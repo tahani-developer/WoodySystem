@@ -1,15 +1,31 @@
 <resources>
     <string name="app_name">Woody System</string>
 
+    <string name="stage1">Stage 1</string>
+    <string name="stage2">Stage 2</string>
+    <string name="stage3">Stage 3</string>
+
+    <string name="enter_inventory">Enter Inventory</string>
+    <string name="loading_order">Loading Order</string>
+
+    <string name="th">Th</string>
+    <string name="w">W</string>
+    <string name="l">L</string>
+    <string name="grade">Grade</string>
+    <string name="num_pcs"># Pieces</string>
+    <string name="bundle_num">Bundle #</string>
+    <string name="location">Location</string>
+    <string name="area">Area</string>
+
+    <string name="done">Done</string>
+
+
     <string name="new_bundle">New Bundle</string>
     <string name="thickness">Thickness</string>
     <string name="width">Width</string>
     <string name="length">Length</string>
-    <string name="grade">Grade</string>
     <string name="no_of_pieces">No Of Pieces</string>
     <string name="bundle_no">Bundle No</string>
-    <string name="location">Location</string>
-    <string name="area">Area</string>
 
     <string name="add">Add</string>
 </resources>
