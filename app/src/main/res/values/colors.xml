@@ -6,6 +6,6 @@
 
     <color name="gray_dark">#5F5C5C</color>
     <color name="white">#FFFFFF</color>
-    <color name="alph">#00FFFFFF</color>
+    <color name="alpha">#00FFFFFF</color>
 
 </resources>
