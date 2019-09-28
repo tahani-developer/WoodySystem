@@ -12,9 +12,11 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        </activity>
+
         <activity android:name=".LoginActivity"></activity>
         <activity android:name=".AddToInventory">
             <intent-filter>
@@ -28,7 +30,7 @@
 
         </activity>
 
-        <activity android:name=".MainActivity"></activity>
+
     </application>
 
 </manifest>
