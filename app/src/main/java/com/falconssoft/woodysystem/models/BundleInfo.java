@@ -10,11 +10,12 @@ public class BundleInfo {
     private String bundleNo;
     private String location;
     private String area;
+    private String barcode;
 
     public BundleInfo() {
     }
 
-    public BundleInfo(double thickness, double length, double width, String grade, int noOfPieces, String bundleNo, String location, String area) {
+    public BundleInfo(double thickness, double length, double width, String grade, int noOfPieces, String bundleNo, String location, String area, String barcode) {
         this.thickness = thickness;
         this.length = length;
         this.width = width;
@@ -23,6 +24,7 @@ public class BundleInfo {
         this.bundleNo = bundleNo;
         this.location = location;
         this.area = area;
+        this.barcode = barcode;
     }
 
     public double getThickness() {
@@ -87,5 +89,13 @@ public class BundleInfo {
 
     public void setArea(String area) {
         this.area = area;
+    }
+
+    public String getBarcode() {
+        return barcode;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
     }
 }
