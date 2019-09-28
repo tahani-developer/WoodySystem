@@ -17,9 +17,6 @@
     <string name="location">Location</string>
     <string name="area">Area</string>
 
-    <string name="done">Done</string>
-
-
     <string name="new_bundle">New Bundle</string>
     <string name="thickness">Thickness</string>
     <string name="width">Width</string>
@@ -27,5 +24,10 @@
     <string name="no_of_pieces">No Of Pieces</string>
     <string name="bundle_no">Bundle No</string>
 
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+
+    <string name="login">Login</string>
+    <string name="done">Done</string>
     <string name="add">Add</string>
 </resources>
