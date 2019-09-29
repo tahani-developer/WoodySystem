@@ -33,7 +33,7 @@
             android:layout_marginLeft="100dp"
             android:layout_marginEnd="100dp"
             android:layout_marginRight="100dp"
-            android:background="@drawable/shape_with_corner"
+            android:background="@drawable/border_background"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
