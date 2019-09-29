@@ -26,9 +26,9 @@ public class Stage3 extends AppCompatActivity implements View.OnClickListener {
         enterInventory.setOnClickListener(this);
         loadingOrder.setOnClickListener(this);
 
-        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.sample_animation);
+        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
         enterInventory.setAnimation(animation);
-        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.sample_animation);
+        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
         loadingOrder.setAnimation(animation);
     }
 

@@ -45,8 +45,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_to_right);
         textView.startAnimation(animation);
 
-        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
-        addToInventory.startAnimation(animation);
+//        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
+//        addToInventory.startAnimation(animation);
 
     }
 
