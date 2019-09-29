@@ -154,7 +154,7 @@ public class ItemsListAdapter extends BaseAdapter implements Filterable {
                         if (data.toLowerCase().startsWith(constraint.toString())) {
                             FilteredArrList.add(new BundleInfo(mOriginalValues.get(i).getThickness(),mOriginalValues.get(i).getWidth(),mOriginalValues.get(i).getLength()
                                     ,mOriginalValues.get(i).getGrade()  ,mOriginalValues.get(i).getNoOfPieces() ,mOriginalValues.get(i).getBundleNo(),
-                                    mOriginalValues.get(i).getLocation() ,mOriginalValues.get(i).getArea()));
+                                    mOriginalValues.get(i).getLocation() ,mOriginalValues.get(i).getArea() ,""));
                             Log.e("here" , "*********2" + constraint + "*" + data);
                         }
                     }
