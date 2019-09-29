@@ -7,9 +7,9 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.view.View;
@@ -83,8 +83,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_to_right);
         textView.startAnimation(animation);
 
-        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
-        addToInventory.startAnimation(animation);
+//        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
+//        addToInventory.startAnimation(animation);
 
     }
 

@@ -5,15 +5,18 @@
     android:gravity="center"
     android:orientation="vertical">
 
-
     <RelativeLayout
         android:layout_width="500dp"
-        android:layout_height="550dp"
+        android:layout_height="600dp"
         android:layout_gravity="center"
-        android:background="@drawable/stages"
+        android:background="@drawable/border_background"
         android:padding="20dp">
 
-
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/stages"
+       >
         <TextView
             android:id="@+id/s1"
             android:layout_width="193dp"
@@ -53,7 +56,7 @@
             android:background="@drawable/circle"
             android:text="" />
 
-
+    </RelativeLayout>
     </RelativeLayout>
 
 </LinearLayout>

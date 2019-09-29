@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.falconssoft.woodysystem.models.BundleInfo;
+import com.falconssoft.woodysystem.models.Orders;
 import com.falconssoft.woodysystem.models.Users;
 
 import java.util.ArrayList;
@@ -16,8 +17,8 @@ import java.util.List;
 public class DatabaseHandler extends SQLiteOpenHelper {
 
     private static String TAG = "DatabaseHandler";
-    private static final int DATABASE_VERSION = 66;
-    private static final String DATABASE_NAME = "WoodySystemDatabase";
+    private static final int DATABASE_VERSION = 1;
+    private static final String DATABASE_NAME = "WoodyDatabase";
     static SQLiteDatabase db;
 
     //******************************************************************
@@ -38,6 +39,22 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     private static final String USERS_USERNAME = "USERNAME";
     private static final String USERS_PASSWORD = "PASSWORD";
+
+    //******************************************************************
+    private static final String ORDERS_TABLE = "ORDERS_TABLE";
+
+    private static final String ORDERS_THICKNESS = "THICKNESS";
+    private static final String ORDERS_LENGTH = "LENGTH";
+    private static final String ORDERS_WIDTH = "WIDTH";
+    private static final String ORDERS_GRADE = "GRADE";
+    private static final String ORDERS_PIECES = "NO_OF_PIECES";
+    private static final String ORDERS_BUNDLE_NO = "BUNDLE_NO";
+    private static final String ORDERS_LOCATION = "LOCATION";
+    private static final String ORDERS_AREA = "AREA";
+    private static final String ORDERS_PLACING_NO = "PLACING_NO";
+    private static final String ORDERS_ORDER_NO = "ORDER_NO";
+    private static final String ORDERS_CONTAINER_NO = "CONTAINER_NO";
+    private static final String ORDERS_DATE_OF_LOAD = "DATE_OF_LOAD";
 
 
     public DatabaseHandler(Context context) {
@@ -63,6 +80,21 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + USERS_USERNAME + " TEXT,"
                 + USERS_PASSWORD + " TEXT" + ")";
         db.execSQL(CREATE_TABLE_USERS);
+
+        String CREATE_ORDERS_TABLE = "CREATE TABLE " + ORDERS_TABLE + "("
+                + ORDERS_THICKNESS + " REAL,"
+                + ORDERS_LENGTH + " REAL,"
+                + ORDERS_WIDTH + " REAL,"
+                + ORDERS_GRADE + " TEXT,"
+                + ORDERS_PIECES + " INTEGER,"
+                + ORDERS_BUNDLE_NO + " TEXT,"
+                + ORDERS_LOCATION + " TEXT,"
+                + ORDERS_AREA + " TEXT,"
+                + ORDERS_PLACING_NO + " INTEGER,"
+                + ORDERS_ORDER_NO + " INTEGER,"
+                + ORDERS_CONTAINER_NO + " INTEGER,"
+                + ORDERS_DATE_OF_LOAD + " TEXT" + ")";
+        db.execSQL(CREATE_ORDERS_TABLE);
     }
 
     @Override
@@ -107,6 +139,27 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void addOrder(Orders orders) {
+        db = this.getReadableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(ORDERS_THICKNESS, orders.getThickness());
+        contentValues.put(ORDERS_LENGTH, orders.getLength());
+        contentValues.put(ORDERS_WIDTH, orders.getWidth());
+        contentValues.put(ORDERS_GRADE, orders.getGrade());
+        contentValues.put(ORDERS_PIECES, orders.getNoOfPieces());
+        contentValues.put(ORDERS_BUNDLE_NO, orders.getBundleNo());
+        contentValues.put(ORDERS_LOCATION, orders.getLocation());
+        contentValues.put(ORDERS_AREA, orders.getArea());
+        contentValues.put(ORDERS_PLACING_NO, orders.getPlacingNo());
+        contentValues.put(ORDERS_ORDER_NO, orders.getOrderNo());
+        contentValues.put(ORDERS_CONTAINER_NO, orders.getContainerNo());
+        contentValues.put(ORDERS_DATE_OF_LOAD, orders.getDateOfLoad());
+
+        db.insert(ORDERS_TABLE, null, contentValues);
+        db.close();
+    }
+
     // **************************************************** Getting ****************************************************
 
     public List<BundleInfo> getBundleInfo() {
@@ -129,6 +182,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 bundleInfo.setLocation(cursor.getString(6));
                 bundleInfo.setArea(cursor.getString(7));
                 bundleInfo.setBarcode(cursor.getString(8));
+                bundleInfo.setChecked(false);
 
                 bundleInfoList.add(bundleInfo);
             } while (cursor.moveToNext());
