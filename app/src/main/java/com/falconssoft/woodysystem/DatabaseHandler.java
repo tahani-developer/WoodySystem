@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.Orders;
@@ -31,6 +32,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String BUNDLE_INFO_BUNDLE_NO = "BUNDLE_NO";
     private static final String BUNDLE_INFO_LOCATION = "LOCATION";
     private static final String BUNDLE_INFO_AREA = "AREA";
+    private static final String BUNDLE_BARCODE = "BARCODE";
 
     //******************************************************************
     private static final String USERS_TABLE = "USERS_TABLE";
@@ -70,7 +72,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + BUNDLE_INFO_PIECES + " INTEGER,"
                 + BUNDLE_INFO_BUNDLE_NO + " TEXT,"
                 + BUNDLE_INFO_LOCATION + " TEXT,"
-                + BUNDLE_INFO_AREA + " TEXT" + ")";
+                + BUNDLE_INFO_AREA + " TEXT,"
+                + BUNDLE_BARCODE + " TEXT" + ")";
         db.execSQL(CREATE_INVENTORY_INFO_TABLE);
 
         String CREATE_TABLE_USERS = "CREATE TABLE " + USERS_TABLE + "("
@@ -97,6 +100,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
+        try {
+            db.execSQL("ALTER TABLE BUNDLE_INFO_TABLE ADD BUNDLE_BARCODE TAXE NOT NULL DEFAULT ''");
+        }catch (Exception e)
+        {
+            Log.e("upgrade","BUNDLE Barcode");
+        }
+
     }
 
     // **************************************************** Adding ****************************************************
@@ -112,6 +122,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         contentValues.put(BUNDLE_INFO_BUNDLE_NO, bundleInfo.getBundleNo());
         contentValues.put(BUNDLE_INFO_LOCATION, bundleInfo.getLocation());
         contentValues.put(BUNDLE_INFO_AREA, bundleInfo.getArea());
+        contentValues.put(BUNDLE_BARCODE, bundleInfo.getBarcode());
 
         db.insert(BUNDLE_INFO_TABLE, null, contentValues);
         db.close();
@@ -170,6 +181,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 bundleInfo.setBundleNo(cursor.getString(5));
                 bundleInfo.setLocation(cursor.getString(6));
                 bundleInfo.setArea(cursor.getString(7));
+                bundleInfo.setBarcode(cursor.getString(8));
                 bundleInfo.setChecked(false);
 
                 bundleInfoList.add(bundleInfo);
