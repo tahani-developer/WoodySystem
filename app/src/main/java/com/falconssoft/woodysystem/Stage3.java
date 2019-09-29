@@ -23,7 +23,7 @@ public class Stage3 extends AppCompatActivity {
         enterInventory.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Stage3.this , EnterInventory.class);
+                Intent intent = new Intent(Stage3.this , AddToInventory.class);
                 startActivity(intent);
             }
         });

@@ -1,6 +1,6 @@
 package com.falconssoft.woodysystem.models;
 
-public class BundleInfo {
+public class Orders {
 
     private double thickness;
     private double length;
@@ -10,12 +10,16 @@ public class BundleInfo {
     private String bundleNo;
     private String location;
     private String area;
-    private boolean checked;
+    private int placingNo;
+    private int orderNo;
+    private int containerNo;
+    private String dateOfLoad;
 
-    public BundleInfo() {
+    public Orders() {
     }
 
-    public BundleInfo(double thickness, double length, double width, String grade, int noOfPieces, String bundleNo, String location, String area) {
+    public Orders(double thickness, double length, double width, String grade, int noOfPieces, String bundleNo, String location, String area
+            , int placingNo, int orderNo, int containerNo, String dateOfLoad) {
         this.thickness = thickness;
         this.length = length;
         this.width = width;
@@ -24,6 +28,10 @@ public class BundleInfo {
         this.bundleNo = bundleNo;
         this.location = location;
         this.area = area;
+        this.placingNo = placingNo;
+        this.orderNo = orderNo;
+        this.containerNo = containerNo;
+        this.dateOfLoad = dateOfLoad;
     }
 
     public double getThickness() {
@@ -90,11 +98,35 @@ public class BundleInfo {
         this.area = area;
     }
 
-    public boolean getChecked() {
-        return checked;
+    public int getPlacingNo() {
+        return placingNo;
     }
 
-    public void setChecked(boolean checked) {
-        this.checked = checked;
+    public void setPlacingNo(int placingNo) {
+        this.placingNo = placingNo;
+    }
+
+    public int getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(int orderNo) {
+        this.orderNo = orderNo;
+    }
+
+    public int getContainerNo() {
+        return containerNo;
+    }
+
+    public void setContainerNo(int containerNo) {
+        this.containerNo = containerNo;
+    }
+
+    public String getDateOfLoad() {
+        return dateOfLoad;
+    }
+
+    public void setDateOfLoad(String dateOfLoad) {
+        this.dateOfLoad = dateOfLoad;
     }
 }
