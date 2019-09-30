@@ -29,12 +29,13 @@
     <string name="thickness">Thickness</string>
     <string name="width">Width</string>
     <string name="length">Length</string>
-    <string name="no_of_pieces">No Of Pieces</string>
-    <string name="bundle_no">Bundle No</string>
+    <string name="no_of_pieces"># Pieces</string>
+    <string name="bundle_no">Bundle #</string>
 
     <string name="username">Username</string>
     <string name="password">Password</string>
 
     <string name="login">Login</string>
     <string name="add">Add</string>
+
 </resources>

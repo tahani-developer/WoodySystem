@@ -59,7 +59,7 @@ public class ItemsListAdapter extends BaseAdapter {
 
     private class ViewHolder {
         CheckBox checkBox;
-        TextView th , w, l, grade, pcs, bundle, location, area ;
+        TextView th, w, l, grade, pcs, bundle, location, area;
     }
 
     @Override
@@ -103,7 +103,7 @@ public class ItemsListAdapter extends BaseAdapter {
         return view;
     }
 
-    public List<BundleInfo> getSelectedItems(){
+    public List<BundleInfo> getSelectedItems() {
 
         selectedBundles.clear();
         for(int i = 0 ; i< itemsList.size() ; i++)
