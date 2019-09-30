@@ -113,7 +113,6 @@ public class ItemsListAdapter extends BaseAdapter {
     }
 
 
-    @Override
     public Filter getFilter() {
         Filter filter = new Filter() {
 

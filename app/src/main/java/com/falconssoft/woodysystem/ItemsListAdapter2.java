@@ -85,7 +85,6 @@ public class ItemsListAdapter2 extends BaseAdapter {
         return view;
     }
 
-    @Override
     public Filter getFilter() {
         Filter filter = new Filter() {
 
