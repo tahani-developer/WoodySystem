@@ -105,6 +105,7 @@ public class ItemsListAdapter extends BaseAdapter {
 
     public List<BundleInfo> getSelectedItems(){
 
+        selectedBundles.clear();
         for(int i = 0 ; i< itemsList.size() ; i++)
             if(itemsList.get(i).getChecked())
                 selectedBundles.add(itemsList.get(i));
