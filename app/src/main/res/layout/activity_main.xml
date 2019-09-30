@@ -3,16 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
+    android:background="@drawable/w10"
     android:orientation="vertical">
 
     <RelativeLayout
-        android:layout_width="500dp"
+        android:layout_width="550dp"
         android:layout_height="600dp"
         android:layout_gravity="center"
         android:background="@drawable/border_background"
         android:padding="20dp">
 
     <RelativeLayout
+        android:id="@+id/relative"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/stages"

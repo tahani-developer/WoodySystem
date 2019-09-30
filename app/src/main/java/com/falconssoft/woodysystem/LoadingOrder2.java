@@ -5,9 +5,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.falconssoft.woodysystem.models.BundleInfo;
@@ -23,6 +26,7 @@ public class LoadingOrder2 extends AppCompatActivity {
     HorizontalListView listView;
     private EditText placingNo, orderNo, containerNo, dateOfLoad;
     private Button done;
+    private TextView textView;
     private Orders order;
     private DatabaseHandler databaseHandler;
 
@@ -134,6 +138,10 @@ public class LoadingOrder2 extends AppCompatActivity {
         containerNo = findViewById(R.id.container_no);
         dateOfLoad = findViewById(R.id.date_of_load);
         done = findViewById(R.id.done);
+        textView = findViewById(R.id.loading_order_textView);
+
+        Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_to_right);
+        textView.startAnimation(animation);
 
     }
 }

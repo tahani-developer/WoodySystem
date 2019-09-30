@@ -20,7 +20,7 @@ import java.util.List;
  * Created by mohd darras on 15/04/2018.
  */
 
-public class ItemsListAdapter extends BaseAdapter implements Filterable {
+public class ItemsListAdapter extends BaseAdapter {
 
     private Context context;
     private List<BundleInfo> mOriginalValues;
@@ -112,61 +112,4 @@ public class ItemsListAdapter extends BaseAdapter implements Filterable {
         return selectedBundles;
     }
 
-
-
-    @Override
-    public Filter getFilter() {
-        Filter filter = new Filter() {
-
-            @SuppressWarnings("unchecked")
-            @Override
-            protected void publishResults(CharSequence constraint,FilterResults results) {
-
-                itemsList = (ArrayList<BundleInfo>) results.values; // has the filtered values
-                notifyDataSetChanged();  // notifies the data with new filtered values
-//                Log.e("here" , "*********1" + itemsList.get(0).getCustName());
-            }
-
-            @Override
-            protected FilterResults performFiltering(CharSequence constraint) {
-                FilterResults results = new FilterResults();        // Holds the results of a filtering operation in values
-                ArrayList<BundleInfo> FilteredArrList = new ArrayList<BundleInfo>();
-
-                if (mOriginalValues == null) {
-                    mOriginalValues = new ArrayList<BundleInfo>(itemsList); // saves the original data in mOriginalValues
-                }
-
-                /********
-                 *
-                 *  If constraint(CharSequence that is received) is null returns the mOriginalValues(Original) values
-                 *  else does the Filtering and returns FilteredArrList(Filtered)
-                 *
-                 ********/
-                if (constraint == null || constraint.length() == 0) {
-
-                    // set the Original result to return
-                    results.count = mOriginalValues.size();
-                    results.values = mOriginalValues;
-                } else {
-                    constraint = constraint.toString().toLowerCase();
-                    for (int i = 0; i < mOriginalValues.size(); i++) {
-                        String data = ""+ mOriginalValues.get(i).getThickness();
-                        if (data.toLowerCase().startsWith(constraint.toString())) {
-                            FilteredArrList.add(new BundleInfo(mOriginalValues.get(i).getThickness(),mOriginalValues.get(i).getWidth(),mOriginalValues.get(i).getLength()
-                                    ,mOriginalValues.get(i).getGrade()  ,mOriginalValues.get(i).getNoOfPieces() ,mOriginalValues.get(i).getBundleNo(),
-                                    mOriginalValues.get(i).getLocation() ,mOriginalValues.get(i).getArea() ,""));
-                            Log.e("here" , "*********2" + constraint + "*" + data);
-                        }
-                    }
-                    // set the Filtered result to return
-                    results.count = FilteredArrList.size();
-                    results.values = FilteredArrList;
-
-//                    Log.e("here" , "*********3" + FilteredArrList.get(0).getCustName());
-                }
-                return results;
-            }
-        };
-        return filter;
-    }
 }

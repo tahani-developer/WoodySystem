@@ -12,8 +12,8 @@
     <string name="w">W</string>
     <string name="l">L</string>
     <string name="grade">Grade</string>
-    <string name="num_pcs"># Pieces</string>
-    <string name="bundle_num">Bundle #</string>
+    <string name="num_pcs">No Of Pieces</string>
+    <string name="bundle_num">Bundle No</string>
     <string name="location">Location</string>
     <string name="area">Area</string>
 
