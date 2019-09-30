@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/w10"
+    android:background="@drawable/wooddecor"
     tools:context=".AddToInventory">
 
     <android.support.constraint.ConstraintLayout
@@ -57,6 +57,11 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingStart="30dp"
+                    android:paddingLeft="30dp"
+                    android:paddingEnd="30dp"
+                    android:paddingRight="30dp"
+                    android:paddingTop="30dp"
                     android:orientation="horizontal">
 
                            <LinearLayout
@@ -64,9 +69,6 @@
                                android:layout_width="0dp"
                                android:layout_height="wrap_content"
                                android:layout_weight="1"
-                               android:layout_marginTop="40dp"
-                               android:layout_marginStart="50dp"
-                               android:layout_marginLeft="50dp"
                                android:layout_marginEnd="50dp"
                                android:layout_marginRight="50dp"
                                android:padding="5dp"
@@ -76,7 +78,7 @@
 
                 <TextView
                     android:id="@+id/textView1"
-                    android:layout_width="100dp"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/thickness"
@@ -100,11 +102,6 @@
                                android:layout_width="0dp"
                                android:layout_height="wrap_content"
                                android:layout_weight="1"
-                               android:layout_marginTop="20dp"
-                               android:layout_marginStart="50dp"
-                               android:layout_marginLeft="50dp"
-                               android:layout_marginEnd="50dp"
-                               android:layout_marginRight="50dp"
                                android:padding="5dp"
                                android:background="@drawable/shape_with_corner"
                                android:orientation="horizontal"
@@ -112,7 +109,7 @@
 
                 <TextView
                     android:id="@+id/textView2"
-                    android:layout_width="100dp"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/length"
@@ -136,24 +133,28 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingStart="30dp"
+                android:paddingLeft="30dp"
+                android:paddingEnd="30dp"
+                android:paddingRight="30dp"
+                android:paddingTop="10dp"
                 android:orientation="horizontal">
+
                            <LinearLayout
-                    android:id="@+id/addToInventory_linear_three"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginStart="50dp"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginEnd="50dp"
-                    android:layout_marginRight="50dp"
-                    android:padding="5dp"
-                    android:background="@drawable/shape_with_corner"
-                    android:orientation="horizontal"
-                   >
+                               android:id="@+id/addToInventory_linear_three"
+                               android:layout_width="0dp"
+                               android:layout_height="wrap_content"
+                               android:layout_weight="1"
+                               android:layout_marginEnd="50dp"
+                               android:layout_marginRight="50dp"
+                               android:padding="5dp"
+                               android:background="@drawable/shape_with_corner"
+                               android:orientation="horizontal"
+                               >
 
                     <TextView
                         android:id="@+id/textView3"
-                        android:layout_width="100dp"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:text="@string/width"
                         android:layout_weight="1"
@@ -173,22 +174,18 @@
                 </LinearLayout>
 
                            <LinearLayout
-                    android:id="@+id/addToInventory_linear_four"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginStart="50dp"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginEnd="50dp"
-                    android:layout_marginRight="50dp"
-                    android:padding="5dp"
-                    android:background="@drawable/shape_with_corner"
-                    android:orientation="horizontal"
-                    >
+                               android:id="@+id/addToInventory_linear_four"
+                               android:layout_width="0dp"
+                               android:layout_height="wrap_content"
+                               android:layout_weight="1"
+                               android:padding="5dp"
+                               android:background="@drawable/shape_with_corner"
+                               android:orientation="horizontal"
+                               >
 
                     <TextView
                         android:id="@+id/textView4"
-                        android:layout_width="100dp"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:text="@string/grade"
                         android:layout_weight="1"
@@ -208,28 +205,30 @@
                 </LinearLayout>
             </LinearLayout>
 
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingStart="30dp"
+                android:paddingLeft="30dp"
+                android:paddingEnd="30dp"
+                android:paddingRight="30dp"
+                android:paddingTop="10dp"
                 android:orientation="horizontal">
                           <LinearLayout
-                    android:id="@+id/addToInventory_linear_five"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginStart="50dp"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginEnd="50dp"
-                    android:layout_marginRight="50dp"
-                    android:padding="5dp"
-                    android:background="@drawable/shape_with_corner"
-                    android:orientation="horizontal"
-                   >
+                              android:id="@+id/addToInventory_linear_five"
+                              android:layout_width="0dp"
+                              android:layout_height="wrap_content"
+                              android:layout_weight="1"
+                              android:layout_marginEnd="50dp"
+                              android:layout_marginRight="50dp"
+                              android:padding="5dp"
+                              android:background="@drawable/shape_with_corner"
+                              android:orientation="horizontal"
+                              >
 
                     <TextView
                         android:id="@+id/textView5"
-                        android:layout_width="100dp"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:text="@string/no_of_pieces"
                         android:layout_weight="1"
@@ -249,22 +248,18 @@
                 </LinearLayout>
 
                           <LinearLayout
-                    android:id="@+id/addToInventory_linear_six"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginStart="50dp"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginEnd="50dp"
-                    android:layout_marginRight="50dp"
-                    android:padding="5dp"
-                    android:background="@drawable/shape_with_corner"
-                    android:orientation="horizontal"
-                    >
+                              android:id="@+id/addToInventory_linear_six"
+                              android:layout_width="0dp"
+                              android:layout_height="wrap_content"
+                              android:layout_weight="1"
+                              android:padding="5dp"
+                              android:background="@drawable/shape_with_corner"
+                              android:orientation="horizontal"
+                              >
 
                     <TextView
                         android:id="@+id/textView6"
-                        android:layout_width="100dp"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:text="@string/bundle_no"
                         android:layout_weight="1"
@@ -287,24 +282,28 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingStart="30dp"
+                android:paddingLeft="30dp"
+                android:paddingEnd="30dp"
+                android:paddingRight="30dp"
+                android:paddingTop="10dp"
                 android:orientation="horizontal">
-                          <LinearLayout
-                    android:id="@+id/addToInventory_linear_seven"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginStart="50dp"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginEnd="50dp"
-                    android:layout_marginRight="50dp"
-                    android:padding="5dp"
-                    android:background="@drawable/shape_with_corner"
-                    android:orientation="horizontal"
-                    >
+
+                         <LinearLayout
+                             android:id="@+id/addToInventory_linear_seven"
+                             android:layout_width="0dp"
+                             android:layout_height="wrap_content"
+                             android:layout_weight="1"
+                             android:layout_marginEnd="50dp"
+                             android:layout_marginRight="50dp"
+                             android:padding="5dp"
+                             android:background="@drawable/shape_with_corner"
+                             android:orientation="horizontal"
+                             >
 
                     <TextView
                         android:id="@+id/textView7"
-                        android:layout_width="100dp"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/location"
@@ -324,22 +323,18 @@
                 </LinearLayout>
 
                           <LinearLayout
-                    android:id="@+id/addToInventory_linear_eight"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginStart="50dp"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginEnd="50dp"
-                    android:layout_marginRight="50dp"
-                    android:padding="5dp"
-                    android:background="@drawable/shape_with_corner"
-                    android:orientation="horizontal"
-                 >
+                              android:id="@+id/addToInventory_linear_eight"
+                              android:layout_width="0dp"
+                              android:layout_height="wrap_content"
+                              android:layout_weight="1"
+                              android:padding="5dp"
+                              android:background="@drawable/shape_with_corner"
+                              android:orientation="horizontal"
+                              >
 
                     <TextView
                         android:id="@+id/textView8"
-                        android:layout_width="100dp"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/area"
@@ -366,11 +361,11 @@
             android:id="@+id/addToInventory_add_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="300dp"
-            android:layout_marginLeft="300dp"
-            android:layout_marginEnd="300dp"
-            android:layout_marginRight="300dp"
+            android:layout_marginStart="400dp"
+            android:layout_marginLeft="400dp"
             android:layout_marginTop="40dp"
+            android:layout_marginEnd="400dp"
+            android:layout_marginRight="400dp"
             android:background="@drawable/white_border"
             android:drawableStart="@drawable/bundle"
             android:drawableLeft="@drawable/bundle"
@@ -385,7 +380,8 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/scrollView"
-            app:layout_constraintVertical_bias="0.079" />
+            app:layout_constraintVertical_bias="0.081" />
 
     </android.support.constraint.ConstraintLayout>
+
 </RelativeLayout>

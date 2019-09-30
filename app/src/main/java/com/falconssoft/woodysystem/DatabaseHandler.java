@@ -17,7 +17,7 @@ import java.util.List;
 public class DatabaseHandler extends SQLiteOpenHelper {
 
     private static String TAG = "DatabaseHandler";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "WoodyDatabase";
     static SQLiteDatabase db;
 
@@ -51,9 +51,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String ORDERS_BUNDLE_NO = "BUNDLE_NO";
     private static final String ORDERS_LOCATION = "LOCATION";
     private static final String ORDERS_AREA = "AREA";
-    private static final String ORDERS_PLACING_NO = "AREA";
-    private static final String ORDERS_ORDER_NO = "AREA";
-    private static final String ORDERS_CONTAINER_NO = "AREA";
+    private static final String ORDERS_PLACING_NO = "PLACING_NO";
+    private static final String ORDERS_ORDER_NO = "ORDER_NO";
+    private static final String ORDERS_CONTAINER_NO = "CONTAINER_NO";
     private static final String ORDERS_DATE_OF_LOAD = "DATE_OF_LOAD";
 
 

@@ -3,8 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:minWidth="1000dp"
     android:minHeight="500dp"
+    tools:context=".LoadingOrder2"
     android:orientation="vertical">
 
     <LinearLayout
@@ -35,7 +37,7 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/alph">
+        android:background="@color/alpha_white">
 
 
         <LinearLayout
@@ -44,8 +46,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="60dp"
             android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@+id/textView"
-            >
+            app:layout_constraintTop_toBottomOf="@+id/listview"
+            tools:ignore="NotSibling">
 
             <TextView
                 android:id="@+id/textView1"
