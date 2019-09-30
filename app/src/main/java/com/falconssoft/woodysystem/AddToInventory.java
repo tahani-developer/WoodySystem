@@ -41,6 +41,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -73,6 +75,14 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
     private List<String> gradeList = new ArrayList<>();
     private ArrayAdapter<String> gradeAdapter;
     private String gradeText = "";
+//    private String []saveBundleNo = new String[]{};
+//    private String []saveLength = new String[]{};
+//    private String []saveWidth = new String[]{};
+//    private String []savewarnum = new String[]{};
+//    private String []savewarnum = new String[]{};
+//    private String []savewarnum = new String[]{};
+//    private String []savewarnum = new String[]{};
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -231,6 +241,30 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                 gradeSpinner.setSelection(0);
                 break;
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        List<TableRow> tableRows = new ArrayList<>();
+        int rowcount = bundlesTable.getChildCount();
+        for (int i = 0; i<rowcount; i++){
+            TableRow row = (TableRow) bundlesTable.getChildAt(i);
+            tableRows.add(row);
+        }
+        outState.putSerializable("table", (Serializable) tableRows);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        List<TableRow> tableRows = (List<TableRow>) savedInstanceState.getSerializable("table");
+        for (int i = 0;i<tableRows.size();i++){
+            if(tableRows.get(i).getParent() != null) {
+                ((ViewGroup)tableRows.get(i).getParent()).removeView(tableRows.get(i)); // <- fix
+            }
+            bundlesTable.addView(tableRows.get(i));
+        }
+        super.onRestoreInstanceState(savedInstanceState);
     }
 
     public Bitmap writeBarcode(String data) {
