@@ -244,7 +244,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         String barcode_data = data;
 
         Bitmap bitmap = null;//  AZTEC -->QR
-        try {
+        try { 
 
             bitmap = encodeAsBitmap(barcode_data, BarcodeFormat.CODE_128, 600, 300);
             iv.setImageBitmap(bitmap);
