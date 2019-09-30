@@ -13,14 +13,18 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -37,22 +41,25 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-public class AddToInventory extends AppCompatActivity implements View.OnClickListener {
+public class AddToInventory extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
-    private EditText thickness, length, width, grade, noOfPieces, bundleNo, location, area;
-    private Button addToInventory;
+    private static final int WHITE = 0xFFFFFFFF;
+    private static final int BLACK = 0xFF000000;
+    private EditText thickness, length, width, noOfPieces, bundleNo, location, area;
+    private Spinner gradeSpinner;
+    private Button addToInventory, newBundleButton;
     private TableLayout bundlesTable;
     private TextView textView;
     private BundleInfo newBundle;
     private DatabaseHandler databaseHandler;
     private Animation animation;
-
-    private byte[] printIm, readBuffer;
     private PrintPic printPic;
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothSocket mmSocket;
@@ -60,8 +67,12 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
     private OutputStream mmOutputStream;
     private InputStream mmInputStream;
     private Thread workerThread;
+    private byte[] printIm, readBuffer;
     private int readBufferPosition;
     volatile boolean stopWorker;
+    private List<String> gradeList = new ArrayList<>();
+    private ArrayAdapter<String> gradeAdapter;
+    private String gradeText = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,144 +83,155 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         thickness = findViewById(R.id.addToInventory_thickness);
         length = findViewById(R.id.addToInventory_length);
         width = findViewById(R.id.addToInventory_width);
-        grade = findViewById(R.id.addToInventory_grade);
+        gradeSpinner = findViewById(R.id.addToInventory_grade);
         noOfPieces = findViewById(R.id.addToInventory_no_of_pieces);
         bundleNo = findViewById(R.id.addToInventory_bundle_no);
         location = findViewById(R.id.addToInventory_location);
         area = findViewById(R.id.addToInventory_area);
         addToInventory = findViewById(R.id.addToInventory_add_button);
+        newBundleButton = findViewById(R.id.addToInventory_new_button);
         textView = findViewById(R.id.addToInventory_textView);
         bundlesTable = findViewById(R.id.addToInventory_table);
 
         addToInventory.setOnClickListener(this);
+        newBundleButton.setOnClickListener(this);
+
+        gradeList.add("Fresh");
+        gradeList.add("BS");
+        gradeList.add("Reject");
+        gradeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, gradeList);
+        gradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        gradeSpinner.setAdapter(gradeAdapter);
+        gradeSpinner.setOnItemSelectedListener(this);
 
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_to_right);
         textView.startAnimation(animation);
 
 //        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
 //        addToInventory.startAnimation(animation);
-
     }
-
 
     @Override
     public void onClick(View v) {
         String thicknessText = thickness.getText().toString();
         String lengthText = length.getText().toString();
         String widthText = width.getText().toString();
-        String gradeText = grade.getText().toString();
         String noOfPiecesText = noOfPieces.getText().toString();
         String bundleNOText = bundleNo.getText().toString();
         String locationText = location.getText().toString();
         String areaText = area.getText().toString();
 
-//        if (!TextUtils.isEmpty(thickness.getText().toString())) {
-//            if (!TextUtils.isEmpty(length.getText().toString())) {
-//                if (!TextUtils.isEmpty(width.getText().toString())) {
+        switch (v.getId()) {
+            case R.id.addToInventory_add_button:
+                if (!TextUtils.isEmpty(thickness.getText().toString())) {
+                    if (!TextUtils.isEmpty(length.getText().toString())) {
+                        if (!TextUtils.isEmpty(width.getText().toString())) {
 //                    if (!TextUtils.isEmpty(grade.getText().toString())) {
-//                        if (!TextUtils.isEmpty(noOfPieces.getText().toString())) {
-//                            if (!TextUtils.isEmpty(bundleNo.getText().toString())) {
-//                                if (!TextUtils.isEmpty(location.getText().toString())) {
-//                                    if (!TextUtils.isEmpty(area.getText().toString())) {
+                            if (!TextUtils.isEmpty(noOfPieces.getText().toString())) {
+                                if (!TextUtils.isEmpty(bundleNo.getText().toString())) {
+                                    if (!TextUtils.isEmpty(location.getText().toString())) {
+                                        if (!TextUtils.isEmpty(area.getText().toString())) {
 
-//                                        String data = thicknessText + lengthText + widthText + gradeText;
-//                                        Bitmap bitmap = writeBarcode(data);
-//                                        newBundle = new BundleInfo(Double.parseDouble(thicknessText)
-//                                                , Double.parseDouble(lengthText)
-//                                                , Double.parseDouble(widthText)
-//                                                , gradeText
-//                                                , Integer.parseInt(noOfPiecesText)
-//                                                , bundleNOText
-//                                                , locationText
-//                                                , areaText
-//                                                , 1
-//                                                , 53
-//                                                , 5
-//                                                , "june");
-//                                        databaseHandler.addNewBundle(newBundle);
+                                            String data = thicknessText + lengthText + widthText;//+ gradeText;
+//                                            Bitmap bitmap = writeBarcode(data);
+                                            newBundle = new BundleInfo(Double.parseDouble(thicknessText)
+                                                    , Double.parseDouble(lengthText)
+                                                    , Double.parseDouble(widthText)
+                                                    , "fresh"
+                                                    , Integer.parseInt(noOfPiecesText)
+                                                    , bundleNOText
+                                                    , locationText
+                                                    , areaText
+                                                    , 1
+                                                    , 53
+                                                    , 5
+                                                    , "june");
+                                            databaseHandler.addNewBundle(newBundle);
 
-        TableRow tableRow = new TableRow(this);
-        for (int i = 0; i < 8; i++) {
-            TextView textView = new TextView(this);
-            textView.setBackgroundResource(R.color.orange);
-            TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
-            textViewParam.setMargins(1, 5 ,1,1);
-            textView.setTextSize(15);
-            textView.setTextColor(ContextCompat.getColor(this, R.color.white));
-            textView.setLayoutParams(textViewParam);
-            switch (i) {
-                case 0:
-                    textView.setText("55");
-                    break;
-                case 1:
-//                                                    textView.setText(lengthText);
-                    textView.setText("65");
+                                            TableRow tableRow = new TableRow(this);
+                                            for (int i = 0; i < 8; i++) {
+                                                TextView textView = new TextView(this);
+                                                textView.setBackgroundResource(R.color.light_orange);
+                                                TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+                                                textViewParam.setMargins(1, 5, 1, 1);
+                                                textView.setTextSize(15);
+                                                textView.setTextColor(ContextCompat.getColor(this, R.color.gray_dark_one));
+                                                textView.setLayoutParams(textViewParam);
+                                                switch (i) {
+                                                    case 0:
+                                                        textView.setText(bundleNOText);
+                                                        break;
+                                                    case 1:
+                                                        textView.setText(lengthText);
+//                    textView.setText("65");
 
-                    break;
-                case 2:
-//                                                    textView.setText(widthText);
-                    textView.setText("65");
-                    break;
-                case 3:
-//                                                    textView.setText(thicknessText);
-                    textView.setText("65");
-                    break;
-                case 4:
-//                                                    textView.setText(gradeText);
-                    textView.setText("new");
-                    break;
-                case 5:
-//                                                    textView.setText(noOfPiecesText);
-                    textView.setText("200");
-                    break;
-                case 6:
-//                                                    textView.setText(locationText);
-                    textView.setText("amman");
-                    break;
-                case 7:
-//                                                    textView.setText(areaText);
-                    textView.setText("zone1");
-                    break;
-            }
-//                                            textView.setBackgroundResource(R.color.alpha_white);
-
-//                                            TableRow.LayoutParams bundleParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 2f);
-//                                            bundleParam.setMargins(0, 2, 0, 2);
-//                                            tableRow.setLayoutParams(bundleParam);
-            tableRow.addView(textView);
-        }
-        bundlesTable.addView(tableRow);
-
-        Toast.makeText(this, "Added Successfully", Toast.LENGTH_SHORT).show();
-
-
-//                                    } else {
-//                                        area.setError("Required!");
-//                                    }
-//                                } else {
-//                                    location.setError("Required!");
-//                                }
-//                            } else {
-//                                bundleNo.setError("Required!");
-//                            }
-//                        } else {
-//                            noOfPieces.setError("Required!");
-//                        }
-//                    } else {
+                                                        break;
+                                                    case 2:
+                                                        textView.setText(widthText);
+//                    textView.setText("65");
+                                                        break;
+                                                    case 3:
+                                                        textView.setText(thicknessText);
+//                    textView.setText("65");
+                                                        break;
+                                                    case 4:
+                                                        textView.setText(gradeText);
+//                                                textView.setText("new");
+                                                        break;
+                                                    case 5:
+                                                        textView.setText(noOfPiecesText);
+//                    textView.setText("200");
+                                                        break;
+                                                    case 6:
+                                                        textView.setText(locationText);
+//                    textView.setText("amman");
+                                                        break;
+                                                    case 7:
+                                                        textView.setText(areaText);
+//                    textView.setText("zone1");
+                                                        break;
+                                                }
+                                                tableRow.addView(textView);
+                                            }
+                                            bundlesTable.addView(tableRow);
+                                            Toast.makeText(this, "Added Successfully", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            area.setError("Required!");
+                                        }
+                                    } else {
+                                        location.setError("Required!");
+                                    }
+                                } else {
+                                    bundleNo.setError("Required!");
+                                }
+                            } else {
+                                noOfPieces.setError("Required!");
+                            }
+//                    } //else {
 //                        grade.setError("Required!");
 //                    }
-//                } else {
-//                    width.setError("Required!");
-//                }
-//            } else {
-//                length.setError("Required!");
-//            }
-//        } else {
-//            thickness.setError("Required!");
-//        }
-
+                        } else {
+                            width.setError("Required!");
+                        }
+                    } else {
+                        length.setError("Required!");
+                    }
+                } else {
+                    thickness.setError("Required!");
+                }
+                break;
+            case R.id.addToInventory_new_button:
+                thickness.setText("");
+                length.setText("");
+                width.setText("");
+                noOfPieces.setText("");
+                bundleNo.setText("");
+                location.setText("");
+                area.setText("");
+                gradeSpinner.setSelection(0);
+                break;
+        }
     }
-
 
     public Bitmap writeBarcode(String data) {
         final Dialog dialog = new Dialog(AddToInventory.this);
@@ -244,10 +266,6 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         return bitmap;
 
     }
-
-    private static final int WHITE = 0xFFFFFFFF;
-    private static final int BLACK = 0xFF000000;
-
 
     Bitmap encodeAsBitmap(String contents, BarcodeFormat format, int img_width, int img_height) throws WriterException {
         String contentsToEncode = contents;
@@ -294,10 +312,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         return null;
     }
 
-
     void findBT() {
-
-
         try {
             mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -425,8 +440,6 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
     /*
      * This will send data to be printed by the bluetooth printer
      */
-
-
     void sendData(Bitmap bitmap) throws IOException {
         try {
             printPic = PrintPic.getInstance();
@@ -459,7 +472,6 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-
     public String BitMapToString(Bitmap bitmap) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
@@ -467,7 +479,6 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         String result = Base64.encodeToString(arr, Base64.DEFAULT);
         return result;
     }
-
 
     public Bitmap StringToBitMap(String image) {
         if (image != "") {
@@ -483,5 +494,14 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         return null;
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        gradeText = parent.getItemAtPosition(position).toString();
+        Log.e("item", gradeText);
+    }
 
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        gradeText = "Fresh";
+    }
 }
