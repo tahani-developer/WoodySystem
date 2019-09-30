@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/w10"
     android:minWidth="1000dp"
     android:minHeight="500dp"
-    tools:context=".LoadingOrder2"
     android:orientation="vertical">
 
     <LinearLayout
@@ -16,15 +16,26 @@
         android:paddingVertical="20dp"
         android:paddingHorizontal="30dp"
         >
-
-
-        <android.support.v7.widget.SearchView
-            android:id="@+id/mSearch"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            app:defaultQueryHint="Search.."
-            />
+        <TextView
+            android:id="@+id/loading_order_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginTop="30dp"
+            android:drawableStart="@drawable/axe"
+            android:drawableLeft="@drawable/axe"
+            android:drawablePadding="10dp"
+            android:gravity="start"
+            android:text="@string/loading_order"
+            android:textColor="@color/orange"
+            android:textSize="30sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </LinearLayout>
 
@@ -36,22 +47,24 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/alpha_white">
+        android:layout_height="wrap_content">
 
 
         <LinearLayout
             android:id="@+id/addToInventory_linear_one"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@+id/listview"
-            tools:ignore="NotSibling">
+            android:layout_marginStart="50dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginRight="50dp"
+            android:padding="5dp"
+            android:background="@drawable/shape_with_corner"            android:orientation="horizontal"
+            tools:ignore="MissingConstraints">
 
             <TextView
                 android:id="@+id/textView1"
-                android:layout_width="100dp"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
@@ -78,12 +91,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:orientation="horizontal"
+            android:layout_marginStart="50dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginRight="50dp"
+            android:padding="5dp"
+            android:background="@drawable/shape_with_corner"            android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_one">
 
             <TextView
                 android:id="@+id/textView2"
-                android:layout_width="100dp"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
@@ -110,13 +128,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:orientation="horizontal"
+            android:layout_marginStart="50dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginRight="50dp"
+            android:padding="5dp"
+            android:background="@drawable/shape_with_corner"            android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_two"
             >
 
             <TextView
                 android:id="@+id/textView3"
-                android:layout_width="100dp"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
@@ -142,13 +165,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:orientation="horizontal"
+            android:layout_marginStart="50dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginRight="50dp"
+            android:padding="5dp"
+            android:background="@drawable/shape_with_corner"            android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_three"
             >
 
             <TextView
                 android:id="@+id/textView4"
-                android:layout_width="100dp"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
@@ -171,13 +199,22 @@
 
     </android.support.constraint.ConstraintLayout>
 
+
     <Button
         android:id="@+id/done"
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="10dp"
-        android:text="@string/done"/>
+        android:layout_marginTop="60dp"
+        android:background="@drawable/white_border"
+        android:drawableStart="@drawable/bundle"
+        android:drawableLeft="@drawable/bundle"
+        android:paddingLeft="20dp"
+        android:text="@string/done"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        />
 
 
 </LinearLayout>

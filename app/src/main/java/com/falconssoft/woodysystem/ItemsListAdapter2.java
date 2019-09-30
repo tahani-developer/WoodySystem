@@ -20,7 +20,7 @@ import java.util.List;
  * Created by mohd darras on 15/04/2018.
  */
 
-public class ItemsListAdapter2 extends BaseAdapter implements Filterable {
+public class ItemsListAdapter2 extends BaseAdapter {
 
     private Context context;
     private List<BundleInfo> mOriginalValues;

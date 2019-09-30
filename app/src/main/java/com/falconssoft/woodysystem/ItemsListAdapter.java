@@ -20,12 +20,12 @@ import java.util.List;
  * Created by mohd darras on 15/04/2018.
  */
 
-public class ItemsListAdapter extends BaseAdapter implements Filterable {
+public class ItemsListAdapter extends BaseAdapter {
 
     private Context context;
     private List<BundleInfo> mOriginalValues;
     private static List<BundleInfo> itemsList;
-    private static List<BundleInfo> selectedBundles;
+    private static List<BundleInfo> selectedBundles ;
 
     public ItemsListAdapter(Context context, List<BundleInfo> itemsList) {
         this.context = context;
