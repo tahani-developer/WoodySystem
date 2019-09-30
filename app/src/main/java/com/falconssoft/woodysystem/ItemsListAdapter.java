@@ -20,7 +20,7 @@ import java.util.List;
  * Created by mohd darras on 15/04/2018.
  */
 
-public class ItemsListAdapter extends BaseAdapter implements Filterable {
+public class ItemsListAdapter extends BaseAdapter {
 
     private Context context;
     private List<BundleInfo> mOriginalValues;
@@ -59,7 +59,7 @@ public class ItemsListAdapter extends BaseAdapter implements Filterable {
 
     private class ViewHolder {
         CheckBox checkBox;
-        TextView th , w, l, grade, pcs, bundle, location, area ;
+        TextView th, w, l, grade, pcs, bundle, location, area;
     }
 
     @Override
@@ -103,15 +103,14 @@ public class ItemsListAdapter extends BaseAdapter implements Filterable {
         return view;
     }
 
-    public List<BundleInfo> getSelectedItems(){
+    public List<BundleInfo> getSelectedItems() {
 
-        for(int i = 0 ; i< itemsList.size() ; i++)
-            if(itemsList.get(i).getChecked())
+        for (int i = 0; i < itemsList.size(); i++)
+            if (itemsList.get(i).getChecked())
                 selectedBundles.add(itemsList.get(i));
 
         return selectedBundles;
     }
-
 
 
     @Override
@@ -120,7 +119,7 @@ public class ItemsListAdapter extends BaseAdapter implements Filterable {
 
             @SuppressWarnings("unchecked")
             @Override
-            protected void publishResults(CharSequence constraint,FilterResults results) {
+            protected void publishResults(CharSequence constraint, FilterResults results) {
 
                 itemsList = (ArrayList<BundleInfo>) results.values; // has the filtered values
                 notifyDataSetChanged();  // notifies the data with new filtered values
@@ -150,12 +149,18 @@ public class ItemsListAdapter extends BaseAdapter implements Filterable {
                 } else {
                     constraint = constraint.toString().toLowerCase();
                     for (int i = 0; i < mOriginalValues.size(); i++) {
-                        String data = ""+ mOriginalValues.get(i).getThickness();
+                        String data = "" + mOriginalValues.get(i).getThickness();
                         if (data.toLowerCase().startsWith(constraint.toString())) {
-                            FilteredArrList.add(new BundleInfo(mOriginalValues.get(i).getThickness(),mOriginalValues.get(i).getWidth(),mOriginalValues.get(i).getLength()
-                                    ,mOriginalValues.get(i).getGrade()  ,mOriginalValues.get(i).getNoOfPieces() ,mOriginalValues.get(i).getBundleNo(),
-                                    mOriginalValues.get(i).getLocation() ,mOriginalValues.get(i).getArea() ,""));
-                            Log.e("here" , "*********2" + constraint + "*" + data);
+                            FilteredArrList.add(new BundleInfo(mOriginalValues.get(i).getThickness()
+                                    , mOriginalValues.get(i).getWidth()
+                                    , mOriginalValues.get(i).getLength()
+                                    , mOriginalValues.get(i).getGrade()
+                                    , mOriginalValues.get(i).getNoOfPieces()
+                                    , mOriginalValues.get(i).getBundleNo()
+                                    , mOriginalValues.get(i).getLocation()
+                                    , mOriginalValues.get(i).getArea()
+                            , ""));
+                            Log.e("here", "*********2" + constraint + "*" + data);
                         }
                     }
                     // set the Filtered result to return

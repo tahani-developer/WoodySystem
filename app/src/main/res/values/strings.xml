@@ -12,8 +12,8 @@
     <string name="w">W</string>
     <string name="l">L</string>
     <string name="grade">Grade</string>
-    <string name="num_pcs"># Pieces</string>
-    <string name="bundle_num">Bundle #</string>
+    <string name="num_pcs">No Of Pieces</string>
+    <string name="bundle_num">Bundle No</string>
     <string name="location">Location</string>
     <string name="area">Area</string>
 
@@ -29,8 +29,8 @@
     <string name="thickness">Thickness</string>
     <string name="width">Width</string>
     <string name="length">Length</string>
-    <string name="no_of_pieces">No Of Pieces</string>
-    <string name="bundle_no">Bundle No</string>
+    <string name="no_of_pieces"># Pieces</string>
+    <string name="bundle_no">Bundle #</string>
 
     <string name="username">Username</string>
     <string name="password">Password</string>

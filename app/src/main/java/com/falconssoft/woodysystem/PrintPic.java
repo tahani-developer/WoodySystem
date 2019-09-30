@@ -1,13 +1,13 @@
 package com.falconssoft.woodysystem;
+
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
 public class PrintPic {
+
     public Canvas canvas = null;
-
     public Paint paint = null;
-
     public Bitmap bm = null;
     public int width;
     public float length = 0.0F;
@@ -52,11 +52,8 @@ public class PrintPic {
 
     public void initPaint() {
         this.paint = new Paint();// 新建一个画笔
-
         this.paint.setAntiAlias(true);//
-
         this.paint.setColor(-16777216);
-
         this.paint.setStyle(Paint.Style.STROKE);
     }
 

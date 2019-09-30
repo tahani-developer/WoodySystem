@@ -9,16 +9,20 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,24 +46,22 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 
     private EditText thickness, length, width, grade, noOfPieces, bundleNo, location, area;
     private Button addToInventory;
+    private TableLayout bundlesTable;
     private TextView textView;
     private BundleInfo newBundle;
     private DatabaseHandler databaseHandler;
     private Animation animation;
 
-
-    byte[] printIm;
-    PrintPic printPic;
-    BluetoothAdapter mBluetoothAdapter;
-    BluetoothSocket mmSocket;
-    BluetoothDevice mmDevice;
-    OutputStream mmOutputStream;
-    InputStream mmInputStream;
-    Thread workerThread;
-    byte[] readBuffer;
-    int readBufferPosition;
+    private byte[] printIm, readBuffer;
+    private PrintPic printPic;
+    private BluetoothAdapter mBluetoothAdapter;
+    private BluetoothSocket mmSocket;
+    private BluetoothDevice mmDevice;
+    private OutputStream mmOutputStream;
+    private InputStream mmInputStream;
+    private Thread workerThread;
+    private int readBufferPosition;
     volatile boolean stopWorker;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +79,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         area = findViewById(R.id.addToInventory_area);
         addToInventory = findViewById(R.id.addToInventory_add_button);
         textView = findViewById(R.id.addToInventory_textView);
+        bundlesTable = findViewById(R.id.addToInventory_table);
 
         addToInventory.setOnClickListener(this);
 
@@ -91,71 +94,130 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        if (!TextUtils.isEmpty(thickness.getText().toString())) {
-            if (!TextUtils.isEmpty(length.getText().toString())) {
-                if (!TextUtils.isEmpty(width.getText().toString())) {
-                    if (!TextUtils.isEmpty(grade.getText().toString())) {
-                        if (!TextUtils.isEmpty(noOfPieces.getText().toString())) {
-                            if (!TextUtils.isEmpty(bundleNo.getText().toString())) {
-                                if (!TextUtils.isEmpty(location.getText().toString())) {
-                                    if (!TextUtils.isEmpty(area.getText().toString())) {
+        String thicknessText = thickness.getText().toString();
+        String lengthText = length.getText().toString();
+        String widthText = width.getText().toString();
+        String gradeText = grade.getText().toString();
+        String noOfPiecesText = noOfPieces.getText().toString();
+        String bundleNOText = bundleNo.getText().toString();
+        String locationText = location.getText().toString();
+        String areaText = area.getText().toString();
 
-                                        String data=thickness.getText().toString()+length.getText().toString()+width.getText().toString()
-                                                +grade.getText().toString();
+//        if (!TextUtils.isEmpty(thickness.getText().toString())) {
+//            if (!TextUtils.isEmpty(length.getText().toString())) {
+//                if (!TextUtils.isEmpty(width.getText().toString())) {
+//                    if (!TextUtils.isEmpty(grade.getText().toString())) {
+//                        if (!TextUtils.isEmpty(noOfPieces.getText().toString())) {
+//                            if (!TextUtils.isEmpty(bundleNo.getText().toString())) {
+//                                if (!TextUtils.isEmpty(location.getText().toString())) {
+//                                    if (!TextUtils.isEmpty(area.getText().toString())) {
 
-                                        Bitmap bitmap=writeBarcode(data);
+//                                        String data = thicknessText + lengthText + widthText + gradeText;
+//                                        Bitmap bitmap = writeBarcode(data);
+//                                        newBundle = new BundleInfo(Double.parseDouble(thicknessText)
+//                                                , Double.parseDouble(lengthText)
+//                                                , Double.parseDouble(widthText)
+//                                                , gradeText
+//                                                , Integer.parseInt(noOfPiecesText)
+//                                                , bundleNOText
+//                                                , locationText
+//                                                , areaText
+//                                                , 1
+//                                                , 53
+//                                                , 5
+//                                                , "june");
+//                                        databaseHandler.addNewBundle(newBundle);
 
+        TableRow tableRow = new TableRow(this);
+        for (int i = 0; i < 8; i++) {
+            TextView textView = new TextView(this);
+            textView.setBackgroundResource(R.color.orange);
+            TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+            textViewParam.setMargins(1, 5 ,1,1);
+            textView.setTextSize(15);
+            textView.setTextColor(ContextCompat.getColor(this, R.color.white));
+            textView.setLayoutParams(textViewParam);
+            switch (i) {
+                case 0:
+                    textView.setText("55");
+                    break;
+                case 1:
+//                                                    textView.setText(lengthText);
+                    textView.setText("65");
 
-                                        newBundle = new BundleInfo(Double.parseDouble(thickness.getText().toString())
-                                                , Double.parseDouble(length.getText().toString())
-                                                , Double.parseDouble(width.getText().toString())
-                                                , grade.getText().toString()
-                                                , Integer.parseInt(noOfPieces.getText().toString())
-                                                , bundleNo.getText().toString()
-                                                , location.getText().toString()
-                                                , area.getText().toString()
-                                                ,BitMapToString(bitmap));
-                                        databaseHandler.addNewBundle(newBundle);
-                                        Toast.makeText(this, "Added Successfully", Toast.LENGTH_SHORT).show();
-
-
-
-                                    } else {
-                                        area.setError("Required!");
-                                    }
-                                } else {
-                                    location.setError("Required!");
-                                }
-                            } else {
-                                bundleNo.setError("Required!");
-                            }
-                        } else {
-                            noOfPieces.setError("Required!");
-                        }
-                    } else {
-                        grade.setError("Required!");
-                    }
-                } else {
-                    width.setError("Required!");
-                }
-            } else {
-                length.setError("Required!");
+                    break;
+                case 2:
+//                                                    textView.setText(widthText);
+                    textView.setText("65");
+                    break;
+                case 3:
+//                                                    textView.setText(thicknessText);
+                    textView.setText("65");
+                    break;
+                case 4:
+//                                                    textView.setText(gradeText);
+                    textView.setText("new");
+                    break;
+                case 5:
+//                                                    textView.setText(noOfPiecesText);
+                    textView.setText("200");
+                    break;
+                case 6:
+//                                                    textView.setText(locationText);
+                    textView.setText("amman");
+                    break;
+                case 7:
+//                                                    textView.setText(areaText);
+                    textView.setText("zone1");
+                    break;
             }
-        } else {
-            thickness.setError("Required!");
+//                                            textView.setBackgroundResource(R.color.alpha_white);
+
+//                                            TableRow.LayoutParams bundleParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 2f);
+//                                            bundleParam.setMargins(0, 2, 0, 2);
+//                                            tableRow.setLayoutParams(bundleParam);
+            tableRow.addView(textView);
         }
+        bundlesTable.addView(tableRow);
+
+        Toast.makeText(this, "Added Successfully", Toast.LENGTH_SHORT).show();
+
+
+//                                    } else {
+//                                        area.setError("Required!");
+//                                    }
+//                                } else {
+//                                    location.setError("Required!");
+//                                }
+//                            } else {
+//                                bundleNo.setError("Required!");
+//                            }
+//                        } else {
+//                            noOfPieces.setError("Required!");
+//                        }
+//                    } else {
+//                        grade.setError("Required!");
+//                    }
+//                } else {
+//                    width.setError("Required!");
+//                }
+//            } else {
+//                length.setError("Required!");
+//            }
+//        } else {
+//            thickness.setError("Required!");
+//        }
 
     }
 
 
-    public Bitmap writeBarcode(String data){
+    public Bitmap writeBarcode(String data) {
         final Dialog dialog = new Dialog(AddToInventory.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.barcode_dialog);
 
-
-        ImageView iv=(ImageView)dialog.findViewById(R.id.iv);
+        ImageView iv = (ImageView) dialog.findViewById(R.id.iv);
         // barcode data
         String barcode_data = data;
 
@@ -177,9 +239,9 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
             e.printStackTrace();
         }
 
-dialog.show();
+        dialog.show();
 
-return bitmap;
+        return bitmap;
 
     }
 
@@ -231,7 +293,6 @@ return bitmap;
         }
         return null;
     }
-
 
 
     void findBT() {
@@ -366,15 +427,11 @@ return bitmap;
      */
 
 
-
-
-
-
     void sendData(Bitmap bitmap) throws IOException {
         try {
             printPic = PrintPic.getInstance();
             printPic.init(bitmap);
-            printIm= printPic.printDraw();
+            printIm = printPic.printDraw();
             mmOutputStream.write(printIm);
 
         } catch (NullPointerException e) {
@@ -403,18 +460,17 @@ return bitmap;
     }
 
 
-    public String BitMapToString(Bitmap bitmap){
-        ByteArrayOutputStream baos=new  ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
-        byte [] arr=baos.toByteArray();
-        String result= Base64.encodeToString(arr, Base64.DEFAULT);
+    public String BitMapToString(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] arr = baos.toByteArray();
+        String result = Base64.encodeToString(arr, Base64.DEFAULT);
         return result;
     }
 
 
-
-    public Bitmap StringToBitMap(String image){
-        if(image!="") {
+    public Bitmap StringToBitMap(String image) {
+        if (image != "") {
             try {
                 byte[] encodeByte = Base64.decode(image, Base64.DEFAULT);
                 Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
@@ -426,8 +482,6 @@ return bitmap;
         }
         return null;
     }
-
-
 
 
 }

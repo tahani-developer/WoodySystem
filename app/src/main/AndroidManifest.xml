@@ -17,27 +17,9 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name=".LoginActivity">
-
-        </activity>
-
-        <activity android:name=".AddToInventory">
-
-        </activity>
-
-        <activity android:name=".Stage3">
-
-        </activity>
-
-        <activity android:name=".LoadingOrder">
-
-        </activity>
-
-        <activity android:name=".LoadingOrder2">
-
-        </activity>
-
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".LoginActivity"
+            android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -45,6 +27,35 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".AddToInventory"
+            android:windowSoftInputMode="stateAlwaysHidden">
+
+        </activity>
+
+        <activity
+            android:name=".Stage3"
+            android:windowSoftInputMode="stateAlwaysHidden">
+
+        </activity>
+
+        <activity
+            android:name=".LoadingOrder"
+            android:windowSoftInputMode="stateAlwaysHidden">
+
+        </activity>
+
+        <activity
+            android:name=".LoadingOrder2"
+            android:windowSoftInputMode="stateAlwaysHidden">
+
+        </activity>
+
+        <activity android:name=".MainActivity">
+
+        </activity>
+
     </application>
+    <uses-permission android:name="android.permission.BLUETOOTH" />
 
 </manifest>
