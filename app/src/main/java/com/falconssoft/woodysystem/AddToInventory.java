@@ -132,12 +132,14 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                     if (!TextUtils.isEmpty(location.getText().toString())) {
                                         if (!TextUtils.isEmpty(area.getText().toString())) {
 
-                                            String data = thicknessText + lengthText + widthText;//+ gradeText;
+                                            String data = bundleNOText;
+
+//                                            String data = thicknessText+" "+ widthText+" " + lengthText+" " +gradeSpinner.getSelectedItem().toString();//+ gradeText;
 //                                            Bitmap bitmap = writeBarcode(data);
                                             newBundle = new BundleInfo(Double.parseDouble(thicknessText)
                                                     , Double.parseDouble(lengthText)
                                                     , Double.parseDouble(widthText)
-                                                    , "fresh"
+                                                    , "Fresh"
                                                     , Integer.parseInt(noOfPiecesText)
                                                     , bundleNOText
                                                     , locationText
@@ -195,6 +197,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                             }
                                             bundlesTable.addView(tableRow);
                                             Toast.makeText(this, "Added Successfully", Toast.LENGTH_SHORT).show();
+
+                                            writeBarcode(data);
                                         } else {
                                             area.setError("Required!");
                                         }
@@ -231,6 +235,9 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                 gradeSpinner.setSelection(0);
                 break;
         }
+
+
+
     }
 
     public Bitmap writeBarcode(String data) {
