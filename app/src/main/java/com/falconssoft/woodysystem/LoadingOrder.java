@@ -33,6 +33,11 @@ public class LoadingOrder extends AppCompatActivity {
     List<BundleInfo> bundles ;
 ImageButton deleteBarcode;
     String barcodeValue="";
+    private GridView items;
+    private Button done;
+    private SearchView searchViewTh, searchViewW, searchViewL;
+    private DatabaseHandler DHandler ;
+    private List<BundleInfo> bundles ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

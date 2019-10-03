@@ -25,8 +25,8 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
+
 
         <activity
             android:name=".AddToInventory"
@@ -34,7 +34,6 @@
 
 
         </activity>
-
         <activity
             android:name=".Stage3"
             android:windowSoftInputMode="stateAlwaysHidden">

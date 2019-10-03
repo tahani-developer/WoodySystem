@@ -16,10 +16,6 @@ import com.falconssoft.woodysystem.models.BundleInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by mohd darras on 15/04/2018.
- */
-
 public class ItemsListAdapter extends BaseAdapter {
 
     private Context context;
@@ -105,12 +101,12 @@ public class ItemsListAdapter extends BaseAdapter {
 
     public List<BundleInfo> getSelectedItems() {
 
-        for (int i = 0; i < itemsList.size(); i++)
-            if (itemsList.get(i).getChecked())
+        selectedBundles.clear();
+        for(int i = 0 ; i< itemsList.size() ; i++)
+            if(itemsList.get(i).getChecked())
                 selectedBundles.add(itemsList.get(i));
 
         return selectedBundles;
     }
-
 
 }

@@ -190,6 +190,20 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return bundleInfoList;
     }
 
+    public List<String> getBundleNo(){
+        List<String> undleNoList = new ArrayList<>();
+        String selectQuery = "SELECT BARCODE FROM " + BUNDLE_INFO_TABLE;
+        db = this.getWritableDatabase();
+        Cursor cursor= db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()){
+            do {
+                undleNoList.add(cursor.getString(5));
+            }while (cursor.moveToNext());
+        }
+        return undleNoList;
+    }
+
     public List<BundleInfo> getBundleInfoForBundle(String bundel) {
         List<BundleInfo> bundleInfoList = new ArrayList<>();
 
