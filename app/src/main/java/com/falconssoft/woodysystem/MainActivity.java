@@ -13,10 +13,8 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
-    RelativeLayout relativeLayout;
-    TextView stage1 ;
-    TextView stage2 ;
-    TextView stage3 ;
+    private RelativeLayout relativeLayout;
+    private TextView stage1, stage2 ,stage3 ;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override

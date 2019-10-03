@@ -23,15 +23,14 @@ import java.util.Locale;
 
 public class LoadingOrder2 extends AppCompatActivity {
 
-    HorizontalListView listView;
+    private HorizontalListView listView;
     private EditText placingNo, orderNo, containerNo, dateOfLoad;
     private Button done;
     private TextView textView;
     private Orders order;
     private DatabaseHandler databaseHandler;
-
-    List<BundleInfo> bundles;
-    Calendar myCalendar;
+    private List<BundleInfo> bundles;
+    private Calendar myCalendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +38,6 @@ public class LoadingOrder2 extends AppCompatActivity {
         setContentView(R.layout.loading_order2);
 
         init();
-
         databaseHandler = new DatabaseHandler(this);
 
         ItemsListAdapter obj = new ItemsListAdapter();

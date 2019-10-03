@@ -16,10 +16,6 @@ import com.falconssoft.woodysystem.models.BundleInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by mohd darras on 15/04/2018.
- */
-
 public class ItemsListAdapter extends BaseAdapter {
 
     private Context context;

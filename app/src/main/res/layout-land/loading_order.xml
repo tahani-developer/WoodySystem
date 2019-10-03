@@ -62,7 +62,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
-        android:background="@drawable/white_border"
+        android:background="@drawable/frame_shape"
         android:drawableStart="@drawable/bundle"
         android:drawableLeft="@drawable/bundle"
         android:paddingLeft="20dp"

@@ -19,20 +19,16 @@ import java.util.List;
 
 public class LoadingOrder extends AppCompatActivity {
 
-
-    GridView items;
-    Button done;
-    SearchView searchViewTh, searchViewW, searchViewL;
-
-    DatabaseHandler DHandler ;
-    List<BundleInfo> bundles ;
-
+    private GridView items;
+    private Button done;
+    private SearchView searchViewTh, searchViewW, searchViewL;
+    private DatabaseHandler DHandler ;
+    private List<BundleInfo> bundles ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.loading_order);
-
 
         items = (GridView) findViewById(R.id.items);
         searchViewTh = (SearchView) findViewById(R.id.mSearchTh);
