@@ -24,14 +24,8 @@ import java.util.List;
 
 public class LoadingOrder extends AppCompatActivity {
 
-
-    GridView items;
-    Button done,barcode;
-    SearchView searchViewTh, searchViewW, searchViewL;
-
-    DatabaseHandler DHandler ;
-    List<BundleInfo> bundles ;
-ImageButton deleteBarcode;
+    Button barcode;
+    ImageButton deleteBarcode;
     String barcodeValue="";
     private GridView items;
     private Button done;
