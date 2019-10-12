@@ -31,9 +31,8 @@ public class LoadingOrder2 extends AppCompatActivity {
     private TextView textView;
     private Orders order;
     private DatabaseHandler databaseHandler;
-
-    List<BundleInfo> bundles;
-    Calendar myCalendar;
+    private List<BundleInfo> bundles;
+    private Calendar myCalendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +40,6 @@ public class LoadingOrder2 extends AppCompatActivity {
         setContentView(R.layout.loading_order2);
 
         init();
-
         databaseHandler = new DatabaseHandler(this);
 
         ItemsListAdapter obj = new ItemsListAdapter();

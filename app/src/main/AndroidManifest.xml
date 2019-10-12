@@ -20,8 +20,13 @@
         <activity
             android:name=".LoginActivity"
             android:windowSoftInputMode="stateAlwaysHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
+
 
         <activity
             android:name=".AddToInventory"
@@ -29,7 +34,6 @@
 
 
         </activity>
-
         <activity
             android:name=".Stage3"
             android:windowSoftInputMode="stateAlwaysHidden">
@@ -57,6 +61,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".QrReader"></activity>
+
 
     </application>
     <uses-permission android:name="android.permission.BLUETOOTH" />

@@ -25,7 +25,7 @@
             android:layout_marginStart="150dp"
             android:layout_marginLeft="150dp"
             android:layout_marginTop="250dp"
-            android:background="@drawable/white_border"
+            android:background="@drawable/frame_shape"
             android:gravity="center"
             android:orientation="vertical">
 

@@ -7,6 +7,33 @@
     android:background="@drawable/w10"
     android:layout_height="match_parent">
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/barcode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/frame_shape"
+
+            android:text="search by Barcode"
+            android:textColor="@color/white" />
+
+        <ImageButton
+            android:id="@+id/deletebaarcode"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="8"
+            android:background="@drawable/frame_shape"
+            app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -61,7 +88,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
-        android:background="@drawable/white_border"
+        android:background="@drawable/frame_shape"
         android:drawableStart="@drawable/bundle"
         android:drawableLeft="@drawable/bundle"
         android:paddingLeft="20dp"
