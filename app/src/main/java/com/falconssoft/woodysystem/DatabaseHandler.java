@@ -192,7 +192,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public List<String> getBundleNo(){
         List<String> bundleNoList = new ArrayList<>();
-        String selectQuery = "SELECT BARCODE FROM " + BUNDLE_INFO_TABLE;
+        String selectQuery = "SELECT BUNDLE_NO FROM " + BUNDLE_INFO_TABLE;
         db = this.getWritableDatabase();
         Cursor cursor= db.rawQuery(selectQuery, null);
 
