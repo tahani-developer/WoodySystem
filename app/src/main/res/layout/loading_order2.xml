@@ -9,6 +9,12 @@
     android:minHeight="500dp"
     android:orientation="vertical">
 
+    <ListView
+        android:id="@+id/verticalListView"
+        android:visibility="gone"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -193,6 +199,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:ems="10"
+                android:focusable="false"
                 android:inputType="text" />
 
         </LinearLayout>
