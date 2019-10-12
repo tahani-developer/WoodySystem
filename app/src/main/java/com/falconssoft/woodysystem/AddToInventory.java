@@ -142,7 +142,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                                     break;
                                                 }
                                             if (!foundBarcode) {
-                                                String data = thicknessText + lengthText + widthText;//+ gradeText;
+                                                String data = bundleNOText;//+ gradeText;
                                                 Bitmap bitmap = writeBarcode(data);
                                                 newBundle = new BundleInfo(Double.parseDouble(thicknessText)
                                                         , Double.parseDouble(lengthText)

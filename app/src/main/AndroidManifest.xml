@@ -27,13 +27,13 @@
             </intent-filter>
         </activity>
 
+
         <activity
             android:name=".AddToInventory"
             android:windowSoftInputMode="stateAlwaysHidden">
 
 
         </activity>
-
         <activity
             android:name=".Stage3"
             android:windowSoftInputMode="stateAlwaysHidden">
@@ -55,6 +55,9 @@
         <activity android:name=".MainActivity">
 
         </activity>
+
+        <activity android:name=".QrReader"></activity>
+
 
     </application>
     <uses-permission android:name="android.permission.BLUETOOTH" />
