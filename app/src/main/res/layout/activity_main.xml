@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:gravity="center"
+    android:background="@drawable/w10"
     tools:context=".MainActivity"
     android:background="@drawable/w10"
     android:orientation="vertical">

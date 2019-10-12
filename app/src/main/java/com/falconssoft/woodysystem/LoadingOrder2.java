@@ -10,6 +10,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,7 +24,8 @@ import java.util.Locale;
 
 public class LoadingOrder2 extends AppCompatActivity {
 
-    private HorizontalListView listView;
+    HorizontalListView listView;
+    ListView listView2;
     private EditText placingNo, orderNo, containerNo, dateOfLoad;
     private Button done;
     private TextView textView;
@@ -45,6 +47,7 @@ public class LoadingOrder2 extends AppCompatActivity {
 
         ItemsListAdapter2 adapter = new ItemsListAdapter2(LoadingOrder2.this, bundles);
         listView.setAdapter(adapter);
+        listView2.setAdapter(adapter);
 
         myCalendar = Calendar.getInstance();
 
@@ -131,6 +134,7 @@ public class LoadingOrder2 extends AppCompatActivity {
     void init() {
 
         listView = findViewById(R.id.listview);
+        listView2 = findViewById(R.id.verticalListView);
         placingNo = findViewById(R.id.placing_no);
         orderNo = findViewById(R.id.order_no);
         containerNo = findViewById(R.id.container_no);

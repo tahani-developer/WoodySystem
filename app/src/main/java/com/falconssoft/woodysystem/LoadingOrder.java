@@ -31,7 +31,10 @@ public class LoadingOrder extends AppCompatActivity {
     private Button done;
     private SearchView searchViewTh, searchViewW, searchViewL;
     private DatabaseHandler DHandler ;
-    private List<BundleInfo> bundles ;
+    private List<BundleInfo> bundles , filteredList;
+
+    String f1 = "", f2 = "", f3 = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,7 @@ public class LoadingOrder extends AppCompatActivity {
         deleteBarcode = (ImageButton) findViewById(R.id.deletebaarcode);
         DHandler = new DatabaseHandler(LoadingOrder.this);
         bundles = DHandler.getBundleInfo();
+        filteredList = new ArrayList<>();
 
         ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, bundles);
         items.setAdapter(adapter);
@@ -75,11 +79,11 @@ public class LoadingOrder extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(listContainsItems()) {
+                if (listContainsItems()) {
                     Intent intent = new Intent(LoadingOrder.this, LoadingOrder2.class);
                     startActivity(intent);
                 } else {
-                    Toast.makeText(LoadingOrder.this , "No item selected !" , Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoadingOrder.this, "No item selected !", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -103,21 +107,15 @@ public class LoadingOrder extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String query) {
 
-                if (query != null && query.length() > 0) {
-                    ArrayList<BundleInfo> filteredList = new ArrayList<>();
-                    for (int k = 0; k < bundles.size(); k++) {
-                        if (("" +bundles.get(k).getThickness()).toUpperCase().contains(query))
-                            filteredList.add(bundles.get(k));
-                    }
+                    f1 = query;
+                    List filteredList = filter (bundles, f1, f2, f3);
                     ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, filteredList);
                     items.setAdapter(adapter);
-                } else {
-                    ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, bundles);
-                    items.setAdapter(adapter);
-                }
+
                 return false;
             }
         });
+
         searchViewW.setOnQueryTextListener(new android.support.v7.widget.SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -127,18 +125,11 @@ public class LoadingOrder extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String query) {
 
-                if (query != null && query.length() > 0) {
-                    ArrayList<BundleInfo> filteredList = new ArrayList<>();
-                    for (int k = 0; k < bundles.size(); k++) {
-                        if (("" +bundles.get(k).getWidth()).toUpperCase().contains(query))
-                            filteredList.add(bundles.get(k));
-                    }
+                    f2 = query;
+                    List filteredList = filter (bundles, f1, f2, f3);
                     ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, filteredList);
                     items.setAdapter(adapter);
-                } else {
-                    ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, bundles);
-                    items.setAdapter(adapter);
-                }
+
                 return false;
             }
         });
@@ -152,30 +143,36 @@ public class LoadingOrder extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String query) {
 
-                if (query != null && query.length() > 0) {
-                    ArrayList<BundleInfo> filteredList = new ArrayList<>();
-                    for (int k = 0; k < bundles.size(); k++) {
-                        if (("" +bundles.get(k).getLength()).toUpperCase().contains(query))
-                            filteredList.add(bundles.get(k));
-                    }
-                    ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, filteredList);
-                    items.setAdapter(adapter);
-                } else {
-                    ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, bundles);
-                    items.setAdapter(adapter);
-                }
+                f3 = query;
+                List filteredList = filter (bundles, f1, f2, f3);
+                ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, filteredList);
+                items.setAdapter(adapter);
+
                 return false;
             }
         });
     }
 
-    boolean listContainsItems(){
+    List<BundleInfo> filter(List<BundleInfo> list, String s1, String s2, String s3){
+        List<BundleInfo> tempList = new ArrayList<>();
+        for (int k = 0; k < list.size(); k++) {
+            if (
+                    (("" + list.get(k).getThickness()).toUpperCase().startsWith(s1) || s1.equals("")) &&
+                    (("" + list.get(k).getWidth()).toUpperCase().startsWith(s2) || s2.equals("")) &&
+                    (("" + list.get(k).getLength()).toUpperCase().startsWith(s3) || s3.equals("")) )
+                tempList.add(list.get(k));
+        }
+
+        return tempList;
+    }
+
+    boolean listContainsItems() {
         ItemsListAdapter obj = new ItemsListAdapter();
         List<BundleInfo> bundles = obj.getSelectedItems();
 
         boolean test = false;
-        for(int i=0 ; i<bundles.size(); i++){
-            if(bundles.get(i).getChecked()) {
+        for (int i = 0; i < bundles.size(); i++) {
+            if (bundles.get(i).getChecked()) {
                 test = true;
                 break;
             }

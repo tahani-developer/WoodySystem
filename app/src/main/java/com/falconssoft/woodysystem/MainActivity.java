@@ -51,40 +51,40 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        stage1.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_UP) {
-                    relativeLayout.setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.stages));
-                } else if(event.getAction() == MotionEvent.ACTION_DOWN) {
-                    relativeLayout.setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.stages1));
-                }
-                return false;
-            }
-        });
-
-        stage2.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_UP) {
-                    relativeLayout.setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.stages));
-                } else if(event.getAction() == MotionEvent.ACTION_DOWN) {
-                    relativeLayout.setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.stages2));
-                }
-                return false;
-            }
-        });
-
-        stage3.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_UP) {
-                    relativeLayout.setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.stages));
-                } else if(event.getAction() == MotionEvent.ACTION_DOWN) {
-                    relativeLayout.setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.stages3));
-                }
-                return false;
-            }
-        });
+//        stage1.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View view, MotionEvent event) {
+//                if(event.getAction() == MotionEvent.ACTION_UP) {
+//                    relativeLayout.setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.stages));
+//                } else if(event.getAction() == MotionEvent.ACTION_DOWN) {
+//                    relativeLayout.setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.stages1));
+//                }
+//                return false;
+//            }
+//        });
+//
+//        stage2.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View view, MotionEvent event) {
+//                if(event.getAction() == MotionEvent.ACTION_UP) {
+//                    relativeLayout.setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.stages));
+//                } else if(event.getAction() == MotionEvent.ACTION_DOWN) {
+//                    relativeLayout.setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.stages2));
+//                }
+//                return false;
+//            }
+//        });
+//
+//        stage3.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View view, MotionEvent event) {
+//                if(event.getAction() == MotionEvent.ACTION_UP) {
+//                    relativeLayout.setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.stages));
+//                } else if(event.getAction() == MotionEvent.ACTION_DOWN) {
+//                    relativeLayout.setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.stages3));
+//                }
+//                return false;
+//            }
+//        });
     }
 }
