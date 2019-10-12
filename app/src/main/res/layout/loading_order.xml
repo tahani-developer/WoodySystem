@@ -78,9 +78,8 @@
     <GridView
         android:id="@+id/items"
         android:layout_width="match_parent"
-        android:layout_height="800dp"
-        android:numColumns="2"
-        />
+        android:layout_height="731dp"
+        android:numColumns="2" />
 
     <Button
         android:id="@+id/done"

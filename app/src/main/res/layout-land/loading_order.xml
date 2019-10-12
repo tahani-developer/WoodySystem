@@ -80,7 +80,7 @@
     <GridView
         android:id="@+id/items"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="289dp"
         android:gravity="center"
         android:numColumns="3" />
 
