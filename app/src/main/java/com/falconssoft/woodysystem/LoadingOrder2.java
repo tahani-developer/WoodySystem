@@ -1,6 +1,7 @@
 package com.falconssoft.woodysystem;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -151,5 +152,19 @@ public class LoadingOrder2 extends AppCompatActivity {
         Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_to_right);
         textView.startAnimation(animation);
 
+    }
+
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(LoadingOrder2.this, LoadingOrder.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+//        setSlideAnimation();
+        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
     }
 }

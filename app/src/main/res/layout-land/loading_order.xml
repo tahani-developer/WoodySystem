@@ -114,13 +114,18 @@
 
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/orange"/>
+
     <GridView
         android:id="@+id/items"
         android:layout_width="match_parent"
         android:layout_height="360dp"
         android:gravity="center"
-        android:numColumns="3"
-        />
+        android:background="@color/alpha_black"
+        android:numColumns="3" />
 
     <Button
         android:id="@+id/done"

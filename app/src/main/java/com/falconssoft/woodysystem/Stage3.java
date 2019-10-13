@@ -38,11 +38,31 @@ public class Stage3 extends AppCompatActivity implements View.OnClickListener {
             case R.id.stage3_enter_inventory:
                 Intent intent = new Intent(this, AddToInventory.class);
                 startActivity(intent);
+                setSlideAnimation();
                 break;
             case R.id.stage3_loading_order:
                 Intent intent2 = new Intent(this, LoadingOrder.class);
                 startActivity(intent2);
+                setSlideAnimation();
                 break;
         }
     }
+
+    public void setSlideAnimation() {
+        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
+    }
+
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(Stage3.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        setSlideAnimation();
+    }
+
 }
