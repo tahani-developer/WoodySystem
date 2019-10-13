@@ -7,39 +7,72 @@
     android:background="@drawable/wooddecor"
     android:layout_height="match_parent">
 
-
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/barcode"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="6"
             android:background="@drawable/frame_shape"
-
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            android:drawableStart="@drawable/ic_search_white_24dp"
+            android:drawableLeft="@drawable/ic_search_white_24dp"
+            android:paddingStart="250dp"
+            android:paddingLeft="250dp"
+            android:drawablePadding="-180dp"
             android:text="search by Barcode"
             android:textColor="@color/white" />
 
         <ImageButton
             android:id="@+id/deletebaarcode"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="8"
+            android:layout_weight="1"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
             android:background="@drawable/frame_shape"
             app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
 
+        <Button
+            android:id="@+id/done"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="2"
+            android:background="@drawable/frame_shape"
+            android:drawableStart="@drawable/bundle"
+            android:drawableLeft="@drawable/bundle"
+            android:paddingStart="50dp"
+            android:paddingLeft="50dp"
+            android:drawablePadding="-50dp"
+            android:text="@string/done"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
         android:orientation="horizontal">
 
         <android.support.v7.widget.SearchView
@@ -77,27 +110,22 @@
 
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/orange"/>
+
     <GridView
         android:id="@+id/items"
         android:layout_width="match_parent"
-        android:layout_height="289dp"
+        android:layout_height="400dp"
         android:gravity="center"
+        android:background="@color/alpha_black"
         android:numColumns="3" />
 
-    <Button
-        android:id="@+id/done"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/frame_shape"
-        android:drawableStart="@drawable/bundle"
-        android:drawableLeft="@drawable/bundle"
-        android:paddingLeft="20dp"
-        android:text="@string/done"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="25sp"
-        />
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/orange"/>
 </LinearLayout>

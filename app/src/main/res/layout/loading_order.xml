@@ -11,7 +11,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
         <Button
@@ -19,9 +24,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:textAllCaps="false"
+            android:textSize="20sp"
             android:background="@drawable/frame_shape"
-
-            android:text="search by Barcode"
+            android:drawableStart="@drawable/ic_search_white_24dp"
+            android:drawableLeft="@drawable/ic_search_white_24dp"
+            android:paddingStart="150dp"
+            android:paddingLeft="150dp"
+            android:drawablePadding="-100dp"
+            android:text="@string/search_by_barcode"
             android:textColor="@color/white" />
 
         <ImageButton
@@ -37,7 +50,11 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
         android:orientation="horizontal">
 
         <android.support.v7.widget.SearchView
@@ -78,7 +95,7 @@
     <GridView
         android:id="@+id/items"
         android:layout_width="match_parent"
-        android:layout_height="731dp"
+        android:layout_height="743dp"
         android:numColumns="2" />
 
     <Button

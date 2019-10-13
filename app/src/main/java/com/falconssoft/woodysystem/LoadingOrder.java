@@ -24,17 +24,13 @@ import java.util.List;
 
 public class LoadingOrder extends AppCompatActivity {
 
-    Button barcode;
-    ImageButton deleteBarcode;
-    String barcodeValue="";
+    private ImageButton deleteBarcode;
     private GridView items;
-    private Button done;
+    private Button done, barcode;
     private SearchView searchViewTh, searchViewW, searchViewL;
-    private DatabaseHandler DHandler ;
-    private List<BundleInfo> bundles , filteredList;
-
-    String f1 = "", f2 = "", f3 = "";
-
+    private DatabaseHandler DHandler;
+    private List<BundleInfo> bundles, filteredList;
+    private String f1 = "", f2 = "", f3 = "", barcodeValue = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +78,7 @@ public class LoadingOrder extends AppCompatActivity {
                 if (listContainsItems()) {
                     Intent intent = new Intent(LoadingOrder.this, LoadingOrder2.class);
                     startActivity(intent);
+                    setSlideAnimation();
                 } else {
                     Toast.makeText(LoadingOrder.this, "No item selected !", Toast.LENGTH_LONG).show();
                 }
@@ -107,10 +104,10 @@ public class LoadingOrder extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String query) {
 
-                    f1 = query;
-                    List filteredList = filter (bundles, f1, f2, f3);
-                    ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, filteredList);
-                    items.setAdapter(adapter);
+                f1 = query;
+                List filteredList = filter(bundles, f1, f2, f3);
+                ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, filteredList);
+                items.setAdapter(adapter);
 
                 return false;
             }
@@ -125,10 +122,10 @@ public class LoadingOrder extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String query) {
 
-                    f2 = query;
-                    List filteredList = filter (bundles, f1, f2, f3);
-                    ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, filteredList);
-                    items.setAdapter(adapter);
+                f2 = query;
+                List filteredList = filter(bundles, f1, f2, f3);
+                ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, filteredList);
+                items.setAdapter(adapter);
 
                 return false;
             }
@@ -144,7 +141,7 @@ public class LoadingOrder extends AppCompatActivity {
             public boolean onQueryTextChange(String query) {
 
                 f3 = query;
-                List filteredList = filter (bundles, f1, f2, f3);
+                List filteredList = filter(bundles, f1, f2, f3);
                 ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, filteredList);
                 items.setAdapter(adapter);
 
@@ -153,13 +150,13 @@ public class LoadingOrder extends AppCompatActivity {
         });
     }
 
-    List<BundleInfo> filter(List<BundleInfo> list, String s1, String s2, String s3){
+    List<BundleInfo> filter(List<BundleInfo> list, String s1, String s2, String s3) {
         List<BundleInfo> tempList = new ArrayList<>();
         for (int k = 0; k < list.size(); k++) {
             if (
                     (("" + list.get(k).getThickness()).toUpperCase().startsWith(s1) || s1.equals("")) &&
-                    (("" + list.get(k).getWidth()).toUpperCase().startsWith(s2) || s2.equals("")) &&
-                    (("" + list.get(k).getLength()).toUpperCase().startsWith(s3) || s3.equals("")) )
+                            (("" + list.get(k).getWidth()).toUpperCase().startsWith(s2) || s2.equals("")) &&
+                            (("" + list.get(k).getLength()).toUpperCase().startsWith(s3) || s3.equals("")))
                 tempList.add(list.get(k));
         }
 
@@ -180,9 +177,9 @@ public class LoadingOrder extends AppCompatActivity {
         return test;
     }
 
-    void searchByBundleNo(String Bundul){
+    void searchByBundleNo(String Bundul) {
 
-        Log.e("searchByBundleNo ",""+barcodeValue+"\n"+"th ="+Bundul);
+        Log.e("searchByBundleNo ", "" + barcodeValue + "\n" + "th =" + Bundul);
 
 
         if (!barcodeValue.equals("cancelled")) {
@@ -202,23 +199,20 @@ public class LoadingOrder extends AppCompatActivity {
 
     }
 
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        IntentResult Result = IntentIntegrator.parseActivityResult(requestCode , resultCode ,data);
-        if(Result != null){
-            if(Result.getContents() == null){
-                Log.d("MainActivity" , "cancelled scan");
+        IntentResult Result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (Result != null) {
+            if (Result.getContents() == null) {
+                Log.d("MainActivity", "cancelled scan");
                 Toast.makeText(this, "cancelled", Toast.LENGTH_SHORT).show();
-                barcodeValue="cancelled";
-            }
-            else {
-                Log.d("MainActivity" , "Scanned");
-                Toast.makeText(this,"Scanned -> " + Result.getContents(), Toast.LENGTH_SHORT).show();
+                barcodeValue = "cancelled";
+            } else {
+                Log.d("MainActivity", "Scanned");
+                Toast.makeText(this, "Scanned -> " + Result.getContents(), Toast.LENGTH_SHORT).show();
 
-                barcodeValue=Result.getContents();
+                barcodeValue = Result.getContents();
 //                String[] arrayString = barcodeValue.split(" ");
 
 //Log.e("barcode_value ",""+barcodeValue+"\n"+"th ="+arrayString[0]+"\n"+"w ="+arrayString[1]+"\n"+"l ="
@@ -226,14 +220,27 @@ public class LoadingOrder extends AppCompatActivity {
                 searchByBundleNo(barcodeValue);
 
             }
-        }
-        else {
-            super.onActivityResult(requestCode , resultCode , data);
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 
+    public void setSlideAnimation() {
+        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
+    }
 
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(LoadingOrder.this, Stage3.class);
+        startActivity(intent);
+        finish();
+    }
 
+    @Override
+    public void finish() {
+        super.finish();
+        setSlideAnimation();
+    }
 
 
 }

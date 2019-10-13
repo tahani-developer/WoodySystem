@@ -67,6 +67,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
+                setSlideAnimation();
 
 //                if (!usernameText.equals("") || !usernameText.equals(null)){
 //                    if (!passwordText.equals("") || !passwordText.equals(null)){
@@ -104,4 +105,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         }
     }
+
+    public void setSlideAnimation() {
+        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
+    }
+
+
 }

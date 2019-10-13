@@ -141,7 +141,6 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         String bundleNOText = bundleNo.getText().toString();
 //        String locationText = location.getText().toString();
 //        String areaText = area.getText().toString();
-
         switch (v.getId()) {
             case R.id.addToInventory_add_button:
                 boolean foundBarcode = false;
@@ -565,5 +564,20 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 //        gradeText = "Fresh";
 //        locationText = "Loc 1";
 
+    }
+
+
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(AddToInventory.this, Stage3.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+//        setSlideAnimation();
+        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
     }
 }

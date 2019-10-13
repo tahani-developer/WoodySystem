@@ -206,17 +206,17 @@
 
     </android.support.constraint.ConstraintLayout>
 
-
     <Button
         android:id="@+id/done"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="60dp"
-        android:background="@drawable/white_border"
+        android:background="@drawable/frame_shape"
         android:drawableStart="@drawable/bundle"
         android:drawableLeft="@drawable/bundle"
-        android:paddingLeft="20dp"
+        android:paddingLeft="60dp"
+        android:drawablePadding="-60dp"
         android:text="@string/done"
         android:textAllCaps="false"
         android:textColor="@color/white"

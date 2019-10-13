@@ -6,7 +6,7 @@
 
     <LinearLayout
         android:id="@+id/linear"
-        android:layout_width="280dp"
+        android:layout_width="290dp"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:background="@drawable/border_background"
@@ -16,8 +16,7 @@
         <CheckBox
             android:id="@+id/checkbox"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="30dp"
             android:gravity="left"
             android:text=""
             android:textColor="#000000"
