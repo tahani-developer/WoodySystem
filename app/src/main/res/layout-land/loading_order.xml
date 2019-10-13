@@ -9,14 +9,80 @@
 
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginHorizontal="10dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/barcode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/frame_shape"
+
+            android:text="search by Barcode"
+            android:textColor="@color/white" />
+
+        <ImageButton
+            android:id="@+id/deletebaarcode"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="8"
+            android:background="@drawable/frame_shape"
+            app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_marginHorizontal="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Srch Thickness"
+            android:layout_marginHorizontal="1dp"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Srch Width"
+            android:textColor="@color/black"
+            android:layout_marginHorizontal="1dp"
+            android:textSize="17sp"
+            />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Srch Length"
+            android:textColor="@color/black"
+            android:layout_marginHorizontal="1dp"
+            android:textSize="17sp"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="10dp"
         android:orientation="horizontal">
 
         <android.support.v7.widget.SearchView
             android:id="@+id/mSearchTh"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="35dp"
             android:layout_weight="1"
             android:padding="5dp"
             android:layout_marginHorizontal="1dp"
@@ -27,7 +93,7 @@
         <android.support.v7.widget.SearchView
             android:id="@+id/mSearchW"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="35dp"
             android:layout_weight="1"
             android:padding="5dp"
             android:layout_marginHorizontal="5dp"
@@ -38,7 +104,7 @@
         <android.support.v7.widget.SearchView
             android:id="@+id/mSearchL"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="35dp"
             android:layout_weight="1"
             android:padding="5dp"
             android:layout_marginHorizontal="1dp"
@@ -51,7 +117,7 @@
     <GridView
         android:id="@+id/items"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="360dp"
         android:gravity="center"
         android:numColumns="3"
         />
@@ -59,9 +125,9 @@
     <Button
         android:id="@+id/done"
         android:layout_width="250dp"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_gravity="center"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/frame_shape"
         android:drawableStart="@drawable/bundle"
         android:drawableLeft="@drawable/bundle"
@@ -69,7 +135,7 @@
         android:text="@string/done"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:textSize="25sp"
+        android:textSize="20sp"
         />
 
 </LinearLayout>

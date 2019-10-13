@@ -55,6 +55,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String ORDERS_ORDER_NO = "ORDER_NO";
     private static final String ORDERS_CONTAINER_NO = "CONTAINER_NO";
     private static final String ORDERS_DATE_OF_LOAD = "DATE_OF_LOAD";
+    private static final String ORDERS_DESTINATION = "DESTINATION";
 
 
     public DatabaseHandler(Context context) {
@@ -90,10 +91,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + ORDERS_BUNDLE_NO + " TEXT,"
                 + ORDERS_LOCATION + " TEXT,"
                 + ORDERS_AREA + " TEXT,"
-                + ORDERS_PLACING_NO + " INTEGER,"
-                + ORDERS_ORDER_NO + " INTEGER,"
-                + ORDERS_CONTAINER_NO + " INTEGER,"
-                + ORDERS_DATE_OF_LOAD + " TEXT" + ")";
+                + ORDERS_PLACING_NO + " TEXT,"
+                + ORDERS_ORDER_NO + " TEXT,"
+                + ORDERS_CONTAINER_NO + " TEXT,"
+                + ORDERS_DATE_OF_LOAD + " TEXT,"
+                + ORDERS_DESTINATION + " TEXT " + ")";
         db.execSQL(CREATE_ORDERS_TABLE);
     }
 
@@ -105,6 +107,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }catch (Exception e)
         {
             Log.e("upgrade","BUNDLE Barcode");
+        }
+
+        try {
+            db.execSQL("ALTER TABLE ORDERS_TABLE ADD DESTINATION TAXE NOT NULL DEFAULT ''");
+        }catch (Exception e)
+        {
+            Log.e("upgrade","DESTINATION");
         }
 
     }
@@ -155,6 +164,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         contentValues.put(ORDERS_ORDER_NO, orders.getOrderNo());
         contentValues.put(ORDERS_CONTAINER_NO, orders.getContainerNo());
         contentValues.put(ORDERS_DATE_OF_LOAD, orders.getDateOfLoad());
+        contentValues.put(ORDERS_DESTINATION, orders.getDestination());
 
         db.insert(ORDERS_TABLE, null, contentValues);
         db.close();

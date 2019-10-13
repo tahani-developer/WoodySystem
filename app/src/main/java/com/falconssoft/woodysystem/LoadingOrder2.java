@@ -26,7 +26,7 @@ public class LoadingOrder2 extends AppCompatActivity {
 
     HorizontalListView listView;
     ListView listView2;
-    private EditText placingNo, orderNo, containerNo, dateOfLoad;
+    private EditText placingNo, orderNo, containerNo, dateOfLoad, destination;
     private Button done;
     private TextView textView;
     private Orders order;
@@ -69,31 +69,36 @@ public class LoadingOrder2 extends AppCompatActivity {
                     if (!TextUtils.isEmpty(orderNo.getText().toString())) {
                         if (!TextUtils.isEmpty(containerNo.getText().toString())) {
                             if (!TextUtils.isEmpty(dateOfLoad.getText().toString())) {
+                                if (!TextUtils.isEmpty(destination.getText().toString())) {
 
 
-                                for (int i = 0; i < bundles.size(); i++) {
-                                    order = new Orders(bundles.get(i).getThickness()
-                                            , bundles.get(i).getWidth()
-                                            , bundles.get(i).getLength()
-                                            , bundles.get(i).getGrade()
-                                            , bundles.get(i).getNoOfPieces()
-                                            , bundles.get(i).getBundleNo()
-                                            , bundles.get(i).getLocation()
-                                            , bundles.get(i).getArea()
-                                            , Integer.parseInt(placingNo.getText().toString())
-                                            , Integer.parseInt(orderNo.getText().toString())
-                                            , Integer.parseInt(containerNo.getText().toString())
-                                            , dateOfLoad.getText().toString());
-                                    databaseHandler.addOrder(order);
+                                    for (int i = 0; i < bundles.size(); i++) {
+                                        order = new Orders(bundles.get(i).getThickness()
+                                                , bundles.get(i).getWidth()
+                                                , bundles.get(i).getLength()
+                                                , bundles.get(i).getGrade()
+                                                , bundles.get(i).getNoOfPieces()
+                                                , bundles.get(i).getBundleNo()
+                                                , bundles.get(i).getLocation()
+                                                , bundles.get(i).getArea()
+                                                , placingNo.getText().toString()
+                                                , orderNo.getText().toString()
+                                                , containerNo.getText().toString()
+                                                , dateOfLoad.getText().toString()
+                                                , destination.getText().toString());
+                                        databaseHandler.addOrder(order);
+                                    }
+                                    Toast.makeText(LoadingOrder2.this, "Saved !", Toast.LENGTH_LONG).show();
+
+                                    placingNo.setText("");
+                                    orderNo.setText("");
+                                    containerNo.setText("");
+                                    dateOfLoad.setText("");
+                                    destination.setText("");
+
+                                } else {
+                                    destination.setError("Required!");
                                 }
-                                Toast.makeText(LoadingOrder2.this, "Saved !", Toast.LENGTH_LONG).show();
-
-                                placingNo.setText("");
-                                orderNo.setText("");
-                                containerNo.setText("");
-                                dateOfLoad.setText("");
-
-
                             } else {
                                 dateOfLoad.setError("Required!");
                             }
@@ -112,7 +117,7 @@ public class LoadingOrder2 extends AppCompatActivity {
 
     }
 
-    public DatePickerDialog.OnDateSetListener openDatePickerDialog (final int flag){
+    public DatePickerDialog.OnDateSetListener openDatePickerDialog(final int flag) {
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -139,6 +144,7 @@ public class LoadingOrder2 extends AppCompatActivity {
         orderNo = findViewById(R.id.order_no);
         containerNo = findViewById(R.id.container_no);
         dateOfLoad = findViewById(R.id.date_of_load);
+        destination = findViewById(R.id.destination);
         done = findViewById(R.id.done);
         textView = findViewById(R.id.loading_order_textView);
 
