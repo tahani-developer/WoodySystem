@@ -14,26 +14,74 @@
         android:background="@color/alpha_black"
         >
 
-        <TextView
-            android:id="@+id/addToInventory_textView"
+        <LinearLayout
+            android:id="@+id/buttons_linear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginRight="30dp"
-            android:drawableStart="@drawable/axe"
-            android:drawableLeft="@drawable/axe"
-            android:drawablePadding="10dp"
-            android:gravity="start"
-            android:text="@string/new_bundle"
-            android:textColor="@color/orange"
-            android:textSize="30sp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/addToInventory_textView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:drawableStart="@drawable/axe"
+                android:drawableLeft="@drawable/axe"
+                android:gravity="start"
+                android:text="@string/new_bundle"
+                android:fontFamily="serif"
+                android:textColor="@color/orange"
+                android:textSize="30sp"
+                />
+
+            <Button
+                android:id="@+id/addToInventory_add_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
+                android:background="@drawable/frame_shape"
+                android:drawableStart="@drawable/ic_add_white_38dp"
+                android:drawableLeft="@drawable/ic_add_white_38dp"
+                android:paddingEnd="60dp"
+                android:paddingRight="60dp"
+                android:paddingLeft="80dp"
+                android:fontFamily="serif"
+                android:text="@string/add"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                />
+
+            <Button
+                android:id="@+id/addToInventory_new_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:background="@drawable/frame_shape"
+                android:drawableStart="@drawable/ic_clear_all_white_38dp"
+                android:drawableLeft="@drawable/handsaw"
+                android:paddingEnd="30dp"
+                android:paddingRight="30dp"
+                android:paddingLeft="40dp"
+                android:fontFamily="serif"
+                android:text="@string/clear_fields"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                />
+
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/linearLayout2"
@@ -43,26 +91,24 @@
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addToInventory_textView">
+            app:layout_constraintTop_toBottomOf="@+id/buttons_linear">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
                 android:orientation="horizontal">
 
                 <LinearLayout
                     android:id="@+id/addToInventory_linear_one"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginLeft="20dp"
                     android:layout_marginTop="10dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
                     android:layout_weight="1"
                     android:background="@drawable/shape_with_corner"
                     android:orientation="horizontal"
@@ -93,8 +139,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
                     android:layout_weight="1"
                     android:background="@drawable/shape_with_corner"
                     android:orientation="horizontal"
@@ -126,8 +172,8 @@
                     android:id="@+id/addToInventory_linear_three"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_weight="1"
                     android:background="@drawable/shape_with_corner"
@@ -159,8 +205,6 @@
                     android:id="@+id/addToInventory_linear_four"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginRight="20dp"
                     android:layout_marginTop="10dp"
                     android:layout_weight="1"
                     android:background="@drawable/shape_with_corner"
@@ -195,10 +239,10 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
                 android:layout_marginTop="5dp"
                 android:orientation="horizontal">
 
@@ -206,10 +250,8 @@
                     android:id="@+id/addToInventory_linear_five"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
                     android:layout_weight="1"
                     android:background="@drawable/shape_with_corner"
                     android:orientation="horizontal"
@@ -269,10 +311,10 @@
                     android:id="@+id/addToInventory_linear_seven"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
                     android:layout_weight="1"
                     android:background="@drawable/shape_with_corner"
                     android:orientation="horizontal"
@@ -304,8 +346,6 @@
                     android:id="@+id/addToInventory_linear_eight"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginRight="20dp"
                     android:layout_weight="1"
                     android:background="@drawable/shape_with_corner"
                     android:orientation="horizontal"
@@ -335,69 +375,19 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="200dp"
-                android:layout_marginLeft="200dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="200dp"
-                android:layout_marginRight="200dp"
-                android:layout_marginBottom="5dp"
-                >
-
-                <Button
-                    android:id="@+id/addToInventory_add_button"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/frame_shape"
-                    android:drawableStart="@drawable/bundle"
-                    android:drawableLeft="@drawable/bundle"
-                    android:layout_marginStart="100dp"
-                    android:layout_marginLeft="100dp"
-                    android:fontFamily="serif"
-                    android:paddingLeft="60dp"
-                    android:drawablePadding="-50dp"
-                    android:text="@string/add"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
-                    />
-
-                <Button
-                    android:id="@+id/addToInventory_new_button"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/frame_shape"
-                    android:drawableStart="@drawable/handsaw"
-                    android:drawableLeft="@drawable/handsaw"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginEnd="100dp"
-                    android:layout_marginRight="100dp"
-                    android:fontFamily="serif"
-                    android:paddingLeft="20dp"
-                    android:text="@string/new_bundle"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
-                    />
-            </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:layout_marginStart="1dp"
-            android:layout_marginLeft="1dp"
+            android:layout_height="305dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
             android:layout_marginTop="15dp"
-            android:layout_marginEnd="1dp"
-            android:layout_marginRight="1dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
             android:orientation="vertical"
+            android:background="@color/alpha_black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
@@ -415,6 +405,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/bundle_no"
+                    android:fontFamily="serif"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
 
@@ -423,6 +414,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/length"
+                    android:fontFamily="serif"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
 
@@ -431,6 +423,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/width"
+                    android:fontFamily="serif"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
 
@@ -439,6 +432,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/th"
+                    android:fontFamily="serif"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
 
@@ -447,6 +441,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/grade"
+                    android:fontFamily="serif"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
 
@@ -455,6 +450,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/no_of_pieces"
+                    android:fontFamily="serif"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
 
@@ -463,6 +459,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/location"
+                    android:fontFamily="serif"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
 
@@ -471,6 +468,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/area"
+                    android:fontFamily="serif"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
 
@@ -478,7 +476,7 @@
 
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="270dp"
                 >
 
                 <TableLayout
