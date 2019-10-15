@@ -10,16 +10,17 @@ public class Orders {
     private String bundleNo;
     private String location;
     private String area;
-    private int placingNo;
-    private int orderNo;
-    private int containerNo;
+    private String placingNo;
+    private String orderNo;
+    private String containerNo;
     private String dateOfLoad;
+    private String destination;
 
     public Orders() {
     }
 
     public Orders(double thickness, double length, double width, String grade, int noOfPieces, String bundleNo, String location, String area
-            , int placingNo, int orderNo, int containerNo, String dateOfLoad) {
+            , String placingNo, String orderNo, String containerNo, String dateOfLoad, String destination) {
         this.thickness = thickness;
         this.length = length;
         this.width = width;
@@ -32,6 +33,7 @@ public class Orders {
         this.orderNo = orderNo;
         this.containerNo = containerNo;
         this.dateOfLoad = dateOfLoad;
+        this.destination = destination;
     }
 
     public double getThickness() {
@@ -98,27 +100,27 @@ public class Orders {
         this.area = area;
     }
 
-    public int getPlacingNo() {
+    public String getPlacingNo() {
         return placingNo;
     }
 
-    public void setPlacingNo(int placingNo) {
+    public void setPlacingNo(String placingNo) {
         this.placingNo = placingNo;
     }
 
-    public int getOrderNo() {
+    public String getOrderNo() {
         return orderNo;
     }
 
-    public void setOrderNo(int orderNo) {
+    public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
     }
 
-    public int getContainerNo() {
+    public String getContainerNo() {
         return containerNo;
     }
 
-    public void setContainerNo(int containerNo) {
+    public void setContainerNo(String containerNo) {
         this.containerNo = containerNo;
     }
 
@@ -128,5 +130,13 @@ public class Orders {
 
     public void setDateOfLoad(String dateOfLoad) {
         this.dateOfLoad = dateOfLoad;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
     }
 }
