@@ -2,6 +2,7 @@ package com.falconssoft.woodysystem;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -28,7 +29,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private LinearLayout linearLayout;
     private EditText username, password;
     private Button login;
-    private ImageView logoImage;
+    private ImageView logoImage, settings;
     private DatabaseHandler databaseHandler;
     private List<Users> usersList = new ArrayList<>();
     private final int IMAGE_CODE = 5;
@@ -44,10 +45,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         password = findViewById(R.id.login_password);
         logoImage = findViewById(R.id.login_logo);
         login = findViewById(R.id.login_login_btn);
+        settings = findViewById(R.id.login_settings);
         linearLayout = findViewById(R.id.login_linearLayout);
 
         login.setOnClickListener(this);
         logoImage.setOnClickListener(this);
+        settings.setOnClickListener(this);
 
         animation = AnimationUtils.loadAnimation(getApplicationContext(),
                 R.anim.move_to_right);
@@ -87,6 +90,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Intent getImage = new Intent(Intent.ACTION_PICK);
                 getImage.setType("image/*");
                 startActivityForResult(getImage, IMAGE_CODE);
+                break;
+            case R.id.login_settings:
                 break;
         }
 
