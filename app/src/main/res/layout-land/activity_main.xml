@@ -32,6 +32,7 @@
                 android:layout_marginBottom="181dp"
                 android:background="@drawable/border_background"
                 android:text="@string/stage1"
+                android:fontFamily="serif"
                 android:textColor="@color/orange"
                 android:textSize="30sp" />
 
@@ -47,6 +48,7 @@
                 android:layout_marginBottom="163dp"
                 android:background="@drawable/frame_shape"
                 android:text="@string/stage2"
+                android:fontFamily="serif"
                 android:textColor="@color/white"
                 android:textSize="30sp" />
 
@@ -62,6 +64,7 @@
                 android:layout_marginBottom="188dp"
                 android:background="@drawable/border_background"
                 android:text="@string/stage3"
+                android:fontFamily="serif"
                 android:textColor="@color/orange"
                 android:textSize="30sp" />
 
