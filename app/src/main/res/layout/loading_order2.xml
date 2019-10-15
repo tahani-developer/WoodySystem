@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingVertical="20dp"
+        android:paddingVertical="10dp"
         android:paddingHorizontal="30dp"
         >
         <TextView
@@ -49,7 +49,7 @@
     <com.falconssoft.woodysystem.HorizontalListView
         android:id="@+id/listview"
         android:layout_width="fill_parent"
-        android:layout_height="300dp" />
+        android:layout_height="290dp" />
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -234,19 +234,100 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:ems="10"
-                android:focusable="false"
                 android:inputType="text" />
 
         </LinearLayout>
 
     </android.support.constraint.ConstraintLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/image1"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/border_background"
+            android:padding="7dp"
+            android:layout_marginHorizontal="5dp"
+            app:srcCompat="@drawable/pic" />
+
+        <ImageView
+            android:id="@+id/image2"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/border_background"
+            android:padding="7dp"
+            android:layout_marginHorizontal="5dp"
+            app:srcCompat="@drawable/pic" />
+
+        <ImageView
+            android:id="@+id/image3"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/border_background"
+            android:padding="7dp"
+            android:layout_marginHorizontal="5dp"
+            app:srcCompat="@drawable/pic" />
+
+        <ImageView
+            android:id="@+id/image4"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/border_background"
+            android:padding="7dp"
+            android:layout_marginHorizontal="5dp"
+            app:srcCompat="@drawable/pic" />
+
+        <ImageView
+            android:id="@+id/image5"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/border_background"
+            android:padding="7dp"
+            android:layout_marginHorizontal="5dp"
+            app:srcCompat="@drawable/pic" />
+
+        <ImageView
+            android:id="@+id/image6"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/border_background"
+            android:padding="7dp"
+            android:layout_marginHorizontal="5dp"
+            app:srcCompat="@drawable/pic" />
+
+        <ImageView
+            android:id="@+id/image7"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/border_background"
+            android:padding="7dp"
+            android:layout_marginHorizontal="5dp"
+            app:srcCompat="@drawable/pic" />
+
+        <ImageView
+            android:id="@+id/image8"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/border_background"
+            android:padding="7dp"
+            android:layout_marginHorizontal="5dp"
+            app:srcCompat="@drawable/pic" />
+
+
+
+    </LinearLayout>
+
     <Button
         android:id="@+id/done"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="30dp"
         android:background="@drawable/frame_shape"
         android:drawableStart="@drawable/bundle"
         android:drawableLeft="@drawable/bundle"

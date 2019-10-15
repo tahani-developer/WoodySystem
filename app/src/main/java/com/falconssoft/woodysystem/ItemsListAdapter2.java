@@ -1,6 +1,11 @@
 package com.falconssoft.woodysystem;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +14,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.falconssoft.woodysystem.models.BundleInfo;
@@ -56,6 +62,7 @@ public class ItemsListAdapter2 extends BaseAdapter {
 
     private class ViewHolder {
         TextView th, w, l, grade, pcs, bundle, location, area;
+        ImageView image;
     }
 
     @Override
@@ -72,6 +79,7 @@ public class ItemsListAdapter2 extends BaseAdapter {
         holder.bundle = (TextView) view.findViewById(R.id.bundle);
         holder.location = (TextView) view.findViewById(R.id.location);
         holder.area = (TextView) view.findViewById(R.id.area);
+        holder.image = (ImageView) view.findViewById(R.id.image);
 
         holder.th.setText("" + itemsList.get(i).getThickness());
         holder.w.setText("" + itemsList.get(i).getWidth());
@@ -82,8 +90,24 @@ public class ItemsListAdapter2 extends BaseAdapter {
         holder.location.setText("" + itemsList.get(i).getLocation());
         holder.area.setText("" + itemsList.get(i).getArea());
 
+        if (itemsList.get(i).getPicture() == null)
+            holder.image.setImageDrawable(context.getResources().getDrawable(R.drawable.pic));
+        else
+            holder.image.setImageBitmap(itemsList.get(i).getPicture());
+//        holder.image.setOnClickListener(new View.OnClickListener() {
+//            @RequiresApi(api = Build.VERSION_CODES.M)
+//            @Override
+//            public void onClick(View view) {
+//
+//                LoadingOrder2 obj = new LoadingOrder2();
+//                obj.openCamera(i);
+//
+//            }
+//        });
+
         return view;
     }
+
 
     public Filter getFilter() {
         Filter filter = new Filter() {
@@ -130,7 +154,8 @@ public class ItemsListAdapter2 extends BaseAdapter {
                                     , mOriginalValues.get(i).getBundleNo()
                                     , mOriginalValues.get(i).getLocation()
                                     , mOriginalValues.get(i).getArea()
-                                    ,""));
+                                    , ""
+                                    , mOriginalValues.get(i).getPicture()));
                             Log.e("here", "*********2" + constraint + "*" + data);
                         }
                     }

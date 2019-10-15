@@ -5,12 +5,15 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.Orders;
+import com.falconssoft.woodysystem.models.Pictures;
 import com.falconssoft.woodysystem.models.Users;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,6 +60,18 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String ORDERS_DATE_OF_LOAD = "DATE_OF_LOAD";
     private static final String ORDERS_DESTINATION = "DESTINATION";
 
+    //******************************************************************
+    private static final String PICTURES_TABLE = "PICTURES_TABLE";
+
+    private static final String ORDER_NO = "ORDER_NO";
+    private static final String PICTURE_1 = "PICTURE_1";
+    private static final String PICTURE_2 = "PICTURE_2";
+    private static final String PICTURE_3 = "PICTURE_3";
+    private static final String PICTURE_4 = "PICTURE_4";
+    private static final String PICTURE_5 = "PICTURE_5";
+    private static final String PICTURE_6 = "PICTURE_6";
+    private static final String PICTURE_7 = "PICTURE_7";
+    private static final String PICTURE_8 = "PICTURE_8";
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -97,6 +112,18 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + ORDERS_DATE_OF_LOAD + " TEXT,"
                 + ORDERS_DESTINATION + " TEXT " + ")";
         db.execSQL(CREATE_ORDERS_TABLE);
+
+        String CREATE_PICTURES_TABLE = "CREATE TABLE " + PICTURES_TABLE + "("
+                + ORDER_NO + " TEXT,"
+                + PICTURE_1 + " BLOB,"
+                + PICTURE_2 + " BLOB,"
+                + PICTURE_3 + " BLOB,"
+                + PICTURE_4 + " BLOB,"
+                + PICTURE_5 + " BLOB,"
+                + PICTURE_6 + " BLOB,"
+                + PICTURE_7 + " BLOB,"
+                + PICTURE_8 + " BLOB " + ")";
+        db.execSQL(CREATE_PICTURES_TABLE);
     }
 
     @Override
@@ -167,6 +194,80 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         contentValues.put(ORDERS_DESTINATION, orders.getDestination());
 
         db.insert(ORDERS_TABLE, null, contentValues);
+        db.close();
+    }
+
+    public void addPictures(Pictures pictures) {
+        db = this.getReadableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        byte[] byteImage1 = {};
+        if (pictures.getPic1() != null) {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            pictures.getPic1().compress(Bitmap.CompressFormat.PNG, 0, stream);
+            byteImage1 = stream.toByteArray();
+        }
+
+        byte[] byteImage2 = {};
+        if (pictures.getPic2() != null) {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            pictures.getPic2().compress(Bitmap.CompressFormat.PNG, 0, stream);
+            byteImage2 = stream.toByteArray();
+        }
+
+        byte[] byteImage3 = {};
+        if (pictures.getPic3() != null) {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            pictures.getPic3().compress(Bitmap.CompressFormat.PNG, 0, stream);
+            byteImage3 = stream.toByteArray();
+        }
+
+        byte[] byteImage4 = {};
+        if (pictures.getPic4() != null) {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            pictures.getPic4().compress(Bitmap.CompressFormat.PNG, 0, stream);
+            byteImage4 = stream.toByteArray();
+        }
+
+        byte[] byteImage5 = {};
+        if (pictures.getPic5() != null) {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            pictures.getPic5().compress(Bitmap.CompressFormat.PNG, 0, stream);
+            byteImage5 = stream.toByteArray();
+        }
+
+        byte[] byteImage6 = {};
+        if (pictures.getPic6() != null) {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            pictures.getPic6().compress(Bitmap.CompressFormat.PNG, 0, stream);
+            byteImage6 = stream.toByteArray();
+        }
+
+        byte[] byteImage7 = {};
+        if (pictures.getPic7() != null) {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            pictures.getPic7().compress(Bitmap.CompressFormat.PNG, 0, stream);
+            byteImage7 = stream.toByteArray();
+        }
+
+        byte[] byteImage8 = {};
+        if (pictures.getPic8() != null) {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            pictures.getPic8().compress(Bitmap.CompressFormat.PNG, 0, stream);
+            byteImage8 = stream.toByteArray();
+        }
+
+        contentValues.put(ORDER_NO, pictures.getOrderNo());
+        contentValues.put(PICTURE_1, byteImage1);
+        contentValues.put(PICTURE_2, byteImage2);
+        contentValues.put(PICTURE_3, byteImage3);
+        contentValues.put(PICTURE_4, byteImage4);
+        contentValues.put(PICTURE_5, byteImage5);
+        contentValues.put(PICTURE_6, byteImage6);
+        contentValues.put(PICTURE_7, byteImage7);
+        contentValues.put(PICTURE_8, byteImage8);
+
+        db.insert(PICTURES_TABLE, null, contentValues);
         db.close();
     }
 
