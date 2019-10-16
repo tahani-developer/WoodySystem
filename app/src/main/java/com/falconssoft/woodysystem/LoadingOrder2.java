@@ -36,7 +36,6 @@ import com.falconssoft.woodysystem.email.SendMailTask;
 import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.Orders;
 import com.falconssoft.woodysystem.models.Pictures;
-import com.ganesh.intermecarabic.Arabic864;
 
 import java.io.IOException;
 import java.io.InputStream;

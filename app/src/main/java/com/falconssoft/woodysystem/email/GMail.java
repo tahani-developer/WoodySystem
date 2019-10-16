@@ -2,6 +2,8 @@ package com.falconssoft.woodysystem.email;
 
 import android.util.Log;
 
+import com.falconssoft.woodysystem.SettingsFile;
+
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Properties;
@@ -61,7 +63,7 @@ public class GMail {
 //            String toEmail=  toEmailList.get(0).toString();
 //            Log.i("GMail", "toEmail: " + toEmail);
             emailMessage.addRecipient(Message.RecipientType.TO,
-                    new InternetAddress("hiary.abeer@yahoo.com"));
+                    new InternetAddress(SettingsFile.recipientName));
 //        }
 
         emailMessage.setSubject(emailSubject);
