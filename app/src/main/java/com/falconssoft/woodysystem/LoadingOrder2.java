@@ -3,6 +3,9 @@ package com.falconssoft.woodysystem;
 import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -33,12 +36,18 @@ import android.widget.Toast;
 import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.Orders;
 import com.falconssoft.woodysystem.models.Pictures;
+import com.ganesh.intermecarabic.Arabic864;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
+import java.util.UUID;
 
 public class LoadingOrder2 extends AppCompatActivity {
 
@@ -55,6 +64,13 @@ public class LoadingOrder2 extends AppCompatActivity {
     static int index = 0;
     ItemsListAdapter2 adapter;
     int imageNo = 0;
+
+    BluetoothAdapter mBluetoothAdapter;
+    BluetoothSocket mmSocket;
+    BluetoothDevice mmDevice;
+    OutputStream mmOutputStream;
+    InputStream mmInputStream;
+    volatile boolean stopWorker;
 
     static ArrayList<Bitmap> pics = new ArrayList<>();
 
@@ -218,6 +234,7 @@ public class LoadingOrder2 extends AppCompatActivity {
                                             , pics.get(7)));
 
                                     Toast.makeText(LoadingOrder2.this, "Saved !", Toast.LENGTH_LONG).show();
+                                    printReport();
 
                                     placingNo.setText("");
                                     orderNo.setText("");
@@ -229,8 +246,8 @@ public class LoadingOrder2 extends AppCompatActivity {
 //                                        pics.set(i,null);
 //
 //                                    onResume();
-                                    printReport();
-                                    onCreate(savedInstanceState);
+
+//                                    onCreate(savedInstanceState);
 
                                 } else {
                                     destination.setError("Required!");
@@ -334,8 +351,188 @@ public class LoadingOrder2 extends AppCompatActivity {
         }
     }
 
-    void printReport(){
+    void printReport() {
+        try {
+            findBT();
+            openBT();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
+    void findBT() {
+
+        try {
+            mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+            if (mBluetoothAdapter == null) {
+//                myLabel.setText("No bluetooth adapter available");
+            }
+
+            if (!mBluetoothAdapter.isEnabled()) {
+                Intent enableBluetooth = new Intent(
+                        BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(enableBluetooth, 0);
+            }
+
+            Set<BluetoothDevice> pairedDevices = mBluetoothAdapter
+                    .getBondedDevices();
+            if (pairedDevices.size() > 0) {
+                for (BluetoothDevice device : pairedDevices) {
+
+                    mmDevice = device;
+                }
+            }
+
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    void openBT() throws IOException {
+        try {
+            Log.e("open", "'yes");
+            // Standard SerialPortService ID
+            UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
+            mmSocket = mmDevice.createRfcommSocketToServiceRecord(uuid);
+            mmSocket.connect();
+            mmOutputStream = mmSocket.getOutputStream();
+            mmInputStream = mmSocket.getInputStream();
+
+            sendData();
+
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    void sendData() throws IOException {
+        try {
+
+            Thread.sleep(1000);
+
+            printCustom("Woody System" + "\n", 1, 1);
+            mmOutputStream.write(PrinterCommands.FEED_LINE);
+            printCustom("Placing Number   : " + placingNo.getText().toString() + "\n", 1, 0);
+            mmOutputStream.write(PrinterCommands.FEED_LINE);
+            printCustom("Order Number     : " + orderNo.getText().toString() + "\n", 1, 0);
+            mmOutputStream.write(PrinterCommands.FEED_LINE);
+            printCustom("Container Number : " + containerNo.getText().toString() + "\n", 1, 0);
+            mmOutputStream.write(PrinterCommands.FEED_LINE);
+            printCustom("Date Of Load     : " + dateOfLoad.getText().toString() + "\n", 1, 0);
+            mmOutputStream.write(PrinterCommands.FEED_LINE);
+            printCustom("Destination      : " + destination.getText().toString() + "\n", 1, 0);
+
+            printCustom("----------------------------------------------" + "\n", 1, 0);
+
+
+            printCustom("Th      W       L    Grade  #Pieces  Bundle# Location  Area" + "\n", 0, 0);
+            printCustom("----------------------------------------------", 1, 0);
+
+
+            String itemsString = "";
+            for(int i = 0 ; i< bundles.size() ; i++){
+                String row = bundles.get(i).getThickness() + "                                             ";
+                row = row.substring(0, 6) + bundles.get(i).getWidth() + row.substring(6, row.length());
+                row = row.substring(0, 15) + bundles.get(i).getLength() + row.substring(15, row.length());
+                row = row.substring(0, 21) + bundles.get(i).getGrade() + row.substring(21, row.length());
+                row = row.substring(0, 30) + bundles.get(i).getNoOfPieces() + row.substring(30, row.length());
+                row = row.substring(0, 40) + bundles.get(i).getBundleNo() + row.substring(40, row.length());
+                row = row.substring(0, 47) + bundles.get(i).getLocation() + row.substring(47, row.length());
+                row = row.substring(0, 56) + bundles.get(i).getArea();
+                row = row.trim();
+                itemsString = itemsString + "\n" + row;
+            }
+            printCustom(itemsString + "\n", 0, 0);
+
+            printCustom("----------------------------------------------" + "\n", 1, 0);
+
+            mmOutputStream.write(PrinterCommands.FEED_LINE);
+            printCustom("\n", 1, 0);
+            printCustom("\n", 1, 0);
+            mmOutputStream.write(PrinterCommands.ESC_ALIGN_CENTER);
+            mmOutputStream.write(PrinterCommands.ESC_ALIGN_CENTER);
+            mmOutputStream.write(PrinterCommands.ESC_ALIGN_CENTER);
+            mmOutputStream.write(PrinterCommands.ESC_ALIGN_CENTER);
+
+            closeBT();
+
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void printCustom(String msg, int size, int align) {
+        //Print config "mode"
+        byte[] cc = new byte[]{0x1B, 0x21, 0x03};  // 0- normal size text
+        //byte[] cc1 = new byte[]{0x1B,0x21,0x00};  // 0- normal size text
+        byte[] bb = new byte[]{0x1B, 0x21, 0x08};  // 1- only bold text
+        byte[] bb2 = new byte[]{0x1B, 0x21, 0x20}; // 2- bold with medium text
+        byte[] bb3 = new byte[]{0x1B, 0x21, 0x10}; // 3- bold with large text
+        try {
+            switch (size) {
+                case 0:
+                    mmOutputStream.write(cc);
+                    break;
+                case 1:
+                    mmOutputStream.write(bb);
+                    break;
+                case 2:
+                    mmOutputStream.write(bb2);
+                    break;
+                case 3:
+                    mmOutputStream.write(bb3);
+                    break;
+            }
+
+            switch (align) {
+                case 0:
+                    //left align
+                    mmOutputStream.write(PrinterCommands.ESC_ALIGN_LEFT);
+                    break;
+                case 1:
+                    //center align
+                    mmOutputStream.write(PrinterCommands.ESC_ALIGN_CENTER);
+                    break;
+                case 2:
+                    //right align
+                    mmOutputStream.write(PrinterCommands.ESC_ALIGN_RIGHT);
+                    break;
+            }
+//            Arabic864 arabic = new Arabic864();
+//            byte[] arabicArr = arabic.Convert(msg, false);
+            mmOutputStream.write(msg.getBytes());
+//             mmOutputStream.write(msg.getBytes());
+
+            //outputStream.write(cc);
+            //printNewLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    void closeBT() throws IOException {
+        try {
+            stopWorker = true;
+            mmOutputStream.close();
+            mmInputStream.close();
+
+            mmSocket.close();
+//            mmSocket=null;
+            //            myLabel.setText("Bluetooth Closed");
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
