@@ -389,7 +389,7 @@ public class LoadingOrder2 extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    } 
 
     void openBT() throws IOException {
         try {
