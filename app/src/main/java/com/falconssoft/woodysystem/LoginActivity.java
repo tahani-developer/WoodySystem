@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         login.setOnClickListener(this);
         logoImage.setOnClickListener(this);
-        settings.setOnClickListener(this);
+//        settings.setOnClickListener(this);
 
         animation = AnimationUtils.loadAnimation(getApplicationContext(),
                 R.anim.move_to_right);

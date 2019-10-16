@@ -38,4 +38,5 @@ dependencies {
     implementation files('lib/activation.jar')
     implementation files('lib/additionnal.jar')
     implementation files('lib/mail.jar')
+    implementation files('lib/intermecarabic.jar')
 }
