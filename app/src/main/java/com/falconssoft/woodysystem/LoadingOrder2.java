@@ -6,7 +6,6 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -30,6 +29,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.falconssoft.woodysystem.email.SendMailTask;
 import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.Orders;
 import com.falconssoft.woodysystem.models.Pictures;
@@ -39,6 +39,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+
+import static com.falconssoft.woodysystem.SettingsFile.emailContent;
+import static com.falconssoft.woodysystem.SettingsFile.emailTitle;
+import static com.falconssoft.woodysystem.SettingsFile.recipientName;
+import static com.falconssoft.woodysystem.SettingsFile.senderName;
+import static com.falconssoft.woodysystem.SettingsFile.senderPassword;
 
 public class LoadingOrder2 extends AppCompatActivity {
 
@@ -189,7 +195,6 @@ public class LoadingOrder2 extends AppCompatActivity {
                             if (!TextUtils.isEmpty(dateOfLoad.getText().toString())) {
                                 if (!TextUtils.isEmpty(destination.getText().toString())) {
 
-
                                     for (int i = 0; i < bundles.size(); i++) {
                                         order = new Orders(bundles.get(i).getThickness()
                                                 , bundles.get(i).getWidth()
@@ -224,11 +229,13 @@ public class LoadingOrder2 extends AppCompatActivity {
                                     containerNo.setText("");
                                     dateOfLoad.setText("");
                                     destination.setText("");
-
 //                                    for(int i = 0 ; i<pics.size() ; i++)
 //                                        pics.set(i,null);
 //
 //                                    onResume();
+                                    new SendMailTask(LoadingOrder2.this).execute(senderName, senderPassword
+                                    , recipientName, emailTitle, emailContent);
+
                                     printReport();
                                     onCreate(savedInstanceState);
 
@@ -252,7 +259,6 @@ public class LoadingOrder2 extends AppCompatActivity {
         });
 
     }
-
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void openCamera(int i) {
@@ -337,7 +343,6 @@ public class LoadingOrder2 extends AppCompatActivity {
     void printReport(){
 
     }
-
 
     @Override
     protected void onResume() {
