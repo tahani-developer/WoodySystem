@@ -1,6 +1,7 @@
 package com.falconssoft.woodysystem;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -27,8 +28,8 @@ import java.util.List;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private LinearLayout linearLayout;
-    private EditText username, password;
-    private Button login;
+    private EditText username, password, ipAddress;
+    private Button login, saveSettings;
     private ImageView logoImage, settings;
     private DatabaseHandler databaseHandler;
     private List<Users> usersList = new ArrayList<>();
@@ -41,6 +42,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login);
 
         databaseHandler = new DatabaseHandler(this);
+
         username = findViewById(R.id.login_username);
         password = findViewById(R.id.login_password);
         logoImage = findViewById(R.id.login_logo);
@@ -50,7 +52,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         login.setOnClickListener(this);
         logoImage.setOnClickListener(this);
-//        settings.setOnClickListener(this);
+        settings.setOnClickListener(this);
 
         animation = AnimationUtils.loadAnimation(getApplicationContext(),
                 R.anim.move_to_right);
@@ -92,7 +94,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 startActivityForResult(getImage, IMAGE_CODE);
                 break;
             case R.id.login_settings:
+                Dialog settingDialog = new Dialog(this);
+                settingDialog.setContentView(R.layout.settings_dialog_layout);
+                settingDialog.setTitle("Settings");
+                ipAddress = settingDialog.findViewById(R.id.settings_ipAddress);
+                saveSettings = settingDialog.findViewById(R.id.settings_save);
+                saveSettings.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(LoginActivity.this, "save btn", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                settingDialog.show();
                 break;
+
         }
 
     }

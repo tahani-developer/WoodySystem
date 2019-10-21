@@ -12,6 +12,7 @@
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="orange">#F1712F</color>
+    <color name="light_orange_2">#FC9631</color>
 
     <color name="alpha_black">#320C0C0C</color>
     <color name="alpha_black_dark">#700C0C0C</color>

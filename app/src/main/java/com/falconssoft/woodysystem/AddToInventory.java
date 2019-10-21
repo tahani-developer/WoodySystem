@@ -1,9 +1,11 @@
 package com.falconssoft.woodysystem;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -75,8 +77,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
     private List<String> gradeList = new ArrayList<>();
     private List<String> locationList = new ArrayList<>();
     private List<String> areaList = new ArrayList<>();
-    private ArrayAdapter<String> gradeAdapter, locationAdapter,areaAdapter;
-    private String gradeText = "Fresh",locationText = "Loc 1",areaText = "Zone 1";
+    private ArrayAdapter<String> gradeAdapter, locationAdapter, areaAdapter;
+    private String gradeText = "Fresh", locationText = "Loc 1", areaText = "Zone 1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -219,6 +221,29 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                             tableRow.addView(textView);
                                         }
                                         bundlesTable.addView(tableRow);
+
+                                        tableRow.setOnLongClickListener(new View.OnLongClickListener() {
+                                            @Override
+                                            public boolean onLongClick(View v) {
+//                                                TextView textView = ((TextView) tableRow.getChildAt(0));
+//                                                tableRow.setBackgroundResource(R.color.light_orange_2);
+                                                String bundleNo = ((TextView) tableRow.getChildAt(0)).getText().toString();
+                                                Log.e("b", bundleNo);
+                                                AlertDialog.Builder builder = new AlertDialog.Builder(AddToInventory.this);
+                                                builder.setMessage("Are you want delete bundle number: " + bundleNo + " ?");
+                                                builder.setTitle("Delete");
+                                                builder.setIcon(R.drawable.ic_warning_black_24dp);
+                                                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        databaseHandler.deleteBundle(bundleNo);
+                                                        bundlesTable.removeView(tableRow);
+                                                    }
+                                                });
+                                                builder.show();
+                                                return false;
+                                            }
+                                        });
                                         Toast.makeText(this, "Added Successfully", Toast.LENGTH_SHORT).show();
                                     } else {
                                         Toast.makeText(this, "Barcode already exist", Toast.LENGTH_SHORT).show();
@@ -542,7 +567,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        switch (parent.getId()){
+        switch (parent.getId()) {
             case R.id.addToInventory_grade:
                 gradeText = parent.getItemAtPosition(position).toString();
                 break;

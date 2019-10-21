@@ -363,4 +363,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return usersList;
     }
 
+    // **************************************************** Delete ****************************************************
+
+    public void deleteBundle(String bundleNo){
+        db = this.getWritableDatabase();
+        db.delete(BUNDLE_INFO_TABLE, " BUNDLE_NO=?" , new String[]{bundleNo});
+        db.close();
+    }
+
 }

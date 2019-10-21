@@ -16,8 +16,7 @@
     <string name="bundle_num">Bundle No</string>
     <string name="location">Location</string>
     <string name="area">Area</string>
-
-    <string name="done">Done</string>
+    <string name="ip_address">IP Address</string>
 
     <string name="placing_no">Placing Number</string>
     <string name="order_no">Order Number</string>
@@ -39,5 +38,8 @@
     <string name="search_by_barcode">"Search by barcode</string>
     <string name="login">Login</string>
     <string name="add">Add</string>
+    <string name="done">Done</string>
+    <string name="save">Save</string>
+
 
 </resources>

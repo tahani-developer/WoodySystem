@@ -31,6 +31,8 @@ public class LoadingOrder extends AppCompatActivity {
     private DatabaseHandler DHandler;
     private List<BundleInfo> bundles, filteredList;
     private String f1 = "", f2 = "", f3 = "", barcodeValue = "";
+    private ItemsListAdapter adapter;
+    private Activity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +50,9 @@ public class LoadingOrder extends AppCompatActivity {
         bundles = DHandler.getBundleInfo();
         filteredList = new ArrayList<>();
 
-        ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, bundles);
+        adapter = new ItemsListAdapter(LoadingOrder.this, bundles);
         items.setAdapter(adapter);
-        final Activity activity = this;
+        activity = this;
 
         barcode.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -178,10 +180,7 @@ public class LoadingOrder extends AppCompatActivity {
     }
 
     void searchByBundleNo(String Bundul) {
-
         Log.e("searchByBundleNo ", "" + barcodeValue + "\n" + "th =" + Bundul);
-
-
         if (!barcodeValue.equals("cancelled")) {
             ArrayList<BundleInfo> filteredList = new ArrayList<>();
             for (int k = 0; k < bundles.size(); k++) {
