@@ -30,7 +30,6 @@ public class LoadingOrder extends AppCompatActivity {
     private GridView items;
     private Button done, barcode;
     View view;
-    private Button done;
     private SearchView searchViewTh, searchViewW, searchViewL;
     private DatabaseHandler DHandler;
     private List<BundleInfo> bundles, filteredList;
