@@ -1,5 +1,7 @@
 package com.falconssoft.woodysystem.models;
 
+import android.graphics.Bitmap;
+
 public class BundleInfo {
 
     private double thickness;
@@ -16,11 +18,12 @@ public class BundleInfo {
     private String dateOfLoad;
     private boolean checked;
     private String barcode;
+    private Bitmap picture;
 
     public BundleInfo() {
     }
 
-    public BundleInfo(double thickness, double length, double width, String grade, int noOfPieces, String bundleNo, String location, String area, String barcode) {
+    public BundleInfo(double thickness, double length, double width, String grade, int noOfPieces, String bundleNo, String location, String area, String barcode, Bitmap pic) {
         this.thickness = thickness;
         this.length = length;
         this.width = width;
@@ -30,6 +33,7 @@ public class BundleInfo {
         this.location = location;
         this.area = area;
         this.barcode = barcode;
+        this.picture = pic;
     }
 
     public BundleInfo(double thickness, double length, double width, String grade, int noOfPieces, String bundleNo, String location, String area, int placingNo, int orderNo, int containerNo, String dateOfLoad) {
@@ -125,5 +129,13 @@ public class BundleInfo {
 
     public void setChecked(boolean checked) {
         this.checked = checked;
+    }
+
+    public Bitmap getPicture() {
+        return picture;
+    }
+
+    public void setPicture(Bitmap picture) {
+        this.picture = picture;
     }
 }

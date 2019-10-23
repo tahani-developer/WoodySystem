@@ -1,7 +1,9 @@
 package com.falconssoft.woodysystem;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -26,9 +28,9 @@ import java.util.List;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private LinearLayout linearLayout;
-    private EditText username, password;
-    private Button login;
-    private ImageView logoImage;
+    private EditText username, password, ipAddress;
+    private Button login, saveSettings;
+    private ImageView logoImage, settings;
     private DatabaseHandler databaseHandler;
     private List<Users> usersList = new ArrayList<>();
     private final int IMAGE_CODE = 5;
@@ -40,14 +42,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login);
 
         databaseHandler = new DatabaseHandler(this);
+
         username = findViewById(R.id.login_username);
         password = findViewById(R.id.login_password);
         logoImage = findViewById(R.id.login_logo);
         login = findViewById(R.id.login_login_btn);
+        settings = findViewById(R.id.login_settings);
         linearLayout = findViewById(R.id.login_linearLayout);
 
         login.setOnClickListener(this);
         logoImage.setOnClickListener(this);
+        settings.setOnClickListener(this);
 
         animation = AnimationUtils.loadAnimation(getApplicationContext(),
                 R.anim.move_to_right);
@@ -67,6 +72,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
+                setSlideAnimation();
 
 //                if (!usernameText.equals("") || !usernameText.equals(null)){
 //                    if (!passwordText.equals("") || !passwordText.equals(null)){
@@ -87,6 +93,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 getImage.setType("image/*");
                 startActivityForResult(getImage, IMAGE_CODE);
                 break;
+            case R.id.login_settings:
+                Dialog settingDialog = new Dialog(this);
+                settingDialog.setContentView(R.layout.settings_dialog_layout);
+                settingDialog.setTitle("Settings");
+                ipAddress = settingDialog.findViewById(R.id.settings_ipAddress);
+                saveSettings = settingDialog.findViewById(R.id.settings_save);
+                saveSettings.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(LoginActivity.this, "save btn", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                settingDialog.show();
+                break;
+
         }
 
     }
@@ -104,4 +125,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         }
     }
+
+    public void setSlideAnimation() {
+        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
+    }
+
+
 }
