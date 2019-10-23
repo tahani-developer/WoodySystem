@@ -2,6 +2,7 @@ package com.falconssoft.woodysystem;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.falconssoft.woodysystem.models.BundleInfo;
@@ -28,6 +30,7 @@ public class LoadingOrder extends AppCompatActivity {
     ImageButton deleteBarcode;
     String barcodeValue="";
     private GridView items;
+    View view;
     private Button done;
     private SearchView searchViewTh, searchViewW, searchViewL;
     private DatabaseHandler DHandler ;
@@ -184,17 +187,18 @@ public class LoadingOrder extends AppCompatActivity {
 
         Log.e("searchByBundleNo ",""+barcodeValue+"\n"+"th ="+Bundul);
 
+int no=-1;
 
         if (!barcodeValue.equals("cancelled")) {
-            ArrayList<BundleInfo> filteredList = new ArrayList<>();
             for (int k = 0; k < bundles.size(); k++) {
                 if ((bundles.get(k).getBundleNo()).equals(Bundul)) {
-                    filteredList.add(bundles.get(k));
-                    Log.e("searchByBundleNo ", "" + filteredList.get(filteredList.size() - 1).getBundleNo());
+                    no=k;
+                    items.getChildAt(no).setTag(0);
+                    break;
                 }
             }
-            ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, filteredList);
-            items.setAdapter(adapter);
+
+//            items.setAdapter(adapter);
         } else {
             ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, bundles);
             items.setAdapter(adapter);

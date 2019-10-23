@@ -286,12 +286,12 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
             bitmap = encodeAsBitmap(barcode_data, BarcodeFormat.CODE_128, 600, 300);
             iv.setImageBitmap(bitmap);
 
-//            try {
-//                findBT();
-//                openBT(bitmap);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
+            try {
+                findBT();
+                openBT(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
 
         } catch (WriterException e) {
@@ -400,8 +400,9 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 
             beginListenForData();
 
-
             sendData(bitmap);
+
+            closeBT();
 
         } catch (NullPointerException e) {
             e.printStackTrace();
