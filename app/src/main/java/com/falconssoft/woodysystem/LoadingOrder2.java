@@ -3,6 +3,7 @@ package com.falconssoft.woodysystem;
 import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -13,6 +14,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
@@ -37,6 +39,9 @@ import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.Orders;
 import com.falconssoft.woodysystem.models.Pictures;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -54,7 +59,7 @@ import static com.falconssoft.woodysystem.SettingsFile.recipientName;
 import static com.falconssoft.woodysystem.SettingsFile.senderName;
 import static com.falconssoft.woodysystem.SettingsFile.senderPassword;
 
-public class LoadingOrder2 extends AppCompatActivity {
+public class LoadingOrder2 extends AppCompatActivity implements View.OnClickListener {
 
     HorizontalListView listView;
     ListView listView2;
@@ -78,7 +83,14 @@ public class LoadingOrder2 extends AppCompatActivity {
     volatile boolean stopWorker;
 
     static ArrayList<Bitmap> pics = new ArrayList<>();
+    private List<File> imagesFileList = new ArrayList<>();
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    private ProgressDialog progressDialog;
 
+    //    protected static final int CAMERA_PIC_REQUEST = 0;
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,10 +98,8 @@ public class LoadingOrder2 extends AppCompatActivity {
 
         init();
         databaseHandler = new DatabaseHandler(this);
-
         Drawable myDrawable = getResources().getDrawable(R.drawable.pic);
         Bitmap myBitmap = ((BitmapDrawable) myDrawable).getBitmap();
-
         pics.add(myBitmap);
         pics.add(myBitmap);
         pics.add(myBitmap);
@@ -113,77 +123,11 @@ public class LoadingOrder2 extends AppCompatActivity {
                 openCamera(position);
             }
         });
-
         listView2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 openCamera(position);
-            }
-        });
-
-        img1.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.M)
-            @Override
-            public void onClick(View v) {
-                openCamera(-1);
-                imageNo = 1;
-            }
-        });
-        img2.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.M)
-            @Override
-            public void onClick(View v) {
-                openCamera(-1);
-                imageNo = 2;
-            }
-        });
-        img3.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.M)
-            @Override
-            public void onClick(View v) {
-                openCamera(-1);
-                imageNo = 3;
-            }
-        });
-        img4.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.M)
-            @Override
-            public void onClick(View v) {
-                openCamera(-1);
-                imageNo = 4;
-            }
-        });
-        img5.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.M)
-            @Override
-            public void onClick(View v) {
-                openCamera(-1);
-                imageNo = 5;
-            }
-        });
-        img6.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.M)
-            @Override
-            public void onClick(View v) {
-                openCamera(-1);
-                imageNo = 6;
-            }
-        });
-        img7.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.M)
-            @Override
-            public void onClick(View v) {
-                openCamera(-1);
-                imageNo = 7;
-            }
-        });
-        img8.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.M)
-            @Override
-            public void onClick(View v) {
-                openCamera(-1);
-                imageNo = 8;
             }
         });
 
@@ -210,7 +154,38 @@ public class LoadingOrder2 extends AppCompatActivity {
                             if (!TextUtils.isEmpty(dateOfLoad.getText().toString())) {
                                 if (!TextUtils.isEmpty(destination.getText().toString())) {
 
+                                    progressDialog.show();
+                                    emailContent = "Placing Number: \t" + placingNo.getText().toString()
+                                            + "<br>" + "Order Number: \t" + orderNo.getText().toString()
+                                            + "<br>" + "Container Number: \t" + containerNo.getText().toString()
+                                            + "<br>" + "Date Of Load: \t" + dateOfLoad.getText().toString()
+                                            + "<br>" + "Destination: \t" + destination.getText().toString()
+                                            + "<br><br><br>";
+
+                                    emailContent += "<table style=\"width:100%; border:1px solid black;border-collapse: collapse;\">" +
+                                            "  <tr style=\"border:1px solid black;border-collapse: collapse;\">" +
+                                            "    <th style=\"border:1px solid black;border-collapse: collapse;\">Area</th>" +
+                                            "    <th style=\"border:1px solid black;border-collapse: collapse;\">Location</th>" +
+                                            "    <th style=\"border:1px solid black;border-collapse: collapse;\">No Of Pieces</th>" +
+                                            "    <th style=\"border:1px solid black;border-collapse: collapse;\">Grade</th>" +
+                                            "    <th style=\"border:1px solid black;border-collapse: collapse;\">Length</th>" +
+                                            "    <th style=\"border:1px solid black;border-collapse: collapse;\">Width</th>" +
+                                            "    <th style=\"border:1px solid black;border-collapse: collapse;\">Thickness</th>" +
+                                            "    <th style=\"border:1px solid black;border-collapse: collapse;\">Bundle Number</th>" +
+                                            "  </tr>";
+
                                     for (int i = 0; i < bundles.size(); i++) {
+                                        emailContent += "<tr>" +
+                                                "<td>" + bundles.get(i).getArea() + "</td>" +
+                                                "<td>" + bundles.get(i).getLocation() + "</td>" +
+                                                "<td>" + bundles.get(i).getNoOfPieces() + "</td>" +
+                                                "<td>" + bundles.get(i).getGrade() + "</td>" +
+                                                "<td>" + bundles.get(i).getLength() + "</td>" +
+                                                "<td>" + bundles.get(i).getWidth() + "</td>" +
+                                                "<td>" + bundles.get(i).getThickness() + "</td>" +
+                                                "<td>" + bundles.get(i).getBundleNo() + "</td>" +
+                                                "</tr>";
+
                                         order = new Orders(bundles.get(i).getThickness()
                                                 , bundles.get(i).getWidth()
                                                 , bundles.get(i).getLength()
@@ -226,7 +201,12 @@ public class LoadingOrder2 extends AppCompatActivity {
                                                 , destination.getText().toString());
                                         databaseHandler.addOrder(order);
                                     }
+                                    emailContent += "</table>";
 
+                                    Log.e("size",""+ imagesFileList.size());
+                                    for (int i =0; i<imagesFileList.size(); i++){
+                                        emailContent += "<br><image>" + imagesFileList.get(i)+"</image>" ;
+                                    }
                                     databaseHandler.addPictures(new Pictures(orderNo.getText().toString()
                                             , pics.get(0)
                                             , pics.get(1)
@@ -237,23 +217,22 @@ public class LoadingOrder2 extends AppCompatActivity {
                                             , pics.get(6)
                                             , pics.get(7)));
 
-                                    Toast.makeText(LoadingOrder2.this, "Saved !", Toast.LENGTH_LONG).show();
+                                    new SendMailTask(LoadingOrder2.this).execute(senderName, senderPassword
+                                            , recipientName, emailTitle, emailContent);
+//                                    Toast.makeText(LoadingOrder2.this, "Saved !", Toast.LENGTH_LONG).show();
                                     printReport();
+//                                    for(int i = 0 ; i<pics.size() ; i++)
+//                                        pics.set(i,null);
+//                                    onResume();
 
                                     placingNo.setText("");
                                     orderNo.setText("");
                                     containerNo.setText("");
                                     dateOfLoad.setText("");
                                     destination.setText("");
-//                                    for(int i = 0 ; i<pics.size() ; i++)
-//                                        pics.set(i,null);
-//
-//                                    onResume();
-                                    new SendMailTask(LoadingOrder2.this).execute(senderName, senderPassword
-                                    , recipientName, emailTitle, emailContent);
-
                                     printReport();
-                                    onCreate(savedInstanceState);
+                                    progressDialog.dismiss();
+//                                    onCreate(savedInstanceState);
 
                                 } else {
                                     destination.setError("Required!");
@@ -291,55 +270,111 @@ public class LoadingOrder2 extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        int permission = ActivityCompat.checkSelfPermission(LoadingOrder2.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(
+                    LoadingOrder2.this,
+                    PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE
+            );
+        }
+
         if (requestCode == 1888 && resultCode == Activity.RESULT_OK) {
-            final Bundle extras = data.getExtras();
+            Bundle extras = data.getExtras();
+            Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+            File picture = null;
+
             if (extras != null) {
-
-                Bitmap pic = extras.getParcelable("data");
-
-
+//                Bitmap pic = extras.getParcelable("data");
                 if (index != -1) {
-                    bundles.get(index).setPicture(pic);
+                    bundles.get(index).setPicture(thumbnail);
                     adapter.notifyDataSetChanged();
                 } else {
                     switch (imageNo) {
                         case 1:
-                            img1.setImageBitmap(pic);
-                            pics.set(0, pic);
+                            img1.setImageBitmap(thumbnail);
+                            pics.set(0, thumbnail);
+                            String root1 = Environment.getExternalStorageDirectory().getAbsolutePath();
+                            picture = new File(root1, "pic1.png");
                             break;
                         case 2:
-                            img2.setImageBitmap(pic);
-                            pics.set(1, pic);
+                            img2.setImageBitmap(thumbnail);
+                            pics.set(1, thumbnail);
+                            String root2 = Environment.getExternalStorageDirectory().getAbsolutePath();
+                            picture = new File(root2, "pic2.png");
                             break;
                         case 3:
-                            img3.setImageBitmap(pic);
-                            pics.set(2, pic);
+                            img3.setImageBitmap(thumbnail);
+                            pics.set(2, thumbnail);
+                            String root3 = Environment.getExternalStorageDirectory().getAbsolutePath();
+                            picture = new File(root3, "pic3.png");
                             break;
                         case 4:
-                            img4.setImageBitmap(pic);
-                            pics.set(3, pic);
+                            img4.setImageBitmap(thumbnail);
+                            pics.set(3, thumbnail);
+                            String root4 = Environment.getExternalStorageDirectory().getAbsolutePath();
+                            picture = new File(root4, "pic4.png");
                             break;
                         case 5:
-                            img5.setImageBitmap(pic);
-                            pics.set(4, pic);
+                            img5.setImageBitmap(thumbnail);
+                            pics.set(4, thumbnail);
+                            String root5 = Environment.getExternalStorageDirectory().getAbsolutePath();
+                            picture = new File(root5, "pic5.png");
                             break;
                         case 6:
-                            img6.setImageBitmap(pic);
-                            pics.set(5, pic);
+                            img6.setImageBitmap(thumbnail);
+                            pics.set(5, thumbnail);
+                            String root6 = Environment.getExternalStorageDirectory().getAbsolutePath();
+                            picture = new File(root6, "pic6.png");
                             break;
                         case 7:
-                            img7.setImageBitmap(pic);
-                            pics.set(6, pic);
+                            img7.setImageBitmap(thumbnail);
+                            pics.set(6, thumbnail);
+                            String root7 = Environment.getExternalStorageDirectory().getAbsolutePath();
+                            picture = new File(root7, "pic7.png");
                             break;
                         case 8:
-                            img8.setImageBitmap(pic);
-                            pics.set(7, pic);
+                            img8.setImageBitmap(thumbnail);
+                            pics.set(7, thumbnail);
+                            String root8 = Environment.getExternalStorageDirectory().getAbsolutePath();
+                            picture = new File(root8, "pic8.png");
                             break;
 
                     }
+                    FileOutputStream out = null;
+                    try {
+                        out = new FileOutputStream(picture);
+                        thumbnail.compress(Bitmap.CompressFormat.PNG, 100, out);
+                        out.flush();
+                        out.close();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    imagesFileList.add(picture);
+
+
                 }
             }
+
+//            thumbnail = (Bitmap) data.getExtras().get("data");
+//            try {
+//                String root = Environment.getExternalStorageDirectory().getAbsolutePath();
+//                picture = new File(root, "pic.png");
+//                Log.e("BROKEN", "" + picture.canWrite());
+//                FileOutputStream out = new FileOutputStream(picture);
+//                thumbnail.compress(Bitmap.CompressFormat.PNG, 100, out);
+//                out.flush();
+//                out.close();
+////                }
+//            } catch (IOException e) {
+//                Log.e("BROKEN", "Could not write file " + e.getMessage());
+//            }
+
         }
+
     }
 
     @Override
@@ -394,7 +429,7 @@ public class LoadingOrder2 extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    } 
+    }
 
     void openBT() throws IOException {
         try {
@@ -440,7 +475,7 @@ public class LoadingOrder2 extends AppCompatActivity {
 
 
             String itemsString = "";
-            for(int i = 0 ; i< bundles.size() ; i++){
+            for (int i = 0; i < bundles.size(); i++) {
                 String row = bundles.get(i).getThickness() + "                                             ";
                 row = row.substring(0, 6) + bundles.get(i).getWidth() + row.substring(6, row.length());
                 row = row.substring(0, 15) + bundles.get(i).getLength() + row.substring(15, row.length());
@@ -574,8 +609,8 @@ public class LoadingOrder2 extends AppCompatActivity {
         return date;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     void init() {
-
         listView = findViewById(R.id.listview);
         listView2 = findViewById(R.id.verticalListView);
         placingNo = findViewById(R.id.placing_no);
@@ -586,6 +621,9 @@ public class LoadingOrder2 extends AppCompatActivity {
         done = findViewById(R.id.done);
         textView = findViewById(R.id.loading_order_textView);
 
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Please Waiting...");
+
         img1 = findViewById(R.id.image1);
         img2 = findViewById(R.id.image2);
         img3 = findViewById(R.id.image3);
@@ -594,6 +632,15 @@ public class LoadingOrder2 extends AppCompatActivity {
         img6 = findViewById(R.id.image6);
         img7 = findViewById(R.id.image7);
         img8 = findViewById(R.id.image8);
+
+        img1.setOnClickListener(this);
+        img2.setOnClickListener(this);
+        img3.setOnClickListener(this);
+        img4.setOnClickListener(this);
+        img5.setOnClickListener(this);
+        img6.setOnClickListener(this);
+        img7.setOnClickListener(this);
+        img8.setOnClickListener(this);
 
         Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_to_right);
         textView.startAnimation(animation);
@@ -612,5 +659,45 @@ public class LoadingOrder2 extends AppCompatActivity {
         super.finish();
 //        setSlideAnimation();
         overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.image1:
+                openCamera(-1);
+                imageNo = 1;
+                break;
+            case R.id.image2:
+                openCamera(-1);
+                imageNo = 2;
+                break;
+            case R.id.image3:
+                openCamera(-1);
+                imageNo = 3;
+                break;
+            case R.id.image4:
+                openCamera(-1);
+                imageNo = 4;
+                break;
+            case R.id.image5:
+                openCamera(-1);
+                imageNo = 5;
+                break;
+            case R.id.image6:
+                openCamera(-1);
+                imageNo = 6;
+                break;
+            case R.id.image7:
+                openCamera(-1);
+                imageNo = 7;
+                break;
+            case R.id.image8:
+                openCamera(-1);
+                imageNo = 8;
+                break;
+        }
+
     }
 }

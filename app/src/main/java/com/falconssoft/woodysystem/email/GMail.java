@@ -18,20 +18,17 @@ import javax.mail.internet.MimeMessage;
 
 public class GMail {
 
-    final String emailPort = "587";// gmail's smtp port
-    final String smtpAuth = "true";
-    final String starttls = "true";
-    final String emailHost = "smtp.gmail.com";
+    private final String emailPort = "587";// gmail's smtp port
+    private final String smtpAuth = "true";
+    private final String starttls = "true";
+    private final String emailHost = "smtp.gmail.com"; // related of sender email
 
-    String fromEmail;
-    String fromPassword;
+    private String fromEmail, fromPassword, emailSubject, emailBody;
     List toEmailList;
-    String emailSubject;
-    String emailBody;
 
-    Properties emailProperties;
-    Session mailSession;
-    MimeMessage emailMessage;
+    private Properties emailProperties;
+    private Session mailSession;
+    private MimeMessage emailMessage; //multipurpose internet mail extensions
 
     public GMail() {
 
@@ -62,12 +59,13 @@ public class GMail {
 //        for (int i=0;i<toEmailList.size();i++) {
 //            String toEmail=  toEmailList.get(0).toString();
 //            Log.i("GMail", "toEmail: " + toEmail);
-            emailMessage.addRecipient(Message.RecipientType.TO,
-                    new InternetAddress(SettingsFile.recipientName));
+        emailMessage.addRecipient(Message.RecipientType.TO,
+                new InternetAddress(SettingsFile.recipientName));
 //        }
 
         emailMessage.setSubject(emailSubject);
         emailMessage.setContent(emailBody, "text/html");// for a html email
+//        emailMessage.set
         // emailMessage.setText(emailBody);// for a text email
         Log.i("GMail", "Email Message created.");
         return emailMessage;
