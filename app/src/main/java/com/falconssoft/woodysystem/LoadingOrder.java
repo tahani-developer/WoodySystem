@@ -186,18 +186,20 @@ public class LoadingOrder extends AppCompatActivity {
 
         Log.e("searchByBundleNo ",""+barcodeValue+"\n"+"th ="+Bundul);
 
-int no=-1;
+           int no=0;
 
         if (!barcodeValue.equals("cancelled")) {
             for (int k = 0; k < bundles.size(); k++) {
                 if ((bundles.get(k).getBundleNo()).equals(Bundul)) {
                     no=k;
-                    items.getChildAt(no).setTag(0);
+                    items.setSelection(no);
+                    items.requestFocusFromTouch();
+                    items.setSelection(no);
+
                     break;
                 }
             }
 
-//            items.setAdapter(adapter);
         } else {
             ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, bundles);
             items.setAdapter(adapter);
@@ -223,8 +225,8 @@ int no=-1;
 
 //Log.e("barcode_value ",""+barcodeValue+"\n"+"th ="+arrayString[0]+"\n"+"w ="+arrayString[1]+"\n"+"l ="
 //        +arrayString[2]+"\n"+"grad ="+arrayString[3]);
+//                searchByBundleNo(barcodeValue);
                 searchByBundleNo(barcodeValue);
-
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);

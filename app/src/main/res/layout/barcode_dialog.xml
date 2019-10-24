@@ -14,13 +14,15 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"/>
 
-    <!--<TextView-->
-        <!--android:id="@+id/tx"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_margin="10dp"-->
-        <!--android:textColor="@color/colorPrimaryDark"-->
-        <!--android:textSize="18sp" />-->
+    <TextView
+        android:id="@+id/close"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="close"
+        android:background="@color/white"
+        android:textColor="@color/orange"
+        android:textSize="25sp" />
 
     <!--<EditText-->
         <!--android:id="@+id/text"-->
