@@ -1,6 +1,10 @@
 package com.falconssoft.woodysystem.models;
 
 import android.graphics.Bitmap;
+import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class BundleInfo {
 
@@ -19,6 +23,7 @@ public class BundleInfo {
     private boolean checked;
     private String barcode;
     private Bitmap picture;
+    private int ordered;
 
     public BundleInfo() {
     }
@@ -36,7 +41,7 @@ public class BundleInfo {
         this.picture = pic;
     }
 
-    public BundleInfo(double thickness, double length, double width, String grade, int noOfPieces, String bundleNo, String location, String area, int placingNo, int orderNo, int containerNo, String dateOfLoad) {
+    public BundleInfo(double thickness, double length, double width, String grade, int noOfPieces, String bundleNo, String location, String area, int placingNo, int orderNo, int containerNo, String dateOfLoad, int ordered) {
         this.thickness = thickness;
         this.length = length;
         this.width = width;
@@ -49,6 +54,7 @@ public class BundleInfo {
         this.orderNo = orderNo;
         this.containerNo = containerNo;
         this.dateOfLoad = dateOfLoad;
+        this.ordered = ordered;
     }
 
     public double getThickness() {
@@ -138,4 +144,35 @@ public class BundleInfo {
     public void setPicture(Bitmap picture) {
         this.picture = picture;
     }
+
+    public int getOrdered() {
+        return ordered;
+    }
+
+    public void setOrdered(int ordered) {
+        this.ordered = ordered;
+    }
+
+    public JSONObject getJSONObject() {
+        JSONObject obj = new JSONObject();
+
+        try {
+            obj.put("THICKNESS", "'" + thickness + "'");
+            obj.put("WIDTH", "'" +width+ "'");
+            obj.put("LENGTH", "'" +length+ "'");
+            obj.put("GRADE", "'" +grade+ "'");
+            obj.put("PIECES","'" + noOfPieces+ "'");
+            obj.put("BUNDLE_NO", "'" +bundleNo+ "'");
+            obj.put("LOCATION", "'" +location+ "'");
+            obj.put("AREA", "'" +area+ "'");
+            obj.put("BARCODE", "'" +barcode+ "'");
+            obj.put("ORDERED", "'" +ordered+ "'");
+
+        } catch (JSONException e) {
+            Log.e("Tag" , "JSONException");
+        }
+        return obj;
+    }
+
+
 }

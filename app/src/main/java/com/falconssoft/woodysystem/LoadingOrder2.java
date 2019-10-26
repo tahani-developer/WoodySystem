@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -38,9 +39,21 @@ import com.falconssoft.woodysystem.models.Orders;
 import com.falconssoft.woodysystem.models.Pictures;
 import com.ganesh.intermecarabic.Arabic864;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -77,6 +90,9 @@ public class LoadingOrder2 extends AppCompatActivity {
     OutputStream mmOutputStream;
     InputStream mmInputStream;
     volatile boolean stopWorker;
+    String mainContent ="";
+
+    JSONArray jsonArrayOrders;
 
     static ArrayList<Bitmap> pics = new ArrayList<>();
 
@@ -87,6 +103,8 @@ public class LoadingOrder2 extends AppCompatActivity {
 
         init();
         databaseHandler = new DatabaseHandler(this);
+
+        jsonArrayOrders = new JSONArray();
 
         Drawable myDrawable = getResources().getDrawable(R.drawable.pic);
         Bitmap myBitmap = ((BitmapDrawable) myDrawable).getBitmap();
@@ -226,6 +244,9 @@ public class LoadingOrder2 extends AppCompatActivity {
                                                 , dateOfLoad.getText().toString()
                                                 , destination.getText().toString());
                                         databaseHandler.addOrder(order);
+                                        jsonArrayOrders.put(order.getJSONObject());
+
+                                        databaseHandler.updateTableBundles(bundles.get(i).getBundleNo());
                                     }
 
                                     databaseHandler.addPictures(new Pictures(orderNo.getText().toString()
@@ -239,22 +260,19 @@ public class LoadingOrder2 extends AppCompatActivity {
                                             , pics.get(7)));
 
                                     Toast.makeText(LoadingOrder2.this, "Saved !", Toast.LENGTH_LONG).show();
-                                    printReport();
-
-                                    placingNo.setText("");
-                                    orderNo.setText("");
-                                    containerNo.setText("");
-                                    dateOfLoad.setText("");
-                                    destination.setText("");
-//                                    for(int i = 0 ; i<pics.size() ; i++)
-//                                        pics.set(i,null);
-//
-//                                    onResume();
-                                    new SendMailTask(LoadingOrder2.this).execute(senderName, senderPassword
-                                    , recipientName, emailTitle, emailContent);
 
                                     printReport();
-                                    onCreate(savedInstanceState);
+
+                                    new SendMailTask(LoadingOrder2.this).execute("rawanfalcons2017@gmail.com", "raw12345678"
+                                            , "hiary.abeer96@gmail.com", "Woody System", mainContent);
+
+                                    new JSONTask().execute();
+
+
+                                    Intent intent = new Intent(LoadingOrder2.this , LoadingOrder.class);
+                                    startActivity(intent);
+
+                                    printReport();
 
                                 } else {
                                     destination.setError("Required!");
@@ -419,6 +437,12 @@ public class LoadingOrder2 extends AppCompatActivity {
     void sendData() throws IOException {
         try {
 
+            mainContent = "Placing Number   : " + placingNo.getText().toString() + "\n" +
+                    "Order Number     : " + orderNo.getText().toString() + "\n" +
+                    "Container Number : " + containerNo.getText().toString() + "\n" +
+                    "Date Of Load     : " + dateOfLoad.getText().toString() + "\n" +
+                    "Destination      : " + destination.getText().toString() ;
+
             Thread.sleep(1000);
 
             printCustom("Woody System" + "\n", 1, 1);
@@ -454,6 +478,7 @@ public class LoadingOrder2 extends AppCompatActivity {
                 itemsString = itemsString + "\n" + row;
             }
             printCustom(itemsString + "\n", 0, 0);
+            mainContent = mainContent + itemsString ;
 
             printCustom("----------------------------------------------" + "\n", 1, 0);
 
@@ -613,5 +638,71 @@ public class LoadingOrder2 extends AppCompatActivity {
         super.finish();
 //        setSlideAnimation();
         overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
+    }
+
+    private class JSONTask extends AsyncTask<String, String, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+
+                String JsonResponse = null;
+                HttpClient client = new DefaultHttpClient();
+                HttpPost request = new HttpPost ();
+                request.setURI(new URI("http://10.0.0.214/WOODY/export.php"));
+
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+                nameValuePairs.add(new BasicNameValuePair("BUNDLE_ORDERS", jsonArrayOrders.toString().trim()));
+
+                request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                HttpResponse response = client.execute(request);
+
+                BufferedReader in = new BufferedReader(new
+                        InputStreamReader(response.getEntity().getContent()));
+
+                StringBuffer sb = new StringBuffer("");
+                String line="";
+
+                while ((line = in.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                in.close();
+
+                JsonResponse = sb.toString();
+                Log.e("tag", "" + JsonResponse);
+
+                return JsonResponse;
+
+            }catch (Exception e)
+            {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+
+            if(s != null) {
+                if (s.contains("BUNDLE_ORDER SUCCESS")) {
+
+                    Log.e("tag", "****Success");
+                } else {
+                    Log.e("tag", "****Failed to export data");
+                }
+            } else {
+                Log.e("tag", "****Failed to export data Please check internet connection");
+            }
+        }
     }
 }

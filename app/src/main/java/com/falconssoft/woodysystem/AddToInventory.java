@@ -1,12 +1,15 @@
 package com.falconssoft.woodysystem;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
@@ -37,14 +40,38 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Serializable;
 import java.lang.reflect.Array;
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -75,8 +102,9 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
     private List<String> gradeList = new ArrayList<>();
     private List<String> locationList = new ArrayList<>();
     private List<String> areaList = new ArrayList<>();
-    private ArrayAdapter<String> gradeAdapter, locationAdapter,areaAdapter;
-    private String gradeText = "Fresh",locationText = "Loc 1",areaText = "Zone 1";
+    private ArrayAdapter<String> gradeAdapter, locationAdapter, areaAdapter;
+    private String gradeText = "Fresh", locationText = "Loc 1", areaText = "Zone 1";
+    JSONArray jsonArrayBundles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +156,9 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_to_right);
         textView.startAnimation(animation);
 
+        jsonArrayBundles = new JSONArray();
+
+
 //        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
 //        addToInventory.startAnimation(animation);
     }
@@ -170,7 +201,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                                 , 1
                                                 , 53
                                                 , 5
-                                                , "june");
+                                                , "june"
+                                                , 0);
                                         databaseHandler.addNewBundle(newBundle);
 
                                         TableRow tableRow = new TableRow(this);
@@ -218,7 +250,13 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                             }
                                             tableRow.addView(textView);
                                         }
+
+                                        jsonArrayBundles.put(newBundle.getJSONObject());
+
                                         bundlesTable.addView(tableRow);
+
+                                        new JSONTask().execute();
+
                                         Toast.makeText(this, "Added Successfully", Toast.LENGTH_SHORT).show();
                                     } else {
                                         Toast.makeText(this, "Barcode already exist", Toast.LENGTH_SHORT).show();
@@ -542,7 +580,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        switch (parent.getId()){
+        switch (parent.getId()) {
             case R.id.addToInventory_grade:
                 gradeText = parent.getItemAtPosition(position).toString();
                 break;
@@ -554,9 +592,9 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                 break;
         }
 
-        Log.e("item", gradeText);
-        Log.e("item", locationText);
-        Log.e("item", areaText);
+//        Log.e("item", gradeText);
+//        Log.e("item", locationText);
+//        Log.e("item", areaText);
     }
 
     @Override
@@ -579,5 +617,69 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         super.finish();
 //        setSlideAnimation();
         overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
+    }
+
+    private class JSONTask extends AsyncTask<String, String, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+
+                String JsonResponse = null;
+                HttpClient client = new DefaultHttpClient();
+                HttpPost request = new HttpPost ();
+                request.setURI(new URI("http://10.0.0.214/WOODY/export.php"));
+
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+                nameValuePairs.add(new BasicNameValuePair("BUNDLE_INFO", jsonArrayBundles.toString().trim()));
+
+                request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                HttpResponse response = client.execute(request);
+
+                BufferedReader in = new BufferedReader(new
+                        InputStreamReader(response.getEntity().getContent()));
+
+                StringBuffer sb = new StringBuffer("");
+                String line="";
+
+                while ((line = in.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                in.close();
+
+                JsonResponse = sb.toString();
+                Log.e("tag", "" + JsonResponse);
+
+                return JsonResponse;
+
+            }catch (Exception e)
+            {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if(s != null) {
+                if (s.contains("BUNDLE_INFO SUCCESS")) {
+
+                    Log.e("tag", "****Success");
+                } else {
+                    Log.e("tag", "****Failed to export data");
+                }
+            } else {
+                Log.e("tag", "****Failed to export data Please check internet connection");
+            }
+        }
     }
 }

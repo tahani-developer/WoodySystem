@@ -1,5 +1,10 @@
 package com.falconssoft.woodysystem.models;
 
+import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Orders {
 
     private double thickness;
@@ -138,5 +143,30 @@ public class Orders {
 
     public void setDestination(String destination) {
         this.destination = destination;
+    }
+
+    public JSONObject getJSONObject() {
+        JSONObject obj = new JSONObject();
+
+        try {
+            obj.put("THICKNESS", "'" + thickness + "'");
+            obj.put("WIDTH", "'" +width+ "'");
+            obj.put("LENGTH", "'" +length+ "'");
+            obj.put("GRADE", "'" +grade+ "'");
+            obj.put("PIECES","'" + noOfPieces+ "'");
+            obj.put("BUNDLE_NO", "'" +bundleNo+ "'");
+            obj.put("LOCATION", "'" +location+ "'");
+            obj.put("AREA", "'" +area+ "'");
+            obj.put("PLACING_NO", "'" +placingNo+ "'");
+            obj.put("ORDER_NO", "'" +orderNo+ "'");
+            obj.put("CONTAINER_NO", "'" +containerNo+ "'");
+            obj.put("DATE_OF_LOAD", "'" +dateOfLoad+ "'");
+            obj.put("DESTINATION", "'" +destination+ "'");
+
+
+        } catch (JSONException e) {
+            Log.e("Tag" , "JSONException");
+        }
+        return obj;
     }
 }

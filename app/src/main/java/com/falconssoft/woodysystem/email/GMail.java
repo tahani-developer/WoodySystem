@@ -61,7 +61,7 @@ public class GMail {
 //            String toEmail=  toEmailList.get(0).toString();
 //            Log.i("GMail", "toEmail: " + toEmail);
             emailMessage.addRecipient(Message.RecipientType.TO,
-                    new InternetAddress("hiary.abeer@yahoo.com"));
+                    new InternetAddress("hiary.abeer96@gmail.com"));
 //        }
 
         emailMessage.setSubject(emailSubject);
