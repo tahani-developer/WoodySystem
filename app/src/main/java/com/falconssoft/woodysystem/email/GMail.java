@@ -1,6 +1,9 @@
 package com.falconssoft.woodysystem.email;
 
+import android.net.Uri;
 import android.util.Log;
+
+import com.falconssoft.woodysystem.SettingsFile;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
@@ -16,32 +19,30 @@ import javax.mail.internet.MimeMessage;
 
 public class GMail {
 
-    final String emailPort = "587";// gmail's smtp port
-    final String smtpAuth = "true";
-    final String starttls = "true";
-    final String emailHost = "smtp.gmail.com";
+    private final String emailPort = "587";// gmail's smtp port
+    private final String smtpAuth = "true";
+    private final String starttls = "true";
+    private final String emailHost = SettingsFile.hostName; // related of sender email
 
-    String fromEmail;
-    String fromPassword;
+    private String fromEmail, fromPassword, emailSubject, emailBody;
     List toEmailList;
-    String emailSubject;
-    String emailBody;
 
-    Properties emailProperties;
-    Session mailSession;
-    MimeMessage emailMessage;
+    private Properties emailProperties;
+    private Session mailSession;
+    private MimeMessage emailMessage; //multipurpose internet mail extensions
 
     public GMail() {
 
     }
 
     public GMail(String fromEmail, String fromPassword,
-                 List toEmailList, String emailSubject, String emailBody) {
+                 List toEmailList, String emailSubject, String emailBody) {//, String emailImage) {
         this.fromEmail = fromEmail;
         this.fromPassword = fromPassword;
         this.toEmailList = toEmailList;
         this.emailSubject = emailSubject;
         this.emailBody = emailBody;
+//        this.emailImage = emailImage;
 
         emailProperties = System.getProperties();
         emailProperties.put("mail.smtp.port", emailPort);
@@ -60,12 +61,14 @@ public class GMail {
 //        for (int i=0;i<toEmailList.size();i++) {
 //            String toEmail=  toEmailList.get(0).toString();
 //            Log.i("GMail", "toEmail: " + toEmail);
-            emailMessage.addRecipient(Message.RecipientType.TO,
-                    new InternetAddress("hiary.abeer96@gmail.com"));
+        emailMessage.addRecipient(Message.RecipientType.TO,
+                new InternetAddress(SettingsFile.recipientName));
 //        }
 
         emailMessage.setSubject(emailSubject);
         emailMessage.setContent(emailBody, "text/html");// for a html email
+//        emailMessage.setContent(emailBody, "image/png");
+//        emailMessage.set
         // emailMessage.setText(emailBody);// for a text email
         Log.i("GMail", "Email Message created.");
         return emailMessage;

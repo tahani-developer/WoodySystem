@@ -1,13 +1,18 @@
 package com.falconssoft.woodysystem;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -257,6 +262,29 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 
                                         new JSONTask().execute();
 
+
+                                        tableRow.setOnLongClickListener(new View.OnLongClickListener() {
+                                            @Override
+                                            public boolean onLongClick(View v) {
+//                                                TextView textView = ((TextView) tableRow.getChildAt(0));
+//                                                tableRow.setBackgroundResource(R.color.light_orange_2);
+                                                String bundleNo = ((TextView) tableRow.getChildAt(0)).getText().toString();
+                                                Log.e("b", bundleNo);
+                                                AlertDialog.Builder builder = new AlertDialog.Builder(AddToInventory.this);
+                                                builder.setMessage("Are you want delete bundle number: " + bundleNo + " ?");
+                                                builder.setTitle("Delete");
+                                                builder.setIcon(R.drawable.ic_warning_black_24dp);
+                                                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        databaseHandler.deleteBundle(bundleNo);
+                                                        bundlesTable.removeView(tableRow);
+                                                    }
+                                                });
+                                                builder.show();
+                                                return false;
+                                            }
+                                        });
                                         Toast.makeText(this, "Added Successfully", Toast.LENGTH_SHORT).show();
                                     } else {
                                         Toast.makeText(this, "Barcode already exist", Toast.LENGTH_SHORT).show();
@@ -320,28 +348,40 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
     public Bitmap writeBarcode(String data) {
         final Dialog dialog = new Dialog(AddToInventory.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(true);
+        dialog.setCancelable(false);
         dialog.setContentView(R.layout.barcode_dialog);
-
+        TextView close = (TextView) dialog.findViewById(R.id.close);
         ImageView iv = (ImageView) dialog.findViewById(R.id.iv);
         // barcode data
         String barcode_data = data;
+
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    closeBT();
+                    dialog.dismiss();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         Bitmap bitmap = null;//  AZTEC -->QR
         try {
 
             bitmap = encodeAsBitmap(barcode_data, BarcodeFormat.CODE_128, 600, 300);
             iv.setImageBitmap(bitmap);
+            try {
+                findBT();
+                openBT(bitmap);
 
-//            try {
-//                findBT();
-//                openBT(bitmap);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-
-
-        } catch (WriterException e) {
+            } catch (IOException e) {
+                e.printStackTrace();
+            }catch (Exception r){
+                closeBT();
+            }
+        } catch (WriterException | IOException e) {
             e.printStackTrace();
         }
 
@@ -547,7 +587,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
             mmOutputStream.close();
             mmInputStream.close();
             mmSocket.close();
-            workerThread.stop();
+//            workerThread.stop();
 //            myLabel.setText("Bluetooth Closed");
         } catch (NullPointerException e) {
             e.printStackTrace();

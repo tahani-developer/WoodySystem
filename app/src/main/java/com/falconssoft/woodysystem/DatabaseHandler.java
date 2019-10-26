@@ -400,4 +400,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.update(BUNDLE_INFO_TABLE, values, BUNDLE_INFO_BUNDLE_NO + " = '" + bundleNo + "'", null);
     }
 
+    // **************************************************** Delete ****************************************************
+
+    public void deleteBundle(String bundleNo){
+        db = this.getWritableDatabase();
+        db.delete(BUNDLE_INFO_TABLE, " BUNDLE_NO=?" , new String[]{bundleNo});
+        db.close();
+    }
+
 }
