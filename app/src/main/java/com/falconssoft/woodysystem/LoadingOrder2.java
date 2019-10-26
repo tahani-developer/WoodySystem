@@ -86,7 +86,6 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
 
     static ArrayList<Bitmap> pics = new ArrayList<>();
     private List<File> imagesFileList = new ArrayList<>();
-    private List<Bitmap> imagesBitmapList = new ArrayList<>();
 
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {Manifest.permission.READ_EXTERNAL_STORAGE,
