@@ -1,5 +1,9 @@
 package com.falconssoft.woodysystem;
 
+import android.net.Uri;
+
+import java.net.URI;
+
 public class SettingsFile {
 
     /**
@@ -11,15 +15,19 @@ public class SettingsFile {
      *     Yahoo- Host: smtp.mail.yahoo.com , Port: 587
      * */
 
+    public static String hostName = "smtp.gmail.com";
+
     public static String senderName = "1234developersteam@gmail.com";
 
     public static String senderPassword = "androiddevelopers4";
 
     public static String recipientName = "hiary.abeer@yahoo.com";
 
-    public static String emailTitle = "Wood App Testing";
+    public static String emailTitle = "Wood App";
 
     public static String emailContent;
+
+//    public static Uri emailContent;
 
     public static String ipAddress;
 

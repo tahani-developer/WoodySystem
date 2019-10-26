@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -45,6 +46,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -84,6 +86,8 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
 
     static ArrayList<Bitmap> pics = new ArrayList<>();
     private List<File> imagesFileList = new ArrayList<>();
+    private List<Bitmap> imagesBitmapList = new ArrayList<>();
+
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -96,6 +100,7 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.loading_order2);
 
+        imagesFileList.clear();
         init();
         databaseHandler = new DatabaseHandler(this);
         Drawable myDrawable = getResources().getDrawable(R.drawable.pic);
@@ -154,76 +159,25 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
                             if (!TextUtils.isEmpty(dateOfLoad.getText().toString())) {
                                 if (!TextUtils.isEmpty(destination.getText().toString())) {
 
+                                    emailTitle = "Order No: " + orderNo.getText().toString();
                                     progressDialog.show();
-                                    emailContent = "Placing Number: \t" + placingNo.getText().toString()
-                                            + "<br>" + "Order Number: \t" + orderNo.getText().toString()
-                                            + "<br>" + "Container Number: \t" + containerNo.getText().toString()
-                                            + "<br>" + "Date Of Load: \t" + dateOfLoad.getText().toString()
-                                            + "<br>" + "Destination: \t" + destination.getText().toString()
-                                            + "<br><br><br>";
-
-                                    emailContent += "<table style=\"width:100%; border:1px solid black;border-collapse: collapse;\">" +
-                                            "  <tr style=\"border:1px solid black;border-collapse: collapse;\">" +
-                                            "    <th style=\"border:1px solid black;border-collapse: collapse;\">Area</th>" +
-                                            "    <th style=\"border:1px solid black;border-collapse: collapse;\">Location</th>" +
-                                            "    <th style=\"border:1px solid black;border-collapse: collapse;\">No Of Pieces</th>" +
-                                            "    <th style=\"border:1px solid black;border-collapse: collapse;\">Grade</th>" +
-                                            "    <th style=\"border:1px solid black;border-collapse: collapse;\">Length</th>" +
-                                            "    <th style=\"border:1px solid black;border-collapse: collapse;\">Width</th>" +
-                                            "    <th style=\"border:1px solid black;border-collapse: collapse;\">Thickness</th>" +
-                                            "    <th style=\"border:1px solid black;border-collapse: collapse;\">Bundle Number</th>" +
-                                            "  </tr>";
-
-                                    for (int i = 0; i < bundles.size(); i++) {
-                                        emailContent += "<tr>" +
-                                                "<td>" + bundles.get(i).getArea() + "</td>" +
-                                                "<td>" + bundles.get(i).getLocation() + "</td>" +
-                                                "<td>" + bundles.get(i).getNoOfPieces() + "</td>" +
-                                                "<td>" + bundles.get(i).getGrade() + "</td>" +
-                                                "<td>" + bundles.get(i).getLength() + "</td>" +
-                                                "<td>" + bundles.get(i).getWidth() + "</td>" +
-                                                "<td>" + bundles.get(i).getThickness() + "</td>" +
-                                                "<td>" + bundles.get(i).getBundleNo() + "</td>" +
-                                                "</tr>";
-
-                                        order = new Orders(bundles.get(i).getThickness()
-                                                , bundles.get(i).getWidth()
-                                                , bundles.get(i).getLength()
-                                                , bundles.get(i).getGrade()
-                                                , bundles.get(i).getNoOfPieces()
-                                                , bundles.get(i).getBundleNo()
-                                                , bundles.get(i).getLocation()
-                                                , bundles.get(i).getArea()
-                                                , placingNo.getText().toString()
-                                                , orderNo.getText().toString()
-                                                , containerNo.getText().toString()
-                                                , dateOfLoad.getText().toString()
-                                                , destination.getText().toString());
-                                        databaseHandler.addOrder(order);
-                                    }
-                                    emailContent += "</table>";
-
-                                    Log.e("size",""+ imagesFileList.size());
-                                    for (int i =0; i<imagesFileList.size(); i++){
-                                        emailContent += "<br><image>" + imagesFileList.get(i)+"</image>" ;
-                                    }
-                                    databaseHandler.addPictures(new Pictures(orderNo.getText().toString()
-                                            , pics.get(0)
-                                            , pics.get(1)
-                                            , pics.get(2)
-                                            , pics.get(3)
-                                            , pics.get(4)
-                                            , pics.get(5)
-                                            , pics.get(6)
-                                            , pics.get(7)));
-
-                                    new SendMailTask(LoadingOrder2.this).execute(senderName, senderPassword
-                                            , recipientName, emailTitle, emailContent);
+                                    sendBundle();
 //                                    Toast.makeText(LoadingOrder2.this, "Saved !", Toast.LENGTH_LONG).show();
-                                    printReport();
 //                                    for(int i = 0 ; i<pics.size() ; i++)
 //                                        pics.set(i,null);
 //                                    onResume();
+                                    Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+                                    intent.putExtra(Intent.EXTRA_EMAIL, new String[]{recipientName});
+                                    intent.putExtra(Intent.EXTRA_SUBJECT, emailTitle);
+                                    intent.setType("image/png");
+                                    ArrayList<Uri> uriArrayList = new ArrayList<>();
+                                    for (int i = 0; i < imagesFileList.size(); i++) {
+                                        uriArrayList.add(Uri.fromFile(imagesFileList.get(i)));
+                                    }
+//                                    intent.putExtra(Intent.EXTRA_STREAM, array);
+                                    intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM , uriArrayList);
+                                    startActivity(Intent.createChooser(intent, "Share you on the jobing"));
+                                    //Log.d("URI@!@#!#!@##!", Uri.fromFile(pic).toString() + "   " + pic.exists());
 
                                     placingNo.setText("");
                                     orderNo.setText("");
@@ -231,7 +185,6 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
                                     dateOfLoad.setText("");
                                     destination.setText("");
                                     printReport();
-                                    progressDialog.dismiss();
 //                                    onCreate(savedInstanceState);
 
                                 } else {
@@ -249,9 +202,80 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
                 } else {
                     placingNo.setError("Required!");
                 }
-
             }
         });
+    }
+
+    public void sendBundle() {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                emailContent = "Placing Number: \t" + placingNo.getText().toString()
+                        + "<br>" + "Order Number: \t" + orderNo.getText().toString()
+                        + "<br>" + "Container Number: \t" + containerNo.getText().toString()
+                        + "<br>" + "Date Of Load: \t" + dateOfLoad.getText().toString()
+                        + "<br>" + "Destination: \t" + destination.getText().toString()
+                        + "<br><br><br>";
+
+                emailContent += "<table style=\"width:100%; border:1px solid black;border-collapse: collapse;\">" +
+                        "  <tr style=\"border:1px solid black;border-collapse: collapse;\">" +
+                        "    <th style=\"border:1px solid black;border-collapse: collapse;\">Area</th>" +
+                        "    <th style=\"border:1px solid black;border-collapse: collapse;\">Location</th>" +
+                        "    <th style=\"border:1px solid black;border-collapse: collapse;\">No Of Pieces</th>" +
+                        "    <th style=\"border:1px solid black;border-collapse: collapse;\">Grade</th>" +
+                        "    <th style=\"border:1px solid black;border-collapse: collapse;\">Length</th>" +
+                        "    <th style=\"border:1px solid black;border-collapse: collapse;\">Width</th>" +
+                        "    <th style=\"border:1px solid black;border-collapse: collapse;\">Thickness</th>" +
+                        "    <th style=\"border:1px solid black;border-collapse: collapse;\">Bundle Number</th>" +
+                        "  </tr>";
+
+                for (int i = 0; i < bundles.size(); i++) {
+                    emailContent += "<tr>" +
+                            "<td>" + bundles.get(i).getArea() + "</td>" +
+                            "<td>" + bundles.get(i).getLocation() + "</td>" +
+                            "<td>" + bundles.get(i).getNoOfPieces() + "</td>" +
+                            "<td>" + bundles.get(i).getGrade() + "</td>" +
+                            "<td>" + bundles.get(i).getLength() + "</td>" +
+                            "<td>" + bundles.get(i).getWidth() + "</td>" +
+                            "<td>" + bundles.get(i).getThickness() + "</td>" +
+                            "<td>" + bundles.get(i).getBundleNo() + "</td>" +
+                            "</tr>";
+
+                    order = new Orders(bundles.get(i).getThickness()
+                            , bundles.get(i).getWidth()
+                            , bundles.get(i).getLength()
+                            , bundles.get(i).getGrade()
+                            , bundles.get(i).getNoOfPieces()
+                            , bundles.get(i).getBundleNo()
+                            , bundles.get(i).getLocation()
+                            , bundles.get(i).getArea()
+                            , placingNo.getText().toString()
+                            , orderNo.getText().toString()
+                            , containerNo.getText().toString()
+                            , dateOfLoad.getText().toString()
+                            , destination.getText().toString());
+                    databaseHandler.addOrder(order);
+                }
+                emailContent += "</table>";
+
+                databaseHandler.addPictures(new Pictures(orderNo.getText().toString()
+                        , pics.get(0)
+                        , pics.get(1)
+                        , pics.get(2)
+                        , pics.get(3)
+                        , pics.get(4)
+                        , pics.get(5)
+                        , pics.get(6)
+                        , pics.get(7)));
+
+                new SendMailTask(LoadingOrder2.this).execute(senderName, senderPassword
+                        , recipientName, emailTitle, emailContent);
+
+                progressDialog.dismiss();
+
+            }
+        }).start();
 
     }
 
@@ -269,6 +293,8 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+//        pics.clear();
 
         int permission = ActivityCompat.checkSelfPermission(LoadingOrder2.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         if (permission != PackageManager.PERMISSION_GRANTED) {
@@ -290,6 +316,9 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
                 if (index != -1) {
                     bundles.get(index).setPicture(thumbnail);
                     adapter.notifyDataSetChanged();
+//                    pics.set(9, thumbnail);
+//                    String root9 = Environment.getExternalStorageDirectory().getAbsolutePath();
+//                    picture = new File(root9, "pic9.png");
                 } else {
                     switch (imageNo) {
                         case 1:
@@ -353,12 +382,11 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    imagesFileList.add(picture);
-
-
+//                    imagesBitmapList.add(thumbnail);
+//                    imagesBitmapList.size();
                 }
+                imagesFileList.add(picture);
             }
-
 //            thumbnail = (Bitmap) data.getExtras().get("data");
 //            try {
 //                String root = Environment.getExternalStorageDirectory().getAbsolutePath();
@@ -372,9 +400,7 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
 //            } catch (IOException e) {
 //                Log.e("BROKEN", "Could not write file " + e.getMessage());
 //            }
-
         }
-
     }
 
     @Override
