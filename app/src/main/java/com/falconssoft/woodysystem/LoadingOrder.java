@@ -2,6 +2,7 @@ package com.falconssoft.woodysystem;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.falconssoft.woodysystem.models.BundleInfo;
@@ -27,6 +29,7 @@ public class LoadingOrder extends AppCompatActivity {
     private ImageButton deleteBarcode;
     private GridView items;
     private Button done, barcode;
+    View view;
     private SearchView searchViewTh, searchViewW, searchViewL;
     private DatabaseHandler DHandler;
     private List<BundleInfo> bundles, filteredList;
@@ -179,18 +182,24 @@ public class LoadingOrder extends AppCompatActivity {
         return test;
     }
 
-    void searchByBundleNo(String Bundul) {
-        Log.e("searchByBundleNo ", "" + barcodeValue + "\n" + "th =" + Bundul);
+    void searchByBundleNo(String Bundul){
+
+        Log.e("searchByBundleNo ",""+barcodeValue+"\n"+"th ="+Bundul);
+
+           int no=0;
+
         if (!barcodeValue.equals("cancelled")) {
-            ArrayList<BundleInfo> filteredList = new ArrayList<>();
             for (int k = 0; k < bundles.size(); k++) {
                 if ((bundles.get(k).getBundleNo()).equals(Bundul)) {
-                    filteredList.add(bundles.get(k));
-                    Log.e("searchByBundleNo ", "" + filteredList.get(filteredList.size() - 1).getBundleNo());
+                    no=k;
+                    items.setSelection(no);
+                    items.requestFocusFromTouch();
+                    items.setSelection(no);
+
+                    break;
                 }
             }
-            ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, filteredList);
-            items.setAdapter(adapter);
+
         } else {
             ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, bundles);
             items.setAdapter(adapter);
@@ -216,8 +225,8 @@ public class LoadingOrder extends AppCompatActivity {
 
 //Log.e("barcode_value ",""+barcodeValue+"\n"+"th ="+arrayString[0]+"\n"+"w ="+arrayString[1]+"\n"+"l ="
 //        +arrayString[2]+"\n"+"grad ="+arrayString[3]);
+//                searchByBundleNo(barcodeValue);
                 searchByBundleNo(barcodeValue);
-
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);

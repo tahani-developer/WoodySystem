@@ -9,6 +9,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
@@ -307,12 +310,24 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
     public Bitmap writeBarcode(String data) {
         final Dialog dialog = new Dialog(AddToInventory.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(true);
+        dialog.setCancelable(false);
         dialog.setContentView(R.layout.barcode_dialog);
-
+        TextView close = (TextView) dialog.findViewById(R.id.close);
         ImageView iv = (ImageView) dialog.findViewById(R.id.iv);
         // barcode data
         String barcode_data = data;
+
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    closeBT();
+                    dialog.dismiss();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         Bitmap bitmap = null;//  AZTEC -->QR
         try {
@@ -322,10 +337,13 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
             try {
                 findBT();
                 openBT(bitmap);
+
             } catch (IOException e) {
                 e.printStackTrace();
+            }catch (Exception r){
+                closeBT();
             }
-        } catch (WriterException e) {
+        } catch (WriterException | IOException e) {
             e.printStackTrace();
         }
 
@@ -531,7 +549,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
             mmOutputStream.close();
             mmInputStream.close();
             mmSocket.close();
-            workerThread.stop();
+//            workerThread.stop();
 //            myLabel.setText("Bluetooth Closed");
         } catch (NullPointerException e) {
             e.printStackTrace();
