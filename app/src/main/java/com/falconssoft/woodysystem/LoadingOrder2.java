@@ -10,6 +10,7 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -50,6 +51,7 @@ import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -83,6 +85,7 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
     OutputStream mmOutputStream;
     InputStream mmInputStream;
     volatile boolean stopWorker;
+    private boolean checkImageExist = false;
 
     static ArrayList<Bitmap> pics = new ArrayList<>();
     private List<File> imagesFileList = new ArrayList<>();
@@ -99,7 +102,7 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.loading_order2);
 
-        imagesFileList.clear();
+//        imagesFileList.clear();
         init();
         databaseHandler = new DatabaseHandler(this);
         Drawable myDrawable = getResources().getDrawable(R.drawable.pic);
@@ -127,6 +130,7 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
                 openCamera(position);
             }
         });
+
         listView2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
@@ -165,17 +169,20 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
 //                                    for(int i = 0 ; i<pics.size() ; i++)
 //                                        pics.set(i,null);
 //                                    onResume();
-                                    Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
-                                    intent.putExtra(Intent.EXTRA_EMAIL, new String[]{recipientName});
-                                    intent.putExtra(Intent.EXTRA_SUBJECT, emailTitle);
-                                    intent.setType("image/png");
-                                    ArrayList<Uri> uriArrayList = new ArrayList<>();
-                                    for (int i = 0; i < imagesFileList.size(); i++) {
-                                        uriArrayList.add(Uri.fromFile(imagesFileList.get(i)));
-                                    }
+                                    if (checkImageExist) {
+                                        Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+                                        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{recipientName});
+                                        intent.putExtra(Intent.EXTRA_SUBJECT, emailTitle);
+                                        intent.setType("image/png");
+                                        ArrayList<Uri> uriArrayList = new ArrayList<>();
+                                        Log.e("size", "" + imagesFileList.size());
+                                        for (int i = 0; i < imagesFileList.size(); i++) {
+                                            uriArrayList.add(Uri.fromFile(imagesFileList.get(i)));
+                                        }
 //                                    intent.putExtra(Intent.EXTRA_STREAM, array);
-                                    intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM , uriArrayList);
-                                    startActivity(Intent.createChooser(intent, "Share you on the jobing"));
+                                        intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uriArrayList);
+                                        startActivity(Intent.createChooser(intent, "Share you on the jobing"));
+                                    }
                                     //Log.d("URI@!@#!#!@##!", Uri.fromFile(pic).toString() + "   " + pic.exists());
 
                                     placingNo.setText("");
@@ -204,6 +211,13 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
             }
         });
     }
+
+//    @RequiresApi(api = Build.VERSION_CODES.M)
+//    void imageClickListener(int position) {
+//        imageNo = position;
+//        openCamera(position);
+//        Log.e("position", "" + position);
+//    }
 
     public void sendBundle() {
 
@@ -280,6 +294,7 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void openCamera(int i) {
+        checkImageExist = true;
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
         } else {
@@ -292,8 +307,6 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-//        pics.clear();
 
         int permission = ActivityCompat.checkSelfPermission(LoadingOrder2.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         if (permission != PackageManager.PERMISSION_GRANTED) {
@@ -314,10 +327,11 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
 //                Bitmap pic = extras.getParcelable("data");
                 if (index != -1) {
                     bundles.get(index).setPicture(thumbnail);
+                    String root1 = Environment.getExternalStorageDirectory().getAbsolutePath();
+                    picture = new File(root1, "bundleImage" + index +".png");
+                    Log.e("position", "" + index);
+                    Log.e("root9", String.valueOf(picture));
                     adapter.notifyDataSetChanged();
-//                    pics.set(9, thumbnail);
-//                    String root9 = Environment.getExternalStorageDirectory().getAbsolutePath();
-//                    picture = new File(root9, "pic9.png");
                 } else {
                     switch (imageNo) {
                         case 1:
@@ -325,6 +339,7 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
                             pics.set(0, thumbnail);
                             String root1 = Environment.getExternalStorageDirectory().getAbsolutePath();
                             picture = new File(root1, "pic1.png");
+                            Log.e("root1", String.valueOf(picture));
                             break;
                         case 2:
                             img2.setImageBitmap(thumbnail);
@@ -370,19 +385,21 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
                             break;
 
                     }
-                    FileOutputStream out = null;
-                    try {
-                        out = new FileOutputStream(picture);
-                        thumbnail.compress(Bitmap.CompressFormat.PNG, 100, out);
-                        out.flush();
-                        out.close();
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+
+//                    imagesFileList.add(picture);
 //                    imagesBitmapList.add(thumbnail);
 //                    imagesBitmapList.size();
+                }
+                FileOutputStream out = null;
+                try {
+                    out = new FileOutputStream(picture);
+                    thumbnail.compress(Bitmap.CompressFormat.PNG, 100, out);
+                    out.flush();
+                    out.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
                 imagesFileList.add(picture);
             }

@@ -21,7 +21,7 @@ public class SettingsFile {
 
     public static String senderPassword = "androiddevelopers4";
 
-    public static String recipientName = "hiary.abeer@yahoo.com";
+    public static String recipientName = "rawanfalcons2017@gmail.com";
 
     public static String emailTitle = "Wood App";
 
