@@ -13,6 +13,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -41,13 +42,25 @@ import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.Orders;
 import com.falconssoft.woodysystem.models.Pictures;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.lang.reflect.Array;
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -63,7 +76,7 @@ import static com.falconssoft.woodysystem.SettingsFile.recipientName;
 import static com.falconssoft.woodysystem.SettingsFile.senderName;
 import static com.falconssoft.woodysystem.SettingsFile.senderPassword;
 
-public class LoadingOrder2 extends AppCompatActivity implements View.OnClickListener {
+public class LoadingOrder2 extends AppCompatActivity{
 
     HorizontalListView listView;
     ListView listView2;
@@ -86,6 +99,9 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
     InputStream mmInputStream;
     volatile boolean stopWorker;
     private boolean checkImageExist = false;
+    String mainContent ="";
+
+    JSONArray jsonArrayOrders;
 
     static ArrayList<Bitmap> pics = new ArrayList<>();
     private List<File> imagesFileList = new ArrayList<>();
@@ -102,9 +118,12 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.loading_order2);
 
-//        imagesFileList.clear();
+        imagesFileList.clear();
         init();
         databaseHandler = new DatabaseHandler(this);
+
+        jsonArrayOrders = new JSONArray();
+
         Drawable myDrawable = getResources().getDrawable(R.drawable.pic);
         Bitmap myBitmap = ((BitmapDrawable) myDrawable).getBitmap();
         pics.add(myBitmap);
@@ -136,6 +155,71 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 openCamera(position);
+            }
+        });
+
+        img1.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            @Override
+            public void onClick(View v) {
+                openCamera(-1);
+                imageNo = 1;
+            }
+        });
+        img2.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            @Override
+            public void onClick(View v) {
+                openCamera(-1);
+                imageNo = 2;
+            }
+        });
+        img3.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            @Override
+            public void onClick(View v) {
+                openCamera(-1);
+                imageNo = 3;
+            }
+        });
+        img4.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            @Override
+            public void onClick(View v) {
+                openCamera(-1);
+                imageNo = 4;
+            }
+        });
+        img5.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            @Override
+            public void onClick(View v) {
+                openCamera(-1);
+                imageNo = 5;
+            }
+        });
+        img6.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            @Override
+            public void onClick(View v) {
+                openCamera(-1);
+                imageNo = 6;
+            }
+        });
+        img7.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            @Override
+            public void onClick(View v) {
+                openCamera(-1);
+                imageNo = 7;
+            }
+        });
+        img8.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            @Override
+            public void onClick(View v) {
+                openCamera(-1);
+                imageNo = 8;
             }
         });
 
@@ -212,13 +296,6 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
         });
     }
 
-//    @RequiresApi(api = Build.VERSION_CODES.M)
-//    void imageClickListener(int position) {
-//        imageNo = position;
-//        openCamera(position);
-//        Log.e("position", "" + position);
-//    }
-
     public void sendBundle() {
 
         new Thread(new Runnable() {
@@ -269,6 +346,10 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
                             , dateOfLoad.getText().toString()
                             , destination.getText().toString());
                     databaseHandler.addOrder(order);
+
+                    jsonArrayOrders.put(order.getJSONObject());
+
+                    databaseHandler.updateTableBundles(bundles.get(i).getBundleNo());
                 }
                 emailContent += "</table>";
 
@@ -284,6 +365,18 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
 
                 new SendMailTask(LoadingOrder2.this).execute(senderName, senderPassword
                         , recipientName, emailTitle, emailContent);
+                                    Toast.makeText(LoadingOrder2.this, "Saved !", Toast.LENGTH_LONG).show();
+
+                                    printReport();
+
+                                    new SendMailTask(LoadingOrder2.this).execute("rawanfalcons2017@gmail.com", "raw12345678"
+                                            , "hiary.abeer96@gmail.com", "Woody System", mainContent);
+
+                                    new JSONTask().execute();
+
+
+                                    Intent intent = new Intent(LoadingOrder2.this , LoadingOrder.class);
+                                    startActivity(intent);
 
                 progressDialog.dismiss();
 
@@ -327,10 +420,8 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
 //                Bitmap pic = extras.getParcelable("data");
                 if (index != -1) {
                     bundles.get(index).setPicture(thumbnail);
-                    String root1 = Environment.getExternalStorageDirectory().getAbsolutePath();
-                    picture = new File(root1, "bundleImage" + index +".png");
-                    Log.e("position", "" + index);
-                    Log.e("root9", String.valueOf(picture));
+                    String root9 = Environment.getExternalStorageDirectory().getAbsolutePath();
+                    picture = new File(root9, "bundleImage" + index +".png");
                     adapter.notifyDataSetChanged();
                 } else {
                     switch (imageNo) {
@@ -339,7 +430,6 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
                             pics.set(0, thumbnail);
                             String root1 = Environment.getExternalStorageDirectory().getAbsolutePath();
                             picture = new File(root1, "pic1.png");
-                            Log.e("root1", String.valueOf(picture));
                             break;
                         case 2:
                             img2.setImageBitmap(thumbnail);
@@ -530,6 +620,7 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
                 itemsString = itemsString + "\n" + row;
             }
             printCustom(itemsString + "\n", 0, 0);
+            mainContent = mainContent + itemsString ;
 
             printCustom("----------------------------------------------" + "\n", 1, 0);
 
@@ -675,15 +766,6 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
         img7 = findViewById(R.id.image7);
         img8 = findViewById(R.id.image8);
 
-        img1.setOnClickListener(this);
-        img2.setOnClickListener(this);
-        img3.setOnClickListener(this);
-        img4.setOnClickListener(this);
-        img5.setOnClickListener(this);
-        img6.setOnClickListener(this);
-        img7.setOnClickListener(this);
-        img8.setOnClickListener(this);
-
         Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_to_right);
         textView.startAnimation(animation);
 
@@ -703,43 +785,69 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
         overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.image1:
-                openCamera(-1);
-                imageNo = 1;
-                break;
-            case R.id.image2:
-                openCamera(-1);
-                imageNo = 2;
-                break;
-            case R.id.image3:
-                openCamera(-1);
-                imageNo = 3;
-                break;
-            case R.id.image4:
-                openCamera(-1);
-                imageNo = 4;
-                break;
-            case R.id.image5:
-                openCamera(-1);
-                imageNo = 5;
-                break;
-            case R.id.image6:
-                openCamera(-1);
-                imageNo = 6;
-                break;
-            case R.id.image7:
-                openCamera(-1);
-                imageNo = 7;
-                break;
-            case R.id.image8:
-                openCamera(-1);
-                imageNo = 8;
-                break;
+    private class JSONTask extends AsyncTask<String, String, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
         }
 
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+
+                String JsonResponse = null;
+                HttpClient client = new DefaultHttpClient();
+                HttpPost request = new HttpPost ();
+                request.setURI(new URI("http://10.0.0.214/WOODY/export.php"));
+
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+                nameValuePairs.add(new BasicNameValuePair("BUNDLE_ORDERS", jsonArrayOrders.toString().trim()));
+
+                request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                HttpResponse response = client.execute(request);
+
+                BufferedReader in = new BufferedReader(new
+                        InputStreamReader(response.getEntity().getContent()));
+
+                StringBuffer sb = new StringBuffer("");
+                String line="";
+
+                while ((line = in.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                in.close();
+
+                JsonResponse = sb.toString();
+                Log.e("tag", "" + JsonResponse);
+
+                return JsonResponse;
+
+            }catch (Exception e)
+            {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+
+            if(s != null) {
+                if (s.contains("BUNDLE_ORDER SUCCESS")) {
+
+                    Log.e("tag", "****Success");
+                } else {
+                    Log.e("tag", "****Failed to export data");
+                }
+            } else {
+                Log.e("tag", "****Failed to export data Please check internet connection");
+            }
+        }
     }
 }
