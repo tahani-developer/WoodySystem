@@ -76,7 +76,7 @@ import static com.falconssoft.woodysystem.SettingsFile.recipientName;
 import static com.falconssoft.woodysystem.SettingsFile.senderName;
 import static com.falconssoft.woodysystem.SettingsFile.senderPassword;
 
-public class LoadingOrder2 extends AppCompatActivity{
+public class LoadingOrder2 extends AppCompatActivity {
 
     HorizontalListView listView;
     ListView listView2;
@@ -98,8 +98,8 @@ public class LoadingOrder2 extends AppCompatActivity{
     OutputStream mmOutputStream;
     InputStream mmInputStream;
     volatile boolean stopWorker;
+    String mainContent = "";
     private boolean checkImageExist = false;
-    String mainContent ="";
 
     JSONArray jsonArrayOrders;
 
@@ -375,8 +375,8 @@ public class LoadingOrder2 extends AppCompatActivity{
                                     new JSONTask().execute();
 
 
-                                    Intent intent = new Intent(LoadingOrder2.this , LoadingOrder.class);
-                                    startActivity(intent);
+                Intent intent = new Intent(LoadingOrder2.this, LoadingOrder.class);
+                startActivity(intent);
 
                 progressDialog.dismiss();
 
@@ -492,6 +492,7 @@ public class LoadingOrder2 extends AppCompatActivity{
                     e.printStackTrace();
                 }
                 imagesFileList.add(picture);
+
             }
 //            thumbnail = (Bitmap) data.getExtras().get("data");
 //            try {
@@ -620,7 +621,7 @@ public class LoadingOrder2 extends AppCompatActivity{
                 itemsString = itemsString + "\n" + row;
             }
             printCustom(itemsString + "\n", 0, 0);
-            mainContent = mainContent + itemsString ;
+            mainContent = mainContent + itemsString;
 
             printCustom("----------------------------------------------" + "\n", 1, 0);
 
@@ -799,7 +800,7 @@ public class LoadingOrder2 extends AppCompatActivity{
 
                 String JsonResponse = null;
                 HttpClient client = new DefaultHttpClient();
-                HttpPost request = new HttpPost ();
+                HttpPost request = new HttpPost();
                 request.setURI(new URI("http://10.0.0.214/WOODY/export.php"));
 
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
@@ -813,7 +814,7 @@ public class LoadingOrder2 extends AppCompatActivity{
                         InputStreamReader(response.getEntity().getContent()));
 
                 StringBuffer sb = new StringBuffer("");
-                String line="";
+                String line = "";
 
                 while ((line = in.readLine()) != null) {
                     sb.append(line);
@@ -826,8 +827,7 @@ public class LoadingOrder2 extends AppCompatActivity{
 
                 return JsonResponse;
 
-            }catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
                 return null;
             }
@@ -838,7 +838,7 @@ public class LoadingOrder2 extends AppCompatActivity{
             super.onPostExecute(s);
 
 
-            if(s != null) {
+            if (s != null) {
                 if (s.contains("BUNDLE_ORDER SUCCESS")) {
 
                     Log.e("tag", "****Success");
