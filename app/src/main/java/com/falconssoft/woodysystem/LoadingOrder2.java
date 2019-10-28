@@ -74,7 +74,7 @@ import static com.falconssoft.woodysystem.SettingsFile.recipientName;
 import static com.falconssoft.woodysystem.SettingsFile.senderName;
 import static com.falconssoft.woodysystem.SettingsFile.senderPassword;
 
-public class LoadingOrder2 extends AppCompatActivity{
+public class LoadingOrder2 extends AppCompatActivity {
 
     HorizontalListView listView;
     ListView listView2;
@@ -96,7 +96,7 @@ public class LoadingOrder2 extends AppCompatActivity{
     OutputStream mmOutputStream;
     InputStream mmInputStream;
     volatile boolean stopWorker;
-    String mainContent ="";
+    String mainContent = "";
 
     JSONArray jsonArrayOrders;
 
@@ -245,6 +245,7 @@ public class LoadingOrder2 extends AppCompatActivity{
                                     emailTitle = "Order No: " + orderNo.getText().toString();
                                     progressDialog.show();
                                     sendBundle();
+                                    Toast.makeText(LoadingOrder2.this, "Saved !", Toast.LENGTH_LONG).show();
 //                                    Toast.makeText(LoadingOrder2.this, "Saved !", Toast.LENGTH_LONG).show();
 //                                    for(int i = 0 ; i<pics.size() ; i++)
 //                                        pics.set(i,null);
@@ -258,17 +259,9 @@ public class LoadingOrder2 extends AppCompatActivity{
                                         uriArrayList.add(Uri.fromFile(imagesFileList.get(i)));
                                     }
 //                                    intent.putExtra(Intent.EXTRA_STREAM, array);
-                                    intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM , uriArrayList);
+                                    intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uriArrayList);
                                     startActivity(Intent.createChooser(intent, "Share you on the jobing"));
                                     //Log.d("URI@!@#!#!@##!", Uri.fromFile(pic).toString() + "   " + pic.exists());
-
-                                    placingNo.setText("");
-                                    orderNo.setText("");
-                                    containerNo.setText("");
-                                    dateOfLoad.setText("");
-                                    destination.setText("");
-                                    printReport();
-//                                    onCreate(savedInstanceState);
 
                                 } else {
                                     destination.setError("Required!");
@@ -358,18 +351,14 @@ public class LoadingOrder2 extends AppCompatActivity{
 
                 new SendMailTask(LoadingOrder2.this).execute(senderName, senderPassword
                         , recipientName, emailTitle, emailContent);
-                                    Toast.makeText(LoadingOrder2.this, "Saved !", Toast.LENGTH_LONG).show();
 
-                                    printReport();
+                printReport();
 
-                                    new SendMailTask(LoadingOrder2.this).execute("rawanfalcons2017@gmail.com", "raw12345678"
-                                            , "hiary.abeer96@gmail.com", "Woody System", mainContent);
-
-                                    new JSONTask().execute();
+                new JSONTask().execute();
 
 
-                                    Intent intent = new Intent(LoadingOrder2.this , LoadingOrder.class);
-                                    startActivity(intent);
+                Intent intent = new Intent(LoadingOrder2.this, LoadingOrder.class);
+                startActivity(intent);
 
                 progressDialog.dismiss();
 
@@ -485,6 +474,7 @@ public class LoadingOrder2 extends AppCompatActivity{
 //                    imagesBitmapList.size();
                 }
                 imagesFileList.add(picture);
+
             }
 //            thumbnail = (Bitmap) data.getExtras().get("data");
 //            try {
@@ -613,7 +603,7 @@ public class LoadingOrder2 extends AppCompatActivity{
                 itemsString = itemsString + "\n" + row;
             }
             printCustom(itemsString + "\n", 0, 0);
-            mainContent = mainContent + itemsString ;
+            mainContent = mainContent + itemsString;
 
             printCustom("----------------------------------------------" + "\n", 1, 0);
 
@@ -792,7 +782,7 @@ public class LoadingOrder2 extends AppCompatActivity{
 
                 String JsonResponse = null;
                 HttpClient client = new DefaultHttpClient();
-                HttpPost request = new HttpPost ();
+                HttpPost request = new HttpPost();
                 request.setURI(new URI("http://10.0.0.214/WOODY/export.php"));
 
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
@@ -806,7 +796,7 @@ public class LoadingOrder2 extends AppCompatActivity{
                         InputStreamReader(response.getEntity().getContent()));
 
                 StringBuffer sb = new StringBuffer("");
-                String line="";
+                String line = "";
 
                 while ((line = in.readLine()) != null) {
                     sb.append(line);
@@ -819,8 +809,7 @@ public class LoadingOrder2 extends AppCompatActivity{
 
                 return JsonResponse;
 
-            }catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
                 return null;
             }
@@ -831,7 +820,7 @@ public class LoadingOrder2 extends AppCompatActivity{
             super.onPostExecute(s);
 
 
-            if(s != null) {
+            if (s != null) {
                 if (s.contains("BUNDLE_ORDER SUCCESS")) {
 
                     Log.e("tag", "****Success");
