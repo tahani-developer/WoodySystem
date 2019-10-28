@@ -10,6 +10,7 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -63,6 +64,7 @@ import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -97,6 +99,7 @@ public class LoadingOrder2 extends AppCompatActivity {
     InputStream mmInputStream;
     volatile boolean stopWorker;
     String mainContent = "";
+    private boolean checkImageExist = false;
 
     JSONArray jsonArrayOrders;
 
@@ -146,6 +149,7 @@ public class LoadingOrder2 extends AppCompatActivity {
                 openCamera(position);
             }
         });
+
         listView2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
@@ -250,17 +254,20 @@ public class LoadingOrder2 extends AppCompatActivity {
 //                                    for(int i = 0 ; i<pics.size() ; i++)
 //                                        pics.set(i,null);
 //                                    onResume();
-                                    Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
-                                    intent.putExtra(Intent.EXTRA_EMAIL, new String[]{recipientName});
-                                    intent.putExtra(Intent.EXTRA_SUBJECT, emailTitle);
-                                    intent.setType("image/png");
-                                    ArrayList<Uri> uriArrayList = new ArrayList<>();
-                                    for (int i = 0; i < imagesFileList.size(); i++) {
-                                        uriArrayList.add(Uri.fromFile(imagesFileList.get(i)));
-                                    }
+                                    if (checkImageExist) {
+                                        Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+                                        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{recipientName});
+                                        intent.putExtra(Intent.EXTRA_SUBJECT, emailTitle);
+                                        intent.setType("image/png");
+                                        ArrayList<Uri> uriArrayList = new ArrayList<>();
+                                        Log.e("size", "" + imagesFileList.size());
+                                        for (int i = 0; i < imagesFileList.size(); i++) {
+                                            uriArrayList.add(Uri.fromFile(imagesFileList.get(i)));
+                                        }
 //                                    intent.putExtra(Intent.EXTRA_STREAM, array);
-                                    intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uriArrayList);
-                                    startActivity(Intent.createChooser(intent, "Share you on the jobing"));
+                                        intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uriArrayList);
+                                        startActivity(Intent.createChooser(intent, "Share you on the jobing"));
+                                    }
                                     //Log.d("URI@!@#!#!@##!", Uri.fromFile(pic).toString() + "   " + pic.exists());
 
                                 } else {
@@ -369,6 +376,7 @@ public class LoadingOrder2 extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void openCamera(int i) {
+        checkImageExist = true;
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
         } else {
@@ -381,8 +389,6 @@ public class LoadingOrder2 extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-//        pics.clear();
 
         int permission = ActivityCompat.checkSelfPermission(LoadingOrder2.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         if (permission != PackageManager.PERMISSION_GRANTED) {
@@ -403,10 +409,9 @@ public class LoadingOrder2 extends AppCompatActivity {
 //                Bitmap pic = extras.getParcelable("data");
                 if (index != -1) {
                     bundles.get(index).setPicture(thumbnail);
+                    String root9 = Environment.getExternalStorageDirectory().getAbsolutePath();
+                    picture = new File(root9, "bundleImage" + index +".png");
                     adapter.notifyDataSetChanged();
-//                    pics.set(9, thumbnail);
-//                    String root9 = Environment.getExternalStorageDirectory().getAbsolutePath();
-//                    picture = new File(root9, "pic9.png");
                 } else {
                     switch (imageNo) {
                         case 1:
@@ -459,19 +464,21 @@ public class LoadingOrder2 extends AppCompatActivity {
                             break;
 
                     }
-                    FileOutputStream out = null;
-                    try {
-                        out = new FileOutputStream(picture);
-                        thumbnail.compress(Bitmap.CompressFormat.PNG, 100, out);
-                        out.flush();
-                        out.close();
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+
+//                    imagesFileList.add(picture);
 //                    imagesBitmapList.add(thumbnail);
 //                    imagesBitmapList.size();
+                }
+                FileOutputStream out = null;
+                try {
+                    out = new FileOutputStream(picture);
+                    thumbnail.compress(Bitmap.CompressFormat.PNG, 100, out);
+                    out.flush();
+                    out.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
                 imagesFileList.add(picture);
 

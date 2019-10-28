@@ -28,13 +28,14 @@ import java.util.List;
 
 public class ItemsListAdapter2 extends BaseAdapter {
 
-    private Context context;
+//    private Context context;
+    private LoadingOrder2 loadingOrder2;
     private List<BundleInfo> mOriginalValues;
     private static List<BundleInfo> itemsList;
     private static List<BundleInfo> selectedBundles;
 
-    public ItemsListAdapter2(Context context, List<BundleInfo> itemsList) {
-        this.context = context;
+    public ItemsListAdapter2(LoadingOrder2 loadingOrder2, List<BundleInfo> itemsList) {
+        this.loadingOrder2 = loadingOrder2;
         this.mOriginalValues = itemsList;
         this.itemsList = itemsList;
         selectedBundles = new ArrayList<>();
@@ -69,7 +70,7 @@ public class ItemsListAdapter2 extends BaseAdapter {
     public View getView(final int i, View view, ViewGroup viewGroup) {
 
         final ViewHolder holder = new ViewHolder();
-        view = View.inflate(context, R.layout.item_row2, null);
+        view = View.inflate(loadingOrder2, R.layout.item_row2, null);
 
         holder.th = (TextView) view.findViewById(R.id.th);
         holder.w = (TextView) view.findViewById(R.id.w);
@@ -91,7 +92,7 @@ public class ItemsListAdapter2 extends BaseAdapter {
         holder.area.setText("" + itemsList.get(i).getArea());
 
         if (itemsList.get(i).getPicture() == null)
-            holder.image.setImageDrawable(context.getResources().getDrawable(R.drawable.pic));
+            holder.image.setImageDrawable(loadingOrder2.getResources().getDrawable(R.drawable.pic));
         else
             holder.image.setImageBitmap(itemsList.get(i).getPicture());
 //        holder.image.setOnClickListener(new View.OnClickListener() {
@@ -105,6 +106,13 @@ public class ItemsListAdapter2 extends BaseAdapter {
 //            }
 //        });
 
+//        holder.image.setOnClickListener(new View.OnClickListener() {
+//            @RequiresApi(api = Build.VERSION_CODES.M)
+//            @Override
+//            public void onClick(View v) {
+//                loadingOrder2.imageClickListener(i);
+//            }
+//        });
         return view;
     }
 
