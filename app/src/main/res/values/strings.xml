@@ -7,6 +7,7 @@
 
     <string name="enter_inventory">Enter Inventory</string>
     <string name="loading_order">Loading Order</string>
+    <string name="reports">Reports</string>
 
     <string name="th">Th</string>
     <string name="w">W</string>
@@ -40,6 +41,7 @@
     <string name="add">Add</string>
     <string name="done">Done</string>
     <string name="save">Save</string>
+    <string name="generate">Generate</string>
 
 
 </resources>

@@ -2,7 +2,6 @@ package com.falconssoft.woodysystem;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -10,10 +9,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -53,30 +48,17 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.Serializable;
-import java.lang.reflect.Array;
-import java.net.HttpURLConnection;
 import java.net.URI;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -86,11 +68,11 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 
     private static final int WHITE = 0xFFFFFFFF;
     private static final int BLACK = 0xFF000000;
-    private EditText thickness, length, width, noOfPieces, bundleNo;
+    private EditText thickness, length, width, noOfPieces ;
     private Spinner gradeSpinner, locationSpinner, areaSpinner;
     private Button addToInventory, newBundleButton;
     private TableLayout bundlesTable;
-    private TextView textView;
+    private TextView textView, generateBundleNo, bundleNumber;
     private BundleInfo newBundle;
     private DatabaseHandler databaseHandler;
     private Animation animation;
@@ -121,30 +103,33 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         length = findViewById(R.id.addToInventory_length);
         width = findViewById(R.id.addToInventory_width);
         noOfPieces = findViewById(R.id.addToInventory_no_of_pieces);
-        bundleNo = findViewById(R.id.addToInventory_bundle_no);
+        generateBundleNo = findViewById(R.id.addToInventory_bundle_no);
         gradeSpinner = findViewById(R.id.addToInventory_grade);
         locationSpinner = findViewById(R.id.addToInventory_location);
         areaSpinner = findViewById(R.id.addToInventory_area);
         addToInventory = findViewById(R.id.addToInventory_add_button);
         newBundleButton = findViewById(R.id.addToInventory_new_button);
+        bundleNumber = findViewById(R.id.addToInventory_bundle_no_tv);
         textView = findViewById(R.id.addToInventory_textView);
         bundlesTable = findViewById(R.id.addToInventory_table);
 
+        generateBundleNo.setOnClickListener(this);
         addToInventory.setOnClickListener(this);
         newBundleButton.setOnClickListener(this);
 
         gradeList.add("Fresh");
         gradeList.add("BS");
         gradeList.add("Reject");
+        gradeList.add("KD");
         gradeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, gradeList);
         gradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         gradeSpinner.setAdapter(gradeAdapter);
         gradeSpinner.setOnItemSelectedListener(this);
 
-        locationList.add("Loc 1");
-        locationList.add("Loc 2");
-        locationList.add("Loc 3");
-        locationList.add("Loc 4");
+        locationList.add("Amman");
+        locationList.add("Kalinovka");
+        locationList.add("Rudniya Store");
+        locationList.add("Rudniya Sawmill");
         locationAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, locationList);
         locationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         locationSpinner.setAdapter(locationAdapter);
@@ -174,7 +159,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         String lengthText = length.getText().toString();
         String widthText = width.getText().toString();
         String noOfPiecesText = noOfPieces.getText().toString();
-        String bundleNOText = bundleNo.getText().toString();
+        String bundleNOText = generateBundleNo.getText().toString();
 //        String locationText = location.getText().toString();
 //        String areaText = area.getText().toString();
         switch (v.getId()) {
@@ -185,7 +170,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                         if (!TextUtils.isEmpty(width.getText().toString())) {
 //                    if (!TextUtils.isEmpty(grade.getText().toString())) {
                             if (!TextUtils.isEmpty(noOfPieces.getText().toString())) {
-                                if (!TextUtils.isEmpty(bundleNo.getText().toString())) {
+                                if (!TextUtils.isEmpty(generateBundleNo.getText().toString())) {
                                     List<String> checkBarcodeList = databaseHandler.getBundleNo();
                                     for (int m = 0; m < checkBarcodeList.size(); m++)
                                         if (bundleNOText.equals(checkBarcodeList.get(m))) {
@@ -290,7 +275,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                         Toast.makeText(this, "Barcode already exist", Toast.LENGTH_SHORT).show();
                                     }
                                 } else {
-                                    bundleNo.setError("Required!");
+                                    generateBundleNo.setError("Required!");
                                 }
                             } else {
                                 noOfPieces.setError("Required!");
@@ -313,7 +298,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                 length.setText("");
                 width.setText("");
                 noOfPieces.setText("");
-                bundleNo.setText("");
+                generateBundleNo.setText("");
                 locationSpinner.setSelection(0);
                 areaSpinner.setSelection(0);
                 gradeSpinner.setSelection(0);
@@ -674,7 +659,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                 String JsonResponse = null;
                 HttpClient client = new DefaultHttpClient();
                 HttpPost request = new HttpPost ();
-                request.setURI(new URI("http://10.0.0.214/WOODY/export.php"));
+                request.setURI(new URI("http://10.0.0.214/WOODY/export.php"));//import
 
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
                 nameValuePairs.add(new BasicNameValuePair("BUNDLE_INFO", jsonArrayBundles.toString().trim()));

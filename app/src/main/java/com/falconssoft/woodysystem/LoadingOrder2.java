@@ -274,7 +274,7 @@ public class LoadingOrder2 extends AppCompatActivity{
                                     containerNo.setText("");
                                     dateOfLoad.setText("");
                                     destination.setText("");
-                                    printReport();
+//                                    printReport();
 //                                    onCreate(savedInstanceState);
 
                                 } else {
@@ -365,12 +365,12 @@ public class LoadingOrder2 extends AppCompatActivity{
 
                 new SendMailTask(LoadingOrder2.this).execute(senderName, senderPassword
                         , recipientName, emailTitle, emailContent);
-                                    Toast.makeText(LoadingOrder2.this, "Saved !", Toast.LENGTH_LONG).show();
+//                                    Toast.makeText(LoadingOrder2.this, "Saved !", Toast.LENGTH_LONG).show();
 
-                                    printReport();
+//                                    printReport();
 
-                                    new SendMailTask(LoadingOrder2.this).execute("rawanfalcons2017@gmail.com", "raw12345678"
-                                            , "hiary.abeer96@gmail.com", "Woody System", mainContent);
+                                    new SendMailTask(LoadingOrder2.this).execute(senderName, senderPassword
+                                            , recipientName, emailTitle, mainContent);
 
                                     new JSONTask().execute();
 
