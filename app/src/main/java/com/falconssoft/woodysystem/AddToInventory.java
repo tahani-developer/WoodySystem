@@ -5,8 +5,10 @@ import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -27,6 +29,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -68,30 +71,24 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 
     private static final int WHITE = 0xFFFFFFFF;
     private static final int BLACK = 0xFF000000;
-    private EditText thickness, length, width, noOfPieces ;
+    private EditText thickness, length, width, noOfPieces;
     private Spinner gradeSpinner, locationSpinner, areaSpinner;
     private Button addToInventory, newBundleButton;
     private TableLayout bundlesTable;
+    private LinearLayout linearLayoutView;
     private TextView textView, generateBundleNo, bundleNumber;
     private BundleInfo newBundle;
     private DatabaseHandler databaseHandler;
     private Animation animation;
-    private PrintPic printPic;
-    private BluetoothAdapter mBluetoothAdapter;
-    private BluetoothSocket mmSocket;
-    private BluetoothDevice mmDevice;
-    private OutputStream mmOutputStream;
-    private InputStream mmInputStream;
-    private Thread workerThread;
-    private byte[] printIm, readBuffer;
-    private int readBufferPosition;
-    volatile boolean stopWorker;
     private List<String> gradeList = new ArrayList<>();
     private List<String> locationList = new ArrayList<>();
     private List<String> areaList = new ArrayList<>();
     private ArrayAdapter<String> gradeAdapter, locationAdapter, areaAdapter;
     private String gradeText = "Fresh", locationText = "Loc 1", areaText = "Zone 1";
-    JSONArray jsonArrayBundles;
+    private JSONArray jsonArrayBundles;
+    private String bundleNoString;
+    private boolean mState = false;
+    private final String STATE_VISIBILITY = "state-visibility";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +109,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         bundleNumber = findViewById(R.id.addToInventory_bundle_no_tv);
         textView = findViewById(R.id.addToInventory_textView);
         bundlesTable = findViewById(R.id.addToInventory_table);
+        linearLayoutView = findViewById(R.id.addToInventory_table_view);
+        linearLayoutView.setVisibility(View.GONE);
 
         generateBundleNo.setOnClickListener(this);
         addToInventory.setOnClickListener(this);
@@ -159,138 +158,114 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         String lengthText = length.getText().toString();
         String widthText = width.getText().toString();
         String noOfPiecesText = noOfPieces.getText().toString();
-        String bundleNOText = generateBundleNo.getText().toString();
-//        String locationText = location.getText().toString();
-//        String areaText = area.getText().toString();
+//         String bundleNoString;
         switch (v.getId()) {
             case R.id.addToInventory_add_button:
                 boolean foundBarcode = false;
-                if (!TextUtils.isEmpty(thickness.getText().toString())) {
-                    if (!TextUtils.isEmpty(length.getText().toString())) {
-                        if (!TextUtils.isEmpty(width.getText().toString())) {
-//                    if (!TextUtils.isEmpty(grade.getText().toString())) {
-                            if (!TextUtils.isEmpty(noOfPieces.getText().toString())) {
-                                if (!TextUtils.isEmpty(generateBundleNo.getText().toString())) {
-                                    List<String> checkBarcodeList = databaseHandler.getBundleNo();
-                                    for (int m = 0; m < checkBarcodeList.size(); m++)
-                                        if (bundleNOText.equals(checkBarcodeList.get(m))) {
-                                            foundBarcode = true;
-                                            break;
-                                        }
-                                    if (!foundBarcode) {
-                                        String data = bundleNOText;//+ gradeText;
-                                        Bitmap bitmap = writeBarcode(data);
-                                        newBundle = new BundleInfo(Double.parseDouble(thicknessText)
-                                                , Double.parseDouble(lengthText)
-                                                , Double.parseDouble(widthText)
-                                                , "fresh"
-                                                , Integer.parseInt(noOfPiecesText)
-                                                , bundleNOText
-                                                , locationText
-                                                , areaText
-                                                , 1
-                                                , 53
-                                                , 5
-                                                , "june"
-                                                , 0);
-                                        databaseHandler.addNewBundle(newBundle);
+                if (!TextUtils.isEmpty(bundleNumber.getText().toString())) {
+                    List<String> checkBarcodeList = databaseHandler.getBundleNo();
+                    for (int m = 0; m < checkBarcodeList.size(); m++)
+                        if (bundleNoString.equals(checkBarcodeList.get(m))) {
+                            foundBarcode = true;
+                            break;
+                        }
+                    if (!foundBarcode) {
+//                        String data = bundleNoString;//+ gradeText;
+//                        Bitmap bitmap = writeBarcode(data);
+                        linearLayoutView.setVisibility(View.VISIBLE);
+                        mState = true;
+                        newBundle = new BundleInfo(Double.parseDouble(thicknessText)
+                                , Double.parseDouble(lengthText)
+                                , Double.parseDouble(widthText)
+                                , gradeText
+                                , Integer.parseInt(noOfPiecesText)
+                                , bundleNoString
+                                , locationText
+                                , areaText
+                                , 1
+                                , 53
+                                , 5
+                                , "june"
+                                , 0);
+                        databaseHandler.addNewBundle(newBundle);
 
-                                        TableRow tableRow = new TableRow(this);
-                                        for (int i = 0; i < 8; i++) {
-                                            TextView textView = new TextView(this);
-                                            textView.setBackgroundResource(R.color.light_orange);
-                                            TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
-                                            textViewParam.setMargins(1, 5, 1, 1);
-                                            textView.setTextSize(15);
-                                            textView.setTextColor(ContextCompat.getColor(this, R.color.gray_dark_one));
-                                            textView.setLayoutParams(textViewParam);
-                                            switch (i) {
-                                                case 0:
-                                                    textView.setText(bundleNOText);
-                                                    break;
-                                                case 1:
-                                                    textView.setText(lengthText);
+                        TableRow tableRow = new TableRow(this);
+                        for (int i = 0; i < 8; i++) {
+                            TextView textView = new TextView(this);
+                            textView.setBackgroundResource(R.color.light_orange);
+                            TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+                            textViewParam.setMargins(1, 5, 1, 1);
+                            textView.setTextSize(15);
+                            textView.setTextColor(ContextCompat.getColor(this, R.color.gray_dark_one));
+                            textView.setLayoutParams(textViewParam);
+                            switch (i) {
+                                case 0:
+                                    textView.setText(bundleNoString);
+                                    break;
+                                case 1:
+                                    textView.setText(lengthText);
 //                    textView.setText("65");
 
-                                                    break;
-                                                case 2:
-                                                    textView.setText(widthText);
+                                    break;
+                                case 2:
+                                    textView.setText(widthText);
 //                    textView.setText("65");
-                                                    break;
-                                                case 3:
-                                                    textView.setText(thicknessText);
+                                    break;
+                                case 3:
+                                    textView.setText(thicknessText);
 //                    textView.setText("65");
-                                                    break;
-                                                case 4:
-                                                    textView.setText(gradeText);
+                                    break;
+                                case 4:
+                                    textView.setText(gradeText);
 //                                                textView.setText("new");
-                                                    break;
-                                                case 5:
-                                                    textView.setText(noOfPiecesText);
+                                    break;
+                                case 5:
+                                    textView.setText(noOfPiecesText);
 //                    textView.setText("200");
-                                                    break;
-                                                case 6:
-                                                    textView.setText(locationText);
+                                    break;
+                                case 6:
+                                    textView.setText(locationText);
 //                    textView.setText("amman");
-                                                    break;
-                                                case 7:
-                                                    textView.setText(areaText);
+                                    break;
+                                case 7:
+                                    textView.setText(areaText);
 //                    textView.setText("zone1");
-                                                    break;
-                                            }
-                                            tableRow.addView(textView);
-                                        }
+                                    break;
+                            }
+                            tableRow.addView(textView);
+                        }
 
-                                        jsonArrayBundles.put(newBundle.getJSONObject());
-
-                                        bundlesTable.addView(tableRow);
-
-                                        new JSONTask().execute();
-
-
-                                        tableRow.setOnLongClickListener(new View.OnLongClickListener() {
-                                            @Override
-                                            public boolean onLongClick(View v) {
+                        jsonArrayBundles.put(newBundle.getJSONObject());
+                        bundlesTable.addView(tableRow);
+                        new JSONTask().execute();
+                        tableRow.setOnLongClickListener(new View.OnLongClickListener() {
+                            @Override
+                            public boolean onLongClick(View v) {
 //                                                TextView textView = ((TextView) tableRow.getChildAt(0));
 //                                                tableRow.setBackgroundResource(R.color.light_orange_2);
-                                                String bundleNo = ((TextView) tableRow.getChildAt(0)).getText().toString();
-                                                Log.e("b", bundleNo);
-                                                AlertDialog.Builder builder = new AlertDialog.Builder(AddToInventory.this);
-                                                builder.setMessage("Are you want delete bundle number: " + bundleNo + " ?");
-                                                builder.setTitle("Delete");
-                                                builder.setIcon(R.drawable.ic_warning_black_24dp);
-                                                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        databaseHandler.deleteBundle(bundleNo);
-                                                        bundlesTable.removeView(tableRow);
-                                                    }
-                                                });
-                                                builder.show();
-                                                return false;
-                                            }
-                                        });
-                                        Toast.makeText(this, "Added Successfully", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        Toast.makeText(this, "Barcode already exist", Toast.LENGTH_SHORT).show();
+                                String bundleNo = ((TextView) tableRow.getChildAt(0)).getText().toString();
+                                Log.e("b", bundleNo);
+                                AlertDialog.Builder builder = new AlertDialog.Builder(AddToInventory.this);
+                                builder.setMessage("Are you want delete bundle number: " + bundleNo + " ?");
+                                builder.setTitle("Delete");
+                                builder.setIcon(R.drawable.ic_warning_black_24dp);
+                                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        databaseHandler.deleteBundle(bundleNo);
+                                        bundlesTable.removeView(tableRow);
                                     }
-                                } else {
-                                    generateBundleNo.setError("Required!");
-                                }
-                            } else {
-                                noOfPieces.setError("Required!");
+                                });
+                                builder.show();
+                                return false;
                             }
-//                    } //else {
-//                        grade.setError("Required!");
-//                    }
-                        } else {
-                            width.setError("Required!");
-                        }
+                        });
+                        Toast.makeText(this, "Added Successfully", Toast.LENGTH_SHORT).show();
                     } else {
-                        length.setError("Required!");
+                        Toast.makeText(this, "Barcode already exist", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    thickness.setError("Required!");
+                    Toast.makeText(this, "Please generate Bundle Number first!", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.addToInventory_new_button:
@@ -303,11 +278,72 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                 areaSpinner.setSelection(0);
                 gradeSpinner.setSelection(0);
                 break;
+            case R.id.addToInventory_bundle_no:
+                if (!TextUtils.isEmpty(thickness.getText().toString())) {
+                    if (!TextUtils.isEmpty(width.getText().toString())) {
+                        if (!TextUtils.isEmpty(length.getText().toString())) {
+                            if (!TextUtils.isEmpty(noOfPieces.getText().toString())) {
+                                String locationString = null, gradeString = null;
+                                switch (gradeText) {
+                                    case "Fresh":
+                                        gradeString = "FR";
+                                        break;
+                                    case "BS":
+                                        gradeString = "BS";
+                                        break;
+                                    case "Reject":
+                                        gradeString = "RJ";
+                                        break;
+                                    case "KD":
+                                        gradeString = "KD";
+                                        break;
+                                }
+
+                                switch (locationText) {
+                                    case "Amman":
+                                        locationString = "Amm";
+                                        break;
+                                    case "Kalinovka":
+                                        locationString = "Kal";
+                                        break;
+                                    case "Rudniya Store":
+                                        locationString = "Rud";
+                                        break;
+                                    case "Rudniya Sawmill":
+                                        locationString = "RLP";
+                                        break;
+                                }
+
+                                bundleNoString = "" + gradeString
+                                        + locationString
+                                        + thicknessText
+                                        + "." + widthText
+                                        + "." + lengthText
+                                        + "." + noOfPiecesText
+                                        + "." + SettingsFile.serialNumber;
+                                bundleNumber.setText(bundleNoString);
+
+                            } else {
+                                noOfPieces.setError("Required!");
+                            }
+                        } else {
+                            length.setError("Required!");
+                        }
+                    } else {
+                        width.setError("Required!");
+                    }
+                } else {
+                    thickness.setError("Required!");
+                }
+                break;
         }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+//        linearLayoutView.getVisibility();
+        outState.putBoolean(STATE_VISIBILITY, mState);
+
         List<TableRow> tableRows = new ArrayList<>();
         int rowcount = bundlesTable.getChildCount();
         for (int i = 0; i < rowcount; i++) {
@@ -320,6 +356,10 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
+
+        // Restore state members from saved instance
+        mState = savedInstanceState.getBoolean(STATE_VISIBILITY);
+        linearLayoutView.setVisibility(mState?View.VISIBLE:View.GONE);
         List<TableRow> tableRows = (List<TableRow>) savedInstanceState.getSerializable("table");
         for (int i = 0; i < tableRows.size(); i++) {
             if (tableRows.get(i).getParent() != null) {
@@ -328,279 +368,6 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
             bundlesTable.addView(tableRows.get(i));
         }
         super.onRestoreInstanceState(savedInstanceState);
-    }
-
-    public Bitmap writeBarcode(String data) {
-        final Dialog dialog = new Dialog(AddToInventory.this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(false);
-        dialog.setContentView(R.layout.barcode_dialog);
-        TextView close = (TextView) dialog.findViewById(R.id.close);
-        ImageView iv = (ImageView) dialog.findViewById(R.id.iv);
-        // barcode data
-        String barcode_data = data;
-
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    closeBT();
-                    dialog.dismiss();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        Bitmap bitmap = null;//  AZTEC -->QR
-        try {
-
-            bitmap = encodeAsBitmap(barcode_data, BarcodeFormat.CODE_128, 600, 300);
-            iv.setImageBitmap(bitmap);
-            try {
-                findBT();
-                openBT(bitmap);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }catch (Exception r){
-                closeBT();
-            }
-        } catch (WriterException | IOException e) {
-            e.printStackTrace();
-        }
-
-        dialog.show();
-
-        return bitmap;
-
-    }
-
-    Bitmap encodeAsBitmap(String contents, BarcodeFormat format, int img_width, int img_height) throws WriterException {
-        String contentsToEncode = contents;
-        if (contentsToEncode == null) {
-            return null;
-        }
-        Map<EncodeHintType, Object> hints = null;
-        String encoding = guessAppropriateEncoding(contentsToEncode);
-        if (encoding != null) {
-            hints = new EnumMap<EncodeHintType, Object>(EncodeHintType.class);
-            hints.put(EncodeHintType.CHARACTER_SET, encoding);
-        }
-        MultiFormatWriter writer = new MultiFormatWriter();
-        BitMatrix result;
-        try {
-            result = writer.encode(contentsToEncode, format, img_width, img_height, hints);
-        } catch (IllegalArgumentException iae) {
-            // Unsupported format
-            return null;
-        }
-        int width = result.getWidth();
-        int height = result.getHeight();
-        int[] pixels = new int[width * height];
-        for (int y = 0; y < height; y++) {
-            int offset = y * width;
-            for (int x = 0; x < width; x++) {
-                pixels[offset + x] = result.get(x, y) ? BLACK : WHITE;
-            }
-        }
-
-        Bitmap bitmap = Bitmap.createBitmap(width, height,
-                Bitmap.Config.ARGB_8888);
-        bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
-        return bitmap;
-    }
-
-    private static String guessAppropriateEncoding(CharSequence contents) {
-        // Very crude at the moment
-        for (int i = 0; i < contents.length(); i++) {
-            if (contents.charAt(i) > 0xFF) {
-                return "UTF-8";
-            }
-        }
-        return null;
-    }
-
-    void findBT() {
-        try {
-            mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-
-            if (mBluetoothAdapter == null) {
-//                myLabel.setText("No bluetooth adapter available");
-            }
-
-            if (!mBluetoothAdapter.isEnabled()) {
-                Intent enableBluetooth = new Intent(
-                        BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivityForResult(enableBluetooth, 0);
-            }
-
-            Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
-            if (pairedDevices.size() > 0) {
-                for (BluetoothDevice device : pairedDevices) {
-
-                    // MP300 is the name of the bluetooth printer device07-28 13:20:10.946  10461-10461/com.example.printer E/sex﹕ C4:73:1E:67:29:6C
-                    /*07-28 13:20:10.946  10461-10461/com.example.printer E/sex﹕ E8:99:C4:FF:B1:AC
-                    07-28 13:20:10.946  10461-10461/com.example.printer E/sex﹕ 0C:A6:94:35:11:27*/
-
-                    /*Log.e("sex",device.getName());*/
-//                    if (device.getName().equals("mobile printer")) { // PR3-30921446556
-                    /*Log.e("sex1",device.getAddress());*/
-                    mmDevice = device;
-//                        break;
-//                    }
-                }
-            }
-//            myLabel.setText("Bluetooth Device Found");
-
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    // Tries to open a connection to the bluetooth printer device
-    void openBT(Bitmap bitmap) throws IOException {
-        try {
-            // Standard SerialPortService ID
-            UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
-            mmSocket = mmDevice.createRfcommSocketToServiceRecord(uuid);
-            mmSocket.connect();
-            mmOutputStream = mmSocket.getOutputStream();
-            mmInputStream = mmSocket.getInputStream();
-
-            beginListenForData();
-
-
-            sendData(bitmap);
-
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    // After opening a connection to bluetooth printer device,
-    // we have to listen and check if a data were sent to be printed.
-    void beginListenForData() throws IOException {
-        try {
-            final Handler handler = new Handler();
-
-            // This is the ASCII code for a newline character
-            final byte delimiter = 10;
-
-            stopWorker = false;
-            readBufferPosition = 0;
-            readBuffer = new byte[1024];
-
-            workerThread = new Thread(new Runnable() {
-                public void run() {
-                    while (!Thread.currentThread().isInterrupted()
-                            && !stopWorker) {
-
-                        try {
-
-                            int bytesAvailable = mmInputStream.available();
-                            if (bytesAvailable > 0) {
-                                byte[] packetBytes = new byte[bytesAvailable];
-                                mmInputStream.read(packetBytes);
-                                for (int i = 0; i < bytesAvailable; i++) {
-                                    byte b = packetBytes[i];
-                                    if (b == delimiter) {
-                                        byte[] encodedBytes = new byte[readBufferPosition];
-                                        System.arraycopy(readBuffer, 0,
-                                                encodedBytes, 0,
-                                                encodedBytes.length);
-                                        final String data = new String(
-                                                encodedBytes, "US-ASCII");
-                                        readBufferPosition = 0;
-
-                                        handler.post(new Runnable() {
-                                            public void run() {
-//                                                myLabel.setText(data);
-                                            }
-                                        });
-                                    } else {
-                                        readBuffer[readBufferPosition++] = b;
-                                    }
-                                }
-                            }
-
-                        } catch (IOException ex) {
-                            stopWorker = true;
-                        }
-
-                    }
-                }
-            });
-
-            workerThread.start();
-        } catch (NullPointerException e) {
-            closeBT();
-            e.printStackTrace();
-        } catch (Exception e) {
-            closeBT();
-            e.printStackTrace();
-        }
-    }
-
-    /*
-     * This will send data to be printed by the bluetooth printer
-     */
-    void sendData(Bitmap bitmap) throws IOException {
-        try {
-            printPic = PrintPic.getInstance();
-            printPic.init(bitmap);
-            printIm = printPic.printDraw();
-            mmOutputStream.write(printIm);
-
-        } catch (NullPointerException e) {
-            closeBT();
-            e.printStackTrace();
-        } catch (Exception e) {
-            closeBT();
-            e.printStackTrace();
-        }
-    }
-
-    // Close the connection to bluetooth printer.
-    void closeBT() throws IOException {
-        try {
-            stopWorker = true;
-            mmOutputStream.close();
-            mmInputStream.close();
-            mmSocket.close();
-//            workerThread.stop();
-//            myLabel.setText("Bluetooth Closed");
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public String BitMapToString(Bitmap bitmap) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        byte[] arr = baos.toByteArray();
-        String result = Base64.encodeToString(arr, Base64.DEFAULT);
-        return result;
-    }
-
-    public Bitmap StringToBitMap(String image) {
-        if (image != "") {
-            try {
-                byte[] encodeByte = Base64.decode(image, Base64.DEFAULT);
-                Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-                return bitmap;
-            } catch (Exception e) {
-                e.getMessage();
-                return null;
-            }
-        }
-        return null;
     }
 
     @Override
@@ -628,7 +395,6 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 //        locationText = "Loc 1";
 
     }
-
 
     public void onBackPressed() {
         super.onBackPressed();
@@ -658,7 +424,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 
                 String JsonResponse = null;
                 HttpClient client = new DefaultHttpClient();
-                HttpPost request = new HttpPost ();
+                HttpPost request = new HttpPost();
                 request.setURI(new URI("http://10.0.0.214/WOODY/export.php"));//import
 
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
@@ -672,7 +438,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                         InputStreamReader(response.getEntity().getContent()));
 
                 StringBuffer sb = new StringBuffer("");
-                String line="";
+                String line = "";
 
                 while ((line = in.readLine()) != null) {
                     sb.append(line);
@@ -685,8 +451,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 
                 return JsonResponse;
 
-            }catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
                 return null;
             }
@@ -695,7 +460,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            if(s != null) {
+            if (s != null) {
                 if (s.contains("BUNDLE_INFO SUCCESS")) {
 
                     Log.e("tag", "****Success");

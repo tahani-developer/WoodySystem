@@ -27,7 +27,7 @@ public class SettingsFile {
 
     public static String emailContent;
 
-//    public static Uri emailContent;
+    public static String serialNumber;
 
     public static String ipAddress;
 

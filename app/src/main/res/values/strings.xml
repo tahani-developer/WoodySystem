@@ -27,7 +27,7 @@
 
     <string name="clear_fields">Clear Fields</string>
     <string name="new_bundle">New Bundle</string>
-    <string name="thickness">Thickness</string>
+    <string name="thickness">Thick</string>
     <string name="width">Width</string>
     <string name="length">Length</string>
     <string name="no_of_pieces"># Pieces</string>
@@ -41,7 +41,7 @@
     <string name="add">Add</string>
     <string name="done">Done</string>
     <string name="save">Save</string>
-    <string name="generate">Generate</string>
+    <string name="generate_bundle_no">Generate Bundle #</string>
 
 
 </resources>
