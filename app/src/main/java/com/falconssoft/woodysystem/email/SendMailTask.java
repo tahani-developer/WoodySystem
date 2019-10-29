@@ -2,6 +2,7 @@ package com.falconssoft.woodysystem.email;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -35,6 +36,7 @@ public class SendMailTask extends AsyncTask {
                     , Collections.singletonList(args[2].toString())
                     , args[3].toString()
                     , args[4].toString());
+                 //   , args[5].toString());
             publishProgress("Preparing mail message....");
             androidEmail.createEmailMessage();
             publishProgress("Sending email....");

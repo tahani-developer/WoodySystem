@@ -5,3 +5,15 @@ Gmail- Host: smtp.gmail.com , Port: 465
 Hotmail- Host: smtp.live.com , Port: 587
 
 Yahoo- Host: smtp.mail.yahoo.com , Port: 465
+
+
+************************************************
+
+
+//        File imgFile = new  File(myList.get(position));
+//        if(imgFile.exists()){
+//            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+//            ImageView myImage = (ImageView) convertView.findViewById(R.id.imageviewTest);
+//            //the imageview of your custom list item
+//            myImage.setImageBitmap(myBitmap);
+//        }

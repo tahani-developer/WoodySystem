@@ -4,20 +4,21 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#5F5C5C</color>
 
-    <color name="light_orange">#FAEBD7</color>
 
     <color name="gray_dark">#5F5C5C</color>
     <color name="gray_light">#E9DCDC</color>
     <color name="gray_dark_one">#575252</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
-    <color name="orange">#F1712F</color>
-    <color name="light_orange_2">#FC9631</color>
+    <color name="orange">#FF7500</color>
+    <color name="light_orange">#FAEBD7</color>
+    <color name="light_orange_2">#DD792E</color>
     <color name="orangeHover">#EC9568</color>
-
+<!--    F1712F-->
     <color name="alpha_black">#320C0C0C</color>
-    <color name="alpha_black_dark">#700C0C0C</color>
+    <color name="alpha_black_dark">#680C0C0C</color>
     <color name="alpha_white">#C1FAFAFA</color>
     <color name="wooden">#643F18</color>
+    <color name="preview">#C24641</color>
 
 </resources>

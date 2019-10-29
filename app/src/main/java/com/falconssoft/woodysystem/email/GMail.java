@@ -1,5 +1,6 @@
 package com.falconssoft.woodysystem.email;
 
+import android.net.Uri;
 import android.util.Log;
 
 import com.falconssoft.woodysystem.SettingsFile;
@@ -21,7 +22,7 @@ public class GMail {
     private final String emailPort = "587";// gmail's smtp port
     private final String smtpAuth = "true";
     private final String starttls = "true";
-    private final String emailHost = "smtp.gmail.com"; // related of sender email
+    private final String emailHost = SettingsFile.hostName; // related of sender email
 
     private String fromEmail, fromPassword, emailSubject, emailBody;
     List toEmailList;
@@ -35,12 +36,13 @@ public class GMail {
     }
 
     public GMail(String fromEmail, String fromPassword,
-                 List toEmailList, String emailSubject, String emailBody) {
+                 List toEmailList, String emailSubject, String emailBody) {//, String emailImage) {
         this.fromEmail = fromEmail;
         this.fromPassword = fromPassword;
         this.toEmailList = toEmailList;
         this.emailSubject = emailSubject;
         this.emailBody = emailBody;
+//        this.emailImage = emailImage;
 
         emailProperties = System.getProperties();
         emailProperties.put("mail.smtp.port", emailPort);
@@ -65,6 +67,7 @@ public class GMail {
 
         emailMessage.setSubject(emailSubject);
         emailMessage.setContent(emailBody, "text/html");// for a html email
+//        emailMessage.setContent(emailBody, "image/png");
 //        emailMessage.set
         // emailMessage.setText(emailBody);// for a text email
         Log.i("GMail", "Email Message created.");

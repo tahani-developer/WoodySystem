@@ -7,8 +7,9 @@
 
     <string name="enter_inventory">Enter Inventory</string>
     <string name="loading_order">Loading Order</string>
+    <string name="reports">Reports</string>
 
-    <string name="th">Th</string>
+    <string name="th">Thic</string>
     <string name="w">W</string>
     <string name="l">L</string>
     <string name="grade">Grade</string>
@@ -18,7 +19,7 @@
     <string name="area">Area</string>
     <string name="ip_address">IP Address</string>
 
-    <string name="placing_no">Placing Number</string>
+    <string name="placing_no">Truck Number</string>
     <string name="order_no">Order Number</string>
     <string name="container_no">Container Number</string>
     <string name="date_of_load">Date Of Load</string>
@@ -26,7 +27,7 @@
 
     <string name="clear_fields">Clear Fields</string>
     <string name="new_bundle">New Bundle</string>
-    <string name="thickness">Thickness</string>
+    <string name="thickness">Thick</string>
     <string name="width">Width</string>
     <string name="length">Length</string>
     <string name="no_of_pieces"># Pieces</string>
@@ -40,6 +41,15 @@
     <string name="add">Add</string>
     <string name="done">Done</string>
     <string name="save">Save</string>
+    <string name="generate_bundle_no">Generate Bundle #</string>
+    <string name="barcode">Barcode</string>
+
+    <string name="bundles">Bundles Report</string>
+    <string name="orders">Orders Report</string>
+    <string name="loading_order_report">Loading Order Report</string>
+    <string name="placing_no_">Truck No</string>
+    <string name="order_no_">Order No</string>
+    <string name="container_no_">Container No</string>
 
 
 </resources>
