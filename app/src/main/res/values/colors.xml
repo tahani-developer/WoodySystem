@@ -19,5 +19,6 @@
     <color name="alpha_black_dark">#680C0C0C</color>
     <color name="alpha_white">#C1FAFAFA</color>
     <color name="wooden">#643F18</color>
+    <color name="preview">#C24641</color>
 
 </resources>
