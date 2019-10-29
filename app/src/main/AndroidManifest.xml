@@ -47,23 +47,14 @@
         <activity
             android:name=".LoadingOrder2"
             android:windowSoftInputMode="stateAlwaysHidden">
-
         </activity>
 
         <activity
             android:name=".LoadingOrderReport"
             android:windowSoftInputMode="stateAlwaysHidden">
-
         </activity>
-
         <activity android:name=".MainActivity"></activity>
-
         <activity android:name=".QrReader"></activity>
-
-
-            android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".QrReader" />
     </application>
 
 
