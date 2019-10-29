@@ -249,7 +249,6 @@ public class LoadingOrder2 extends AppCompatActivity {
                                     emailTitle = "Order No: " + orderNo.getText().toString();
                                     progressDialog.show();
                                     sendBundle();
-                                    Toast.makeText(LoadingOrder2.this, "Saved !", Toast.LENGTH_LONG).show();
 //                                    Toast.makeText(LoadingOrder2.this, "Saved !", Toast.LENGTH_LONG).show();
 //                                    for(int i = 0 ; i<pics.size() ; i++)
 //                                        pics.set(i,null);
@@ -269,6 +268,14 @@ public class LoadingOrder2 extends AppCompatActivity {
                                         startActivity(Intent.createChooser(intent, "Share you on the jobing"));
                                     }
                                     //Log.d("URI@!@#!#!@##!", Uri.fromFile(pic).toString() + "   " + pic.exists());
+
+                                    placingNo.setText("");
+                                    orderNo.setText("");
+                                    containerNo.setText("");
+                                    dateOfLoad.setText("");
+                                    destination.setText("");
+//                                    printReport();
+//                                    onCreate(savedInstanceState);
 
                                 } else {
                                     destination.setError("Required!");
@@ -358,10 +365,14 @@ public class LoadingOrder2 extends AppCompatActivity {
 
                 new SendMailTask(LoadingOrder2.this).execute(senderName, senderPassword
                         , recipientName, emailTitle, emailContent);
+//                                    Toast.makeText(LoadingOrder2.this, "Saved !", Toast.LENGTH_LONG).show();
 
-                printReport();
+//                                    printReport();
 
-                new JSONTask().execute();
+                                    new SendMailTask(LoadingOrder2.this).execute(senderName, senderPassword
+                                            , recipientName, emailTitle, mainContent);
+
+                                    new JSONTask().execute();
 
 
                 Intent intent = new Intent(LoadingOrder2.this, LoadingOrder.class);

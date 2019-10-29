@@ -14,12 +14,14 @@ public class Stage3 extends AppCompatActivity implements View.OnClickListener {
 
     private LinearLayout enterInventory, loadingOrder;
     private Animation animation;
+    private WoodPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stage3);
 
+        presenter = new WoodPresenter(this);
         enterInventory = findViewById(R.id.stage3_enter_inventory);
         loadingOrder = findViewById(R.id.stage3_loading_order);
 
@@ -36,6 +38,7 @@ public class Stage3 extends AppCompatActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.stage3_enter_inventory:
+                presenter.getImportData();
                 Intent intent = new Intent(this, AddToInventory.class);
                 startActivity(intent);
                 setSlideAnimation();
