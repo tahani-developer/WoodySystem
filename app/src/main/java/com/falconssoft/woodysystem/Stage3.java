@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 
 public class Stage3 extends AppCompatActivity implements View.OnClickListener {
 
-    private LinearLayout enterInventory, loadingOrder;
+    private LinearLayout enterInventory, loadingOrder, reports;
     private Animation animation;
     private WoodPresenter presenter;
 
@@ -24,14 +24,18 @@ public class Stage3 extends AppCompatActivity implements View.OnClickListener {
         presenter = new WoodPresenter(this);
         enterInventory = findViewById(R.id.stage3_enter_inventory);
         loadingOrder = findViewById(R.id.stage3_loading_order);
+        reports = findViewById(R.id.stage3_reports);
 
         enterInventory.setOnClickListener(this);
         loadingOrder.setOnClickListener(this);
+        reports.setOnClickListener(this);
 
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
         enterInventory.setAnimation(animation);
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
         loadingOrder.setAnimation(animation);
+        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
+        reports.setAnimation(animation);
     }
 
     @Override
@@ -46,6 +50,11 @@ public class Stage3 extends AppCompatActivity implements View.OnClickListener {
             case R.id.stage3_loading_order:
                 Intent intent2 = new Intent(this, LoadingOrder.class);
                 startActivity(intent2);
+                setSlideAnimation();
+                break;
+            case R.id.stage3_reports:
+                Intent intent3 = new Intent(this, ReportsActivity.class);
+                startActivity(intent3);
                 setSlideAnimation();
                 break;
         }
