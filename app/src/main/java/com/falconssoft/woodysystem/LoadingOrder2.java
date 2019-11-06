@@ -272,12 +272,6 @@ public class LoadingOrder2 extends AppCompatActivity {
                                     Toast.makeText(LoadingOrder2.this, "Saved Successfully", Toast.LENGTH_SHORT).show();
                                    sendBundle();
 
-                                    placingNo.setText("");
-                                    orderNo.setText("");
-                                    containerNo.setText("");
-                                    dateOfLoad.setText("");
-                                    destination.setText("");
-
                                 } else {
                                     destination.setError("Required!");
                                 }
@@ -369,7 +363,7 @@ public class LoadingOrder2 extends AppCompatActivity {
 //                                    new SendMailTask(LoadingOrder2.this).execute(senderName, senderPassword
 //                                            , recipientName, emailTitle, mainContent);
 
-                                    new JSONTask().execute();
+                new JSONTask().execute();
 
 
                 Intent intent = new Intent(LoadingOrder2.this, LoadingOrder.class);
@@ -418,7 +412,7 @@ public class LoadingOrder2 extends AppCompatActivity {
                 if (index != -1) {
                     bundles.get(index).setPicture(thumbnail);
                     String root9 = Environment.getExternalStorageDirectory().getAbsolutePath();
-                    picture = new File(root9, "bundleImage" + index +".png");
+                    picture = new File(root9, "bundleImage" + index + ".png");
                     adapter.notifyDataSetChanged();
                 } else {
                     switch (imageNo) {
