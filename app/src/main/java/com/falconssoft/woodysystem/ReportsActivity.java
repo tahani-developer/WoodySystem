@@ -43,6 +43,9 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
                 setSlideAnimation();
                 break;
             case R.id.reports_orders:
+                Intent intent2=new Intent(ReportsActivity.this, LoadingOrderReport.class);
+                startActivity(intent2);
+                setSlideAnimation();
                 break;
         }
 
