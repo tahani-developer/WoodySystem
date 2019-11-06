@@ -329,6 +329,35 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return bundleInfoList;
     }
 
+    public List<BundleInfo> getAllBundleInfo() {
+        List<BundleInfo> bundleInfoList = new ArrayList<>();
+
+        String selectQuery = "SELECT  * FROM " + BUNDLE_INFO_TABLE ;
+        db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                BundleInfo bundleInfo = new BundleInfo();
+
+                bundleInfo.setThickness(Double.parseDouble(cursor.getString(0)));
+                bundleInfo.setLength(Double.parseDouble(cursor.getString(1)));
+                bundleInfo.setWidth(Double.parseDouble(cursor.getString(2)));
+                bundleInfo.setGrade(cursor.getString(3));
+                bundleInfo.setNoOfPieces(Integer.parseInt(cursor.getString(4)));
+                bundleInfo.setBundleNo(cursor.getString(5));
+                bundleInfo.setLocation(cursor.getString(6));
+                bundleInfo.setArea(cursor.getString(7));
+                bundleInfo.setBarcode(cursor.getString(8));
+                bundleInfo.setOrdered(Integer.parseInt(cursor.getString(9)));
+                bundleInfo.setChecked(false);
+
+                bundleInfoList.add(bundleInfo);
+            } while (cursor.moveToNext());
+        }
+        return bundleInfoList;
+    }
+
     public List<String> getBundleNo(){
         List<String> bundleNoList = new ArrayList<>();
         String selectQuery = "SELECT BUNDLE_NO FROM " + BUNDLE_INFO_TABLE;

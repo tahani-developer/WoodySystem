@@ -45,6 +45,7 @@ public class LoadingOrderReport extends AppCompatActivity {
     private Button arrow;
     private HorizontalListView listView;
     private List<Orders> orders, bundles;
+    private Animation animation;
     ItemsListAdapter3 adapter;
 
     @Override
@@ -60,6 +61,9 @@ public class LoadingOrderReport extends AppCompatActivity {
         listView = findViewById(R.id.listview);
         linearLayout = findViewById(R.id.linearLayout);
         arrow = findViewById(R.id.arrow);
+
+        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_to_right);
+        textView.startAnimation(animation);
 
         adapter = new ItemsListAdapter3(LoadingOrderReport.this, new ArrayList<>());
         listView.setAdapter(adapter);
