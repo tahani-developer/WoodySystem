@@ -1,5 +1,6 @@
 package com.falconssoft.woodysystem.reports;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -42,11 +45,18 @@ public class BundlesReport extends AppCompatActivity {
     private TableLayout bundlesTable;
     private DatabaseHandler databaseHandler;
     private List<BundleInfo> bundleInfos = new ArrayList<>();
+    private Animation animation;
+    private TextView textView;
 
+    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bundles_report);
+
+        textView = findViewById(R.id.loading_order_report_tv);
+        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_to_right);
+        textView.startAnimation(animation);
 
         bundlesTable = findViewById(R.id.addToInventory_table);
         databaseHandler = new DatabaseHandler(this);
@@ -55,7 +65,7 @@ public class BundlesReport extends AppCompatActivity {
     }
 
     void fillTable() {
-        bundleInfos = databaseHandler.getBundleInfo();
+        bundleInfos = databaseHandler.getAllBundleInfo();
 //        TableRow tableRowBasic = new TableRow(this);
 //        tableRowBasic = fillTableRows(tableRowBasic
 //                , "Bundle#"

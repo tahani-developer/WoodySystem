@@ -37,6 +37,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
     @Override
     public void onErrorResponse(VolleyError error) {
         Log.e("presenter/import/err ", "" + error);
+        SettingsFile.serialNumber = "";
     }
 
     @Override
@@ -45,7 +46,8 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
         try {
             JSONObject object = new JSONObject(response);
             JSONObject object2 = object.getJSONArray("Bundles").getJSONObject(0);
-           SettingsFile.serialNumber = object2.getString("MAX_SERIAL");
+            SettingsFile.serialNumber = "";
+            SettingsFile.serialNumber = object2.getString("MAX_SERIAL");
         } catch (JSONException e) {
             e.printStackTrace();
         }

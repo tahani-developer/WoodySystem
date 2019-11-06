@@ -73,7 +73,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
     private static final int BLACK = 0xFF000000;
     private EditText thickness, length, width, noOfPieces;
     private Spinner gradeSpinner, locationSpinner, areaSpinner;
-    private Button addToInventory, newBundleButton;
+    private Button addToInventory;//, newBundleButton;
     private TableLayout bundlesTable;
     private LinearLayout linearLayoutView;
     private TextView textView, generateBundleNo, bundleNumber;
@@ -89,6 +89,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
     private String bundleNoString;
     private boolean mState = false;
     private final String STATE_VISIBILITY = "state-visibility";
+    private WoodPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +97,9 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_add_to_inventory);
 
         databaseHandler = new DatabaseHandler(this);
+        presenter = new WoodPresenter(this);
+        presenter.getImportData();
+
         thickness = findViewById(R.id.addToInventory_thickness);
         length = findViewById(R.id.addToInventory_length);
         width = findViewById(R.id.addToInventory_width);
@@ -105,7 +109,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         locationSpinner = findViewById(R.id.addToInventory_location);
         areaSpinner = findViewById(R.id.addToInventory_area);
         addToInventory = findViewById(R.id.addToInventory_add_button);
-        newBundleButton = findViewById(R.id.addToInventory_new_button);
+//        newBundleButton = findViewById(R.id.addToInventory_new_button);
         bundleNumber = findViewById(R.id.addToInventory_bundle_no_tv);
         textView = findViewById(R.id.addToInventory_textView);
         bundlesTable = findViewById(R.id.addToInventory_table);
@@ -114,7 +118,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 
         generateBundleNo.setOnClickListener(this);
         addToInventory.setOnClickListener(this);
-        newBundleButton.setOnClickListener(this);
+//        newBundleButton.setOnClickListener(this);
 
         gradeList.add("Fresh");
         gradeList.add("BS");
@@ -234,10 +238,19 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                             }
                             tableRow.addView(textView);
                         }
-
                         jsonArrayBundles.put(newBundle.getJSONObject());
                         bundlesTable.addView(tableRow);
                         new JSONTask().execute();
+
+                        thickness.setText("");
+                        length.setText("");
+                        width.setText("");
+                        noOfPieces.setText("");
+                        bundleNumber.setText("");
+                        locationSpinner.setSelection(0);
+                        areaSpinner.setSelection(0);
+                        gradeSpinner.setSelection(0);
+
                         tableRow.setOnLongClickListener(new View.OnLongClickListener() {
                             @Override
                             public boolean onLongClick(View v) {
@@ -268,61 +281,64 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                     Toast.makeText(this, "Please generate Bundle Number first!", Toast.LENGTH_SHORT).show();
                 }
                 break;
-            case R.id.addToInventory_new_button:
-                thickness.setText("");
-                length.setText("");
-                width.setText("");
-                noOfPieces.setText("");
-                generateBundleNo.setText("");
-                locationSpinner.setSelection(0);
-                areaSpinner.setSelection(0);
-                gradeSpinner.setSelection(0);
-                break;
             case R.id.addToInventory_bundle_no:
+
                 if (!TextUtils.isEmpty(thickness.getText().toString())) {
                     if (!TextUtils.isEmpty(width.getText().toString())) {
                         if (!TextUtils.isEmpty(length.getText().toString())) {
                             if (!TextUtils.isEmpty(noOfPieces.getText().toString())) {
-                                String locationString = null, gradeString = null;
-                                switch (gradeText) {
-                                    case "Fresh":
-                                        gradeString = "FR";
-                                        break;
-                                    case "BS":
-                                        gradeString = "BS";
-                                        break;
-                                    case "Reject":
-                                        gradeString = "RJ";
-                                        break;
-                                    case "KD":
-                                        gradeString = "KD";
-                                        break;
+
+//                                Log.e("serial" , " " + !SettingsFile.serialNumber.equals(""));
+//                                Log.e("serial" , " " + !SettingsFile.serialNumber.equals(null));
+
+                                if ((!SettingsFile.serialNumber.equals("")) && (!SettingsFile.serialNumber.equals(null))) {
+                                    String locationString = null, gradeString = null;
+                                    switch (gradeText) {
+                                        case "Fresh":
+                                            gradeString = "FR";
+                                            break;
+                                        case "BS":
+                                            gradeString = "BS";
+                                            break;
+                                        case "Reject":
+                                            gradeString = "RJ";
+                                            break;
+                                        case "KD":
+                                            gradeString = "KD";
+                                            break;
+                                    }
+
+                                    switch (locationText) {
+                                        case "Amman":
+                                            locationString = "Amm";
+                                            break;
+                                        case "Kalinovka":
+                                            locationString = "Kal";
+                                            break;
+                                        case "Rudniya Store":
+                                            locationString = "Rud";
+                                            break;
+                                        case "Rudniya Sawmill":
+                                            locationString = "RLP";
+                                            break;
+                                    }
+//                                    Log.e("serial" , " " + SettingsFile.serialNumber);
+
+                                    bundleNoString = "" + gradeString
+                                            + locationString
+                                            + thicknessText
+                                            + "." + widthText
+                                            + "." + lengthText
+                                            + "." + noOfPiecesText
+                                            + "." + SettingsFile.serialNumber;
+                                    bundleNumber.setText(bundleNoString);
+//                                    Log.e("serial" , " " + SettingsFile.serialNumber);
+
+//                                    presenter.getImportData();
+                                }else {
+//                                    presenter.getImportData();
+                                    Toast.makeText(this, "No serial number is generated!", Toast.LENGTH_SHORT).show();
                                 }
-
-                                switch (locationText) {
-                                    case "Amman":
-                                        locationString = "Amm";
-                                        break;
-                                    case "Kalinovka":
-                                        locationString = "Kal";
-                                        break;
-                                    case "Rudniya Store":
-                                        locationString = "Rud";
-                                        break;
-                                    case "Rudniya Sawmill":
-                                        locationString = "RLP";
-                                        break;
-                                }
-
-                                bundleNoString = "" + gradeString
-                                        + locationString
-                                        + thicknessText
-                                        + "." + widthText
-                                        + "." + lengthText
-                                        + "." + noOfPiecesText
-                                        + "." + SettingsFile.serialNumber;
-                                bundleNumber.setText(bundleNoString);
-
                             } else {
                                 noOfPieces.setError("Required!");
                             }
@@ -360,6 +376,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         // Restore state members from saved instance
         mState = savedInstanceState.getBoolean(STATE_VISIBILITY);
         linearLayoutView.setVisibility(mState?View.VISIBLE:View.GONE);
+        bundleNumber.setText(bundleNoString);
+        presenter.getImportData();
         List<TableRow> tableRows = (List<TableRow>) savedInstanceState.getSerializable("table");
         for (int i = 0; i < tableRows.size(); i++) {
             if (tableRows.get(i).getParent() != null) {
@@ -462,12 +480,14 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
             super.onPostExecute(s);
             if (s != null) {
                 if (s.contains("BUNDLE_INFO SUCCESS")) {
-
+                    presenter.getImportData();
                     Log.e("tag", "****Success");
                 } else {
+                    SettingsFile.serialNumber = "";
                     Log.e("tag", "****Failed to export data");
                 }
             } else {
+                SettingsFile.serialNumber = "";
                 Log.e("tag", "****Failed to export data Please check internet connection");
             }
         }
