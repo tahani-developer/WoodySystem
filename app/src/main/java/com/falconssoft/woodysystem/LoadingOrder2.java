@@ -272,12 +272,6 @@ public class LoadingOrder2 extends AppCompatActivity {
                                     Toast.makeText(LoadingOrder2.this, "Saved Successfully", Toast.LENGTH_SHORT).show();
                                    sendBundle();
 
-                                    placingNo.setText("");
-                                    orderNo.setText("");
-                                    containerNo.setText("");
-                                    dateOfLoad.setText("");
-                                    destination.setText("");
-
                                 } else {
                                     destination.setError("Required!");
                                 }
