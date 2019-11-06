@@ -369,10 +369,10 @@ public class LoadingOrder2 extends AppCompatActivity {
 
 //                                    printReport();
 
-                                    new SendMailTask(LoadingOrder2.this).execute(senderName, senderPassword
-                                            , recipientName, emailTitle, mainContent);
+                new SendMailTask(LoadingOrder2.this).execute(senderName, senderPassword
+                        , recipientName, emailTitle, mainContent);
 
-                                    new JSONTask().execute();
+                new JSONTask().execute();
 
 
                 Intent intent = new Intent(LoadingOrder2.this, LoadingOrder.class);
@@ -421,7 +421,7 @@ public class LoadingOrder2 extends AppCompatActivity {
                 if (index != -1) {
                     bundles.get(index).setPicture(thumbnail);
                     String root9 = Environment.getExternalStorageDirectory().getAbsolutePath();
-                    picture = new File(root9, "bundleImage" + index +".png");
+                    picture = new File(root9, "bundleImage" + index + ".png");
                     adapter.notifyDataSetChanged();
                 } else {
                     switch (imageNo) {
