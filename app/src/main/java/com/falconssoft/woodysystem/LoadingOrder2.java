@@ -92,14 +92,14 @@ public class LoadingOrder2 extends AppCompatActivity {
     ItemsListAdapter2 adapter;
     int imageNo = 0;
 
-    BluetoothAdapter mBluetoothAdapter;
-    BluetoothSocket mmSocket;
-    BluetoothDevice mmDevice;
-    OutputStream mmOutputStream;
-    InputStream mmInputStream;
-    volatile boolean stopWorker;
-    String mainContent = "";
-    private boolean checkImageExist = false;
+//    BluetoothAdapter mBluetoothAdapter;
+//    BluetoothSocket mmSocket;
+//    BluetoothDevice mmDevice;
+//    OutputStream mmOutputStream;
+//    InputStream mmInputStream;
+//    volatile boolean stopWorker;
+//    String mainContent = "";
+//    private boolean checkImageExist = false;
 
     JSONArray jsonArrayOrders;
 
@@ -246,8 +246,8 @@ public class LoadingOrder2 extends AppCompatActivity {
                             if (!TextUtils.isEmpty(dateOfLoad.getText().toString())) {
                                 if (!TextUtils.isEmpty(destination.getText().toString())) {
 
-                                    emailTitle = "Order No: " + orderNo.getText().toString();
-                                    progressDialog.show();
+//                                    emailTitle = "Order No: " + orderNo.getText().toString();
+                                  /**  progressDialog.show();
                                     sendBundle();
 //                                    Toast.makeText(LoadingOrder2.this, "Saved !", Toast.LENGTH_LONG).show();
 //                                    for(int i = 0 ; i<pics.size() ; i++)
@@ -268,14 +268,14 @@ public class LoadingOrder2 extends AppCompatActivity {
                                         startActivity(Intent.createChooser(intent, "Share you on the jobing"));
                                     }
                                     //Log.d("URI@!@#!#!@##!", Uri.fromFile(pic).toString() + "   " + pic.exists());
-
+*/
+                                    Toast.makeText(LoadingOrder2.this, "Saved Successfully", Toast.LENGTH_SHORT).show();
+                                    new JSONTask().execute();
                                     placingNo.setText("");
                                     orderNo.setText("");
                                     containerNo.setText("");
                                     dateOfLoad.setText("");
                                     destination.setText("");
-//                                    printReport();
-//                                    onCreate(savedInstanceState);
 
                                 } else {
                                     destination.setError("Required!");
@@ -296,7 +296,7 @@ public class LoadingOrder2 extends AppCompatActivity {
         });
     }
 
-    public void sendBundle() {
+  /**  public void sendBundle() {
 
         new Thread(new Runnable() {
             @Override
@@ -363,10 +363,6 @@ public class LoadingOrder2 extends AppCompatActivity {
                         , pics.get(6)
                         , pics.get(7)));
 
-                new SendMailTask(LoadingOrder2.this).execute(senderName, senderPassword
-                        , recipientName, emailTitle, emailContent);
-//                                    Toast.makeText(LoadingOrder2.this, "Saved !", Toast.LENGTH_LONG).show();
-
 //                                    printReport();
 
                                     new SendMailTask(LoadingOrder2.this).execute(senderName, senderPassword
@@ -384,10 +380,11 @@ public class LoadingOrder2 extends AppCompatActivity {
         }).start();
 
     }
+*/
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void openCamera(int i) {
-        checkImageExist = true;
+//        checkImageExist = true;
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
         } else {
@@ -428,59 +425,56 @@ public class LoadingOrder2 extends AppCompatActivity {
                         case 1:
                             img1.setImageBitmap(thumbnail);
                             pics.set(0, thumbnail);
-                            String root1 = Environment.getExternalStorageDirectory().getAbsolutePath();
-                            picture = new File(root1, "pic1.png");
+//                            String root1 = Environment.getExternalStorageDirectory().getAbsolutePath();
+//                            picture = new File(root1, "pic1.png");
                             break;
                         case 2:
                             img2.setImageBitmap(thumbnail);
                             pics.set(1, thumbnail);
-                            String root2 = Environment.getExternalStorageDirectory().getAbsolutePath();
-                            picture = new File(root2, "pic2.png");
+//                            String root2 = Environment.getExternalStorageDirectory().getAbsolutePath();
+//                            picture = new File(root2, "pic2.png");
                             break;
                         case 3:
                             img3.setImageBitmap(thumbnail);
                             pics.set(2, thumbnail);
-                            String root3 = Environment.getExternalStorageDirectory().getAbsolutePath();
-                            picture = new File(root3, "pic3.png");
+//                            String root3 = Environment.getExternalStorageDirectory().getAbsolutePath();
+//                            picture = new File(root3, "pic3.png");
                             break;
                         case 4:
                             img4.setImageBitmap(thumbnail);
                             pics.set(3, thumbnail);
-                            String root4 = Environment.getExternalStorageDirectory().getAbsolutePath();
-                            picture = new File(root4, "pic4.png");
+//                            String root4 = Environment.getExternalStorageDirectory().getAbsolutePath();
+//                            picture = new File(root4, "pic4.png");
                             break;
                         case 5:
                             img5.setImageBitmap(thumbnail);
                             pics.set(4, thumbnail);
-                            String root5 = Environment.getExternalStorageDirectory().getAbsolutePath();
-                            picture = new File(root5, "pic5.png");
+//                            String root5 = Environment.getExternalStorageDirectory().getAbsolutePath();
+//                            picture = new File(root5, "pic5.png");
                             break;
                         case 6:
                             img6.setImageBitmap(thumbnail);
                             pics.set(5, thumbnail);
-                            String root6 = Environment.getExternalStorageDirectory().getAbsolutePath();
-                            picture = new File(root6, "pic6.png");
+//                            String root6 = Environment.getExternalStorageDirectory().getAbsolutePath();
+//                            picture = new File(root6, "pic6.png");
                             break;
                         case 7:
                             img7.setImageBitmap(thumbnail);
                             pics.set(6, thumbnail);
-                            String root7 = Environment.getExternalStorageDirectory().getAbsolutePath();
-                            picture = new File(root7, "pic7.png");
+//                            String root7 = Environment.getExternalStorageDirectory().getAbsolutePath();
+//                            picture = new File(root7, "pic7.png");
                             break;
                         case 8:
                             img8.setImageBitmap(thumbnail);
                             pics.set(7, thumbnail);
-                            String root8 = Environment.getExternalStorageDirectory().getAbsolutePath();
-                            picture = new File(root8, "pic8.png");
+//                            String root8 = Environment.getExternalStorageDirectory().getAbsolutePath();
+//                            picture = new File(root8, "pic8.png");
                             break;
 
                     }
 
-//                    imagesFileList.add(picture);
-//                    imagesBitmapList.add(thumbnail);
-//                    imagesBitmapList.size();
                 }
-                FileOutputStream out = null;
+              /**  FileOutputStream out = null;
                 try {
                     out = new FileOutputStream(picture);
                     thumbnail.compress(Bitmap.CompressFormat.PNG, 100, out);
@@ -492,21 +486,8 @@ public class LoadingOrder2 extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 imagesFileList.add(picture);
-
+*/
             }
-//            thumbnail = (Bitmap) data.getExtras().get("data");
-//            try {
-//                String root = Environment.getExternalStorageDirectory().getAbsolutePath();
-//                picture = new File(root, "pic.png");
-//                Log.e("BROKEN", "" + picture.canWrite());
-//                FileOutputStream out = new FileOutputStream(picture);
-//                thumbnail.compress(Bitmap.CompressFormat.PNG, 100, out);
-//                out.flush();
-//                out.close();
-////                }
-//            } catch (IOException e) {
-//                Log.e("BROKEN", "Could not write file " + e.getMessage());
-//            }
         }
     }
 
@@ -524,7 +505,7 @@ public class LoadingOrder2 extends AppCompatActivity {
         }
     }
 
-    void printReport() {
+  /**  void printReport() {
         try {
             findBT();
             openBT();
@@ -708,7 +689,7 @@ public class LoadingOrder2 extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
+*/
     @Override
     protected void onResume() {
         super.onResume();

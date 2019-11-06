@@ -1,4 +1,188 @@
+DONE BUTTON::::::::::::::::::::::::::::::::::::
 
+ sendBundle();
+                                    if (checkImageExist) {
+                                        Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+                                        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{recipientName});
+                                        intent.putExtra(Intent.EXTRA_SUBJECT, emailTitle);
+                                        intent.setType("image/png");
+                                        ArrayList<Uri> uriArrayList = new ArrayList<>();
+                                        Log.e("size", "" + imagesFileList.size());
+                                        for (int i = 0; i < imagesFileList.size(); i++) {
+                                            uriArrayList.add(Uri.fromFile(imagesFileList.get(i)));
+                                        }
+//                                    intent.putExtra(Intent.EXTRA_STREAM, array);
+                                        intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uriArrayList);
+                                        startActivity(Intent.createChooser(intent, "Share you on the jobing"));
+                                    }
+
+  public void sendBundle() {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                emailContent = "Placing Number: \t" + placingNo.getText().toString()
+                        + "<br>" + "Order Number: \t" + orderNo.getText().toString()
+                        + "<br>" + "Container Number: \t" + containerNo.getText().toString()
+                        + "<br>" + "Date Of Load: \t" + dateOfLoad.getText().toString()
+                        + "<br>" + "Destination: \t" + destination.getText().toString()
+                        + "<br><br><br>";
+
+                emailContent += "<table style=\"width:100%; border:1px solid black;border-collapse: collapse;\">" +
+                        "  <tr style=\"border:1px solid black;border-collapse: collapse;\">" +
+                        "    <th style=\"border:1px solid black;border-collapse: collapse;\">Area</th>" +
+                        "    <th style=\"border:1px solid black;border-collapse: collapse;\">Location</th>" +
+                        "    <th style=\"border:1px solid black;border-collapse: collapse;\">No Of Pieces</th>" +
+                        "    <th style=\"border:1px solid black;border-collapse: collapse;\">Grade</th>" +
+                        "    <th style=\"border:1px solid black;border-collapse: collapse;\">Length</th>" +
+                        "    <th style=\"border:1px solid black;border-collapse: collapse;\">Width</th>" +
+                        "    <th style=\"border:1px solid black;border-collapse: collapse;\">Thickness</th>" +
+                        "    <th style=\"border:1px solid black;border-collapse: collapse;\">Bundle Number</th>" +
+                        "  </tr>";
+
+                for (int i = 0; i < bundles.size(); i++) {
+                    emailContent += "<tr>" +
+                            "<td>" + bundles.get(i).getArea() + "</td>" +
+                            "<td>" + bundles.get(i).getLocation() + "</td>" +
+                            "<td>" + bundles.get(i).getNoOfPieces() + "</td>" +
+                            "<td>" + bundles.get(i).getGrade() + "</td>" +
+                            "<td>" + bundles.get(i).getLength() + "</td>" +
+                            "<td>" + bundles.get(i).getWidth() + "</td>" +
+                            "<td>" + bundles.get(i).getThickness() + "</td>" +
+                            "<td>" + bundles.get(i).getBundleNo() + "</td>" +
+                            "</tr>";
+
+                    order = new Orders(bundles.get(i).getThickness()
+                            , bundles.get(i).getWidth()
+                            , bundles.get(i).getLength()
+                            , bundles.get(i).getGrade()
+                            , bundles.get(i).getNoOfPieces()
+                            , bundles.get(i).getBundleNo()
+                            , bundles.get(i).getLocation()
+                            , bundles.get(i).getArea()
+                            , placingNo.getText().toString()
+                            , orderNo.getText().toString()
+                            , containerNo.getText().toString()
+                            , dateOfLoad.getText().toString()
+                            , destination.getText().toString());
+                    databaseHandler.addOrder(order);
+
+                    jsonArrayOrders.put(order.getJSONObject());
+
+                    databaseHandler.updateTableBundles(bundles.get(i).getBundleNo());
+                }
+                emailContent += "</table>";
+
+                databaseHandler.addPictures(new Pictures(orderNo.getText().toString()
+                        , pics.get(0)
+                        , pics.get(1)
+                        , pics.get(2)
+                        , pics.get(3)
+                        , pics.get(4)
+                        , pics.get(5)
+                        , pics.get(6)
+                        , pics.get(7)));
+
+//                                    printReport();
+
+                                    new SendMailTask(LoadingOrder2.this).execute(senderName, senderPassword
+                                            , recipientName, emailTitle, mainContent);
+
+                                    new JSONTask().execute();
+
+
+                Intent intent = new Intent(LoadingOrder2.this, LoadingOrder.class);
+                startActivity(intent);
+
+                progressDialog.dismiss();
+
+            }
+        }).start();
+
+    }
+
+ON ACTIVITY RESULT ::::::::::::::::::::::::::::::::
+
+ if (extras != null) {
+//                Bitmap pic = extras.getParcelable("data");
+                if (index != -1) {
+                    bundles.get(index).setPicture(thumbnail);
+                    String root9 = Environment.getExternalStorageDirectory().getAbsolutePath();
+                    picture = new File(root9, "bundleImage" + index +".png");
+                    adapter.notifyDataSetChanged();
+                } else {
+                    switch (imageNo) {
+                        case 1:
+                            img1.setImageBitmap(thumbnail);
+                            pics.set(0, thumbnail);
+                            String root1 = Environment.getExternalStorageDirectory().getAbsolutePath();
+                            picture = new File(root1, "pic1.png");
+                            break;
+                        case 2:
+                            img2.setImageBitmap(thumbnail);
+                            pics.set(1, thumbnail);
+                            String root2 = Environment.getExternalStorageDirectory().getAbsolutePath();
+                            picture = new File(root2, "pic2.png");
+                            break;
+                        case 3:
+                            img3.setImageBitmap(thumbnail);
+                            pics.set(2, thumbnail);
+                            String root3 = Environment.getExternalStorageDirectory().getAbsolutePath();
+                            picture = new File(root3, "pic3.png");
+                            break;
+                        case 4:
+                            img4.setImageBitmap(thumbnail);
+                            pics.set(3, thumbnail);
+                            String root4 = Environment.getExternalStorageDirectory().getAbsolutePath();
+                            picture = new File(root4, "pic4.png");
+                            break;
+                        case 5:
+                            img5.setImageBitmap(thumbnail);
+                            pics.set(4, thumbnail);
+                            String root5 = Environment.getExternalStorageDirectory().getAbsolutePath();
+                            picture = new File(root5, "pic5.png");
+                            break;
+                        case 6:
+                            img6.setImageBitmap(thumbnail);
+                            pics.set(5, thumbnail);
+                            String root6 = Environment.getExternalStorageDirectory().getAbsolutePath();
+                            picture = new File(root6, "pic6.png");
+                            break;
+                        case 7:
+                            img7.setImageBitmap(thumbnail);
+                            pics.set(6, thumbnail);
+                            String root7 = Environment.getExternalStorageDirectory().getAbsolutePath();
+                            picture = new File(root7, "pic7.png");
+                            break;
+                        case 8:
+                            img8.setImageBitmap(thumbnail);
+                            pics.set(7, thumbnail);
+                            String root8 = Environment.getExternalStorageDirectory().getAbsolutePath();
+                            picture = new File(root8, "pic8.png");
+                            break;
+
+                    }
+
+                }
+                FileOutputStream out = null;
+                try {
+                    out = new FileOutputStream(picture);
+                    thumbnail.compress(Bitmap.CompressFormat.PNG, 100, out);
+                    out.flush();
+                    out.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                imagesFileList.add(picture);
+
+
+
+
+
+
+/********************************************************************************************************************************
  private PrintPic printPic;
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothSocket mmSocket;
