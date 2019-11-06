@@ -270,7 +270,8 @@ public class LoadingOrder2 extends AppCompatActivity {
                                     //Log.d("URI@!@#!#!@##!", Uri.fromFile(pic).toString() + "   " + pic.exists());
 */
                                     Toast.makeText(LoadingOrder2.this, "Saved Successfully", Toast.LENGTH_SHORT).show();
-                                    new JSONTask().execute();
+                                   sendBundle();
+
                                     placingNo.setText("");
                                     orderNo.setText("");
                                     containerNo.setText("");
@@ -296,12 +297,12 @@ public class LoadingOrder2 extends AppCompatActivity {
         });
     }
 
-  /**  public void sendBundle() {
+   public void sendBundle() {
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                emailContent = "Placing Number: \t" + placingNo.getText().toString()
+        /**        emailContent = "Placing Number: \t" + placingNo.getText().toString()
                         + "<br>" + "Order Number: \t" + orderNo.getText().toString()
                         + "<br>" + "Container Number: \t" + containerNo.getText().toString()
                         + "<br>" + "Date Of Load: \t" + dateOfLoad.getText().toString()
@@ -319,18 +320,18 @@ public class LoadingOrder2 extends AppCompatActivity {
                         "    <th style=\"border:1px solid black;border-collapse: collapse;\">Thickness</th>" +
                         "    <th style=\"border:1px solid black;border-collapse: collapse;\">Bundle Number</th>" +
                         "  </tr>";
-
+*/
                 for (int i = 0; i < bundles.size(); i++) {
-                    emailContent += "<tr>" +
-                            "<td>" + bundles.get(i).getArea() + "</td>" +
-                            "<td>" + bundles.get(i).getLocation() + "</td>" +
-                            "<td>" + bundles.get(i).getNoOfPieces() + "</td>" +
-                            "<td>" + bundles.get(i).getGrade() + "</td>" +
-                            "<td>" + bundles.get(i).getLength() + "</td>" +
-                            "<td>" + bundles.get(i).getWidth() + "</td>" +
-                            "<td>" + bundles.get(i).getThickness() + "</td>" +
-                            "<td>" + bundles.get(i).getBundleNo() + "</td>" +
-                            "</tr>";
+//                    emailContent += "<tr>" +
+//                            "<td>" + bundles.get(i).getArea() + "</td>" +
+//                            "<td>" + bundles.get(i).getLocation() + "</td>" +
+//                            "<td>" + bundles.get(i).getNoOfPieces() + "</td>" +
+//                            "<td>" + bundles.get(i).getGrade() + "</td>" +
+//                            "<td>" + bundles.get(i).getLength() + "</td>" +
+//                            "<td>" + bundles.get(i).getWidth() + "</td>" +
+//                            "<td>" + bundles.get(i).getThickness() + "</td>" +
+//                            "<td>" + bundles.get(i).getBundleNo() + "</td>" +
+//                            "</tr>";
 
                     order = new Orders(bundles.get(i).getThickness()
                             , bundles.get(i).getWidth()
@@ -351,7 +352,7 @@ public class LoadingOrder2 extends AppCompatActivity {
 
                     databaseHandler.updateTableBundles(bundles.get(i).getBundleNo());
                 }
-                emailContent += "</table>";
+//                emailContent += "</table>";
 
                 databaseHandler.addPictures(new Pictures(orderNo.getText().toString()
                         , pics.get(0)
@@ -365,22 +366,21 @@ public class LoadingOrder2 extends AppCompatActivity {
 
 //                                    printReport();
 
-                                    new SendMailTask(LoadingOrder2.this).execute(senderName, senderPassword
-                                            , recipientName, emailTitle, mainContent);
+//                                    new SendMailTask(LoadingOrder2.this).execute(senderName, senderPassword
+//                                            , recipientName, emailTitle, mainContent);
 
                                     new JSONTask().execute();
 
 
                 Intent intent = new Intent(LoadingOrder2.this, LoadingOrder.class);
                 startActivity(intent);
-
                 progressDialog.dismiss();
 
             }
         }).start();
 
     }
-*/
+
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void openCamera(int i) {
