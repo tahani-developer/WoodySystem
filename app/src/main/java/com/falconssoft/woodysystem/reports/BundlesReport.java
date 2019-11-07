@@ -4,16 +4,21 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.sip.SipSession;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.print.PrintHelper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -98,10 +103,18 @@ public class BundlesReport extends AppCompatActivity {
 
                     PrintHelper photoPrinter = new PrintHelper(BundlesReport.this);
                     photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
-                    TextView text=(TextView) finalTableRow.getChildAt(0);
-                    Bitmap bitmap=writeBarcode(text.getText().toString());
+                    TextView bundleNo=(TextView) finalTableRow.getChildAt(0);
+                    TextView length=(TextView) finalTableRow.getChildAt(1);
+                    TextView width=(TextView) finalTableRow.getChildAt(2);
+                    TextView thic=(TextView) finalTableRow.getChildAt(3);
+                    TextView grade=(TextView) finalTableRow.getChildAt(4);
+                    TextView pcs=(TextView) finalTableRow.getChildAt(5);
+                    Bitmap bitmap=writeBarcode(bundleNo.getText().toString(),length.getText().toString(),width.getText().toString(),
+                            thic.getText().toString(),grade.getText().toString(),pcs.getText().toString());
+
+
                     photoPrinter.printBitmap("invoice.jpg", bitmap);
-                    Toast.makeText(BundlesReport.this, "tested+"+text.getText().toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(BundlesReport.this, "tested+"+bundleNo.getText().toString(), Toast.LENGTH_SHORT).show();
 
 
                 }
@@ -201,30 +214,60 @@ public class BundlesReport extends AppCompatActivity {
         setSlideAnimation();
     }
 
-    public Bitmap writeBarcode(String data) {
+
+    public Bitmap writeBarcode(String data,String length,String width,String thic,String grades,String pcs) {
         final Dialog dialog = new Dialog(BundlesReport.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(true);
-        dialog.setContentView(R.layout.barcode_dialog);
-        TextView close = (TextView) dialog.findViewById(R.id.close);
-        ImageView iv = (ImageView) dialog.findViewById(R.id.iv);
+        dialog.setContentView(R.layout.barcode_design);
+        TextView companyName,bundelNo,TLW,pcsNo,grade;
+
+        companyName= (TextView) dialog.findViewById(R.id.companyName);
+        bundelNo= (TextView) dialog.findViewById(R.id.bundelNo);
+        TLW= (TextView) dialog.findViewById(R.id.TLW);
+        pcsNo= (TextView) dialog.findViewById(R.id.pcsNo);
+        grade= (TextView) dialog.findViewById(R.id.grade);
+        ImageView iv = (ImageView) dialog.findViewById(R.id.barcode);
+
+//        companyName.setText("");
+        bundelNo.setText(data);
+        TLW.setText(thic+" X "+width+" X "+length);
+        pcsNo.setText(pcs);
+        grade.setText(grades);
+
+
+        LinearLayout linearView = (LinearLayout) dialog.findViewById(R.id.design);
+
         // barcode data
         String barcode_data = data;
-
-
-
         Bitmap bitmap = null;//  AZTEC -->QR
-
         try {
             bitmap = encodeAsBitmap(barcode_data, BarcodeFormat.CODE_128, 1100, 200);
         } catch (WriterException e) {
             e.printStackTrace();
         }
 
+        iv.setImageBitmap(bitmap);
+
+        linearView.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        linearView.layout(0, 0, linearView.getMeasuredWidth(), linearView.getMeasuredHeight());
+
+        Log.e("size of img ", "width=" + linearView.getMeasuredWidth() + "      higth =" + linearView.getHeight());
+
+        Bitmap bitmaps = Bitmap.createBitmap(linearView.getWidth(), linearView.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmaps);
+        Drawable bgDrawable = linearView.getBackground();
+        if (bgDrawable != null) {
+            bgDrawable.draw(canvas);
+        } else {
+            canvas.drawColor(Color.WHITE);
+        }
+        linearView.draw(canvas);
 
 //        dialog.show();
 
-        return bitmap;
+        return bitmaps;
 
     }
 
