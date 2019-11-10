@@ -17,7 +17,10 @@
     <string name="bundle_num">Bundle No</string>
     <string name="location">Location</string>
     <string name="area">Area</string>
+
+    <string name="company_name">Company Name</string>
     <string name="ip_address">IP Address</string>
+    <string name="store">Store</string>
 
     <string name="placing_no">Truck Number</string>
     <string name="order_no">Order Number</string>

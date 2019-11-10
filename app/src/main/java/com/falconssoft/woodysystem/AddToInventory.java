@@ -73,10 +73,9 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
     private static final int BLACK = 0xFF000000;
     private EditText thickness, length, width, noOfPieces;
     private Spinner gradeSpinner, locationSpinner, areaSpinner;
-    private Button addToInventory;//, newBundleButton;
     private TableLayout bundlesTable;
     private LinearLayout linearLayoutView;
-    private TextView textView, generateBundleNo, bundleNumber;
+    private TextView textView, addToInventory;
     private BundleInfo newBundle;
     private DatabaseHandler databaseHandler;
     private Animation animation;
@@ -104,19 +103,16 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         length = findViewById(R.id.addToInventory_length);
         width = findViewById(R.id.addToInventory_width);
         noOfPieces = findViewById(R.id.addToInventory_no_of_pieces);
-        generateBundleNo = findViewById(R.id.addToInventory_bundle_no);
         gradeSpinner = findViewById(R.id.addToInventory_grade);
         locationSpinner = findViewById(R.id.addToInventory_location);
         areaSpinner = findViewById(R.id.addToInventory_area);
         addToInventory = findViewById(R.id.addToInventory_add_button);
 //        newBundleButton = findViewById(R.id.addToInventory_new_button);
-        bundleNumber = findViewById(R.id.addToInventory_bundle_no_tv);
         textView = findViewById(R.id.addToInventory_textView);
         bundlesTable = findViewById(R.id.addToInventory_table);
         linearLayoutView = findViewById(R.id.addToInventory_table_view);
         linearLayoutView.setVisibility(View.GONE);
 
-        generateBundleNo.setOnClickListener(this);
         addToInventory.setOnClickListener(this);
 //        newBundleButton.setOnClickListener(this);
 
@@ -166,131 +162,13 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         switch (v.getId()) {
             case R.id.addToInventory_add_button:
                 boolean foundBarcode = false;
-                if (!TextUtils.isEmpty(bundleNumber.getText().toString())) {
-                    List<String> checkBarcodeList = databaseHandler.getBundleNo();
-                    for (int m = 0; m < checkBarcodeList.size(); m++)
-                        if (bundleNoString.equals(checkBarcodeList.get(m))) {
-                            foundBarcode = true;
-                            break;
-                        }
-                    if (!foundBarcode) {
-//                        String data = bundleNoString;//+ gradeText;
-//                        Bitmap bitmap = writeBarcode(data);
-                        linearLayoutView.setVisibility(View.VISIBLE);
-                        mState = true;
-                        newBundle = new BundleInfo(Double.parseDouble(thicknessText)
-                                , Double.parseDouble(lengthText)
-                                , Double.parseDouble(widthText)
-                                , gradeText
-                                , Integer.parseInt(noOfPiecesText)
-                                , bundleNoString
-                                , locationText
-                                , areaText
-                                , 1
-                                , 53
-                                , 5
-                                , "june"
-                                , 0);
-                        databaseHandler.addNewBundle(newBundle);
-
-                        TableRow tableRow = new TableRow(this);
-                        for (int i = 0; i < 8; i++) {
-                            TextView textView = new TextView(this);
-                            textView.setBackgroundResource(R.color.light_orange);
-                            TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
-                            textViewParam.setMargins(1, 5, 1, 1);
-                            textView.setTextSize(15);
-                            textView.setTextColor(ContextCompat.getColor(this, R.color.gray_dark_one));
-                            textView.setLayoutParams(textViewParam);
-                            switch (i) {
-                                case 0:
-                                    textView.setText(bundleNoString);
-                                    break;
-                                case 1:
-                                    textView.setText(lengthText);
-//                    textView.setText("65");
-
-                                    break;
-                                case 2:
-                                    textView.setText(widthText);
-//                    textView.setText("65");
-                                    break;
-                                case 3:
-                                    textView.setText(thicknessText);
-//                    textView.setText("65");
-                                    break;
-                                case 4:
-                                    textView.setText(gradeText);
-//                                                textView.setText("new");
-                                    break;
-                                case 5:
-                                    textView.setText(noOfPiecesText);
-//                    textView.setText("200");
-                                    break;
-                                case 6:
-                                    textView.setText(locationText);
-//                    textView.setText("amman");
-                                    break;
-                                case 7:
-                                    textView.setText(areaText);
-//                    textView.setText("zone1");
-                                    break;
-                            }
-                            tableRow.addView(textView);
-                        }
-                        jsonArrayBundles.put(newBundle.getJSONObject());
-                        bundlesTable.addView(tableRow);
-                        new JSONTask().execute();
-
-                        thickness.setText("");
-                        length.setText("");
-                        width.setText("");
-                        noOfPieces.setText("");
-                        bundleNumber.setText("");
-                        locationSpinner.setSelection(0);
-                        areaSpinner.setSelection(0);
-                        gradeSpinner.setSelection(0);
-
-                        tableRow.setOnLongClickListener(new View.OnLongClickListener() {
-                            @Override
-                            public boolean onLongClick(View v) {
-//                                                TextView textView = ((TextView) tableRow.getChildAt(0));
-//                                                tableRow.setBackgroundResource(R.color.light_orange_2);
-                                String bundleNo = ((TextView) tableRow.getChildAt(0)).getText().toString();
-                                Log.e("b", bundleNo);
-                                AlertDialog.Builder builder = new AlertDialog.Builder(AddToInventory.this);
-                                builder.setMessage("Are you want delete bundle number: " + bundleNo + " ?");
-                                builder.setTitle("Delete");
-                                builder.setIcon(R.drawable.ic_warning_black_24dp);
-                                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        databaseHandler.deleteBundle(bundleNo);
-                                        bundlesTable.removeView(tableRow);
-                                    }
-                                });
-                                builder.show();
-                                return false;
-                            }
-                        });
-                        Toast.makeText(this, "Added Successfully", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(this, "Barcode already exist", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(this, "Please generate Bundle Number first!", Toast.LENGTH_SHORT).show();
-                }
-                break;
-            case R.id.addToInventory_bundle_no:
 
                 if (!TextUtils.isEmpty(thickness.getText().toString())) {
                     if (!TextUtils.isEmpty(width.getText().toString())) {
                         if (!TextUtils.isEmpty(length.getText().toString())) {
                             if (!TextUtils.isEmpty(noOfPieces.getText().toString())) {
-
 //                                Log.e("serial" , " " + !SettingsFile.serialNumber.equals(""));
 //                                Log.e("serial" , " " + !SettingsFile.serialNumber.equals(null));
-
                                 if ((!SettingsFile.serialNumber.equals("")) && (!SettingsFile.serialNumber.equals(null))) {
                                     String locationString = null, gradeString = null;
                                     switch (gradeText) {
@@ -331,12 +209,112 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                             + "." + lengthText
                                             + "." + noOfPiecesText
                                             + "." + SettingsFile.serialNumber;
-                                    bundleNumber.setText(bundleNoString);
+
+                                    List<String> checkBarcodeList = databaseHandler.getBundleNo();
+                                    for (int m = 0; m < checkBarcodeList.size(); m++)
+                                        if (bundleNoString.equals(checkBarcodeList.get(m))) {
+                                            foundBarcode = true;
+                                            break;
+                                        }
+                                    if (!foundBarcode) {
+                                        linearLayoutView.setVisibility(View.VISIBLE);
+                                        mState = true;
+                                        newBundle = new BundleInfo(Double.parseDouble(thicknessText)
+                                                , Double.parseDouble(lengthText)
+                                                , Double.parseDouble(widthText)
+                                                , gradeText
+                                                , Integer.parseInt(noOfPiecesText)
+                                                , bundleNoString
+                                                , locationText
+                                                , areaText
+                                                , 1
+                                                , 53
+                                                , 5
+                                                , "june"
+                                                , 0);
+//                                        databaseHandler.addNewBundle(newBundle);
+
+                                        TableRow tableRow = new TableRow(this);
+                                        for (int i = 0; i < 8; i++) {
+                                            TextView textView = new TextView(this);
+                                            textView.setBackgroundResource(R.color.light_orange);
+                                            TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+                                            textViewParam.setMargins(1, 5, 1, 1);
+                                            textView.setTextSize(15);
+                                            textView.setTextColor(ContextCompat.getColor(this, R.color.gray_dark_one));
+                                            textView.setLayoutParams(textViewParam);
+                                            switch (i) {
+                                                case 0:
+                                                    textView.setText(bundleNoString);
+                                                    break;
+                                                case 1:
+                                                    textView.setText(lengthText);
+                                                    break;
+                                                case 2:
+                                                    textView.setText(widthText);
+                                                    break;
+                                                case 3:
+                                                    textView.setText(thicknessText);
+                                                    break;
+                                                case 4:
+                                                    textView.setText(gradeText);
+//                                                textView.setText("new");
+                                                    break;
+                                                case 5:
+                                                    textView.setText(noOfPiecesText);
+                                                    break;
+                                                case 6:
+                                                    textView.setText(locationText);
+                                                    break;
+                                                case 7:
+                                                    textView.setText(areaText);
+                                                    break;
+                                            }
+                                            tableRow.addView(textView);
+                                        }
+                                        jsonArrayBundles.put(newBundle.getJSONObject());
+                                        bundlesTable.addView(tableRow);
+                                        new JSONTask().execute();
+
+                                        thickness.setText("");
+                                        length.setText("");
+                                        width.setText("");
+                                        noOfPieces.setText("");
+                                        locationSpinner.setSelection(0);
+                                        areaSpinner.setSelection(0);
+                                        gradeSpinner.setSelection(0);
+
+                                        tableRow.setOnLongClickListener(new View.OnLongClickListener() {
+                                            @Override
+                                            public boolean onLongClick(View v) {
+//                                                TextView textView = ((TextView) tableRow.getChildAt(0));
+//                                                tableRow.setBackgroundResource(R.color.light_orange_2);
+                                                String bundleNo = ((TextView) tableRow.getChildAt(0)).getText().toString();
+                                                Log.e("b", bundleNo);
+                                                AlertDialog.Builder builder = new AlertDialog.Builder(AddToInventory.this);
+                                                builder.setMessage("Are you want delete bundle number: " + bundleNo + " ?");
+                                                builder.setTitle("Delete");
+                                                builder.setIcon(R.drawable.ic_warning_black_24dp);
+                                                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        databaseHandler.deleteBundle(bundleNo);
+                                                        bundlesTable.removeView(tableRow);
+                                                    }
+                                                });
+                                                builder.show();
+                                                return false;
+                                            }
+                                        });
+                                        Toast.makeText(this, "Added Successfully", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(this, "Barcode already exist", Toast.LENGTH_SHORT).show();
+                                    }
 //                                    Log.e("serial" , " " + SettingsFile.serialNumber);
 
 //                                    presenter.getImportData();
-                                }else {
-//                                    presenter.getImportData();
+                                } else {
+                                    presenter.getImportData();
                                     Toast.makeText(this, "No serial number is generated!", Toast.LENGTH_SHORT).show();
                                 }
                             } else {
@@ -375,8 +353,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 
         // Restore state members from saved instance
         mState = savedInstanceState.getBoolean(STATE_VISIBILITY);
-        linearLayoutView.setVisibility(mState?View.VISIBLE:View.GONE);
-        bundleNumber.setText(bundleNoString);
+        linearLayoutView.setVisibility(mState ? View.VISIBLE : View.GONE);
         presenter.getImportData();
         List<TableRow> tableRows = (List<TableRow>) savedInstanceState.getSerializable("table");
         for (int i = 0; i < tableRows.size(); i++) {
@@ -480,6 +457,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
             super.onPostExecute(s);
             if (s != null) {
                 if (s.contains("BUNDLE_INFO SUCCESS")) {
+                    databaseHandler.addNewBundle(newBundle);
                     presenter.getImportData();
                     Log.e("tag", "****Success");
                 } else {

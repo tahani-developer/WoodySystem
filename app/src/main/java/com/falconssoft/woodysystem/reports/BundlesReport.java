@@ -23,6 +23,7 @@ import com.falconssoft.woodysystem.DatabaseHandler;
 import com.falconssoft.woodysystem.MainActivity;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.ReportsActivity;
+import com.falconssoft.woodysystem.SettingsFile;
 import com.falconssoft.woodysystem.Stage3;
 import com.falconssoft.woodysystem.models.BundleInfo;
 import com.google.zxing.BarcodeFormat;
@@ -65,7 +66,7 @@ public class BundlesReport extends AppCompatActivity {
     }
 
     void fillTable() {
-        bundleInfos = databaseHandler.getAllBundleInfo();
+        bundleInfos = databaseHandler.getAllBundleInfo(SettingsFile.store);
 //        TableRow tableRowBasic = new TableRow(this);
 //        tableRowBasic = fillTableRows(tableRowBasic
 //                , "Bundle#"
@@ -95,15 +96,12 @@ public class BundlesReport extends AppCompatActivity {
             tableRow.getVirtualChildAt(8).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     PrintHelper photoPrinter = new PrintHelper(BundlesReport.this);
                     photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
                     TextView text=(TextView) finalTableRow.getChildAt(0);
                     Bitmap bitmap=writeBarcode(text.getText().toString());
                     photoPrinter.printBitmap("invoice.jpg", bitmap);
                     Toast.makeText(BundlesReport.this, "tested+"+text.getText().toString(), Toast.LENGTH_SHORT).show();
-
-
                 }
             });
         }

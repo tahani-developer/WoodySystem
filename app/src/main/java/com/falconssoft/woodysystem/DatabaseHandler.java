@@ -11,6 +11,7 @@ import android.util.Log;
 import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.Orders;
 import com.falconssoft.woodysystem.models.Pictures;
+import com.falconssoft.woodysystem.models.Settings;
 import com.falconssoft.woodysystem.models.Users;
 
 import java.io.ByteArrayOutputStream;
@@ -23,6 +24,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 5;
     private static final String DATABASE_NAME = "WoodyDatabase";
     static SQLiteDatabase db;
+
+    //******************************************************************
+    private static final String SETTINGS_TABLE = "SETTINGS_TABLE";
+
+    private static final String SETTINGS_COMPANY_NAME = "COMPANY_NAME";
+    private static final String SETTINGS_IP_ADDRESS = "IP_ADDRESS";
+    private static final String SETTINGS_STORE = "STORE";
 
     //******************************************************************
     private static final String BUNDLE_INFO_TABLE = "INVENTORY_INFO";
@@ -81,6 +89,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
+        String CREATE_TABLE_SETTINGS = "CREATE TABLE " + SETTINGS_TABLE + "("
+                + SETTINGS_COMPANY_NAME + " TEXT,"
+                + SETTINGS_IP_ADDRESS + " TEXT,"
+                + SETTINGS_STORE + " TEXT" + ")";
+        db.execSQL(CREATE_TABLE_SETTINGS);
+
         String CREATE_INVENTORY_INFO_TABLE = "CREATE TABLE " + BUNDLE_INFO_TABLE + "("
                 + BUNDLE_INFO_THICKNESS + " REAL,"
                 + BUNDLE_INFO_LENGTH + " REAL,"
@@ -133,23 +147,20 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         try {
             db.execSQL("ALTER TABLE INVENTORY_INFO ADD BUNDLE_BARCODE TAXE NOT NULL DEFAULT ''");
-        }catch (Exception e)
-        {
-            Log.e("upgrade","BUNDLE Barcode");
+        } catch (Exception e) {
+            Log.e("upgrade", "BUNDLE Barcode");
         }
 
         try {
             db.execSQL("ALTER TABLE ORDERS_TABLE ADD DESTINATION TAXE NOT NULL DEFAULT ''");
-        }catch (Exception e)
-        {
-            Log.e("upgrade","DESTINATION");
+        } catch (Exception e) {
+            Log.e("upgrade", "DESTINATION");
         }
 
         try {
             db.execSQL("ALTER TABLE INVENTORY_INFO ADD ORDERED INTEGER NOT NULL DEFAULT '0'");
-        }catch (Exception e)
-        {
-            Log.e("upgrade","BUNDLE ORDERED");
+        } catch (Exception e) {
+            Log.e("upgrade", "BUNDLE ORDERED");
         }
 
         try {
@@ -164,14 +175,25 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                     + PICTURE_7 + " BLOB,"
                     + PICTURE_8 + " BLOB " + ")";
             db.execSQL(CREATE_PICTURES_TABLE);
-        }catch (Exception e)
-        {
-            Log.e("upgrade","BUNDLE ORDERED");
+        } catch (Exception e) {
+            Log.e("upgrade", "BUNDLE ORDERED");
         }
 
     }
 
     // **************************************************** Adding ****************************************************
+    public void addSettings(Settings settings) {
+        db = this.getReadableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(SETTINGS_COMPANY_NAME, settings.getCompanyName());
+        contentValues.put(SETTINGS_IP_ADDRESS, settings.getIpAddress());
+        contentValues.put(SETTINGS_STORE, settings.getStore());
+
+        db.insert(SETTINGS_TABLE, null, contentValues);
+        db.close();
+    }
+
     public void addNewBundle(BundleInfo bundleInfo) {
         db = this.getReadableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -299,6 +321,19 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     // **************************************************** Getting ****************************************************
+    public void getSettings() {
+        String selectQuery = "SELECT * FROM " + SETTINGS_TABLE;
+        db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                SettingsFile.companyName = cursor.getString(0);
+                SettingsFile.ipAddress = cursor.getString(1);
+                SettingsFile.store = cursor.getString(2);
+            } while (cursor.moveToNext());
+        }
+    }
 
     public List<BundleInfo> getBundleInfo() {
         List<BundleInfo> bundleInfoList = new ArrayList<>();
@@ -329,10 +364,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return bundleInfoList;
     }
 
-    public List<BundleInfo> getAllBundleInfo() {
+    public List<BundleInfo> getAllBundleInfo(String location) {
         List<BundleInfo> bundleInfoList = new ArrayList<>();
 
-        String selectQuery = "SELECT  * FROM " + BUNDLE_INFO_TABLE ;
+        String selectQuery = "SELECT  * FROM " + BUNDLE_INFO_TABLE + " where LOCATION = '" + location + "'";
         db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
@@ -358,16 +393,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return bundleInfoList;
     }
 
-    public List<String> getBundleNo(){
+    public List<String> getBundleNo() {
         List<String> bundleNoList = new ArrayList<>();
         String selectQuery = "SELECT BUNDLE_NO FROM " + BUNDLE_INFO_TABLE;
         db = this.getWritableDatabase();
-        Cursor cursor= db.rawQuery(selectQuery, null);
+        Cursor cursor = db.rawQuery(selectQuery, null);
 
-        if (cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             do {
                 bundleNoList.add(cursor.getString(0));
-            }while (cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
         return bundleNoList;
     }
@@ -375,7 +410,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public List<BundleInfo> getBundleInfoForBundle(String bundel) {
         List<BundleInfo> bundleInfoList = new ArrayList<>();
 
-        String selectQuery = "SELECT  * FROM " + BUNDLE_INFO_TABLE+" where BUNDLE_NO = '"+bundel+"'";
+        String selectQuery = "SELECT  * FROM " + BUNDLE_INFO_TABLE + " where BUNDLE_NO = '" + bundel + "'";
         db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
@@ -401,7 +436,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return bundleInfoList;
     }
 
-    public List<Users> getUsers(){
+    public List<Users> getUsers() {
         List<Users> usersList = new ArrayList<>();
 
         String selectQuery = "SELECT  * FROM " + USERS_TABLE;
@@ -410,7 +445,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-                Users user= new Users();
+                Users user = new Users();
 
                 user.setUsername(cursor.getString(0));
                 user.setPassword(cursor.getString(1));
@@ -430,10 +465,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     // **************************************************** Delete ****************************************************
-
-    public void deleteBundle(String bundleNo){
+    public void deleteSettings() {
         db = this.getWritableDatabase();
-        db.delete(BUNDLE_INFO_TABLE, " BUNDLE_NO=?" , new String[]{bundleNo});
+        db.delete(SETTINGS_TABLE, null, null);
+        db.close();
+    }
+
+    public void deleteBundle(String bundleNo) {
+        db = this.getWritableDatabase();
+        db.delete(BUNDLE_INFO_TABLE, " BUNDLE_NO=?", new String[]{bundleNo});
         db.close();
     }
 

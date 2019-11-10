@@ -29,9 +29,11 @@ public class SettingsFile {
 
     public static String serialNumber;
 
-    public static String ipAddress;
+    public static String companyName = "";
 
-    public static String Location;
+    public static String ipAddress = "";
+
+    public static String store = "";
 
     public static String area;
 
