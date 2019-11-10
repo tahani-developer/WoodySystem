@@ -31,6 +31,7 @@ import com.falconssoft.woodysystem.ReportsActivity;
 import com.falconssoft.woodysystem.SettingsFile;
 import com.falconssoft.woodysystem.Stage3;
 import com.falconssoft.woodysystem.models.BundleInfo;
+import com.falconssoft.woodysystem.models.Settings;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -229,7 +230,7 @@ public class BundlesReport extends AppCompatActivity {
         grade= (TextView) dialog.findViewById(R.id.grade);
         ImageView iv = (ImageView) dialog.findViewById(R.id.barcode);
 
-//        companyName.setText("");
+        companyName.setText(SettingsFile.companyName);
         bundelNo.setText(data);
         TLW.setText(thic+" X "+width+" X "+length);
         pcsNo.setText(pcs);
