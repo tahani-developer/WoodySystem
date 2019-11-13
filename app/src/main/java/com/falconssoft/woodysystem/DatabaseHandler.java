@@ -21,7 +21,7 @@ import java.util.List;
 public class DatabaseHandler extends SQLiteOpenHelper {
 
     private static String TAG = "DatabaseHandler";
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
     private static final String DATABASE_NAME = "WoodyDatabase";
     static SQLiteDatabase db;
 
@@ -158,7 +158,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
 
         try {
-            db.execSQL("ALTER TABLE INVENTORY_INFO ADD ORDERED INTEGER NOT NULL DEFAULT '0'");
+            String CREATE_TABLE_SETTINGS = "CREATE TABLE " + SETTINGS_TABLE + "("
+                    + SETTINGS_COMPANY_NAME + " TEXT,"
+                    + SETTINGS_IP_ADDRESS + " TEXT,"
+                    + SETTINGS_STORE + " TEXT" + ")";
+            db.execSQL(CREATE_TABLE_SETTINGS);
         } catch (Exception e) {
             Log.e("upgrade", "BUNDLE ORDERED");
         }
