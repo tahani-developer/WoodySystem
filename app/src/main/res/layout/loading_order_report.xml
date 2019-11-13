@@ -101,7 +101,16 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="serif"
-                    android:text=""
+                    android:text="Bundles"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.25"
+                    android:fontFamily="serif"
+                    android:text="Pic"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
 
@@ -137,7 +146,7 @@
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="260dp"
+            android:layout_height="290dp"
             android:layout_alignParentBottom="true"
             android:visibility="gone"
             android:orientation="vertical">

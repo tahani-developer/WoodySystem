@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -24,6 +25,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -52,6 +54,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -85,6 +88,7 @@ public class LoadingOrder2 extends AppCompatActivity {
     private Button done;
     private TextView textView;
     private Orders order;
+    private Pictures picture;
     private DatabaseHandler databaseHandler;
     private List<BundleInfo> bundles;
     private Calendar myCalendar;
@@ -102,8 +106,9 @@ public class LoadingOrder2 extends AppCompatActivity {
 //    private boolean checkImageExist = false;
 
     JSONArray jsonArrayOrders;
+    JSONArray jsonArrayPics;
 
-    static ArrayList<Bitmap> pics = new ArrayList<>();
+    static ArrayList<String> pics = new ArrayList<>();
     private List<File> imagesFileList = new ArrayList<>();
 
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -123,17 +128,19 @@ public class LoadingOrder2 extends AppCompatActivity {
         databaseHandler = new DatabaseHandler(this);
 
         jsonArrayOrders = new JSONArray();
+        jsonArrayPics = new JSONArray();
 
         Drawable myDrawable = getResources().getDrawable(R.drawable.pic);
         Bitmap myBitmap = ((BitmapDrawable) myDrawable).getBitmap();
-        pics.add(myBitmap);
-        pics.add(myBitmap);
-        pics.add(myBitmap);
-        pics.add(myBitmap);
-        pics.add(myBitmap);
-        pics.add(myBitmap);
-        pics.add(myBitmap);
-        pics.add(myBitmap);
+        myBitmap = getResizedBitmap(myBitmap, 100, 100);
+        pics.add(BitMapToString(myBitmap));
+        pics.add(BitMapToString(myBitmap));
+        pics.add(BitMapToString(myBitmap));
+        pics.add(BitMapToString(myBitmap));
+        pics.add(BitMapToString(myBitmap));
+        pics.add(BitMapToString(myBitmap));
+        pics.add(BitMapToString(myBitmap));
+        pics.add(BitMapToString(myBitmap));
 
         ItemsListAdapter obj = new ItemsListAdapter();
         bundles = obj.getSelectedItems();
@@ -339,8 +346,11 @@ public class LoadingOrder2 extends AppCompatActivity {
                             , orderNo.getText().toString()
                             , containerNo.getText().toString()
                             , dateOfLoad.getText().toString()
-                            , destination.getText().toString());
+                            , destination.getText().toString()
+                            , bundles.get(i).getPicture());
                     databaseHandler.addOrder(order);
+
+//                    Log.e("**********", "" + bundles.get(i).getPicture().length());
 
                     jsonArrayOrders.put(order.getJSONObject());
 
@@ -348,7 +358,8 @@ public class LoadingOrder2 extends AppCompatActivity {
                 }
 //                emailContent += "</table>";
 
-                databaseHandler.addPictures(new Pictures(orderNo.getText().toString()
+
+                picture = new Pictures(orderNo.getText().toString()
                         , pics.get(0)
                         , pics.get(1)
                         , pics.get(2)
@@ -356,8 +367,11 @@ public class LoadingOrder2 extends AppCompatActivity {
                         , pics.get(4)
                         , pics.get(5)
                         , pics.get(6)
-                        , pics.get(7)));
+                        , pics.get(7));
 
+                jsonArrayPics.put(picture.getJSONObject());
+
+                databaseHandler.addPictures(picture);
 //                                    printReport();
 
 //                                    new SendMailTask(LoadingOrder2.this).execute(senderName, senderPassword
@@ -405,12 +419,13 @@ public class LoadingOrder2 extends AppCompatActivity {
         if (requestCode == 1888 && resultCode == Activity.RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+            thumbnail = getResizedBitmap(thumbnail, 100, 100);
             File picture = null;
 
             if (extras != null) {
 //                Bitmap pic = extras.getParcelable("data");
                 if (index != -1) {
-                    bundles.get(index).setPicture(thumbnail);
+                    bundles.get(index).setPicture(BitMapToString(thumbnail));
                     String root9 = Environment.getExternalStorageDirectory().getAbsolutePath();
                     picture = new File(root9, "bundleImage" + index + ".png");
                     adapter.notifyDataSetChanged();
@@ -418,49 +433,49 @@ public class LoadingOrder2 extends AppCompatActivity {
                     switch (imageNo) {
                         case 1:
                             img1.setImageBitmap(thumbnail);
-                            pics.set(0, thumbnail);
+                            pics.set(0, BitMapToString(thumbnail));
 //                            String root1 = Environment.getExternalStorageDirectory().getAbsolutePath();
 //                            picture = new File(root1, "pic1.png");
                             break;
                         case 2:
                             img2.setImageBitmap(thumbnail);
-                            pics.set(1, thumbnail);
+                            pics.set(1, BitMapToString(thumbnail));
 //                            String root2 = Environment.getExternalStorageDirectory().getAbsolutePath();
 //                            picture = new File(root2, "pic2.png");
                             break;
                         case 3:
                             img3.setImageBitmap(thumbnail);
-                            pics.set(2, thumbnail);
+                            pics.set(2, BitMapToString(thumbnail));
 //                            String root3 = Environment.getExternalStorageDirectory().getAbsolutePath();
 //                            picture = new File(root3, "pic3.png");
                             break;
                         case 4:
                             img4.setImageBitmap(thumbnail);
-                            pics.set(3, thumbnail);
+                            pics.set(3, BitMapToString(thumbnail));
 //                            String root4 = Environment.getExternalStorageDirectory().getAbsolutePath();
 //                            picture = new File(root4, "pic4.png");
                             break;
                         case 5:
                             img5.setImageBitmap(thumbnail);
-                            pics.set(4, thumbnail);
+                            pics.set(4, BitMapToString(thumbnail));
 //                            String root5 = Environment.getExternalStorageDirectory().getAbsolutePath();
 //                            picture = new File(root5, "pic5.png");
                             break;
                         case 6:
                             img6.setImageBitmap(thumbnail);
-                            pics.set(5, thumbnail);
+                            pics.set(5, BitMapToString(thumbnail));
 //                            String root6 = Environment.getExternalStorageDirectory().getAbsolutePath();
 //                            picture = new File(root6, "pic6.png");
                             break;
                         case 7:
                             img7.setImageBitmap(thumbnail);
-                            pics.set(6, thumbnail);
+                            pics.set(6, BitMapToString(thumbnail));
 //                            String root7 = Environment.getExternalStorageDirectory().getAbsolutePath();
 //                            picture = new File(root7, "pic7.png");
                             break;
                         case 8:
                             img8.setImageBitmap(thumbnail);
-                            pics.set(7, thumbnail);
+                            pics.set(7, BitMapToString(thumbnail));
 //                            String root8 = Environment.getExternalStorageDirectory().getAbsolutePath();
 //                            picture = new File(root8, "pic8.png");
                             break;
@@ -689,15 +704,14 @@ public class LoadingOrder2 extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        Log.e("****** ", "onResume");
-        img1.setImageBitmap(pics.get(0));
-        img2.setImageBitmap(pics.get(1));
-        img3.setImageBitmap(pics.get(2));
-        img4.setImageBitmap(pics.get(3));
-        img5.setImageBitmap(pics.get(4));
-        img6.setImageBitmap(pics.get(5));
-        img7.setImageBitmap(pics.get(6));
-        img8.setImageBitmap(pics.get(7));
+        img1.setImageBitmap(StringToBitMap(pics.get(0)));
+        img2.setImageBitmap(StringToBitMap(pics.get(1)));
+        img3.setImageBitmap(StringToBitMap(pics.get(2)));
+        img4.setImageBitmap(StringToBitMap(pics.get(3)));
+        img5.setImageBitmap(StringToBitMap(pics.get(4)));
+        img6.setImageBitmap(StringToBitMap(pics.get(5)));
+        img7.setImageBitmap(StringToBitMap(pics.get(6)));
+        img8.setImageBitmap(StringToBitMap(pics.get(7)));
     }
 
     public DatePickerDialog.OnDateSetListener openDatePickerDialog(final int flag) {
@@ -762,6 +776,50 @@ public class LoadingOrder2 extends AppCompatActivity {
         overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
     }
 
+    public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
+        if (bm != null) {
+            int width = bm.getWidth();
+            int height = bm.getHeight();
+            float scaleWidth = ((float) newWidth) / width;
+            float scaleHeight = ((float) newHeight) / height;
+            // CREATE A MATRIX FOR THE MANIPULATION
+            Matrix matrix = new Matrix();
+            // RESIZE THE BIT MAP
+            matrix.postScale(scaleWidth, scaleHeight);
+
+            // "RECREATE" THE NEW BITMAP
+            Bitmap resizedBitmap = Bitmap.createBitmap(
+                    bm, 0, 0, width, height, matrix, false);
+            return resizedBitmap;
+        }
+        return null;
+    }
+
+    public String BitMapToString(Bitmap bitmap) {
+        if (bitmap != null) {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+            byte[] arr = baos.toByteArray();
+            String result = Base64.encodeToString(arr, Base64.DEFAULT);
+            return result;
+        }
+
+        return "";
+    }
+
+
+    public Bitmap StringToBitMap(String image) {
+        try {
+            byte[] encodeByte = Base64.decode(image, Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        } catch (Exception e) {
+            e.getMessage();
+            return null;
+        }
+    }
+
+
     private class JSONTask extends AsyncTask<String, String, String> {
 
         @Override
@@ -781,6 +839,7 @@ public class LoadingOrder2 extends AppCompatActivity {
 
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
                 nameValuePairs.add(new BasicNameValuePair("BUNDLE_ORDERS", jsonArrayOrders.toString().trim()));
+                nameValuePairs.add(new BasicNameValuePair("BUNDLE_PIC", jsonArrayPics.toString().trim()));
 
                 request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
