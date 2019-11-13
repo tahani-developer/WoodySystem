@@ -59,6 +59,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         login = findViewById(R.id.login_login_btn);
         settings = findViewById(R.id.login_settings);
         linearLayout = findViewById(R.id.login_linearLayout);
+        SettingsFile.store = "Amman";
 
         login.setOnClickListener(this);
         logoImage.setOnClickListener(this);
@@ -84,18 +85,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 startActivity(intent);
                 setSlideAnimation();
 
-//                if (!usernameText.equals("") || !usernameText.equals(null)){
-//                    if (!passwordText.equals("") || !passwordText.equals(null)){
-//                        usersList = databaseHandler.getUsers();
-//                        for (int i = 0; i<usersList.size(); i++)
-//                            if (usernameText.equals(usersList.get(i).getUsername())
-//                                    && passwordText.equals(usersList.get(i).getPassword())){
-//                                i = usersList.size();
-//                                Intent intent = new Intent(this, MainActivity.class);
-//                                startActivity(intent);
-//                            }
+                if ((!SettingsFile.companyName.isEmpty()) && (!SettingsFile.ipAddress.isEmpty())) {
+//                    if (!usernameText.equals("") || !usernameText.equals(null)) {
+//                        if (!passwordText.equals("") || !passwordText.equals(null)) {
+//                            usersList = databaseHandler.getUsers();
+//                            for (int i = 0; i < usersList.size(); i++)
+//                                if (usernameText.equals(usersList.get(i).getUsername())
+//                                        && passwordText.equals(usersList.get(i).getPassword())) {
+//                                    i = usersList.size();
+                                    Intent intent2 = new Intent(this, MainActivity.class);
+                                    startActivity(intent2);
+//                                }
+//                        }
 //                    }
-//                }
+                } else {
+                    Toast.makeText(this, "Please fill settings first!", Toast.LENGTH_SHORT).show();
+                }
 
                 break;
             case R.id.login_logo:
@@ -148,7 +153,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                     @Override
                     public void onNothingSelected(AdapterView<?> parent) {
-                        settings.setStore("Amman");
+//                        settings.setStore("Amman");
                     }
                 });
 
