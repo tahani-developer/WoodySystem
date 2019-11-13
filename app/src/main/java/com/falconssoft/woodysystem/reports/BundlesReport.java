@@ -1,7 +1,9 @@
 package com.falconssoft.woodysystem.reports;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -24,6 +26,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.falconssoft.woodysystem.AddToInventory;
 import com.falconssoft.woodysystem.DatabaseHandler;
 import com.falconssoft.woodysystem.MainActivity;
 import com.falconssoft.woodysystem.R;
@@ -72,7 +75,7 @@ public class BundlesReport extends AppCompatActivity {
     }
 
     void fillTable() {
-        bundleInfos = databaseHandler.getAllBundleInfo(SettingsFile.store);
+        bundleInfos = databaseHandler.getAllBundleInfo(SettingsFile.store, "0");
 //        TableRow tableRowBasic = new TableRow(this);
 //        tableRowBasic = fillTableRows(tableRowBasic
 //                , "Bundle#"
@@ -84,9 +87,9 @@ public class BundlesReport extends AppCompatActivity {
 //                , "Location"
 //                , "Area");
 //        bundlesTable.addView(tableRowBasic);
-
+        TableRow tableRow;
         for (int m = 0; m < bundleInfos.size(); m++) {
-            TableRow tableRow = new TableRow(this);
+             tableRow = new TableRow(this);
             tableRow = fillTableRows(tableRow
                     , bundleInfos.get(m).getBundleNo()
                     , "" + bundleInfos.get(m).getLength()
@@ -98,31 +101,51 @@ public class BundlesReport extends AppCompatActivity {
                     , bundleInfos.get(m).getArea());
             bundlesTable.addView(tableRow);
 
-            TableRow finalTableRow = tableRow;
-            tableRow.getVirtualChildAt(8).setOnClickListener(new View.OnClickListener() {
+//            TableRow finalTableRow = tableRow;
+//            tableRow.getVirtualChildAt(8).setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    PrintHelper photoPrinter = new PrintHelper(BundlesReport.this);
+//                    photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
+//                    TextView bundleNo=(TextView) finalTableRow.getChildAt(0);
+//                    TextView length=(TextView) finalTableRow.getChildAt(1);
+//                    TextView width=(TextView) finalTableRow.getChildAt(2);
+//                    TextView thic=(TextView) finalTableRow.getChildAt(3);
+//                    TextView grade=(TextView) finalTableRow.getChildAt(4);
+//                    TextView pcs=(TextView) finalTableRow.getChildAt(5);
+//                    Bitmap bitmap=writeBarcode(bundleNo.getText().toString(),length.getText().toString(),width.getText().toString(),
+//                            thic.getText().toString(),grade.getText().toString(),pcs.getText().toString());
+//
+//                    photoPrinter.printBitmap("invoice.jpg", bitmap);
+//                    Toast.makeText(BundlesReport.this, "tested+"+bundleNo.getText().toString(), Toast.LENGTH_SHORT).show();
+//
+//                }
+//            });
+
+            TableRow clickTableRow = tableRow;
+            tableRow.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
-                public void onClick(View v) {
-                    PrintHelper photoPrinter = new PrintHelper(BundlesReport.this);
-                    photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
-                    TextView bundleNo=(TextView) finalTableRow.getChildAt(0);
-                    TextView length=(TextView) finalTableRow.getChildAt(1);
-                    TextView width=(TextView) finalTableRow.getChildAt(2);
-                    TextView thic=(TextView) finalTableRow.getChildAt(3);
-                    TextView grade=(TextView) finalTableRow.getChildAt(4);
-                    TextView pcs=(TextView) finalTableRow.getChildAt(5);
-                    Bitmap bitmap=writeBarcode(bundleNo.getText().toString(),length.getText().toString(),width.getText().toString(),
-                            thic.getText().toString(),grade.getText().toString(),pcs.getText().toString());
-
-
-                    photoPrinter.printBitmap("invoice.jpg", bitmap);
-                    Toast.makeText(BundlesReport.this, "tested+"+bundleNo.getText().toString(), Toast.LENGTH_SHORT).show();
-
-
+                public boolean onLongClick(View v) {
+//                                                TextView textView = ((TextView) tableRow.getChildAt(0));
+//                                                tableRow.setBackgroundResource(R.color.light_orange_2);
+                    String bundleNo = ((TextView) clickTableRow.getChildAt(0)).getText().toString();
+                    Log.e("b", bundleNo);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(BundlesReport.this);
+                    builder.setMessage("Are you want hide bundle number: " + bundleNo + " ?");
+                    builder.setTitle("Delete");
+                    builder.setIcon(R.drawable.ic_warning_black_24dp);
+                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            databaseHandler.updateBundlesFlag(bundleNo, "1");
+                            bundlesTable.removeView(clickTableRow);
+                        }
+                    });
+                    builder.show();
+                    return false;
                 }
             });
         }
-
-
     }
 
     TableRow fillTableRows(TableRow tableRow, String bundlNo, String length, String width, String thic, String grade, String noOfPieces, String location, String area) {
@@ -214,7 +237,6 @@ public class BundlesReport extends AppCompatActivity {
         super.finish();
         setSlideAnimation();
     }
-
 
     public Bitmap writeBarcode(String data,String length,String width,String thic,String grades,String pcs) {
         final Dialog dialog = new Dialog(BundlesReport.this);

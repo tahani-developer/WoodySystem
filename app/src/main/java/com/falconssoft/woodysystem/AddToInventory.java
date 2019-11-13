@@ -215,6 +215,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                             foundBarcode = true;
                                             break;
                                         }
+
                                     if (!foundBarcode) {
                                         linearLayoutView.setVisibility(View.VISIBLE);
                                         mState = true;

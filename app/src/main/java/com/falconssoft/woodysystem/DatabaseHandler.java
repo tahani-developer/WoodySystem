@@ -45,6 +45,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String BUNDLE_INFO_AREA = "AREA";
     private static final String BUNDLE_BARCODE = "BARCODE";
     private static final String BUNDLE_INFO_ORDERED = "ORDERED";
+    private static final String BUNDLE_INFO_FLAG = "FLAG";
 
     //******************************************************************
     private static final String USERS_TABLE = "USERS_TABLE";
@@ -105,7 +106,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + BUNDLE_INFO_LOCATION + " TEXT,"
                 + BUNDLE_INFO_AREA + " TEXT,"
                 + BUNDLE_BARCODE + " TEXT,"
-                + BUNDLE_INFO_ORDERED + " INTEGER" + ")";
+                + BUNDLE_INFO_ORDERED + " INTEGER,"
+                + BUNDLE_INFO_FLAG + " TEXT"+ ")";
         db.execSQL(CREATE_INVENTORY_INFO_TABLE);
 
         String CREATE_TABLE_USERS = "CREATE TABLE " + USERS_TABLE + "("
@@ -200,6 +202,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         contentValues.put(BUNDLE_INFO_AREA, bundleInfo.getArea());
         contentValues.put(BUNDLE_BARCODE, bundleInfo.getBarcode());
         contentValues.put(BUNDLE_INFO_ORDERED, bundleInfo.getOrdered());
+        contentValues.put(BUNDLE_INFO_FLAG, "0");
 
         db.insert(BUNDLE_INFO_TABLE, null, contentValues);
         db.close();
@@ -357,10 +360,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return bundleInfoList;
     }
 
-    public List<BundleInfo> getAllBundleInfo(String location) {
+    public List<BundleInfo> getAllBundleInfo(String location, String flag) {
         List<BundleInfo> bundleInfoList = new ArrayList<>();
 
-        String selectQuery = "SELECT  * FROM " + BUNDLE_INFO_TABLE + " where LOCATION = '" + location + "'";
+        String selectQuery = "SELECT  * FROM " + BUNDLE_INFO_TABLE + " where LOCATION = '" + location + "' AND FLAG = '" + flag + "'";
         db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
@@ -378,6 +381,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 bundleInfo.setArea(cursor.getString(7));
                 bundleInfo.setBarcode(cursor.getString(8));
                 bundleInfo.setOrdered(Integer.parseInt(cursor.getString(9)));
+                bundleInfo.setHideFlag(cursor.getString(10));
                 bundleInfo.setChecked(false);
 
                 bundleInfoList.add(bundleInfo);
@@ -458,6 +462,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.update(BUNDLE_INFO_TABLE, values, BUNDLE_INFO_BUNDLE_NO + " = '" + bundleNo + "'", null);
     }
 
+    public void updateBundlesFlag(String bundleNo, String flag) {
+        db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(BUNDLE_INFO_FLAG, "1");
+        db.update(BUNDLE_INFO_TABLE, values, BUNDLE_INFO_BUNDLE_NO + " = '" + bundleNo + "'", null);
+    }
     // **************************************************** Delete ****************************************************
 
     public void deleteSettings() {
