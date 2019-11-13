@@ -165,13 +165,14 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         switch (v.getId()) {
             case R.id.addToInventory_add_button:
                 boolean foundBarcode = false;
-
+//http://5.189.130.98:8085/import.php?FLAG=1
                 if (!TextUtils.isEmpty(thickness.getText().toString())) {
                     if (!TextUtils.isEmpty(width.getText().toString())) {
                         if (!TextUtils.isEmpty(length.getText().toString())) {
                             if (!TextUtils.isEmpty(noOfPieces.getText().toString())) {
 //                                Log.e("serial" , " " + !SettingsFile.serialNumber.equals(""));
 //                                Log.e("serial" , " " + !SettingsFile.serialNumber.equals(null));
+                                Log.e("serialNumber", "" + SettingsFile.serialNumber);
                                 if ((!SettingsFile.serialNumber.equals("")) && (!SettingsFile.serialNumber.equals(null))) {
                                     String locationString = null, gradeString = null;
                                     switch (gradeText) {
@@ -235,7 +236,6 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                                 , 5
                                                 , "june"
                                                 , 0);
-//                                        databaseHandler.addNewBundle(newBundle);
 
                                         TableRow tableRow = new TableRow(this);
                                         for (int i = 0; i < 8; i++) {
@@ -419,11 +419,11 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         @Override
         protected String doInBackground(String... params) {
             try {
-
+//https://5.189.130.98/WOODY/export.php
                 String JsonResponse = null;
                 HttpClient client = new DefaultHttpClient();
                 HttpPost request = new HttpPost();
-                request.setURI(new URI("http://10.0.0.214/WOODY/export.php"));//import
+                request.setURI(new URI("http://" + SettingsFile.ipAddress + "/export.php"));//import 10.0.0.214
 
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
                 nameValuePairs.add(new BasicNameValuePair("BUNDLE_INFO", jsonArrayBundles.toString().trim()));

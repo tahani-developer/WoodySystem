@@ -106,7 +106,7 @@ public class LoadingOrderReport extends AppCompatActivity {
 
             try {
 
-                URL url = new URL("http://10.0.0.214/WOODY/import.php?FLAG=2");
+                URL url = new URL("http://" + SettingsFile.ipAddress +"/import.php?FLAG=2");
 
                 URLConnection conn = url.openConnection();
                 conn.setDoOutput(true);

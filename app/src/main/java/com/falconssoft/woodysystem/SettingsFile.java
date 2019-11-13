@@ -31,7 +31,7 @@ public class SettingsFile {
 
     public static String companyName = "";
 
-    public static String ipAddress = "";
+    public static String ipAddress = "5.189.130.98:8085";
 
     public static String store = "";
 

@@ -835,7 +835,7 @@ public class LoadingOrder2 extends AppCompatActivity {
                 String JsonResponse = null;
                 HttpClient client = new DefaultHttpClient();
                 HttpPost request = new HttpPost();
-                request.setURI(new URI("http://10.0.0.214/WOODY/export.php"));
+                request.setURI(new URI("http://" + SettingsFile.ipAddress + "/export.php"));
 
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
                 nameValuePairs.add(new BasicNameValuePair("BUNDLE_ORDERS", jsonArrayOrders.toString().trim()));

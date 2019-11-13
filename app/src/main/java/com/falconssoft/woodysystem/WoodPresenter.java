@@ -22,8 +22,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
     private Context context;
     private RequestQueue requestQueue;
     private StringRequest jsonObjectRequest;
-    private String URLImport = "http://10.0.0.214/WOODY/import.php?FLAG=1";
-
+    private String URLImport = "http://" + SettingsFile.ipAddress +  "/import.php?FLAG=1";//http://5.189.130.98:8085/import.php?FLAG=1
     public WoodPresenter(Context context) {
         this.context = context;
         this.requestQueue = Volley.newRequestQueue(context);
@@ -45,9 +44,12 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
         Log.e("presenter: import ", "" + response);
         try {
             JSONObject object = new JSONObject(response);
+            Log.e("presenter1: import ", "" + response);
             JSONObject object2 = object.getJSONArray("Bundles").getJSONObject(0);
+            Log.e("presenter2: import ", "" + object2);
             SettingsFile.serialNumber = "";
             SettingsFile.serialNumber = object2.getString("MAX_SERIAL");
+            Log.e("presenter3: import ", "" + SettingsFile.serialNumber);
         } catch (JSONException e) {
             e.printStackTrace();
         }
