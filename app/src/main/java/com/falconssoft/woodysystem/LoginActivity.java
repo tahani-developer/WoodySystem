@@ -31,6 +31,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.falconssoft.woodysystem.SettingsFile.usersList;
+
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private LinearLayout linearLayout;
@@ -38,12 +40,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private Button login, saveSettings;
     private ImageView logoImage, settings;
     private DatabaseHandler databaseHandler;
-    private List<Users> usersList = new ArrayList<>();
     private final int IMAGE_CODE = 5;
     private Animation animation;
     private Spinner storesSpinner;
     private List<String> storesList = new ArrayList<>();
     private ArrayAdapter<String> storesAdapter;
+    private WoodPresenter woodPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         databaseHandler = new DatabaseHandler(this);
         databaseHandler.getSettings();
+        woodPresenter = new WoodPresenter(this);
+//        woodPresenter.getImportData();
+
+        if ((!SettingsFile.companyName.equals("")) && (!SettingsFile.ipAddress.equals(""))) {
+            woodPresenter.getUsersData();
+        } else {
+            Toast.makeText(this, "Please fill settings!", Toast.LENGTH_SHORT).show();
+        }
 
         username = findViewById(R.id.login_username);
         password = findViewById(R.id.login_password);
@@ -80,26 +90,32 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.login_login_btn:
                 String usernameText = username.getText().toString();
                 String passwordText = password.getText().toString();
+                boolean found = false;
 
-                Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
-                setSlideAnimation();
+//                Intent intent = new Intent(this, MainActivity.class);
+//                startActivity(intent);
+//                setSlideAnimation();
 
-                if ((!SettingsFile.companyName.isEmpty()) && (!SettingsFile.ipAddress.isEmpty())) {
-//                    if (!usernameText.equals("") || !usernameText.equals(null)) {
-//                        if (!passwordText.equals("") || !passwordText.equals(null)) {
+                if ((!SettingsFile.companyName.equals("")) && (!SettingsFile.ipAddress.equals(""))) {
+                    if (!usernameText.equals("") || !usernameText.equals(null)) {
+                        if (!passwordText.equals("") || !passwordText.equals(null)) {
 //                            usersList = databaseHandler.getUsers();
-//                            for (int i = 0; i < usersList.size(); i++)
-//                                if (usernameText.equals(usersList.get(i).getUsername())
-//                                        && passwordText.equals(usersList.get(i).getPassword())) {
-//                                    i = usersList.size();
+                            for (int i = 0; i < usersList.size(); i++)
+                                if (usernameText.equals(usersList.get(i).getUsername())
+                                        && passwordText.equals(usersList.get(i).getPassword())) {
+                                    found = true;
+                                    i = usersList.size();
                                     Intent intent2 = new Intent(this, MainActivity.class);
                                     startActivity(intent2);
-//                                }
-//                        }
-//                    }
+                                }
+
+                            if (!found){
+                                Toast.makeText(this, "Username or password is wrong or check settings! ", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
                 } else {
-                    Toast.makeText(this, "Please fill settings first!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Please fill settings first!!!!", Toast.LENGTH_SHORT).show();
                 }
 
                 break;
@@ -126,6 +142,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 storesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 storesSpinner.setAdapter(storesAdapter);
 
+                databaseHandler.getSettings();
                 companyName.setText(SettingsFile.companyName);
                 ipAddress.setText(SettingsFile.ipAddress);
                 switch (SettingsFile.store) {
@@ -166,6 +183,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 settings.setIpAddress(ipAddress.getText().toString());
                                 databaseHandler.deleteSettings();
                                 databaseHandler.addSettings(settings);
+                                woodPresenter.getUsersData();
                                 Toast.makeText(LoginActivity.this, "Saved Successfully", Toast.LENGTH_SHORT).show();
                                 settingDialog.dismiss();
                             } else {

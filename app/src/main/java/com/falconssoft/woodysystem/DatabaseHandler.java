@@ -178,6 +178,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         contentValues.put(SETTINGS_IP_ADDRESS, settings.getIpAddress());
         contentValues.put(SETTINGS_STORE, settings.getStore());
 
+        SettingsFile.companyName = settings.getCompanyName();
+        SettingsFile.ipAddress = settings.getIpAddress();
+        SettingsFile.store = settings.getStore();
+
         db.insert(SETTINGS_TABLE, null, contentValues);
         db.close();
     }
@@ -309,6 +313,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     // **************************************************** Getting ****************************************************
+
     public void getSettings() {
         String selectQuery = "SELECT * FROM " + SETTINGS_TABLE;
         db = this.getWritableDatabase();
@@ -454,9 +459,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     // **************************************************** Delete ****************************************************
+
     public void deleteSettings() {
         db = this.getWritableDatabase();
         db.delete(SETTINGS_TABLE, null, null);
+        db.close();
+    }
+
+    public void deleteUsers() {
+        db = this.getWritableDatabase();
+        db.delete(USERS_TABLE, null, null);
         db.close();
     }
 
