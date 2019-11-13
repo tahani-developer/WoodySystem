@@ -316,64 +316,22 @@
                     >
 
                     <TextView
-                        android:id="@+id/addToInventory_bundle_no"
+                        android:id="@+id/addToInventory_add_button"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:text="@string/generate_bundle_no"
+                        android:drawableStart="@drawable/ic_add_white_38dp"
+                        android:drawableLeft="@drawable/ic_add_white_38dp"
+                        android:paddingStart="70dp"
+                        android:paddingLeft="70dp"
+                        android:paddingEnd="90dp"
+                        android:paddingRight="90dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="@string/add"
                         android:textColor="@color/white"
                        />
 
                 </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="5dp"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp"
-                >
-
-                <TextView
-                    android:id="@+id/addToInventory_bundle_no_tv"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/border_background"
-                    android:layout_weight="3.2"
-                    android:fontFamily="serif"
-                    android:textAllCaps="false"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
-                    android:textSize="20sp"
-                    />
-
-                <Button
-                    android:id="@+id/addToInventory_add_button"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:background="@drawable/frame_shape"
-                    android:drawableStart="@drawable/ic_add_white_38dp"
-                    android:drawableLeft="@drawable/ic_add_white_38dp"
-                    android:paddingEnd="60dp"
-                    android:paddingRight="60dp"
-                    android:paddingLeft="80dp"
-                    android:fontFamily="serif"
-                    android:text="@string/add"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
-                    />
 
             </LinearLayout>
 
