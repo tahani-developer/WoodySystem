@@ -186,10 +186,10 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                 , bundleNoString
                                 , locationText
                                 , areaText
-                                , 1
-                                , 53
-                                , 5
-                                , "june"
+                                , 0
+                                , 0
+                                , 0
+                                , ""
                                 , 0);
                         databaseHandler.addNewBundle(newBundle);
 
@@ -335,7 +335,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 //                                    Log.e("serial" , " " + SettingsFile.serialNumber);
 
 //                                    presenter.getImportData();
-                                }else {
+                                } else {
 //                                    presenter.getImportData();
                                     Toast.makeText(this, "No serial number is generated!", Toast.LENGTH_SHORT).show();
                                 }
@@ -375,7 +375,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 
         // Restore state members from saved instance
         mState = savedInstanceState.getBoolean(STATE_VISIBILITY);
-        linearLayoutView.setVisibility(mState?View.VISIBLE:View.GONE);
+        linearLayoutView.setVisibility(mState ? View.VISIBLE : View.GONE);
         bundleNumber.setText(bundleNoString);
         presenter.getImportData();
         List<TableRow> tableRows = (List<TableRow>) savedInstanceState.getSerializable("table");
@@ -443,7 +443,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                 String JsonResponse = null;
                 HttpClient client = new DefaultHttpClient();
                 HttpPost request = new HttpPost();
-                request.setURI(new URI("http://10.0.0.214/WOODY/export.php"));//import
+                request.setURI(new URI("http://5.189.130.98/WOODY/export.php"));//import
 
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
                 nameValuePairs.add(new BasicNameValuePair("BUNDLE_INFO", jsonArrayBundles.toString().trim()));
@@ -474,7 +474,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                 return null;
             }
         }
- 
+
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);

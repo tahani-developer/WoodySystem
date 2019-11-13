@@ -22,13 +22,13 @@ public class BundleInfo {
     private String dateOfLoad;
     private boolean checked;
     private String barcode;
-    private Bitmap picture;
+    private String  picture;
     private int ordered;
 
     public BundleInfo() {
     }
 
-    public BundleInfo(double thickness, double length, double width, String grade, int noOfPieces, String bundleNo, String location, String area, String barcode, Bitmap pic) {
+    public BundleInfo(double thickness, double length, double width, String grade, int noOfPieces, String bundleNo, String location, String area, String barcode, String pic) {
         this.thickness = thickness;
         this.length = length;
         this.width = width;
@@ -137,11 +137,11 @@ public class BundleInfo {
         this.checked = checked;
     }
 
-    public Bitmap getPicture() {
+    public String getPicture() {
         return picture;
     }
 
-    public void setPicture(Bitmap picture) {
+    public void setPicture(String picture) {
         this.picture = picture;
     }
 
