@@ -2,7 +2,11 @@ package com.falconssoft.woodysystem;
 
 import android.net.Uri;
 
+import com.falconssoft.woodysystem.models.Users;
+
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SettingsFile {
 
@@ -31,10 +35,12 @@ public class SettingsFile {
 
     public static String companyName = "";
 
-    public static String ipAddress = "5.189.130.98:8085";
+    public static String ipAddress = "";//5.189.130.98:8085
 
     public static String store = "";
 
     public static String area;
+
+    public static List<Users> usersList = new ArrayList<>();
 
 }

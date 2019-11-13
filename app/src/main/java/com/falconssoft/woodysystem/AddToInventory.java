@@ -97,27 +97,22 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 
         databaseHandler = new DatabaseHandler(this);
         presenter = new WoodPresenter(this);
-        presenter.getImportData();
 
         thickness = findViewById(R.id.addToInventory_thickness);
         length = findViewById(R.id.addToInventory_length);
         width = findViewById(R.id.addToInventory_width);
         noOfPieces = findViewById(R.id.addToInventory_no_of_pieces);
-        generateBundleNo = findViewById(R.id.addToInventory_bundle_no);
         gradeSpinner = findViewById(R.id.addToInventory_grade);
         locationSpinner = findViewById(R.id.addToInventory_location);
         areaSpinner = findViewById(R.id.addToInventory_area);
         addToInventory = findViewById(R.id.addToInventory_add_button);
 //        newBundleButton = findViewById(R.id.addToInventory_new_button);
-        bundleNumber = findViewById(R.id.addToInventory_bundle_no_tv);
         textView = findViewById(R.id.addToInventory_textView);
         bundlesTable = findViewById(R.id.addToInventory_table);
         linearLayoutView = findViewById(R.id.addToInventory_table_view);
         linearLayoutView.setVisibility(View.GONE);
 
-        generateBundleNo.setOnClickListener(this);
         addToInventory.setOnClickListener(this);
-//        newBundleButton.setOnClickListener(this);
 
         gradeList.add("Fresh");
         gradeList.add("BS");
