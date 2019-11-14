@@ -24,6 +24,7 @@ public class BundleInfo {
     private String barcode;
     private String  picture;
     private int ordered;
+    private String hideFlag;// 0 => show, 1 => hide
 
     public BundleInfo() {
     }
@@ -39,6 +40,20 @@ public class BundleInfo {
         this.area = area;
         this.barcode = barcode;
         this.picture = pic;
+    }
+
+    public BundleInfo(double thickness, double length, double width, String grade, int noOfPieces, String bundleNo, String location, String area, String barcode, String pic, String hideFlag) {
+        this.thickness = thickness;
+        this.length = length;
+        this.width = width;
+        this.grade = grade;
+        this.noOfPieces = noOfPieces;
+        this.bundleNo = bundleNo;
+        this.location = location;
+        this.area = area;
+        this.barcode = barcode;
+        this.picture = pic;
+        this.hideFlag = hideFlag;
     }
 
     public BundleInfo(double thickness, double length, double width, String grade, int noOfPieces, String bundleNo, String location, String area, int placingNo, int orderNo, int containerNo, String dateOfLoad, int ordered) {
@@ -151,6 +166,14 @@ public class BundleInfo {
 
     public void setOrdered(int ordered) {
         this.ordered = ordered;
+    }
+
+    public String getHideFlag() {
+        return hideFlag;
+    }
+
+    public void setHideFlag(String hideFlag) {
+        this.hideFlag = hideFlag;
     }
 
     public JSONObject getJSONObject() {
