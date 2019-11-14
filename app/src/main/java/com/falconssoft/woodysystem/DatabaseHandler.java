@@ -334,7 +334,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public List<BundleInfo> getBundleInfo() {
         List<BundleInfo> bundleInfoList = new ArrayList<>();
 
-        String selectQuery = "SELECT  * FROM " + BUNDLE_INFO_TABLE + " where ORDERED = '0'";
+        String selectQuery = "SELECT  * FROM " + BUNDLE_INFO_TABLE + " where ORDERED = '0' and LOCATION = (select STORE from SETTINGS_TABLE)" ;
         db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
@@ -363,7 +363,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public List<BundleInfo> getAllBundleInfo(String location, String flag) {
         List<BundleInfo> bundleInfoList = new ArrayList<>();
 
-        String selectQuery = "SELECT  * FROM " + BUNDLE_INFO_TABLE + " where LOCATION = '" + location + "' AND FLAG = '" + flag + "'";
+        String selectQuery = "SELECT  * FROM " + BUNDLE_INFO_TABLE + " where LOCATION = (select STORE from SETTINGS_TABLE)";
         db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 

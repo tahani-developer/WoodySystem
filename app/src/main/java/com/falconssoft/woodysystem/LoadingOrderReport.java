@@ -18,10 +18,12 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -45,6 +47,7 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Spliterator;
 
 public class LoadingOrderReport extends AppCompatActivity {
 
@@ -57,6 +60,8 @@ public class LoadingOrderReport extends AppCompatActivity {
     private List<Pictures> pictures;
     private Animation animation;
     ItemsListAdapter2 adapter;
+    Spinner location;
+    private ArrayAdapter<String> locationAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +77,17 @@ public class LoadingOrderReport extends AppCompatActivity {
         listView = findViewById(R.id.listview);
         linearLayout = findViewById(R.id.linearLayout);
         arrow = findViewById(R.id.arrow);
+        location = findViewById(R.id.location);
+
+        List<String> locationList = new ArrayList<>();
+        locationList.add("");
+        locationList.add("Amman");
+        locationList.add("Kalinovka");
+        locationList.add("Rudniya Store");
+        locationList.add("Rudniya Sawmill");
+        locationAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, locationList);
+        locationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        location.setAdapter(locationAdapter);
 
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_to_right);
         textView.startAnimation(animation);
@@ -88,6 +104,37 @@ public class LoadingOrderReport extends AppCompatActivity {
         });
 
         new JSONTask().execute();
+
+        location.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+
+//                Log.e("oooo" , orders.get(0).getLocation());
+                Log.e("oooo" , parent.getItemAtPosition(position).toString());
+
+                if(orders.size()!=0) {
+                    List<Orders> filtered = new ArrayList<>();
+                    for (int k = 0; k < orders.size(); k++) {
+                        if (orders.get(k).getLocation().equals(parent.getItemAtPosition(position).toString()))
+                            filtered.add(orders.get(k));
+                    }
+
+                    Log.e("oooo" , filtered.get(0).getLocation() + " " + filtered.size());
+//                    orders.clear();
+                    orders=filtered;
+                    ordersTable.removeAllViews();
+                    fillTable();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
 
     }
 
