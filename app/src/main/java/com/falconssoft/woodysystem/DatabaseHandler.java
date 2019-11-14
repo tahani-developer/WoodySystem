@@ -360,10 +360,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return bundleInfoList;
     }
 
-    public List<BundleInfo> getAllBundleInfo(String location, String flag) {
+    public List<BundleInfo> getAllBundleInfo(String flag) {
         List<BundleInfo> bundleInfoList = new ArrayList<>();
 
-        String selectQuery = "SELECT  * FROM " + BUNDLE_INFO_TABLE + " where LOCATION = (select STORE from SETTINGS_TABLE)";
+//        String selectQuery = "SELECT  * FROM " + BUNDLE_INFO_TABLE + " where LOCATION = '" + location + "' AND FLAG = '" + flag + "'";
+
+        String selectQuery = "SELECT  * FROM " + BUNDLE_INFO_TABLE + " where LOCATION = (select STORE from SETTINGS_TABLE)"
+       +  " AND FLAG = '" + flag + "'";
+
         db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
@@ -462,7 +466,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.update(BUNDLE_INFO_TABLE, values, BUNDLE_INFO_BUNDLE_NO + " = '" + bundleNo + "'", null);
     }
 
-    public void updateBundlesFlag(String bundleNo, String flag) {
+    public void updateBundlesFlag(String bundleNo) {
         db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 

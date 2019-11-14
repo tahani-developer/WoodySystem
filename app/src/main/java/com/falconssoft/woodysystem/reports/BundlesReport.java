@@ -75,7 +75,7 @@ public class BundlesReport extends AppCompatActivity {
     }
 
     void fillTable() {
-        bundleInfos = databaseHandler.getAllBundleInfo(SettingsFile.store, "0");
+        bundleInfos = databaseHandler.getAllBundleInfo("0");
 //        TableRow tableRowBasic = new TableRow(this);
 //        tableRowBasic = fillTableRows(tableRowBasic
 //                , "Bundle#"
@@ -137,7 +137,7 @@ public class BundlesReport extends AppCompatActivity {
                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            databaseHandler.updateBundlesFlag(bundleNo, "1");
+                            databaseHandler.updateBundlesFlag(bundleNo);// 1 mean hide
                             bundlesTable.removeView(clickTableRow);
                         }
                     });
