@@ -1,5 +1,6 @@
 package com.falconssoft.woodysystem;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
@@ -20,6 +21,8 @@ import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -45,8 +48,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Spliterator;
 
 public class LoadingOrderReport extends AppCompatActivity {
@@ -54,14 +62,17 @@ public class LoadingOrderReport extends AppCompatActivity {
     private TextView textView;
     private TableLayout ordersTable;
     private LinearLayout linearLayout;
+    private EditText from, to;
     private Button arrow;
     private HorizontalListView listView;
     private List<Orders> orders, bundles;
     private List<Pictures> pictures;
     private Animation animation;
     ItemsListAdapter2 adapter;
-    private Spinner location;
+    private Calendar myCalendar;
+    Spinner location;
     private ArrayAdapter<String> locationAdapter;
+    private String loc = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +89,8 @@ public class LoadingOrderReport extends AppCompatActivity {
         linearLayout = findViewById(R.id.linearLayout);
         arrow = findViewById(R.id.arrow);
         location = findViewById(R.id.location);
+        from = findViewById(R.id.from);
+        to = findViewById(R.id.to);
 
         List<String> locationList = new ArrayList<>();
         locationList.add("");
@@ -108,21 +121,10 @@ public class LoadingOrderReport extends AppCompatActivity {
         location.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                Log.e("oooo" , orders.get(0).getLocation());
-                if (orders.size() != 0) {
-                    Log.e("oooo" , parent.getItemAtPosition(position).toString());
-                    List<Orders> filtered = new ArrayList<>();
-                    for (int k = 0; k < orders.size(); k++) {
-                        if (orders.get(k).getLocation().equals(parent.getItemAtPosition(position).toString()))
-                            filtered.add(orders.get(k));
-                    }
 
-                    Log.e("oooo", filtered.get(0).getLocation() + " " + filtered.size());
-//                    orders.clear();
-                    orders = filtered;
-                    ordersTable.removeAllViews();
-                    fillTable();
-                }
+                loc = parent.getSelectedItem().toString();
+                filters();
+
             }
 
             @Override
@@ -131,6 +133,27 @@ public class LoadingOrderReport extends AppCompatActivity {
             }
         });
 
+        myCalendar = Calendar.getInstance();
+
+        from.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                new DatePickerDialog(LoadingOrderReport.this, openDatePickerDialog(0), myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+
+        to.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                new DatePickerDialog(LoadingOrderReport.this, openDatePickerDialog(1), myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
 
     }
 
@@ -182,6 +205,7 @@ public class LoadingOrderReport extends AppCompatActivity {
                         order.setContainerNo(finalObject.getString("CONTAINER_NO"));
                         order.setDateOfLoad(finalObject.getString("DATE_OF_LOAD"));
                         order.setDestination(finalObject.getString("DESTINATION"));
+                        order.setLocation(finalObject.getString("LOCATION"));
 
                         orders.add(order);
                     }
@@ -297,7 +321,7 @@ public class LoadingOrderReport extends AppCompatActivity {
 
             if (result != null) {
                 Log.e("result", "*****************" + orders.size());
-                fillTable();
+                fillTable(orders);
 //                storeInDatabase();
             } else {
                 Toast.makeText(LoadingOrderReport.this, "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();
@@ -305,7 +329,7 @@ public class LoadingOrderReport extends AppCompatActivity {
         }
     }
 
-    void fillTable() {
+    void fillTable(List<Orders> orders) {
 
         for (int k = 0; k < orders.size(); k++) {
 
@@ -462,6 +486,33 @@ public class LoadingOrderReport extends AppCompatActivity {
 
     }
 
+    public DatePickerDialog.OnDateSetListener openDatePickerDialog(final int flag) {
+        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+
+                // TODO Auto-generated method stub
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, month);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                String myFormat = "dd/MM/yyyy";
+                SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+                if (flag == 0)
+                    from.setText(sdf.format(myCalendar.getTime()));
+                else
+                    to.setText(sdf.format(myCalendar.getTime()));
+
+                if (!from.getText().toString().equals("") && !from.getText().toString().equals(""))
+                    filters();
+
+            }
+
+        };
+        return date;
+    }
+
     public Bitmap StringToBitMap(String image) {
         try {
             byte[] encodeByte = Base64.decode(image, Base64.DEFAULT);
@@ -499,6 +550,39 @@ public class LoadingOrderReport extends AppCompatActivity {
 //        animate.setFillAfter(true);
         view.startAnimation(animate);
 
+    }
+
+    public Date formatDate(String date) throws ParseException {
+
+        String myFormat = "dd/MM/yyyy"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        Date d = sdf.parse(date);
+        return d;
+    }
+
+    public void filters() {
+
+        String fromDate = from.getText().toString().trim();
+        String toDate = to.getText().toString();
+
+        try {
+            List<Orders> filtered = new ArrayList<>();
+            for (int k = 0; k < orders.size(); k++) {
+
+                Log.e("-----" , orders.get(k).getLocation());
+
+                if ((formatDate(orders.get(k).getDateOfLoad()).after(formatDate(fromDate)) || formatDate(orders.get(k).getDateOfLoad()).equals(formatDate(fromDate))) &&
+                        (formatDate(orders.get(k).getDateOfLoad()).before(formatDate(toDate)) || formatDate(orders.get(k).getDateOfLoad()).equals(formatDate(toDate))) &&
+                        (loc.equals("") || loc.equals(orders.get(k).getLocation())))
+                    filtered.add(orders.get(k));
+            }
+
+            ordersTable.removeAllViews();
+            fillTable(filtered);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 }
 

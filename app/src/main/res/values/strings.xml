@@ -17,6 +17,8 @@
     <string name="bundle_num">Bundle No</string>
     <string name="location">Location</string>
     <string name="area">Area</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
 
     <string name="company_name">Company Name</string>
     <string name="ip_address">IP Address</string>
