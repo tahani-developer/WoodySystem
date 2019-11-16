@@ -60,7 +60,7 @@ public class LoadingOrderReport extends AppCompatActivity {
     private List<Pictures> pictures;
     private Animation animation;
     ItemsListAdapter2 adapter;
-    Spinner location;
+    private Spinner location;
     private ArrayAdapter<String> locationAdapter;
 
     @Override
@@ -70,7 +70,7 @@ public class LoadingOrderReport extends AppCompatActivity {
 
         orders = new ArrayList<>();
         bundles = new ArrayList<>();
-        pictures  = new ArrayList<>();
+        pictures = new ArrayList<>();
 
         textView = findViewById(R.id.loading_order_report);
         ordersTable = findViewById(R.id.orders_table);
@@ -108,21 +108,18 @@ public class LoadingOrderReport extends AppCompatActivity {
         location.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-
 //                Log.e("oooo" , orders.get(0).getLocation());
-                Log.e("oooo" , parent.getItemAtPosition(position).toString());
-
-                if(orders.size()!=0) {
+                if (orders.size() != 0) {
+                    Log.e("oooo" , parent.getItemAtPosition(position).toString());
                     List<Orders> filtered = new ArrayList<>();
                     for (int k = 0; k < orders.size(); k++) {
                         if (orders.get(k).getLocation().equals(parent.getItemAtPosition(position).toString()))
                             filtered.add(orders.get(k));
                     }
 
-                    Log.e("oooo" , filtered.get(0).getLocation() + " " + filtered.size());
+                    Log.e("oooo", filtered.get(0).getLocation() + " " + filtered.size());
 //                    orders.clear();
-                    orders=filtered;
+                    orders = filtered;
                     ordersTable.removeAllViews();
                     fillTable();
                 }
@@ -133,7 +130,6 @@ public class LoadingOrderReport extends AppCompatActivity {
 
             }
         });
-
 
 
     }
@@ -153,7 +149,7 @@ public class LoadingOrderReport extends AppCompatActivity {
 
             try {
 
-                URL url = new URL("http://" + SettingsFile.ipAddress +"/import.php?FLAG=2");
+                URL url = new URL("http://" + SettingsFile.ipAddress + "/import.php?FLAG=2");
 
                 URLConnection conn = url.openConnection();
                 conn.setDoOutput(true);
@@ -248,7 +244,7 @@ public class LoadingOrderReport extends AppCompatActivity {
                                     finalObject.getString("PIC" + k + "PART7") + finalObject.getString("PIC" + k + "PART8");
 
                             pic = pic.replaceAll("null", "");
-                            rowPics[k-1] = pic ;
+                            rowPics[k - 1] = pic;
                         }
 
                         picture.setPic1(rowPics[0]);
@@ -405,7 +401,7 @@ public class LoadingOrderReport extends AppCompatActivity {
 
                                 Pictures pics = new Pictures();
                                 for (int i = 0; i < pictures.size(); i++) {
-                                    if(pictures.get(i).getOrderNo().equals(orders.get(index1).getOrderNo())) {
+                                    if (pictures.get(i).getOrderNo().equals(orders.get(index1).getOrderNo())) {
                                         pics = pictures.get(i);
                                         break;
                                     }
@@ -439,7 +435,7 @@ public class LoadingOrderReport extends AppCompatActivity {
     }
 
 
-    public void openPicDialog( Pictures picts) {
+    public void openPicDialog(Pictures picts) {
         Dialog dialog = new Dialog(LoadingOrderReport.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);

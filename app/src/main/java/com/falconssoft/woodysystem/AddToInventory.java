@@ -239,15 +239,17 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                             textView.setBackgroundResource(R.color.light_orange);
                                             TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
                                             textViewParam.setMargins(1, 5, 1, 1);
-                                            textView.setTextSize(15);
+                                            textView.setTextSize(10);
                                             textView.setTextColor(ContextCompat.getColor(this, R.color.gray_dark_one));
                                             textView.setLayoutParams(textViewParam);
                                             switch (i) {
                                                 case 0:
                                                     textView.setText(bundleNoString);
+//                                                    textView.setTextSize(10);
                                                     break;
                                                 case 1:
                                                     textView.setText(lengthText);
+                                                    textView.setTextSize(15);
                                                     break;
                                                 case 2:
                                                     textView.setText(widthText);
