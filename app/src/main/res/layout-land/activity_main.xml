@@ -21,36 +21,24 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/s1"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginEnd="692dp"
-                android:layout_marginRight="692dp"
-                android:layout_marginBottom="181dp"
-                android:background="@drawable/border_background"
-                android:text="@string/stage1"
-                android:fontFamily="serif"
-                android:textColor="@color/orange"
-                android:textSize="30sp" />
-
-            <TextView
                 android:id="@+id/s2"
-                android:layout_width="250dp"
-                android:layout_height="250dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
+                android:layout_width="210dp"
+                android:layout_height="230dp"
                 android:layout_alignParentBottom="true"
-                android:layout_marginEnd="394dp"
-                android:layout_marginRight="394dp"
-                android:layout_marginBottom="163dp"
+                android:layout_marginStart="60dp"
+                android:layout_marginLeft="60dp"
+                android:layout_marginEnd="60dp"
+                android:layout_marginRight="60dp"
+                android:layout_marginBottom="152dp"
+                android:layout_toStartOf="@+id/s3"
+                android:layout_toLeftOf="@+id/s3"
+                android:layout_toEndOf="@+id/s1"
+                android:layout_toRightOf="@+id/s1"
                 android:background="@drawable/frame_shape"
-                android:text="@string/stage2"
                 android:fontFamily="serif"
+                android:text="@string/stage2"
                 android:textColor="@color/white"
-                android:textSize="30sp" />
+                android:textSize="35sp" />
 
             <TextView
                 android:id="@+id/s3"
@@ -59,12 +47,28 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginEnd="148dp"
-                android:layout_marginRight="148dp"
-                android:layout_marginBottom="188dp"
+                android:layout_marginEnd="110dp"
+                android:layout_marginRight="110dp"
+                android:layout_marginBottom="167dp"
                 android:background="@drawable/border_background"
-                android:text="@string/stage3"
                 android:fontFamily="serif"
+                android:text="@string/stage3"
+                android:textColor="@color/orange"
+                android:textSize="30sp" />
+
+            <TextView
+                android:id="@+id/s1"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="100dp"
+                android:layout_marginLeft="100dp"
+                android:layout_marginBottom="170dp"
+                android:background="@drawable/border_background"
+                android:fontFamily="serif"
+                android:text="@string/stage1"
                 android:textColor="@color/orange"
                 android:textSize="30sp" />
 

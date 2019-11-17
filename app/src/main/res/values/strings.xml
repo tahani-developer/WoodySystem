@@ -24,9 +24,9 @@
     <string name="ip_address">IP Address</string>
     <string name="store">Store</string>
 
-    <string name="placing_no">Truck Number</string>
-    <string name="order_no">Order Number</string>
-    <string name="container_no">Container Number</string>
+    <string name="placing_no">Truck No</string>
+    <string name="order_no">Order No</string>
+    <string name="container_no">Container No</string>
     <string name="date_of_load">Date Of Load</string>
     <string name="destination">Destination</string>
 
