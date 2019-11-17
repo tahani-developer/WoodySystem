@@ -217,6 +217,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                         }
 
                                     if (!foundBarcode) {
+                                        jsonArrayBundles = new JSONArray();
                                         linearLayoutView.setVisibility(View.VISIBLE);
                                         mState = true;
                                         newBundle = new BundleInfo(Double.parseDouble(thicknessText)
