@@ -246,11 +246,9 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                             switch (i) {
                                                 case 0:
                                                     textView.setText(bundleNoString);
-//                                                    textView.setTextSize(10);
                                                     break;
                                                 case 1:
                                                     textView.setText(lengthText);
-                                                    textView.setTextSize(15);
                                                     break;
                                                 case 2:
                                                     textView.setText(widthText);
@@ -260,7 +258,6 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                                     break;
                                                 case 4:
                                                     textView.setText(gradeText);
-//                                                textView.setText("new");
                                                     break;
                                                 case 5:
                                                     textView.setText(noOfPiecesText);
