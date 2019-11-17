@@ -395,7 +395,7 @@ public class LoadingOrderReport extends AppCompatActivity {
                                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                        openLargePicDialog(StringToBitMap(bundles.get(position).getPicture()));
+                                        openLargePicDialog(StringToBitMap(bundleInfos.get(position).getPicture()));
                                     }
                                 });
 
@@ -568,13 +568,15 @@ public class LoadingOrderReport extends AppCompatActivity {
         try {
             List<Orders> filtered = new ArrayList<>();
             for (int k = 0; k < orders.size(); k++) {
-
-                Log.e("-----" , orders.get(k).getLocation());
-
-                if ((formatDate(orders.get(k).getDateOfLoad()).after(formatDate(fromDate)) || formatDate(orders.get(k).getDateOfLoad()).equals(formatDate(fromDate))) &&
-                        (formatDate(orders.get(k).getDateOfLoad()).before(formatDate(toDate)) || formatDate(orders.get(k).getDateOfLoad()).equals(formatDate(toDate))) &&
-                        (loc.equals("") || loc.equals(orders.get(k).getLocation())))
-                    filtered.add(orders.get(k));
+                if(fromDate.equals("") || toDate.equals("")){
+                    if (loc.equals("") || loc.equals(orders.get(k).getLocation()))
+                        filtered.add(orders.get(k));
+                } else {
+                    if ((formatDate(orders.get(k).getDateOfLoad()).after(formatDate(fromDate)) || formatDate(orders.get(k).getDateOfLoad()).equals(formatDate(fromDate))) &&
+                            (formatDate(orders.get(k).getDateOfLoad()).before(formatDate(toDate)) || formatDate(orders.get(k).getDateOfLoad()).equals(formatDate(toDate))) &&
+                            (loc.equals("") || loc.equals(orders.get(k).getLocation())))
+                        filtered.add(orders.get(k));
+                }
             }
 
             ordersTable.removeAllViews();
