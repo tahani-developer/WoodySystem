@@ -101,26 +101,26 @@ public class BundlesReport extends AppCompatActivity {
                     , bundleInfos.get(m).getArea());
             bundlesTable.addView(tableRow);
 
-//            TableRow finalTableRow = tableRow;
-//            tableRow.getVirtualChildAt(8).setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    PrintHelper photoPrinter = new PrintHelper(BundlesReport.this);
-//                    photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
-//                    TextView bundleNo=(TextView) finalTableRow.getChildAt(0);
-//                    TextView length=(TextView) finalTableRow.getChildAt(1);
-//                    TextView width=(TextView) finalTableRow.getChildAt(2);
-//                    TextView thic=(TextView) finalTableRow.getChildAt(3);
-//                    TextView grade=(TextView) finalTableRow.getChildAt(4);
-//                    TextView pcs=(TextView) finalTableRow.getChildAt(5);
-//                    Bitmap bitmap=writeBarcode(bundleNo.getText().toString(),length.getText().toString(),width.getText().toString(),
-//                            thic.getText().toString(),grade.getText().toString(),pcs.getText().toString());
-//
-//                    photoPrinter.printBitmap("invoice.jpg", bitmap);
-//                    Toast.makeText(BundlesReport.this, "tested+"+bundleNo.getText().toString(), Toast.LENGTH_SHORT).show();
-//
-//                }
-//            });
+            TableRow finalTableRow = tableRow;
+            tableRow.getVirtualChildAt(8).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    PrintHelper photoPrinter = new PrintHelper(BundlesReport.this);
+                    photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
+                    TextView bundleNo=(TextView) finalTableRow.getChildAt(0);
+                    TextView length=(TextView) finalTableRow.getChildAt(1);
+                    TextView width=(TextView) finalTableRow.getChildAt(2);
+                    TextView thic=(TextView) finalTableRow.getChildAt(3);
+                    TextView grade=(TextView) finalTableRow.getChildAt(4);
+                    TextView pcs=(TextView) finalTableRow.getChildAt(5);
+                    Bitmap bitmap=writeBarcode(bundleNo.getText().toString(),length.getText().toString(),width.getText().toString(),
+                            thic.getText().toString(),grade.getText().toString(),pcs.getText().toString());
+
+                    photoPrinter.printBitmap("invoice.jpg", bitmap);
+                    Toast.makeText(BundlesReport.this, "tested+"+bundleNo.getText().toString(), Toast.LENGTH_SHORT).show();
+
+                }
+            });
 
             TableRow clickTableRow = tableRow;
             tableRow.setOnLongClickListener(new View.OnLongClickListener() {

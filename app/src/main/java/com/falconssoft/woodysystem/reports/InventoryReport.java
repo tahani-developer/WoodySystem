@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.print.PrintHelper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -120,173 +121,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 //        fillTable(bundleInfoServer);
     }
 
-    /**
-     * private class JSONTask extends AsyncTask<String, String, List<Orders>> {
-     *
-     * @Override protected void onPreExecute() {
-     * super.onPreExecute();
-     * <p>
-     * }
-     * @Override protected List<Orders> doInBackground(String... params) {
-     * URLConnection connection = null;
-     * BufferedReader reader = null;
-     * <p>
-     * try {
-     * <p>
-     * URL url = new URL("http://" + SettingsFile.ipAddress + "/import.php?FLAG=2");
-     * <p>
-     * URLConnection conn = url.openConnection();
-     * conn.setDoOutput(true);
-     * <p>
-     * reader = new BufferedReader(new
-     * InputStreamReader(conn.getInputStream()));
-     * <p>
-     * StringBuilder sb = new StringBuilder();
-     * String line = null;
-     * <p>
-     * // Read Server Response
-     * while ((line = reader.readLine()) != null) {
-     * sb.append(line);
-     * }
-     * <p>
-     * String finalJson = sb.toString();
-     * Log.e("finalJson*********", finalJson);
-     * <p>
-     * JSONObject parentObject = new JSONObject(finalJson);
-     * <p>
-     * try {
-     * JSONArray parentArrayOrders = parentObject.getJSONArray("ONLY_ORDER");
-     * orders.clear();
-     * for (int i = 0; i < parentArrayOrders.length(); i++) {
-     * JSONObject finalObject = parentArrayOrders.getJSONObject(i);
-     * <p>
-     * Orders order = new Orders();
-     * order.setPlacingNo(finalObject.getString("PLACING_NO"));
-     * order.setOrderNo(finalObject.getString("ORDER_NO"));
-     * order.setContainerNo(finalObject.getString("CONTAINER_NO"));
-     * order.setDateOfLoad(finalObject.getString("DATE_OF_LOAD"));
-     * order.setDestination(finalObject.getString("DESTINATION"));
-     * order.setLocation(finalObject.getString("LOCATION"));
-     * <p>
-     * orders.add(order);
-     * }
-     * } catch (JSONException e) {
-     * Log.e("Import Data2", e.getMessage().toString());
-     * }
-     * <p>
-     * try {
-     * JSONArray parentArrayOrders = parentObject.getJSONArray("BUNDLE_ORDER");
-     * bundles.clear();
-     * for (int i = 0; i < parentArrayOrders.length(); i++) {
-     * JSONObject finalObject = parentArrayOrders.getJSONObject(i);
-     * <p>
-     * Orders order = new Orders();
-     * order.setThickness(finalObject.getDouble("THICKNESS"));
-     * order.setWidth(finalObject.getDouble("WIDTH"));
-     * order.setLength(finalObject.getDouble("LENGTH"));
-     * order.setGrade(finalObject.getString("GRADE"));
-     * order.setNoOfPieces(finalObject.getInt("PIECES"));
-     * order.setBundleNo(finalObject.getString("BUNDLE_NO"));
-     * order.setLocation(finalObject.getString("LOCATION"));
-     * order.setArea(finalObject.getString("AREA"));
-     * order.setPlacingNo(finalObject.getString("PLACING_NO"));
-     * order.setOrderNo(finalObject.getString("ORDER_NO"));
-     * order.setContainerNo(finalObject.getString("CONTAINER_NO"));
-     * order.setDateOfLoad(finalObject.getString("DATE_OF_LOAD"));
-     * order.setDestination(finalObject.getString("DESTINATION"));
-     * <p>
-     * String pic = finalObject.getString("PART1") + finalObject.getString("PART2") +
-     * finalObject.getString("PART3") + finalObject.getString("PART4") +
-     * finalObject.getString("PART5") + finalObject.getString("PART6") +
-     * finalObject.getString("PART7") + finalObject.getString("PART8");
-     * <p>
-     * pic = pic.replaceAll("null", "");
-     * <p>
-     * order.setPicture(pic);
-     * <p>
-     * bundles.add(order);
-     * }
-     * } catch (JSONException e) {
-     * Log.e("Import Data1", e.getMessage().toString());
-     * }
-     * <p>
-     * <p>
-     * try {
-     * JSONArray parentArrayOrders = parentObject.getJSONArray("BUNDLE_PIC");
-     * pictures.clear();
-     * for (int i = 0; i < parentArrayOrders.length(); i++) {
-     * JSONObject finalObject = parentArrayOrders.getJSONObject(i);
-     * <p>
-     * Pictures picture = new Pictures();
-     * picture.setOrderNo(finalObject.getString("ORDER_NO"));
-     * <p>
-     * String[] rowPics = new String[8];
-     * <p>
-     * for (int k = 1; k <= 8; k++) {
-     * String pic = finalObject.getString("PIC" + k + "PART1") + finalObject.getString("PIC" + k + "PART2") +
-     * finalObject.getString("PIC" + k + "PART3") + finalObject.getString("PIC" + k + "PART4") +
-     * finalObject.getString("PIC" + k + "PART5") + finalObject.getString("PIC" + k + "PART6") +
-     * finalObject.getString("PIC" + k + "PART7") + finalObject.getString("PIC" + k + "PART8");
-     * <p>
-     * pic = pic.replaceAll("null", "");
-     * rowPics[k - 1] = pic;
-     * }
-     * <p>
-     * picture.setPic1(rowPics[0]);
-     * picture.setPic2(rowPics[1]);
-     * picture.setPic3(rowPics[2]);
-     * picture.setPic4(rowPics[3]);
-     * picture.setPic5(rowPics[4]);
-     * picture.setPic6(rowPics[5]);
-     * picture.setPic7(rowPics[6]);
-     * picture.setPic8(rowPics[7]);
-     * <p>
-     * pictures.add(picture);
-     * }
-     * } catch (JSONException e) {
-     * Log.e("Import Data1", e.getMessage().toString());
-     * }
-     * <p>
-     * <p>
-     * } catch (MalformedURLException e) {
-     * Log.e("Customer", "********ex1");
-     * e.printStackTrace();
-     * } catch (IOException e) {
-     * Log.e("Customer", e.getMessage().toString());
-     * e.printStackTrace();
-     * <p>
-     * } catch (JSONException e) {
-     * Log.e("Customer", "********ex3  " + e.toString());
-     * e.printStackTrace();
-     * } finally {
-     * Log.e("Customer", "********finally");
-     * if (connection != null) {
-     * Log.e("Customer", "********ex4");
-     * // connection.disconnect();
-     * }
-     * try {
-     * if (reader != null) {
-     * reader.close();
-     * }
-     * } catch (IOException e) {
-     * e.printStackTrace();
-     * }
-     * }
-     * return orders;
-     * }
-     * @Override protected void onPostExecute(final List<Orders> result) {
-     * super.onPostExecute(result);
-     * <p>
-     * if (result != null) {
-     * Log.e("result", "*****************" + orders.size());
-     * fillTable(orders);
-     * //                storeInDatabase();
-     * } else {
-     * Toast.makeText(LoadingOrderReport.this, "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();
-     * }
-     * }
-     * }
-     */
+
 
     public void filters() {
         List<BundleInfo> filtered = new ArrayList<>();
@@ -340,26 +175,26 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                     , filteredList.get(m).getLocation()
                     , filteredList.get(m).getArea());
             bundlesTable.addView(tableRow);
-//            TableRow finalTableRow = tableRow;
-//            tableRow.getVirtualChildAt(8).setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    PrintHelper photoPrinter = new PrintHelper(BundlesReport.this);
-//                    photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
-//                    TextView bundleNo=(TextView) finalTableRow.getChildAt(0);
-//                    TextView length=(TextView) finalTableRow.getChildAt(1);
-//                    TextView width=(TextView) finalTableRow.getChildAt(2);
-//                    TextView thic=(TextView) finalTableRow.getChildAt(3);
-//                    TextView grade=(TextView) finalTableRow.getChildAt(4);
-//                    TextView pcs=(TextView) finalTableRow.getChildAt(5);
-//                    Bitmap bitmap=writeBarcode(bundleNo.getText().toString(),length.getText().toString(),width.getText().toString(),
-//                            thic.getText().toString(),grade.getText().toString(),pcs.getText().toString());
-//
-//                    photoPrinter.printBitmap("invoice.jpg", bitmap);
-//                    Toast.makeText(BundlesReport.this, "tested+"+bundleNo.getText().toString(), Toast.LENGTH_SHORT).show();
-//
-//                }
-//            });
+            TableRow finalTableRow = tableRow;
+            tableRow.getVirtualChildAt(8).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    PrintHelper photoPrinter = new PrintHelper(InventoryReport.this);
+                    photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
+                    TextView bundleNo=(TextView) finalTableRow.getChildAt(0);
+                    TextView length=(TextView) finalTableRow.getChildAt(1);
+                    TextView width=(TextView) finalTableRow.getChildAt(2);
+                    TextView thic=(TextView) finalTableRow.getChildAt(3);
+                    TextView grade=(TextView) finalTableRow.getChildAt(4);
+                    TextView pcs=(TextView) finalTableRow.getChildAt(5);
+                    Bitmap bitmap=writeBarcode(bundleNo.getText().toString(),length.getText().toString(),width.getText().toString(),
+                            thic.getText().toString(),grade.getText().toString(),pcs.getText().toString());
+
+                    photoPrinter.printBitmap("invoice.jpg", bitmap);
+                    Toast.makeText(InventoryReport.this, "tested+"+bundleNo.getText().toString(), Toast.LENGTH_SHORT).show();
+
+                }
+            });
             TableRow clickTableRow = tableRow;
             tableRow.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override

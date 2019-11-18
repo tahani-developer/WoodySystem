@@ -88,9 +88,9 @@ public class LoadingOrderReport extends AppCompatActivity {
         listView = findViewById(R.id.listview);
         linearLayout = findViewById(R.id.linearLayout);
         arrow = findViewById(R.id.arrow);
-        location = findViewById(R.id.location);
-        from = findViewById(R.id.from);
-        to = findViewById(R.id.to);
+        location =(Spinner) findViewById(R.id.Loding_Order_Location);
+        from = (EditText) findViewById(R.id.Loding_Order_from);
+        to =(EditText) findViewById(R.id.Loding_Order_to);
 
         List<String> locationList = new ArrayList<>();
         locationList.add("");

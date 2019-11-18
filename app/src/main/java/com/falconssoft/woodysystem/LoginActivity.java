@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
@@ -125,6 +126,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.login_settings:
                 Settings settings = new Settings();
                 Dialog settingDialog = new Dialog(this);
+                settingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 settingDialog.setContentView(R.layout.settings_dialog_layout);
                 companyName = settingDialog.findViewById(R.id.settings_company_name);
                 ipAddress = settingDialog.findViewById(R.id.settings_ipAddress);
