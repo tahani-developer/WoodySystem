@@ -250,7 +250,6 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                                     break;
                                                 case 1:
                                                     textView.setText(lengthText);
-                                                    textView.setTextSize(15);
                                                     break;
                                                 case 2:
                                                     textView.setText(widthText);
