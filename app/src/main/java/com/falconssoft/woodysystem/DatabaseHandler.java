@@ -21,7 +21,7 @@ import java.util.List;
 public class DatabaseHandler extends SQLiteOpenHelper {
 
     private static String TAG = "DatabaseHandler";
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
     private static final String DATABASE_NAME = "WoodyDatabase";
     static SQLiteDatabase db;
 
@@ -45,6 +45,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String BUNDLE_INFO_AREA = "AREA";
     private static final String BUNDLE_BARCODE = "BARCODE";
     private static final String BUNDLE_INFO_ORDERED = "ORDERED";
+    private static final String BUNDLE_INFO_FLAG = "FLAG";
 
     //******************************************************************
     private static final String USERS_TABLE = "USERS_TABLE";
@@ -105,7 +106,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + BUNDLE_INFO_LOCATION + " TEXT,"
                 + BUNDLE_INFO_AREA + " TEXT,"
                 + BUNDLE_BARCODE + " TEXT,"
-                + BUNDLE_INFO_ORDERED + " INTEGER" + ")";
+                + BUNDLE_INFO_ORDERED + " INTEGER,"
+                + BUNDLE_INFO_FLAG + " TEXT"+ ")";
         db.execSQL(CREATE_INVENTORY_INFO_TABLE);
 
         String CREATE_TABLE_USERS = "CREATE TABLE " + USERS_TABLE + "("
@@ -131,14 +133,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         String CREATE_PICTURES_TABLE = "CREATE TABLE " + PICTURES_TABLE + "("
                 + ORDER_NO + " TEXT,"
-                + PICTURE_1 + " BLOB,"
-                + PICTURE_2 + " BLOB,"
-                + PICTURE_3 + " BLOB,"
-                + PICTURE_4 + " BLOB,"
-                + PICTURE_5 + " BLOB,"
-                + PICTURE_6 + " BLOB,"
-                + PICTURE_7 + " BLOB,"
-                + PICTURE_8 + " BLOB " + ")";
+                + PICTURE_1 + " TEXT,"
+                + PICTURE_2 + " TEXT,"
+                + PICTURE_3 + " TEXT,"
+                + PICTURE_4 + " TEXT,"
+                + PICTURE_5 + " TEXT,"
+                + PICTURE_6 + " TEXT,"
+                + PICTURE_7 + " TEXT,"
+                + PICTURE_8 + " TEXT " + ")";
         db.execSQL(CREATE_PICTURES_TABLE);
     }
 
@@ -158,23 +160,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
 
         try {
-            db.execSQL("ALTER TABLE INVENTORY_INFO ADD ORDERED INTEGER NOT NULL DEFAULT '0'");
-        } catch (Exception e) {
-            Log.e("upgrade", "BUNDLE ORDERED");
-        }
-
-        try {
-            String CREATE_PICTURES_TABLE = "CREATE TABLE " + PICTURES_TABLE + "("
-                    + ORDER_NO + " TEXT,"
-                    + PICTURE_1 + " BLOB,"
-                    + PICTURE_2 + " BLOB,"
-                    + PICTURE_3 + " BLOB,"
-                    + PICTURE_4 + " BLOB,"
-                    + PICTURE_5 + " BLOB,"
-                    + PICTURE_6 + " BLOB,"
-                    + PICTURE_7 + " BLOB,"
-                    + PICTURE_8 + " BLOB " + ")";
-            db.execSQL(CREATE_PICTURES_TABLE);
+            String CREATE_TABLE_SETTINGS = "CREATE TABLE " + SETTINGS_TABLE + "("
+                    + SETTINGS_COMPANY_NAME + " TEXT,"
+                    + SETTINGS_IP_ADDRESS + " TEXT,"
+                    + SETTINGS_STORE + " TEXT" + ")";
+            db.execSQL(CREATE_TABLE_SETTINGS);
         } catch (Exception e) {
             Log.e("upgrade", "BUNDLE ORDERED");
         }
@@ -189,6 +179,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         contentValues.put(SETTINGS_COMPANY_NAME, settings.getCompanyName());
         contentValues.put(SETTINGS_IP_ADDRESS, settings.getIpAddress());
         contentValues.put(SETTINGS_STORE, settings.getStore());
+
+        SettingsFile.companyName = settings.getCompanyName();
+        SettingsFile.ipAddress = settings.getIpAddress();
+        SettingsFile.store = settings.getStore();
 
         db.insert(SETTINGS_TABLE, null, contentValues);
         db.close();
@@ -208,6 +202,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         contentValues.put(BUNDLE_INFO_AREA, bundleInfo.getArea());
         contentValues.put(BUNDLE_BARCODE, bundleInfo.getBarcode());
         contentValues.put(BUNDLE_INFO_ORDERED, bundleInfo.getOrdered());
+        contentValues.put(BUNDLE_INFO_FLAG, "0");
 
         db.insert(BUNDLE_INFO_TABLE, null, contentValues);
         db.close();
@@ -250,77 +245,78 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db = this.getReadableDatabase();
         ContentValues contentValues = new ContentValues();
 
-        byte[] byteImage1 = {};
-        if (pictures.getPic1() != null) {
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            pictures.getPic1().compress(Bitmap.CompressFormat.PNG, 0, stream);
-            byteImage1 = stream.toByteArray();
-        }
-
-        byte[] byteImage2 = {};
-        if (pictures.getPic2() != null) {
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            pictures.getPic2().compress(Bitmap.CompressFormat.PNG, 0, stream);
-            byteImage2 = stream.toByteArray();
-        }
-
-        byte[] byteImage3 = {};
-        if (pictures.getPic3() != null) {
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            pictures.getPic3().compress(Bitmap.CompressFormat.PNG, 0, stream);
-            byteImage3 = stream.toByteArray();
-        }
-
-        byte[] byteImage4 = {};
-        if (pictures.getPic4() != null) {
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            pictures.getPic4().compress(Bitmap.CompressFormat.PNG, 0, stream);
-            byteImage4 = stream.toByteArray();
-        }
-
-        byte[] byteImage5 = {};
-        if (pictures.getPic5() != null) {
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            pictures.getPic5().compress(Bitmap.CompressFormat.PNG, 0, stream);
-            byteImage5 = stream.toByteArray();
-        }
-
-        byte[] byteImage6 = {};
-        if (pictures.getPic6() != null) {
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            pictures.getPic6().compress(Bitmap.CompressFormat.PNG, 0, stream);
-            byteImage6 = stream.toByteArray();
-        }
-
-        byte[] byteImage7 = {};
-        if (pictures.getPic7() != null) {
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            pictures.getPic7().compress(Bitmap.CompressFormat.PNG, 0, stream);
-            byteImage7 = stream.toByteArray();
-        }
-
-        byte[] byteImage8 = {};
-        if (pictures.getPic8() != null) {
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            pictures.getPic8().compress(Bitmap.CompressFormat.PNG, 0, stream);
-            byteImage8 = stream.toByteArray();
-        }
+//        byte[] byteImage1 = {};
+//        if (pictures.getPic1() != null) {
+//            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//            pictures.getPic1().compress(Bitmap.CompressFormat.PNG, 0, stream);
+//            byteImage1 = stream.toByteArray();
+//        }
+//
+//        byte[] byteImage2 = {};
+//        if (pictures.getPic2() != null) {
+//            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//            pictures.getPic2().compress(Bitmap.CompressFormat.PNG, 0, stream);
+//            byteImage2 = stream.toByteArray();
+//        }
+//
+//        byte[] byteImage3 = {};
+//        if (pictures.getPic3() != null) {
+//            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//            pictures.getPic3().compress(Bitmap.CompressFormat.PNG, 0, stream);
+//            byteImage3 = stream.toByteArray();
+//        }
+//
+//        byte[] byteImage4 = {};
+//        if (pictures.getPic4() != null) {
+//            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//            pictures.getPic4().compress(Bitmap.CompressFormat.PNG, 0, stream);
+//            byteImage4 = stream.toByteArray();
+//        }
+//
+//        byte[] byteImage5 = {};
+//        if (pictures.getPic5() != null) {
+//            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//            pictures.getPic5().compress(Bitmap.CompressFormat.PNG, 0, stream);
+//            byteImage5 = stream.toByteArray();
+//        }
+//
+//        byte[] byteImage6 = {};
+//        if (pictures.getPic6() != null) {
+//            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//            pictures.getPic6().compress(Bitmap.CompressFormat.PNG, 0, stream);
+//            byteImage6 = stream.toByteArray();
+//        }
+//
+//        byte[] byteImage7 = {};
+//        if (pictures.getPic7() != null) {
+//            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//            pictures.getPic7().compress(Bitmap.CompressFormat.PNG, 0, stream);
+//            byteImage7 = stream.toByteArray();
+//        }
+//
+//        byte[] byteImage8 = {};
+//        if (pictures.getPic8() != null) {
+//            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//            pictures.getPic8().compress(Bitmap.CompressFormat.PNG, 0, stream);
+//            byteImage8 = stream.toByteArray();
+//        }
 
         contentValues.put(ORDER_NO, pictures.getOrderNo());
-        contentValues.put(PICTURE_1, byteImage1);
-        contentValues.put(PICTURE_2, byteImage2);
-        contentValues.put(PICTURE_3, byteImage3);
-        contentValues.put(PICTURE_4, byteImage4);
-        contentValues.put(PICTURE_5, byteImage5);
-        contentValues.put(PICTURE_6, byteImage6);
-        contentValues.put(PICTURE_7, byteImage7);
-        contentValues.put(PICTURE_8, byteImage8);
+        contentValues.put(PICTURE_1, pictures.getPic1());
+        contentValues.put(PICTURE_2, pictures.getPic2());
+        contentValues.put(PICTURE_3, pictures.getPic3());
+        contentValues.put(PICTURE_4, pictures.getPic4());
+        contentValues.put(PICTURE_5, pictures.getPic5());
+        contentValues.put(PICTURE_6, pictures.getPic6());
+        contentValues.put(PICTURE_7, pictures.getPic7());
+        contentValues.put(PICTURE_8, pictures.getPic8());
 
         db.insert(PICTURES_TABLE, null, contentValues);
         db.close();
     }
 
     // **************************************************** Getting ****************************************************
+
     public void getSettings() {
         String selectQuery = "SELECT * FROM " + SETTINGS_TABLE;
         db = this.getWritableDatabase();
@@ -338,7 +334,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public List<BundleInfo> getBundleInfo() {
         List<BundleInfo> bundleInfoList = new ArrayList<>();
 
-        String selectQuery = "SELECT  * FROM " + BUNDLE_INFO_TABLE + " where ORDERED = '0'";
+        String selectQuery = "SELECT  * FROM " + BUNDLE_INFO_TABLE + " where ORDERED = '0' and LOCATION = (select STORE from SETTINGS_TABLE)" ;
         db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
@@ -364,10 +360,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return bundleInfoList;
     }
 
-    public List<BundleInfo> getAllBundleInfo(String location) {
+    public List<BundleInfo> getAllBundleInfo(String flag) {
         List<BundleInfo> bundleInfoList = new ArrayList<>();
 
-        String selectQuery = "SELECT  * FROM " + BUNDLE_INFO_TABLE + " where LOCATION = '" + location + "'";
+//        String selectQuery = "SELECT  * FROM " + BUNDLE_INFO_TABLE + " where LOCATION = '" + location + "' AND FLAG = '" + flag + "'";
+
+        String selectQuery = "SELECT  * FROM " + BUNDLE_INFO_TABLE + " where LOCATION = (select STORE from SETTINGS_TABLE)"
+       +  " AND FLAG = '" + flag + "'";
+
         db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
@@ -385,6 +385,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 bundleInfo.setArea(cursor.getString(7));
                 bundleInfo.setBarcode(cursor.getString(8));
                 bundleInfo.setOrdered(Integer.parseInt(cursor.getString(9)));
+                bundleInfo.setHideFlag(cursor.getString(10));
                 bundleInfo.setChecked(false);
 
                 bundleInfoList.add(bundleInfo);
@@ -437,7 +438,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
 
-    
     public List<Users> getUsers() {
         List<Users> usersList = new ArrayList<>();
 
@@ -466,10 +466,24 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.update(BUNDLE_INFO_TABLE, values, BUNDLE_INFO_BUNDLE_NO + " = '" + bundleNo + "'", null);
     }
 
+    public void updateBundlesFlag(String bundleNo) {
+        db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(BUNDLE_INFO_FLAG, "1");
+        db.update(BUNDLE_INFO_TABLE, values, BUNDLE_INFO_BUNDLE_NO + " = '" + bundleNo + "'", null);
+    }
     // **************************************************** Delete ****************************************************
+
     public void deleteSettings() {
         db = this.getWritableDatabase();
         db.delete(SETTINGS_TABLE, null, null);
+        db.close();
+    }
+
+    public void deleteUsers() {
+        db = this.getWritableDatabase();
+        db.delete(USERS_TABLE, null, null);
         db.close();
     }
 

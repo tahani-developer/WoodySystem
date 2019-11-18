@@ -319,12 +319,12 @@
                         android:id="@+id/addToInventory_add_button"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:drawableStart="@drawable/ic_add_white_38dp"
-                        android:drawableLeft="@drawable/ic_add_white_38dp"
+                        android:drawableStart="@drawable/ic_add_white_32dp"
+                        android:drawableLeft="@drawable/ic_add_white_32dp"
                         android:paddingStart="70dp"
                         android:paddingLeft="70dp"
-                        android:paddingEnd="90dp"
-                        android:paddingRight="90dp"
+                        android:paddingEnd="70dp"
+                        android:paddingRight="70dp"
                         android:paddingTop="5dp"
                         android:paddingBottom="5dp"
                         android:text="@string/add"
@@ -340,7 +340,7 @@
         <LinearLayout
             android:id="@+id/addToInventory_table_view"
             android:layout_width="match_parent"
-            android:layout_height="305dp"
+            android:layout_height="400dp"
             android:layout_marginStart="5dp"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="15dp"
@@ -436,7 +436,7 @@
 
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="270dp"
+                android:layout_height="365dp"
                 >
 
                 <TableLayout

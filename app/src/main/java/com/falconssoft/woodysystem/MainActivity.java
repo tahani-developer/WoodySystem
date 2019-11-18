@@ -80,19 +80,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void callAnimation(){
         scale = new ScaleAnimation(0, 1, 0, 1, ScaleAnimation.INFINITE, .8f, ScaleAnimation.RELATIVE_TO_SELF, .8f);
-        scale.setStartOffset(400);
+        scale.setStartOffset(300);
         scale.setDuration(700);
         scale.setInterpolator(new OvershootInterpolator());
         stage1.startAnimation(scale);
 
         scale = new ScaleAnimation(0, 1, 0, 1, ScaleAnimation.RELATIVE_TO_SELF, .5f, ScaleAnimation.RELATIVE_TO_SELF, .5f);
-        scale.setStartOffset(400);
+        scale.setStartOffset(300);
         scale.setDuration(600);
         scale.setInterpolator(new OvershootInterpolator());
         stage2.startAnimation(scale);
 
         scale = new ScaleAnimation(0, 1, 0, 1, ScaleAnimation.RESTART, .7f, ScaleAnimation.RELATIVE_TO_SELF, .7f);
-        scale.setStartOffset(400);
+        scale.setStartOffset(300);
         scale.setDuration(800);
         scale.setInterpolator(new OvershootInterpolator());
         stage3.startAnimation(scale);

@@ -27,10 +27,11 @@
             android:background="@drawable/frame_shape"
             android:drawableStart="@drawable/ic_search_white_24dp"
             android:drawableLeft="@drawable/ic_search_white_24dp"
-            android:paddingStart="150dp"
-            android:paddingLeft="150dp"
-            android:drawablePadding="-100dp"
+            android:paddingStart="170dp"
+            android:paddingLeft="170dp"
+            android:drawablePadding="-130dp"
             android:text="@string/search_by_barcode"
+            android:fontFamily="serif"
             android:textColor="@color/white" />
 
         <ImageButton
@@ -56,6 +57,7 @@
             android:text="Srch Thickness"
             android:textColor="@color/black"
             android:layout_marginHorizontal="1dp"
+            android:fontFamily="serif"
             android:textSize="17sp"
             />
 
@@ -66,6 +68,7 @@
             android:text="Srch Width"
             android:textColor="@color/black"
             android:layout_marginHorizontal="1dp"
+            android:fontFamily="serif"
             android:textSize="17sp"
             />
 
@@ -76,6 +79,7 @@
             android:text="Srch Length"
             android:textColor="@color/black"
             android:layout_marginHorizontal="1dp"
+            android:fontFamily="serif"
             android:textSize="17sp"
             />
 
@@ -126,7 +130,7 @@
     <GridView
         android:id="@+id/items"
         android:layout_width="match_parent"
-        android:layout_height="750dp"
+        android:layout_height="730dp"
         android:numColumns="2"
         />
 

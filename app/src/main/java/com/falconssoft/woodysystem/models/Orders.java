@@ -20,12 +20,13 @@ public class Orders {
     private String containerNo;
     private String dateOfLoad;
     private String destination;
+    private String picture;
 
     public Orders() {
     }
 
     public Orders(double thickness, double length, double width, String grade, int noOfPieces, String bundleNo, String location, String area
-            , String placingNo, String orderNo, String containerNo, String dateOfLoad, String destination) {
+            , String placingNo, String orderNo, String containerNo, String dateOfLoad, String destination, String picture) {
         this.thickness = thickness;
         this.length = length;
         this.width = width;
@@ -39,6 +40,7 @@ public class Orders {
         this.containerNo = containerNo;
         this.dateOfLoad = dateOfLoad;
         this.destination = destination;
+        this.picture = picture;
     }
 
     public double getThickness() {
@@ -145,6 +147,14 @@ public class Orders {
         this.destination = destination;
     }
 
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
     public JSONObject getJSONObject() {
         JSONObject obj = new JSONObject();
 
@@ -162,6 +172,7 @@ public class Orders {
             obj.put("CONTAINER_NO", "'" +containerNo+ "'");
             obj.put("DATE_OF_LOAD", "'" +dateOfLoad+ "'");
             obj.put("DESTINATION", "'" +destination+ "'");
+            obj.put("PIC", "'" +picture+ "'");
 
 
         } catch (JSONException e) {

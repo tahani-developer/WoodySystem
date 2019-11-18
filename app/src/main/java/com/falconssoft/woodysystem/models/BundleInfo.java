@@ -22,13 +22,14 @@ public class BundleInfo {
     private String dateOfLoad;
     private boolean checked;
     private String barcode;
-    private Bitmap picture;
+    private String  picture;
     private int ordered;
+    private String hideFlag;// 0 => show, 1 => hide
 
     public BundleInfo() {
     }
 
-    public BundleInfo(double thickness, double length, double width, String grade, int noOfPieces, String bundleNo, String location, String area, String barcode, Bitmap pic) {
+    public BundleInfo(double thickness, double length, double width, String grade, int noOfPieces, String bundleNo, String location, String area, String barcode, String pic) {
         this.thickness = thickness;
         this.length = length;
         this.width = width;
@@ -39,6 +40,20 @@ public class BundleInfo {
         this.area = area;
         this.barcode = barcode;
         this.picture = pic;
+    }
+
+    public BundleInfo(double thickness, double length, double width, String grade, int noOfPieces, String bundleNo, String location, String area, String barcode, String pic, String hideFlag) {
+        this.thickness = thickness;
+        this.length = length;
+        this.width = width;
+        this.grade = grade;
+        this.noOfPieces = noOfPieces;
+        this.bundleNo = bundleNo;
+        this.location = location;
+        this.area = area;
+        this.barcode = barcode;
+        this.picture = pic;
+        this.hideFlag = hideFlag;
     }
 
     public BundleInfo(double thickness, double length, double width, String grade, int noOfPieces, String bundleNo, String location, String area, int placingNo, int orderNo, int containerNo, String dateOfLoad, int ordered) {
@@ -55,6 +70,14 @@ public class BundleInfo {
         this.containerNo = containerNo;
         this.dateOfLoad = dateOfLoad;
         this.ordered = ordered;
+    }
+
+    public String getDateOfLoad() {
+        return dateOfLoad;
+    }
+
+    public void setDateOfLoad(String dateOfLoad) {
+        this.dateOfLoad = dateOfLoad;
     }
 
     public double getThickness() {
@@ -137,11 +160,11 @@ public class BundleInfo {
         this.checked = checked;
     }
 
-    public Bitmap getPicture() {
+    public String getPicture() {
         return picture;
     }
 
-    public void setPicture(Bitmap picture) {
+    public void setPicture(String picture) {
         this.picture = picture;
     }
 
@@ -151,6 +174,14 @@ public class BundleInfo {
 
     public void setOrdered(int ordered) {
         this.ordered = ordered;
+    }
+
+    public String getHideFlag() {
+        return hideFlag;
+    }
+
+    public void setHideFlag(String hideFlag) {
+        this.hideFlag = hideFlag;
     }
 
     public JSONObject getJSONObject() {

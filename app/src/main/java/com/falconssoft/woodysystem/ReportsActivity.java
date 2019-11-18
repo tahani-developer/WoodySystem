@@ -9,10 +9,11 @@ import android.view.animation.ScaleAnimation;
 import android.widget.TextView;
 
 import com.falconssoft.woodysystem.reports.BundlesReport;
+import com.falconssoft.woodysystem.reports.InventoryReport;
 
 public class ReportsActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private TextView bundlesReport, ordersReport, report1,report2,report3,report4;
+    private TextView bundlesReport, ordersReport, inventoryReport,report2,report3,report4;
     private ScaleAnimation scale;
 
     @Override
@@ -22,13 +23,14 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
 
         bundlesReport = findViewById(R.id.reports_bundles);
         ordersReport = findViewById(R.id.reports_orders);
-        report1 = findViewById(R.id.reports_textView9);
+        inventoryReport = findViewById(R.id.reports_inventory);
         report2 = findViewById(R.id.reports_textView10);
         report3 = findViewById(R.id.reports_textView11);
         report4 = findViewById(R.id.reports_textView12);
 
         bundlesReport.setOnClickListener(this);
         ordersReport.setOnClickListener(this);
+        inventoryReport.setOnClickListener(this);
 
         callAnimation();
 
@@ -45,6 +47,11 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.reports_orders:
                 Intent intent2=new Intent(ReportsActivity.this, LoadingOrderReport.class);
                 startActivity(intent2);
+                setSlideAnimation();
+                break;
+            case R.id.reports_inventory:
+                Intent intent3=new Intent(ReportsActivity.this, InventoryReport.class);
+                startActivity(intent3);
                 setSlideAnimation();
                 break;
         }
@@ -68,7 +75,7 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
         scale.setStartOffset(400);
         scale.setDuration(600);
         scale.setInterpolator(new OvershootInterpolator());
-        report1.startAnimation(scale);
+        inventoryReport.startAnimation(scale);
 
         scale = new ScaleAnimation(0, 1, 0, 1, ScaleAnimation.RELATIVE_TO_SELF, .5f, ScaleAnimation.RELATIVE_TO_SELF, .5f);
         scale.setStartOffset(400);
