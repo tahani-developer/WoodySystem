@@ -130,7 +130,7 @@
     <GridView
         android:id="@+id/items"
         android:layout_width="match_parent"
-        android:layout_height="700dp"
+        android:layout_height="730dp"
         android:numColumns="2"
         />
 

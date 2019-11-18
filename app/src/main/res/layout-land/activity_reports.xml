@@ -45,7 +45,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/reports_textView9"
+            android:id="@+id/reports_inventory"
             android:layout_width="220dp"
             android:layout_height="200dp"
             android:layout_marginStart="20dp"
@@ -54,7 +54,7 @@
             android:drawableTop="@drawable/reports"
             android:fontFamily="serif"
             android:paddingTop="10dp"
-            android:text="Report"
+            android:text="@string/inventory_report"
             android:textColor="@color/white"
             android:textSize="25sp"
             app:layout_constraintStart_toEndOf="@+id/reports_orders"
@@ -76,7 +76,7 @@
             android:textColor="@color/white"
             android:textSize="25sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/reports_textView9"
+            app:layout_constraintStart_toEndOf="@+id/reports_inventory"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -94,7 +94,7 @@
             android:textSize="25sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/reports_textView9"
+            app:layout_constraintTop_toBottomOf="@+id/reports_inventory"
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView

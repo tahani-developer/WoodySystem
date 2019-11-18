@@ -72,6 +72,14 @@ public class BundleInfo {
         this.ordered = ordered;
     }
 
+    public String getDateOfLoad() {
+        return dateOfLoad;
+    }
+
+    public void setDateOfLoad(String dateOfLoad) {
+        this.dateOfLoad = dateOfLoad;
+    }
+
     public double getThickness() {
         return thickness;
     }

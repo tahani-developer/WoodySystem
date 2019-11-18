@@ -91,11 +91,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 String usernameText = username.getText().toString();
                 String passwordText = password.getText().toString();
                 boolean found = false;
-
 //                Intent intent = new Intent(this, MainActivity.class);
 //                startActivity(intent);
 //                setSlideAnimation();
-
                 if ((!SettingsFile.companyName.equals("")) && (!SettingsFile.ipAddress.equals(""))) {
                     if (!usernameText.equals("") || !usernameText.equals(null)) {
                         if (!passwordText.equals("") || !passwordText.equals(null)) {
@@ -128,7 +126,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Settings settings = new Settings();
                 Dialog settingDialog = new Dialog(this);
                 settingDialog.setContentView(R.layout.settings_dialog_layout);
-                settingDialog.setTitle("Settings");
                 companyName = settingDialog.findViewById(R.id.settings_company_name);
                 ipAddress = settingDialog.findViewById(R.id.settings_ipAddress);
                 storesSpinner = settingDialog.findViewById(R.id.settings_stores);

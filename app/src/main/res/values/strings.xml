@@ -51,6 +51,7 @@
 
     <string name="bundles">Bundles Report</string>
     <string name="orders">Orders Report</string>
+    <string name="inventory_report">Inventory Report</string>
     <string name="loading_order_report">Loading Order Report</string>
     <string name="placing_no_">Truck No</string>
     <string name="order_no_">Order No</string>
