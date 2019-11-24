@@ -92,9 +92,10 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         setContentView(R.layout.activity_inventory_report);
 
         databaseHandler = new DatabaseHandler(this);
+        woodPresenter = new WoodPresenter(this);
+        generalSettings = new Settings();
         generalSettings = databaseHandler.getSettings();
 
-        woodPresenter = new WoodPresenter(this);
         bundlesTable = findViewById(R.id.inventory_report_table);
         location = findViewById(R.id.inventory_report_location);
         area = findViewById(R.id.inventory_report_area);

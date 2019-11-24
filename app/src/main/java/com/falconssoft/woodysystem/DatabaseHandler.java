@@ -46,6 +46,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String BUNDLE_BARCODE = "BARCODE";
     private static final String BUNDLE_INFO_ORDERED = "ORDERED";
     private static final String BUNDLE_INFO_FLAG = "FLAG";
+    private static final String BUNDLE_INFO_ADD_DATE = "ADD_DATE";
 
     //******************************************************************
     private static final String USERS_TABLE = "USERS_TABLE";
@@ -107,7 +108,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + BUNDLE_INFO_AREA + " TEXT,"
                 + BUNDLE_BARCODE + " TEXT,"
                 + BUNDLE_INFO_ORDERED + " INTEGER,"
-                + BUNDLE_INFO_FLAG + " TEXT"+ ")";
+                + BUNDLE_INFO_FLAG + " TEXT,"
+                + BUNDLE_INFO_ADD_DATE + " TEXT" + ")";
         db.execSQL(CREATE_INVENTORY_INFO_TABLE);
 
         String CREATE_TABLE_USERS = "CREATE TABLE " + USERS_TABLE + "("
@@ -203,6 +205,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         contentValues.put(BUNDLE_BARCODE, bundleInfo.getBarcode());
         contentValues.put(BUNDLE_INFO_ORDERED, bundleInfo.getOrdered());
         contentValues.put(BUNDLE_INFO_FLAG, "0");
+        contentValues.put(BUNDLE_INFO_ADD_DATE, bundleInfo.getAddingDate());
 
         db.insert(BUNDLE_INFO_TABLE, null, contentValues);
         db.close();
@@ -339,7 +342,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public List<BundleInfo> getBundleInfo() {
         List<BundleInfo> bundleInfoList = new ArrayList<>();
 
-        String selectQuery = "SELECT  * FROM " + BUNDLE_INFO_TABLE + " where ORDERED = '0' and LOCATION = (select STORE from SETTINGS_TABLE)" ;
+        String selectQuery = "SELECT  * FROM " + BUNDLE_INFO_TABLE + " where ORDERED = '0' and LOCATION = (select STORE from SETTINGS_TABLE)";
         db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
@@ -371,7 +374,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 //        String selectQuery = "SELECT  * FROM " + BUNDLE_INFO_TABLE + " where LOCATION = '" + location + "' AND FLAG = '" + flag + "'";
 
         String selectQuery = "SELECT  * FROM " + BUNDLE_INFO_TABLE + " where LOCATION = (select STORE from SETTINGS_TABLE)"
-       +  " AND FLAG = '" + flag + "'";
+                + " AND FLAG = '" + flag + "'";
 
         db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);

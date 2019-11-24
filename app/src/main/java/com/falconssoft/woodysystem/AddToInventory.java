@@ -61,7 +61,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.net.URI;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -99,6 +102,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 
         databaseHandler = new DatabaseHandler(this);
         presenter = new WoodPresenter(this);
+        generalSettings = new Settings();
         generalSettings = databaseHandler.getSettings();
 
         thickness = findViewById(R.id.addToInventory_thickness);
@@ -223,6 +227,11 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                         jsonArrayBundles = new JSONArray();
                                         linearLayoutView.setVisibility(View.VISIBLE);
                                         mState = true;
+
+                                        Date date= Calendar.getInstance().getTime();
+                                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                                        String generateDate = simpleDateFormat.format(date);
+
                                         newBundle = new BundleInfo(Double.parseDouble(thicknessText)
                                                 , Double.parseDouble(lengthText)
                                                 , Double.parseDouble(widthText)
@@ -231,11 +240,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                                 , bundleNoString
                                                 , locationText
                                                 , areaText
-                                                , 1
-                                                , 53
-                                                , 5
-                                                , "june"
-                                                , 0);
+                                                , generateDate);
 
                                         TableRow tableRow = new TableRow(this);
                                         for (int i = 0; i < 8; i++) {

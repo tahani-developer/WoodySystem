@@ -81,6 +81,7 @@ public class LoadingOrderReport extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.loading_order_report);
 
+        generalSettings = new Settings();
         generalSettings = new DatabaseHandler(this).getSettings();
         orders = new ArrayList<>();
         bundles = new ArrayList<>();
