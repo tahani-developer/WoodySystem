@@ -4,13 +4,20 @@ import android.app.DownloadManager;
 import android.content.Context;
 import android.util.Log;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.falconssoft.woodysystem.models.BundleInfo;
+import com.falconssoft.woodysystem.models.Settings;
 import com.falconssoft.woodysystem.models.Users;
 import com.falconssoft.woodysystem.reports.InventoryReport;
 
@@ -25,6 +32,7 @@ import static com.falconssoft.woodysystem.reports.InventoryReport.bundleInfoServ
 public class WoodPresenter implements Response.ErrorListener, Response.Listener<String> {
 
     private Context context;
+    private Settings settings;
     private RequestQueue requestQueue;
     private DatabaseHandler databaseHandler;
 
@@ -50,7 +58,8 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
     //------------------------------------------------------------------------------------------------
 
     void getImportData() {
-        urlImport = "http://" + SettingsFile.ipAddress + "/import.php?FLAG=1";
+        settings =  databaseHandler.getSettings();
+        urlImport = "http://" + settings.getIpAddress() + "/import.php?FLAG=1";//http://5.189.130.98:8085/import.php?FLAG=1
 //        Log.e("presenter:ipImport ", "" + SettingsFile.ipAddress);
 //        Log.e("presenter:urlImport ", "" + urlImport);
         jsonObjectRequest = new StringRequest(Request.Method.GET, urlImport, this, this);
@@ -59,7 +68,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
 
     @Override
     public void onErrorResponse(VolleyError error) {
-        Log.e("presenter/import/err ", "" + error);
+        Log.e("presenter/import/err ", ""  +  error);
         SettingsFile.serialNumber = "";
     }
 
@@ -88,7 +97,8 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
     //------------------------------------------------------------------------------------------------
 
     void getUsersData() {
-        urlUsers = "http://" + SettingsFile.ipAddress + "/import.php?FLAG=0";
+        settings =  databaseHandler.getSettings();
+        urlUsers = "http://" + settings.getIpAddress() + "/import.php?FLAG=0";
 //        Log.e("presenter/urlUsers ", "" + urlUsers);
 //        Log.e("presenter:ipUsers ", "" + SettingsFile.ipAddress);
         usersJsonObjectRequest = new StringRequest(Request.Method.GET, urlUsers, new UsersResponseClass(), new UsersResponseClass());
@@ -99,6 +109,25 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
 
         @Override
         public void onErrorResponse(VolleyError error) {
+            Log.e("presenter/users/err ", "" + settings.getIpAddress() + " *** "+ urlUsers+ " *** "+ error);
+            if (error instanceof NetworkError) {
+            } else if (error instanceof ServerError) {
+                Log.e("presenter/users/err ", "0");
+
+            } else if (error instanceof AuthFailureError) {
+                Log.e("presenter/users/err ", "1");
+
+            } else if (error instanceof ParseError) {
+                Log.e("presenter/users/err ", "2");
+
+            } else if (error instanceof NoConnectionError) {
+                Log.e("presenter/users/err ", "3");
+
+            } else if (error instanceof TimeoutError) {
+                Log.e("presenter/users/err ", "4");
+
+            }
+
             SettingsFile.usersList.clear();
             SettingsFile.usersList = databaseHandler.getUsers();
 //            Log.e("presenter/users/url ", "" + urlUsers);
@@ -138,8 +167,10 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
     //------------------------------------------------------------------------------------------------
 
     public void getBundlesData(InventoryReport inventoryReport) {
+        settings =  databaseHandler.getSettings();
         this.inventoryReport = inventoryReport;
-        urlBundles = "http://" + SettingsFile.ipAddress + "/import.php?FLAG=3";
+
+        urlBundles = "http://" + settings.getIpAddress() + "/import.php?FLAG=3";
 //        Log.e("presenter/urlUsers ", "" + urlUsers);
 //        Log.e("presenter:ipUsers ", "" + SettingsFile.ipAddress);
         bundlesJsonObjectRequest = new StringRequest(Request.Method.GET, urlBundles, new BundlesResponseClass(), new BundlesResponseClass());

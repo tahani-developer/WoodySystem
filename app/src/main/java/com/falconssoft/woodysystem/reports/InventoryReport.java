@@ -40,6 +40,7 @@ import com.falconssoft.woodysystem.WoodPresenter;
 import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.Orders;
 import com.falconssoft.woodysystem.models.Pictures;
+import com.falconssoft.woodysystem.models.Settings;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -83,6 +84,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private ArrayAdapter<String> locationAdapter;
     private ArrayAdapter<String> areaAdapter;
     private String loc = "All", areaField = "All";
+    private Settings generalSettings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +92,8 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         setContentView(R.layout.activity_inventory_report);
 
         databaseHandler = new DatabaseHandler(this);
+        generalSettings = databaseHandler.getSettings();
+
         woodPresenter = new WoodPresenter(this);
         bundlesTable = findViewById(R.id.inventory_report_table);
         location = findViewById(R.id.inventory_report_location);
@@ -195,29 +199,29 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 
                 }
             });
-            TableRow clickTableRow = tableRow;
-            tableRow.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-//                                                TextView textView = ((TextView) tableRow.getChildAt(0));
-//                                                tableRow.setBackgroundResource(R.color.light_orange_2);
-                    String bundleNo = ((TextView) clickTableRow.getChildAt(0)).getText().toString();
-                    Log.e("b", bundleNo);
-                    AlertDialog.Builder builder = new AlertDialog.Builder(InventoryReport.this);
-                    builder.setMessage("Are you want hide bundle number: " + bundleNo + " ?");
-                    builder.setTitle("Delete");
-                    builder.setIcon(R.drawable.ic_warning_black_24dp);
-                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            databaseHandler.updateBundlesFlag(bundleNo);// 1 mean hide
-                            bundlesTable.removeView(clickTableRow);
-                        }
-                    });
-                    builder.show();
-                    return false;
-                }
-            });
+//            TableRow clickTableRow = tableRow;
+//            tableRow.setOnLongClickListener(new View.OnLongClickListener() {
+//                @Override
+//                public boolean onLongClick(View v) {
+////                                                TextView textView = ((TextView) tableRow.getChildAt(0));
+////                                                tableRow.setBackgroundResource(R.color.light_orange_2);
+//                    String bundleNo = ((TextView) clickTableRow.getChildAt(0)).getText().toString();
+//                    Log.e("b", bundleNo);
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(InventoryReport.this);
+//                    builder.setMessage("Are you want hide bundle number: " + bundleNo + " ?");
+//                    builder.setTitle("Delete");
+//                    builder.setIcon(R.drawable.ic_warning_black_24dp);
+//                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            databaseHandler.updateBundlesFlag(bundleNo);// 1 mean hide
+//                            bundlesTable.removeView(clickTableRow);
+//                        }
+//                    });
+//                    builder.show();
+//                    return false;
+//                }
+//            });
         }
 
     }
@@ -326,7 +330,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         grade = (TextView) dialog.findViewById(R.id.grade);
         ImageView iv = (ImageView) dialog.findViewById(R.id.barcode);
 
-        companyName.setText(SettingsFile.companyName);
+        companyName.setText(generalSettings.getCompanyName());
         bundelNo.setText(data);
         TLW.setText(thic + " X " + width + " X " + length);
         pcsNo.setText(pcs);

@@ -47,6 +47,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private List<String> storesList = new ArrayList<>();
     private ArrayAdapter<String> storesAdapter;
     private WoodPresenter woodPresenter;
+    private Settings generalSettings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,11 +55,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login);
 
         databaseHandler = new DatabaseHandler(this);
-        databaseHandler.getSettings();
+        generalSettings = databaseHandler.getSettings();
         woodPresenter = new WoodPresenter(this);
 //        woodPresenter.getImportData();
 
-        if ((!SettingsFile.companyName.equals("")) && (!SettingsFile.ipAddress.equals(""))) {
+        if ((!generalSettings.getCompanyName().equals("")) && (!generalSettings.getIpAddress().equals(""))) {
             woodPresenter.getUsersData();
         } else {
             Toast.makeText(this, "Please fill settings!", Toast.LENGTH_SHORT).show();
@@ -70,7 +71,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         login = findViewById(R.id.login_login_btn);
         settings = findViewById(R.id.login_settings);
         linearLayout = findViewById(R.id.login_linearLayout);
-        SettingsFile.store = "Amman";
+//        SettingsFile.store = "Amman";
 
         login.setOnClickListener(this);
         logoImage.setOnClickListener(this);
@@ -95,7 +96,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 //                Intent intent = new Intent(this, MainActivity.class);
 //                startActivity(intent);
 //                setSlideAnimation();
-                if ((!SettingsFile.companyName.equals("")) && (!SettingsFile.ipAddress.equals(""))) {
+                if ((!generalSettings.getCompanyName().equals("")) && (!generalSettings.getIpAddress().equals(""))) {
                     if (!usernameText.equals("") || !usernameText.equals(null)) {
                         if (!passwordText.equals("") || !passwordText.equals(null)) {
 //                            usersList = databaseHandler.getUsers();
@@ -142,9 +143,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 storesSpinner.setAdapter(storesAdapter);
 
                 databaseHandler.getSettings();
-                companyName.setText(SettingsFile.companyName);
-                ipAddress.setText(SettingsFile.ipAddress);
-                switch (SettingsFile.store) {
+                companyName.setText(generalSettings.getCompanyName());
+                ipAddress.setText(generalSettings.getIpAddress());
+                switch (generalSettings.getStore()) {
                     case "Amman":
                         storesSpinner.setSelection(0);
                         break;

@@ -57,6 +57,8 @@ public class BundlesReport extends AppCompatActivity {
     private List<BundleInfo> bundleInfos = new ArrayList<>();
     private Animation animation;
     private TextView textView;
+    private Settings generalSettings;
+
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -76,6 +78,8 @@ public class BundlesReport extends AppCompatActivity {
 
     void fillTable() {
         bundleInfos = databaseHandler.getAllBundleInfo("0");
+        generalSettings = databaseHandler.getSettings();
+
 //        TableRow tableRowBasic = new TableRow(this);
 //        tableRowBasic = fillTableRows(tableRowBasic
 //                , "Bundle#"
@@ -252,7 +256,7 @@ public class BundlesReport extends AppCompatActivity {
         grade= (TextView) dialog.findViewById(R.id.grade);
         ImageView iv = (ImageView) dialog.findViewById(R.id.barcode);
 
-        companyName.setText(SettingsFile.companyName);
+        companyName.setText(generalSettings.getCompanyName());
         bundelNo.setText(data);
         TLW.setText(thic+" X "+width+" X "+length);
         pcsNo.setText(pcs);

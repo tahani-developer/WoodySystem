@@ -180,9 +180,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         contentValues.put(SETTINGS_IP_ADDRESS, settings.getIpAddress());
         contentValues.put(SETTINGS_STORE, settings.getStore());
 
-        SettingsFile.companyName = settings.getCompanyName();
-        SettingsFile.ipAddress = settings.getIpAddress();
-        SettingsFile.store = settings.getStore();
+//        SettingsFile.companyName = settings.getCompanyName();
+//        SettingsFile.ipAddress = settings.getIpAddress();
+//        SettingsFile.store = settings.getStore();
 
         db.insert(SETTINGS_TABLE, null, contentValues);
         db.close();
@@ -317,18 +317,23 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     // **************************************************** Getting ****************************************************
 
-    public void getSettings() {
+    public Settings getSettings() {
+        Settings settings = new Settings();
         String selectQuery = "SELECT * FROM " + SETTINGS_TABLE;
         db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()) {
             do {
-                SettingsFile.companyName = cursor.getString(0);
-                SettingsFile.ipAddress = cursor.getString(1);
-                SettingsFile.store = cursor.getString(2);
+                settings.setCompanyName(cursor.getString(0));
+                settings.setIpAddress(cursor.getString(1));
+                settings.setStore(cursor.getString(2));
+//                SettingsFile.companyName = cursor.getString(0);
+//                SettingsFile.ipAddress = cursor.getString(1);
+//                SettingsFile.store = cursor.getString(2);
             } while (cursor.moveToNext());
         }
+        return settings;
     }
 
     public List<BundleInfo> getBundleInfo() {
@@ -436,7 +441,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
         return bundleInfoList;
     }
-
 
     public List<Users> getUsers() {
         List<Users> usersList = new ArrayList<>();
