@@ -78,6 +78,7 @@ public class BundlesReport extends AppCompatActivity {
 
     void fillTable() {
         bundleInfos = databaseHandler.getAllBundleInfo("0");
+        generalSettings = new Settings();
         generalSettings = databaseHandler.getSettings();
 
 //        TableRow tableRowBasic = new TableRow(this);

@@ -48,6 +48,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private ArrayAdapter<String> storesAdapter;
     private WoodPresenter woodPresenter;
     private Settings generalSettings;
+    private String localCompanyName, localIpAddress, localStore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,12 +56,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login);
 
         databaseHandler = new DatabaseHandler(this);
+        generalSettings = new Settings();
         generalSettings = databaseHandler.getSettings();
         woodPresenter = new WoodPresenter(this);
 //        woodPresenter.getImportData();
+        localCompanyName = generalSettings.getCompanyName();
+        localIpAddress = generalSettings.getIpAddress();
+        localStore = generalSettings.getStore();
 
-        if ((!generalSettings.getCompanyName().equals("")) && (!generalSettings.getIpAddress().equals(""))) {
-            woodPresenter.getUsersData();
+        Log.e("bool", "" + (!(localIpAddress == null)));
+
+        if (!(localIpAddress == null) && (!(localCompanyName == null))) {
+            if ((!localIpAddress.equals("")) && (!localCompanyName.toString().equals(""))) {
+                woodPresenter.getUsersData();
+            } else {
+            }
         } else {
             Toast.makeText(this, "Please fill settings!", Toast.LENGTH_SHORT).show();
         }
@@ -93,26 +103,30 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 String usernameText = username.getText().toString();
                 String passwordText = password.getText().toString();
                 boolean found = false;
+                localCompanyName = generalSettings.getCompanyName();
+                localIpAddress = generalSettings.getIpAddress();
+                localStore = generalSettings.getStore();
 //                Intent intent = new Intent(this, MainActivity.class);
 //                startActivity(intent);
 //                setSlideAnimation();
-                if ((!generalSettings.getCompanyName().equals("")) && (!generalSettings.getIpAddress().equals(""))) {
-                    if (!usernameText.equals("") || !usernameText.equals(null)) {
-                        if (!passwordText.equals("") || !passwordText.equals(null)) {
+                if (!(localIpAddress == null) && (!(localCompanyName == null))) {
+                    if ((!localIpAddress.equals("")) && (!localCompanyName.equals(""))) {
 //                            usersList = databaseHandler.getUsers();
-                            for (int i = 0; i < usersList.size(); i++)
-                                if (usernameText.equals(usersList.get(i).getUsername())
-                                        && passwordText.equals(usersList.get(i).getPassword())) {
-                                    found = true;
-                                    i = usersList.size();
-                                    Intent intent2 = new Intent(this, MainActivity.class);
-                                    startActivity(intent2);
-                                }
-
-                            if (!found){
-                                Toast.makeText(this, "Username or password is wrong or check settings! ", Toast.LENGTH_SHORT).show();
+                        for (int i = 0; i < usersList.size(); i++)
+                            if (usernameText.equals(usersList.get(i).getUsername())
+                                    && passwordText.equals(usersList.get(i).getPassword())) {
+                                found = true;
+                                i = usersList.size();
+                                Intent intent2 = new Intent(this, MainActivity.class);
+                                startActivity(intent2);
                             }
+
+                        if (!found) {
+                            Toast.makeText(this, "Username or password is wrong or check settings! ", Toast.LENGTH_SHORT).show();
                         }
+
+                    } else {
+                        Toast.makeText(this, "Please fill settings first!!!!", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(this, "Please fill settings first!!!!", Toast.LENGTH_SHORT).show();
@@ -126,6 +140,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.login_settings:
                 Settings settings = new Settings();
+                generalSettings = databaseHandler.getSettings();
                 Dialog settingDialog = new Dialog(this);
                 settingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 settingDialog.setContentView(R.layout.settings_dialog_layout);
@@ -133,6 +148,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 ipAddress = settingDialog.findViewById(R.id.settings_ipAddress);
                 storesSpinner = settingDialog.findViewById(R.id.settings_stores);
                 saveSettings = settingDialog.findViewById(R.id.settings_save);
+                localCompanyName = generalSettings.getCompanyName();
+                localIpAddress = generalSettings.getIpAddress();
+                localStore = generalSettings.getStore();
 
                 storesList.add("Amman");
                 storesList.add("Kalinovka");
@@ -142,81 +160,86 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 storesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 storesSpinner.setAdapter(storesAdapter);
 
-                databaseHandler.getSettings();
-                companyName.setText(generalSettings.getCompanyName());
-                ipAddress.setText(generalSettings.getIpAddress());
-                switch (generalSettings.getStore()) {
-                    case "Amman":
-                        storesSpinner.setSelection(0);
-                        break;
-                    case "Kalinovka":
-                        storesSpinner.setSelection(1);
-                        break;
-                    case "Rudniya Store":
-                        storesSpinner.setSelection(2);
-                        break;
-                    case "Rudniya Sawmill":
-                        storesSpinner.setSelection(3);
-                        break;
-                    default:
-                        storesSpinner.setSelection(0);
-                }
-
-                storesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        settings.setStore(parent.getItemAtPosition(position).toString());
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-//                        settings.setStore("Amman");
-                    }
-                });
-
-                saveSettings.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (!TextUtils.isEmpty(companyName.getText().toString())) {
-                            if (!TextUtils.isEmpty(ipAddress.getText().toString())) {
-                                settings.setCompanyName(companyName.getText().toString());
-                                settings.setIpAddress(ipAddress.getText().toString());
-                                databaseHandler.deleteSettings();
-                                databaseHandler.addSettings(settings);
-                                woodPresenter.getUsersData();
-                                Toast.makeText(LoginActivity.this, "Saved Successfully", Toast.LENGTH_SHORT).show();
-                                settingDialog.dismiss();
-                            } else {
-                                ipAddress.setError("Required");
-                            }
-                        } else {
-                            companyName.setError("Required");
+//                if (!(localIpAddress == null) && (!(localCompanyName == null))) {
+//                    if ((!localIpAddress.equals("")) && (!localCompanyName.equals(""))) {
+                        companyName.setText(localCompanyName);
+                        ipAddress.setText(localIpAddress);
+                        if (localStore == null){
+                            storesSpinner.setSelection(0);
+                        }else {
+                        switch (localStore) {
+                            case "Amman":
+                                storesSpinner.setSelection(0);
+                                break;
+                            case "Kalinovka":
+                                storesSpinner.setSelection(1);
+                                break;
+                            case "Rudniya Store":
+                                storesSpinner.setSelection(2);
+                                break;
+                            case "Rudniya Sawmill":
+                                storesSpinner.setSelection(3);
+                                break;
+                            default:
+                                storesSpinner.setSelection(0);
                         }
                     }
-                });
-                settingDialog.show();
-                break;
+
+                    storesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            settings.setStore(parent.getItemAtPosition(position).toString());
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+//                        settings.setStore("Amman");
+                        }
+                    });
+
+                    saveSettings.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (!TextUtils.isEmpty(companyName.getText().toString())) {
+                                if (!TextUtils.isEmpty(ipAddress.getText().toString())) {
+                                    settings.setCompanyName(companyName.getText().toString());
+                                    settings.setIpAddress(ipAddress.getText().toString());
+                                    databaseHandler.deleteSettings();
+                                    databaseHandler.addSettings(settings);
+                                    woodPresenter.getUsersData();
+                                    Toast.makeText(LoginActivity.this, "Saved Successfully", Toast.LENGTH_SHORT).show();
+                                    settingDialog.dismiss();
+                                } else {
+                                    ipAddress.setError("Required");
+                                }
+                            } else {
+                                companyName.setError("Required");
+                            }
+                        }
+                    });
+                    settingDialog.show();
+                    break;
+                }
+
         }
 
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            Uri selectedImage = data.getData();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
-                logoImage.setImageBitmap(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
+        @Override
+        protected void onActivityResult ( int requestCode, int resultCode, @Nullable Intent data){
+            super.onActivityResult(requestCode, resultCode, data);
+            if (resultCode == Activity.RESULT_OK) {
+                Uri selectedImage = data.getData();
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
+                    logoImage.setImageBitmap(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
+
+        public void setSlideAnimation () {
+            overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
+        }
+
+
     }
-
-    public void setSlideAnimation() {
-        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
-    }
-
-
-}

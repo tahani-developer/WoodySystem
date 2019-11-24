@@ -128,8 +128,8 @@ public class LoadingOrder2 extends AppCompatActivity {
         imagesFileList.clear();
         init();
         databaseHandler = new DatabaseHandler(this);
+        generalSettings = new Settings();
         generalSettings = databaseHandler.getSettings();
-
         jsonArrayOrders = new JSONArray();
         jsonArrayPics = new JSONArray();
 
