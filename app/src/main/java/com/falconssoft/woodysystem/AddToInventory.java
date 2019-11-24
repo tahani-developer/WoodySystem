@@ -426,7 +426,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 //https://5.189.130.98/WOODY/export.php
                 String JsonResponse = null;
                 HttpClient client = new DefaultHttpClient();
-                HttpPost request = new HttpPost();
+                HttpPost request = new HttpPost(); 
                 request.setURI(new URI("http://" + generalSettings.getIpAddress() + "/export.php"));//import 10.0.0.214
 
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
