@@ -140,6 +140,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.login_settings:
                 Settings settings = new Settings();
+                generalSettings = databaseHandler.getSettings();
                 Dialog settingDialog = new Dialog(this);
                 settingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 settingDialog.setContentView(R.layout.settings_dialog_layout);
@@ -158,8 +159,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 storesAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, storesList);
                 storesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 storesSpinner.setAdapter(storesAdapter);
-
-                databaseHandler.getSettings();
 
 //                if (!(localIpAddress == null) && (!(localCompanyName == null))) {
 //                    if ((!localIpAddress.equals("")) && (!localCompanyName.equals(""))) {

@@ -205,7 +205,6 @@ public class BundleInfo {
             obj.put("ORDERED", "'" + ordered + "'");
             obj.put("BUNDLE_DATE", "'" + addingDate + "'");
 
-
         } catch (JSONException e) {
             Log.e("Tag", "JSONException");
         }

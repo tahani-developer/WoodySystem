@@ -492,7 +492,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                 String JsonResponse = null;
                 HttpClient client = new DefaultHttpClient();
                 HttpPost request = new HttpPost();
-                request.setURI(new URI("http://" + SettingsFile.ipAddress + "/export.php"));//import 10.0.0.214
+                request.setURI(new URI("http://" + generalSettings.getIpAddress() + "/export.php"));//import 10.0.0.214
 
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
                 nameValuePairs.add(new BasicNameValuePair("DELETE_BUNDLE", "1"));
