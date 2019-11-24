@@ -485,7 +485,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         protected String doInBackground(String... params) {
             try {
                 String JsonResponse = null;
-                HttpClient client = new DefaultHttpClient();
+                HttpClient client = new DefaultHttpClient(); 
                 HttpPost request = new HttpPost();
                 request.setURI(new URI("http://" + SettingsFile.ipAddress + "/export.php"));//import 10.0.0.214
 
