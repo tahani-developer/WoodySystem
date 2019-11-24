@@ -37,6 +37,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.falconssoft.woodysystem.models.BundleInfo;
+import com.falconssoft.woodysystem.models.Settings;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -89,6 +90,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
     private boolean mState = false;
     private final String STATE_VISIBILITY = "state-visibility";
     private WoodPresenter presenter;
+    private Settings generalSettings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +99,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 
         databaseHandler = new DatabaseHandler(this);
         presenter = new WoodPresenter(this);
+        generalSettings = databaseHandler.getSettings();
 
         thickness = findViewById(R.id.addToInventory_thickness);
         length = findViewById(R.id.addToInventory_length);
@@ -419,7 +422,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                 String JsonResponse = null;
                 HttpClient client = new DefaultHttpClient();
                 HttpPost request = new HttpPost();
-                request.setURI(new URI("http://" + SettingsFile.ipAddress + "/export.php"));//import 10.0.0.214
+                request.setURI(new URI("http://" + generalSettings.getIpAddress() + "/export.php"));//import 10.0.0.214
 
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
                 nameValuePairs.add(new BasicNameValuePair("BUNDLE_INFO", jsonArrayBundles.toString().trim()));

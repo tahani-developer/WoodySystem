@@ -33,13 +33,13 @@ public class SettingsFile {
 
     public static String serialNumber;
 
-    public static String companyName = "";
+//    public static String companyName = "";
 
-    public static String ipAddress = "";//5.189.130.98:8085
+//    public static String ipAddress = "";//5.189.130.98:8085
 
-    public static String store = "";
+//    public static String store = "";
 
-    public static String area;
+//    public static String area;
 
     public static List<Users> usersList = new ArrayList<>();
 

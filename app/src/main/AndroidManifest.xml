@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".reports.InventoryReport"></activity>
+        <activity android:name=".reports.InventoryReport" android:screenOrientation="sensorLandscape"></activity>
         <activity
             android:name=".reports.BundlesReport"
             android:screenOrientation="sensorLandscape" />

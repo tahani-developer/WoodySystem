@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
@@ -46,6 +47,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private List<String> storesList = new ArrayList<>();
     private ArrayAdapter<String> storesAdapter;
     private WoodPresenter woodPresenter;
+    private Settings generalSettings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +55,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login);
 
         databaseHandler = new DatabaseHandler(this);
-        databaseHandler.getSettings();
+        generalSettings = databaseHandler.getSettings();
         woodPresenter = new WoodPresenter(this);
 //        woodPresenter.getImportData();
 
-        if ((!SettingsFile.companyName.equals("")) && (!SettingsFile.ipAddress.equals(""))) {
+        if ((!generalSettings.getCompanyName().equals("")) && (!generalSettings.getIpAddress().equals(""))) {
             woodPresenter.getUsersData();
         } else {
             Toast.makeText(this, "Please fill settings!", Toast.LENGTH_SHORT).show();
@@ -69,7 +71,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         login = findViewById(R.id.login_login_btn);
         settings = findViewById(R.id.login_settings);
         linearLayout = findViewById(R.id.login_linearLayout);
-        SettingsFile.store = "Amman";
+//        SettingsFile.store = "Amman";
 
         login.setOnClickListener(this);
         logoImage.setOnClickListener(this);
@@ -94,7 +96,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 //                Intent intent = new Intent(this, MainActivity.class);
 //                startActivity(intent);
 //                setSlideAnimation();
-                if ((!SettingsFile.companyName.equals("")) && (!SettingsFile.ipAddress.equals(""))) {
+                if ((!generalSettings.getCompanyName().equals("")) && (!generalSettings.getIpAddress().equals(""))) {
                     if (!usernameText.equals("") || !usernameText.equals(null)) {
                         if (!passwordText.equals("") || !passwordText.equals(null)) {
 //                            usersList = databaseHandler.getUsers();
@@ -125,6 +127,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.login_settings:
                 Settings settings = new Settings();
                 Dialog settingDialog = new Dialog(this);
+                settingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 settingDialog.setContentView(R.layout.settings_dialog_layout);
                 companyName = settingDialog.findViewById(R.id.settings_company_name);
                 ipAddress = settingDialog.findViewById(R.id.settings_ipAddress);
@@ -140,9 +143,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 storesSpinner.setAdapter(storesAdapter);
 
                 databaseHandler.getSettings();
-                companyName.setText(SettingsFile.companyName);
-                ipAddress.setText(SettingsFile.ipAddress);
-                switch (SettingsFile.store) {
+                companyName.setText(generalSettings.getCompanyName());
+                ipAddress.setText(generalSettings.getIpAddress());
+                switch (generalSettings.getStore()) {
                     case "Amman":
                         storesSpinner.setSelection(0);
                         break;
