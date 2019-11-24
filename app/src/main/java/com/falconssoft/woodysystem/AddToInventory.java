@@ -152,7 +152,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 
         jsonArrayBundles = new JSONArray();
 
-
+        new JSONTask2().execute();
 //        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
 //        addToInventory.startAnimation(animation);
     }
@@ -464,6 +464,72 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
             super.onPostExecute(s);
             if (s != null) {
                 if (s.contains("BUNDLE_INFO SUCCESS")) {
+                    databaseHandler.addNewBundle(newBundle);
+                    presenter.getImportData();
+                    Log.e("tag", "****Success");
+                } else {
+                    SettingsFile.serialNumber = "";
+                    Log.e("tag", "****Failed to export data");
+                }
+            } else {
+                SettingsFile.serialNumber = "";
+                Log.e("tag", "****Failed to export data Please check internet connection");
+            }
+        }
+    }
+
+    private class JSONTask2 extends AsyncTask<String, String, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                String JsonResponse = null;
+                HttpClient client = new DefaultHttpClient();
+                HttpPost request = new HttpPost();
+                request.setURI(new URI("http://" + SettingsFile.ipAddress + "/export.php"));//import 10.0.0.214
+
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+                nameValuePairs.add(new BasicNameValuePair("DELETE_BUNDLE", "1"));
+                nameValuePairs.add(new BasicNameValuePair("BUNDLE_NO", "123"));
+
+                request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                HttpResponse response = client.execute(request);
+
+                BufferedReader in = new BufferedReader(new
+                        InputStreamReader(response.getEntity().getContent()));
+
+                StringBuffer sb = new StringBuffer("");
+                String line = "";
+
+                while ((line = in.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                in.close();
+
+                JsonResponse = sb.toString();
+                Log.e("tag", "" + JsonResponse);
+
+                return JsonResponse;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (s != null) {
+                if (s.contains("DELETE BUNDLE SUCCESS")) {
                     databaseHandler.addNewBundle(newBundle);
                     presenter.getImportData();
                     Log.e("tag", "****Success");
