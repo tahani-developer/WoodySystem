@@ -94,6 +94,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
     private final String STATE_VISIBILITY = "state-visibility";
     private WoodPresenter presenter;
     private Settings generalSettings;
+    String bundleNumber ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,8 +152,6 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         textView.startAnimation(animation);
 
         jsonArrayBundles = new JSONArray();
-
-        new JSONTask2().execute();
 //        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
 //        addToInventory.startAnimation(animation);
     }
@@ -309,6 +308,9 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                                     public void onClick(DialogInterface dialog, int which) {
                                                         databaseHandler.deleteBundle(bundleNo);
                                                         bundlesTable.removeView(tableRow);
+
+                                                        bundleNumber = bundleNo ;
+                                                        new JSONTask2().execute();
                                                     }
                                                 });
                                                 builder.show();
@@ -428,7 +430,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 //https://5.189.130.98/WOODY/export.php
                 String JsonResponse = null;
                 HttpClient client = new DefaultHttpClient();
-                HttpPost request = new HttpPost(); 
+                HttpPost request = new HttpPost();
                 request.setURI(new URI("http://" + generalSettings.getIpAddress() + "/export.php"));//import 10.0.0.214
 
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
@@ -499,7 +501,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
                 nameValuePairs.add(new BasicNameValuePair("DELETE_BUNDLE", "1"));
-                nameValuePairs.add(new BasicNameValuePair("BUNDLE_NO", "123"));
+                nameValuePairs.add(new BasicNameValuePair("BUNDLE_NO", bundleNumber));
 
                 request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
@@ -533,15 +535,11 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
             super.onPostExecute(s);
             if (s != null) {
                 if (s.contains("DELETE BUNDLE SUCCESS")) {
-//                    databaseHandler.addNewBundle(newBundle);
-                    presenter.getImportData();
                     Log.e("tag", "****Success");
                 } else {
-                    SettingsFile.serialNumber = "";
                     Log.e("tag", "****Failed to export data");
                 }
             } else {
-                SettingsFile.serialNumber = "";
                 Log.e("tag", "****Failed to export data Please check internet connection");
             }
         }
