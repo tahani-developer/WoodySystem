@@ -367,7 +367,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                 else
                     dateTo.setText(sdf.format(calendar.getTime()));
 
-                if (!dateFrom.getText().toString().equals("") && !dateFrom.getText().toString().equals("")) {
+                if (!dateFrom.getText().toString().equals("") && !dateTo.getText().toString().equals("")) {
                     filters();
                 }
             }

@@ -508,7 +508,7 @@ public class LoadingOrderReport extends AppCompatActivity {
                 else
                     to.setText(sdf.format(myCalendar.getTime()));
 
-                if (!from.getText().toString().equals("") && !from.getText().toString().equals(""))
+                if (!from.getText().toString().equals("") && !to.getText().toString().equals(""))
                     filters();
 
             }

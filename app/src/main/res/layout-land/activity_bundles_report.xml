@@ -27,7 +27,7 @@
             android:drawableLeft="@drawable/axe"
             android:fontFamily="serif"
             android:gravity="start"
-            android:text="@string/bundles"
+            android:text="@string/print_barcode_report"
             android:textColor="@color/orange"
             android:textSize="30sp" />
 
