@@ -87,6 +87,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private String loc = "All", areaField = "All";
     private Settings generalSettings;
     private Calendar calendar;
+    private Date date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +99,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         generalSettings = new Settings();
         generalSettings = databaseHandler.getSettings();
         calendar = Calendar.getInstance();
+        date = Calendar.getInstance().getTime();
 
         bundlesTable = findViewById(R.id.inventory_report_table);
         location = findViewById(R.id.inventory_report_location);
@@ -107,6 +109,10 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         dateTo = findViewById(R.id.inventory_report_to);
         noOfBundles = findViewById(R.id.inventory_report_no_bundles);
         noOfPieces = findViewById(R.id.inventory_report_no_pieces);
+
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        dateFrom.setText(df.format(date));
+        dateTo.setText(df.format(date));
 
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_to_right);
         textView.startAnimation(animation);
@@ -143,41 +149,36 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         List<BundleInfo> filtered = new ArrayList<>();
         List<BundleInfo> dateFiltered = new ArrayList<>();
 
-        for (int k = 0; k < bundleInfoServer.size(); k++) {
-//            Log.e("-------------------","" +((!loc.equals("All")) && areaField.equals("All")
-//                    && loc.equals(bundleInfoServer.get(k).getLocation())));
-            Log.e("location", bundleInfoServer.get(k).getLocation());
+        for (int m = 0; m < bundleInfoServer.size(); m++) {
+            JSONObject jsonObject = bundleInfoServer.get(m).getJSONObject();
+            Log.e("bundleInfoServer", "" + jsonObject.toString());
+
+            if ((formatDate(bundleInfoServer.get(m).getAddingDate()).after(formatDate(fromDate))
+                    || formatDate(bundleInfoServer.get(m).getAddingDate()).equals(formatDate(fromDate)))
+                    && (formatDate(bundleInfoServer.get(m).getAddingDate()).before(formatDate(toDate))
+                    || formatDate(bundleInfoServer.get(m).getAddingDate()).equals(formatDate(toDate))))
+                dateFiltered.add(bundleInfoServer.get(m));
+        }
+
+        for (int k = 0; k < dateFiltered.size(); k++) {
+            Log.e("-------------------", dateFiltered.get(k).getAddingDate());
+            Log.e("location", dateFiltered.get(k).getLocation());
             if ((!loc.equals("All")) && (!areaField.equals("All"))
-                    && loc.equals(bundleInfoServer.get(k).getLocation())
-                    && areaField.equals(bundleInfoServer.get(k).getArea()))
-                filtered.add(bundleInfoServer.get(k));
+                    && loc.equals(dateFiltered.get(k).getLocation())
+                    && areaField.equals(dateFiltered.get(k).getArea()))
+                filtered.add(dateFiltered.get(k));
             else if ((!loc.equals("All")) && areaField.equals("All")
-                    && loc.equals(bundleInfoServer.get(k).getLocation())) {
-                filtered.add(bundleInfoServer.get(k));
+                    && loc.equals(dateFiltered.get(k).getLocation())) {
+                filtered.add(dateFiltered.get(k));
             } else if (loc.equals("All") && (!areaField.equals("All"))
-                    && areaField.equals(bundleInfoServer.get(k).getArea()))
-                filtered.add(bundleInfoServer.get(k));
+                    && areaField.equals(dateFiltered.get(k).getArea()))
+                filtered.add(dateFiltered.get(k));
             else if (loc.equals("All") && areaField.equals("All"))
-                filtered.add(bundleInfoServer.get(k));
+                filtered.add(dateFiltered.get(k));
 
         }
 
-        if (!(fromDate.equals("") && toDate.equals(""))) {
-            for (int m = 0; m < filtered.size(); m++) {
-                Log.e("filterdate", "" + filtered.get(m).getDateOfLoad());
-                if ((formatDate(filtered.get(m).getDateOfLoad()).after(formatDate(fromDate))
-                        || formatDate(filtered.get(m).getDateOfLoad()).equals(formatDate(fromDate)))
-                        && (formatDate(filtered.get(m).getDateOfLoad()).before(formatDate(toDate))
-                        || formatDate(filtered.get(m).getDateOfLoad()).equals(formatDate(toDate)))) {
-                    dateFiltered.add(filtered.get(m));
-                }
-            }
-            fillTable(dateFiltered);
-
-        } else {
-            fillTable(filtered);
-        }
-//        fillTable(filtered);
+        fillTable(filtered);
 
     }
 
@@ -334,7 +335,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         return tableRow;
     }
 
-    public Date formatDate(String date){
+    public Date formatDate(String date) {
 
         Log.e("date", date);
         String myFormat = "dd/MM/yyyy"; //In which you need put here
@@ -505,7 +506,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                 flag = 1;
                 break;
         }
-
+//        filters();
         new DatePickerDialog(InventoryReport.this, openDatePickerDialog(flag), calendar
                 .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)).show();
