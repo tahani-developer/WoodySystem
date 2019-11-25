@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@color/alpha_black"
+        android:background="@color/alpha_black_dark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,24 +25,34 @@
 
             <TextView
                 android:id="@+id/inventory_report_tv"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
                 android:drawableStart="@drawable/axe"
                 android:drawableLeft="@drawable/axe"
+                android:paddingStart="350dp"
+                android:paddingLeft="350dp"
+                android:drawablePadding="-310dp"
                 android:fontFamily="serif"
-                android:gravity="start"
+                android:gravity="center"
                 android:text="@string/inventory_report"
                 android:textColor="@color/orange"
                 android:textSize="30sp" />
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
             <LinearLayout
-                android:id="@+id/inventory_report_linear_two"
-                android:layout_width="250dp"
+                android:id="@+id/inventory_report_linear_one"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:layout_margin="7dp"
                 android:layout_gravity="center"
                 android:background="@drawable/shape_with_corner"
@@ -65,10 +75,12 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/inventory_report_linear_three"
-                android:layout_width="250dp"
+                android:id="@+id/inventory_report_linear_two"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="7dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="7dp"
+                android:layout_marginRight="7dp"
                 android:layout_gravity="center"
                 android:background="@drawable/shape_with_corner"
                 android:orientation="horizontal"
@@ -83,6 +95,65 @@
 
                 <Spinner
                     android:id="@+id/inventory_report_area"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/inventory_report_linear_three"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="7dp"
+                android:layout_marginRight="7dp"
+                android:paddingEnd="5dp"
+                android:paddingRight="5dp"
+                android:layout_gravity="center"
+                android:background="@drawable/shape_with_corner"
+                android:orientation="horizontal"
+               >
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:fontFamily="serif"
+                    android:text="@string/from" />
+
+                <EditText
+                    android:id="@+id/inventory_report_from"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/inventory_report_linear_four"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="7dp"
+                android:layout_marginRight="7dp"
+                android:paddingEnd="5dp"
+                android:paddingRight="5dp"
+                android:layout_gravity="center"
+                android:background="@drawable/shape_with_corner"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:fontFamily="serif"
+                    android:text="@string/to" />
+
+                <EditText
+                    android:id="@+id/inventory_report_to"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     />
@@ -181,7 +252,7 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="470dp">
+            android:layout_height="390dp">
 
             <TableLayout
                 android:id="@+id/inventory_report_table"
@@ -199,9 +270,85 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:layout_marginTop="2dp"
-            android:background="@color/light_orange_2" />
+            android:layout_height="1dp"
+            android:layout_marginTop="1dp"
+            android:background="@color/white" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="200dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="7dp"
+                android:layout_marginRight="7dp"
+                android:paddingEnd="5dp"
+                android:paddingRight="5dp"
+                android:layout_gravity="center"
+                android:background="@drawable/border_background"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/frame_shape"
+                    android:paddingStart="5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingEnd="10dp"
+                    android:paddingRight="10dp"
+                    android:textSize="18sp"
+                    android:fontFamily="serif"
+                    android:textColor="@color/white"
+                    android:text="@string/no_bundle" />
+
+                <TextView
+                    android:id="@+id/inventory_report_no_bundles"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textColor="@color/orange"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="200dp"
+                android:layout_height="40dp"
+                android:background="@drawable/border_background"
+                android:layout_marginEnd="7dp"
+                android:layout_marginRight="7dp"
+                android:paddingEnd="5dp"
+                android:paddingRight="5dp"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/frame_shape"
+                    android:textSize="18sp"
+                    android:fontFamily="serif"
+                    android:textColor="@color/white"
+                    android:text="@string/no_of_pieces" />
+
+                <TextView
+                    android:id="@+id/inventory_report_no_pieces"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:textColor="@color/orange"
+                    />
+
+            </LinearLayout>
+        </LinearLayout>
+
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

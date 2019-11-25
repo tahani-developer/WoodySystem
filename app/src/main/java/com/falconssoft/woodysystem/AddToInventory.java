@@ -227,7 +227,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                         linearLayoutView.setVisibility(View.VISIBLE);
                                         mState = true;
 
-                                        Date date= Calendar.getInstance().getTime();
+                                        Date date = Calendar.getInstance().getTime();
                                         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
                                         String generateDate = simpleDateFormat.format(date);
 
@@ -240,6 +240,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                                 , locationText
                                                 , areaText
                                                 , generateDate);
+
+                                        Log.e("date is", generateDate);
 
                                         TableRow tableRow = new TableRow(this);
                                         for (int i = 0; i < 8; i++) {
@@ -432,6 +434,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                 request.setURI(new URI("http://" + generalSettings.getIpAddress() + "/export.php"));//import 10.0.0.214
 
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+//                Log.e("date 2", jsonArrayBundles.get)
                 nameValuePairs.add(new BasicNameValuePair("BUNDLE_INFO", jsonArrayBundles.toString().trim()));
 
                 request.setEntity(new UrlEncodedFormEntity(nameValuePairs));

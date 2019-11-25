@@ -44,7 +44,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
 
     private StringRequest bundlesJsonObjectRequest;
     private String urlBundles;
-    private InventoryReport inventoryReport ;//= new InventoryReport();
+    private InventoryReport inventoryReport;//= new InventoryReport();
 //    private String urlImport = "http://" + SettingsFile.ipAddress + "/import.php?FLAG=1";//http://5.189.130.98:8085/import.php?FLAG=1
 
 //    private String urlUsers = "http://" + SettingsFile.ipAddress + "/import.php?FLAG=0";//http://10.0.0.214/WOODY/import.php?FLAG=0
@@ -58,7 +58,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
     //------------------------------------------------------------------------------------------------
 
     void getImportData() {
-        settings =  databaseHandler.getSettings();
+        settings = databaseHandler.getSettings();
         urlImport = "http://" + settings.getIpAddress() + "/import.php?FLAG=1";//http://5.189.130.98:8085/import.php?FLAG=1
 //        Log.e("presenter:ipImport ", "" + SettingsFile.ipAddress);
 //        Log.e("presenter:urlImport ", "" + urlImport);
@@ -68,14 +68,16 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
 
     @Override
     public void onErrorResponse(VolleyError error) {
-        Log.e("presenter/import/err ", ""  +  error);
+        Log.e("presenter/import/err ", "" + error);
         SettingsFile.serialNumber = "";
     }
 
     @Override
     public void onResponse(String response) {
         try {
-            response=new String(response.getBytes("ISO-8859-1"), "UTF-8");
+//            response=new String(response.getBytes("ISO-8859-1"), "UTF-8");
+            if (response.indexOf("{") != 0)
+                response = response.substring(response.indexOf("{"));
             Log.e("presenter: import ", "" + response);
             JSONObject object = new JSONObject(response);
             Log.e("presenter1: import ", "" + response);
@@ -88,8 +90,8 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
 
         } catch (JSONException e) {
             e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
         }
 
     }
@@ -97,7 +99,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
     //------------------------------------------------------------------------------------------------
 
     void getUsersData() {
-        settings =  databaseHandler.getSettings();
+        settings = databaseHandler.getSettings();
         urlUsers = "http://" + settings.getIpAddress() + "/import.php?FLAG=0";
 //        Log.e("presenter/urlUsers ", "" + urlUsers);
 //        Log.e("presenter:ipUsers ", "" + SettingsFile.ipAddress);
@@ -109,7 +111,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
 
         @Override
         public void onErrorResponse(VolleyError error) {
-            Log.e("presenter/users/err ", "" + settings.getIpAddress() + " *** "+ urlUsers+ " *** "+ error);
+            Log.e("presenter/users/err ", "" + settings.getIpAddress() + " *** " + urlUsers + " *** " + error);
             if (error instanceof NetworkError) {
             } else if (error instanceof ServerError) {
                 Log.e("presenter/users/err ", "0");
@@ -139,7 +141,12 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
             try {
                 databaseHandler.deleteUsers();
                 SettingsFile.usersList.clear();
-                response=new String(response.getBytes("ISO-8859-1"), "UTF-8");
+                Log.e("presenter/users/res ", "before " + (response.indexOf("{") != 0));
+
+                if (response.indexOf("{") != 0)
+                    response = response.substring(response.indexOf("{"));
+
+//                response=new String(response.getBytes("ISO-8859-1"), "UTF-8");
                 Log.e("presenter/users/res ", "" + response);
 
                 JSONObject object = new JSONObject(response);
@@ -158,8 +165,8 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
 
             } catch (JSONException e) {
                 e.printStackTrace();
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+//            } catch (UnsupportedEncodingException e) {
+//                e.printStackTrace();
             }
         }
     }
@@ -167,10 +174,10 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
     //------------------------------------------------------------------------------------------------
 
     public void getBundlesData(InventoryReport inventoryReport) {
-        settings =  databaseHandler.getSettings();
+        settings = databaseHandler.getSettings();
         this.inventoryReport = inventoryReport;
 
-        urlBundles = "http://" + settings.getIpAddress() + "/import.php?FLAG=3";
+        urlBundles = "http://" + settings.getIpAddress() + "/import.php?FLAG=3";//http://5.189.130.98:8085/import.php?FLAG=3
 //        Log.e("presenter/urlUsers ", "" + urlUsers);
 //        Log.e("presenter:ipUsers ", "" + SettingsFile.ipAddress);
         bundlesJsonObjectRequest = new StringRequest(Request.Method.GET, urlBundles, new BundlesResponseClass(), new BundlesResponseClass());
@@ -188,12 +195,14 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
         public void onResponse(String response) {
             try {
                 bundleInfoServer.clear();
-                response=new String(response.getBytes("ISO-8859-1"), "UTF-8");
+                if (response.indexOf("{") != 0)
+                    response = response.substring(response.indexOf("{"));
+//                response=new String(response.getBytes("ISO-8859-1"), "UTF-8");
 //                Log.e("presenter/users/res ", "" + response);
                 JSONObject object = new JSONObject(response);
-                Log.e("presenter:bun1", "" + object.toString());
+//                Log.e("presenter:bun1", "" + object.toString());
                 JSONArray array = object.getJSONArray("BUNDLE_INFO");
-                Log.e("presenter:bun2", "" + array.toString());
+//                Log.e("presenter:bun2", "" + array.toString());
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject innerObject = array.getJSONObject(i);
                     Log.e("presenter:bun3 ", "" + innerObject.toString());
@@ -208,7 +217,8 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                     bundleInfo.setArea(innerObject.getString("AREA"));
                     bundleInfo.setBarcode(innerObject.getString("BARCODE"));
                     bundleInfo.setOrdered(innerObject.getInt("ORDERED"));
-                    bundleInfo.setPicture(innerObject.getString("PIC"));
+//                    bundleInfo.setPicture(innerObject.getString("PIC"));
+                    bundleInfo.setAddingDate(innerObject.getString("BUNDLE_DATE"));
 
                     bundleInfoServer.add(bundleInfo);
                 }
@@ -217,8 +227,8 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
 //
             } catch (JSONException e) {
                 e.printStackTrace();
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+//            } catch (UnsupportedEncodingException e) {
+//                e.printStackTrace();
             }
         }
     }

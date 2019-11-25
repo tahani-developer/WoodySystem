@@ -70,7 +70,7 @@ import java.util.Map;
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.WHITE;
 
-public class InventoryReport extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class InventoryReport extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
     private TableLayout bundlesTable;
     private DatabaseHandler databaseHandler;
@@ -79,12 +79,15 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private List<String> areaList = new ArrayList<>();
     private WoodPresenter woodPresenter;
     private Animation animation;
-    private TextView textView;
+    private TextView textView, noOfBundles, noOfPieces;
+    private EditText dateFrom, dateTo;
     private Spinner location, area;
     private ArrayAdapter<String> locationAdapter;
     private ArrayAdapter<String> areaAdapter;
     private String loc = "All", areaField = "All";
     private Settings generalSettings;
+    private Calendar calendar;
+    private Date date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,11 +98,22 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         woodPresenter = new WoodPresenter(this);
         generalSettings = new Settings();
         generalSettings = databaseHandler.getSettings();
+        calendar = Calendar.getInstance();
+        date = Calendar.getInstance().getTime();
 
         bundlesTable = findViewById(R.id.inventory_report_table);
         location = findViewById(R.id.inventory_report_location);
         area = findViewById(R.id.inventory_report_area);
         textView = findViewById(R.id.inventory_report_tv);
+        dateFrom = findViewById(R.id.inventory_report_from);
+        dateTo = findViewById(R.id.inventory_report_to);
+        noOfBundles = findViewById(R.id.inventory_report_no_bundles);
+        noOfPieces = findViewById(R.id.inventory_report_no_pieces);
+
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        dateFrom.setText(df.format(date));
+        dateTo.setText(df.format(date));
+
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_to_right);
         textView.startAnimation(animation);
 
@@ -121,31 +135,46 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         area.setAdapter(areaAdapter);
 
         woodPresenter.getBundlesData(this);
+
+        dateFrom.setOnClickListener(this);
+        dateTo.setOnClickListener(this);
         location.setOnItemSelectedListener(this);
         area.setOnItemSelectedListener(this);
-//        fillTable(bundleInfoServer);
+        fillTable(bundleInfoServer);
     }
 
-
-
     public void filters() {
+        String fromDate = dateFrom.getText().toString().trim();
+        String toDate = dateTo.getText().toString();
         List<BundleInfo> filtered = new ArrayList<>();
-        for (int k = 0; k < bundleInfoServer.size(); k++) {
-//            Log.e("-------------------","" +((!loc.equals("All")) && areaField.equals("All")
-//                    && loc.equals(bundleInfoServer.get(k).getLocation())));
-            Log.e("location", bundleInfoServer.get(k).getLocation());
+        List<BundleInfo> dateFiltered = new ArrayList<>();
+
+        for (int m = 0; m < bundleInfoServer.size(); m++) {
+            JSONObject jsonObject = bundleInfoServer.get(m).getJSONObject();
+            Log.e("bundleInfoServer", "" + jsonObject.toString());
+
+            if ((formatDate(bundleInfoServer.get(m).getAddingDate()).after(formatDate(fromDate))
+                    || formatDate(bundleInfoServer.get(m).getAddingDate()).equals(formatDate(fromDate)))
+                    && (formatDate(bundleInfoServer.get(m).getAddingDate()).before(formatDate(toDate))
+                    || formatDate(bundleInfoServer.get(m).getAddingDate()).equals(formatDate(toDate))))
+                dateFiltered.add(bundleInfoServer.get(m));
+        }
+
+        for (int k = 0; k < dateFiltered.size(); k++) {
+            Log.e("-------------------", dateFiltered.get(k).getAddingDate());
+            Log.e("location", dateFiltered.get(k).getLocation());
             if ((!loc.equals("All")) && (!areaField.equals("All"))
-                    && loc.equals(bundleInfoServer.get(k).getLocation())
-                    && areaField.equals(bundleInfoServer.get(k).getArea()))
-                filtered.add(bundleInfoServer.get(k));
+                    && loc.equals(dateFiltered.get(k).getLocation())
+                    && areaField.equals(dateFiltered.get(k).getArea()))
+                filtered.add(dateFiltered.get(k));
             else if ((!loc.equals("All")) && areaField.equals("All")
-                    && loc.equals(bundleInfoServer.get(k).getLocation())) {
-                filtered.add(bundleInfoServer.get(k));
+                    && loc.equals(dateFiltered.get(k).getLocation())) {
+                filtered.add(dateFiltered.get(k));
             } else if (loc.equals("All") && (!areaField.equals("All"))
-                    && areaField.equals(bundleInfoServer.get(k).getArea()))
-                filtered.add(bundleInfoServer.get(k));
+                    && areaField.equals(dateFiltered.get(k).getArea()))
+                filtered.add(dateFiltered.get(k));
             else if (loc.equals("All") && areaField.equals("All"))
-                filtered.add(bundleInfoServer.get(k));
+                filtered.add(dateFiltered.get(k));
 
         }
 
@@ -168,7 +197,11 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 //        bundlesTable.addView(tableRowBasic);
         bundlesTable.removeAllViews();
         TableRow tableRow;
+        int sumOfBundles = 0, sumOfPieces = 0;
         for (int m = 0; m < filteredList.size(); m++) {
+            sumOfBundles += 1;
+            sumOfPieces += filteredList.get(m).getNoOfPieces();
+
             tableRow = new TableRow(this);
             tableRow = fillTableRows(tableRow
                     , filteredList.get(m).getBundleNo()
@@ -186,17 +219,17 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                 public void onClick(View v) {
                     PrintHelper photoPrinter = new PrintHelper(InventoryReport.this);
                     photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
-                    TextView bundleNo=(TextView) finalTableRow.getChildAt(0);
-                    TextView length=(TextView) finalTableRow.getChildAt(1);
-                    TextView width=(TextView) finalTableRow.getChildAt(2);
-                    TextView thic=(TextView) finalTableRow.getChildAt(3);
-                    TextView grade=(TextView) finalTableRow.getChildAt(4);
-                    TextView pcs=(TextView) finalTableRow.getChildAt(5);
-                    Bitmap bitmap=writeBarcode(bundleNo.getText().toString(),length.getText().toString(),width.getText().toString(),
-                            thic.getText().toString(),grade.getText().toString(),pcs.getText().toString());
+                    TextView bundleNo = (TextView) finalTableRow.getChildAt(0);
+                    TextView length = (TextView) finalTableRow.getChildAt(1);
+                    TextView width = (TextView) finalTableRow.getChildAt(2);
+                    TextView thic = (TextView) finalTableRow.getChildAt(3);
+                    TextView grade = (TextView) finalTableRow.getChildAt(4);
+                    TextView pcs = (TextView) finalTableRow.getChildAt(5);
+                    Bitmap bitmap = writeBarcode(bundleNo.getText().toString(), length.getText().toString(), width.getText().toString(),
+                            thic.getText().toString(), grade.getText().toString(), pcs.getText().toString());
 
                     photoPrinter.printBitmap("invoice.jpg", bitmap);
-                    Toast.makeText(InventoryReport.this, "tested+"+bundleNo.getText().toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(InventoryReport.this, "tested+" + bundleNo.getText().toString(), Toast.LENGTH_SHORT).show();
 
                 }
             });
@@ -225,6 +258,8 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 //            });
         }
 
+        noOfBundles.setText("" + sumOfBundles);
+        noOfPieces.setText("" + sumOfPieces);
     }
 
     TableRow fillTableRows(TableRow tableRow, String bundlNo, String length, String width, String thic, String grade, String noOfPieces, String location, String area) {
@@ -300,21 +335,44 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         return tableRow;
     }
 
-    public void setSlideAnimation() {
-        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
+    public Date formatDate(String date) {
+
+        Log.e("date", date);
+        String myFormat = "dd/MM/yyyy"; //In which you need put here
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(myFormat, Locale.US);
+        Date d = null;
+        try {
+            d = simpleDateFormat.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return d;
     }
 
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent intent = new Intent(InventoryReport.this, ReportsActivity.class);
-        startActivity(intent);
-        finish();
-    }
+    public DatePickerDialog.OnDateSetListener openDatePickerDialog(final int flag) {
+        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
 
-    @Override
-    public void finish() {
-        super.finish();
-        setSlideAnimation();
+                // TODO Auto-generated method stub
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, month);
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                String myFormat = "dd/MM/yyyy";
+                SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+                if (flag == 0)
+                    dateFrom.setText(sdf.format(calendar.getTime()));
+                else
+                    dateTo.setText(sdf.format(calendar.getTime()));
+
+                if (!dateFrom.getText().toString().equals("") && !dateFrom.getText().toString().equals("")) {
+                    filters();
+                }
+            }
+        };
+        return date;
     }
 
     public Bitmap writeBarcode(String data, String length, String width, String thic, String grades, String pcs) {
@@ -435,5 +493,40 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        int flag = 0;
+        switch (v.getId()) {
+            case R.id.inventory_report_from:
+                flag = 0;
+                break;
+            case R.id.inventory_report_to:
+                flag = 1;
+                break;
+        }
+//        filters();
+        new DatePickerDialog(InventoryReport.this, openDatePickerDialog(flag), calendar
+                .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)).show();
+
+    }
+
+    public void setSlideAnimation() {
+        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
+    }
+
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(InventoryReport.this, ReportsActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        setSlideAnimation();
     }
 }
