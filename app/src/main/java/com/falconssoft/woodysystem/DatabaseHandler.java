@@ -202,8 +202,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         contentValues.put(BUNDLE_INFO_BUNDLE_NO, bundleInfo.getBundleNo());
         contentValues.put(BUNDLE_INFO_LOCATION, bundleInfo.getLocation());
         contentValues.put(BUNDLE_INFO_AREA, bundleInfo.getArea());
-        contentValues.put(BUNDLE_BARCODE, bundleInfo.getBarcode());
-        contentValues.put(BUNDLE_INFO_ORDERED, bundleInfo.getOrdered());
+//        contentValues.put(BUNDLE_BARCODE, bundleInfo.getBarcode());
+        contentValues.put(BUNDLE_INFO_ORDERED, 0);//bundleInfo.getOrdered());
         contentValues.put(BUNDLE_INFO_FLAG, "0");
         contentValues.put(BUNDLE_INFO_ADD_DATE, bundleInfo.getAddingDate());
 
