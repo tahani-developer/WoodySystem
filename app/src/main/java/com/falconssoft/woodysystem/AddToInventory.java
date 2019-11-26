@@ -94,7 +94,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
     private final String STATE_VISIBILITY = "state-visibility";
     private WoodPresenter presenter;
     private Settings generalSettings;
-    String bundleNumber ;
+    String bundleNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -239,7 +239,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                                 , bundleNoString
                                                 , locationText
                                                 , areaText
-                                                , generateDate);
+                                                , generateDate
+                                                , 0);
 
                                         Log.e("date is", generateDate);
 
@@ -309,7 +310,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                                         databaseHandler.deleteBundle(bundleNo);
                                                         bundlesTable.removeView(tableRow);
 
-                                                        bundleNumber = bundleNo ;
+                                                        bundleNumber = bundleNo;
                                                         new JSONTask2().execute();
                                                     }
                                                 });
@@ -495,7 +496,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         protected String doInBackground(String... params) {
             try {
                 String JsonResponse = null;
-                HttpClient client = new DefaultHttpClient(); 
+                HttpClient client = new DefaultHttpClient();
                 HttpPost request = new HttpPost();
                 request.setURI(new URI("http://" + generalSettings.getIpAddress() + "/export.php"));//import 10.0.0.214
 

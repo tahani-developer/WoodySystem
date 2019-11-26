@@ -26,6 +26,7 @@ public class BundleInfo {
     private String picture;
     private int ordered; // 0 => order not done, 1 => order done
     private String hideFlag;// 0 => show, 1 => hide
+    private int isPrinted;
 
     public BundleInfo() {
     }
@@ -57,7 +58,7 @@ public class BundleInfo {
         this.hideFlag = hideFlag;
     }
 
-    public BundleInfo(double thickness, double length, double width, String grade, int noOfPieces, String bundleNo, String location, String area, String addingDate) {
+    public BundleInfo(double thickness, double length, double width, String grade, int noOfPieces, String bundleNo, String location, String area, String addingDate, int isPrinted) {
         this.thickness = thickness;
         this.length = length;
         this.width = width;
@@ -67,6 +68,15 @@ public class BundleInfo {
         this.location = location;
         this.area = area;
         this.addingDate = addingDate;
+        this.isPrinted = isPrinted;
+    }
+
+    public int getIsPrinted() {
+        return isPrinted;
+    }
+
+    public void setIsPrinted(int isPrinted) {
+        this.isPrinted = isPrinted;
     }
 
     public String getAddingDate() {

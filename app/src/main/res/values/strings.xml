@@ -41,7 +41,7 @@
     <string name="length">Length</string>
     <string name="no_of_pieces"># Pieces</string>
     <string name="bundle_no">Bundle #</string>
-    <string name="cubic">Cubic</string>
+    <string name="cubic">Cubic-</string>
 
     <string name="username">Username</string>
     <string name="password">Password</string>
@@ -55,7 +55,7 @@
     <string name="barcode">Barcode</string>
 
     <string name="bundles">Bundles Report</string>
-    <string name="print_barcode_report">Print Barcode Report</string>
+    <string name="print_barcode_report">Print Barcode</string>
     <string name="orders">Orders Report</string>
     <string name="inventory_report">Inventory Report</string>
     <string name="loading_order_report">Loading Order Report</string>

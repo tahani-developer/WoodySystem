@@ -363,13 +363,16 @@
                 >
 
                 <TextView
-                    android:layout_width="100dp"
+                    android:layout_width="115dp"
                     android:layout_height="match_parent"
                     android:background="@drawable/frame_shape"
-                    android:textSize="18sp"
+                    android:drawableEnd="@drawable/m3"
+                    android:drawableRight="@drawable/m3"
+                    android:drawablePadding="-20dp"
                     android:fontFamily="serif"
+                    android:text="@string/cubic"
                     android:textColor="@color/white"
-                    android:text="@string/cubic" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/inventory_report_cubic"
