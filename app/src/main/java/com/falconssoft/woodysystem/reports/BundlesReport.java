@@ -9,7 +9,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.net.sip.SipSession;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.print.PrintHelper;
 import android.support.v7.app.AppCompatActivity;
@@ -26,13 +25,9 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.falconssoft.woodysystem.AddToInventory;
 import com.falconssoft.woodysystem.DatabaseHandler;
-import com.falconssoft.woodysystem.MainActivity;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.ReportsActivity;
-import com.falconssoft.woodysystem.SettingsFile;
-import com.falconssoft.woodysystem.Stage3;
 import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.Settings;
 import com.google.zxing.BarcodeFormat;
@@ -41,7 +36,6 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -132,7 +126,7 @@ public class BundlesReport extends AppCompatActivity {
                     TextView pcs = (TextView) finalTableRow.getChildAt(5);
                     Bitmap bitmap = writeBarcode(bundleNo.getText().toString(), length.getText().toString(), width.getText().toString(),
                             thic.getText().toString(), grade.getText().toString(), pcs.getText().toString());
-                    databaseHandler.updateChekcPrinting(bundleNo.getText().toString(), 1);
+                    databaseHandler.updateCheckPrinting(bundleNo.getText().toString(), 1);
 
                     photoPrinter.printBitmap("invoice.jpg", bitmap);
                     Toast.makeText(BundlesReport.this, "tested+" + bundleNo.getText().toString(), Toast.LENGTH_SHORT).show();

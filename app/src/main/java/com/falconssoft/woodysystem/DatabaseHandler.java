@@ -486,7 +486,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.update(BUNDLE_INFO_TABLE, values, BUNDLE_INFO_BUNDLE_NO + " = '" + bundleNo + "'", null);
     }
 
-    public void updateChekcPrinting(String bundleNo, int printed) {
+    public void updateCheckPrinting(String bundleNo, int printed) {
         db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
