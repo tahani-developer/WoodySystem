@@ -79,7 +79,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private List<String> areaList = new ArrayList<>();
     private WoodPresenter woodPresenter;
     private Animation animation;
-    private TextView textView, noOfBundles, noOfPieces;
+    private TextView textView, noOfBundles, noOfPieces, cubicField;
     private EditText dateFrom, dateTo;
     private Spinner location, area;
     private ArrayAdapter<String> locationAdapter;
@@ -109,6 +109,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         dateTo = findViewById(R.id.inventory_report_to);
         noOfBundles = findViewById(R.id.inventory_report_no_bundles);
         noOfPieces = findViewById(R.id.inventory_report_no_pieces);
+        cubicField = findViewById(R.id.inventory_report_cubic);
 
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         dateFrom.setText(df.format(date));
@@ -198,9 +199,11 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         bundlesTable.removeAllViews();
         TableRow tableRow;
         int sumOfBundles = 0, sumOfPieces = 0;
+        double sumOfCubic = 0;
         for (int m = 0; m < filteredList.size(); m++) {
             sumOfBundles += 1;
             sumOfPieces += filteredList.get(m).getNoOfPieces();
+            sumOfCubic += (filteredList.get(m).getLength() * filteredList.get(m).getWidth() * filteredList.get(m).getThickness() * filteredList.get(m).getNoOfPieces());
 
             tableRow = new TableRow(this);
             tableRow = fillTableRows(tableRow
@@ -260,6 +263,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 
         noOfBundles.setText("" + sumOfBundles);
         noOfPieces.setText("" + sumOfPieces);
+        cubicField.setText("" +  sumOfCubic);
     }
 
     TableRow fillTableRows(TableRow tableRow, String bundlNo, String length, String width, String thic, String grade, String noOfPieces, String location, String area) {

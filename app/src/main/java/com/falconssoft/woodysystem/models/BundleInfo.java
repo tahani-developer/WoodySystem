@@ -24,7 +24,7 @@ public class BundleInfo {
     private boolean checked;
     private String barcode;
     private String picture;
-    private int ordered;
+    private int ordered; // 0 => order not done, 1 => order done
     private String hideFlag;// 0 => show, 1 => hide
 
     public BundleInfo() {

@@ -41,6 +41,7 @@
     <string name="length">Length</string>
     <string name="no_of_pieces"># Pieces</string>
     <string name="bundle_no">Bundle #</string>
+    <string name="cubic">Cubic</string>
 
     <string name="username">Username</string>
     <string name="password">Password</string>
