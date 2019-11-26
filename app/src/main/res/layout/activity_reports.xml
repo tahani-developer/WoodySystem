@@ -22,9 +22,9 @@
             android:drawableTop="@drawable/reports"
             android:fontFamily="serif"
             android:paddingTop="10dp"
-            android:text="@string/bundles"
+            android:text="@string/print_barcode_report"
             android:textColor="@color/white"
-            android:textSize="25sp"
+            android:textSize="22sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -38,7 +38,7 @@
             android:paddingTop="10dp"
             android:text="@string/orders"
             android:textColor="@color/white"
-            android:textSize="25sp"
+            android:textSize="22sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.36"
             app:layout_constraintStart_toEndOf="@+id/reports_bundles"
@@ -56,7 +56,7 @@
             android:paddingTop="10dp"
             android:text="@string/inventory_report"
             android:textColor="@color/white"
-            android:textSize="25sp"
+            android:textSize="22sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/reports_bundles" />
 
@@ -72,7 +72,7 @@
             android:paddingTop="10dp"
             android:text="Report"
             android:textColor="@color/white"
-            android:textSize="25sp"
+            android:textSize="22sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.34"
             app:layout_constraintStart_toEndOf="@+id/reports_inventory"
@@ -89,7 +89,7 @@
             android:fontFamily="serif"
             android:paddingTop="10dp"
             android:textColor="@color/white"
-            android:textSize="25sp"
+            android:textSize="22sp"
             android:text="Report"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/reports_inventory" />
@@ -103,7 +103,7 @@
             android:fontFamily="serif"
             android:paddingTop="10dp"
             android:textColor="@color/white"
-            android:textSize="25sp"
+            android:textSize="22sp"
             android:text="Report"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.363"
