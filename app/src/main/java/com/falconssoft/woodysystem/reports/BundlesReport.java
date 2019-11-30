@@ -238,6 +238,9 @@ public class BundlesReport extends AppCompatActivity {
         setSlideAnimation();
     }
 
+
+    
+
     public Bitmap writeBarcode(String data,String length,String width,String thic,String grades,String pcs) {
         final Dialog dialog = new Dialog(BundlesReport.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
