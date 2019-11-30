@@ -47,6 +47,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private List<String> storesList = new ArrayList<>();
     private ArrayAdapter<String> storesAdapter;
     private WoodPresenter woodPresenter;
+    private Settings generalSettings;
+    private String localCompanyName, localIpAddress, localStore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,12 +56,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login);
 
         databaseHandler = new DatabaseHandler(this);
-        databaseHandler.getSettings();
+        generalSettings = new Settings();
+        generalSettings = databaseHandler.getSettings();
         woodPresenter = new WoodPresenter(this);
 //        woodPresenter.getImportData();
+        localCompanyName = generalSettings.getCompanyName();
+        localIpAddress = generalSettings.getIpAddress();
+        localStore = generalSettings.getStore();
 
-        if ((!SettingsFile.companyName.equals("")) && (!SettingsFile.ipAddress.equals(""))) {
-            woodPresenter.getUsersData();
+        Log.e("bool", "" + (!(localIpAddress == null)));
+
+        if (!(localIpAddress == null) && (!(localCompanyName == null))) {
+            if ((!localIpAddress.equals("")) && (!localCompanyName.toString().equals(""))) {
+                woodPresenter.getUsersData();
+            } else {
+            }
         } else {
             Toast.makeText(this, "Please fill settings!", Toast.LENGTH_SHORT).show();
         }
@@ -70,7 +81,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         login = findViewById(R.id.login_login_btn);
         settings = findViewById(R.id.login_settings);
         linearLayout = findViewById(R.id.login_linearLayout);
-        SettingsFile.store = "Amman";
+//        SettingsFile.store = "Amman";
 
         login.setOnClickListener(this);
         logoImage.setOnClickListener(this);
@@ -92,13 +103,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 String usernameText = username.getText().toString();
                 String passwordText = password.getText().toString();
                 boolean found = false;
+                localCompanyName = generalSettings.getCompanyName();
+                localIpAddress = generalSettings.getIpAddress();
+                localStore = generalSettings.getStore();
 //                Intent intent = new Intent(this, MainActivity.class);
 //                startActivity(intent);
 //                setSlideAnimation();
-                if ((!SettingsFile.companyName.equals("")) && (!SettingsFile.ipAddress.equals(""))) {
-                    if (!usernameText.equals("") || !usernameText.equals(null)) {
-                        if (!passwordText.equals("") || !passwordText.equals(null)) {
+                if (!(localIpAddress == null) && (!(localCompanyName == null))) {
+                    if ((!localIpAddress.equals("")) && (!localCompanyName.equals(""))) {
 //                            usersList = databaseHandler.getUsers();
+                        if (usersList.size() > 0) {
                             for (int i = 0; i < usersList.size(); i++)
                                 if (usernameText.equals(usersList.get(i).getUsername())
                                         && passwordText.equals(usersList.get(i).getPassword())) {
@@ -108,10 +122,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     startActivity(intent2);
                                 }
 
-                            if (!found){
+                            if (!found) {
                                 Toast.makeText(this, "Username or password is wrong or check settings! ", Toast.LENGTH_SHORT).show();
                             }
+                        } else {
+                            Toast.makeText(this, "Please check internet connection!!!!", Toast.LENGTH_SHORT).show();
                         }
+
+                    } else {
+                        Toast.makeText(this, "Please fill settings first!!!!", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(this, "Please fill settings first!!!!", Toast.LENGTH_SHORT).show();
@@ -125,6 +144,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.login_settings:
                 Settings settings = new Settings();
+                generalSettings = databaseHandler.getSettings();
                 Dialog settingDialog = new Dialog(this);
                 settingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 settingDialog.setContentView(R.layout.settings_dialog_layout);
@@ -132,6 +152,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 ipAddress = settingDialog.findViewById(R.id.settings_ipAddress);
                 storesSpinner = settingDialog.findViewById(R.id.settings_stores);
                 saveSettings = settingDialog.findViewById(R.id.settings_save);
+                localCompanyName = generalSettings.getCompanyName();
+                localIpAddress = generalSettings.getIpAddress();
+                localStore = generalSettings.getStore();
 
                 storesList.add("Amman");
                 storesList.add("Kalinovka");
@@ -141,24 +164,29 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 storesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 storesSpinner.setAdapter(storesAdapter);
 
-                databaseHandler.getSettings();
-                companyName.setText(SettingsFile.companyName);
-                ipAddress.setText(SettingsFile.ipAddress);
-                switch (SettingsFile.store) {
-                    case "Amman":
-                        storesSpinner.setSelection(0);
-                        break;
-                    case "Kalinovka":
-                        storesSpinner.setSelection(1);
-                        break;
-                    case "Rudniya Store":
-                        storesSpinner.setSelection(2);
-                        break;
-                    case "Rudniya Sawmill":
-                        storesSpinner.setSelection(3);
-                        break;
-                    default:
-                        storesSpinner.setSelection(0);
+//                if (!(localIpAddress == null) && (!(localCompanyName == null))) {
+//                    if ((!localIpAddress.equals("")) && (!localCompanyName.equals(""))) {
+                companyName.setText(localCompanyName);
+                ipAddress.setText(localIpAddress);
+                if (localStore == null) {
+                    storesSpinner.setSelection(0);
+                } else {
+                    switch (localStore) {
+                        case "Amman":
+                            storesSpinner.setSelection(0);
+                            break;
+                        case "Kalinovka":
+                            storesSpinner.setSelection(1);
+                            break;
+                        case "Rudniya Store":
+                            storesSpinner.setSelection(2);
+                            break;
+                        case "Rudniya Sawmill":
+                            storesSpinner.setSelection(3);
+                            break;
+                        default:
+                            storesSpinner.setSelection(0);
+                    }
                 }
 
                 storesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

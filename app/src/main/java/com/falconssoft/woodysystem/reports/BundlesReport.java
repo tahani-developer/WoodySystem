@@ -9,7 +9,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.net.sip.SipSession;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.print.PrintHelper;
 import android.support.v7.app.AppCompatActivity;
@@ -26,13 +25,9 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.falconssoft.woodysystem.AddToInventory;
 import com.falconssoft.woodysystem.DatabaseHandler;
-import com.falconssoft.woodysystem.MainActivity;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.ReportsActivity;
-import com.falconssoft.woodysystem.SettingsFile;
-import com.falconssoft.woodysystem.Stage3;
 import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.Settings;
 import com.google.zxing.BarcodeFormat;
@@ -41,7 +36,6 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -57,6 +51,8 @@ public class BundlesReport extends AppCompatActivity {
     private List<BundleInfo> bundleInfos = new ArrayList<>();
     private Animation animation;
     private TextView textView;
+    private Settings generalSettings;
+
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -76,6 +72,9 @@ public class BundlesReport extends AppCompatActivity {
 
     void fillTable() {
         bundleInfos = databaseHandler.getAllBundleInfo("0");
+        generalSettings = new Settings();
+        generalSettings = databaseHandler.getSettings();
+
 //        TableRow tableRowBasic = new TableRow(this);
 //        tableRowBasic = fillTableRows(tableRowBasic
 //                , "Bundle#"
@@ -89,7 +88,7 @@ public class BundlesReport extends AppCompatActivity {
 //        bundlesTable.addView(tableRowBasic);
         TableRow tableRow;
         for (int m = 0; m < bundleInfos.size(); m++) {
-             tableRow = new TableRow(this);
+            tableRow = new TableRow(this);
             tableRow = fillTableRows(tableRow
                     , bundleInfos.get(m).getBundleNo()
                     , "" + bundleInfos.get(m).getLength()
@@ -98,26 +97,39 @@ public class BundlesReport extends AppCompatActivity {
                     , bundleInfos.get(m).getGrade()
                     , "" + bundleInfos.get(m).getNoOfPieces()
                     , bundleInfos.get(m).getLocation()
-                    , bundleInfos.get(m).getArea());
+                    , bundleInfos.get(m).getArea()
+                    , bundleInfos.get(m).getIsPrinted()
+            );
             bundlesTable.addView(tableRow);
 
             TableRow finalTableRow = tableRow;
+            TableRow finalTableRow1 = tableRow;
             tableRow.getVirtualChildAt(8).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     PrintHelper photoPrinter = new PrintHelper(BundlesReport.this);
+                    for (int i = 0; i < 9; i++)
+                        switch (i) {
+                            case 8:
+                                finalTableRow1.getVirtualChildAt(8).setBackgroundResource(R.color.gray_dark);
+                                break;
+                            default:
+                                finalTableRow1.getVirtualChildAt(i).setBackgroundResource(R.color.white);
+                                break;
+                        }
                     photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
-                    TextView bundleNo=(TextView) finalTableRow.getChildAt(0);
-                    TextView length=(TextView) finalTableRow.getChildAt(1);
-                    TextView width=(TextView) finalTableRow.getChildAt(2);
-                    TextView thic=(TextView) finalTableRow.getChildAt(3);
-                    TextView grade=(TextView) finalTableRow.getChildAt(4);
-                    TextView pcs=(TextView) finalTableRow.getChildAt(5);
-                    Bitmap bitmap=writeBarcode(bundleNo.getText().toString(),length.getText().toString(),width.getText().toString(),
-                            thic.getText().toString(),grade.getText().toString(),pcs.getText().toString());
+                    TextView bundleNo = (TextView) finalTableRow.getChildAt(0);
+                    TextView length = (TextView) finalTableRow.getChildAt(1);
+                    TextView width = (TextView) finalTableRow.getChildAt(2);
+                    TextView thic = (TextView) finalTableRow.getChildAt(3);
+                    TextView grade = (TextView) finalTableRow.getChildAt(4);
+                    TextView pcs = (TextView) finalTableRow.getChildAt(5);
+                    Bitmap bitmap = writeBarcode(bundleNo.getText().toString(), length.getText().toString(), width.getText().toString(),
+                            thic.getText().toString(), grade.getText().toString(), pcs.getText().toString());
+                    databaseHandler.updateCheckPrinting(bundleNo.getText().toString(), 1);
 
                     photoPrinter.printBitmap("invoice.jpg", bitmap);
-                    Toast.makeText(BundlesReport.this, "tested+"+bundleNo.getText().toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(BundlesReport.this, "tested+" + bundleNo.getText().toString(), Toast.LENGTH_SHORT).show();
 
                 }
             });
@@ -148,10 +160,16 @@ public class BundlesReport extends AppCompatActivity {
         }
     }
 
-    TableRow fillTableRows(TableRow tableRow, String bundlNo, String length, String width, String thic, String grade, String noOfPieces, String location, String area) {
+    TableRow fillTableRows(TableRow tableRow, String bundlNo, String length, String width, String thic, String grade, String noOfPieces, String location, String area, int printed) {
+        int backgroundColor;
+        if (printed == 0) {
+            backgroundColor = R.color.light_orange;
+        } else {
+            backgroundColor = R.color.white;
+        }
         for (int i = 0; i < 9; i++) {
             TextView textView = new TextView(this);
-            textView.setBackgroundResource(R.color.light_orange);
+            textView.setBackgroundResource(backgroundColor);
             TableRow.LayoutParams textViewParam;
 //            TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
 //            textViewParam.setMargins(1, 5, 1, 1);
@@ -213,7 +231,12 @@ public class BundlesReport extends AppCompatActivity {
                     textView.setLayoutParams(textViewParam);
                     textView.setText("Print");
                     textView.setTextColor(ContextCompat.getColor(this, R.color.white));
-                    textView.setBackgroundResource(R.color.orange);
+                    if (printed == 0) {
+                        backgroundColor = R.color.orange;
+                    } else {
+                        backgroundColor = R.color.gray_dark;
+                    }
+                    textView.setBackgroundResource(backgroundColor);
                     break;
             }
             tableRow.addView(textView);
@@ -238,26 +261,23 @@ public class BundlesReport extends AppCompatActivity {
         setSlideAnimation();
     }
 
-
-    
-
-    public Bitmap writeBarcode(String data,String length,String width,String thic,String grades,String pcs) {
+    public Bitmap writeBarcode(String data, String length, String width, String thic, String grades, String pcs) {
         final Dialog dialog = new Dialog(BundlesReport.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.barcode_design);
-        TextView companyName,bundelNo,TLW,pcsNo,grade;
+        TextView companyName, bundelNo, TLW, pcsNo, grade;
 
-        companyName= (TextView) dialog.findViewById(R.id.companyName);
-        bundelNo= (TextView) dialog.findViewById(R.id.bundelNo);
-        TLW= (TextView) dialog.findViewById(R.id.TLW);
-        pcsNo= (TextView) dialog.findViewById(R.id.pcsNo);
-        grade= (TextView) dialog.findViewById(R.id.grade);
+        companyName = (TextView) dialog.findViewById(R.id.companyName);
+        bundelNo = (TextView) dialog.findViewById(R.id.bundelNo);
+        TLW = (TextView) dialog.findViewById(R.id.TLW);
+        pcsNo = (TextView) dialog.findViewById(R.id.pcsNo);
+        grade = (TextView) dialog.findViewById(R.id.grade);
         ImageView iv = (ImageView) dialog.findViewById(R.id.barcode);
 
-        companyName.setText(SettingsFile.companyName);
+        companyName.setText(generalSettings.getCompanyName());
         bundelNo.setText(data);
-        TLW.setText(thic+" X "+width+" X "+length);
+        TLW.setText(thic + " X " + width + " X " + length);
         pcsNo.setText(pcs);
         grade.setText(grades);
 

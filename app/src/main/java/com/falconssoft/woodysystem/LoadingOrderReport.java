@@ -35,6 +35,7 @@ import android.widget.Toast;
 import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.Orders;
 import com.falconssoft.woodysystem.models.Pictures;
+import com.falconssoft.woodysystem.models.Settings;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -73,12 +74,15 @@ public class LoadingOrderReport extends AppCompatActivity {
     Spinner location;
     private ArrayAdapter<String> locationAdapter;
     private String loc = "";
+    private Settings generalSettings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.loading_order_report);
 
+        generalSettings = new Settings();
+        generalSettings = new DatabaseHandler(this).getSettings();
         orders = new ArrayList<>();
         bundles = new ArrayList<>();
         pictures = new ArrayList<>();
@@ -172,7 +176,7 @@ public class LoadingOrderReport extends AppCompatActivity {
 
             try {
 
-                URL url = new URL("http://" + SettingsFile.ipAddress + "/import.php?FLAG=2");
+                URL url = new URL("http://" + generalSettings.getIpAddress() + "/import.php?FLAG=2");
 
                 URLConnection conn = url.openConnection();
                 conn.setDoOutput(true);
@@ -504,7 +508,7 @@ public class LoadingOrderReport extends AppCompatActivity {
                 else
                     to.setText(sdf.format(myCalendar.getTime()));
 
-                if (!from.getText().toString().equals("") && !from.getText().toString().equals(""))
+                if (!from.getText().toString().equals("") && !to.getText().toString().equals(""))
                     filters();
 
             }

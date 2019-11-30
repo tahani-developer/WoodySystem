@@ -37,6 +37,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.falconssoft.woodysystem.models.BundleInfo;
+import com.falconssoft.woodysystem.models.Settings;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -60,7 +61,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.net.URI;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -89,6 +93,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
     private boolean mState = false;
     private final String STATE_VISIBILITY = "state-visibility";
     private WoodPresenter presenter;
+    private Settings generalSettings;
+    String bundleNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +103,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 
         databaseHandler = new DatabaseHandler(this);
         presenter = new WoodPresenter(this);
+        generalSettings = new Settings();
+        generalSettings = databaseHandler.getSettings();
 
         thickness = findViewById(R.id.addToInventory_thickness);
         length = findViewById(R.id.addToInventory_length);
@@ -144,8 +152,6 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         textView.startAnimation(animation);
 
         jsonArrayBundles = new JSONArray();
-
-
 //        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
 //        addToInventory.startAnimation(animation);
     }
@@ -220,6 +226,11 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                         jsonArrayBundles = new JSONArray();
                                         linearLayoutView.setVisibility(View.VISIBLE);
                                         mState = true;
+
+                                        Date date = Calendar.getInstance().getTime();
+                                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                                        String generateDate = simpleDateFormat.format(date);
+
                                         newBundle = new BundleInfo(Double.parseDouble(thicknessText)
                                                 , Double.parseDouble(lengthText)
                                                 , Double.parseDouble(widthText)
@@ -228,11 +239,10 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                                 , bundleNoString
                                                 , locationText
                                                 , areaText
-                                                , 1
-                                                , 53
-                                                , 5
-                                                , "june"
+                                                , generateDate
                                                 , 0);
+
+                                        Log.e("date is", generateDate);
 
                                         TableRow tableRow = new TableRow(this);
                                         for (int i = 0; i < 8; i++) {
@@ -299,6 +309,9 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                                     public void onClick(DialogInterface dialog, int which) {
                                                         databaseHandler.deleteBundle(bundleNo);
                                                         bundlesTable.removeView(tableRow);
+
+                                                        bundleNumber = bundleNo;
+                                                        new JSONTask2().execute();
                                                     }
                                                 });
                                                 builder.show();
@@ -419,9 +432,10 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                 String JsonResponse = null;
                 HttpClient client = new DefaultHttpClient();
                 HttpPost request = new HttpPost();
-                request.setURI(new URI("http://" + SettingsFile.ipAddress + "/export.php"));//import 10.0.0.214
+                request.setURI(new URI("http://" + generalSettings.getIpAddress() + "/export.php"));//import 10.0.0.214
 
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+//                Log.e("date 2", jsonArrayBundles.get)
                 nameValuePairs.add(new BasicNameValuePair("BUNDLE_INFO", jsonArrayBundles.toString().trim()));
 
                 request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
@@ -465,6 +479,68 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                 }
             } else {
                 SettingsFile.serialNumber = "";
+                Log.e("tag", "****Failed to export data Please check internet connection");
+            }
+        }
+    }
+
+    private class JSONTask2 extends AsyncTask<String, String, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                String JsonResponse = null;
+                HttpClient client = new DefaultHttpClient();
+                HttpPost request = new HttpPost();
+                request.setURI(new URI("http://" + generalSettings.getIpAddress() + "/export.php"));//import 10.0.0.214
+
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+                nameValuePairs.add(new BasicNameValuePair("DELETE_BUNDLE", "1"));
+                nameValuePairs.add(new BasicNameValuePair("BUNDLE_NO", bundleNumber));
+
+                request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                HttpResponse response = client.execute(request);
+
+                BufferedReader in = new BufferedReader(new
+                        InputStreamReader(response.getEntity().getContent()));
+
+                StringBuffer sb = new StringBuffer("");
+                String line = "";
+
+                while ((line = in.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                in.close();
+
+                JsonResponse = sb.toString();
+                Log.e("tag", "" + JsonResponse);
+
+                return JsonResponse;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (s != null) {
+                if (s.contains("DELETE BUNDLE SUCCESS")) {
+                    Log.e("tag", "****Success");
+                } else {
+                    Log.e("tag", "****Failed to export data");
+                }
+            } else {
                 Log.e("tag", "****Failed to export data Please check internet connection");
             }
         }

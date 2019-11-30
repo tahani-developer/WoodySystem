@@ -43,6 +43,7 @@ import com.falconssoft.woodysystem.email.SendMailTask;
 import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.Orders;
 import com.falconssoft.woodysystem.models.Pictures;
+import com.falconssoft.woodysystem.models.Settings;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -95,6 +96,7 @@ public class LoadingOrder2 extends AppCompatActivity {
     static int index = 0;
     ItemsListAdapter2 adapter;
     int imageNo = 0;
+    private Settings generalSettings;
 
 //    BluetoothAdapter mBluetoothAdapter;
 //    BluetoothSocket mmSocket;
@@ -126,7 +128,8 @@ public class LoadingOrder2 extends AppCompatActivity {
         imagesFileList.clear();
         init();
         databaseHandler = new DatabaseHandler(this);
-
+        generalSettings = new Settings();
+        generalSettings = databaseHandler.getSettings();
         jsonArrayOrders = new JSONArray();
         jsonArrayPics = new JSONArray();
 
@@ -835,7 +838,7 @@ public class LoadingOrder2 extends AppCompatActivity {
                 String JsonResponse = null;
                 HttpClient client = new DefaultHttpClient();
                 HttpPost request = new HttpPost();
-                request.setURI(new URI("http://" + SettingsFile.ipAddress + "/export.php"));
+                request.setURI(new URI("http://" + generalSettings.getIpAddress() + "/export.php"));
 
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
                 nameValuePairs.add(new BasicNameValuePair("BUNDLE_ORDERS", jsonArrayOrders.toString().trim()));

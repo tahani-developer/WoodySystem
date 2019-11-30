@@ -21,7 +21,7 @@ import java.util.List;
 public class DatabaseHandler extends SQLiteOpenHelper {
 
     private static String TAG = "DatabaseHandler";
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
     private static final String DATABASE_NAME = "WoodyDatabase";
     static SQLiteDatabase db;
 
@@ -33,7 +33,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String SETTINGS_STORE = "STORE";
 
     //******************************************************************
-    private static final String BUNDLE_INFO_TABLE = "INVENTORY_INFO";
+    private static final String BUNDLE_INFO_TABLE = "BUNDLE_INFO_TABLE";
 
     private static final String BUNDLE_INFO_THICKNESS = "THICKNESS";
     private static final String BUNDLE_INFO_LENGTH = "LENGTH";
@@ -46,6 +46,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String BUNDLE_BARCODE = "BARCODE";
     private static final String BUNDLE_INFO_ORDERED = "ORDERED";
     private static final String BUNDLE_INFO_FLAG = "FLAG";
+    private static final String BUNDLE_INFO_ADD_DATE = "ADD_DATE";
+    private static final String BUNDLE_INFO_PRINTED = "PRINTED";
 
     //******************************************************************
     private static final String USERS_TABLE = "USERS_TABLE";
@@ -107,7 +109,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + BUNDLE_INFO_AREA + " TEXT,"
                 + BUNDLE_BARCODE + " TEXT,"
                 + BUNDLE_INFO_ORDERED + " INTEGER,"
-                + BUNDLE_INFO_FLAG + " TEXT"+ ")";
+                + BUNDLE_INFO_FLAG + " TEXT,"
+                + BUNDLE_INFO_ADD_DATE + " TEXT,"
+                + BUNDLE_INFO_PRINTED + " INTEGER" + ")";
         db.execSQL(CREATE_INVENTORY_INFO_TABLE);
 
         String CREATE_TABLE_USERS = "CREATE TABLE " + USERS_TABLE + "("
@@ -180,9 +184,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         contentValues.put(SETTINGS_IP_ADDRESS, settings.getIpAddress());
         contentValues.put(SETTINGS_STORE, settings.getStore());
 
-        SettingsFile.companyName = settings.getCompanyName();
-        SettingsFile.ipAddress = settings.getIpAddress();
-        SettingsFile.store = settings.getStore();
+//        SettingsFile.companyName = settings.getCompanyName();
+//        SettingsFile.ipAddress = settings.getIpAddress();
+//        SettingsFile.store = settings.getStore();
 
         db.insert(SETTINGS_TABLE, null, contentValues);
         db.close();
@@ -200,9 +204,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         contentValues.put(BUNDLE_INFO_BUNDLE_NO, bundleInfo.getBundleNo());
         contentValues.put(BUNDLE_INFO_LOCATION, bundleInfo.getLocation());
         contentValues.put(BUNDLE_INFO_AREA, bundleInfo.getArea());
-        contentValues.put(BUNDLE_BARCODE, bundleInfo.getBarcode());
-        contentValues.put(BUNDLE_INFO_ORDERED, bundleInfo.getOrdered());
+//        contentValues.put(BUNDLE_BARCODE, bundleInfo.getBarcode());
+        contentValues.put(BUNDLE_INFO_ORDERED, 0);//bundleInfo.getOrdered());
         contentValues.put(BUNDLE_INFO_FLAG, "0");
+        contentValues.put(BUNDLE_INFO_ADD_DATE, bundleInfo.getAddingDate());
+        contentValues.put(BUNDLE_INFO_PRINTED, bundleInfo.getIsPrinted());
 
         db.insert(BUNDLE_INFO_TABLE, null, contentValues);
         db.close();
@@ -317,24 +323,29 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     // **************************************************** Getting ****************************************************
 
-    public void getSettings() {
+    public Settings getSettings() {
+        Settings settings = new Settings();
         String selectQuery = "SELECT * FROM " + SETTINGS_TABLE;
         db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()) {
             do {
-                SettingsFile.companyName = cursor.getString(0);
-                SettingsFile.ipAddress = cursor.getString(1);
-                SettingsFile.store = cursor.getString(2);
+                settings.setCompanyName(cursor.getString(0));
+                settings.setIpAddress(cursor.getString(1));
+                settings.setStore(cursor.getString(2));
+//                SettingsFile.companyName = cursor.getString(0);
+//                SettingsFile.ipAddress = cursor.getString(1);
+//                SettingsFile.store = cursor.getString(2);
             } while (cursor.moveToNext());
         }
+        return settings;
     }
 
     public List<BundleInfo> getBundleInfo() {
         List<BundleInfo> bundleInfoList = new ArrayList<>();
 
-        String selectQuery = "SELECT  * FROM " + BUNDLE_INFO_TABLE + " where ORDERED = '0' and LOCATION = (select STORE from SETTINGS_TABLE)" ;
+        String selectQuery = "SELECT  * FROM " + BUNDLE_INFO_TABLE + " where ORDERED = '0' and LOCATION = (select STORE from SETTINGS_TABLE)";
         db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
@@ -366,7 +377,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 //        String selectQuery = "SELECT  * FROM " + BUNDLE_INFO_TABLE + " where LOCATION = '" + location + "' AND FLAG = '" + flag + "'";
 
         String selectQuery = "SELECT  * FROM " + BUNDLE_INFO_TABLE + " where LOCATION = (select STORE from SETTINGS_TABLE)"
-       +  " AND FLAG = '" + flag + "'";
+                + " AND FLAG = '" + flag + "'";
 
         db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -386,6 +397,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 bundleInfo.setBarcode(cursor.getString(8));
                 bundleInfo.setOrdered(Integer.parseInt(cursor.getString(9)));
                 bundleInfo.setHideFlag(cursor.getString(10));
+                bundleInfo.setIsPrinted(cursor.getInt(12));
+
                 bundleInfo.setChecked(false);
 
                 bundleInfoList.add(bundleInfo);
@@ -437,7 +450,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return bundleInfoList;
     }
 
-
     public List<Users> getUsers() {
         List<Users> usersList = new ArrayList<>();
 
@@ -473,6 +485,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(BUNDLE_INFO_FLAG, "1");
         db.update(BUNDLE_INFO_TABLE, values, BUNDLE_INFO_BUNDLE_NO + " = '" + bundleNo + "'", null);
     }
+
+    public void updateCheckPrinting(String bundleNo, int printed) {
+        db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(BUNDLE_INFO_PRINTED, printed);
+        db.update(BUNDLE_INFO_TABLE, values, BUNDLE_INFO_BUNDLE_NO + " = '" + bundleNo + "'", null);
+    }
+
     // **************************************************** Delete ****************************************************
 
     public void deleteSettings() {

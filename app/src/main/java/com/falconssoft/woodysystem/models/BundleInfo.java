@@ -16,15 +16,17 @@ public class BundleInfo {
     private String bundleNo;
     private String location;
     private String area;
+    private String addingDate;
     private int placingNo;
     private int orderNo;
     private int containerNo;
     private String dateOfLoad;
     private boolean checked;
     private String barcode;
-    private String  picture;
-    private int ordered;
+    private String picture;
+    private int ordered; // 0 => order not done, 1 => order done
     private String hideFlag;// 0 => show, 1 => hide
+    private int isPrinted;
 
     public BundleInfo() {
     }
@@ -56,7 +58,7 @@ public class BundleInfo {
         this.hideFlag = hideFlag;
     }
 
-    public BundleInfo(double thickness, double length, double width, String grade, int noOfPieces, String bundleNo, String location, String area, int placingNo, int orderNo, int containerNo, String dateOfLoad, int ordered) {
+    public BundleInfo(double thickness, double length, double width, String grade, int noOfPieces, String bundleNo, String location, String area, String addingDate, int isPrinted) {
         this.thickness = thickness;
         this.length = length;
         this.width = width;
@@ -65,11 +67,24 @@ public class BundleInfo {
         this.bundleNo = bundleNo;
         this.location = location;
         this.area = area;
-        this.placingNo = placingNo;
-        this.orderNo = orderNo;
-        this.containerNo = containerNo;
-        this.dateOfLoad = dateOfLoad;
-        this.ordered = ordered;
+        this.addingDate = addingDate;
+        this.isPrinted = isPrinted;
+    }
+
+    public int getIsPrinted() {
+        return isPrinted;
+    }
+
+    public void setIsPrinted(int isPrinted) {
+        this.isPrinted = isPrinted;
+    }
+
+    public String getAddingDate() {
+        return addingDate;
+    }
+
+    public void setAddingDate(String addingDate) {
+        this.addingDate = addingDate;
     }
 
     public String getDateOfLoad() {
@@ -189,18 +204,19 @@ public class BundleInfo {
 
         try {
             obj.put("THICKNESS", "'" + thickness + "'");
-            obj.put("WIDTH", "'" +width+ "'");
-            obj.put("LENGTH", "'" +length+ "'");
-            obj.put("GRADE", "'" +grade+ "'");
-            obj.put("PIECES","'" + noOfPieces+ "'");
-            obj.put("BUNDLE_NO", "'" +bundleNo+ "'");
-            obj.put("LOCATION", "'" +location+ "'");
-            obj.put("AREA", "'" +area+ "'");
-            obj.put("BARCODE", "'" +barcode+ "'");
-            obj.put("ORDERED", "'" +ordered+ "'");
+            obj.put("WIDTH", "'" + width + "'");
+            obj.put("LENGTH", "'" + length + "'");
+            obj.put("GRADE", "'" + grade + "'");
+            obj.put("PIECES", "'" + noOfPieces + "'");
+            obj.put("BUNDLE_NO", "'" + bundleNo + "'");
+            obj.put("LOCATION", "'" + location + "'");
+            obj.put("AREA", "'" + area + "'");
+            obj.put("BARCODE", "'" + barcode + "'");
+            obj.put("ORDERED", "'" + ordered + "'");
+            obj.put("BUNDLE_DATE", "'" + addingDate + "'");
 
         } catch (JSONException e) {
-            Log.e("Tag" , "JSONException");
+            Log.e("Tag", "JSONException");
         }
         return obj;
     }

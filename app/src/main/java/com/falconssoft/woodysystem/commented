@@ -17,3 +17,30 @@ Yahoo- Host: smtp.mail.yahoo.com , Port: 465
 //            //the imageview of your custom list item
 //            myImage.setImageBitmap(myBitmap);
 //        }
+
+**************************************************
+
+
+    public BundleInfo(double thickness, double length, double width, String grade, int noOfPieces, String bundleNo, String location, String area, int placingNo, int orderNo, int containerNo, String dateOfLoad, int ordered) {
+        this.thickness = thickness;
+        this.length = length;
+        this.width = width;
+        this.grade = grade;
+        this.noOfPieces = noOfPieces;
+        this.bundleNo = bundleNo;
+        this.location = location;
+        this.area = area;
+        this.placingNo = placingNo;
+        this.orderNo = orderNo;
+        this.containerNo = containerNo;
+        this.dateOfLoad = dateOfLoad;
+        this.ordered = ordered;
+    }
+
+
+ , areaText
+                                                , 1
+                                                , 53
+                                                , 5
+                                                , "june"
+                                                , 0);
