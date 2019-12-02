@@ -60,6 +60,8 @@ import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import org.json.JSONException;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -132,12 +134,22 @@ public class BundlesReport extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-//                for(int i=0;bundleInfos.size()<i;i++){
-                    databaseHandler.updateAllPrinting("", 1);
-                bundleInfos=databaseHandler.getAllBundleInfo("0");
-                bundlesTable.removeAllViews();
-                fillTable();
-//                }
+
+                new android.support.v7.app.AlertDialog.Builder(BundlesReport.this)
+                        .setTitle("Confirm Delete")
+                        .setMessage("Are you sure you want to delete All data ?!")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+
+                                databaseHandler.updateAllPrinting("", 1);
+                                bundleInfos=databaseHandler.getAllBundleInfo("0");
+                                bundlesTable.removeAllViews();
+                                fillTable();
+                            }
+                        })
+                        .setNegativeButton("Cancel", null).show();
+
 
 
 
