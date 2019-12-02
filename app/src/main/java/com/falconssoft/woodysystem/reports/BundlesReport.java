@@ -150,10 +150,6 @@ public class BundlesReport extends AppCompatActivity {
                         })
                         .setNegativeButton("Cancel", null).show();
 
-
-
-
-
             }
         });
 
@@ -461,7 +457,7 @@ public class BundlesReport extends AppCompatActivity {
             //Step 1
 //        Rectangle rect = new Rectangle(0, 0, 595, 842);
             Document document = new Document();
-            document.setPageSize(PageSize.A5);
+            document.setPageSize(PageSize.A4);
 //        Document document = new Document();//PageSize.A4.rotate()
 //        document
             //Step 2
@@ -483,11 +479,25 @@ public class BundlesReport extends AppCompatActivity {
                     Image signature;
                     signature = Image.getInstance(stream.toByteArray());
                     signature.setAbsolutePosition(0f, 20f);
-                    signature.scalePercent(150f);
+                    signature.scalePercent(200f);
                     signature.setRotationDegrees(90f);
 //            signature.setRotation(0f);
 //            signature.setPaddingTop(10);
                     document.add(signature);
+
+//                    if ((i + 1)< bundleInfos.size()){
+//                        Bitmap bitmap2 = writeBarcode(String.valueOf(bundleInfos.get(i+1).getBundleNo()), String.valueOf(bundleInfos.get(i+1).getLength()), String.valueOf(bundleInfos.get(i+1).getWidth()),
+//                                String.valueOf(bundleInfos.get(i+1).getThickness()), String.valueOf(bundleInfos.get(i+1).getGrade()), String.valueOf(bundleInfos.get(i+1).getNoOfPieces()));
+//                    ByteArrayOutputStream stream2 = new ByteArrayOutputStream();
+//                    bitmap2.compress(Bitmap.CompressFormat.PNG, 100, stream2);
+//                    Image signature2;
+//                    signature2 = Image.getInstance(stream2.toByteArray());
+//                    signature2.setAbsolutePosition(20f, 450f);
+//                    signature2.scalePercent(150f);
+////                    signature2.setRotationDegrees(90f);
+//
+//                    document.add(signature2);
+//                }
                     document.newPage();
                     ispage=1;
                 }
