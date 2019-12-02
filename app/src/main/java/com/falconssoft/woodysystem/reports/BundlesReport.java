@@ -406,21 +406,12 @@ public class BundlesReport extends AppCompatActivity {
                 callback.onLayoutFinished(pdi, true);
             }
 
-//
-//            @Override
-//            public void onFinish() {
-//
-//                int master =printManager.getPrintJobs().get(printManager.getPrintJobs().size()-1).getInfo().getState();
-////                Log.e("printManagerState",""+master);
-//            }
         };
 
         PrintAttributes attrib = new PrintAttributes.Builder()
                 .setMediaSize(PrintAttributes.MediaSize.ISO_A5.UNKNOWN_LANDSCAPE)
                 . build();
-       PrintJob printJob= printManager.print(jobName, pda, null);
-//        int master =printManager.getPrintJobs().get(printManager.getPrintJobs().size()-1).getInfo().getState();
-//Log.e("printManagerState",""+printJob.getInfo());
+        printManager.print(jobName, pda, null);
 
     }
 
@@ -548,7 +539,7 @@ public class BundlesReport extends AppCompatActivity {
         String barcode_data = data;
         Bitmap bitmap = null;//  AZTEC -->QR
         try {
-            bitmap = encodeAsBitmap(barcode_data, BarcodeFormat.CODE_128, 1100, 200);
+            bitmap = encodeAsBitmap(barcode_data, BarcodeFormat.CODE_128, 200, 50);
         } catch (WriterException e) {
             e.printStackTrace();
         }
