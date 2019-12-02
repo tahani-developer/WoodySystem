@@ -1,9 +1,9 @@
 package com.falconssoft.woodysystem.reports;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,7 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.CancellationSignal;
 import android.os.Environment;
@@ -21,7 +21,9 @@ import android.print.PrintAttributes;
 import android.print.PrintDocumentAdapter;
 import android.print.PrintDocumentInfo;
 import android.print.PrintJob;
+import android.print.PrintJobInfo;
 import android.print.PrintManager;
+import android.print.PrinterInfo;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.print.PrintHelper;
@@ -41,6 +43,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.falconssoft.woodysystem.DatabaseHandler;
+import com.falconssoft.woodysystem.PrinterCommands;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.ReportsActivity;
 import com.falconssoft.woodysystem.models.BundleInfo;
@@ -54,7 +57,7 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
-import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import java.io.ByteArrayOutputStream;
@@ -81,7 +84,7 @@ public class BundlesReport extends AppCompatActivity {
     private Animation animation;
     private TextView textView;
     private Settings generalSettings;
-    private Button printall;
+    private Button printAll,delete;
 
 
     @SuppressLint("WrongViewCast")
@@ -89,15 +92,16 @@ public class BundlesReport extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bundles_report);
-        printall= findViewById(R.id.loading_order_report_printAll);
+        printAll = findViewById(R.id.loading_order_report_printAll);
         textView = findViewById(R.id.loading_order_report_tv);
+        delete=findViewById(R.id.loading_order_report_delete);
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_to_right);
         textView.startAnimation(animation);
 
         bundlesTable = findViewById(R.id.addToInventory_table);
         databaseHandler = new DatabaseHandler(this);
         fillTable();
-        printall.setOnClickListener(new View.OnClickListener() {
+        printAll.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View v) {
@@ -122,6 +126,25 @@ public class BundlesReport extends AppCompatActivity {
             }
 
         });
+
+        delete.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+            @Override
+            public void onClick(View v) {
+
+//                for(int i=0;bundleInfos.size()<i;i++){
+                    databaseHandler.updateAllPrinting("", 1);
+                bundleInfos=databaseHandler.getAllBundleInfo("0");
+                bundlesTable.removeAllViews();
+                fillTable();
+//                }
+
+
+
+
+            }
+        });
+
 
     }
 
@@ -153,7 +176,8 @@ public class BundlesReport extends AppCompatActivity {
 //        bundlesTable.addView(tableRowBasic);
         TableRow tableRow;
         for (int m = 0; m < bundleInfos.size(); m++) {
-            tableRow = new TableRow(this);
+            if (bundleInfos.get(m).getIsPrinted() != 1){
+                tableRow = new TableRow(this);
             tableRow = fillTableRows(tableRow
                     , bundleInfos.get(m).getBundleNo()
                     , "" + bundleInfos.get(m).getLength()
@@ -222,7 +246,7 @@ public class BundlesReport extends AppCompatActivity {
                     return false;
                 }
             });
-        }
+        } }
     }
 
     TableRow fillTableRows(TableRow tableRow, String bundlNo, String length, String width, String thic, String grade, String noOfPieces, String location, String area, int printed) {
@@ -423,57 +447,65 @@ public class BundlesReport extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private File createPdf() throws IOException, DocumentException {
+        File myFile = creatFile();
+        try {
+
+            //Image image = Image.getInstance(byteArray);
 
 
-
-        //Image image = Image.getInstance(byteArray);
-        File myFile=creatFile();
-
-        Log.e("file ",""+myFile.getPath());
-        OutputStream output = new FileOutputStream(myFile);
-        //Step 1
+            Log.e("file ", "" + myFile.getPath());
+            OutputStream output = new FileOutputStream(myFile);
+            //Step 1
 //        Rectangle rect = new Rectangle(0, 0, 595, 842);
-        Document document = new Document();
-        document.setPageSize(PageSize.A5);
+            Document document = new Document();
+            document.setPageSize(PageSize.A5);
 //        Document document = new Document();//PageSize.A4.rotate()
 //        document
-        //Step 2
+            //Step 2
 //        document.newPage();
 
-        PdfWriter.getInstance(document, output);
+            PdfWriter.getInstance(document, output);
 
-        //Step 3
-        document.open();
+            //Step 3
+            document.open();
 
-        //Step 4 Add content
-
-
-        for (int i = 0; i < bundleInfos.size(); i++) {
-            if (bundleInfos.get(i).getIsPrinted() != 1) {
-                Bitmap bitmap = writeBarcode(String.valueOf(bundleInfos.get(i).getBundleNo()), String.valueOf(bundleInfos.get(i).getLength()), String.valueOf(bundleInfos.get(i).getWidth()),
-                        String.valueOf(bundleInfos.get(i).getThickness()), String.valueOf(bundleInfos.get(i).getGrade()), String.valueOf(bundleInfos.get(i).getNoOfPieces()));
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                Image signature;
-                signature = Image.getInstance(stream.toByteArray());
-                signature.setAbsolutePosition(0f, 20f);
-                signature.scalePercent(150f);
-                signature.setRotationDegrees(90f);
+            //Step 4 Add content
+            int ispage=0;
+            for (int i = 0; i < bundleInfos.size(); i++) {
+                if (bundleInfos.get(i).getIsPrinted() != 1) {
+                    Bitmap bitmap = writeBarcode(String.valueOf(bundleInfos.get(i).getBundleNo()), String.valueOf(bundleInfos.get(i).getLength()), String.valueOf(bundleInfos.get(i).getWidth()),
+                            String.valueOf(bundleInfos.get(i).getThickness()), String.valueOf(bundleInfos.get(i).getGrade()), String.valueOf(bundleInfos.get(i).getNoOfPieces()));
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    Image signature;
+                    signature = Image.getInstance(stream.toByteArray());
+                    signature.setAbsolutePosition(0f, 20f);
+                    signature.scalePercent(150f);
+                    signature.setRotationDegrees(90f);
 //            signature.setRotation(0f);
 //            signature.setPaddingTop(10);
-                document.add(signature);
-                document.newPage();
+                    document.add(signature);
+                    document.newPage();
+                    ispage=1;
+                }
             }
+            if (ispage == 0){
+                Paragraph p = new Paragraph("no bundle to print ");
+                document.add(p);
         }
+            Log.e("getPageNumber()= ",""+document.getPageNumber());
 
+            //document.add(new Paragraph(text.getText().toString()));
+            //document.add(new Paragraph(mBodyEditText.getText().toString()));
 
-        //document.add(new Paragraph(text.getText().toString()));
-        //document.add(new Paragraph(mBodyEditText.getText().toString()));
+            //Step 5: Close the document
+            document.close();
 
-        //Step 5: Close the document
-        document.close();
-
+        } catch (Exception ex) {
+            Log.e("Exception create Pdf : ", "" + ex.getMessage());
+        }
         return myFile;
+
     }
 
 
