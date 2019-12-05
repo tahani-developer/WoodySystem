@@ -3,12 +3,28 @@ package com.falconssoft.woodysystem.reports;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.wifi.WifiManager;
+import android.os.Build;
+import android.os.CancellationSignal;
+import android.os.Environment;
+import android.os.ParcelFileDescriptor;
+import android.print.PageRange;
+import android.print.PrintAttributes;
+import android.print.PrintDocumentAdapter;
+import android.print.PrintDocumentInfo;
+import android.print.PrintJob;
+import android.print.PrintJobInfo;
+import android.print.PrintManager;
+import android.print.PrinterInfo;
+import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.print.PrintHelper;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +34,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
@@ -26,6 +43,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.falconssoft.woodysystem.DatabaseHandler;
+import com.falconssoft.woodysystem.PrinterCommands;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.ReportsActivity;
 import com.falconssoft.woodysystem.models.BundleInfo;
@@ -35,7 +53,23 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 
+import org.json.JSONException;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -52,6 +86,7 @@ public class BundlesReport extends AppCompatActivity {
     private Animation animation;
     private TextView textView;
     private Settings generalSettings;
+    private Button printAll,delete;
 
 
     @SuppressLint("WrongViewCast")
@@ -59,16 +94,77 @@ public class BundlesReport extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bundles_report);
-
+        printAll = findViewById(R.id.loading_order_report_printAll);
         textView = findViewById(R.id.loading_order_report_tv);
+        delete=findViewById(R.id.loading_order_report_delete);
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_to_right);
         textView.startAnimation(animation);
 
         bundlesTable = findViewById(R.id.addToInventory_table);
         databaseHandler = new DatabaseHandler(this);
         fillTable();
+        printAll.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+            @Override
+            public void onClick(View v) {
+//               PrintAll();
+                try {
+                    File file=createPdf();
+
+
+                   PrintAll(file);
+
+//                    Intent intent = new Intent();
+//                    intent.setAction(Intent.ACTION_SEND);
+//                    intent.setType("application/pdf");
+//                    intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+//                    startActivity(intent);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (DocumentException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        });
+
+        delete.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+            @Override
+            public void onClick(View v) {
+
+
+                new android.support.v7.app.AlertDialog.Builder(BundlesReport.this)
+                        .setTitle("Confirm Delete")
+                        .setMessage("Are you sure you want to delete All data ?!")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+
+                                databaseHandler.updateAllPrinting("", 1);
+                                bundleInfos=databaseHandler.getAllBundleInfo("0");
+                                bundlesTable.removeAllViews();
+                                fillTable();
+                            }
+                        })
+                        .setNegativeButton("Cancel", null).show();
+
+            }
+        });
+
 
     }
+
+//    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+//    private void doPrint(String fileName) {
+//        PrintManager printManager = (PrintManager) BundlesReport.this
+//                .getSystemService(Context.PRINT_SERVICE);
+//
+////        mFileName = fileName;
+//        String jobName = BundlesReport.this.getString(R.string.app_name) + " Document";
+//        printManager.print(jobName, mPrintDocumentAdapter, null);
+//    }
 
     void fillTable() {
         bundleInfos = databaseHandler.getAllBundleInfo("0");
@@ -88,7 +184,8 @@ public class BundlesReport extends AppCompatActivity {
 //        bundlesTable.addView(tableRowBasic);
         TableRow tableRow;
         for (int m = 0; m < bundleInfos.size(); m++) {
-            tableRow = new TableRow(this);
+            if (bundleInfos.get(m).getIsPrinted() != 1){
+                tableRow = new TableRow(this);
             tableRow = fillTableRows(tableRow
                     , bundleInfos.get(m).getBundleNo()
                     , "" + bundleInfos.get(m).getLength()
@@ -157,7 +254,7 @@ public class BundlesReport extends AppCompatActivity {
                     return false;
                 }
             });
-        }
+        } }
     }
 
     TableRow fillTableRows(TableRow tableRow, String bundlNo, String length, String width, String thic, String grade, String noOfPieces, String location, String area, int printed) {
@@ -261,6 +358,182 @@ public class BundlesReport extends AppCompatActivity {
         setSlideAnimation();
     }
 
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public  void PrintAll (File file){
+        PrintManager printManager = (PrintManager) BundlesReport.this.getSystemService(Context.PRINT_SERVICE);
+        String jobName = " Document";
+
+
+        PrintDocumentAdapter pda = new PrintDocumentAdapter(){
+            @Override
+            public void onWrite(PageRange[] pages, ParcelFileDescriptor destination, CancellationSignal cancellationSignal, WriteResultCallback callback){
+                InputStream input = null;
+                OutputStream output = null;
+
+                try {
+
+                    input = new FileInputStream(file);
+                    output = new FileOutputStream(destination.getFileDescriptor());
+
+                    byte[] buf = new byte[1024];
+                    int bytesRead;
+
+                    while ((bytesRead = input.read(buf)) > 0) {
+                        output.write(buf, 0, bytesRead);
+                    }
+
+                    callback.onWriteFinished(new PageRange[]{PageRange.ALL_PAGES});
+
+                } catch (FileNotFoundException ee){
+                    //Catch exception
+                } catch (Exception e) {
+                    //Catch exception
+                } finally {
+                    try {
+                        input.close();
+                        output.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onLayout(PrintAttributes oldAttributes, PrintAttributes newAttributes, CancellationSignal cancellationSignal, LayoutResultCallback callback, Bundle extras){
+
+                if (cancellationSignal.isCanceled()) {
+                    callback.onLayoutCancelled();
+
+                    return;
+                }
+
+
+                PrintDocumentInfo pdi = new PrintDocumentInfo.Builder("pdfdemokk.pdf").setContentType(PrintDocumentInfo.CONTENT_TYPE_DOCUMENT).build();
+
+                callback.onLayoutFinished(pdi, true);
+            }
+
+        };
+
+        PrintAttributes attrib = new PrintAttributes.Builder()
+                .setMediaSize(PrintAttributes.MediaSize.ISO_A5.UNKNOWN_LANDSCAPE)
+                . build();
+        printManager.print(jobName, pda, null);
+
+    }
+
+
+
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    File creatFile(){
+
+        File pdfFolder = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DOCUMENTS), "pdfdemo");
+        if (!pdfFolder.exists()) {
+            pdfFolder.mkdirs();
+            Log.i("Created", "Pdf Directory created");
+        }
+
+        //Create time stamp
+//        Date date = new Date() ;
+//        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(date);
+
+        File myFile = new File(pdfFolder + "kk" + ".pdf");
+        return myFile;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private File createPdf() throws IOException, DocumentException {
+        File myFile = creatFile();
+        try {
+
+            //Image image = Image.getInstance(byteArray);
+
+
+            Log.e("file ", "" + myFile.getPath());
+            OutputStream output = new FileOutputStream(myFile);
+            //Step 1
+//        Rectangle rect = new Rectangle(0, 0, 595, 842);
+            Document document = new Document();
+            document.setPageSize(PageSize.A4);
+//        Document document = new Document();//PageSize.A4.rotate()
+//        document
+            //Step 2
+//        document.newPage();
+
+            PdfWriter.getInstance(document, output);
+
+            //Step 3
+            document.open();
+
+            //Step 4 Add content
+            int ispage=0;
+            for (int i = 0; i < bundleInfos.size(); i++) {
+                if (bundleInfos.get(i).getIsPrinted() != 1) {
+                    Bitmap bitmap = writeBarcode(String.valueOf(bundleInfos.get(i).getBundleNo()), String.valueOf(bundleInfos.get(i).getLength()), String.valueOf(bundleInfos.get(i).getWidth()),
+                            String.valueOf(bundleInfos.get(i).getThickness()), String.valueOf(bundleInfos.get(i).getGrade()), String.valueOf(bundleInfos.get(i).getNoOfPieces()));
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    Image signature;
+                    signature = Image.getInstance(stream.toByteArray());
+                    signature.setAbsolutePosition(0f, 20f);
+                    signature.scalePercent(200f);
+                    signature.setRotationDegrees(90f);
+//            signature.setRotation(0f);
+//            signature.setPaddingTop(10);
+                    document.add(signature);
+
+//                    if ((i + 1)< bundleInfos.size()){
+//                        Bitmap bitmap2 = writeBarcode(String.valueOf(bundleInfos.get(i+1).getBundleNo()), String.valueOf(bundleInfos.get(i+1).getLength()), String.valueOf(bundleInfos.get(i+1).getWidth()),
+//                                String.valueOf(bundleInfos.get(i+1).getThickness()), String.valueOf(bundleInfos.get(i+1).getGrade()), String.valueOf(bundleInfos.get(i+1).getNoOfPieces()));
+//                    ByteArrayOutputStream stream2 = new ByteArrayOutputStream();
+//                    bitmap2.compress(Bitmap.CompressFormat.PNG, 100, stream2);
+//                    Image signature2;
+//                    signature2 = Image.getInstance(stream2.toByteArray());
+//                    signature2.setAbsolutePosition(20f, 450f);
+//                    signature2.scalePercent(150f);
+////                    signature2.setRotationDegrees(90f);
+//
+//                    document.add(signature2);
+//                }
+                    document.newPage();
+                    ispage=1;
+                }
+            }
+            if (ispage == 0){
+                Paragraph p = new Paragraph("no bundle to print ");
+                document.add(p);
+        }
+            Log.e("getPageNumber()= ",""+document.getPageNumber());
+
+            //document.add(new Paragraph(text.getText().toString()));
+            //document.add(new Paragraph(mBodyEditText.getText().toString()));
+
+            //Step 5: Close the document
+            document.close();
+
+        } catch (Exception ex) {
+            Log.e("Exception create Pdf : ", "" + ex.getMessage());
+        }
+        return myFile;
+
+    }
+
+
+//    @TargetApi(Build.VERSION_CODES.KITKAT)
+//    private void doPDFPrint(File pdfFile, String filename) {
+//        PrintManager printManager = (PrintManager) this.getSystemService(Context.PRINT_SERVICE);
+//        String jobName = this.getString(R.string.app_name) + " Report";
+//        PrintPDFAdapter pda = new PrintPDFAdapter(pdfFile, filename);
+//        PrintAttributes attrib = new PrintAttributes.Builder().
+//                setMediaSize(PrintAttributes.MediaSize.NA_LETTER.asLandscape()).
+//                setMinMargins(PrintAttributes.Margins.NO_MARGINS).
+//                build();
+//        printManager.print(jobName, pda, attrib);
+//    }
+
     public Bitmap writeBarcode(String data, String length, String width, String thic, String grades, String pcs) {
         final Dialog dialog = new Dialog(BundlesReport.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -288,7 +561,7 @@ public class BundlesReport extends AppCompatActivity {
         String barcode_data = data;
         Bitmap bitmap = null;//  AZTEC -->QR
         try {
-            bitmap = encodeAsBitmap(barcode_data, BarcodeFormat.CODE_128, 1100, 200);
+            bitmap = encodeAsBitmap(barcode_data, BarcodeFormat.CODE_128, 200, 50);
         } catch (WriterException e) {
             e.printStackTrace();
         }
@@ -364,3 +637,5 @@ public class BundlesReport extends AppCompatActivity {
 
 
 }
+
+
