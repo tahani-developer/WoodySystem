@@ -341,23 +341,22 @@ public class BundlesReport extends AppCompatActivity {
         return tableRow;
     }
 
-    public void setSlideAnimation() {
-        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
-    }
-
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent intent = new Intent(BundlesReport.this, ReportsActivity.class);
-        startActivity(intent);
-        finish();
-    }
-
-    @Override
-    public void finish() {
-        super.finish();
-        setSlideAnimation();
-    }
-
+//    public void setSlideAnimation() {
+//        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
+//    }
+//
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        Intent intent = new Intent(BundlesReport.this, ReportsActivity.class);
+//        startActivity(intent);
+//        finish();
+//    }
+//
+//    @Override
+//    public void finish() {
+//        super.finish();
+//        setSlideAnimation();
+//    }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public  void PrintAll (File file){
@@ -422,9 +421,6 @@ public class BundlesReport extends AppCompatActivity {
         printManager.print(jobName, pda, null);
 
     }
-
-
-
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     File creatFile(){
@@ -520,8 +516,6 @@ public class BundlesReport extends AppCompatActivity {
         return myFile;
 
     }
-
-
 //    @TargetApi(Build.VERSION_CODES.KITKAT)
 //    private void doPDFPrint(File pdfFile, String filename) {
 //        PrintManager printManager = (PrintManager) this.getSystemService(Context.PRINT_SERVICE);
