@@ -18,6 +18,8 @@
     <string name="location">Location</string>
     <string name="loc">Loc</string>
     <string name="area">Area</string>
+    <string name="description">Description</string>
+    <string name="detail">Detail</string>
     <string name="from">From</string>
     <string name="to">To</string>
     <string name="no_bundle"># Bundle</string>

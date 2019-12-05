@@ -17,7 +17,7 @@
         <LinearLayout
             android:id="@+id/buttons_linear"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
@@ -31,7 +31,7 @@
 
             <TextView
                 android:id="@+id/addToInventory_textView"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:drawableStart="@drawable/axe"
@@ -43,6 +43,18 @@
                 android:textSize="30sp"
                 />
 
+                <TextView
+                    android:id="@+id/addToInventory_add_button"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/ic_add_circle_24dp"
+                    android:paddingStart="70dp"
+                    android:paddingLeft="70dp"
+                    android:paddingEnd="70dp"
+                    android:paddingRight="70dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    />
 
         </LinearLayout>
 
@@ -307,35 +319,39 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/addToInventory_linear_six"
+                    android:id="@+id/description_linear"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@drawable/frame_shape"
+
+                    android:background="@drawable/shape_with_corner"
                     android:orientation="horizontal"
-                    >
+                   >
 
                     <TextView
-                        android:id="@+id/addToInventory_add_button"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:drawableStart="@drawable/ic_add_white_32dp"
-                        android:drawableLeft="@drawable/ic_add_white_32dp"
-                        android:paddingStart="70dp"
-                        android:paddingLeft="70dp"
-                        android:paddingEnd="70dp"
-                        android:paddingRight="70dp"
-                        android:paddingTop="5dp"
-                        android:paddingBottom="5dp"
-                        android:text="@string/add"
-                        android:textColor="@color/white"
-                       />
+                        android:id="@+id/textView9"
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:textSize="18sp"
+                        android:text="@string/description" />
 
+                    <Spinner
+                        android:id="@+id/addToInventory_description"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_weight="2"
+                        />
                 </LinearLayout>
 
             </LinearLayout>
 
-        </LinearLayout>
+      </LinearLayout>
 
         <LinearLayout
             android:id="@+id/addToInventory_table_view"
@@ -432,6 +448,14 @@
                     android:textColor="@color/white"
                     android:textSize="20sp" />
 
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/detail"
+                    android:fontFamily="serif"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
             </TableRow>
 
             <ScrollView

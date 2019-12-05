@@ -34,7 +34,7 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/light_orange_2">
+            android:background="@color/orange">
 
             <TextView
                 android:layout_width="0dp"

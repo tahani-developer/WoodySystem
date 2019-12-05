@@ -21,7 +21,7 @@ import java.util.List;
 public class DatabaseHandler extends SQLiteOpenHelper {
 
     private static String TAG = "DatabaseHandler";
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 9;
     private static final String DATABASE_NAME = "WoodyDatabase";
     static SQLiteDatabase db;
 
@@ -48,6 +48,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String BUNDLE_INFO_FLAG = "FLAG";
     private static final String BUNDLE_INFO_ADD_DATE = "ADD_DATE";
     private static final String BUNDLE_INFO_PRINTED = "PRINTED";
+    private static final String BUNDLE_INFO_DESCRIPTION = "DESCRIPTION";
 
     //******************************************************************
     private static final String USERS_TABLE = "USERS_TABLE";
@@ -111,7 +112,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + BUNDLE_INFO_ORDERED + " INTEGER,"
                 + BUNDLE_INFO_FLAG + " TEXT,"
                 + BUNDLE_INFO_ADD_DATE + " TEXT,"
-                + BUNDLE_INFO_PRINTED + " INTEGER" + ")";
+                + BUNDLE_INFO_PRINTED + " INTEGER,"
+                + BUNDLE_INFO_DESCRIPTION + " TEXT" + ")";
         db.execSQL(CREATE_INVENTORY_INFO_TABLE);
 
         String CREATE_TABLE_USERS = "CREATE TABLE " + USERS_TABLE + "("
@@ -173,6 +175,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             Log.e("upgrade", "BUNDLE ORDERED");
         }
 
+        try {
+            db.execSQL("ALTER TABLE BUNDLE_INFO_TABLE ADD DESCRIPTION TAXE NOT NULL DEFAULT ''");
+        } catch (Exception e) {
+            Log.e("upgrade", "BUNDLE Barcode");
+        }
+
     }
 
     // **************************************************** Adding ****************************************************
@@ -209,6 +217,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         contentValues.put(BUNDLE_INFO_FLAG, "0");
         contentValues.put(BUNDLE_INFO_ADD_DATE, bundleInfo.getAddingDate());
         contentValues.put(BUNDLE_INFO_PRINTED, bundleInfo.getIsPrinted());
+        contentValues.put(BUNDLE_INFO_DESCRIPTION, bundleInfo.getDescription());
 
         db.insert(BUNDLE_INFO_TABLE, null, contentValues);
         db.close();
@@ -364,6 +373,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 bundleInfo.setBarcode(cursor.getString(8));
                 bundleInfo.setOrdered(Integer.parseInt(cursor.getString(9)));
                 bundleInfo.setChecked(false);
+                bundleInfo.setDescription(cursor.getString(10));
 
                 bundleInfoList.add(bundleInfo);
             } while (cursor.moveToNext());
@@ -398,6 +408,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 bundleInfo.setOrdered(Integer.parseInt(cursor.getString(9)));
                 bundleInfo.setHideFlag(cursor.getString(10));
                 bundleInfo.setIsPrinted(cursor.getInt(12));
+                bundleInfo.setDescription(cursor.getString(13));
 
                 bundleInfo.setChecked(false);
 

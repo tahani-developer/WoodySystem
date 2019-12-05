@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -81,7 +82,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         login = findViewById(R.id.login_login_btn);
         settings = findViewById(R.id.login_settings);
         linearLayout = findViewById(R.id.login_linearLayout);
-//        SettingsFile.store = "Amman";
 
         login.setOnClickListener(this);
         logoImage.setOnClickListener(this);
@@ -241,9 +241,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    public void setSlideAnimation() {
-        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
-    }
+//    public void setSlideAnimation() {
+//        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
+//    }
 
 
 }

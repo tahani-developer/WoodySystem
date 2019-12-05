@@ -93,6 +93,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_weight="2"
+                    android:singleLine="true"
                     android:nextFocusDown="@id/order_no"
                     android:ems="10" />
 
@@ -132,6 +133,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
+                    android:singleLine="true"
                     android:nextFocusDown="@id/container_no"
                     android:ems="10"/>
 
@@ -170,6 +172,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
+                    android:singleLine="true"
                     android:nextFocusDown="@id/date_of_load"
                     android:ems="10" />
 
@@ -208,8 +211,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:ems="10"
+                    android:singleLine="true"
                     android:nextFocusDown="@id/destination"
+                    android:ems="10"
                     android:focusable="false"
                     android:inputType="text" />
 
