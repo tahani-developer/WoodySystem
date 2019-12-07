@@ -42,17 +42,17 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.reports_bundles:
                 Intent intent=new Intent(ReportsActivity.this, BundlesReport.class);
                 startActivity(intent);
-                setSlideAnimation();
+//                setSlideAnimation();
                 break;
             case R.id.reports_orders:
                 Intent intent2=new Intent(ReportsActivity.this, LoadingOrderReport.class);
                 startActivity(intent2);
-                setSlideAnimation();
+//                setSlideAnimation();
                 break;
             case R.id.reports_inventory:
                 Intent intent3=new Intent(ReportsActivity.this, InventoryReport.class);
                 startActivity(intent3);
-                setSlideAnimation();
+//                setSlideAnimation();
                 break;
         }
 
@@ -97,21 +97,22 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
-    public void setSlideAnimation() {
-        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
-    }
+//    public void setSlideAnimation() {
+//        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
+//    }
 
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent intent = new Intent(ReportsActivity.this, Stage3.class);
-        startActivity(intent);
-        finish();
-    }
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        Intent intent = new Intent(ReportsActivity.this, Stage3.class);
+//        startActivity(intent);
+//        setSlideAnimation();
+//        finish();
+//    }
 
-    @Override
-    public void finish() {
-        super.finish();
-        setSlideAnimation();
-    }
+//    @Override
+//    public void finish() {
+//        super.finish();
+//        setSlideAnimation();
+//    }
 
 }

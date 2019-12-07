@@ -45,36 +45,37 @@ public class Stage3 extends AppCompatActivity implements View.OnClickListener {
                 presenter.getImportData();
                 Intent intent = new Intent(this, AddToInventory.class);
                 startActivity(intent);
-                setSlideAnimation();
+//                setSlideAnimation();
                 break;
             case R.id.stage3_loading_order:
                 Intent intent2 = new Intent(this, LoadingOrder.class);
                 startActivity(intent2);
-                setSlideAnimation();
+//                setSlideAnimation();
                 break;
             case R.id.stage3_reports:
                 Intent intent3 = new Intent(this, ReportsActivity.class);
                 startActivity(intent3);
-                setSlideAnimation();
+//                setSlideAnimation();
                 break;
         }
     }
 
-    public void setSlideAnimation() {
-        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
-    }
+//    public void setSlideAnimation() {
+//        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
+//    }
 
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent intent = new Intent(Stage3.this, MainActivity.class);
-        startActivity(intent);
-        finish();
-    }
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        Intent intent = new Intent(Stage3.this, MainActivity.class);
+//        startActivity(intent);
+//        setSlideAnimation();
+//        finish();
+//    }
 
-    @Override
-    public void finish() {
-        super.finish();
-        setSlideAnimation();
-    }
+//    @Override
+//    public void finish() {
+//        super.finish();
+//        setSlideAnimation();
+//    }
 
 }

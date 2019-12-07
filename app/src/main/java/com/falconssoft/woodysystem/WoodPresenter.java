@@ -1,6 +1,5 @@
 package com.falconssoft.woodysystem;
 
-import android.app.DownloadManager;
 import android.content.Context;
 import android.util.Log;
 
@@ -28,6 +27,7 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 
 import static com.falconssoft.woodysystem.reports.InventoryReport.bundleInfoServer;
+import static com.falconssoft.woodysystem.reports.InventoryReport.bundleInfoServer2;
 
 public class WoodPresenter implements Response.ErrorListener, Response.Listener<String> {
 
@@ -75,9 +75,9 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
     @Override
     public void onResponse(String response) {
         try {
-//            response=new String(response.getBytes("ISO-8859-1"), "UTF-8");
-            if (response.indexOf("{") != 0)
-                response = response.substring(response.indexOf("{"));
+            response=new String(response.getBytes("ISO-8859-1"), "UTF-8");
+//            if (response.indexOf("{") != 0)
+//                response = response.substring(response.indexOf("{"));
             Log.e("presenter: import ", "" + response);
             JSONObject object = new JSONObject(response);
             Log.e("presenter1: import ", "" + response);
@@ -92,6 +92,8 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
             e.printStackTrace();
 //        } catch (UnsupportedEncodingException e) {
 //            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
 
     }
@@ -143,10 +145,10 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                 SettingsFile.usersList.clear();
                 Log.e("presenter/users/res ", "before " + (response.indexOf("{") != 0));
 
-                if (response.indexOf("{") != 0)
-                    response = response.substring(response.indexOf("{"));
+//                if (response.indexOf("{") != 0)
+//                    response = response.substring(response.indexOf("{"));
 
-//                response=new String(response.getBytes("ISO-8859-1"), "UTF-8");
+                response=new String(response.getBytes("ISO-8859-1"), "UTF-8");
                 Log.e("presenter/users/res ", "" + response);
 
                 JSONObject object = new JSONObject(response);
@@ -167,6 +169,8 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                 e.printStackTrace();
 //            } catch (UnsupportedEncodingException e) {
 //                e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -195,17 +199,19 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
         public void onResponse(String response) {
             try {
                 bundleInfoServer.clear();
-                if (response.indexOf("{") != 0)
-                    response = response.substring(response.indexOf("{"));
-//                response=new String(response.getBytes("ISO-8859-1"), "UTF-8");
-//                Log.e("presenter/users/res ", "" + response);
+                bundleInfoServer2.clear();
+//                if (response.indexOf("{") >= 0)
+//                    response = response.substring(response.indexOf("{"));
+                response=new String(response.getBytes("ISO-8859-1"), "UTF-8");
+                Log.e("presenter/bundle/res ", "" + response);
                 JSONObject object = new JSONObject(response);
 //                Log.e("presenter:bun1", "" + object.toString());
                 JSONArray array = object.getJSONArray("BUNDLE_INFO");
 //                Log.e("presenter:bun2", "" + array.toString());
                 for (int i = 0; i < array.length(); i++) {
-                    JSONObject innerObject = array.getJSONObject(i);
+                    JSONObject innerObject = array.getJSONObject(i);//ORDERED
                     Log.e("presenter:bun3 ", "" + innerObject.toString());
+                    if (innerObject.getInt("ORDERED") == 0){
                     BundleInfo bundleInfo = new BundleInfo();
                     bundleInfo.setThickness(innerObject.getDouble("THICKNESS"));
                     bundleInfo.setWidth(innerObject.getDouble("WIDTH"));
@@ -220,15 +226,22 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
 //                    bundleInfo.setPicture(innerObject.getString("PIC"));
                     bundleInfo.setAddingDate(innerObject.getString("BUNDLE_DATE"));
 
+                    bundleInfoServer2.add(bundleInfo);
                     bundleInfoServer.add(bundleInfo);
+                    }
                 }
-                inventoryReport.fillTable(bundleInfoServer);
+                Log.e("follow", "" + bundleInfoServer.size());
+                inventoryReport.filters();
+
+//                inventoryReport.fillTable(bundleInfoServer);
 ////                Log.e("presenter3: import ", "" + SettingsFile.serialNumber);
 //
             } catch (JSONException e) {
                 e.printStackTrace();
 //            } catch (UnsupportedEncodingException e) {
 //                e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
             }
         }
     }

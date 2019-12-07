@@ -83,7 +83,7 @@ public class LoadingOrder extends AppCompatActivity {
                 if (listContainsItems()) {
                     Intent intent = new Intent(LoadingOrder.this, LoadingOrder2.class);
                     startActivity(intent);
-                    setSlideAnimation();
+//                    setSlideAnimation();
                 } else {
                     Toast.makeText(LoadingOrder.this, "No item selected !", Toast.LENGTH_LONG).show();
                 }
@@ -233,22 +233,22 @@ public class LoadingOrder extends AppCompatActivity {
         }
     }
 
-    public void setSlideAnimation() {
-        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
-    }
-
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent intent = new Intent(LoadingOrder.this, Stage3.class);
-        startActivity(intent);
-        finish();
-    }
-
-    @Override
-    public void finish() {
-        super.finish();
-        setSlideAnimation();
-    }
+//    public void setSlideAnimation() {
+//        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
+//    }
+//
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        Intent intent = new Intent(LoadingOrder.this, Stage3.class);
+//        startActivity(intent);
+//        finish();
+//    }
+//
+//    @Override
+//    public void finish() {
+//        super.finish();
+//        setSlideAnimation();
+//    }
 
 
 }

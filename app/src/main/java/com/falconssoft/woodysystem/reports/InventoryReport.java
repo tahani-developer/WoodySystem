@@ -31,6 +31,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.falconssoft.woodysystem.AddToInventory;
 import com.falconssoft.woodysystem.DatabaseHandler;
 import com.falconssoft.woodysystem.LoadingOrderReport;
 import com.falconssoft.woodysystem.R;
@@ -47,6 +48,13 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -55,6 +63,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.ParseException;
@@ -75,12 +84,15 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private TableLayout bundlesTable;
     private DatabaseHandler databaseHandler;
     public static List<BundleInfo> bundleInfoServer = new ArrayList<>();
+    public static List<BundleInfo> bundleInfoServer2 = new ArrayList<>();
     private List<String> locationList = new ArrayList<>();
     private List<String> areaList = new ArrayList<>();
+    private List<BundleInfo> bundlesForDelete = new ArrayList<>();
+    private List<BundleInfo> dateFiltered, filtered;
+    private JSONArray jsonArrayBundles = new JSONArray();
     private WoodPresenter woodPresenter;
     private Animation animation;
-    private TextView textView, noOfBundles, noOfPieces;
-    private EditText dateFrom, dateTo;
+    private TextView textView, noOfBundles, noOfPieces, cubicField, deleteAll, dateFrom, dateTo;
     private Spinner location, area;
     private ArrayAdapter<String> locationAdapter;
     private ArrayAdapter<String> areaAdapter;
@@ -88,6 +100,8 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private Settings generalSettings;
     private Calendar calendar;
     private Date date;
+    private String bundleNumber;
+    private int index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +123,8 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         dateTo = findViewById(R.id.inventory_report_to);
         noOfBundles = findViewById(R.id.inventory_report_no_bundles);
         noOfPieces = findViewById(R.id.inventory_report_no_pieces);
+        cubicField = findViewById(R.id.inventory_report_cubic);
+        deleteAll = findViewById(R.id.inventory_report_delete);
 
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         dateFrom.setText(df.format(date));
@@ -135,34 +151,49 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         area.setAdapter(areaAdapter);
 
         woodPresenter.getBundlesData(this);
-
+        deleteAll.setOnClickListener(this);
         dateFrom.setOnClickListener(this);
         dateTo.setOnClickListener(this);
         location.setOnItemSelectedListener(this);
         area.setOnItemSelectedListener(this);
-        fillTable(bundleInfoServer);
+
+        for (int v = 0; v < bundleInfoServer2.size(); v++) {
+            BundleInfo fake = new BundleInfo();
+            fake = bundleInfoServer2.get(v);
+            bundlesForDelete.add(fake);
+        }
+//        fillTable(bundleInfoServer);
     }
 
     public void filters() {
+        bundleInfoServer.clear();
+        for (int v = 0; v < bundleInfoServer2.size(); v++) {
+            BundleInfo fake = new BundleInfo();
+            fake = bundleInfoServer2.get(v);
+            bundleInfoServer.add(fake);
+        }
         String fromDate = dateFrom.getText().toString().trim();
         String toDate = dateTo.getText().toString();
-        List<BundleInfo> filtered = new ArrayList<>();
-        List<BundleInfo> dateFiltered = new ArrayList<>();
+       filtered = new ArrayList<>();
+        dateFiltered = new ArrayList<>();
+
+        Log.e("follow", fromDate + " to " + toDate + " size1 " + bundleInfoServer.size() + " loc&area " + loc + areaField);
 
         for (int m = 0; m < bundleInfoServer.size(); m++) {
             JSONObject jsonObject = bundleInfoServer.get(m).getJSONObject();
-            Log.e("bundleInfoServer", "" + jsonObject.toString());
-
             if ((formatDate(bundleInfoServer.get(m).getAddingDate()).after(formatDate(fromDate))
                     || formatDate(bundleInfoServer.get(m).getAddingDate()).equals(formatDate(fromDate)))
                     && (formatDate(bundleInfoServer.get(m).getAddingDate()).before(formatDate(toDate))
                     || formatDate(bundleInfoServer.get(m).getAddingDate()).equals(formatDate(toDate))))
                 dateFiltered.add(bundleInfoServer.get(m));
         }
+        Log.e("follow", " size2 " + dateFiltered.size());
+
+//        Log.e("follow", fromDate + " to " + toDate + " size1 " + bundleInfoServer.size() + " size2 " + dateFiltered.size());
 
         for (int k = 0; k < dateFiltered.size(); k++) {
-            Log.e("-------------------", dateFiltered.get(k).getAddingDate());
-            Log.e("location", dateFiltered.get(k).getLocation());
+//            Log.e("-------------------", dateFiltered.get(k).getAddingDate());
+//            Log.e("location", dateFiltered.get(k).getLocation());
             if ((!loc.equals("All")) && (!areaField.equals("All"))
                     && loc.equals(dateFiltered.get(k).getLocation())
                     && areaField.equals(dateFiltered.get(k).getArea()))
@@ -177,7 +208,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                 filtered.add(dateFiltered.get(k));
 
         }
-
+        Log.e("follow", " size2 " + filtered.size());
         fillTable(filtered);
 
     }
@@ -198,9 +229,11 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         bundlesTable.removeAllViews();
         TableRow tableRow;
         int sumOfBundles = 0, sumOfPieces = 0;
+        double sumOfCubic = 0;
         for (int m = 0; m < filteredList.size(); m++) {
             sumOfBundles += 1;
             sumOfPieces += filteredList.get(m).getNoOfPieces();
+            sumOfCubic += (filteredList.get(m).getLength() * filteredList.get(m).getWidth() * filteredList.get(m).getThickness() * filteredList.get(m).getNoOfPieces());
 
             tableRow = new TableRow(this);
             tableRow = fillTableRows(tableRow
@@ -233,6 +266,43 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 
                 }
             });
+            TableRow finalTableRow1 = tableRow;
+            tableRow.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+//                                                TextView textView = ((TextView) tableRow.getChildAt(0));
+//                                                tableRow.setBackgroundResource(R.color.light_orange_2);
+                    bundleNumber = ((TextView) finalTableRow1.getChildAt(0)).getText().toString();
+                    index = 0;
+                    Log.e("b", bundleNumber);
+                    for (int i = 0; i < bundleInfoServer2.size(); i++)
+                        if (bundleNumber.equals(bundleInfoServer2.get(i).getBundleNo())) {
+                            index = i;
+                            break;
+                        }
+                    AlertDialog.Builder builder = new AlertDialog.Builder(InventoryReport.this);
+                    builder.setMessage("Are you want delete bundle number: " + bundleNumber + " ?");
+                    builder.setTitle("Delete");
+                    builder.setIcon(R.drawable.ic_warning_black_24dp);
+                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+//                            databaseHandler.updateBundlesFlag(bundleNo);// 1 mean hide
+//                            filteredList.remove();
+//                            bundleInfoServer2.remove(index);
+//                            bundlesForDelete.clear();
+//                            filteredList.remove(index);
+//                            for (int c = 0; c < filteredList.size(); c++)
+//                                bundlesForDelete.add(filteredList.get(c));
+                            new JSONTask2().execute();
+                            bundlesTable.removeView(finalTableRow1);
+                        }
+                    });
+                    builder.show();
+                    return false;
+                }
+            });
+
 //            TableRow clickTableRow = tableRow;
 //            tableRow.setOnLongClickListener(new View.OnLongClickListener() {
 //                @Override
@@ -260,6 +330,11 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 
         noOfBundles.setText("" + sumOfBundles);
         noOfPieces.setText("" + sumOfPieces);
+        cubicField.setText("" + String.format("%.3f", sumOfCubic));
+//        bundlesForDelete.clear();
+//        bundlesForDelete = filteredList;
+
+        Log.e("follow", "filltable " + filteredList.size());
     }
 
     TableRow fillTableRows(TableRow tableRow, String bundlNo, String length, String width, String thic, String grade, String noOfPieces, String location, String area) {
@@ -337,7 +412,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 
     public Date formatDate(String date) {
 
-        Log.e("date", date);
+//        Log.e("date", date);
         String myFormat = "dd/MM/yyyy"; //In which you need put here
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(myFormat, Locale.US);
         Date d = null;
@@ -501,32 +576,208 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         switch (v.getId()) {
             case R.id.inventory_report_from:
                 flag = 0;
+                new DatePickerDialog(InventoryReport.this, openDatePickerDialog(flag), calendar
+                        .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH)).show();
                 break;
             case R.id.inventory_report_to:
                 flag = 1;
+                new DatePickerDialog(InventoryReport.this, openDatePickerDialog(flag), calendar
+                        .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH)).show();
+                break;
+            case R.id.inventory_report_delete:
+//                for (int n = 0; n < bundlesForDelete.size(); n++)
+//                    jsonArrayBundles.put(bundlesForDelete.get(n).getJSONObject());
+//                for (int b = 0; b < dateFiltered.size(); b++)
+//                    bundlesForDelete.add(dateFiltered.get(b));
+                AlertDialog.Builder builder = new AlertDialog.Builder(InventoryReport.this);
+                builder.setMessage("Are you want delete all bundles ?");
+                builder.setTitle("Delete All");
+                builder.setIcon(R.drawable.ic_warning_black_24dp);
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        for (int n = 0; n < filtered.size(); n++)
+                            jsonArrayBundles.put(filtered.get(n).getJSONObject());
+                        new JSONTask3().execute();
+//                        databaseHandler.deleteBundle(bundleNo);
+//                        bundlesTable.removeView(tableRow);
+//
+//                        bundleNumber = bundleNo;
+//                        new AddToInventory.JSONTask2().execute();
+                    }
+                });
+                builder.show();
                 break;
         }
-//        filters();
-        new DatePickerDialog(InventoryReport.this, openDatePickerDialog(flag), calendar
-                .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)).show();
+//        new DatePickerDialog(InventoryReport.this, openDatePickerDialog(flag), calendar
+//                .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+//                calendar.get(Calendar.DAY_OF_MONTH)).show();
+
 
     }
 
-    public void setSlideAnimation() {
-        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
+    private class JSONTask2 extends AsyncTask<String, String, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                String JsonResponse = null;
+                HttpClient client = new DefaultHttpClient();
+                HttpPost request = new HttpPost();
+                request.setURI(new URI("http://" + generalSettings.getIpAddress() + "/export.php"));//import 10.0.0.214
+
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+                nameValuePairs.add(new BasicNameValuePair("DELETE_BUNDLE", "1"));
+                nameValuePairs.add(new BasicNameValuePair("BUNDLE_NO", bundleNumber));
+
+                request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                HttpResponse response = client.execute(request);
+
+                BufferedReader in = new BufferedReader(new
+                        InputStreamReader(response.getEntity().getContent()));
+
+                StringBuffer sb = new StringBuffer("");
+                String line = "";
+
+                while ((line = in.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                in.close();
+
+                JsonResponse = sb.toString();
+                Log.e("tag", "" + JsonResponse);
+
+                return JsonResponse;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            Log.e("inventory report", "json 2 " + s);
+            if (s != null) {
+                if (s.contains("DELETE BUNDLE SUCCESS")) {
+                    bundleInfoServer2.remove(index);
+                    databaseHandler.deleteBundle(bundleNumber);
+                    filters();
+                    Log.e("inventoryReport", "****Success");
+                } else {
+                    Toast.makeText(InventoryReport.this, "Failed to export data!", Toast.LENGTH_SHORT).show();
+//                    Log.e("inventoryReport", "****Failed to export data");
+                }
+            } else {
+                Toast.makeText(InventoryReport.this, "No internet connection!", Toast.LENGTH_SHORT).show();
+//                Log.e("inventoryReport", "****Failed to export data Please check internet connection");
+            }
+        }
     }
 
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent intent = new Intent(InventoryReport.this, ReportsActivity.class);
-        startActivity(intent);
-        finish();
+    private class JSONTask3 extends AsyncTask<String, String, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+//            Log.e("size", "" + jsonArrayBundles.size());
+            try {
+                String JsonResponse = null;
+                HttpClient client = new DefaultHttpClient();
+                HttpPost request = new HttpPost();
+                request.setURI(new URI("http://" + generalSettings.getIpAddress() + "/export.php"));//import 10.0.0.214
+
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+                nameValuePairs.add(new BasicNameValuePair("DELETE_ALL_BUNDLES", "1"));
+                nameValuePairs.add(new BasicNameValuePair("BUNDLE_NO", jsonArrayBundles.toString().trim()));
+
+                request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                HttpResponse response = client.execute(request);
+
+                BufferedReader in = new BufferedReader(new
+                        InputStreamReader(response.getEntity().getContent()));
+
+                StringBuffer sb = new StringBuffer("");
+                String line = "";
+
+                while ((line = in.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                in.close();
+
+                JsonResponse = sb.toString();
+                Log.e("tag", "" + JsonResponse);
+
+                return JsonResponse;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            Log.e("inventory report", "json 3 " + s);
+            if (s != null) {
+                if (s.contains("DELETE ALL BUNDLES SUCCESS")) {
+                    for (int i = 0; i < filtered.size(); i++) {
+                        databaseHandler.deleteBundle(filtered.get(i).getBundleNo());
+                        for (int k = 0; k < bundleInfoServer2.size(); k++)
+                            if (bundleInfoServer2.get(k).getBundleNo().equals(filtered.get(i).getBundleNo())) {
+                                bundleInfoServer2.remove(k);
+                                k = bundleInfoServer2.size();
+                            }
+                    }
+//                    bundlesForDelete.clear();
+                    bundlesTable.removeAllViews();
+                    filters();
+                    Log.e("tag", "****Success");
+                } else {
+                    Toast.makeText(InventoryReport.this, "Failed to export data!", Toast.LENGTH_SHORT).show();
+//                    Log.e("tag", "****Failed to export data");
+                }
+            } else {
+                Toast.makeText(InventoryReport.this, "No internet connection!", Toast.LENGTH_SHORT).show();
+//                Log.e("tag", "****Failed to export data Please check internet connection");
+            }
+        }
     }
 
-    @Override
-    public void finish() {
-        super.finish();
-        setSlideAnimation();
-    }
+//    public void setSlideAnimation() {
+//        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
+//    }
+//
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        Intent intent = new Intent(InventoryReport.this, ReportsActivity.class);
+//        startActivity(intent);
+//        setSlideAnimation();
+//        finish();
+//    }
+
+//    @Override
+//    public void finish() {
+//        super.finish();
+//        setSlideAnimation();
+//    }
 }

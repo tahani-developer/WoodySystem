@@ -112,26 +112,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.s3:
                 Intent intent = new Intent(MainActivity.this, Stage3.class);
                 startActivity(intent);
-                setSlideAnimation();
+//                setSlideAnimation();
                 break;
         }
     }
 
-    public void setSlideAnimation() {
-        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
-    }
+//    public void setSlideAnimation() {
+//        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
+//    }
 
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-        startActivity(intent);
-        finish();
-    }
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+//        startActivity(intent);
+//        setSlideAnimation();
+//        finish();
+//    }
 
-    @Override
-    public void finish() {
-        super.finish();
-        setSlideAnimation();
-    }
+//    @Override
+//    public void finish() {
+//        super.finish();
+//        setSlideAnimation();
+//    }
 
 }
