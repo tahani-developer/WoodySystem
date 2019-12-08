@@ -141,6 +141,24 @@
 
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/login_about_developers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_error_24dp"
+            android:drawableLeft="@drawable/ic_error_24dp"
+            android:text="@string/about_developers"
+            android:textColor="@color/white"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:drawablePadding="5dp"
+            android:layout_marginBottom="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/login_login_btn"
+            app:layout_constraintVertical_bias="0.944" />
     </android.support.constraint.ConstraintLayout>
 
 </FrameLayout>

@@ -34,7 +34,7 @@
                 android:drawableLeft="@drawable/axe"
                 android:paddingStart="350dp"
                 android:paddingLeft="350dp"
-                android:drawablePadding="-310dp"
+                android:drawablePadding="-350dp"
                 android:fontFamily="serif"
                 android:gravity="center"
                 android:text="@string/inventory_report"
@@ -365,12 +365,9 @@
                 >
 
                 <TextView
-                    android:layout_width="115dp"
+                    android:layout_width="130dp"
                     android:layout_height="match_parent"
                     android:background="@drawable/frame_shape"
-                    android:drawableEnd="@drawable/m3"
-                    android:drawableRight="@drawable/m3"
-                    android:drawablePadding="-20dp"
                     android:fontFamily="serif"
                     android:text="@string/cubic"
                     android:textColor="@color/white"

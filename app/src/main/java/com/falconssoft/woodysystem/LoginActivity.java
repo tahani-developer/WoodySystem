@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.falconssoft.woodysystem.models.Settings;
@@ -39,6 +40,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private LinearLayout linearLayout;
     private EditText username, password, ipAddress, companyName;
+    private TextView aboutDevelopers;
     private Button login, saveSettings;
     private ImageView logoImage, settings;
     private DatabaseHandler databaseHandler;
@@ -82,10 +84,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         login = findViewById(R.id.login_login_btn);
         settings = findViewById(R.id.login_settings);
         linearLayout = findViewById(R.id.login_linearLayout);
+        aboutDevelopers = findViewById(R.id.login_about_developers);
 
         login.setOnClickListener(this);
         logoImage.setOnClickListener(this);
         settings.setOnClickListener(this);
+        aboutDevelopers.setOnClickListener(this);
 
         animation = AnimationUtils.loadAnimation(getApplicationContext(),
                 R.anim.move_to_right);
@@ -99,6 +103,38 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.login_about_developers:
+                Dialog dialog = new Dialog(this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.about_developers_dialog);
+
+                TextView webTextView = dialog.findViewById(R.id.textView21);
+                TextView phoneTextView = dialog.findViewById(R.id.textView22);
+                TextView emailTextView = dialog.findViewById(R.id.textView23);
+                TextView locationTextView = dialog.findViewById(R.id.textView25);
+
+                Animation slide_down = AnimationUtils.loadAnimation(getApplicationContext(),
+                        R.anim.slide_down);
+                slide_down.setStartOffset(100);
+                webTextView.startAnimation(slide_down);
+
+                Animation slide_down1 = AnimationUtils.loadAnimation(getApplicationContext(),
+                        R.anim.slide_down);
+                slide_down1.setStartOffset(200);
+                phoneTextView.startAnimation(slide_down1);
+
+                Animation slide_down2 = AnimationUtils.loadAnimation(getApplicationContext(),
+                        R.anim.slide_down);
+                slide_down2.setStartOffset(300);
+                emailTextView.startAnimation(slide_down2);
+
+                Animation slide_down3 = AnimationUtils.loadAnimation(getApplicationContext(),
+                        R.anim.slide_down);
+                slide_down3.setStartOffset(400);
+                locationTextView.startAnimation(slide_down3);
+
+                dialog.show();
+                break;
             case R.id.login_login_btn:
                 String usernameText = username.getText().toString();
                 String passwordText = password.getText().toString();

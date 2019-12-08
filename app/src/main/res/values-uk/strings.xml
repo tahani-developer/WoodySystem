@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Деревна система</string>
+
+    <string name="stage1">1 етап</string>
+    <string name="stage2">2 етап</string>
+    <string name="stage3">3 етап</string>
+
+    <string name="enter_inventory">Введіть інвентар</string>
+    <string name="loading_order">Порядок завантаження</string>
+    <string name="reports">Звіти</string>
+
+    <string name="th">Товщина</string>
+    <string name="w">Ширина</string>
+    <string name="l">Довжина</string>
+    <string name="grade">Сорт</string>
+    <string name="num_pcs"># Шматок</string>
+    <string name="bundle_num">Пачка #</string>
+    <string name="location">Місцезнаходження</string>
+    <string name="loc">Місцезнаходження</string>
+    <string name="area">Площа</string>
+    <string name="description">Опис</string>
+    <string name="detail">Деталь</string>
+    <string name="from">З</string>
+    <string name="to">До</string>
+    <string name="no_bundle"># Пачка</string>
+    <string name="no_pieces"># Шматки</string>
+
+    <string name="company_name">Назва компанії</string>
+    <string name="ip_address">IP-адреса</string>
+    <string name="store">Магазин</string>
+
+    <string name="placing_no">Номер вантажівки</string>
+    <string name="order_no">Номер замовлення</string>
+    <string name="container_no">Контейнер #</string>
+    <string name="date_of_load">Дата завантаження</string>
+    <string name="destination">Місце призначення</string>
+    <string name="date">Дата</string>
+
+    <string name="clear_fields">Очистити поля</string>
+    <string name="new_bundle">Новий пакет</string>
+    <string name="thickness">Товщина</string>
+    <string name="width">Ширина</string>
+    <string name="length">Довжина</string>
+    <string name="no_of_pieces"># Шматки</string>
+    <string name="bundle_no">Пачка #</string>
+    <string name="cubic">Кубічний-</string>
+
+    <string name="username">Імя користувача</string>
+    <string name="password">Пароль</string>
+
+    <string name="search_by_barcode">Пошук за штрих-кодом</string>
+    <string name="login">Вхід</string>
+    <string name="add">Додайте</string>
+    <string name="done">Зроблено</string>
+    <string name="save">Зберегти</string>
+    <string name="generate_bundle_no">Створіть пакет #</string>
+    <string name="barcode">Штрих-код</string>
+
+    <string name="bundles">Звіт про пакети</string>
+    <string name="print_barcode_report">Роздрукувати штрих-код</string>
+    <string name="orders">Замовлення</string>
+    <string name="inventory_report">Інвентар</string>
+    <string name="loading_order_report">Замовлення на завантаження</string>
+    <string name="placing_no_">Вантажівка #</string>
+    <string name="order_no_">Замовлення #</string>
+    <string name="container_no_">Контейнер #</string>
+
+    <string name="about_developers">Про розробників</string>
+    <string name="falcons_soft">Соколи мякі</string>
+    <string name="report">Звіт</string>
+    <string name="print_all">Роздрукувати все</string>
+    <string name="delete_all">Видалити все</string>
+
+</resources>
