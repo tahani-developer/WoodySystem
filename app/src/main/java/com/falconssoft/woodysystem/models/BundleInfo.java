@@ -27,6 +27,7 @@ public class BundleInfo {
     private int ordered; // 0 => order not done, 1 => order done
     private String hideFlag;// 0 => show, 1 => hide
     private int isPrinted;
+    private String description;
 
     public BundleInfo() {
     }
@@ -58,7 +59,7 @@ public class BundleInfo {
         this.hideFlag = hideFlag;
     }
 
-    public BundleInfo(double thickness, double length, double width, String grade, int noOfPieces, String bundleNo, String location, String area, String addingDate, int isPrinted) {
+    public BundleInfo(double thickness, double length, double width, String grade, int noOfPieces, String bundleNo, String location, String area, String addingDate, int isPrinted, String description) {
         this.thickness = thickness;
         this.length = length;
         this.width = width;
@@ -69,6 +70,7 @@ public class BundleInfo {
         this.area = area;
         this.addingDate = addingDate;
         this.isPrinted = isPrinted;
+        this.description = description;
     }
 
     public int getIsPrinted() {
@@ -199,6 +201,14 @@ public class BundleInfo {
         this.hideFlag = hideFlag;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public JSONObject getJSONObject() {
         JSONObject obj = new JSONObject();
 
@@ -214,6 +224,7 @@ public class BundleInfo {
             obj.put("BARCODE", "'" + barcode + "'");
             obj.put("ORDERED", "'" + ordered + "'");
             obj.put("BUNDLE_DATE", "'" + addingDate + "'");
+            obj.put("DESCRIPTION", "'" + description + "'");
 
         } catch (JSONException e) {
             Log.e("Tag", "JSONException");

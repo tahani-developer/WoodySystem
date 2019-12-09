@@ -40,27 +40,29 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:background="@drawable/border_background"
+                android:layout_margin="4dp"
                 android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/loading_order_report_printAll"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/frame_shape"
-                    android:padding="5dp"
-                    android:text="Print All"
+                    android:layout_height="40dp"
+                    android:background="@drawable/corner_shape_dark"
+                    android:padding="3dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:text="@string/print_all"
                     android:textAllCaps="false"
-                    android:textColor="@color/alpha_white"
+                    android:textColor="@color/orange"
                     android:textSize="16sp" />
 
                 <Button
                     android:id="@+id/loading_order_report_delete"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:background="@drawable/corner_shape_dark"
-                    android:text="Delete All"
+                    android:padding="3dp"
+                    android:text="@string/delete_all"
                     android:textAllCaps="false"
                     android:textColor="@color/orange"
                     android:textSize="16sp" />
@@ -71,7 +73,7 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/light_orange_2">
+            android:background="@color/orange">
 
             <TextView
                 android:layout_width="0dp"

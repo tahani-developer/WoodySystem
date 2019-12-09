@@ -7,44 +7,57 @@
     android:background="@drawable/wooddecor"
     android:minWidth="1000dp"
     android:minHeight="500dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:ignore="MissingDefaultResource">
 
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/alpha_black"
+        >
+
+        <TextView
+            android:id="@+id/loading_order_report"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center"
+            android:layout_marginTop="19dp"
+            android:layout_marginBottom="20dp"
+            android:drawableStart="@drawable/axe"
+            android:drawableLeft="@drawable/axe"
+            android:paddingStart="350dp"
+            android:paddingLeft="350dp"
+            android:drawablePadding="-300dp"
+            android:fontFamily="serif"
+            android:gravity="center"
+            android:text="@string/loading_order_report"
+            android:textColor="@color/orange"
+            android:textSize="27sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/loading_order_report"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:drawableStart="@drawable/axe"
-                android:drawableLeft="@drawable/axe"
-                android:fontFamily="serif"
-                android:gravity="start"
-                android:layout_gravity="center"
-                android:text="@string/loading_order_report"
-                android:textColor="@color/orange"
-                android:textSize="27sp" />
+            android:layout_marginTop="60dp"
+            >
 
             <LinearLayout
                 android:id="@+id/addToInventory_linear_two"
-                android:layout_width="210dp"
-                android:layout_height="60dp"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
                 android:layout_marginHorizontal="5dp"
                 android:layout_gravity="center"
                 android:background="@drawable/shape_with_corner"
                 android:orientation="horizontal"
-                android:padding="5dp">
+                >
 
                 <TextView
-                    android:layout_width="100dp"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
@@ -53,10 +66,10 @@
 
                 <Spinner
                     android:id="@+id/Loding_Order_Location"
-                    android:layout_width="100dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
                     android:layout_marginTop="12dp"
                     />
 
@@ -64,29 +77,28 @@
 
             <LinearLayout
                 android:layout_width="180dp"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
                 android:layout_marginHorizontal="5dp"
                 android:layout_gravity="center"
                 android:background="@drawable/shape_with_corner"
                 android:orientation="horizontal"
-                android:padding="5dp">
+                >
 
                 <TextView
                     android:layout_width="60dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginBottom="10dp"
                     android:textSize="18sp"
                     android:text="@string/from" />
 
                 <EditText
                     android:id="@+id/Loding_Order_from"
-                    android:layout_width="100dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginEnd="5dp"
                     android:focusable="false"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="5dp"
                     android:textSize="17sp"
                     />
 
@@ -94,34 +106,32 @@
 
             <LinearLayout
                 android:layout_width="180dp"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
                 android:layout_marginHorizontal="5dp"
                 android:layout_gravity="center"
                 android:background="@drawable/shape_with_corner"
                 android:orientation="horizontal"
-                android:padding="5dp">
+                >
 
                 <TextView
                     android:layout_width="60dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginBottom="10dp"
                     android:textSize="18sp"
                     android:text="@string/to" />
 
                 <EditText
                     android:id="@+id/Loding_Order_to"
-                    android:layout_width="100dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
                     android:focusable="false"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="5dp"
                     android:textSize="17sp"
                     />
 
             </LinearLayout>
-
 
         </LinearLayout>
 
@@ -130,11 +140,10 @@
             android:layout_height="match_parent"
             android:layout_marginStart="5dp"
             android:layout_marginLeft="5dp"
-            android:layout_marginTop="85dp"
+            android:layout_marginTop="130dp"
             android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
             android:layout_marginBottom="5dp"
-            android:background="@color/alpha_black"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

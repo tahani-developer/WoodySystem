@@ -765,19 +765,19 @@ public class LoadingOrder2 extends AppCompatActivity {
 
     }
 
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent intent = new Intent(LoadingOrder2.this, LoadingOrder.class);
-        startActivity(intent);
-        finish();
-    }
-
-    @Override
-    public void finish() {
-        super.finish();
-//        setSlideAnimation();
-        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
-    }
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        Intent intent = new Intent(LoadingOrder2.this, LoadingOrder.class);
+//        startActivity(intent);
+//        finish();
+//    }
+//
+//    @Override
+//    public void finish() {
+//        super.finish();
+////        setSlideAnimation();
+//        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
+//    }
 
     public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
         if (bm != null) {

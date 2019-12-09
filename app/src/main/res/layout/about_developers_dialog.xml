@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="480dp"
+    android:layout_height="500dp"
+    android:background="@drawable/office"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+         <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="105dp"
+        android:layout_height="84dp"
+        android:layout_marginTop="268dp"
+        android:padding="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/falconssoftlogo" />
+
+         <TextView
+            android:id="@+id/textView21"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="70dp"
+            android:drawableStart="@drawable/ic_web_white_24dp"
+            android:drawableLeft="@drawable/ic_web_white_24dp"
+            android:drawablePadding="10dp"
+            android:padding="10dp"
+            android:text="https://falconssoft.com/"
+            android:textColor="@color/orange"
+            android:textSize="18sp"
+        android:fontFamily="serif"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/textView22"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_call_white_24dp"
+            android:drawableLeft="@drawable/ic_call_white_24dp"
+            android:drawablePadding="10dp"
+            android:padding="10dp"
+            android:text="+962-6-5656597 // +962-6-5658736"
+            android:textColor="@color/orange"
+            android:textSize="18sp"
+            android:fontFamily="serif"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView21" />
+
+        <TextView
+            android:id="@+id/textView23"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_email_white_24dp"
+            android:drawableLeft="@drawable/ic_email_white_24dp"
+            android:drawablePadding="10dp"
+            android:padding="10dp"
+            android:text=" info@falconssoft.com"
+            android:textColor="@color/orange"
+            android:textSize="18sp"
+            android:fontFamily="serif"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView22" />
+
+        <TextView
+            android:id="@+id/textView25"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_place_white_24dp"
+            android:drawableLeft="@drawable/ic_place_white_24dp"
+            android:drawablePadding="10dp"
+            android:gravity="center"
+            android:padding="10dp"
+            android:layout_marginStart="100dp"
+            android:layout_marginRight="100dp"
+            android:layout_marginLeft="100dp"
+            android:layout_marginEnd="100dp"
+            android:text="Adel Al-Qasem Complex, 8th Floor, \n Jabal Al-Hussein, Amman, Jordan"
+            android:textColor="@color/orange"
+            android:textSize="18sp"
+            android:fontFamily="serif"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.483"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView23"
+            app:layout_constraintVertical_bias="0.0" />
+
+</android.support.constraint.ConstraintLayout>

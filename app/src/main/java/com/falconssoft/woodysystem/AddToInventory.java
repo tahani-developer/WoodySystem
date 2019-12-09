@@ -76,18 +76,20 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
     private static final int WHITE = 0xFFFFFFFF;
     private static final int BLACK = 0xFF000000;
     private EditText thickness, length, width, noOfPieces;
-    private Spinner gradeSpinner, locationSpinner, areaSpinner;
+    private Spinner gradeSpinner, locationSpinner, areaSpinner, descriptionSpinner;
     private TableLayout bundlesTable;
     private LinearLayout linearLayoutView;
     private TextView textView, addToInventory;
     private BundleInfo newBundle;
+    private ArrayList<BundleInfo> bundleInfoList;
     private DatabaseHandler databaseHandler;
     private Animation animation;
     private List<String> gradeList = new ArrayList<>();
     private List<String> locationList = new ArrayList<>();
     private List<String> areaList = new ArrayList<>();
-    private ArrayAdapter<String> gradeAdapter, locationAdapter, areaAdapter;
-    private String gradeText = "Fresh", locationText = "Loc 1", areaText = "Zone 1";
+    private List<String> descriptionaList = new ArrayList<>();
+    private ArrayAdapter<String> gradeAdapter, locationAdapter, areaAdapter, descriptionaAdapter;
+    private String gradeText = "Fresh", locationText = "Loc 1", areaText = "Zone 1", descriptionText = "Bundle Origin";
     private JSONArray jsonArrayBundles;
     private String bundleNoString;
     private boolean mState = false;
@@ -105,6 +107,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         presenter = new WoodPresenter(this);
         generalSettings = new Settings();
         generalSettings = databaseHandler.getSettings();
+        bundleInfoList = new ArrayList<>();
 
         thickness = findViewById(R.id.addToInventory_thickness);
         length = findViewById(R.id.addToInventory_length);
@@ -113,6 +116,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         gradeSpinner = findViewById(R.id.addToInventory_grade);
         locationSpinner = findViewById(R.id.addToInventory_location);
         areaSpinner = findViewById(R.id.addToInventory_area);
+        descriptionSpinner = findViewById(R.id.addToInventory_description);
         addToInventory = findViewById(R.id.addToInventory_add_button);
 //        newBundleButton = findViewById(R.id.addToInventory_new_button);
         textView = findViewById(R.id.addToInventory_textView);
@@ -148,10 +152,24 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         areaSpinner.setAdapter(areaAdapter);
         areaSpinner.setOnItemSelectedListener(this);
 
+        descriptionaList.add("Bundle Origin");
+        descriptionaList.add("Finland Wood");
+        descriptionaList.add("Decore Wood");
+        descriptionaList.add("German Wood");
+        descriptionaList.add("Romanian Wood");
+        descriptionaList.add("Russian Wood");
+        descriptionaList.add("Ukrainian Wood");
+        descriptionaList.add("Canadian Wood");
+        descriptionaList.add("Swedian Wood");
+        descriptionaList.add("Latvian Wood");
+        descriptionaAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, descriptionaList);
+        descriptionaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        descriptionSpinner.setAdapter(descriptionaAdapter);
+        descriptionSpinner.setOnItemSelectedListener(this);
+
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_to_right);
         textView.startAnimation(animation);
 
-        jsonArrayBundles = new JSONArray();
 //        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
 //        addToInventory.startAnimation(animation);
     }
@@ -175,7 +193,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 //                                Log.e("serial" , " " + !SettingsFile.serialNumber.equals(null));
                                 Log.e("serialNumber", "" + SettingsFile.serialNumber);
                                 if ((!SettingsFile.serialNumber.equals("")) && (!SettingsFile.serialNumber.equals(null))) {
-                                    String locationString = null, gradeString = null;
+                                    String locationString = null, gradeString = null, detailString = null;
                                     switch (gradeText) {
                                         case "Fresh":
                                             gradeString = "FR";
@@ -203,6 +221,39 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                             break;
                                         case "Rudniya Sawmill":
                                             locationString = "RLP";
+                                            break;
+                                    }
+
+                                    switch (descriptionText) {
+                                        case "Bundle Origin":
+                                            detailString = "Origin";
+                                            break;
+                                        case "Finland Wood":
+                                            detailString = "FIN";
+                                            break;
+                                        case "Decore Wood":
+                                            detailString = "Decore";
+                                            break;
+                                        case "German Wood":
+                                            detailString = "DEU";
+                                            break;
+                                        case "Romanian Wood":
+                                            detailString = "ROU";
+                                            break;
+                                        case "Russian Wood":
+                                            detailString = "RUS";
+                                            break;
+                                        case "Ukrainian Wood":
+                                            detailString = "UKR";
+                                            break;
+                                        case "Canadian Wood":
+                                            detailString = "CAN";
+                                            break;
+                                        case "Swedian Wood":
+                                            detailString = "SWE";
+                                            break;
+                                        case "Latvian Wood":
+                                            detailString = "LVA";
                                             break;
                                     }
 //                                    Log.e("serial" , " " + SettingsFile.serialNumber);
@@ -240,21 +291,26 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                                 , locationText
                                                 , areaText
                                                 , generateDate
-                                                , 0);
+                                                , 0
+                                                , descriptionText);
 
+                                        bundleInfoList.add(newBundle);
                                         Log.e("date is", generateDate);
 
                                         TableRow tableRow = new TableRow(this);
-                                        for (int i = 0; i < 8; i++) {
+                                        for (int i = 0; i < 9; i++) {
                                             TextView textView = new TextView(this);
                                             textView.setBackgroundResource(R.color.light_orange);
-                                            TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+                                            TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f);
                                             textViewParam.setMargins(1, 5, 1, 1);
                                             textView.setTextSize(15);
                                             textView.setTextColor(ContextCompat.getColor(this, R.color.gray_dark_one));
                                             textView.setLayoutParams(textViewParam);
                                             switch (i) {
                                                 case 0:
+                                                    TableRow.LayoutParams param = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+                                                    param.setMargins(1, 5, 1, 1);
+                                                    textView.setLayoutParams(param);
                                                     textView.setText(bundleNoString);
                                                     break;
                                                 case 1:
@@ -278,6 +334,9 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                                 case 7:
                                                     textView.setText(areaText);
                                                     break;
+                                                case 8:
+                                                    textView.setText(detailString);
+                                                    break;
                                             }
                                             tableRow.addView(textView);
                                         }
@@ -292,6 +351,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                         locationSpinner.setSelection(0);
                                         areaSpinner.setSelection(0);
                                         gradeSpinner.setSelection(0);
+                                        descriptionSpinner.setSelection(0);
 
                                         tableRow.setOnLongClickListener(new View.OnLongClickListener() {
                                             @Override
@@ -307,7 +367,6 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                                     @Override
                                                     public void onClick(DialogInterface dialog, int which) {
-                                                        databaseHandler.deleteBundle(bundleNo);
                                                         bundlesTable.removeView(tableRow);
 
                                                         bundleNumber = bundleNo;
@@ -318,6 +377,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                                 return false;
                                             }
                                         });
+                                        thickness.requestFocus();
                                         Toast.makeText(this, "Added Successfully", Toast.LENGTH_SHORT).show();
                                     } else {
                                         Toast.makeText(this, "Barcode already exist", Toast.LENGTH_SHORT).show();
@@ -342,6 +402,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                     thickness.setError("Required!");
                 }
                 break;
+
         }
     }
 
@@ -389,6 +450,9 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
             case R.id.addToInventory_area:
                 areaText = parent.getItemAtPosition(position).toString();
                 break;
+            case R.id.addToInventory_description:
+                descriptionText = parent.getItemAtPosition(position).toString();
+                break;
         }
 
 //        Log.e("item", gradeText);
@@ -403,19 +467,19 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 
     }
 
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent intent = new Intent(AddToInventory.this, Stage3.class);
-        startActivity(intent);
-        finish();
-    }
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        Intent intent = new Intent(AddToInventory.this, Stage3.class);
+//        startActivity(intent);
+////        finish();
+//    }
 
-    @Override
-    public void finish() {
-        super.finish();
-//        setSlideAnimation();
-        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
-    }
+//    @Override
+//    public void finish() {
+//        super.finish();
+////        setSlideAnimation();
+//        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
+//    }
 
     private class JSONTask extends AsyncTask<String, String, String> {
 
@@ -536,6 +600,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
             super.onPostExecute(s);
             if (s != null) {
                 if (s.contains("DELETE BUNDLE SUCCESS")) {
+                    databaseHandler.deleteBundle(bundleNumber);
                     Log.e("tag", "****Success");
                 } else {
                     Log.e("tag", "****Failed to export data");
@@ -545,4 +610,5 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
             }
         }
     }
+
 }
