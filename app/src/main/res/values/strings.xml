@@ -43,7 +43,7 @@
     <string name="length">Length</string>
     <string name="no_of_pieces"># Pieces</string>
     <string name="bundle_no">Bundle #</string>
-    <string name="cubic">Cubic-</string>
+    <string name="cubic">Cubic</string>
 
     <string name="username">Username</string>
     <string name="password">Password</string>
@@ -65,5 +65,10 @@
     <string name="order_no_">Order No</string>
     <string name="container_no_">Container No</string>
 
+    <string name="about_developers">About Developers</string>
+    <string name="falcons_soft">Falcons Soft</string>
+    <string name="report">Report</string>
+    <string name="print_all">Print All</string>
+    <string name="delete_all">Delete All</string>
 
 </resources>

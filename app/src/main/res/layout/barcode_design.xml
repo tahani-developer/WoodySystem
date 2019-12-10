@@ -24,8 +24,7 @@
                 android:gravity="start"
                 android:text="KOSKISEN"
                 android:textColor="@color/black"
-                android:textSize="30sp"
-                android:textStyle="bold" />
+                android:textSize="30sp" />
 
             <TextView
                 android:id="@+id/textView6"
@@ -52,8 +51,7 @@
                 android:gravity="center"
                 android:text="T1665464"
                 android:textColor="@color/black"
-                android:textSize="30sp"
-                android:textStyle="bold" />
+                android:textSize="30sp" />
         </LinearLayout>
 
         <TextView
@@ -74,8 +72,7 @@
                 android:gravity="center"
                 android:text="44 X 100 X 400"
                 android:textColor="@color/black"
-                android:textSize="25sp"
-                android:textStyle="bold" />
+                android:textSize="25sp" />
         </LinearLayout>
 
         <TextView
@@ -95,8 +92,7 @@
                 android:layout_height="wrap_content"
                 android:text="PCS  "
                 android:textColor="@color/black"
-                android:textSize="25sp"
-                android:textStyle="bold" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/pcsNo"
@@ -104,8 +100,7 @@
                 android:layout_height="wrap_content"
                 android:text="275"
                 android:textColor="@color/black"
-                android:textSize="25sp"
-                android:textStyle="bold" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/textView18"
@@ -114,8 +109,7 @@
                 android:layout_marginLeft="70dp"
                 android:text="Grade"
                 android:textColor="@color/black"
-                android:textSize="25sp"
-                android:textStyle="bold" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/grade"
@@ -123,8 +117,7 @@
                 android:layout_height="wrap_content"
                 android:text="SF"
                 android:textColor="@color/black"
-                android:textSize="25sp"
-                android:textStyle="bold" />
+                android:textSize="25sp" />
 
         </TableRow>
 

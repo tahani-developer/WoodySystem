@@ -475,7 +475,7 @@ public class BundlesReport extends AppCompatActivity {
                     Image signature;
                     signature = Image.getInstance(stream.toByteArray());
                     signature.setAbsolutePosition(0f, 20f);
-                    signature.scalePercent(200f);
+                    signature.scalePercent(160f);
                     signature.setRotationDegrees(90f);
 //            signature.setRotation(0f);
 //            signature.setPaddingTop(10);
