@@ -44,7 +44,9 @@
         <activity
             android:name=".LoadingOrderReport"
             android:screenOrientation="sensorLandscape"
-            android:windowSoftInputMode="stateAlwaysHidden" />
+            android:windowSoftInputMode="stateAlwaysHidden" >
+
+        </activity>
         <activity android:name=".MainActivity"></activity>
         <activity android:name=".QrReader" />
     </application>

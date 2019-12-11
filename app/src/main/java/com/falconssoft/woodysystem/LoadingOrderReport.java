@@ -1,8 +1,10 @@
 package com.falconssoft.woodysystem;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -36,7 +38,15 @@ import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.Orders;
 import com.falconssoft.woodysystem.models.Pictures;
 import com.falconssoft.woodysystem.models.Settings;
+import com.falconssoft.woodysystem.reports.InventoryReport;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,6 +56,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -75,13 +86,15 @@ public class LoadingOrderReport extends AppCompatActivity {
     private ArrayAdapter<String> locationAdapter;
     private String loc = "";
     private Settings generalSettings;
+    private String orderNo;
+    private DatabaseHandler MHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.loading_order_report);
 
-        generalSettings = new Settings();
+        MHandler = new DatabaseHandler(LoadingOrderReport.this);
         generalSettings = new DatabaseHandler(this).getSettings();
         orders = new ArrayList<>();
         bundles = new ArrayList<>();
@@ -125,15 +138,12 @@ public class LoadingOrderReport extends AppCompatActivity {
         location.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
                 loc = parent.getSelectedItem().toString();
                 filters();
-
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
 
@@ -336,7 +346,7 @@ public class LoadingOrderReport extends AppCompatActivity {
     void fillTable(List<Orders> orders) {
 
         for (int k = 0; k < orders.size(); k++) {
-
+            final int index = k;
             TableRow tableRow = new TableRow(this);
             for (int i = 0; i < 7; i++) {
                 TextView textView = new TextView(this);
@@ -363,7 +373,6 @@ public class LoadingOrderReport extends AppCompatActivity {
                         textView.setText(orders.get(k).getDestination());
                         break;
                     case 5:
-                        final int index = k;
                         textView.setText("Preview");
                         textView.setTextColor(ContextCompat.getColor(this, R.color.preview));
                         textView.setOnClickListener(new View.OnClickListener() {
@@ -416,7 +425,6 @@ public class LoadingOrderReport extends AppCompatActivity {
                         break;
 
                     case 6:
-                        final int index1 = k;
                         TableRow.LayoutParams param = new TableRow.LayoutParams(0, 40, 0.25f);
                         textViewParam.setMargins(0, 2, 2, 0);
                         textView.setLayoutParams(param);
@@ -429,7 +437,7 @@ public class LoadingOrderReport extends AppCompatActivity {
 
                                 Pictures pics = new Pictures();
                                 for (int i = 0; i < pictures.size(); i++) {
-                                    if (pictures.get(i).getOrderNo().equals(orders.get(index1).getOrderNo())) {
+                                    if (pictures.get(i).getOrderNo().equals(orders.get(index).getOrderNo())) {
                                         pics = pictures.get(i);
                                         break;
                                     }
@@ -442,6 +450,30 @@ public class LoadingOrderReport extends AppCompatActivity {
 
                 }
                 tableRow.addView(textView);
+
+                tableRow.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(LoadingOrderReport.this);
+                        builder.setMessage("Are you want delete this order ?");
+                        builder.setTitle("Delete");
+                        builder.setIcon(R.drawable.ic_warning_black_24dp);
+                        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                orderNo = orders.get(index).getOrderNo();
+                                new JSONTask2().execute();
+                                ordersTable.removeView(tableRow);
+                            }
+                        });
+                        builder.show();
+
+
+                        return false;
+                    }
+                });
             }
             ordersTable.addView(tableRow);
         }
@@ -461,7 +493,6 @@ public class LoadingOrderReport extends AppCompatActivity {
         dialog.show();
 
     }
-
 
     public void openPicDialog(Pictures picts) {
         Dialog dialog = new Dialog(LoadingOrderReport.this);
@@ -525,6 +556,68 @@ public class LoadingOrderReport extends AppCompatActivity {
         } catch (Exception e) {
             e.getMessage();
             return null;
+        }
+    }
+
+    private class JSONTask2 extends AsyncTask<String, String, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                String JsonResponse = null;
+                HttpClient client = new DefaultHttpClient();
+                HttpPost request = new HttpPost();
+                request.setURI(new URI("http://" + generalSettings.getIpAddress() + "/export.php"));//import 10.0.0.214
+
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+                nameValuePairs.add(new BasicNameValuePair("DELETE_ORDER", "1"));
+                nameValuePairs.add(new BasicNameValuePair("ORDER_NO", orderNo));
+
+                request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                HttpResponse response = client.execute(request);
+
+                BufferedReader in = new BufferedReader(new
+                        InputStreamReader(response.getEntity().getContent()));
+
+                StringBuffer sb = new StringBuffer("");
+                String line = "";
+
+                while ((line = in.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                in.close();
+
+                JsonResponse = sb.toString();
+                Log.e("tag", "" + JsonResponse);
+
+                return JsonResponse;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (s != null) {
+                if (s.contains("DELETE ORDER SUCCESS")) {
+                    MHandler.deleteOrder(orderNo);
+                } else {
+                    Toast.makeText(LoadingOrderReport.this, "Failed to export data!", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(LoadingOrderReport.this, "No internet connection!", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
