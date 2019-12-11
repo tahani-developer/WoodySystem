@@ -75,9 +75,9 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
     @Override
     public void onResponse(String response) {
         try {
-//            response=new String(response.getBytes("ISO-8859-1"), "UTF-8");
-            if (response.indexOf("{") != 0)
-                response = response.substring(response.indexOf("{"));
+            response=new String(response.getBytes("ISO-8859-1"), "UTF-8");
+//            if (response.indexOf("{") != 0)
+//                response = response.substring(response.indexOf("{"));
             Log.e("presenter: import ", "" + response);
             JSONObject object = new JSONObject(response);
             Log.e("presenter1: import ", "" + response);
@@ -92,8 +92,8 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
             e.printStackTrace();
 //        } catch (UnsupportedEncodingException e) {
 //            e.printStackTrace();
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
 
     }
@@ -145,11 +145,11 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                 SettingsFile.usersList.clear();
 //                Log.e("presenter/users/res ", "before " + (response.indexOf("{") != 0));
 
-                if (response.indexOf("{") != 0)
-                    response = response.substring(response.indexOf("{"));
+//                if (response.indexOf("{") != 0)
+//                    response = response.substring(response.indexOf("{"));
 
-//                response=new String(response.getBytes("ISO-8859-1"), "UTF-8");
-//                Log.e("presenter/users/res ", "" + response);
+                response=new String(response.getBytes("ISO-8859-1"), "UTF-8");
+                Log.e("presenter/users/res ", "" + response);
 
                 JSONObject object = new JSONObject(response);
                 Log.e("presenter:obj1", "" + object.toString());
@@ -169,8 +169,8 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                 e.printStackTrace();
 //            } catch (UnsupportedEncodingException e) {
 //                e.printStackTrace();
-//            } catch (UnsupportedEncodingException e) {
-//                e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -200,9 +200,9 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
             try {
                 bundleInfoServer.clear();
                 bundleInfoServer2.clear();
-                if (response.indexOf("{") >= 0)
-                    response = response.substring(response.indexOf("{"));
-//                response=new String(response.getBytes("ISO-8859-1"), "UTF-8");
+//                if (response.indexOf("{") >= 0)
+//                    response = response.substring(response.indexOf("{"));
+                response=new String(response.getBytes("ISO-8859-1"), "UTF-8");
                 Log.e("presenter/bundle/res ", "" + response);
                 JSONObject object = new JSONObject(response);
 //                Log.e("presenter:bun1", "" + object.toString());
@@ -240,8 +240,8 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                 e.printStackTrace();
 //            } catch (UnsupportedEncodingException e) {
 //                e.printStackTrace();
-//            } catch (UnsupportedEncodingException e) {
-//                e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
             }
         }
     }
