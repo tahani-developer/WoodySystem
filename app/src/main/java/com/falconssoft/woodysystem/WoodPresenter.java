@@ -174,7 +174,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
         }
     }
 
-    //------------------------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------/
 
     public void getBundlesData(InventoryReport inventoryReport) {
         settings = databaseHandler.getSettings();
