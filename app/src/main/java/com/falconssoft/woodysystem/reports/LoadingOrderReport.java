@@ -6,8 +6,11 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
@@ -54,6 +57,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
@@ -102,9 +106,9 @@ public class LoadingOrderReport extends AppCompatActivity {
         listView = findViewById(R.id.listview);
         linearLayout = findViewById(R.id.linearLayout);
         arrow = findViewById(R.id.arrow);
-        location =(Spinner) findViewById(R.id.Loding_Order_Location);
+        location = (Spinner) findViewById(R.id.Loding_Order_Location);
         from = (EditText) findViewById(R.id.Loding_Order_from);
-        to =(EditText) findViewById(R.id.Loding_Order_to);
+        to = (EditText) findViewById(R.id.Loding_Order_to);
 
         List<String> locationList = new ArrayList<>();
         locationList.add("");
@@ -452,20 +456,44 @@ public class LoadingOrderReport extends AppCompatActivity {
                     @Override
                     public boolean onLongClick(View v) {
 
-                        AlertDialog.Builder builder = new AlertDialog.Builder(LoadingOrderReport.this);
-                        builder.setMessage("Are you want delete this order ?");
-                        builder.setTitle("Delete");
-                        builder.setIcon(R.drawable.ic_warning_black_24dp);
-                        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                        Dialog passwordDialog = new Dialog(LoadingOrderReport.this);
+                        passwordDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        passwordDialog.setContentView(R.layout.password_dialog);
+                        passwordDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-                                orderNo = orders.get(index).getOrderNo();
-                                new JSONTask2().execute();
-                                ordersTable.removeView(tableRow);
+                        TextInputEditText password = passwordDialog.findViewById(R.id.password_dialog_password);
+                        TextView done = passwordDialog.findViewById(R.id.password_dialog_done);
+
+                        done.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (password.getText().toString().equals("301190")) {
+                                    orderNo = orders.get(index).getOrderNo();
+                                    new JSONTask2().execute();
+                                    ordersTable.removeView(tableRow);
+                                    passwordDialog.dismiss();
+                                } else {
+                                    Toast.makeText(LoadingOrderReport.this, "Not Authorized!", Toast.LENGTH_SHORT).show();
+                                    password.setText("");
+                                }
                             }
                         });
-                        builder.show();
+
+                        passwordDialog.show();
+//                        AlertDialog.Builder builder = new AlertDialog.Builder(LoadingOrderReport.this);
+//                        builder.setMessage("Are you want delete this order ?");
+//                        builder.setTitle("Delete");
+//                        builder.setIcon(R.drawable.ic_warning_black_24dp);
+//                        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//
+//                                orderNo = orders.get(index).getOrderNo();
+//                                new JSONTask2().execute();
+//                                ordersTable.removeView(tableRow);
+//                            }
+//                        });
+//                        builder.show();
 
 
                         return false;
@@ -662,7 +690,7 @@ public class LoadingOrderReport extends AppCompatActivity {
         try {
             List<Orders> filtered = new ArrayList<>();
             for (int k = 0; k < orders.size(); k++) {
-                if(fromDate.equals("") || toDate.equals("")){
+                if (fromDate.equals("") || toDate.equals("")) {
                     if (loc.equals("") || loc.equals(orders.get(k).getLocation()))
                         filtered.add(orders.get(k));
                 } else {

@@ -40,8 +40,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private LinearLayout linearLayout;
     private EditText username, password, ipAddress, companyName;
-    private TextView aboutDevelopers;
-    private Button login, saveSettings;
+    private TextView aboutDevelopers, saveSettings;
+    private Button login;
     private ImageView logoImage, settings;
     private DatabaseHandler databaseHandler;
     private final int IMAGE_CODE = 5;
