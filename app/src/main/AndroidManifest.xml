@@ -42,7 +42,7 @@
             android:name=".LoadingOrder2"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name=".LoadingOrderReport"
+            android:name=".reports.LoadingOrderReport"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="stateAlwaysHidden" >
 
