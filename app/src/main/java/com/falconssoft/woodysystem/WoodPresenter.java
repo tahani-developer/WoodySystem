@@ -75,8 +75,8 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
     @Override
     public void onResponse(String response) {
         try {
-            response=new String(response.getBytes("ISO-8859-1"), "UTF-8");
-//            if (response.indexOf("{") != 0)
+            if (response.indexOf("{") == 3)
+                response = new String(response.getBytes("ISO-8859-1"), "UTF-8");
 //                response = response.substring(response.indexOf("{"));
             Log.e("presenter: import ", "" + response);
             JSONObject object = new JSONObject(response);
@@ -143,12 +143,11 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
             try {
                 databaseHandler.deleteUsers();
                 SettingsFile.usersList.clear();
-                Log.e("presenter/users/res ", "before " + (response.indexOf("{") != 0));
-
-//                if (response.indexOf("{") != 0)
+//
+                if (response.indexOf("{") == 3) {
 //                    response = response.substring(response.indexOf("{"));
-
-                response=new String(response.getBytes("ISO-8859-1"), "UTF-8");
+                    response = new String(response.getBytes("ISO-8859-1"), "UTF-8");// cloud
+                }
                 Log.e("presenter/users/res ", "" + response);
 
                 JSONObject object = new JSONObject(response);
@@ -175,7 +174,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
         }
     }
 
-    //------------------------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------/
 
     public void getBundlesData(InventoryReport inventoryReport) {
         settings = databaseHandler.getSettings();
@@ -200,9 +199,10 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
             try {
                 bundleInfoServer.clear();
                 bundleInfoServer2.clear();
-//                if (response.indexOf("{") >= 0)
+                if (response.indexOf("{") == 3)
+                    response = new String(response.getBytes("ISO-8859-1"), "UTF-8");
 //                    response = response.substring(response.indexOf("{"));
-                response=new String(response.getBytes("ISO-8859-1"), "UTF-8");
+
                 Log.e("presenter/bundle/res ", "" + response);
                 JSONObject object = new JSONObject(response);
 //                Log.e("presenter:bun1", "" + object.toString());
@@ -211,23 +211,23 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject innerObject = array.getJSONObject(i);//ORDERED
                     Log.e("presenter:bun3 ", "" + innerObject.toString());
-                    if (innerObject.getInt("ORDERED") == 0){
-                    BundleInfo bundleInfo = new BundleInfo();
-                    bundleInfo.setThickness(innerObject.getDouble("THICKNESS"));
-                    bundleInfo.setWidth(innerObject.getDouble("WIDTH"));
-                    bundleInfo.setLength(innerObject.getDouble("LENGTH"));
-                    bundleInfo.setGrade(innerObject.getString("GRADE"));
-                    bundleInfo.setNoOfPieces(innerObject.getInt("PIECES"));
-                    bundleInfo.setBundleNo(innerObject.getString("BUNDLE_NO"));
-                    bundleInfo.setLocation(innerObject.getString("LOCATION"));
-                    bundleInfo.setArea(innerObject.getString("AREA"));
-                    bundleInfo.setBarcode(innerObject.getString("BARCODE"));
-                    bundleInfo.setOrdered(innerObject.getInt("ORDERED"));
+                    if (innerObject.getInt("ORDERED") == 0) {
+                        BundleInfo bundleInfo = new BundleInfo();
+                        bundleInfo.setThickness(innerObject.getDouble("THICKNESS"));
+                        bundleInfo.setWidth(innerObject.getDouble("WIDTH"));
+                        bundleInfo.setLength(innerObject.getDouble("LENGTH"));
+                        bundleInfo.setGrade(innerObject.getString("GRADE"));
+                        bundleInfo.setNoOfPieces(innerObject.getInt("PIECES"));
+                        bundleInfo.setBundleNo(innerObject.getString("BUNDLE_NO"));
+                        bundleInfo.setLocation(innerObject.getString("LOCATION"));
+                        bundleInfo.setArea(innerObject.getString("AREA"));
+                        bundleInfo.setBarcode(innerObject.getString("BARCODE"));
+                        bundleInfo.setOrdered(innerObject.getInt("ORDERED"));
 //                    bundleInfo.setPicture(innerObject.getString("PIC"));
-                    bundleInfo.setAddingDate(innerObject.getString("BUNDLE_DATE"));
+                        bundleInfo.setAddingDate(innerObject.getString("BUNDLE_DATE"));
 
-                    bundleInfoServer2.add(bundleInfo);
-                    bundleInfoServer.add(bundleInfo);
+                        bundleInfoServer2.add(bundleInfo);
+                        bundleInfoServer.add(bundleInfo);
                     }
                 }
                 Log.e("follow", "" + bundleInfoServer.size());

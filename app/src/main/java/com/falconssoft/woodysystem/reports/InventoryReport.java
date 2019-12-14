@@ -1,15 +1,15 @@
 package com.falconssoft.woodysystem.reports;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.print.PrintHelper;
 import android.support.v7.app.AppCompatActivity;
@@ -22,7 +22,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -31,16 +30,10 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.falconssoft.woodysystem.AddToInventory;
 import com.falconssoft.woodysystem.DatabaseHandler;
-import com.falconssoft.woodysystem.LoadingOrderReport;
 import com.falconssoft.woodysystem.R;
-import com.falconssoft.woodysystem.ReportsActivity;
-import com.falconssoft.woodysystem.SettingsFile;
 import com.falconssoft.woodysystem.WoodPresenter;
 import com.falconssoft.woodysystem.models.BundleInfo;
-import com.falconssoft.woodysystem.models.Orders;
-import com.falconssoft.woodysystem.models.Pictures;
 import com.falconssoft.woodysystem.models.Settings;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -56,16 +49,11 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URL;
-import java.net.URLConnection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -174,7 +162,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         }
         String fromDate = dateFrom.getText().toString().trim();
         String toDate = dateTo.getText().toString();
-       filtered = new ArrayList<>();
+        filtered = new ArrayList<>();
         dateFiltered = new ArrayList<>();
 
         Log.e("follow", fromDate + " to " + toDate + " size1 " + bundleInfoServer.size() + " loc&area " + loc + areaField);
@@ -280,25 +268,42 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                             index = i;
                             break;
                         }
-                    AlertDialog.Builder builder = new AlertDialog.Builder(InventoryReport.this);
-                    builder.setMessage("Are you want delete bundle number: " + bundleNumber + " ?");
-                    builder.setTitle("Delete");
-                    builder.setIcon(R.drawable.ic_warning_black_24dp);
-                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+                    Dialog passwordDialog = new Dialog(InventoryReport.this);
+                    passwordDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    passwordDialog.setContentView(R.layout.password_dialog);
+                    passwordDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                    TextInputEditText password = passwordDialog.findViewById(R.id.password_dialog_password);
+                    TextView done = passwordDialog.findViewById(R.id.password_dialog_done);
+
+                    done.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
-//                            databaseHandler.updateBundlesFlag(bundleNo);// 1 mean hide
-//                            filteredList.remove();
-//                            bundleInfoServer2.remove(index);
-//                            bundlesForDelete.clear();
-//                            filteredList.remove(index);
-//                            for (int c = 0; c < filteredList.size(); c++)
-//                                bundlesForDelete.add(filteredList.get(c));
-                            new JSONTask2().execute();
-                            bundlesTable.removeView(finalTableRow1);
+                        public void onClick(View v) {
+                            if (password.getText().toString().equals("301190")) {
+                                new JSONTask2().execute();
+                                bundlesTable.removeView(finalTableRow1);
+                                passwordDialog.dismiss();
+                            } else {
+                                Toast.makeText(InventoryReport.this, "Not Authorized!", Toast.LENGTH_SHORT).show();
+                                password.setText("");
+                            }
                         }
                     });
-                    builder.show();
+
+                    passwordDialog.show();
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(InventoryReport.this);
+//                    builder.setMessage("Are you want delete bundle number: " + bundleNumber + " ?");
+//                    builder.setTitle("Delete");
+//                    builder.setIcon(R.drawable.ic_warning_black_24dp);
+//                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            new JSONTask2().execute();
+//                            bundlesTable.removeView(finalTableRow1);
+//                        }
+//                    });
+//                    builder.show();
                     return false;
                 }
             });
@@ -587,34 +592,46 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                         calendar.get(Calendar.DAY_OF_MONTH)).show();
                 break;
             case R.id.inventory_report_delete:
-//                for (int n = 0; n < bundlesForDelete.size(); n++)
-//                    jsonArrayBundles.put(bundlesForDelete.get(n).getJSONObject());
-//                for (int b = 0; b < dateFiltered.size(); b++)
-//                    bundlesForDelete.add(dateFiltered.get(b));
-                AlertDialog.Builder builder = new AlertDialog.Builder(InventoryReport.this);
-                builder.setMessage("Are you want delete all bundles ?");
-                builder.setTitle("Delete All");
-                builder.setIcon(R.drawable.ic_warning_black_24dp);
-                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+                Dialog passwordDialog = new Dialog(this);
+                passwordDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                passwordDialog.setContentView(R.layout.password_dialog);
+                passwordDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                TextInputEditText password = passwordDialog.findViewById(R.id.password_dialog_password);
+                TextView done = passwordDialog.findViewById(R.id.password_dialog_done);
+
+                done.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        for (int n = 0; n < filtered.size(); n++)
-                            jsonArrayBundles.put(filtered.get(n).getJSONObject());
-                        new JSONTask3().execute();
-//                        databaseHandler.deleteBundle(bundleNo);
-//                        bundlesTable.removeView(tableRow);
-//
-//                        bundleNumber = bundleNo;
-//                        new AddToInventory.JSONTask2().execute();
+                    public void onClick(View v) {
+                        if (password.getText().toString().equals("301190")) {
+                            for (int n = 0; n < filtered.size(); n++)
+                                jsonArrayBundles.put(filtered.get(n).getJSONObject());
+                            new JSONTask3().execute();
+                            passwordDialog.dismiss();
+                        } else {
+                            Toast.makeText(InventoryReport.this, "Not Authorized!", Toast.LENGTH_SHORT).show();
+                            password.setText("");
+                        }
                     }
                 });
-                builder.show();
+
+//                AlertDialog.Builder builder = new AlertDialog.Builder(InventoryReport.this);
+//                builder.setMessage("Are you want delete all bundles ?");
+//                builder.setTitle("Delete All");
+//                builder.setIcon(R.drawable.ic_warning_black_24dp);
+//                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        for (int n = 0; n < filtered.size(); n++)
+//                            jsonArrayBundles.put(filtered.get(n).getJSONObject());
+//                        new JSONTask3().execute();
+//                    }
+//                });
+//                builder.show();
+                passwordDialog.show();
                 break;
         }
-//        new DatePickerDialog(InventoryReport.this, openDatePickerDialog(flag), calendar
-//                .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-//                calendar.get(Calendar.DAY_OF_MONTH)).show();
-
 
     }
 

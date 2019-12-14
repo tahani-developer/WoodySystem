@@ -183,7 +183,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="serif"
-                android:text="@string/length"
+                android:text="@string/l"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
 
@@ -192,7 +192,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.8"
                 android:fontFamily="serif"
-                android:text="@string/width"
+                android:text="@string/w"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
 
@@ -219,7 +219,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="serif"
-                android:text="@string/no_of_pieces"
+                android:text="@string/no_pieces"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
 
@@ -339,7 +339,7 @@
                     android:textSize="18sp"
                     android:fontFamily="serif"
                     android:textColor="@color/white"
-                    android:text="@string/no_of_pieces" />
+                    android:text="@string/no_pieces" />
 
                 <TextView
                     android:id="@+id/inventory_report_no_pieces"

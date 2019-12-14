@@ -534,4 +534,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void deleteOrder(String orderNo) {
+        db = this.getWritableDatabase();
+        db.delete(ORDERS_TABLE, " Order_NO=?", new String[]{orderNo});
+        db.close();
+    }
+
 }
