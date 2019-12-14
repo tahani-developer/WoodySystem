@@ -463,7 +463,7 @@ public class BundlesReport extends AppCompatActivity {
 
             //Step 3
             document.open();
- 
+
             //Step 4 Add content
             int ispage=0;
             for (int i = 0; i < bundleInfos.size(); i++) {
