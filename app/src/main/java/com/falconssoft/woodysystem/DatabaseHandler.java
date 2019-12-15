@@ -49,6 +49,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String BUNDLE_INFO_ADD_DATE = "ADD_DATE";
     private static final String BUNDLE_INFO_PRINTED = "PRINTED";
     private static final String BUNDLE_INFO_DESCRIPTION = "DESCRIPTION";
+//    private static final String BUNDLE_INFO_SERIAL = "SERIAL";
 
     //******************************************************************
     private static final String USERS_TABLE = "USERS_TABLE";
@@ -152,6 +153,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+//        try {
+//            db.execSQL("ALTER TABLE BUNDLE_INFO_TABLE ADD SERIAL TEXT NOT NULL");
+//        } catch (Exception e) {
+//            Log.e("upgrade", "SERIAL");
+//        }
 
         try {
             db.execSQL("ALTER TABLE INVENTORY_INFO ADD BUNDLE_BARCODE TAXE NOT NULL DEFAULT ''");
