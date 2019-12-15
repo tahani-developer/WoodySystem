@@ -35,6 +35,7 @@ import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
@@ -82,6 +83,7 @@ public class BundlesReport extends AppCompatActivity {
 
     private TableLayout bundlesTable;
     private DatabaseHandler databaseHandler;
+    private List<BundleInfo> bundleInfoForPrint = new ArrayList<>();
     private List<BundleInfo> bundleInfos = new ArrayList<>();
     private Animation animation;
     private TextView textView;
@@ -109,6 +111,16 @@ public class BundlesReport extends AppCompatActivity {
             public void onClick(View v) {
 //               PrintAll();
                 try {
+
+                    for(int i=0;i<bundlesTable.getChildCount();i++){
+                        TableRow table=(TableRow)bundlesTable.getChildAt(i);
+                        CheckBox bundleCheck = (CheckBox) table.getChildAt(9);
+                        if(bundleCheck.isChecked()) {
+                            Log.e("bundelCheak",""+i+"  "+bundleInfos.get(Integer.parseInt(bundleCheck.getTag().toString())).getBundleNo());
+                            bundleInfoForPrint.add(bundleInfos.get(Integer.parseInt(bundleCheck.getTag().toString())));
+                        }
+                    }
+
                     File file=createPdf();
 
 
@@ -142,9 +154,14 @@ public class BundlesReport extends AppCompatActivity {
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
 
-                                databaseHandler.updateAllPrinting("", 1);
+                                for(int i=0;i<bundleInfoForPrint.size();i++){
+                                    databaseHandler.updateAllPrinting(bundleInfoForPrint.get(i).getBundleNo(), 1);
+
+                                }
+
                                 bundleInfos=databaseHandler.getAllBundleInfo("0");
                                 bundlesTable.removeAllViews();
+                                bundleInfoForPrint.clear();
                                 fillTable();
                             }
                         })
@@ -196,6 +213,7 @@ public class BundlesReport extends AppCompatActivity {
                     , bundleInfos.get(m).getLocation()
                     , bundleInfos.get(m).getArea()
                     , bundleInfos.get(m).getIsPrinted()
+                    ,m
             );
             bundlesTable.addView(tableRow);
 
@@ -257,14 +275,14 @@ public class BundlesReport extends AppCompatActivity {
         } }
     }
 
-    TableRow fillTableRows(TableRow tableRow, String bundlNo, String length, String width, String thic, String grade, String noOfPieces, String location, String area, int printed) {
+    TableRow fillTableRows(TableRow tableRow, String bundlNo, String length, String width, String thic, String grade, String noOfPieces, String location, String area, int printed,int indexInList) {
         int backgroundColor;
         if (printed == 0) {
             backgroundColor = R.color.light_orange;
         } else {
             backgroundColor = R.color.white;
         }
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 11; i++) {
             TextView textView = new TextView(this);
             textView.setBackgroundResource(backgroundColor);
             TableRow.LayoutParams textViewParam;
@@ -335,6 +353,24 @@ public class BundlesReport extends AppCompatActivity {
                     }
                     textView.setBackgroundResource(backgroundColor);
                     break;
+
+                case 9:
+                    CheckBox checkBox = new CheckBox(this);
+
+                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+                    textViewParam.setMargins(1, 5, 1, 1);
+                    checkBox.setLayoutParams(textViewParam);
+                    checkBox.setText("");
+                    checkBox.setTag(""+indexInList);
+                    checkBox.setTextColor(ContextCompat.getColor(this, R.color.white));
+                    checkBox.setBackgroundResource(backgroundColor);
+                    tableRow.addView(checkBox);
+                    break;
+
+                case 10:
+
+                    break;
+
             }
             tableRow.addView(textView);
         }
@@ -466,10 +502,10 @@ public class BundlesReport extends AppCompatActivity {
 
             //Step 4 Add content
             int ispage=0;
-            for (int i = 0; i < bundleInfos.size(); i++) {
-                if (bundleInfos.get(i).getIsPrinted() != 1) {
-                    Bitmap bitmap = writeBarcode(String.valueOf(bundleInfos.get(i).getBundleNo()), String.valueOf(bundleInfos.get(i).getLength()), String.valueOf(bundleInfos.get(i).getWidth()),
-                            String.valueOf(bundleInfos.get(i).getThickness()), String.valueOf(bundleInfos.get(i).getGrade()), String.valueOf(bundleInfos.get(i).getNoOfPieces()));
+            for (int i = 0; i < bundleInfoForPrint.size(); i++) {
+                if (bundleInfoForPrint.get(i).getIsPrinted() != 1) {
+                    Bitmap bitmap = writeBarcode(String.valueOf(bundleInfoForPrint.get(i).getBundleNo()), String.valueOf(bundleInfoForPrint.get(i).getLength()), String.valueOf(bundleInfoForPrint.get(i).getWidth()),
+                            String.valueOf(bundleInfoForPrint.get(i).getThickness()), String.valueOf(bundleInfoForPrint.get(i).getGrade()), String.valueOf(bundleInfoForPrint.get(i).getNoOfPieces()));
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
                     Image signature;

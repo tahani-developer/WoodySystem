@@ -3,6 +3,7 @@ package com.falconssoft.woodysystem;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -18,9 +19,21 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.falconssoft.woodysystem.models.BundleInfo;
+import com.falconssoft.woodysystem.models.Orders;
+import com.falconssoft.woodysystem.models.Pictures;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,11 +63,13 @@ public class LoadingOrder extends AppCompatActivity {
         barcode = (Button) findViewById(R.id.barcode);
         deleteBarcode = (ImageButton) findViewById(R.id.deletebaarcode);
         DHandler = new DatabaseHandler(LoadingOrder.this);
-        bundles = DHandler.getBundleInfo();
+//        bundles = DHandler.getBundleInfo();
+
+        new JSONTask().execute();
+
         filteredList = new ArrayList<>();
 
-        adapter = new ItemsListAdapter(LoadingOrder.this, bundles);
-        items.setAdapter(adapter);
+
         activity = this;
 
         barcode.setOnClickListener(new View.OnClickListener() {
@@ -182,16 +197,16 @@ public class LoadingOrder extends AppCompatActivity {
         return test;
     }
 
-    void searchByBundleNo(String Bundul){
+    void searchByBundleNo(String Bundul) {
 
-        Log.e("searchByBundleNo ",""+barcodeValue+"\n"+"th ="+Bundul);
+        Log.e("searchByBundleNo ", "" + barcodeValue + "\n" + "th =" + Bundul);
 
-           int no=0;
+        int no = 0;
 
         if (!barcodeValue.equals("cancelled")) {
             for (int k = 0; k < bundles.size(); k++) {
                 if ((bundles.get(k).getBundleNo()).equals(Bundul)) {
-                    no=k;
+                    no = k;
                     items.setSelection(no);
                     items.requestFocusFromTouch();
                     items.setSelection(no);
@@ -233,22 +248,110 @@ public class LoadingOrder extends AppCompatActivity {
         }
     }
 
-//    public void setSlideAnimation() {
-//        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
-//    }
-//
-//    public void onBackPressed() {
-//        super.onBackPressed();
-//        Intent intent = new Intent(LoadingOrder.this, Stage3.class);
-//        startActivity(intent);
-//        finish();
-//    }
-//
-//    @Override
-//    public void finish() {
-//        super.finish();
-//        setSlideAnimation();
-//    }
+    private class JSONTask extends AsyncTask<String, String, List<BundleInfo>> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected List<BundleInfo> doInBackground(String... params) {
+            URLConnection connection = null;
+            BufferedReader reader = null;
+
+            try {
+                URL url = new URL("http://" + DHandler.getSettings().getIpAddress() + "/import.php?FLAG=3");
+
+                URLConnection conn = url.openConnection();
+                conn.setDoOutput(true);
+
+                reader = new BufferedReader(new
+                        InputStreamReader(conn.getInputStream()));
+
+                StringBuilder sb = new StringBuilder();
+                String line = null;
+
+                // Read Server Response
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                String finalJson = sb.toString();
+                Log.e("finalJson*********", finalJson);
+
+                JSONObject parentObject = new JSONObject(finalJson);
+
+                try {
+                    JSONArray parentArrayOrders = parentObject.getJSONArray("BUNDLE_INFO");
+                    bundles.clear();
+                    for (int i = 0; i < parentArrayOrders.length(); i++) {
+                        JSONObject innerObject = parentArrayOrders.getJSONObject(i);
+
+                        BundleInfo bundleInfo = new BundleInfo();
+                        bundleInfo.setThickness(innerObject.getDouble("THICKNESS"));
+                        bundleInfo.setWidth(innerObject.getDouble("WIDTH"));
+                        bundleInfo.setLength(innerObject.getDouble("LENGTH"));
+                        bundleInfo.setGrade(innerObject.getString("GRADE"));
+                        bundleInfo.setNoOfPieces(innerObject.getInt("PIECES"));
+                        bundleInfo.setBundleNo(innerObject.getString("BUNDLE_NO"));
+                        bundleInfo.setLocation(innerObject.getString("LOCATION"));
+                        bundleInfo.setArea(innerObject.getString("AREA"));
+                        bundleInfo.setBarcode(innerObject.getString("BARCODE"));
+                        bundleInfo.setOrdered(innerObject.getInt("ORDERED"));
+                        bundleInfo.setAddingDate(innerObject.getString("BUNDLE_DATE"));
+                        bundleInfo.setChecked(false);
+
+                        if (innerObject.getInt("ORDERED") == 0 &&
+                                innerObject.getString("LOCATION").equals(DHandler.getSettings().getStore()))
+                            bundles.add(bundleInfo);
+
+                    }
+                } catch (JSONException e) {
+                    Log.e("Import Data2", e.getMessage().toString());
+                }
+
+            } catch (MalformedURLException e) {
+                Log.e("Customer", "********ex1");
+                e.printStackTrace();
+            } catch (IOException e) {
+                Log.e("Customer", e.getMessage().toString());
+                e.printStackTrace();
+
+            } catch (JSONException e) {
+                Log.e("Customer", "********ex3  " + e.toString());
+                e.printStackTrace();
+            } finally {
+                Log.e("Customer", "********finally");
+                if (connection != null) {
+                    Log.e("Customer", "********ex4");
+                    // connection.disconnect();
+                }
+                try {
+                    if (reader != null) {
+                        reader.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return bundles;
+        }
+
+
+        @Override
+        protected void onPostExecute(final List<BundleInfo> result) {
+            super.onPostExecute(result);
+
+            if (result != null) {
+                Log.e("result", "*****************" + result.size());
+                adapter = new ItemsListAdapter(LoadingOrder.this, bundles);
+                items.setAdapter(adapter);
+            } else {
+                Toast.makeText(LoadingOrder.this, "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 
 
 }
