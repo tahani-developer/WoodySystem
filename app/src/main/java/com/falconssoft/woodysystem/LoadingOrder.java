@@ -284,7 +284,7 @@ public class LoadingOrder extends AppCompatActivity {
 
                 try {
                     JSONArray parentArrayOrders = parentObject.getJSONArray("BUNDLE_INFO");
-                    bundles.clear();
+                    bundles = new ArrayList<>();
                     for (int i = 0; i < parentArrayOrders.length(); i++) {
                         JSONObject innerObject = parentArrayOrders.getJSONObject(i);
 

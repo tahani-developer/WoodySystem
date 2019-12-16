@@ -21,7 +21,7 @@ import java.util.List;
 public class DatabaseHandler extends SQLiteOpenHelper {
 
     private static String TAG = "DatabaseHandler";
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 16;
     private static final String DATABASE_NAME = "WoodyDatabase";
     static SQLiteDatabase db;
 
@@ -49,6 +49,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String BUNDLE_INFO_ADD_DATE = "ADD_DATE";
     private static final String BUNDLE_INFO_PRINTED = "PRINTED";
     private static final String BUNDLE_INFO_DESCRIPTION = "DESCRIPTION";
+    private static final String BUNDLE_INFO_SERIAL = "SERIAL";
 
     //******************************************************************
     private static final String USERS_TABLE = "USERS_TABLE";
@@ -113,7 +114,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + BUNDLE_INFO_FLAG + " TEXT,"
                 + BUNDLE_INFO_ADD_DATE + " TEXT,"
                 + BUNDLE_INFO_PRINTED + " INTEGER,"
-                + BUNDLE_INFO_DESCRIPTION + " TEXT" + ")";
+                + BUNDLE_INFO_DESCRIPTION + " TEXT,"
+                + BUNDLE_INFO_SERIAL + " TEXT NOT NULL DEFAULT ''"+ ")";
         db.execSQL(CREATE_INVENTORY_INFO_TABLE);
 
         String CREATE_TABLE_USERS = "CREATE TABLE " + USERS_TABLE + "("
@@ -152,15 +154,26 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        try {
+            db.execSQL("ALTER TABLE BUNDLE_INFO_TABLE ADD " + BUNDLE_INFO_SERIAL + " TEXT NOT NULL DEFAULT ''");
+        } catch (Exception e) {
+            Log.e("upgrade", "SERIAL");
+        }
 
         try {
-            db.execSQL("ALTER TABLE INVENTORY_INFO ADD BUNDLE_BARCODE TAXE NOT NULL DEFAULT ''");
+            db.execSQL("UPDATE BUNDLE_INFO_TABLE SET " + BUNDLE_INFO_SERIAL + " = SUBSTR (BUNDLE_NO,(INSTR (BUNDLE_NO, '.', -1))+1 ,10)");
+        } catch (Exception e) {
+            Log.e("upgrade", "SERIAL");
+        }
+
+        try {
+            db.execSQL("ALTER TABLE BUNDLE_INFO_TABLE ADD BARCODE TEXT NOT NULL DEFAULT ''");
         } catch (Exception e) {
             Log.e("upgrade", "BUNDLE Barcode");
         }
 
         try {
-            db.execSQL("ALTER TABLE ORDERS_TABLE ADD DESTINATION TAXE NOT NULL DEFAULT ''");
+            db.execSQL("ALTER TABLE ORDERS_TABLE ADD DESTINATION TEXT NOT NULL DEFAULT ''");
         } catch (Exception e) {
             Log.e("upgrade", "DESTINATION");
         }
@@ -176,7 +189,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
 
         try {
-            db.execSQL("ALTER TABLE BUNDLE_INFO_TABLE ADD DESCRIPTION TAXE NOT NULL DEFAULT ''");
+            db.execSQL("ALTER TABLE BUNDLE_INFO_TABLE ADD DESCRIPTION TEXT NOT NULL DEFAULT ''");
         } catch (Exception e) {
             Log.e("upgrade", "BUNDLE Barcode");
         }
@@ -204,6 +217,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db = this.getReadableDatabase();
         ContentValues contentValues = new ContentValues();
 
+//        contentValues.put(BUNDLE_INFO_SERIAL, bundleInfo.getSerial());
         contentValues.put(BUNDLE_INFO_THICKNESS, bundleInfo.getThickness());
         contentValues.put(BUNDLE_INFO_LENGTH, bundleInfo.getLength());
         contentValues.put(BUNDLE_INFO_WIDTH, bundleInfo.getWidth());
@@ -218,6 +232,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         contentValues.put(BUNDLE_INFO_ADD_DATE, bundleInfo.getAddingDate());
         contentValues.put(BUNDLE_INFO_PRINTED, bundleInfo.getIsPrinted());
         contentValues.put(BUNDLE_INFO_DESCRIPTION, bundleInfo.getDescription());
+        contentValues.put(BUNDLE_INFO_SERIAL, bundleInfo.getSerialNo());
 
         db.insert(BUNDLE_INFO_TABLE, null, contentValues);
         db.close();
@@ -409,6 +424,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 bundleInfo.setHideFlag(cursor.getString(10));
                 bundleInfo.setIsPrinted(cursor.getInt(12));
                 bundleInfo.setDescription(cursor.getString(13));
+                bundleInfo.setSerialNo(cursor.getString(14));
 
                 bundleInfo.setChecked(false);
 
@@ -479,6 +495,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
         return usersList;
+    }
+
+    // **************************************************** Getting ****************************************************
+    public void updateBundlesSerial(String bundleNo, String serial) {
+        db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(BUNDLE_INFO_SERIAL, serial);
+        db.update(BUNDLE_INFO_TABLE, values, BUNDLE_INFO_BUNDLE_NO + " = '" + bundleNo + "'", null);
     }
 
     public void updateTableBundles(String bundleNo) {

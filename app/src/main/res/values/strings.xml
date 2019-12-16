@@ -70,6 +70,7 @@
     <string name="report">Report</string>
     <string name="print_all">Print All</string>
     <string name="delete_all">Delete All</string>
-    <string name="serial_no">Serial NO</string>
+    <string name="print">Print</string>
+    <string name="serial_no">Serial</string>
 
 </resources>
