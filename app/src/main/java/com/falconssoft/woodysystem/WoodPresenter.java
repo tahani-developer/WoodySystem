@@ -90,25 +90,26 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
 //                    presenter.getImportData();
 //                    break;
 //            }
-            if (response.indexOf("{") == 3)
-                response = new String(response.getBytes("ISO-8859-1"), "UTF-8");
+            if(response.contains("MAX_SERIAL")) {
+                if (response.indexOf("{") == 3)
+                    response = new String(response.getBytes("ISO-8859-1"), "UTF-8");
 //                response = response.substring(response.indexOf("{"));
-            Log.e("presenter: import ", "" + response);
-            JSONObject object = new JSONObject(response);
-            Log.e("presenter1: import ", "" + response);
-            JSONArray object2 = object.getJSONArray("Bundles");
-            Log.e("presenter2: import ", "" + object2);
+                Log.e("presenter: import ", "" + response);
+                JSONObject object = new JSONObject(response);
+                Log.e("presenter1: import ", "" + response);
+                JSONArray object2 = object.getJSONArray("Bundles");
+                Log.e("presenter2: import ", "" + object2);
 
-            for (int i = 0 ; i<object2.length(); i++){
-                String store = object2.getJSONObject(i).getString("LOCATION");
-                if ( store.equals(settings.getStore()))
-                {
-                    int intSerial = (Integer.parseInt(object2.getJSONObject(i).getString("MAX_SERIAL")) + 1);
-                    SettingsFile.serialNumber = ("" + intSerial);
-                    Log.e("presenter3: import ", "" + object2.getJSONObject(i).getString("MAX_SERIAL"));
-                    break;
+                for (int i = 0; i < object2.length(); i++) {
+                    String store = object2.getJSONObject(i).getString("LOCATION");
+                    if (store.equals(settings.getStore())) {
+                        int intSerial = (Integer.parseInt(object2.getJSONObject(i).getString("MAX_SERIAL")) + 1);
+                        SettingsFile.serialNumber = ("" + intSerial);
+                        Log.e("presenter3: import ", "" + object2.getJSONObject(i).getString("MAX_SERIAL"));
+                        break;
+                    } else
+                        SettingsFile.serialNumber = "1";
                 }
-            }
 //            String store = object2.getString("LOCATION");
 //            SettingsFile.serialNumber = "";
 //            switch (settings.getStore()){
@@ -135,8 +136,9 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
 //            int intSerial = (Integer.parseInt(object2.getString("MAX_SERIAL")) + 1);
 //            SettingsFile.serialNumber = ("" + intSerial);
 //            Log.e("presenter3: import ", "" + object2.getString("MAX_SERIAL"));
-            Log.e("presenter4: import ", "" + SettingsFile.serialNumber);
-
+                Log.e("presenter4: import ", "" + SettingsFile.serialNumber);
+            } else
+                SettingsFile.serialNumber = "1";
         } catch (JSONException e) {
             e.printStackTrace();
 //        } catch (UnsupportedEncodingException e) {

@@ -335,7 +335,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 
         noOfBundles.setText("" + sumOfBundles);
         noOfPieces.setText("" + sumOfPieces);
-        cubicField.setText("" + String.format("%.3f", sumOfCubic));
+        cubicField.setText("" + String.format("%.3f", (sumOfCubic / 1000000000)));
 //        bundlesForDelete.clear();
 //        bundlesForDelete = filteredList;
 
