@@ -343,7 +343,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         db.insert(PICTURES_TABLE, null, contentValues);
         db.close();
-    } 
+    }
 
     // **************************************************** Getting ****************************************************
 
