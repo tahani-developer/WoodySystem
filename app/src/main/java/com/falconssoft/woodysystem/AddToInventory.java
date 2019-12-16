@@ -97,6 +97,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
     private WoodPresenter presenter;
     private Settings generalSettings;
     String bundleNumber;
+    private TableRow publicTableRow = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -189,8 +190,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                     if (!TextUtils.isEmpty(width.getText().toString())) {
                         if (!TextUtils.isEmpty(length.getText().toString())) {
                             if (!TextUtils.isEmpty(noOfPieces.getText().toString())) {
-                                Log.e("serial" , " " + !SettingsFile.serialNumber.equals(""));
-                                Log.e("serial" , " " + !SettingsFile.serialNumber.equals(null));
+                                Log.e("serial", " " + !SettingsFile.serialNumber.equals(""));
+                                Log.e("serial", " " + !SettingsFile.serialNumber.equals(null));
                                 Log.e("serialNumber", "" + SettingsFile.serialNumber);
                                 if ((!SettingsFile.serialNumber.equals("")) && (!SettingsFile.serialNumber.equals(null))) {
                                     String locationString = null, gradeString = null, detailString = null;
@@ -342,7 +343,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                             tableRow.addView(textView);
                                         }
                                         jsonArrayBundles.put(newBundle.getJSONObject());
-                                        bundlesTable.addView(tableRow);
+                                        publicTableRow = tableRow;
+//                                        bundlesTable.addView(tableRow);
                                         new JSONTask().execute();
 
                                         thickness.setText("");
@@ -380,7 +382,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                         });
                                         thickness.requestFocus();
                                         Toast.makeText(this, "Added Successfully", Toast.LENGTH_SHORT).show();
-                                        SettingsFile.serialNumber="";
+                                        SettingsFile.serialNumber = "";
                                     } else {
                                         Toast.makeText(this, "Barcode already exist", Toast.LENGTH_SHORT).show();
                                     }
@@ -538,6 +540,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                 if (s.contains("BUNDLE_INFO SUCCESS")) {
                     databaseHandler.addNewBundle(newBundle);
                     presenter.getImportData();
+                    bundlesTable.addView(publicTableRow);
                     Log.e("tag", "****Success");
                 } else {
                     SettingsFile.serialNumber = "";
