@@ -5,16 +5,27 @@ import android.content.Intent;
 
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
+
+import com.falconssoft.woodysystem.models.Settings;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Stage3 extends AppCompatActivity implements View.OnClickListener {
 
     private LinearLayout enterInventory, loadingOrder, reports;
     private Animation animation;
     private WoodPresenter presenter;
+    private DatabaseHandler databaseHandler;
+    private List<String> list = new ArrayList<>();
+    private Settings settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +33,7 @@ public class Stage3 extends AppCompatActivity implements View.OnClickListener {
         setContentView(R.layout.stage3);
 
         presenter = new WoodPresenter(this);
+        databaseHandler = new DatabaseHandler(this);
         enterInventory = findViewById(R.id.stage3_enter_inventory);
         loadingOrder = findViewById(R.id.stage3_loading_order);
         reports = findViewById(R.id.stage3_reports);
@@ -36,6 +48,14 @@ public class Stage3 extends AppCompatActivity implements View.OnClickListener {
         loadingOrder.setAnimation(animation);
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
         reports.setAnimation(animation);
+
+        list = databaseHandler.getBundleNo();
+        for (int i =0; i< list.size();i++){
+            String serialBefore = list.get(i);
+            String serial = serialBefore.substring(serialBefore.lastIndexOf(".") + 1);
+//            Log.e("stage 3 ", serial);
+            databaseHandler.updateBundlesSerial(list.get(i), serial);
+        }
     }
 
     @Override

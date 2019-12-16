@@ -292,7 +292,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                                 , areaText
                                                 , generateDate
                                                 , 0
-                                                , descriptionText);
+                                                , descriptionText
+                                                , SettingsFile.serialNumber);
 
                                         bundleInfoList.add(newBundle);
                                         Log.e("date is", generateDate);
@@ -308,7 +309,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                             textView.setLayoutParams(textViewParam);
                                             switch (i) {
                                                 case 0:
-                                                    TableRow.LayoutParams param = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+                                                    TableRow.LayoutParams param = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
                                                     param.setMargins(1, 5, 1, 1);
                                                     textView.setLayoutParams(param);
                                                     textView.setText(bundleNoString);

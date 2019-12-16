@@ -88,7 +88,7 @@ public class BundlesReport extends AppCompatActivity {
     private Animation animation;
     private TextView textView;
     private Settings generalSettings;
-    private Button printAll,delete;
+    private Button printAll, delete;
 
 
     @SuppressLint("WrongViewCast")
@@ -98,7 +98,7 @@ public class BundlesReport extends AppCompatActivity {
         setContentView(R.layout.activity_bundles_report);
         printAll = findViewById(R.id.loading_order_report_printAll);
         textView = findViewById(R.id.loading_order_report_tv);
-        delete=findViewById(R.id.loading_order_report_delete);
+        delete = findViewById(R.id.loading_order_report_delete);
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_to_right);
         textView.startAnimation(animation);
 
@@ -112,19 +112,19 @@ public class BundlesReport extends AppCompatActivity {
 //               PrintAll();
                 try {
 
-                    for(int i=0;i<bundlesTable.getChildCount();i++){
-                        TableRow table=(TableRow)bundlesTable.getChildAt(i);
+                    for (int i = 0; i < bundlesTable.getChildCount(); i++) {
+                        TableRow table = (TableRow) bundlesTable.getChildAt(i);
                         CheckBox bundleCheck = (CheckBox) table.getChildAt(9);
-                        if(bundleCheck.isChecked()) {
-                            Log.e("bundelCheak",""+i+"  "+bundleInfos.get(Integer.parseInt(bundleCheck.getTag().toString())).getBundleNo());
+                        if (bundleCheck.isChecked()) {
+                            Log.e("bundelCheak", "" + i + "  " + bundleInfos.get(Integer.parseInt(bundleCheck.getTag().toString())).getBundleNo());
                             bundleInfoForPrint.add(bundleInfos.get(Integer.parseInt(bundleCheck.getTag().toString())));
                         }
                     }
 
-                    File file=createPdf();
+                    File file = createPdf();
 
 
-                   PrintAll(file);
+                    PrintAll(file);
 
 //                    Intent intent = new Intent();
 //                    intent.setAction(Intent.ACTION_SEND);
@@ -154,12 +154,12 @@ public class BundlesReport extends AppCompatActivity {
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
 
-                                for(int i=0;i<bundleInfoForPrint.size();i++){
+                                for (int i = 0; i < bundleInfoForPrint.size(); i++) {
                                     databaseHandler.updateAllPrinting(bundleInfoForPrint.get(i).getBundleNo(), 1);
 
                                 }
 
-                                bundleInfos=databaseHandler.getAllBundleInfo("0");
+                                bundleInfos = databaseHandler.getAllBundleInfo("0");
                                 bundlesTable.removeAllViews();
                                 bundleInfoForPrint.clear();
                                 fillTable();
@@ -201,81 +201,83 @@ public class BundlesReport extends AppCompatActivity {
 //        bundlesTable.addView(tableRowBasic);
         TableRow tableRow;
         for (int m = 0; m < bundleInfos.size(); m++) {
-            if (bundleInfos.get(m).getIsPrinted() != 1){
+            if (bundleInfos.get(m).getIsPrinted() != 1) {
                 tableRow = new TableRow(this);
-            tableRow = fillTableRows(tableRow
-                    , bundleInfos.get(m).getBundleNo()
-                    , "" + bundleInfos.get(m).getLength()
-                    , "" + bundleInfos.get(m).getWidth()
-                    , "" + bundleInfos.get(m).getThickness()
-                    , bundleInfos.get(m).getGrade()
-                    , "" + bundleInfos.get(m).getNoOfPieces()
-                    , bundleInfos.get(m).getLocation()
-                    , bundleInfos.get(m).getArea()
-                    , bundleInfos.get(m).getIsPrinted()
-                    ,m
-            );
-            bundlesTable.addView(tableRow);
+                tableRow = fillTableRows(tableRow
+                        , bundleInfos.get(m).getBundleNo()
+                        , "" + bundleInfos.get(m).getLength()
+                        , "" + bundleInfos.get(m).getWidth()
+                        , "" + bundleInfos.get(m).getThickness()
+                        , bundleInfos.get(m).getGrade()
+                        , "" + bundleInfos.get(m).getNoOfPieces()
+                        , bundleInfos.get(m).getLocation()
+                        , bundleInfos.get(m).getArea()
+                        , bundleInfos.get(m).getIsPrinted()
+                        , m
+                        , bundleInfos.get(m).getSerialNo()
+                );
+                bundlesTable.addView(tableRow);
 
-            TableRow finalTableRow = tableRow;
-            TableRow finalTableRow1 = tableRow;
-            tableRow.getVirtualChildAt(8).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    PrintHelper photoPrinter = new PrintHelper(BundlesReport.this);
-                    for (int i = 0; i < 9; i++)
-                        switch (i) {
-                            case 8:
-                                finalTableRow1.getVirtualChildAt(8).setBackgroundResource(R.color.gray_dark);
-                                break;
-                            default:
-                                finalTableRow1.getVirtualChildAt(i).setBackgroundResource(R.color.white);
-                                break;
-                        }
-                    photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
-                    TextView bundleNo = (TextView) finalTableRow.getChildAt(0);
-                    TextView length = (TextView) finalTableRow.getChildAt(1);
-                    TextView width = (TextView) finalTableRow.getChildAt(2);
-                    TextView thic = (TextView) finalTableRow.getChildAt(3);
-                    TextView grade = (TextView) finalTableRow.getChildAt(4);
-                    TextView pcs = (TextView) finalTableRow.getChildAt(5);
-                    Bitmap bitmap = writeBarcode(bundleNo.getText().toString(), length.getText().toString(), width.getText().toString(),
-                            thic.getText().toString(), grade.getText().toString(), pcs.getText().toString());
-                    databaseHandler.updateCheckPrinting(bundleNo.getText().toString(), 1);
+                TableRow finalTableRow = tableRow;
+                TableRow finalTableRow1 = tableRow;
+                tableRow.getVirtualChildAt(8).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        PrintHelper photoPrinter = new PrintHelper(BundlesReport.this);
+                        for (int i = 0; i < 9; i++)
+                            switch (i) {
+                                case 8:
+                                    finalTableRow1.getVirtualChildAt(8).setBackgroundResource(R.color.gray_dark);
+                                    break;
+                                default:
+                                    finalTableRow1.getVirtualChildAt(i).setBackgroundResource(R.color.white);
+                                    break;
+                            }
+                        photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
+                        TextView bundleNo = (TextView) finalTableRow.getChildAt(0);
+                        TextView length = (TextView) finalTableRow.getChildAt(1);
+                        TextView width = (TextView) finalTableRow.getChildAt(2);
+                        TextView thic = (TextView) finalTableRow.getChildAt(3);
+                        TextView grade = (TextView) finalTableRow.getChildAt(4);
+                        TextView pcs = (TextView) finalTableRow.getChildAt(5);
+                        Bitmap bitmap = writeBarcode(bundleNo.getText().toString(), length.getText().toString(), width.getText().toString(),
+                                thic.getText().toString(), grade.getText().toString(), pcs.getText().toString());
+                        databaseHandler.updateCheckPrinting(bundleNo.getText().toString(), 1);
 
-                    photoPrinter.printBitmap("invoice.jpg", bitmap);
-                    Toast.makeText(BundlesReport.this, "tested+" + bundleNo.getText().toString(), Toast.LENGTH_SHORT).show();
+                        photoPrinter.printBitmap("invoice.jpg", bitmap);
+                        Toast.makeText(BundlesReport.this, "tested+" + bundleNo.getText().toString(), Toast.LENGTH_SHORT).show();
 
-                }
-            });
+                    }
+                });
 
-            TableRow clickTableRow = tableRow;
-            tableRow.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
+                TableRow clickTableRow = tableRow;
+                tableRow.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
 //                                                TextView textView = ((TextView) tableRow.getChildAt(0));
 //                                                tableRow.setBackgroundResource(R.color.light_orange_2);
-                    String bundleNo = ((TextView) clickTableRow.getChildAt(0)).getText().toString();
-                    Log.e("b", bundleNo);
-                    AlertDialog.Builder builder = new AlertDialog.Builder(BundlesReport.this);
-                    builder.setMessage("Are you want hide bundle number: " + bundleNo + " ?");
-                    builder.setTitle("Delete");
-                    builder.setIcon(R.drawable.ic_warning_black_24dp);
-                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            databaseHandler.updateBundlesFlag(bundleNo);// 1 mean hide
-                            bundlesTable.removeView(clickTableRow);
-                        }
-                    });
-                    builder.show();
-                    return false;
-                }
-            });
-        } }
+                        String bundleNo = ((TextView) clickTableRow.getChildAt(0)).getText().toString();
+                        Log.e("b", bundleNo);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(BundlesReport.this);
+                        builder.setMessage("Are you want hide bundle number: " + bundleNo + " ?");
+                        builder.setTitle("Delete");
+                        builder.setIcon(R.drawable.ic_warning_black_24dp);
+                        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                databaseHandler.updateBundlesFlag(bundleNo);// 1 mean hide
+                                bundlesTable.removeView(clickTableRow);
+                            }
+                        });
+                        builder.show();
+                        return false;
+                    }
+                });
+            }
+        }
     }
 
-    TableRow fillTableRows(TableRow tableRow, String bundlNo, String length, String width, String thic, String grade, String noOfPieces, String location, String area, int printed,int indexInList) {
+    TableRow fillTableRows(TableRow tableRow, String bundlNo, String length, String width, String thic, String grade, String noOfPieces, String location, String area, int printed, int indexInList, String serialNo) {
         int backgroundColor;
         if (printed == 0) {
             backgroundColor = R.color.light_orange;
@@ -293,82 +295,79 @@ public class BundlesReport extends AppCompatActivity {
 //            textView.setLayoutParams(textViewParam);
             switch (i) {
                 case 0:
-                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 2f);
-                    textViewParam.setMargins(1, 5, 1, 1);
-                    textView.setLayoutParams(textViewParam);
-                    textView.setText(bundlNo);
-                    break;
-                case 1:
                     textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
                     textViewParam.setMargins(1, 5, 1, 1);
+                    textView.setPadding(1, 6, 1, 7);
                     textView.setLayoutParams(textViewParam);
-                    textView.setText(length);
+                    textView.setText(serialNo);
+                    break;
+                case 1:
+                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 3.4f);
+                    textViewParam.setMargins(1, 5, 1, 1);
+                    textView.setPadding(1, 6, 1, 7);
+                    textView.setLayoutParams(textViewParam);
+                    textView.setText(bundlNo);
                     break;
                 case 2:
                     textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
                     textViewParam.setMargins(1, 5, 1, 1);
+                    textView.setPadding(1, 6, 1, 7);
                     textView.setLayoutParams(textViewParam);
-                    textView.setText(width);
+                    textView.setText(length);
                     break;
                 case 3:
                     textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
                     textViewParam.setMargins(1, 5, 1, 1);
+                    textView.setPadding(1, 6, 1, 7);
                     textView.setLayoutParams(textViewParam);
-                    textView.setText(thic);
+                    textView.setText(width);
                     break;
                 case 4:
                     textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
                     textViewParam.setMargins(1, 5, 1, 1);
+                    textView.setPadding(1, 6, 1, 7);
+                    textView.setTextSize(15);
                     textView.setLayoutParams(textViewParam);
-                    textView.setText(grade);
+                    textView.setText(thic);
                     break;
                 case 5:
                     textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
                     textViewParam.setMargins(1, 5, 1, 1);
+                    textView.setPadding(1, 6, 1, 7);
+                    textView.setLayoutParams(textViewParam);
+                    textView.setText(grade);
+                    break;
+                case 6:
+                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+                    textViewParam.setMargins(1, 5, 1, 1);
+                    textView.setPadding(1, 6, 1, 7);
                     textView.setLayoutParams(textViewParam);
                     textView.setText(noOfPieces);
                     break;
-                case 6:
+                case 7:
                     textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1.5f);
                     textViewParam.setMargins(1, 5, 1, 1);
+                    textView.setPadding(1, 6, 1, 7);
                     textView.setLayoutParams(textViewParam);
                     textView.setText(location);
-                    break;
-                case 7:
-                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
-                    textViewParam.setMargins(1, 5, 1, 1);
-                    textView.setLayoutParams(textViewParam);
-                    textView.setText(area);
                     break;
                 case 8:
                     textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
                     textViewParam.setMargins(1, 5, 1, 1);
+                    textView.setPadding(1, 6, 1, 7);
                     textView.setLayoutParams(textViewParam);
-                    textView.setText("Print");
-                    textView.setTextColor(ContextCompat.getColor(this, R.color.white));
-                    if (printed == 0) {
-                        backgroundColor = R.color.orange;
-                    } else {
-                        backgroundColor = R.color.gray_dark;
-                    }
-                    textView.setBackgroundResource(backgroundColor);
+                    textView.setText(area);
                     break;
-
                 case 9:
                     CheckBox checkBox = new CheckBox(this);
-
-                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+                    textViewParam = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
                     textViewParam.setMargins(1, 5, 1, 1);
                     checkBox.setLayoutParams(textViewParam);
                     checkBox.setText("");
-                    checkBox.setTag(""+indexInList);
+                    checkBox.setTag("" + indexInList);
                     checkBox.setTextColor(ContextCompat.getColor(this, R.color.white));
                     checkBox.setBackgroundResource(backgroundColor);
                     tableRow.addView(checkBox);
-                    break;
-
-                case 10:
-
                     break;
 
             }
@@ -395,14 +394,14 @@ public class BundlesReport extends AppCompatActivity {
 //    }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public  void PrintAll (File file){
+    public void PrintAll(File file) {
         PrintManager printManager = (PrintManager) BundlesReport.this.getSystemService(Context.PRINT_SERVICE);
         String jobName = " Document";
 
 
-        PrintDocumentAdapter pda = new PrintDocumentAdapter(){
+        PrintDocumentAdapter pda = new PrintDocumentAdapter() {
             @Override
-            public void onWrite(PageRange[] pages, ParcelFileDescriptor destination, CancellationSignal cancellationSignal, WriteResultCallback callback){
+            public void onWrite(PageRange[] pages, ParcelFileDescriptor destination, CancellationSignal cancellationSignal, WriteResultCallback callback) {
                 InputStream input = null;
                 OutputStream output = null;
 
@@ -420,7 +419,7 @@ public class BundlesReport extends AppCompatActivity {
 
                     callback.onWriteFinished(new PageRange[]{PageRange.ALL_PAGES});
 
-                } catch (FileNotFoundException ee){
+                } catch (FileNotFoundException ee) {
                     //Catch exception
                 } catch (Exception e) {
                     //Catch exception
@@ -435,7 +434,7 @@ public class BundlesReport extends AppCompatActivity {
             }
 
             @Override
-            public void onLayout(PrintAttributes oldAttributes, PrintAttributes newAttributes, CancellationSignal cancellationSignal, LayoutResultCallback callback, Bundle extras){
+            public void onLayout(PrintAttributes oldAttributes, PrintAttributes newAttributes, CancellationSignal cancellationSignal, LayoutResultCallback callback, Bundle extras) {
 
                 if (cancellationSignal.isCanceled()) {
                     callback.onLayoutCancelled();
@@ -453,13 +452,13 @@ public class BundlesReport extends AppCompatActivity {
 
         PrintAttributes attrib = new PrintAttributes.Builder()
                 .setMediaSize(PrintAttributes.MediaSize.ISO_A5.UNKNOWN_LANDSCAPE)
-                . build();
+                .build();
         printManager.print(jobName, pda, null);
 
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    File creatFile(){
+    File creatFile() {
 
         File pdfFolder = new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_DOCUMENTS), "pdfdemo");
@@ -501,7 +500,7 @@ public class BundlesReport extends AppCompatActivity {
             document.open();
 
             //Step 4 Add content
-            int ispage=0;
+            int ispage = 0;
             for (int i = 0; i < bundleInfoForPrint.size(); i++) {
                 if (bundleInfoForPrint.get(i).getIsPrinted() != 1) {
                     Bitmap bitmap = writeBarcode(String.valueOf(bundleInfoForPrint.get(i).getBundleNo()), String.valueOf(bundleInfoForPrint.get(i).getLength()), String.valueOf(bundleInfoForPrint.get(i).getWidth()),
@@ -531,14 +530,14 @@ public class BundlesReport extends AppCompatActivity {
 //                    document.add(signature2);
 //                }
                     document.newPage();
-                    ispage=1;
+                    ispage = 1;
                 }
             }
-            if (ispage == 0){
+            if (ispage == 0) {
                 Paragraph p = new Paragraph("no bundle to print ");
                 document.add(p);
-        }
-            Log.e("getPageNumber()= ",""+document.getPageNumber());
+            }
+            Log.e("getPageNumber()= ", "" + document.getPageNumber());
 
             //document.add(new Paragraph(text.getText().toString()));
             //document.add(new Paragraph(mBodyEditText.getText().toString()));

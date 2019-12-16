@@ -354,7 +354,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 //            textView.setLayoutParams(textViewParam);
             switch (i) {
                 case 0:
-                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 2f);
+                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 3.4f);
                     textViewParam.setMargins(1, 5, 1, 1);
                     textView.setLayoutParams(textViewParam);
                     textView.setText(bundlNo);
@@ -402,12 +402,12 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                     textView.setText(area);
                     break;
                 case 8:
-                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
-                    textViewParam.setMargins(1, 5, 1, 1);
+                    textViewParam = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
+                    textViewParam.setMargins(1, 5, 10, 1);
                     textView.setLayoutParams(textViewParam);
-                    textView.setText("Print");
-                    textView.setTextColor(ContextCompat.getColor(this, R.color.white));
-                    textView.setBackgroundResource(R.color.orange);
+//                    textView.setText("Print");
+//                    textView.setTextColor(ContextCompat.getColor(this, R.color.white));
+                    textView.setBackgroundResource(R.drawable.ic_print_24dp);
                     break;
             }
             tableRow.addView(textView);

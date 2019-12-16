@@ -76,9 +76,20 @@
             android:background="@color/orange">
 
             <TextView
+                android:id="@+id/textView12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="serif"
+                android:text="@string/serial_no"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+            <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1.7"
+                android:layout_weight="3"
                 android:fontFamily="serif"
                 android:text="@string/bundle_no"
                 android:textColor="@color/white"
@@ -148,33 +159,13 @@
                 android:textSize="20sp" />
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="serif"
-                android:text="@string/barcode"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
-
-            <TextView
                 android:id="@+id/textView11"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="serif"
-                android:text="@string/print_all"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/textView12"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="serif"
-                android:text="@string/serial_no"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:background="@drawable/ic_print_24dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                 />
 
         </TableRow>
 
