@@ -180,7 +180,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         String lengthText = length.getText().toString();
         String widthText = width.getText().toString();
         String noOfPiecesText = noOfPieces.getText().toString();
-//         String bundleNoString;
+//         String bundleNoString;,
         switch (v.getId()) {
             case R.id.addToInventory_add_button:
                 boolean foundBarcode = false;
