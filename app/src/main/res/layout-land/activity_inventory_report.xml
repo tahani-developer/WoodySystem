@@ -25,21 +25,47 @@
 
             <TextView
                 android:id="@+id/inventory_report_tv"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="5dp"
                 android:layout_marginRight="5dp"
+                android:layout_weight="7"
                 android:drawableStart="@drawable/axe"
                 android:drawableLeft="@drawable/axe"
-                android:paddingStart="350dp"
-                android:paddingLeft="350dp"
                 android:drawablePadding="-350dp"
                 android:fontFamily="serif"
                 android:gravity="center"
+                android:paddingStart="350dp"
+                android:paddingLeft="350dp"
                 android:text="@string/inventory_report"
                 android:textColor="@color/orange"
                 android:textSize="30sp" />
+
+            <Button
+                android:id="@+id/printAll"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="3dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_with_corner"
+                android:text="@string/print"
+                android:textColor="@color/colorAccent" />
+
+            <Button
+                android:id="@+id/delete"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="3dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_with_corner"
+                android:text="@string/delete"
+                android:visibility="gone"
+                android:textColor="@color/colorAccent" />
 
         </LinearLayout>
 
@@ -241,13 +267,19 @@
                 android:textColor="@color/white"
                 android:textSize="20sp" />
 
-            <TextView
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:background="@drawable/ic_print_24dp"-->
+                <!--android:layout_marginEnd="10dp"-->
+                <!--android:layout_marginRight="10dp"-->
+                <!--/>-->
+            <CheckBox
+                android:id="@+id/checkBoxPrint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/ic_print_24dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
-                />
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp" />
 
         </TableRow>
 
