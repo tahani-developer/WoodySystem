@@ -185,7 +185,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         switch (v.getId()) {
             case R.id.addToInventory_add_button:
                 boolean foundBarcode = false;
-//http://5.189.130.98:8085/import.php?FLAG=1
+//http://5.189.130.98:8085/import.php?FLAG=1.
                 if (!TextUtils.isEmpty(thickness.getText().toString())) {
                     if (!TextUtils.isEmpty(width.getText().toString())) {
                         if (!TextUtils.isEmpty(length.getText().toString())) {
