@@ -72,5 +72,6 @@
     <string name="delete_all">Delete All</string>
     <string name="print">Print</string>
     <string name="serial_no">Serial</string>
+    <string name="delete">Delete</string>
 
 </resources>

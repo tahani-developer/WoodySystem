@@ -51,7 +51,7 @@
                     android:padding="3dp"
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
-                    android:text="@string/print_all"
+                    android:text="@string/print"
                     android:textAllCaps="false"
                     android:textColor="@color/orange"
                     android:textSize="16sp" />
@@ -62,7 +62,7 @@
                     android:layout_height="40dp"
                     android:background="@drawable/shape_with_corner"
                     android:padding="3dp"
-                    android:text="@string/delete_all"
+                    android:text="@string/delete"
                     android:textAllCaps="false"
                     android:textColor="@color/orange"
                     android:textSize="16sp" />
@@ -158,14 +158,12 @@
                 android:textColor="@color/white"
                 android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/textView11"
+            <CheckBox
+                android:id="@+id/checkBoxPrinter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/ic_print_24dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
-                 />
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"/>
 
         </TableRow>
 
