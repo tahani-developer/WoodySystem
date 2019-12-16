@@ -90,6 +90,7 @@ public class BundlesReport extends AppCompatActivity {
     private Settings generalSettings;
     private Button printAll, delete;
 
+    private CheckBox checkBoxPrinter;
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -99,12 +100,37 @@ public class BundlesReport extends AppCompatActivity {
         printAll = findViewById(R.id.loading_order_report_printAll);
         textView = findViewById(R.id.loading_order_report_tv);
         delete = findViewById(R.id.loading_order_report_delete);
+        checkBoxPrinter = findViewById(R.id.checkBoxPrinter);
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_to_right);
         textView.startAnimation(animation);
 
         bundlesTable = findViewById(R.id.addToInventory_table);
         databaseHandler = new DatabaseHandler(this);
         fillTable();
+
+        checkBoxPrinter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(checkBoxPrinter.isChecked()){
+
+                    for (int i = 0; i < bundlesTable.getChildCount(); i++) {
+                        TableRow table = (TableRow) bundlesTable.getChildAt(i);
+                        CheckBox bundleCheck = (CheckBox) table.getChildAt(9);
+                       bundleCheck.setChecked(true);
+
+                    }
+                }else{
+                    for (int i = 0; i < bundlesTable.getChildCount(); i++) {
+                        TableRow table = (TableRow) bundlesTable.getChildAt(i);
+                        CheckBox bundleCheck = (CheckBox) table.getChildAt(9);
+                        bundleCheck.setChecked(false);
+
+                    }
+                }
+
+            }
+        });
         printAll.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
@@ -125,7 +151,7 @@ public class BundlesReport extends AppCompatActivity {
 
 
                     PrintAll(file);
-
+                    bundleInfoForPrint.clear();
 //                    Intent intent = new Intent();
 //                    intent.setAction(Intent.ACTION_SEND);
 //                    intent.setType("application/pdf");
@@ -149,15 +175,26 @@ public class BundlesReport extends AppCompatActivity {
 
                 new android.support.v7.app.AlertDialog.Builder(BundlesReport.this)
                         .setTitle("Confirm Delete")
-                        .setMessage("Are you sure you want to delete All data ?!")
+                        .setMessage("Are you sure you want to delete checked data ?!")
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
 
-                                for (int i = 0; i < bundleInfoForPrint.size(); i++) {
-                                    databaseHandler.updateAllPrinting(bundleInfoForPrint.get(i).getBundleNo(), 1);
-
+                                for (int i = 0; i < bundlesTable.getChildCount(); i++) {
+                                    TableRow table = (TableRow) bundlesTable.getChildAt(i);
+                                    CheckBox bundleCheck = (CheckBox) table.getChildAt(9);
+                                    TextView bundleNo = (TextView) table.getChildAt(1);
+                                    if (bundleCheck.isChecked()) {
+                                        Log.e("bundelCheak", "" + i + "  " + bundleInfos.get(Integer.parseInt(bundleCheck.getTag().toString())).getBundleNo());
+                                        databaseHandler.updateAllPrinting(bundleNo.getText().toString(), 1);
+                                    }
                                 }
+
+
+//                                for (int i = 0; i < bundleInfoForPrint.size(); i++) {
+//                                    databaseHandler.updateAllPrinting(bundleInfoForPrint.get(i).getBundleNo(), 1);
+//
+//                                }
 
                                 bundleInfos = databaseHandler.getAllBundleInfo("0");
                                 bundlesTable.removeAllViews();

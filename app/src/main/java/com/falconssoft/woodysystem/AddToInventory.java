@@ -189,8 +189,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                     if (!TextUtils.isEmpty(width.getText().toString())) {
                         if (!TextUtils.isEmpty(length.getText().toString())) {
                             if (!TextUtils.isEmpty(noOfPieces.getText().toString())) {
-//                                Log.e("serial" , " " + !SettingsFile.serialNumber.equals(""));
-//                                Log.e("serial" , " " + !SettingsFile.serialNumber.equals(null));
+                                Log.e("serial" , " " + !SettingsFile.serialNumber.equals(""));
+                                Log.e("serial" , " " + !SettingsFile.serialNumber.equals(null));
                                 Log.e("serialNumber", "" + SettingsFile.serialNumber);
                                 if ((!SettingsFile.serialNumber.equals("")) && (!SettingsFile.serialNumber.equals(null))) {
                                     String locationString = null, gradeString = null, detailString = null;
@@ -380,6 +380,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                         });
                                         thickness.requestFocus();
                                         Toast.makeText(this, "Added Successfully", Toast.LENGTH_SHORT).show();
+                                        SettingsFile.serialNumber="";
                                     } else {
                                         Toast.makeText(this, "Barcode already exist", Toast.LENGTH_SHORT).show();
                                     }
