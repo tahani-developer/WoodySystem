@@ -169,7 +169,7 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="480dp">
+            android:layout_height="wrap_content">
 
             <TableLayout
                 android:id="@+id/addToInventory_table"
