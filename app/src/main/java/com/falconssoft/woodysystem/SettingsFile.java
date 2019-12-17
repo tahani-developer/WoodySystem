@@ -11,13 +11,13 @@ import java.util.List;
 public class SettingsFile {
 
     /**
-     *  AuthenticationFailedException
-     *  less secure apps
-     *  solution:
-     *     Gmail- Host: smtp.gmail.com , Port: 587
-     *     Hotmail- Host: smtp.live.com , Port: 587
-     *     Yahoo- Host: smtp.mail.yahoo.com , Port: 587
-     * */
+     * AuthenticationFailedException
+     * less secure apps
+     * solution:
+     * Gmail- Host: smtp.gmail.com , Port: 587
+     * Hotmail- Host: smtp.live.com , Port: 587
+     * Yahoo- Host: smtp.mail.yahoo.com , Port: 587
+     */
 
     public static String hostName = "smtp.gmail.com";
 
@@ -31,7 +31,7 @@ public class SettingsFile {
 
     public static String emailContent;
 
-    public static String serialNumber="";
+//    public static String serialNumber = "";
 
 //    public static String companyName = "";
 

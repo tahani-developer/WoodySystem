@@ -190,10 +190,11 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                     if (!TextUtils.isEmpty(width.getText().toString())) {
                         if (!TextUtils.isEmpty(length.getText().toString())) {
                             if (!TextUtils.isEmpty(noOfPieces.getText().toString())) {
-                                Log.e("serial", " " + !SettingsFile.serialNumber.equals(""));
-                                Log.e("serial", " " + !SettingsFile.serialNumber.equals(null));
-                                Log.e("serialNumber", "" + SettingsFile.serialNumber);
-                                if ((!SettingsFile.serialNumber.equals("")) && (!SettingsFile.serialNumber.equals(null))) {
+                                String serial = presenter.getSerialNo();
+                                Log.e("serial", " " + !serial.equals(""));
+                                Log.e("serial", " " + !serial.equals(null));
+                                Log.e("serialNumber", "" + serial);
+                                if ((!serial.equals("")) && (!serial.equals(null))) { //(!SettingsFile.serialNumber.equals("")) && (!SettingsFile.serialNumber.equals(null))
                                     String locationString = null, gradeString = null, detailString = null;
                                     switch (gradeText) {
                                         case "Fresh":
@@ -265,7 +266,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                             + "." + widthText
                                             + "." + lengthText
                                             + "." + noOfPiecesText
-                                            + "." + SettingsFile.serialNumber;
+                                            + "." + presenter.getSerialNo();//SettingsFile.serialNumber
 
                                     List<String> checkBarcodeList = databaseHandler.getBundleNo();
                                     for (int m = 0; m < checkBarcodeList.size(); m++)
@@ -294,7 +295,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                                 , generateDate
                                                 , 0
                                                 , descriptionText
-                                                , SettingsFile.serialNumber);
+                                                , presenter.getSerialNo());//SettingsFile.serialNumber
 
                                         bundleInfoList.add(newBundle);
                                         Log.e("date is", generateDate);
@@ -382,7 +383,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                         });
                                         thickness.requestFocus();
                                         Toast.makeText(this, "Added Successfully", Toast.LENGTH_SHORT).show();
-                                        SettingsFile.serialNumber = "";
+                                        presenter.setSerialNo("");
+//                                        SettingsFile.serialNumber = "";
                                     } else {
                                         Toast.makeText(this, "Barcode already exist", Toast.LENGTH_SHORT).show();
                                     }
@@ -543,11 +545,13 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                     bundlesTable.addView(publicTableRow);
                     Log.e("tag", "****Success");
                 } else {
-                    SettingsFile.serialNumber = "";
+                    presenter.setSerialNo("");
+//                    SettingsFile.serialNumber = "";
                     Log.e("tag", "****Failed to export data");
                 }
             } else {
-                SettingsFile.serialNumber = "";
+                presenter.setSerialNo("");
+//                SettingsFile.serialNumber = "";
                 Log.e("tag", "****Failed to export data Please check internet connection");
             }
         }
