@@ -1,9 +1,11 @@
 package com.falconssoft.woodysystem.reports;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -21,6 +23,7 @@ import android.print.PrintDocumentInfo;
 import android.print.PrintManager;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.print.PrintHelper;
 import android.support.v7.app.AppCompatActivity;
@@ -215,7 +218,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
             public void onClick(View v) {
 //               PrintAll();
                 try {
-
+                    bundleInfoForPrint.clear();
                     for (int i = 0; i < bundlesTable.getChildCount(); i++) {
                         TableRow table = (TableRow) bundlesTable.getChildAt(i);
                         CheckBox bundleCheck = (CheckBox) table.getChildAt(8);
@@ -225,20 +228,22 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                         }
                     }
 
-                    File file = createPdf();
+                    boolean permission= isStoragePermissionGranted();
 
+                    if(permission){
+                        File file = null;
+                        try {
+                            file = createPdf();
+                            PrintAll(file);
+                            bundleInfoForPrint.clear();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (DocumentException e) {
+                            e.printStackTrace();
+                        }
+                    }
 
-                    PrintAll(file);
-                    bundleInfoForPrint.clear();
-//                    Intent intent = new Intent();
-//                    intent.setAction(Intent.ACTION_SEND);
-//                    intent.setType("application/pdf");
-//                    intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
-//                    startActivity(intent);
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (DocumentException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -783,7 +788,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         String barcode_data = data;
         Bitmap bitmap = null;//  AZTEC -->QR
         try {
-            bitmap = encodeAsBitmap(barcode_data, BarcodeFormat.CODE_128, 1100, 200);
+            bitmap = encodeAsBitmap(barcode_data, BarcodeFormat.CODE_128, 50, 50);
         } catch (WriterException e) {
             e.printStackTrace();
         }
@@ -932,6 +937,53 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 //                builder.show();
                 passwordDialog.show();
                 break;
+        }
+
+    }
+
+
+    public boolean isStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                Log.v("", "Permission is granted");
+                return true;
+            } else {
+
+                Log.v("", "Permission is revoked");
+                ActivityCompat.requestPermissions(
+                        this,
+                        new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+                        1);
+                return false;
+            }
+        } else { // permission is automatically granted on sdk<23 upon
+            // installation
+            Log.v("", "Permission is granted");
+            return true;
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            Log.v("", "Permission: " + permissions[0] + "was "
+                    + grantResults[0]);
+            // resume tasks needing this permission
+
+            File file = null;
+            try {
+                file = createPdf();
+                PrintAll(file);
+                bundleInfoForPrint.clear();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (DocumentException e) {
+                e.printStackTrace();
+            }
+
         }
 
     }
