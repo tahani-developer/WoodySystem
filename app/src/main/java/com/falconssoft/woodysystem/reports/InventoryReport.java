@@ -123,6 +123,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private CheckBox checkBoxPrint;
     List <BundleInfo>bundleInfoForPrint= new ArrayList<>();
     private Button printAll,delete;
+    private TableRow tableRowToDelete = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -576,8 +577,9 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                         @Override
                         public void onClick(View v) {
                             if (password.getText().toString().equals("301190")) {
+                                tableRowToDelete = finalTableRow1;
                                 new JSONTask2().execute();
-                                bundlesTable.removeView(finalTableRow1);
+//                                bundlesTable.removeView(finalTableRow1);
                                 passwordDialog.dismiss();
                             } else {
                                 Toast.makeText(InventoryReport.this, "Not Authorized!", Toast.LENGTH_SHORT).show();
@@ -1041,8 +1043,10 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
             Log.e("inventory report", "json 2 " + s);
             if (s != null) {
                 if (s.contains("DELETE BUNDLE SUCCESS")) {
+                    bundlesTable.removeView(tableRowToDelete);
                     bundleInfoServer2.remove(index);
                     databaseHandler.deleteBundle(bundleNumber);
+                    Toast.makeText(InventoryReport.this, "Deleted successfully", Toast.LENGTH_SHORT).show();
                     filters();
                     Log.e("inventoryReport", "****Success");
                 } else {
