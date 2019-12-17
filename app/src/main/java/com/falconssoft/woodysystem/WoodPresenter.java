@@ -113,7 +113,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                         break;
                     } else
                         setSerialNo("1");
-//                        SettingsFile.serialNumber = "1"; 
+//                        SettingsFile.serialNumber = "1";
                 }
 //            String store = object2.getString("LOCATION");
 //            SettingsFile.serialNumber = "";
