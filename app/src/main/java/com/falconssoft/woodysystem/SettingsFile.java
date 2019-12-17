@@ -31,7 +31,7 @@ public class SettingsFile {
 
     public static String emailContent;
 
-    public static String serialNumber = "";
+//    public static String serialNumber = "";
 
 //    public static String companyName = "";
 
