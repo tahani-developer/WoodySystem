@@ -402,7 +402,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 //        String selectQuery = "SELECT  * FROM " + BUNDLE_INFO_TABLE + " where LOCATION = '" + location + "' AND FLAG = '" + flag + "'";
 
         String selectQuery = "SELECT  * FROM " + BUNDLE_INFO_TABLE + " where LOCATION = (select STORE from SETTINGS_TABLE)"
-                + " AND FLAG = '" + flag + "' ORDER BY SERIAL";
+                + " AND FLAG = '" + flag + "' ORDER BY cast(SERIAL as unsigned) ASC";
 
         db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
