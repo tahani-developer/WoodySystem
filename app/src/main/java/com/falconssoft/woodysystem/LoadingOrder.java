@@ -248,6 +248,14 @@ public class LoadingOrder extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        Intent intent = new Intent(LoadingOrder.this , Stage3.class);
+        startActivity(intent);
+    }
+
     private class JSONTask extends AsyncTask<String, String, List<BundleInfo>> {
 
         @Override

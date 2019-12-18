@@ -88,7 +88,9 @@ public class LoadingOrderReport extends AppCompatActivity {
     private String loc = "";
     private Settings generalSettings;
     private String orderNo;
+    private JSONArray bundleNo = new JSONArray();
     private DatabaseHandler MHandler;
+    List<BundleInfo> bundleInfos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -380,7 +382,7 @@ public class LoadingOrderReport extends AppCompatActivity {
                             @Override
                             public void onClick(View v) {
 
-                                List<BundleInfo> bundleInfos = new ArrayList<>();
+                                bundleInfos = new ArrayList<>();
 
                                 for (int i = 0; i < bundles.size(); i++) {
 //                                    Log.e("ooo  " , ""+ orders.get(index).getOrderNo() + "  " + bundles.get(i).getBundleNo());
@@ -469,6 +471,31 @@ public class LoadingOrderReport extends AppCompatActivity {
                             public void onClick(View v) {
                                 if (password.getText().toString().equals("301190")) {
                                     orderNo = orders.get(index).getOrderNo();
+
+                                    bundleInfos = new ArrayList<>();
+
+                                    for (int i = 0; i < bundles.size(); i++) {
+                                        if (orders.get(index).getOrderNo().equals(bundles.get(i).getOrderNo()) &&
+                                                orders.get(index).getPlacingNo().equals(bundles.get(i).getPlacingNo()) &&
+                                                orders.get(index).getContainerNo().equals(bundles.get(i).getContainerNo()) &&
+                                                orders.get(index).getDateOfLoad().equals(bundles.get(i).getDateOfLoad())) {
+
+                                            bundleInfos.add(new BundleInfo(
+                                                    bundles.get(i).getThickness(),
+                                                    bundles.get(i).getWidth(),
+                                                    bundles.get(i).getLength(),
+                                                    bundles.get(i).getGrade(),
+                                                    bundles.get(i).getNoOfPieces(),
+                                                    bundles.get(i).getBundleNo(),
+                                                    bundles.get(i).getLocation(),
+                                                    bundles.get(i).getArea(),
+                                                    "",
+                                                    ""));
+                                        }
+                                    }
+                                    for (int i = 0; i < bundleInfos.size(); i++) {
+                                        bundleNo.put(bundleInfos.get(i).getJSONObject());
+                                    }
                                     new JSONTask2().execute();
                                     ordersTable.removeView(tableRow);
                                     passwordDialog.dismiss();
@@ -603,6 +630,7 @@ public class LoadingOrderReport extends AppCompatActivity {
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
                 nameValuePairs.add(new BasicNameValuePair("DELETE_ORDER", "1"));
                 nameValuePairs.add(new BasicNameValuePair("ORDER_NO", orderNo));
+                nameValuePairs.add(new BasicNameValuePair("BUNDLE_NO", bundleNo.toString()));
 
                 request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
