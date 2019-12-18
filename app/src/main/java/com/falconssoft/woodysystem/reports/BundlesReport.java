@@ -786,7 +786,7 @@ public class BundlesReport extends AppCompatActivity {
         }
 
     }
-}
+
 
     private class JSONTask2 extends AsyncTask<String, String, String> {
 
