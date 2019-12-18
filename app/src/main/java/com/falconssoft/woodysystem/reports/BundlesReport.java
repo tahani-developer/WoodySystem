@@ -12,6 +12,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.wifi.WifiManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.CancellationSignal;
 import android.os.Environment;
@@ -60,8 +61,16 @@ import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -69,7 +78,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -87,6 +98,7 @@ public class BundlesReport extends AppCompatActivity {
     private TextView textView;
     private Settings generalSettings;
     private Button printAll,delete;
+    private String bundleNumber;
 
 
     @SuppressLint("WrongViewCast")
@@ -224,6 +236,9 @@ public class BundlesReport extends AppCompatActivity {
                     Bitmap bitmap = writeBarcode(bundleNo.getText().toString(), length.getText().toString(), width.getText().toString(),
                             thic.getText().toString(), grade.getText().toString(), pcs.getText().toString());
                     databaseHandler.updateCheckPrinting(bundleNo.getText().toString(), 1);
+
+                    bundleNumber = bundleNo.getText().toString();
+                    new JSONTask2().execute();
 
                     photoPrinter.printBitmap("invoice.jpg", bitmap);
                     Toast.makeText(BundlesReport.this, "tested+" + bundleNo.getText().toString(), Toast.LENGTH_SHORT).show();
@@ -630,6 +645,71 @@ public class BundlesReport extends AppCompatActivity {
     }
 
 
+    private class JSONTask2 extends AsyncTask<String, String, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                String JsonResponse = null;
+                HttpClient client = new DefaultHttpClient();
+                HttpPost request = new HttpPost();
+                request.setURI(new URI("http://" + generalSettings.getIpAddress() + "/export.php"));//import 10.0.0.214
+
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+                nameValuePairs.add(new BasicNameValuePair("PRINT_BUNDLE", "1"));
+                nameValuePairs.add(new BasicNameValuePair("BUNDLE_NO", bundleNumber));
+
+                request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                HttpResponse response = client.execute(request);
+
+                BufferedReader in = new BufferedReader(new
+                        InputStreamReader(response.getEntity().getContent()));
+
+                StringBuffer sb = new StringBuffer("");
+                String line = "";
+
+                while ((line = in.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                in.close();
+
+                JsonResponse = sb.toString();
+                Log.e("tag", "" + JsonResponse);
+
+                return JsonResponse;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            Log.e("BundleReport", "json 2 " + s);
+            if (s != null) {
+                if (s.contains("PRINT BUNDLE SUCCESS")) {
+
+                    Log.e("BundleReport", "****Success");
+                } else {
+                    Toast.makeText(BundlesReport.this, "Failed to export data!", Toast.LENGTH_SHORT).show();
+//                    Log.e("inventoryReport", "****Failed to export data");
+                }
+            } else {
+                Toast.makeText(BundlesReport.this, "No internet connection!", Toast.LENGTH_SHORT).show();
+//                Log.e("inventoryReport", "****Failed to export data Please check internet connection");
+            }
+        }
+    }
 }
 
 
