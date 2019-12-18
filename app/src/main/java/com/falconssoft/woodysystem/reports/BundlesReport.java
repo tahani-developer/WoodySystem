@@ -73,6 +73,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.BufferedReader;
@@ -107,6 +108,7 @@ public class BundlesReport extends AppCompatActivity {
     private Button printAll, delete;
     private String bundleNumber;
     private TableRow hidedTableRow = null;
+    private JSONArray jsonArrayBundles = new JSONArray();
 
     private CheckBox checkBoxPrinter;
 
@@ -202,6 +204,7 @@ public class BundlesReport extends AppCompatActivity {
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
 
+                                jsonArrayBundles= new JSONArray();
                                 for (int i = 0; i < bundlesTable.getChildCount(); i++) {
                                     TableRow table = (TableRow) bundlesTable.getChildAt(i);
                                     CheckBox bundleCheck = (CheckBox) table.getChildAt(9);
@@ -209,8 +212,14 @@ public class BundlesReport extends AppCompatActivity {
                                     if (bundleCheck.isChecked()) {
                                         Log.e("bundelCheak", "" + i + "  " + bundleInfos.get(Integer.parseInt(bundleCheck.getTag().toString())).getBundleNo());
                                         databaseHandler.updateAllPrinting(bundleNo.getText().toString(), 1);
+
+                                        BundleInfo bundleInfo = new BundleInfo();
+                                        bundleInfo.setBundleNo(bundleNo.getText().toString());
+                                        jsonArrayBundles.put(bundleInfo.getJSONObject());
                                     }
                                 }
+
+                                new JSONTask3().execute();
 
 //                                for (int i = 0; i < bundleInfoForPrint.size(); i++) {
 //                                    databaseHandler.updateAllPrinting(bundleInfoForPrint.get(i).getBundleNo(), 1);
@@ -827,7 +836,77 @@ public class BundlesReport extends AppCompatActivity {
             }
         }
     }
+
+    private class JSONTask3 extends AsyncTask<String, String, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+//            Log.e("size", "" + jsonArrayBundles.size());
+            try {
+                String JsonResponse = null;
+                HttpClient client = new DefaultHttpClient();
+                HttpPost request = new HttpPost();
+                request.setURI(new URI("http://" + generalSettings.getIpAddress() + "/export.php"));//import 10.0.0.214
+
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+                nameValuePairs.add(new BasicNameValuePair("PRINT_BUNDLES", "1"));
+                nameValuePairs.add(new BasicNameValuePair("BUNDLE_NO", jsonArrayBundles.toString().trim()));
+
+                request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                HttpResponse response = client.execute(request);
+
+                BufferedReader in = new BufferedReader(new
+                        InputStreamReader(response.getEntity().getContent()));
+
+                StringBuffer sb = new StringBuffer("");
+                String line = "";
+
+                while ((line = in.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                in.close();
+
+                JsonResponse = sb.toString();
+                Log.e("tag", "" + JsonResponse);
+
+                return JsonResponse;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            Log.e("Bundles report", "json 3 " + s);
+            if (s != null) {
+                if (s.contains("PRINT BUNDLES SUCCESS")) {
+                    Log.e("tag", "****Success");
+                } else {
+                    Toast.makeText(BundlesReport.this, "Failed to export data!", Toast.LENGTH_SHORT).show();
+//                    Log.e("tag", "****Failed to export data");
+                }
+            } else {
+                Toast.makeText(BundlesReport.this, "No internet connection!", Toast.LENGTH_SHORT).show();
+//                Log.e("tag", "****Failed to export data Please check internet connection");
+            }
+        }
+    }
 }
+
+
+
+
 
 
 
