@@ -148,6 +148,7 @@
             android:drawableStart="@drawable/ic_error_24dp"
             android:drawableLeft="@drawable/ic_error_24dp"
             android:text="@string/about_developers"
+            android:fontFamily="serif"
             android:textColor="@color/white"
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"

@@ -107,6 +107,7 @@ public class BundlesReport extends AppCompatActivity {
     private Settings generalSettings;
     private Button printAll, delete;
     private String bundleNumber;
+    private TableRow hidedTableRow = null;
     private JSONArray jsonArrayBundles = new JSONArray();
 
     private CheckBox checkBoxPrinter;
@@ -127,7 +128,7 @@ public class BundlesReport extends AppCompatActivity {
 
         bundlesTable = findViewById(R.id.addToInventory_table);
         databaseHandler = new DatabaseHandler(this);
-        presenter.getPrintBarcodeData( this);
+        presenter.getPrintBarcodeData(this);
 //        fillTable();
 
         checkBoxPrinter.setOnClickListener(new View.OnClickListener() {
@@ -153,6 +154,7 @@ public class BundlesReport extends AppCompatActivity {
 
             }
         });
+
         printAll.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
@@ -195,8 +197,6 @@ public class BundlesReport extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View v) {
-
-
                 new android.support.v7.app.AlertDialog.Builder(BundlesReport.this)
                         .setTitle("Confirm Delete")
                         .setMessage("Are you sure you want to delete checked data ?!")
@@ -225,8 +225,7 @@ public class BundlesReport extends AppCompatActivity {
 //                                    databaseHandler.updateAllPrinting(bundleInfoForPrint.get(i).getBundleNo(), 1);
 //
 //                                }
-
-                                bundleInfos = databaseHandler.getAllBundleInfo("0");
+//                                bundleInfos = databaseHandler.getAllBundleInfo("0");
                                 bundlesTable.removeAllViews();
                                 bundleInfoForPrint.clear();
                                 fillTable();
@@ -236,7 +235,6 @@ public class BundlesReport extends AppCompatActivity {
 
             }
         });
-
 
     }
 
@@ -253,7 +251,7 @@ public class BundlesReport extends AppCompatActivity {
     public void fillTable() {
         Log.e("compare", "" + presenter.getBundleReportList().size());
         for (int i = 0; i < presenter.getBundleReportList().size(); i++)
-                bundleInfos.add(presenter.getBundleReportList().get(i));
+            bundleInfos.add(presenter.getBundleReportList().get(i));
         Log.e("compare2", "" + bundleInfos.size());
 
         generalSettings = new Settings();
@@ -283,48 +281,38 @@ public class BundlesReport extends AppCompatActivity {
                         , "" + bundleInfos.get(m).getNoOfPieces()
                         , bundleInfos.get(m).getLocation()
                         , bundleInfos.get(m).getArea()
-                        , bundleInfos.get(m).getIsPrinted()
+                        , R.color.light_orange
                         , m
                         , bundleInfos.get(m).getSerialNo()
                 );
                 bundlesTable.addView(tableRow);
 
-                TableRow finalTableRow = tableRow;
-                TableRow finalTableRow1 = tableRow;
-                tableRow.getVirtualChildAt(8).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        PrintHelper photoPrinter = new PrintHelper(BundlesReport.this);
-                        for (int i = 0; i < 9; i++)
-                            switch (i) {
-                                case 8:
-                                    finalTableRow1.getVirtualChildAt(8).setBackgroundResource(R.color.gray_dark);
-                                    break;
-                                default:
-                                    finalTableRow1.getVirtualChildAt(i).setBackgroundResource(R.color.white);
-                                    break;
-                            }
-                        photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
-                        TextView bundleNo = (TextView) finalTableRow.getChildAt(0);
-                        TextView length = (TextView) finalTableRow.getChildAt(1);
-                        TextView width = (TextView) finalTableRow.getChildAt(2);
-                        TextView thic = (TextView) finalTableRow.getChildAt(3);
-                        TextView grade = (TextView) finalTableRow.getChildAt(4);
-                        TextView pcs = (TextView) finalTableRow.getChildAt(5);
-                        Bitmap bitmap = writeBarcode(bundleNo.getText().toString(), length.getText().toString(), width.getText().toString(),
-                                thic.getText().toString(), grade.getText().toString(), pcs.getText().toString());
-                        databaseHandler.updateCheckPrinting(bundleNo.getText().toString(), 1);
-
-                        photoPrinter.printBitmap("invoice.jpg", bitmap);
-                        Toast.makeText(BundlesReport.this, "tested+" + bundleNo.getText().toString(), Toast.LENGTH_SHORT).show();
-                        bundleNumber = bundleNo.getText().toString();
-                        new JSONTask2().execute();
-
-                        photoPrinter.printBitmap("invoice.jpg", bitmap);
-                        Toast.makeText(BundlesReport.this, "tested+" + bundleNo.getText().toString(), Toast.LENGTH_SHORT).show();
-
-                    }
-                });
+//                TableRow finalTableRow = tableRow;
+//                tableRow.getVirtualChildAt(8).setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        PrintHelper photoPrinter = new PrintHelper(BundlesReport.this);
+//                        photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
+//                        TextView bundleNo = (TextView) finalTableRow.getChildAt(0);
+//                        TextView length = (TextView) finalTableRow.getChildAt(1);
+//                        TextView width = (TextView) finalTableRow.getChildAt(2);
+//                        TextView thic = (TextView) finalTableRow.getChildAt(3);
+//                        TextView grade = (TextView) finalTableRow.getChildAt(4);
+//                        TextView pcs = (TextView) finalTableRow.getChildAt(5);
+//                        Bitmap bitmap = writeBarcode(bundleNo.getText().toString(), length.getText().toString(), width.getText().toString(),
+//                                thic.getText().toString(), grade.getText().toString(), pcs.getText().toString());
+//                        databaseHandler.updateCheckPrinting(bundleNo.getText().toString(), 1);
+//
+//                        photoPrinter.printBitmap("invoice.jpg", bitmap);
+//                        Toast.makeText(BundlesReport.this, "tested+" + bundleNo.getText().toString(), Toast.LENGTH_SHORT).show();
+//                        bundleNumber = bundleNo.getText().toString();
+//                        new JSONTask2().execute();
+//
+//                        photoPrinter.printBitmap("invoice.jpg", bitmap);
+//                        Toast.makeText(BundlesReport.this, "tested+" + bundleNo.getText().toString(), Toast.LENGTH_SHORT).show();
+//
+//                    }
+//                });
 
                 TableRow clickTableRow = tableRow;
                 tableRow.setOnLongClickListener(new View.OnLongClickListener() {
@@ -332,7 +320,7 @@ public class BundlesReport extends AppCompatActivity {
                     public boolean onLongClick(View v) {
 //                                                TextView textView = ((TextView) tableRow.getChildAt(0));
 //                                                tableRow.setBackgroundResource(R.color.light_orange_2);
-                        String bundleNo = ((TextView) clickTableRow.getChildAt(0)).getText().toString();
+                        String bundleNo = ((TextView) clickTableRow.getChildAt(1)).getText().toString();
                         Log.e("b", bundleNo);
                         AlertDialog.Builder builder = new AlertDialog.Builder(BundlesReport.this);
                         builder.setMessage("Are you want hide bundle number: " + bundleNo + " ?");
@@ -341,8 +329,11 @@ public class BundlesReport extends AppCompatActivity {
                         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                databaseHandler.updateBundlesFlag(bundleNo);// 1 mean hide
-                                bundlesTable.removeView(clickTableRow);
+//                                databaseHandler.updateBundlesFlag(bundleNo);// 1 mean hide
+                                bundleNumber = bundleNo;
+                                hidedTableRow = clickTableRow;
+                                new JSONTask2().execute();
+
                             }
                         });
                         builder.show();
@@ -353,13 +344,8 @@ public class BundlesReport extends AppCompatActivity {
         }
     }
 
-    TableRow fillTableRows(TableRow tableRow, String bundlNo, String length, String width, String thic, String grade, String noOfPieces, String location, String area, int printed, int indexInList, String serialNo) {
-        int backgroundColor;
-        if (printed == 0) {
-            backgroundColor = R.color.light_orange;
-        } else {
-            backgroundColor = R.color.white;
-        }
+    TableRow fillTableRows(TableRow tableRow, String bundlNo, String length, String width, String thic, String grade, String noOfPieces, String location, String area, int backgroundColor, int indexInList, String serialNo) {
+
         for (int i = 0; i < 11; i++) {
             TextView textView = new TextView(this);
             textView.setBackgroundResource(backgroundColor);
@@ -788,12 +774,10 @@ public class BundlesReport extends AppCompatActivity {
     }
 
 
-    private class JSONTask2 extends AsyncTask<String, String, String> {
-
+    class JSONTask2 extends AsyncTask<String, String, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
         }
 
         @Override
@@ -841,7 +825,7 @@ public class BundlesReport extends AppCompatActivity {
             Log.e("BundleReport", "json 2 " + s);
             if (s != null) {
                 if (s.contains("PRINT BUNDLE SUCCESS")) {
-
+                    bundlesTable.removeView(hidedTableRow);
                     Log.e("BundleReport", "****Success");
                 } else {
                     Toast.makeText(BundlesReport.this, "Failed to export data!", Toast.LENGTH_SHORT).show();
@@ -920,6 +904,7 @@ public class BundlesReport extends AppCompatActivity {
         }
     }
 }
+
 
 
 

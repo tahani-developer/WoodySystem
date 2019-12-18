@@ -187,7 +187,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 //         String bundleNoString;,
         switch (v.getId()) {
             case R.id.addToInventory_add_button:
-                boolean foundBarcode = false;
+//                boolean foundBarcode = false;
 //http://5.189.130.98:8085/import.php?FLAG=1.
                 if (!TextUtils.isEmpty(serialNo.getText().toString())) {
                     if (!TextUtils.isEmpty(thickness.getText().toString())) {
@@ -272,14 +272,14 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                             + "." + noOfPiecesText
                                             + "." + serialNoText;//presenter.getSerialNo();//SettingsFile.serialNumber
 
-                                    List<String> checkBarcodeList = databaseHandler.getBundleNo();
-                                    for (int m = 0; m < checkBarcodeList.size(); m++)
-                                        if (bundleNoString.equals(checkBarcodeList.get(m))) {
-                                            foundBarcode = true;
-                                            break;
-                                        }
+//                                    List<String> checkBarcodeList = databaseHandler.getBundleNo();
+//                                    for (int m = 0; m < checkBarcodeList.size(); m++)
+//                                        if (bundleNoString.equals(checkBarcodeList.get(m))) {
+//                                            foundBarcode = true;
+//                                            break;
+//                                        }
 
-                                    if (!foundBarcode) {
+//                                    if (!foundBarcode) {
                                         jsonArrayBundles = new JSONArray();
                                         linearLayoutView.setVisibility(View.VISIBLE);
                                         mState = true;
@@ -389,9 +389,9 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                         Toast.makeText(this, "Added Successfully", Toast.LENGTH_SHORT).show();
 //                                            presenter.setSerialNo("");
 //                                        SettingsFile.serialNumber = "";
-                                    } else {
-                                        Toast.makeText(this, "Barcode already exist", Toast.LENGTH_SHORT).show();
-                                    }
+//                                    } else {
+//                                        Toast.makeText(this, "Barcode already exist", Toast.LENGTH_SHORT).show();
+//                                    }
 //                                    Log.e("serial" , " " + SettingsFile.serialNumber);
 
 //                                    presenter.getImportData();
@@ -547,7 +547,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
             super.onPostExecute(s);
             if (s != null) {
                 if (s.contains("BUNDLE_INFO SUCCESS")) {
-                    databaseHandler.addNewBundle(newBundle);
+//                    databaseHandler.addNewBundle(newBundle);
 //                    presenter.getImportData();
                     bundlesTable.addView(publicTableRow);
                     Log.e("tag", "****Success");
@@ -616,7 +616,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
             super.onPostExecute(s);
             if (s != null) {
                 if (s.contains("DELETE BUNDLE SUCCESS")) {
-                    databaseHandler.deleteBundle(bundleNumber);
+//                    databaseHandler.deleteBundle(bundleNumber);
                     Log.e("tag", "****Success");
                 } else {
                     Log.e("tag", "****Failed to export data");
