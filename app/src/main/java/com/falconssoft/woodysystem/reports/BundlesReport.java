@@ -50,6 +50,7 @@ import com.falconssoft.woodysystem.DatabaseHandler;
 import com.falconssoft.woodysystem.PrinterCommands;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.ReportsActivity;
+import com.falconssoft.woodysystem.WoodPresenter;
 import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.Settings;
 import com.google.zxing.BarcodeFormat;
@@ -86,6 +87,7 @@ public class BundlesReport extends AppCompatActivity {
 
     private TableLayout bundlesTable;
     private DatabaseHandler databaseHandler;
+    private WoodPresenter presenter;
     private List<BundleInfo> bundleInfoForPrint = new ArrayList<>();
     private List<BundleInfo> bundleInfos = new ArrayList<>();
     private Animation animation;
@@ -100,6 +102,8 @@ public class BundlesReport extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bundles_report);
+
+        presenter = new WoodPresenter(this);
         printAll = findViewById(R.id.loading_order_report_printAll);
         textView = findViewById(R.id.loading_order_report_tv);
         delete = findViewById(R.id.loading_order_report_delete);
@@ -109,21 +113,22 @@ public class BundlesReport extends AppCompatActivity {
 
         bundlesTable = findViewById(R.id.addToInventory_table);
         databaseHandler = new DatabaseHandler(this);
-        fillTable();
+        presenter.getPrintBarcodeData( this);
+//        fillTable();
 
         checkBoxPrinter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if(checkBoxPrinter.isChecked()){
+                if (checkBoxPrinter.isChecked()) {
 
                     for (int i = 0; i < bundlesTable.getChildCount(); i++) {
                         TableRow table = (TableRow) bundlesTable.getChildAt(i);
                         CheckBox bundleCheck = (CheckBox) table.getChildAt(9);
-                       bundleCheck.setChecked(true);
+                        bundleCheck.setChecked(true);
 
                     }
-                }else{
+                } else {
                     for (int i = 0; i < bundlesTable.getChildCount(); i++) {
                         TableRow table = (TableRow) bundlesTable.getChildAt(i);
                         CheckBox bundleCheck = (CheckBox) table.getChildAt(9);
@@ -142,17 +147,17 @@ public class BundlesReport extends AppCompatActivity {
                 try {
 
                     bundleInfoForPrint.clear();
-                        for (int i = 0; i < bundlesTable.getChildCount(); i++) {
-                            TableRow table = (TableRow) bundlesTable.getChildAt(i);
-                            CheckBox bundleCheck = (CheckBox) table.getChildAt(9);
-                            if (bundleCheck.isChecked()) {
-                                Log.e("bundelCheak", "" + i + "  " + bundleInfos.get(Integer.parseInt(bundleCheck.getTag().toString())).getBundleNo());
-                                bundleInfoForPrint.add(bundleInfos.get(Integer.parseInt(bundleCheck.getTag().toString())));
-                            }
+                    for (int i = 0; i < bundlesTable.getChildCount(); i++) {
+                        TableRow table = (TableRow) bundlesTable.getChildAt(i);
+                        CheckBox bundleCheck = (CheckBox) table.getChildAt(9);
+                        if (bundleCheck.isChecked()) {
+                            Log.e("bundelCheak", "" + i + "  " + bundleInfos.get(Integer.parseInt(bundleCheck.getTag().toString())).getBundleNo());
+                            bundleInfoForPrint.add(bundleInfos.get(Integer.parseInt(bundleCheck.getTag().toString())));
                         }
-                       boolean permission= isStoragePermissionGranted();
+                    }
+                    boolean permission = isStoragePermissionGranted();
 
-                    if(permission){
+                    if (permission) {
                         File file = null;
                         try {
                             file = createPdf();
@@ -167,7 +172,7 @@ public class BundlesReport extends AppCompatActivity {
 //
                 } catch (Exception e) {
                     e.printStackTrace();
-               }
+                }
             }
 
         });
@@ -225,8 +230,12 @@ public class BundlesReport extends AppCompatActivity {
 //        printManager.print(jobName, mPrintDocumentAdapter, null);
 //    }
 
-    void fillTable() {
-        bundleInfos = databaseHandler.getAllBundleInfo("0");
+    public void fillTable() {
+        Log.e("compare", "" + presenter.getBundleReportList().size());
+        for (int i = 0; i < presenter.getBundleReportList().size(); i++)
+                bundleInfos.add(presenter.getBundleReportList().get(i));
+        Log.e("compare2", "" + bundleInfos.size());
+
         generalSettings = new Settings();
         generalSettings = databaseHandler.getSettings();
 
@@ -302,7 +311,7 @@ public class BundlesReport extends AppCompatActivity {
                         Log.e("b", bundleNo);
                         AlertDialog.Builder builder = new AlertDialog.Builder(BundlesReport.this);
                         builder.setMessage("Are you want hide bundle number: " + bundleNo + " ?");
-                        builder.setTitle("Delete");
+                        builder.setTitle("Hide");
                         builder.setIcon(R.drawable.ic_warning_black_24dp);
                         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
@@ -716,9 +725,9 @@ public class BundlesReport extends AppCompatActivity {
 
                 Log.v("", "Permission is revoked");
                 ActivityCompat.requestPermissions(
-                                this,
-                                new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
-                                1);
+                        this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        1);
                 return false;
             }
         } else { // permission is automatically granted on sdk<23 upon
@@ -751,8 +760,8 @@ public class BundlesReport extends AppCompatActivity {
 
         }
 
-        }
     }
+}
 
 
 

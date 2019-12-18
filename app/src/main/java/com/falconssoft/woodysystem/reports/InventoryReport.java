@@ -121,8 +121,8 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private String bundleNumber;
     private int index;
     private CheckBox checkBoxPrint;
-    List <BundleInfo>bundleInfoForPrint= new ArrayList<>();
-    private Button printAll,delete;
+    List<BundleInfo> bundleInfoForPrint = new ArrayList<>();
+    private Button printAll, delete;
     private TableRow tableRowToDelete = null;
 
     @Override
@@ -147,9 +147,9 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         noOfPieces = findViewById(R.id.inventory_report_no_pieces);
         cubicField = findViewById(R.id.inventory_report_cubic);
         deleteAll = findViewById(R.id.inventory_report_delete);
-        checkBoxPrint=findViewById(R.id.checkBoxPrint);
-        printAll=findViewById(R.id.printAll);
-        delete=findViewById(R.id.delete);
+        checkBoxPrint = findViewById(R.id.checkBoxPrint);
+        printAll = findViewById(R.id.printAll);
+        delete = findViewById(R.id.delete);
 
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         dateFrom.setText(df.format(date));
@@ -193,18 +193,18 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
             @Override
             public void onClick(View v) {
 
-                if(checkBoxPrint.isChecked()){
+                if (checkBoxPrint.isChecked()) {
 
                     for (int i = 0; i < bundlesTable.getChildCount(); i++) {
                         TableRow table = (TableRow) bundlesTable.getChildAt(i);
-                        CheckBox bundleCheck = (CheckBox) table.getChildAt(8);
+                        CheckBox bundleCheck = (CheckBox) table.getChildAt(9);
                         bundleCheck.setChecked(true);
 
                     }
-                }else{
+                } else {
                     for (int i = 0; i < bundlesTable.getChildCount(); i++) {
                         TableRow table = (TableRow) bundlesTable.getChildAt(i);
-                        CheckBox bundleCheck = (CheckBox) table.getChildAt(8);
+                        CheckBox bundleCheck = (CheckBox) table.getChildAt(9);
                         bundleCheck.setChecked(false);
 
                     }
@@ -222,16 +222,16 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                     bundleInfoForPrint.clear();
                     for (int i = 0; i < bundlesTable.getChildCount(); i++) {
                         TableRow table = (TableRow) bundlesTable.getChildAt(i);
-                        CheckBox bundleCheck = (CheckBox) table.getChildAt(8);
+                        CheckBox bundleCheck = (CheckBox) table.getChildAt(9);
                         if (bundleCheck.isChecked()) {
                             Log.e("bundelCheak", "" + i + "  " + filtered.get(Integer.parseInt(bundleCheck.getTag().toString())).getBundleNo());
                             bundleInfoForPrint.add(filtered.get(Integer.parseInt(bundleCheck.getTag().toString())));
                         }
                     }
 
-                    boolean permission= isStoragePermissionGranted();
+                    boolean permission = isStoragePermissionGranted();
 
-                    if(permission){
+                    if (permission) {
                         File file = null;
                         try {
                             file = createPdf();
@@ -450,6 +450,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 
     public void filters() {
         bundleInfoServer.clear();
+        Log.e("inventoryReport", "/bundleInfoServer2/size/" + bundleInfoServer2.size());
         for (int v = 0; v < bundleInfoServer2.size(); v++) {
             BundleInfo fake = new BundleInfo();
             fake = bundleInfoServer2.get(v);
@@ -470,7 +471,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                     || formatDate(bundleInfoServer.get(m).getAddingDate()).equals(formatDate(toDate))))
                 dateFiltered.add(bundleInfoServer.get(m));
         }
-        Log.e("follow", " size2 " + dateFiltered.size());
+        Log.e("follow/", "size2/dateFiltered/ " + dateFiltered.size());
 
 //        Log.e("follow", fromDate + " to " + toDate + " size1 " + bundleInfoServer.size() + " size2 " + dateFiltered.size());
 
@@ -491,7 +492,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                 filtered.add(dateFiltered.get(k));
 
         }
-        Log.e("follow", " size2 " + filtered.size());
+        Log.e("follow/", "size3/filtered/" + filtered.size());
         fillTable(filtered);
 
     }
@@ -528,7 +529,8 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                     , "" + filteredList.get(m).getNoOfPieces()
                     , filteredList.get(m).getLocation()
                     , filteredList.get(m).getArea()
-                    ,m);
+                    , m
+                    , filteredList.get(m).getSerialNo());
             bundlesTable.addView(tableRow);
             TableRow finalTableRow = tableRow;
 //            tableRow.getVirtualChildAt(8).setOnClickListener(new View.OnClickListener() {
@@ -639,8 +641,8 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         Log.e("follow", "filltable " + filteredList.size());
     }
 
-    TableRow fillTableRows(TableRow tableRow, String bundlNo, String length, String width, String thic, String grade, String noOfPieces, String location, String area,int index) {
-        for (int i = 0; i < 9; i++) {
+    TableRow fillTableRows(TableRow tableRow, String bundlNo, String length, String width, String thic, String grade, String noOfPieces, String location, String area, int index, String serial) {
+        for (int i = 0; i < 10; i++) {
             TextView textView = new TextView(this);
             textView.setBackgroundResource(R.color.light_orange);
             TableRow.LayoutParams textViewParam;
@@ -651,48 +653,54 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 //            textView.setLayoutParams(textViewParam);
             switch (i) {
                 case 0:
+                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+                    textViewParam.setMargins(1, 5, 1, 1);
+                    textView.setLayoutParams(textViewParam);
+                    textView.setText(serial);
+                    break;
+                case 1:
                     textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 3.4f);
                     textViewParam.setMargins(1, 5, 1, 1);
                     textView.setLayoutParams(textViewParam);
                     textView.setText(bundlNo);
                     break;
-                case 1:
+                case 2:
                     textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
                     textViewParam.setMargins(1, 5, 1, 1);
                     textView.setLayoutParams(textViewParam);
                     textView.setText(length);
                     break;
-                case 2:
+                case 3:
                     textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
                     textViewParam.setMargins(1, 5, 1, 1);
                     textView.setLayoutParams(textViewParam);
                     textView.setText(width);
                     break;
-                case 3:
+                case 4:
                     textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
                     textViewParam.setMargins(1, 5, 1, 1);
                     textView.setLayoutParams(textViewParam);
                     textView.setText(thic);
                     break;
-                case 4:
+                case 5:
                     textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
                     textViewParam.setMargins(1, 5, 1, 1);
                     textView.setLayoutParams(textViewParam);
                     textView.setText(grade);
                     break;
-                case 5:
+                case 6:
                     textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
                     textViewParam.setMargins(1, 5, 1, 1);
                     textView.setLayoutParams(textViewParam);
                     textView.setText(noOfPieces);
                     break;
-                case 6:
+                case 7:
                     textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1.5f);
                     textViewParam.setMargins(1, 5, 1, 1);
                     textView.setLayoutParams(textViewParam);
                     textView.setText(location);
                     break;
-                case 7:
+                case 8:
                     textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
                     textViewParam.setMargins(1, 5, 1, 1);
                     textView.setLayoutParams(textViewParam);
@@ -706,15 +714,15 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 ////                    textView.setTextColor(ContextCompat.getColor(this, R.color.white));
 //                    textView.setBackgroundResource(R.drawable.ic_print_24dp);
 //                    break;
-                case 8:
+                case 9:
                     CheckBox checkBox = new CheckBox(this);
                     textViewParam = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
                     textViewParam.setMargins(1, 5, 1, 1);
                     checkBox.setLayoutParams(textViewParam);
                     checkBox.setText("");
-                    checkBox.setTag(""+index);
+                    checkBox.setTag("" + index);
                     checkBox.setTextColor(ContextCompat.getColor(this, R.color.white));
-                    checkBox.setBackgroundResource( R.color.light_orange);
+                    checkBox.setBackgroundResource(R.color.light_orange);
                     tableRow.addView(checkBox);
                     break;
             }
@@ -954,7 +962,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                 Log.v("", "Permission is revoked");
                 ActivityCompat.requestPermissions(
                         this,
-                        new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         1);
                 return false;
             }
