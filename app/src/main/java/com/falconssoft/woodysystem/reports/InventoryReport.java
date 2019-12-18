@@ -1053,7 +1053,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                 if (s.contains("DELETE BUNDLE SUCCESS")) {
                     bundlesTable.removeView(tableRowToDelete);
                     bundleInfoServer2.remove(index);
-                    databaseHandler.deleteBundle(bundleNumber);
+//                    databaseHandler.deleteBundle(bundleNumber);
                     Toast.makeText(InventoryReport.this, "Deleted successfully", Toast.LENGTH_SHORT).show();
                     filters();
                     Log.e("inventoryReport", "****Success");
@@ -1123,7 +1123,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
             if (s != null) {
                 if (s.contains("DELETE ALL BUNDLES SUCCESS")) {
                     for (int i = 0; i < filtered.size(); i++) {
-                        databaseHandler.deleteBundle(filtered.get(i).getBundleNo());
+//                        databaseHandler.deleteBundle(filtered.get(i).getBundleNo());
                         for (int k = 0; k < bundleInfoServer2.size(); k++)
                             if (bundleInfoServer2.get(k).getBundleNo().equals(filtered.get(i).getBundleNo())) {
                                 bundleInfoServer2.remove(k);

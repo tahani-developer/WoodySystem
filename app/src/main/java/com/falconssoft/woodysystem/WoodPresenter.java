@@ -359,7 +359,8 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                     Log.e("presenter:bun3 ", "" + innerObject.toString());
                     if ((innerObject.getInt("ORDERED") == 0)
                             && (innerObject.getString("USER_NO").equals(settings.getUserNo()))
-                            && (innerObject.getString("LOCATION").equals(settings.getStore()))) {
+                            && (innerObject.getString("LOCATION").equals(settings.getStore()))
+                            && (innerObject.getString("IS_PRINTED").equals("0"))) {
                         BundleInfo bundleInfo = new BundleInfo();
                         bundleInfo.setThickness(innerObject.getDouble("THICKNESS"));
                         bundleInfo.setWidth(innerObject.getDouble("WIDTH"));
