@@ -71,5 +71,7 @@
     <string name="report">Звіт</string>
     <string name="print_all">Роздрукувати все</string>
     <string name="delete_all">Видалити все</string>
-
+    <string name="print">Друк</string>
+    <string name="serial_no">Серійний</string>
+    <string name="delete">Видалити</string>
 </resources>

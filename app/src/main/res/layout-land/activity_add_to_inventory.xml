@@ -377,9 +377,9 @@
                 android:background="@color/light_orange_2">
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+
                     android:text="@string/bundle_no"
                     android:fontFamily="serif"
                     android:textColor="@color/white"
@@ -434,7 +434,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/location"
+                    android:text="@string/loc"
                     android:fontFamily="serif"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
@@ -458,9 +458,10 @@
                     android:textSize="20sp" />
             </TableRow>
 
-            <ScrollView
+            <android.support.v4.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="365dp"
+                android:scrollbars="horizontal|vertical"
                 >
 
                 <TableLayout
@@ -473,10 +474,9 @@
                     android:layout_marginEnd="3dp"
                     android:layout_marginRight="3dp">
 
-
                 </TableLayout>
 
-            </ScrollView>
+            </android.support.v4.widget.NestedScrollView>
 
             <View
                 android:layout_width="match_parent"

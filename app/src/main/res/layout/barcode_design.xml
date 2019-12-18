@@ -51,7 +51,7 @@
                 android:gravity="center"
                 android:text="T1665464"
                 android:textColor="@color/black"
-                android:textSize="30sp" />
+                android:textSize="25sp" />
         </LinearLayout>
 
         <TextView
@@ -72,7 +72,7 @@
                 android:gravity="center"
                 android:text="44 X 100 X 400"
                 android:textColor="@color/black"
-                android:textSize="25sp" />
+                android:textSize="20sp" />
         </LinearLayout>
 
         <TextView
@@ -136,10 +136,11 @@
 
             <ImageView
                 android:id="@+id/barcode"
-                android:layout_width="200dp"
-                android:layout_height="50dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
-                app:srcCompat="@drawable/pic" />
+                android:padding="5dp"
+                />
         </LinearLayout>
 
     </LinearLayout>

@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@color/alpha_black"
+        android:background="@color/alpha_black_dark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,7 +21,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginBottom="5dp">
 
             <TextView
                 android:id="@+id/loading_order_report_tv"
@@ -31,17 +32,14 @@
                 android:layout_weight="1"
                 android:drawableStart="@drawable/axe"
                 android:drawableLeft="@drawable/axe"
+               android:paddingStart="350dp"
+                android:paddingLeft="350dp"
+                android:drawablePadding="-250dp"
                 android:fontFamily="serif"
-                android:gravity="start"
+                android:gravity="center"
                 android:text="@string/print_barcode_report"
                 android:textColor="@color/orange"
                 android:textSize="30sp" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/loading_order_report_printAll"
@@ -51,7 +49,8 @@
                     android:padding="3dp"
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
-                    android:text="@string/print_all"
+                    android:text="@string/print"
+                    android:fontFamily="serif"
                     android:textAllCaps="false"
                     android:textColor="@color/orange"
                     android:textSize="16sp" />
@@ -62,11 +61,11 @@
                     android:layout_height="40dp"
                     android:background="@drawable/shape_with_corner"
                     android:padding="3dp"
-                    android:text="@string/delete_all"
+                    android:text="@string/delete"
+                    android:fontFamily="serif"
                     android:textAllCaps="false"
                     android:textColor="@color/orange"
                     android:textSize="16sp" />
-            </LinearLayout>
 
         </LinearLayout>
 
@@ -76,9 +75,20 @@
             android:background="@color/orange">
 
             <TextView
+                android:id="@+id/textView12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="serif"
+                android:text="@string/serial_no"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+            <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1.7"
+                android:layout_weight="3"
                 android:fontFamily="serif"
                 android:text="@string/bundle_no"
                 android:textColor="@color/white"
@@ -147,20 +157,18 @@
                 android:textColor="@color/white"
                 android:textSize="20sp" />
 
-            <TextView
-                android:layout_width="0dp"
+            <CheckBox
+                android:id="@+id/checkBoxPrinter"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="serif"
-                android:text="@string/barcode"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"/>
 
         </TableRow>
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="480dp">
+            android:layout_height="wrap_content">
 
             <TableLayout
                 android:id="@+id/addToInventory_table"

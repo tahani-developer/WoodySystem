@@ -97,6 +97,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
     private WoodPresenter presenter;
     private Settings generalSettings;
     String bundleNumber;
+    private TableRow publicTableRow = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -180,19 +181,20 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         String lengthText = length.getText().toString();
         String widthText = width.getText().toString();
         String noOfPiecesText = noOfPieces.getText().toString();
-//         String bundleNoString;
+//         String bundleNoString;,
         switch (v.getId()) {
             case R.id.addToInventory_add_button:
                 boolean foundBarcode = false;
-//http://5.189.130.98:8085/import.php?FLAG=1
+//http://5.189.130.98:8085/import.php?FLAG=1.
                 if (!TextUtils.isEmpty(thickness.getText().toString())) {
                     if (!TextUtils.isEmpty(width.getText().toString())) {
                         if (!TextUtils.isEmpty(length.getText().toString())) {
                             if (!TextUtils.isEmpty(noOfPieces.getText().toString())) {
-//                                Log.e("serial" , " " + !SettingsFile.serialNumber.equals(""));
-//                                Log.e("serial" , " " + !SettingsFile.serialNumber.equals(null));
-                                Log.e("serialNumber", "" + SettingsFile.serialNumber);
-                                if ((!SettingsFile.serialNumber.equals("")) && (!SettingsFile.serialNumber.equals(null))) {
+                                String serial = presenter.getSerialNo();
+                                Log.e("serial", " " + !serial.equals(""));
+                                Log.e("serial", " " + !serial.equals(null));
+                                Log.e("serialNumber", "" + serial);
+                                if ((!serial.equals("")) && (!serial.equals(null))) { //(!SettingsFile.serialNumber.equals("")) && (!SettingsFile.serialNumber.equals(null))
                                     String locationString = null, gradeString = null, detailString = null;
                                     switch (gradeText) {
                                         case "Fresh":
@@ -264,7 +266,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                             + "." + widthText
                                             + "." + lengthText
                                             + "." + noOfPiecesText
-                                            + "." + SettingsFile.serialNumber;
+                                            + "." + presenter.getSerialNo();//SettingsFile.serialNumber
 
                                     List<String> checkBarcodeList = databaseHandler.getBundleNo();
                                     for (int m = 0; m < checkBarcodeList.size(); m++)
@@ -292,7 +294,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                                 , areaText
                                                 , generateDate
                                                 , 0
-                                                , descriptionText);
+                                                , descriptionText
+                                                , presenter.getSerialNo());//SettingsFile.serialNumber
 
                                         bundleInfoList.add(newBundle);
                                         Log.e("date is", generateDate);
@@ -308,7 +311,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                             textView.setLayoutParams(textViewParam);
                                             switch (i) {
                                                 case 0:
-                                                    TableRow.LayoutParams param = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+                                                    TableRow.LayoutParams param = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
                                                     param.setMargins(1, 5, 1, 1);
                                                     textView.setLayoutParams(param);
                                                     textView.setText(bundleNoString);
@@ -341,7 +344,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                             tableRow.addView(textView);
                                         }
                                         jsonArrayBundles.put(newBundle.getJSONObject());
-                                        bundlesTable.addView(tableRow);
+                                        publicTableRow = tableRow;
+//                                        bundlesTable.addView(tableRow);
                                         new JSONTask().execute();
 
                                         thickness.setText("");
@@ -379,6 +383,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                         });
                                         thickness.requestFocus();
                                         Toast.makeText(this, "Added Successfully", Toast.LENGTH_SHORT).show();
+                                        presenter.setSerialNo("");
+//                                        SettingsFile.serialNumber = "";
                                     } else {
                                         Toast.makeText(this, "Barcode already exist", Toast.LENGTH_SHORT).show();
                                     }
@@ -536,13 +542,16 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                 if (s.contains("BUNDLE_INFO SUCCESS")) {
                     databaseHandler.addNewBundle(newBundle);
                     presenter.getImportData();
+                    bundlesTable.addView(publicTableRow);
                     Log.e("tag", "****Success");
                 } else {
-                    SettingsFile.serialNumber = "";
+                    presenter.setSerialNo("");
+//                    SettingsFile.serialNumber = "";
                     Log.e("tag", "****Failed to export data");
                 }
             } else {
-                SettingsFile.serialNumber = "";
+                presenter.setSerialNo("");
+//                SettingsFile.serialNumber = "";
                 Log.e("tag", "****Failed to export data Please check internet connection");
             }
         }

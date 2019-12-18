@@ -1,15 +1,29 @@
 package com.falconssoft.woodysystem.reports;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.os.CancellationSignal;
+import android.os.Environment;
+import android.os.ParcelFileDescriptor;
+import android.print.PageRange;
+import android.print.PrintAttributes;
+import android.print.PrintDocumentAdapter;
+import android.print.PrintDocumentInfo;
+import android.print.PrintManager;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.print.PrintHelper;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +35,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -40,6 +56,12 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -52,7 +74,15 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.URI;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -90,6 +120,10 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private Date date;
     private String bundleNumber;
     private int index;
+    private CheckBox checkBoxPrint;
+    List <BundleInfo>bundleInfoForPrint= new ArrayList<>();
+    private Button printAll,delete;
+    private TableRow tableRowToDelete = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +147,9 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         noOfPieces = findViewById(R.id.inventory_report_no_pieces);
         cubicField = findViewById(R.id.inventory_report_cubic);
         deleteAll = findViewById(R.id.inventory_report_delete);
+        checkBoxPrint=findViewById(R.id.checkBoxPrint);
+        printAll=findViewById(R.id.printAll);
+        delete=findViewById(R.id.delete);
 
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         dateFrom.setText(df.format(date));
@@ -151,7 +188,265 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
             bundlesForDelete.add(fake);
         }
 //        fillTable(bundleInfoServer);
+
+        checkBoxPrint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(checkBoxPrint.isChecked()){
+
+                    for (int i = 0; i < bundlesTable.getChildCount(); i++) {
+                        TableRow table = (TableRow) bundlesTable.getChildAt(i);
+                        CheckBox bundleCheck = (CheckBox) table.getChildAt(8);
+                        bundleCheck.setChecked(true);
+
+                    }
+                }else{
+                    for (int i = 0; i < bundlesTable.getChildCount(); i++) {
+                        TableRow table = (TableRow) bundlesTable.getChildAt(i);
+                        CheckBox bundleCheck = (CheckBox) table.getChildAt(8);
+                        bundleCheck.setChecked(false);
+
+                    }
+                }
+
+            }
+        });
+
+        printAll.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+            @Override
+            public void onClick(View v) {
+//               PrintAll();
+                try {
+                    bundleInfoForPrint.clear();
+                    for (int i = 0; i < bundlesTable.getChildCount(); i++) {
+                        TableRow table = (TableRow) bundlesTable.getChildAt(i);
+                        CheckBox bundleCheck = (CheckBox) table.getChildAt(8);
+                        if (bundleCheck.isChecked()) {
+                            Log.e("bundelCheak", "" + i + "  " + filtered.get(Integer.parseInt(bundleCheck.getTag().toString())).getBundleNo());
+                            bundleInfoForPrint.add(filtered.get(Integer.parseInt(bundleCheck.getTag().toString())));
+                        }
+                    }
+
+                    boolean permission= isStoragePermissionGranted();
+
+                    if(permission){
+                        File file = null;
+                        try {
+                            file = createPdf();
+                            PrintAll(file);
+                            bundleInfoForPrint.clear();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (DocumentException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+        });
+
+        delete.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+            @Override
+            public void onClick(View v) {
+
+
+                new android.support.v7.app.AlertDialog.Builder(InventoryReport.this)
+                        .setTitle("Confirm Delete")
+                        .setMessage("Are you sure you want to delete checked data ?!")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+
+                                for (int i = 0; i < bundlesTable.getChildCount(); i++) {
+                                    TableRow table = (TableRow) bundlesTable.getChildAt(i);
+                                    CheckBox bundleCheck = (CheckBox) table.getChildAt(9);
+                                    TextView bundleNo = (TextView) table.getChildAt(1);
+                                    if (bundleCheck.isChecked()) {
+//                                        Log.e("bundelCheak", "" + i + "  " + bundleInfos.get(Integer.parseInt(bundleCheck.getTag().toString())).getBundleNo());
+//                                        databaseHandler.updateAllPrinting(bundleNo.getText().toString(), 1);
+                                    }
+                                }
+//                                for (int i = 0; i < bundleInfoForPrint.size(); i++) {
+//                                    databaseHandler.updateAllPrinting(bundleInfoForPrint.get(i).getBundleNo(), 1);
+//
+//                                }
+                                bundleInfoForPrint.clear();
+
+                            }
+                        })
+                        .setNegativeButton("Cancel", null).show();
+
+            }
+        });
+
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public void PrintAll(File file) {
+        PrintManager printManager = (PrintManager) InventoryReport.this.getSystemService(Context.PRINT_SERVICE);
+        String jobName = " Document";
+
+
+        PrintDocumentAdapter pda = new PrintDocumentAdapter() {
+            @Override
+            public void onWrite(PageRange[] pages, ParcelFileDescriptor destination, CancellationSignal cancellationSignal, WriteResultCallback callback) {
+                InputStream input = null;
+                OutputStream output = null;
+
+                try {
+
+                    input = new FileInputStream(file);
+                    output = new FileOutputStream(destination.getFileDescriptor());
+
+                    byte[] buf = new byte[1024];
+                    int bytesRead;
+
+                    while ((bytesRead = input.read(buf)) > 0) {
+                        output.write(buf, 0, bytesRead);
+                    }
+
+                    callback.onWriteFinished(new PageRange[]{PageRange.ALL_PAGES});
+
+                } catch (FileNotFoundException ee) {
+                    //Catch exception
+                } catch (Exception e) {
+                    //Catch exception
+                } finally {
+                    try {
+                        input.close();
+                        output.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onLayout(PrintAttributes oldAttributes, PrintAttributes newAttributes, CancellationSignal cancellationSignal, LayoutResultCallback callback, Bundle extras) {
+
+                if (cancellationSignal.isCanceled()) {
+                    callback.onLayoutCancelled();
+
+                    return;
+                }
+
+
+                PrintDocumentInfo pdi = new PrintDocumentInfo.Builder("pdfdemokk.pdf").setContentType(PrintDocumentInfo.CONTENT_TYPE_DOCUMENT).build();
+
+                callback.onLayoutFinished(pdi, true);
+            }
+
+        };
+
+        PrintAttributes attrib = new PrintAttributes.Builder()
+                .setMediaSize(PrintAttributes.MediaSize.ISO_A5.UNKNOWN_LANDSCAPE)
+                .build();
+        printManager.print(jobName, pda, null);
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    File creatFile() {
+
+        File pdfFolder = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DOCUMENTS), "pdfdemo");
+        if (!pdfFolder.exists()) {
+            pdfFolder.mkdirs();
+            Log.i("Created", "Pdf Directory created");
+        }
+
+        //Create time stamp
+//        Date date = new Date() ;
+//        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(date);
+
+        File myFile = new File(pdfFolder + "inventory" + ".pdf");
+        return myFile;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private File createPdf() throws IOException, DocumentException {
+        File myFile = creatFile();
+        try {
+
+            //Image image = Image.getInstance(byteArray);
+
+
+            Log.e("file ", "" + myFile.getPath());
+            OutputStream output = new FileOutputStream(myFile);
+            //Step 1
+//        Rectangle rect = new Rectangle(0, 0, 595, 842);
+            Document document = new Document();
+            document.setPageSize(PageSize.A4);
+//        Document document = new Document();//PageSize.A4.rotate()
+//        document
+            //Step 2
+//        document.newPage();
+
+            PdfWriter.getInstance(document, output);
+
+            //Step 3
+            document.open();
+
+            //Step 4 Add content
+            int ispage = 0;
+            for (int i = 0; i < bundleInfoForPrint.size(); i++) {
+                if (bundleInfoForPrint.get(i).getIsPrinted() != 1) {
+                    Bitmap bitmap = writeBarcode(String.valueOf(bundleInfoForPrint.get(i).getBundleNo()), String.valueOf(bundleInfoForPrint.get(i).getLength()), String.valueOf(bundleInfoForPrint.get(i).getWidth()),
+                            String.valueOf(bundleInfoForPrint.get(i).getThickness()), String.valueOf(bundleInfoForPrint.get(i).getGrade()), String.valueOf(bundleInfoForPrint.get(i).getNoOfPieces()));
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    Image signature;
+                    signature = Image.getInstance(stream.toByteArray());
+                    signature.setAbsolutePosition(0f, 20f);
+                    signature.scalePercent(160f);
+                    signature.setRotationDegrees(90f);
+//            signature.setRotation(0f);
+//            signature.setPaddingTop(10);
+                    document.add(signature);
+
+//                    if ((i + 1)< bundleInfos.size()){
+//                        Bitmap bitmap2 = writeBarcode(String.valueOf(bundleInfos.get(i+1).getBundleNo()), String.valueOf(bundleInfos.get(i+1).getLength()), String.valueOf(bundleInfos.get(i+1).getWidth()),
+//                                String.valueOf(bundleInfos.get(i+1).getThickness()), String.valueOf(bundleInfos.get(i+1).getGrade()), String.valueOf(bundleInfos.get(i+1).getNoOfPieces()));
+//                    ByteArrayOutputStream stream2 = new ByteArrayOutputStream();
+//                    bitmap2.compress(Bitmap.CompressFormat.PNG, 100, stream2);
+//                    Image signature2;
+//                    signature2 = Image.getInstance(stream2.toByteArray());
+//                    signature2.setAbsolutePosition(20f, 450f);
+//                    signature2.scalePercent(150f);
+////                    signature2.setRotationDegrees(90f);
+//
+//                    document.add(signature2);
+//                }
+                    document.newPage();
+                    ispage = 1;
+                }
+            }
+            if (ispage == 0) {
+                Paragraph p = new Paragraph("no bundle to print ");
+                document.add(p);
+            }
+            Log.e("getPageNumber()= ", "" + document.getPageNumber());
+
+            //document.add(new Paragraph(text.getText().toString()));
+            //document.add(new Paragraph(mBodyEditText.getText().toString()));
+
+            //Step 5: Close the document
+            document.close();
+
+        } catch (Exception ex) {
+            Log.e("Exception create Pdf : ", "" + ex.getMessage());
+        }
+        return myFile;
+
+    }
+
 
     public void filters() {
         bundleInfoServer.clear();
@@ -232,28 +527,29 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                     , filteredList.get(m).getGrade()
                     , "" + filteredList.get(m).getNoOfPieces()
                     , filteredList.get(m).getLocation()
-                    , filteredList.get(m).getArea());
+                    , filteredList.get(m).getArea()
+                    ,m);
             bundlesTable.addView(tableRow);
             TableRow finalTableRow = tableRow;
-            tableRow.getVirtualChildAt(8).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    PrintHelper photoPrinter = new PrintHelper(InventoryReport.this);
-                    photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
-                    TextView bundleNo = (TextView) finalTableRow.getChildAt(0);
-                    TextView length = (TextView) finalTableRow.getChildAt(1);
-                    TextView width = (TextView) finalTableRow.getChildAt(2);
-                    TextView thic = (TextView) finalTableRow.getChildAt(3);
-                    TextView grade = (TextView) finalTableRow.getChildAt(4);
-                    TextView pcs = (TextView) finalTableRow.getChildAt(5);
-                    Bitmap bitmap = writeBarcode(bundleNo.getText().toString(), length.getText().toString(), width.getText().toString(),
-                            thic.getText().toString(), grade.getText().toString(), pcs.getText().toString());
-
-                    photoPrinter.printBitmap("invoice.jpg", bitmap);
-                    Toast.makeText(InventoryReport.this, "tested+" + bundleNo.getText().toString(), Toast.LENGTH_SHORT).show();
-
-                }
-            });
+//            tableRow.getVirtualChildAt(8).setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    PrintHelper photoPrinter = new PrintHelper(InventoryReport.this);
+//                    photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
+//                    TextView bundleNo = (TextView) finalTableRow.getChildAt(0);
+//                    TextView length = (TextView) finalTableRow.getChildAt(1);
+//                    TextView width = (TextView) finalTableRow.getChildAt(2);
+//                    TextView thic = (TextView) finalTableRow.getChildAt(3);
+//                    TextView grade = (TextView) finalTableRow.getChildAt(4);
+//                    TextView pcs = (TextView) finalTableRow.getChildAt(5);
+//                    Bitmap bitmap = writeBarcode(bundleNo.getText().toString(), length.getText().toString(), width.getText().toString(),
+//                            thic.getText().toString(), grade.getText().toString(), pcs.getText().toString());
+//
+//                    photoPrinter.printBitmap("invoice.jpg", bitmap);
+//                    Toast.makeText(InventoryReport.this, "tested+" + bundleNo.getText().toString(), Toast.LENGTH_SHORT).show();
+//
+//                }
+//            });
             TableRow finalTableRow1 = tableRow;
             tableRow.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
@@ -281,8 +577,9 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                         @Override
                         public void onClick(View v) {
                             if (password.getText().toString().equals("301190")) {
+                                tableRowToDelete = finalTableRow1;
                                 new JSONTask2().execute();
-                                bundlesTable.removeView(finalTableRow1);
+//                                bundlesTable.removeView(finalTableRow1);
                                 passwordDialog.dismiss();
                             } else {
                                 Toast.makeText(InventoryReport.this, "Not Authorized!", Toast.LENGTH_SHORT).show();
@@ -335,14 +632,14 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 
         noOfBundles.setText("" + sumOfBundles);
         noOfPieces.setText("" + sumOfPieces);
-        cubicField.setText("" + String.format("%.3f", sumOfCubic));
+        cubicField.setText("" + String.format("%.3f", (sumOfCubic / 1000000000)));
 //        bundlesForDelete.clear();
 //        bundlesForDelete = filteredList;
 
         Log.e("follow", "filltable " + filteredList.size());
     }
 
-    TableRow fillTableRows(TableRow tableRow, String bundlNo, String length, String width, String thic, String grade, String noOfPieces, String location, String area) {
+    TableRow fillTableRows(TableRow tableRow, String bundlNo, String length, String width, String thic, String grade, String noOfPieces, String location, String area,int index) {
         for (int i = 0; i < 9; i++) {
             TextView textView = new TextView(this);
             textView.setBackgroundResource(R.color.light_orange);
@@ -354,7 +651,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 //            textView.setLayoutParams(textViewParam);
             switch (i) {
                 case 0:
-                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 2f);
+                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 3.4f);
                     textViewParam.setMargins(1, 5, 1, 1);
                     textView.setLayoutParams(textViewParam);
                     textView.setText(bundlNo);
@@ -401,13 +698,24 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                     textView.setLayoutParams(textViewParam);
                     textView.setText(area);
                     break;
+//                case 8:
+//                    textViewParam = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
+//                    textViewParam.setMargins(1, 5, 10, 1);
+//                    textView.setLayoutParams(textViewParam);
+////                    textView.setText("Print");
+////                    textView.setTextColor(ContextCompat.getColor(this, R.color.white));
+//                    textView.setBackgroundResource(R.drawable.ic_print_24dp);
+//                    break;
                 case 8:
-                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+                    CheckBox checkBox = new CheckBox(this);
+                    textViewParam = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
                     textViewParam.setMargins(1, 5, 1, 1);
-                    textView.setLayoutParams(textViewParam);
-                    textView.setText("Print");
-                    textView.setTextColor(ContextCompat.getColor(this, R.color.white));
-                    textView.setBackgroundResource(R.color.orange);
+                    checkBox.setLayoutParams(textViewParam);
+                    checkBox.setText("");
+                    checkBox.setTag(""+index);
+                    checkBox.setTextColor(ContextCompat.getColor(this, R.color.white));
+                    checkBox.setBackgroundResource( R.color.light_orange);
+                    tableRow.addView(checkBox);
                     break;
             }
             tableRow.addView(textView);
@@ -482,7 +790,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         String barcode_data = data;
         Bitmap bitmap = null;//  AZTEC -->QR
         try {
-            bitmap = encodeAsBitmap(barcode_data, BarcodeFormat.CODE_128, 1100, 200);
+            bitmap = encodeAsBitmap(barcode_data, BarcodeFormat.CODE_128, 50, 50);
         } catch (WriterException e) {
             e.printStackTrace();
         }
@@ -635,6 +943,53 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 
     }
 
+
+    public boolean isStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                Log.v("", "Permission is granted");
+                return true;
+            } else {
+
+                Log.v("", "Permission is revoked");
+                ActivityCompat.requestPermissions(
+                        this,
+                        new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+                        1);
+                return false;
+            }
+        } else { // permission is automatically granted on sdk<23 upon
+            // installation
+            Log.v("", "Permission is granted");
+            return true;
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            Log.v("", "Permission: " + permissions[0] + "was "
+                    + grantResults[0]);
+            // resume tasks needing this permission
+
+            File file = null;
+            try {
+                file = createPdf();
+                PrintAll(file);
+                bundleInfoForPrint.clear();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (DocumentException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+    }
+
     private class JSONTask2 extends AsyncTask<String, String, String> {
 
         @Override
@@ -688,8 +1043,10 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
             Log.e("inventory report", "json 2 " + s);
             if (s != null) {
                 if (s.contains("DELETE BUNDLE SUCCESS")) {
+                    bundlesTable.removeView(tableRowToDelete);
                     bundleInfoServer2.remove(index);
                     databaseHandler.deleteBundle(bundleNumber);
+                    Toast.makeText(InventoryReport.this, "Deleted successfully", Toast.LENGTH_SHORT).show();
                     filters();
                     Log.e("inventoryReport", "****Success");
                 } else {

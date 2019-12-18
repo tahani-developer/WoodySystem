@@ -45,6 +45,8 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
     private StringRequest bundlesJsonObjectRequest;
     private String urlBundles;
     private InventoryReport inventoryReport;//= new InventoryReport();
+
+    private static String serialNo;
 //    private String urlImport = "http://" + SettingsFile.ipAddress + "/import.php?FLAG=1";//http://5.189.130.98:8085/import.php?FLAG=1
 
 //    private String urlUsers = "http://" + SettingsFile.ipAddress + "/import.php?FLAG=0";//http://10.0.0.214/WOODY/import.php?FLAG=0
@@ -69,25 +71,80 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
     @Override
     public void onErrorResponse(VolleyError error) {
         Log.e("presenter/import/err ", "" + error);
-        SettingsFile.serialNumber = "";
+        setSerialNo("");
+//        SettingsFile.serialNumber = "";
     }
 
     @Override
     public void onResponse(String response) {
         try {
-            if (response.indexOf("{") == 3)
-                response = new String(response.getBytes("ISO-8859-1"), "UTF-8");
+//            settings = databaseHandler.getSettings();
+//            switch (settings.getStore()){
+//                case "Amman":
+//                    presenter.getImportData();
+//                    break;
+//                case "Kalinovka":
+//                    presenter.getImportData();
+//                    break;
+//                case "Rudniya Store":
+//                    presenter.getImportData();
+//                    break;
+//                case "Rudniya Sawmill":
+//                    presenter.getImportData();
+//                    break;
+//            }
+            if (response.contains("MAX_SERIAL")) {
+                if (response.indexOf("{") == 3)
+                    response = new String(response.getBytes("ISO-8859-1"), "UTF-8");
 //                response = response.substring(response.indexOf("{"));
-            Log.e("presenter: import ", "" + response);
-            JSONObject object = new JSONObject(response);
-            Log.e("presenter1: import ", "" + response);
-            JSONObject object2 = object.getJSONArray("Bundles").getJSONObject(0);
-            Log.e("presenter2: import ", "" + object2);
-            SettingsFile.serialNumber = "";
-            SettingsFile.serialNumber = object2.getString("MAX_SERIAL");
-            Log.e("presenter3: import ", "" + object2.getString("MAX_SERIAL"));
-            Log.e("presenter4: import ", "" + SettingsFile.serialNumber);
+                Log.e("presenter: import ", "" + response);
+                JSONObject object = new JSONObject(response);
+                Log.e("presenter1: import ", "" + response);
+                JSONArray object2 = object.getJSONArray("Bundles");
+                Log.e("presenter2: import ", "" + object2);
 
+                for (int i = 0; i < object2.length(); i++) {
+                    String store = object2.getJSONObject(i).getString("LOCATION");
+                    if (store.equals(settings.getStore())) {
+                        int intSerial = (Integer.parseInt(object2.getJSONObject(i).getString("MAX_SERIAL")) + 1);
+//                        SettingsFile.serialNumber = ("" + intSerial);
+                        setSerialNo("" + intSerial);
+                        Log.e("presenter3: import ", "" + object2.getJSONObject(i).getString("MAX_SERIAL"));
+                        break;
+                    } else
+                        setSerialNo("1");
+//                        SettingsFile.serialNumber = "1";
+                }
+//            String store = object2.getString("LOCATION");
+//            SettingsFile.serialNumber = "";
+//            switch (settings.getStore()){
+//                case "Amman":
+//                    int intSerial = (Integer.parseInt(object2.getString("MAX_SERIAL")) + 1);
+//                    SettingsFile.serialNumber = ("" + intSerial);
+//                    break;
+//                case "Kalinovka":
+//                    int intSerial = (Integer.parseInt(object2.getString("MAX_SERIAL")) + 1);
+//                    SettingsFile.serialNumber = ("" + intSerial);
+//                    break;
+//                case "Rudniya Store":
+//                    int intSerial = (Integer.parseInt(object2.getString("MAX_SERIAL")) + 1);
+//                    SettingsFile.serialNumber = ("" + intSerial);
+//                    break;
+//                case "Rudniya Sawmill":
+//                    int intSerial = (Integer.parseInt(object2.getString("MAX_SERIAL")) + 1);
+//                    SettingsFile.serialNumber = ("" + intSerial);
+//                    break;
+//            }
+
+
+//            String stringSerial = object2.getString("MAX_SERIAL");
+//            int intSerial = (Integer.parseInt(object2.getString("MAX_SERIAL")) + 1);
+//            SettingsFile.serialNumber = ("" + intSerial);
+//            Log.e("presenter3: import ", "" + object2.getString("MAX_SERIAL"));
+                Log.e("presenter4: import ", "" + getSerialNo());//SettingsFile.serialNumber
+            } else
+                setSerialNo("1");
+//                SettingsFile.serialNumber = "1";
         } catch (JSONException e) {
             e.printStackTrace();
 //        } catch (UnsupportedEncodingException e) {
@@ -98,12 +155,20 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
 
     }
 
+    public String getSerialNo() {
+        return serialNo;
+    }
+
+    public void setSerialNo(String value) {
+        serialNo = value;
+    }
+
     //------------------------------------------------------------------------------------------------
 
     void getUsersData() {
         settings = databaseHandler.getSettings();
-        urlUsers = "http://" + settings.getIpAddress() + "/import.php?FLAG=0";
-//        Log.e("presenter/urlUsers ", "" + urlUsers);
+        urlUsers = "http://" + settings.getIpAddress() + "/import.php?FLAG=0";//http://10.0.0.214/woody/import.php?FLAG=0
+        Log.e("presenter/urlUsers ", "" + urlUsers);
 //        Log.e("presenter:ipUsers ", "" + SettingsFile.ipAddress);
         usersJsonObjectRequest = new StringRequest(Request.Method.GET, urlUsers, new UsersResponseClass(), new UsersResponseClass());
         requestQueue.add(usersJsonObjectRequest);
