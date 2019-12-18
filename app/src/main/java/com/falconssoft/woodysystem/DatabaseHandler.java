@@ -21,7 +21,7 @@ import java.util.List;
 public class DatabaseHandler extends SQLiteOpenHelper {
 
     private static String TAG = "DatabaseHandler";
-    private static final int DATABASE_VERSION = 17;
+    private static final int DATABASE_VERSION = 18;
     private static final String DATABASE_NAME = "WoodyDatabase";
     static SQLiteDatabase db;
 
@@ -31,6 +31,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String SETTINGS_COMPANY_NAME = "COMPANY_NAME";
     private static final String SETTINGS_IP_ADDRESS = "IP_ADDRESS";
     private static final String SETTINGS_STORE = "STORE";
+    private static final String SETTINGS_USER_NO = "USER_NO";
 
     //******************************************************************
     private static final String BUNDLE_INFO_TABLE = "BUNDLE_INFO_TABLE";
@@ -97,7 +98,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String CREATE_TABLE_SETTINGS = "CREATE TABLE " + SETTINGS_TABLE + "("
                 + SETTINGS_COMPANY_NAME + " TEXT,"
                 + SETTINGS_IP_ADDRESS + " TEXT,"
-                + SETTINGS_STORE + " TEXT" + ")";
+                + SETTINGS_STORE + " TEXT,"
+                + SETTINGS_USER_NO + " TEXT" + ")";
         db.execSQL(CREATE_TABLE_SETTINGS);
 
         String CREATE_INVENTORY_INFO_TABLE = "CREATE TABLE " + BUNDLE_INFO_TABLE + "("
@@ -154,6 +156,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+        try {
+            db.execSQL("ALTER TABLE SETTINGS_TABLE ADD " + SETTINGS_USER_NO + " TEXT");
+        }catch (Exception e){
+            Log.e("upgrade", "USER NO");
+        }
+
         try {
             db.execSQL("ALTER TABLE BUNDLE_INFO_TABLE ADD " + BUNDLE_INFO_SERIAL + " TEXT NOT NULL DEFAULT ''");
         } catch (Exception e) {
@@ -197,6 +206,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     // **************************************************** Adding ****************************************************
+//    public void addSettingsUserNo(String userNo){
+//        db = this.getReadableDatabase();
+//        ContentValues contentValues = new ContentValues();
+//        contentValues.put(SETTINGS_USER_NO, userNo);
+//        db.insert(SETTINGS_TABLE, null, contentValues);
+//        db.close();
+//    }
+
     public void addSettings(Settings settings) {
         db = this.getReadableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -358,6 +375,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 settings.setCompanyName(cursor.getString(0));
                 settings.setIpAddress(cursor.getString(1));
                 settings.setStore(cursor.getString(2));
+                settings.setUserNo(cursor.getString(3));
+
 //                SettingsFile.companyName = cursor.getString(0);
 //                SettingsFile.ipAddress = cursor.getString(1);
 //                SettingsFile.store = cursor.getString(2);
@@ -498,6 +517,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     // **************************************************** Getting ****************************************************
+
+    public void updateSettingsUserNo(String userNo) {
+        db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(SETTINGS_USER_NO, userNo);
+        db.update(SETTINGS_TABLE, values, null, null);
+    }
+
     public void updateBundlesSerial(String bundleNo, String serial) {
         db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -529,7 +557,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(BUNDLE_INFO_PRINTED, printed);
         db.update(BUNDLE_INFO_TABLE, values, BUNDLE_INFO_BUNDLE_NO + " = '" + bundleNo + "'", null);
     }
-
 
     public void updateAllPrinting(String bundleNo, int printed) {
         db = this.getWritableDatabase();

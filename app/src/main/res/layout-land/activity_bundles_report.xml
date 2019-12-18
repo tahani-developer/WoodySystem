@@ -79,7 +79,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="serif"
-                android:text="@string/serial_no"
+                android:text="@string/serial"
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
                 android:textColor="@color/white"

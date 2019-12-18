@@ -62,7 +62,7 @@ public class Stage3 extends AppCompatActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.stage3_enter_inventory:
-                presenter.getImportData();
+//                presenter.getImportData();
                 Intent intent = new Intent(this, AddToInventory.class);
                 startActivity(intent);
 //                setSlideAnimation();

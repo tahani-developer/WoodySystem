@@ -29,6 +29,7 @@ public class BundleInfo {
     private int isPrinted;
     private String description;
     private String serialNo;
+    private String userNo;
 
     public BundleInfo() {
     }
@@ -73,6 +74,14 @@ public class BundleInfo {
         this.isPrinted = isPrinted;
         this.description = description;
         this.serialNo = serialNo;
+    }
+
+    public String getUserNo() {
+        return userNo;
+    }
+
+    public void setUserNo(String userNo) {
+        this.userNo = userNo;
     }
 
     public String getSerialNo() {

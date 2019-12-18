@@ -51,6 +51,7 @@ import com.falconssoft.woodysystem.DatabaseHandler;
 import com.falconssoft.woodysystem.PrinterCommands;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.ReportsActivity;
+import com.falconssoft.woodysystem.WoodPresenter;
 import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.Settings;
 import com.google.zxing.BarcodeFormat;
@@ -98,6 +99,7 @@ public class BundlesReport extends AppCompatActivity {
 
     private TableLayout bundlesTable;
     private DatabaseHandler databaseHandler;
+    private WoodPresenter presenter;
     private List<BundleInfo> bundleInfoForPrint = new ArrayList<>();
     private List<BundleInfo> bundleInfos = new ArrayList<>();
     private Animation animation;
@@ -114,6 +116,8 @@ public class BundlesReport extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bundles_report);
+
+        presenter = new WoodPresenter(this);
         printAll = findViewById(R.id.loading_order_report_printAll);
         textView = findViewById(R.id.loading_order_report_tv);
         delete = findViewById(R.id.loading_order_report_delete);
@@ -123,7 +127,8 @@ public class BundlesReport extends AppCompatActivity {
 
         bundlesTable = findViewById(R.id.addToInventory_table);
         databaseHandler = new DatabaseHandler(this);
-        fillTable();
+        presenter.getPrintBarcodeData( this);
+//        fillTable();
 
         checkBoxPrinter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -245,8 +250,12 @@ public class BundlesReport extends AppCompatActivity {
 //        printManager.print(jobName, mPrintDocumentAdapter, null);
 //    }
 
-    void fillTable() {
-        bundleInfos = databaseHandler.getAllBundleInfo("0");
+    public void fillTable() {
+        Log.e("compare", "" + presenter.getBundleReportList().size());
+        for (int i = 0; i < presenter.getBundleReportList().size(); i++)
+                bundleInfos.add(presenter.getBundleReportList().get(i));
+        Log.e("compare2", "" + bundleInfos.size());
+
         generalSettings = new Settings();
         generalSettings = databaseHandler.getSettings();
 
@@ -327,7 +336,7 @@ public class BundlesReport extends AppCompatActivity {
                         Log.e("b", bundleNo);
                         AlertDialog.Builder builder = new AlertDialog.Builder(BundlesReport.this);
                         builder.setMessage("Are you want hide bundle number: " + bundleNo + " ?");
-                        builder.setTitle("Delete");
+                        builder.setTitle("Hide");
                         builder.setIcon(R.drawable.ic_warning_black_24dp);
                         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
@@ -777,6 +786,7 @@ public class BundlesReport extends AppCompatActivity {
         }
 
     }
+}
 
     private class JSONTask2 extends AsyncTask<String, String, String> {
 
