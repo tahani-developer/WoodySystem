@@ -24,6 +24,7 @@
     <string name="to">To</string>
     <string name="no_bundle"># Bundle</string>
     <string name="no_pieces"># Pieces</string>
+    <string name="loading_order_no">L.order No</string>
 
     <string name="company_name">Company Name</string>
     <string name="ip_address">IP Address</string>
@@ -74,5 +75,15 @@
     <string name="serial">Serial</string>
     <string name="serial_no">Serial No</string>
     <string name="delete">Delete</string>
+    <string name="hide">Hide</string>
+
+    <string name="new_raw">New Raw</string>
+    <string name="supplier_no">Supplier #</string>
+    <string name="supplier_name">Supplier Name</string>
+    <string name="raw_thickness">Thickness</string>
+    <string name="search">Search</string>
+    <string name="acceptance_info">Acceptance Info</string>
+    <string name="generate_barcode">Generate Barcode</string>
+
 
 </resources>

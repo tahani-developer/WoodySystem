@@ -76,7 +76,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 
     private static final int WHITE = 0xFFFFFFFF;
     private static final int BLACK = 0xFF000000;
-    private EditText thickness, length, width, noOfPieces, serialNo;
+    private EditText thickness, length, width, noOfPieces, serialNo, loadingOrderNo;
     private Spinner gradeSpinner, areaSpinner, descriptionSpinner;//, locationSpinner
     private TableLayout bundlesTable;
     private LinearLayout linearLayoutView;
@@ -117,6 +117,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         noOfPieces = findViewById(R.id.addToInventory_no_of_pieces);
         gradeSpinner = findViewById(R.id.addToInventory_grade);
         serialNo = findViewById(R.id.addToInventory_serial_no);
+        loadingOrderNo = findViewById(R.id.addToInventory_loading_order_no);
 //        locationSpinner = findViewById(R.id.addToInventory_location);
         areaSpinner = findViewById(R.id.addToInventory_area);
         descriptionSpinner = findViewById(R.id.addToInventory_description);
@@ -184,6 +185,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         String lengthText = length.getText().toString();
         String widthText = width.getText().toString();
         String noOfPiecesText = noOfPieces.getText().toString();
+        String loadingOrderNoText = loadingOrderNo.getText().toString();
+
 //         String bundleNoString;,
         switch (v.getId()) {
             case R.id.addToInventory_add_button:

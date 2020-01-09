@@ -16,6 +16,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.falconssoft.woodysystem.stage_one.AddNewRaw;
+import com.falconssoft.woodysystem.stage_one.StageOne;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private RelativeLayout relativeLayout;
@@ -102,16 +105,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.s1:
-//                Intent intent = new Intent(MainActivity.this , Stage3.class);
-//                startActivity(intent);
+                Intent intent1 = new Intent(MainActivity.this , StageOne.class);
+                startActivity(intent1);
                 break;
             case R.id.s2:
 //                Intent intent = new Intent(MainActivity.this , Stage3.class);
 //                startActivity(intent);
                 break;
             case R.id.s3:
-                Intent intent = new Intent(MainActivity.this, Stage3.class);
-                startActivity(intent);
+                Intent intent2 = new Intent(MainActivity.this, Stage3.class);
+                startActivity(intent2);
 //                setSlideAnimation();
                 break;
         }

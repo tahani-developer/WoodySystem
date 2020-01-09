@@ -121,7 +121,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private String bundleNumber;
     private int index;
     private CheckBox checkBoxPrint;
-    List<BundleInfo> bundleInfoForPrint = new ArrayList<>();
+    private List<BundleInfo> bundleInfoForPrint = new ArrayList<>();
     private Button printAll, delete;
     private TableRow tableRowToDelete = null;
 
