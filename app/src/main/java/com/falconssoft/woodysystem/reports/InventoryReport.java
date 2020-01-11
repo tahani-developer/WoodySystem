@@ -121,7 +121,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private String bundleNumber;
     private int index;
     private CheckBox checkBoxPrint;
-    List<BundleInfo> bundleInfoForPrint = new ArrayList<>();
+    private List<BundleInfo> bundleInfoForPrint = new ArrayList<>();
     private Button printAll, delete;
     private TableRow tableRowToDelete = null;
 
@@ -532,7 +532,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                     , m
                     , filteredList.get(m).getSerialNo());
             bundlesTable.addView(tableRow);
-            TableRow finalTableRow = tableRow;
+//            TableRow finalTableRow = tableRow;
 //            tableRow.getVirtualChildAt(8).setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {
@@ -552,60 +552,60 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 //
 //                }
 //            });
-            TableRow finalTableRow1 = tableRow;
-            tableRow.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-//                                                TextView textView = ((TextView) tableRow.getChildAt(0));
-//                                                tableRow.setBackgroundResource(R.color.light_orange_2);
-                    bundleNumber = ((TextView) finalTableRow1.getChildAt(0)).getText().toString();
-                    index = 0;
-                    Log.e("b", bundleNumber);
-                    for (int i = 0; i < bundleInfoServer2.size(); i++)
-                        if (bundleNumber.equals(bundleInfoServer2.get(i).getBundleNo())) {
-                            index = i;
-                            break;
-                        }
-
-                    Dialog passwordDialog = new Dialog(InventoryReport.this);
-                    passwordDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    passwordDialog.setContentView(R.layout.password_dialog);
-                    passwordDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-                    TextInputEditText password = passwordDialog.findViewById(R.id.password_dialog_password);
-                    TextView done = passwordDialog.findViewById(R.id.password_dialog_done);
-
-                    done.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (password.getText().toString().equals("301190")) {
-                                tableRowToDelete = finalTableRow1;
-                                new JSONTask2().execute();
-//                                bundlesTable.removeView(finalTableRow1);
-                                passwordDialog.dismiss();
-                            } else {
-                                Toast.makeText(InventoryReport.this, "Not Authorized!", Toast.LENGTH_SHORT).show();
-                                password.setText("");
-                            }
-                        }
-                    });
-
-                    passwordDialog.show();
-//                    AlertDialog.Builder builder = new AlertDialog.Builder(InventoryReport.this);
-//                    builder.setMessage("Are you want delete bundle number: " + bundleNumber + " ?");
-//                    builder.setTitle("Delete");
-//                    builder.setIcon(R.drawable.ic_warning_black_24dp);
-//                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//            TableRow finalTableRow1 = tableRow;
+//            tableRow.setOnLongClickListener(new View.OnLongClickListener() {
+//                @Override
+//                public boolean onLongClick(View v) {
+////                                                TextView textView = ((TextView) tableRow.getChildAt(0));
+////                                                tableRow.setBackgroundResource(R.color.light_orange_2);
+//                    bundleNumber = ((TextView) finalTableRow1.getChildAt(0)).getText().toString();
+//                    index = 0;
+//                    Log.e("b", bundleNumber);
+//                    for (int i = 0; i < bundleInfoServer2.size(); i++)
+//                        if (bundleNumber.equals(bundleInfoServer2.get(i).getBundleNo())) {
+//                            index = i;
+//                            break;
+//                        }
+//
+//                    Dialog passwordDialog = new Dialog(InventoryReport.this);
+//                    passwordDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//                    passwordDialog.setContentView(R.layout.password_dialog);
+//                    passwordDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//
+//                    TextInputEditText password = passwordDialog.findViewById(R.id.password_dialog_password);
+//                    TextView done = passwordDialog.findViewById(R.id.password_dialog_done);
+//
+//                    done.setOnClickListener(new View.OnClickListener() {
 //                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            new JSONTask2().execute();
-//                            bundlesTable.removeView(finalTableRow1);
+//                        public void onClick(View v) {
+//                            if (password.getText().toString().equals("301190")) {
+//                                tableRowToDelete = finalTableRow1;
+//                                new JSONTask2().execute();
+////                                bundlesTable.removeView(finalTableRow1);
+//                                passwordDialog.dismiss();
+//                            } else {
+//                                Toast.makeText(InventoryReport.this, "Not Authorized!", Toast.LENGTH_SHORT).show();
+//                                password.setText("");
+//                            }
 //                        }
 //                    });
-//                    builder.show();
-                    return false;
-                }
-            });
+//
+//                    passwordDialog.show();
+////                    AlertDialog.Builder builder = new AlertDialog.Builder(InventoryReport.this);
+////                    builder.setMessage("Are you want delete bundle number: " + bundleNumber + " ?");
+////                    builder.setTitle("Delete");
+////                    builder.setIcon(R.drawable.ic_warning_black_24dp);
+////                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+////                        @Override
+////                        public void onClick(DialogInterface dialog, int which) {
+////                            new JSONTask2().execute();
+////                            bundlesTable.removeView(finalTableRow1);
+////                        }
+////                    });
+////                    builder.show();
+//                    return false;
+//                }
+//            });
 
 //            TableRow clickTableRow = tableRow;
 //            tableRow.setOnLongClickListener(new View.OnLongClickListener() {
@@ -921,10 +921,49 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                     @Override
                     public void onClick(View v) {
                         if (password.getText().toString().equals("301190")) {
-                            for (int n = 0; n < filtered.size(); n++)
-                                jsonArrayBundles.put(filtered.get(n).getJSONObject());
+                            bundleInfoForPrint.clear();
+                            for (int i = 0; i < bundlesTable.getChildCount(); i++) {
+                                TableRow table = (TableRow) bundlesTable.getChildAt(i);
+                                CheckBox bundleCheck = (CheckBox) table.getChildAt(9);
+                                if (bundleCheck.isChecked()) {
+                                    BundleInfo bundleInfo = new BundleInfo();
+                                    bundleInfo = filtered.get(Integer.parseInt(bundleCheck.getTag().toString()));
+                                    bundleInfoForPrint.add(bundleInfo);
+                                    jsonArrayBundles.put(bundleInfoForPrint.get(bundleInfoForPrint.size() - 1).getJSONObject());
+                                }
+                            }
+
                             new JSONTask3().execute();
                             passwordDialog.dismiss();
+//                            bundleInfoForPrint.clear();
+
+//                            new android.support.v7.app.AlertDialog.Builder(InventoryReport.this)
+//                                    .setTitle("Confirm Delete")
+//                                    .setMessage("Are you sure you want to delete checked data ?!")
+//                                    .setIcon(android.R.drawable.ic_dialog_alert)
+//                                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+//                                        public void onClick(DialogInterface dialog, int whichButton) {
+//
+//                                            List<BundleInfo> BundleDelete=new ArrayList<>();
+//
+//                                            for (int i = 0; i < bundlesTable.getChildCount(); i++) {
+//                                                TableRow table = (TableRow) bundlesTable.getChildAt(i);
+//                                                CheckBox bundleCheck = (CheckBox) table.getChildAt(9);
+//                                                TextView bundleNo = (TextView) table.getChildAt(1);
+//                                                if (bundleCheck.isChecked()) {
+//                                                    jsonArrayBundles.put(filtered.get(Integer.parseInt(bundleNo.getTag().toString())));
+//                                                }
+//                                            }
+//
+//                                            new JSONTask3().execute();
+//                                            passwordDialog.dismiss();
+//                                            bundleInfoForPrint.clear();
+//
+//                                        }
+//                                    })
+//                                    .setNegativeButton("Cancel", null).show();
+
+
                         } else {
                             Toast.makeText(InventoryReport.this, "Not Authorized!", Toast.LENGTH_SHORT).show();
                             password.setText("");
@@ -1122,16 +1161,16 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
             Log.e("inventory report", "json 3 " + s);
             if (s != null) {
                 if (s.contains("DELETE ALL BUNDLES SUCCESS")) {
-                    for (int i = 0; i < filtered.size(); i++) {
+                    for (int i = 0; i < bundleInfoForPrint.size(); i++) {
 //                        databaseHandler.deleteBundle(filtered.get(i).getBundleNo());
                         for (int k = 0; k < bundleInfoServer2.size(); k++)
-                            if (bundleInfoServer2.get(k).getBundleNo().equals(filtered.get(i).getBundleNo())) {
+                            if (bundleInfoServer2.get(k).getBundleNo().equals(bundleInfoForPrint.get(i).getBundleNo())) {
                                 bundleInfoServer2.remove(k);
                                 k = bundleInfoServer2.size();
                             }
                     }
 //                    bundlesForDelete.clear();
-                    bundlesTable.removeAllViews();
+//                    bundlesTable.removeAllViews();
                     filters();
                     Log.e("tag", "****Success");
                 } else {

@@ -32,8 +32,8 @@ public class Stage3 extends AppCompatActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stage3);
 
-        presenter = new WoodPresenter(this);
-        databaseHandler = new DatabaseHandler(this);
+//        presenter = new WoodPresenter(this);
+//        databaseHandler = new DatabaseHandler(this);
         enterInventory = findViewById(R.id.stage3_enter_inventory);
         loadingOrder = findViewById(R.id.stage3_loading_order);
         reports = findViewById(R.id.stage3_reports);

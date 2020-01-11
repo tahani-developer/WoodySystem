@@ -186,6 +186,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
 
         @Override
         public void onErrorResponse(VolleyError error) {
+            getUsersData();
             Log.e("presenter/users/err ", "" + settings.getIpAddress() + " *** " + urlUsers + " *** " + error);
             if (error instanceof NetworkError) {
             } else if (error instanceof ServerError) {

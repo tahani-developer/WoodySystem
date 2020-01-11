@@ -61,7 +61,7 @@
                     android:layout_height="40dp"
                     android:background="@drawable/shape_with_corner"
                     android:padding="3dp"
-                    android:text="@string/delete"
+                    android:text="@string/hide"
                     android:fontFamily="serif"
                     android:textAllCaps="false"
                     android:textColor="@color/orange"
