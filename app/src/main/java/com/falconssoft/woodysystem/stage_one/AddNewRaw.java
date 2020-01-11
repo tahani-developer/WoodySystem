@@ -1,10 +1,12 @@
 package com.falconssoft.woodysystem.stage_one;
 
 import android.app.Dialog;
+import android.opengl.ETC1;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.falconssoft.woodysystem.R;
@@ -12,6 +14,7 @@ import com.falconssoft.woodysystem.R;
 public class AddNewRaw extends AppCompatActivity implements View.OnClickListener {
 
     private TextView addNewSupplier, searchSupplier;
+    private EditText thickness, width, length, noOfPieces, noOfBundles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
