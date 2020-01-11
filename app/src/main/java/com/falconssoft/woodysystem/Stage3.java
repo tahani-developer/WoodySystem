@@ -80,7 +80,14 @@ public class Stage3 extends AppCompatActivity implements View.OnClickListener {
         }
     }
 
-//    public void setSlideAnimation() {
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(Stage3.this , MainActivity.class);
+        startActivity(intent);
+    }
+
+    //    public void setSlideAnimation() {
 //        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
 //    }
 
