@@ -85,5 +85,14 @@
     <string name="acceptance_info">Acceptance Info</string>
     <string name="generate_barcode">Generate Barcode</string>
 
+    <string name="accept_raw">Accept Row</string>
+    <string name="name_of_supplier">Name Of Supplier</string>
+    <string name="truck_no">Truck Number</string>
+    <string name="date_of_acceptance">Date Of Acceptance</string>
+    <string name="name_of_person_to_accept">Name Of Person To Accept</string>
+    <string name="location_of_acceptance">Location Of Acceptance</string>
+    <string name="ttn_no">TTN Number</string>
+    <string name="rejection_list">Rejection List</string>
+
 
 </resources>
