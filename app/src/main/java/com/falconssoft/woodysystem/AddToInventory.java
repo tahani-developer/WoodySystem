@@ -369,7 +369,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                                 String bundleNo = ((TextView) tableRow.getChildAt(0)).getText().toString();
                                                 Log.e("b", bundleNo);
                                                 AlertDialog.Builder builder = new AlertDialog.Builder(AddToInventory.this);
-                                                builder.setMessage("Are you want delete bundle number: " + bundleNo + " ?");
+                                                builder.setMessage("Do you want to delete bundle number: " + bundleNo + " ?");
                                                 builder.setTitle("Delete");
                                                 builder.setIcon(R.drawable.ic_warning_black_24dp);
                                                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {

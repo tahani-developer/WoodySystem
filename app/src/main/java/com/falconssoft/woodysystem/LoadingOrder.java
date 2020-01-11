@@ -65,6 +65,8 @@ public class LoadingOrder extends AppCompatActivity {
         DHandler = new DatabaseHandler(LoadingOrder.this);
 //        bundles = DHandler.getBundleInfo();
 
+        bundles = new ArrayList<>();
+        
         new JSONTask().execute();
 
         filteredList = new ArrayList<>();
@@ -125,7 +127,7 @@ public class LoadingOrder extends AppCompatActivity {
             public boolean onQueryTextChange(String query) {
 
                 f1 = query;
-                List filteredList = filter(bundles, f1, f2, f3);
+                filteredList = filter(bundles, f1, f2, f3);
                 ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, filteredList);
                 items.setAdapter(adapter);
 
@@ -143,7 +145,7 @@ public class LoadingOrder extends AppCompatActivity {
             public boolean onQueryTextChange(String query) {
 
                 f2 = query;
-                List filteredList = filter(bundles, f1, f2, f3);
+                filteredList = filter(bundles, f1, f2, f3);
                 ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, filteredList);
                 items.setAdapter(adapter);
 
@@ -161,7 +163,7 @@ public class LoadingOrder extends AppCompatActivity {
             public boolean onQueryTextChange(String query) {
 
                 f3 = query;
-                List filteredList = filter(bundles, f1, f2, f3);
+                filteredList = filter(bundles, f1, f2, f3);
                 ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, filteredList);
                 items.setAdapter(adapter);
 
@@ -292,7 +294,7 @@ public class LoadingOrder extends AppCompatActivity {
 
                 try {
                     JSONArray parentArrayOrders = parentObject.getJSONArray("BUNDLE_INFO");
-                    bundles = new ArrayList<>();
+
                     for (int i = 0; i < parentArrayOrders.length(); i++) {
                         JSONObject innerObject = parentArrayOrders.getJSONObject(i);
 
