@@ -14,7 +14,7 @@ import com.falconssoft.woodysystem.R;
 public class AddNewRaw extends AppCompatActivity implements View.OnClickListener {
 
     private TextView addNewSupplier, searchSupplier;
-    private EditText thickness, width, length, noOfPieces, noOfBundles;
+    private EditText thickness, width, length, noOfPieces, noOfBundles ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
