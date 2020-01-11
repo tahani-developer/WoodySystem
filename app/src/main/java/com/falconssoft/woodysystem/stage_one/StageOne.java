@@ -48,6 +48,8 @@ public class StageOne extends AppCompatActivity implements View.OnClickListener 
 //                setSlideAnimation();
                 break;
             case R.id.stage1_accept_info:
+                Intent intent2 = new Intent(this, AcceptRow.class);
+                startActivity(intent2);
                 break;
             case R.id.stage1_generate_barcode:
                 break;
