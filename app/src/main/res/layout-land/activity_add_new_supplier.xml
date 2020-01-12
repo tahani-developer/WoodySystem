@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/w10"
+    android:background="@drawable/wooddecor"
     tools:context=".stage_one.AddNewSupplier">
 
     <LinearLayout
@@ -108,7 +108,7 @@
                     android:fontFamily="serif"
                     android:textColor="@color/white"
                     android:textSize="15sp" />
-              
+
             </TableRow>
 
             <ScrollView
