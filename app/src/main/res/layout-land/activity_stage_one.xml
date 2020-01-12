@@ -42,10 +42,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="10dp"
+                android:fontFamily="serif"
                 android:gravity="center_horizontal"
                 android:lineSpacingExtra="15dp"
-                android:text="@string/new_raw"
-                android:fontFamily="serif"
+                android:text="@string/enter_inventory"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
         </LinearLayout>

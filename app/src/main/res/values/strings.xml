@@ -22,7 +22,7 @@
     <string name="detail">Detail</string>
     <string name="from">From</string>
     <string name="to">To</string>
-    <string name="no_bundle"># Bundle</string>
+    <string name="no_bundle"># Bundles</string>
     <string name="no_pieces"># Pieces</string>
     <string name="loading_order_no">L.order No</string>
 
@@ -81,7 +81,7 @@
     <string name="supplier_no">Supplier #</string>
     <string name="supplier_name">Supplier Name</string>
     <string name="raw_thickness">Thickness</string>
-    <string name="search">Search</string>
+    <string name="search">Search ...</string>
     <string name="acceptance_info">Acceptance Info</string>
     <string name="generate_barcode">Generate Barcode</string>
 

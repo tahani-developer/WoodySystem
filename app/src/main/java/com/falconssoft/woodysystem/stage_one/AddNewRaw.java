@@ -1,6 +1,7 @@
 package com.falconssoft.woodysystem.stage_one;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.opengl.ETC1;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -33,11 +34,8 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.addNewRaw_add_supplier:
-                Dialog addSupplierDialog = new Dialog(this);
-                addSupplierDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                addSupplierDialog.setContentView(R.layout.add_supplier_dialog);
-                addSupplierDialog.show();
-
+                Intent intent = new Intent(AddNewRaw.this, AddNewSupplier.class);
+                startActivity(intent);
                 break;
             case R.id.addNewRaw_search_supplier:
                 break;
