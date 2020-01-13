@@ -154,6 +154,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                         && passwordText.equals(usersList.get(i).getPassword())) {
                                     found = true;
                                     i = usersList.size();
+                                    databaseHandler.updateSettingsUserNo(usernameText);
+//                                    databaseHandler.addSettingsUserNo(usernameText);
                                     Intent intent2 = new Intent(this, MainActivity.class);
                                     startActivity(intent2);
                                 }

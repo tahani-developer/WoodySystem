@@ -22,8 +22,9 @@
     <string name="detail">Detail</string>
     <string name="from">From</string>
     <string name="to">To</string>
-    <string name="no_bundle"># Bundle</string>
+    <string name="no_bundle"># Bundles</string>
     <string name="no_pieces"># Pieces</string>
+    <string name="loading_order_no">L.order No</string>
 
     <string name="company_name">Company Name</string>
     <string name="ip_address">IP Address</string>
@@ -71,7 +72,27 @@
     <string name="print_all">Print All</string>
     <string name="delete_all">Delete All</string>
     <string name="print">Print</string>
-    <string name="serial_no">Serial</string>
+    <string name="serial">Serial</string>
+    <string name="serial_no">Serial No</string>
     <string name="delete">Delete</string>
+    <string name="hide">Hide</string>
+
+    <string name="new_raw">New Raw</string>
+    <string name="supplier_no">Supplier #</string>
+    <string name="supplier_name">Supplier Name</string>
+    <string name="raw_thickness">Thickness</string>
+    <string name="search">Search ...</string>
+    <string name="acceptance_info">Acceptance Info</string>
+    <string name="generate_barcode">Generate Barcode</string>
+
+    <string name="accept_raw">Accept Row</string>
+    <string name="name_of_supplier">Name Of Supplier</string>
+    <string name="truck_no">Truck Number</string>
+    <string name="date_of_acceptance">Date Of Acceptance</string>
+    <string name="name_of_person_to_accept">Name Of Person To Accept</string>
+    <string name="location_of_acceptance">Location Of Acceptance</string>
+    <string name="ttn_no">TTN Number</string>
+    <string name="rejection_list">Rejection List</string>
+
 
 </resources>

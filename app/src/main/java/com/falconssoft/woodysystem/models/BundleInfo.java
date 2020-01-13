@@ -29,6 +29,7 @@ public class BundleInfo {
     private int isPrinted;
     private String description;
     private String serialNo;
+    private String userNo;
 
     public BundleInfo() {
     }
@@ -60,7 +61,7 @@ public class BundleInfo {
         this.hideFlag = hideFlag;
     }
 
-    public BundleInfo(double thickness, double length, double width, String grade, int noOfPieces, String bundleNo, String location, String area, String addingDate, int isPrinted, String description, String serialNo) {
+    public BundleInfo(double thickness, double length, double width, String grade, int noOfPieces, String bundleNo, String location, String area, String addingDate, int isPrinted, String description, String serialNo, String userNo) {
         this.thickness = thickness;
         this.length = length;
         this.width = width;
@@ -73,6 +74,15 @@ public class BundleInfo {
         this.isPrinted = isPrinted;
         this.description = description;
         this.serialNo = serialNo;
+        this.userNo = userNo;
+    }
+
+    public String getUserNo() {
+        return userNo;
+    }
+
+    public void setUserNo(String userNo) {
+        this.userNo = userNo;
     }
 
     public String getSerialNo() {
@@ -236,7 +246,8 @@ public class BundleInfo {
             obj.put("BUNDLE_DATE", "'" + addingDate + "'");
             obj.put("DESCRIPTION", "'" + description + "'");
             obj.put("B_SERIAL", "'" + serialNo + "'");
-
+            obj.put("USER_NO", "'" + userNo + "'");
+            obj.put("IS_PRINTED", "'" + isPrinted + "'");
         } catch (JSONException e) {
             Log.e("Tag", "JSONException");
         }

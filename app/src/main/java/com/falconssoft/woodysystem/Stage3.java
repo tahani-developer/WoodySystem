@@ -24,7 +24,7 @@ public class Stage3 extends AppCompatActivity implements View.OnClickListener {
     private Animation animation;
     private WoodPresenter presenter;
     private DatabaseHandler databaseHandler;
-    private List<String> list = new ArrayList<>();
+//    private List<String> list = new ArrayList<>();
     private Settings settings;
 
     @Override
@@ -32,8 +32,8 @@ public class Stage3 extends AppCompatActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stage3);
 
-        presenter = new WoodPresenter(this);
-        databaseHandler = new DatabaseHandler(this);
+//        presenter = new WoodPresenter(this);
+//        databaseHandler = new DatabaseHandler(this);
         enterInventory = findViewById(R.id.stage3_enter_inventory);
         loadingOrder = findViewById(R.id.stage3_loading_order);
         reports = findViewById(R.id.stage3_reports);
@@ -49,20 +49,20 @@ public class Stage3 extends AppCompatActivity implements View.OnClickListener {
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
         reports.setAnimation(animation);
 
-        list = databaseHandler.getBundleNo();
-        for (int i =0; i< list.size();i++){
-            String serialBefore = list.get(i);
-            String serial = serialBefore.substring(serialBefore.lastIndexOf(".") + 1);
-//            Log.e("stage 3 ", serial);
-            databaseHandler.updateBundlesSerial(list.get(i), serial);
-        }
+//        list = databaseHandler.getBundleNo();
+//        for (int i =0; i< list.size();i++){
+//            String serialBefore = list.get(i);
+//            String serial = serialBefore.substring(serialBefore.lastIndexOf(".") + 1);
+////            Log.e("stage 3 ", serial);
+//            databaseHandler.updateBundlesSerial(list.get(i), serial);
+//        }
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.stage3_enter_inventory:
-                presenter.getImportData();
+//                presenter.getImportData();
                 Intent intent = new Intent(this, AddToInventory.class);
                 startActivity(intent);
 //                setSlideAnimation();
@@ -80,7 +80,14 @@ public class Stage3 extends AppCompatActivity implements View.OnClickListener {
         }
     }
 
-//    public void setSlideAnimation() {
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(Stage3.this , MainActivity.class);
+        startActivity(intent);
+    }
+
+    //    public void setSlideAnimation() {
 //        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
 //    }
 

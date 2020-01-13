@@ -42,17 +42,6 @@
                 android:textColor="@color/orange"
                 android:textSize="30sp" />
 
-            <Button
-                android:id="@+id/printAll"
-                android:layout_width="wrap_content"
-                android:layout_height="45dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="3dp"
-                android:layout_weight="1"
-                android:background="@drawable/shape_with_corner"
-                android:text="@string/print"
-                android:textColor="@color/colorAccent" />
 
             <Button
                 android:id="@+id/delete"
@@ -196,6 +185,16 @@
             android:background="@color/orange">
 
             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:fontFamily="serif"
+                android:text="@string/serial"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+            <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
@@ -308,7 +307,7 @@
             android:background="@color/white" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:layout_marginStart="10dp"
@@ -384,7 +383,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="300dp"
+                android:layout_width="250dp"
                 android:layout_height="40dp"
                 android:background="@drawable/border_background"
                 android:layout_marginEnd="7dp"
@@ -396,7 +395,7 @@
                 >
 
                 <TextView
-                    android:layout_width="130dp"
+                    android:layout_width="100dp"
                     android:layout_height="match_parent"
                     android:background="@drawable/frame_shape"
                     android:fontFamily="serif"
@@ -417,9 +416,34 @@
 
             <TextView
                 android:id="@+id/inventory_report_delete"
-                android:layout_width="30dp"
-                android:layout_height="50dp"
-                android:drawableTop="@drawable/ic_delete_black_24dp"/>
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="7dp"
+                android:layout_marginRight="7dp"
+                android:paddingStart="10dp"
+                android:paddingLeft="10dp"
+                android:paddingEnd="10dp"
+                android:paddingRight="10dp"
+                android:background="@drawable/frame_shape"
+                android:text="@string/delete"
+                android:textSize="18sp"
+                android:textAllCaps="false"
+                android:fontFamily="serif"
+                android:textColor="@color/white"
+               />
+
+            <Button
+                android:id="@+id/printAll"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginTop="1dp"
+                android:background="@drawable/frame_shape"
+                android:text="@string/print"
+                android:textSize="18sp"
+                android:textAllCaps="false"
+                android:fontFamily="serif"
+                android:textColor="@color/white" />
 
         </LinearLayout>
 

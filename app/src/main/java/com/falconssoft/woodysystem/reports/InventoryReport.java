@@ -121,8 +121,9 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private String bundleNumber;
     private int index;
     private CheckBox checkBoxPrint;
-    List <BundleInfo>bundleInfoForPrint= new ArrayList<>();
-    private Button printAll,delete;
+    private List<BundleInfo> bundleInfoForPrint = new ArrayList<>();
+    private Button printAll, delete;
+    private TableRow tableRowToDelete = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,9 +147,9 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         noOfPieces = findViewById(R.id.inventory_report_no_pieces);
         cubicField = findViewById(R.id.inventory_report_cubic);
         deleteAll = findViewById(R.id.inventory_report_delete);
-        checkBoxPrint=findViewById(R.id.checkBoxPrint);
-        printAll=findViewById(R.id.printAll);
-        delete=findViewById(R.id.delete);
+        checkBoxPrint = findViewById(R.id.checkBoxPrint);
+        printAll = findViewById(R.id.printAll);
+        delete = findViewById(R.id.delete);
 
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         dateFrom.setText(df.format(date));
@@ -192,18 +193,18 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
             @Override
             public void onClick(View v) {
 
-                if(checkBoxPrint.isChecked()){
+                if (checkBoxPrint.isChecked()) {
 
                     for (int i = 0; i < bundlesTable.getChildCount(); i++) {
                         TableRow table = (TableRow) bundlesTable.getChildAt(i);
-                        CheckBox bundleCheck = (CheckBox) table.getChildAt(8);
+                        CheckBox bundleCheck = (CheckBox) table.getChildAt(9);
                         bundleCheck.setChecked(true);
 
                     }
-                }else{
+                } else {
                     for (int i = 0; i < bundlesTable.getChildCount(); i++) {
                         TableRow table = (TableRow) bundlesTable.getChildAt(i);
-                        CheckBox bundleCheck = (CheckBox) table.getChildAt(8);
+                        CheckBox bundleCheck = (CheckBox) table.getChildAt(9);
                         bundleCheck.setChecked(false);
 
                     }
@@ -221,16 +222,16 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                     bundleInfoForPrint.clear();
                     for (int i = 0; i < bundlesTable.getChildCount(); i++) {
                         TableRow table = (TableRow) bundlesTable.getChildAt(i);
-                        CheckBox bundleCheck = (CheckBox) table.getChildAt(8);
+                        CheckBox bundleCheck = (CheckBox) table.getChildAt(9);
                         if (bundleCheck.isChecked()) {
                             Log.e("bundelCheak", "" + i + "  " + filtered.get(Integer.parseInt(bundleCheck.getTag().toString())).getBundleNo());
                             bundleInfoForPrint.add(filtered.get(Integer.parseInt(bundleCheck.getTag().toString())));
                         }
                     }
 
-                    boolean permission= isStoragePermissionGranted();
+                    boolean permission = isStoragePermissionGranted();
 
-                    if(permission){
+                    if (permission) {
                         File file = null;
                         try {
                             file = createPdf();
@@ -449,6 +450,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 
     public void filters() {
         bundleInfoServer.clear();
+        Log.e("inventoryReport", "/bundleInfoServer2/size/" + bundleInfoServer2.size());
         for (int v = 0; v < bundleInfoServer2.size(); v++) {
             BundleInfo fake = new BundleInfo();
             fake = bundleInfoServer2.get(v);
@@ -469,7 +471,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                     || formatDate(bundleInfoServer.get(m).getAddingDate()).equals(formatDate(toDate))))
                 dateFiltered.add(bundleInfoServer.get(m));
         }
-        Log.e("follow", " size2 " + dateFiltered.size());
+        Log.e("follow/", "size2/dateFiltered/ " + dateFiltered.size());
 
 //        Log.e("follow", fromDate + " to " + toDate + " size1 " + bundleInfoServer.size() + " size2 " + dateFiltered.size());
 
@@ -490,7 +492,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                 filtered.add(dateFiltered.get(k));
 
         }
-        Log.e("follow", " size2 " + filtered.size());
+        Log.e("follow/", "size3/filtered/" + filtered.size());
         fillTable(filtered);
 
     }
@@ -527,9 +529,10 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                     , "" + filteredList.get(m).getNoOfPieces()
                     , filteredList.get(m).getLocation()
                     , filteredList.get(m).getArea()
-                    ,m);
+                    , m
+                    , filteredList.get(m).getSerialNo());
             bundlesTable.addView(tableRow);
-            TableRow finalTableRow = tableRow;
+//            TableRow finalTableRow = tableRow;
 //            tableRow.getVirtualChildAt(8).setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {
@@ -549,59 +552,60 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 //
 //                }
 //            });
-            TableRow finalTableRow1 = tableRow;
-            tableRow.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-//                                                TextView textView = ((TextView) tableRow.getChildAt(0));
-//                                                tableRow.setBackgroundResource(R.color.light_orange_2);
-                    bundleNumber = ((TextView) finalTableRow1.getChildAt(0)).getText().toString();
-                    index = 0;
-                    Log.e("b", bundleNumber);
-                    for (int i = 0; i < bundleInfoServer2.size(); i++)
-                        if (bundleNumber.equals(bundleInfoServer2.get(i).getBundleNo())) {
-                            index = i;
-                            break;
-                        }
-
-                    Dialog passwordDialog = new Dialog(InventoryReport.this);
-                    passwordDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    passwordDialog.setContentView(R.layout.password_dialog);
-                    passwordDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-                    TextInputEditText password = passwordDialog.findViewById(R.id.password_dialog_password);
-                    TextView done = passwordDialog.findViewById(R.id.password_dialog_done);
-
-                    done.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (password.getText().toString().equals("301190")) {
-                                new JSONTask2().execute();
-                                bundlesTable.removeView(finalTableRow1);
-                                passwordDialog.dismiss();
-                            } else {
-                                Toast.makeText(InventoryReport.this, "Not Authorized!", Toast.LENGTH_SHORT).show();
-                                password.setText("");
-                            }
-                        }
-                    });
-
-                    passwordDialog.show();
-//                    AlertDialog.Builder builder = new AlertDialog.Builder(InventoryReport.this);
-//                    builder.setMessage("Are you want delete bundle number: " + bundleNumber + " ?");
-//                    builder.setTitle("Delete");
-//                    builder.setIcon(R.drawable.ic_warning_black_24dp);
-//                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//            TableRow finalTableRow1 = tableRow;
+//            tableRow.setOnLongClickListener(new View.OnLongClickListener() {
+//                @Override
+//                public boolean onLongClick(View v) {
+////                                                TextView textView = ((TextView) tableRow.getChildAt(0));
+////                                                tableRow.setBackgroundResource(R.color.light_orange_2);
+//                    bundleNumber = ((TextView) finalTableRow1.getChildAt(0)).getText().toString();
+//                    index = 0;
+//                    Log.e("b", bundleNumber);
+//                    for (int i = 0; i < bundleInfoServer2.size(); i++)
+//                        if (bundleNumber.equals(bundleInfoServer2.get(i).getBundleNo())) {
+//                            index = i;
+//                            break;
+//                        }
+//
+//                    Dialog passwordDialog = new Dialog(InventoryReport.this);
+//                    passwordDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//                    passwordDialog.setContentView(R.layout.password_dialog);
+//                    passwordDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//
+//                    TextInputEditText password = passwordDialog.findViewById(R.id.password_dialog_password);
+//                    TextView done = passwordDialog.findViewById(R.id.password_dialog_done);
+//
+//                    done.setOnClickListener(new View.OnClickListener() {
 //                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            new JSONTask2().execute();
-//                            bundlesTable.removeView(finalTableRow1);
+//                        public void onClick(View v) {
+//                            if (password.getText().toString().equals("301190")) {
+//                                tableRowToDelete = finalTableRow1;
+//                                new JSONTask2().execute();
+////                                bundlesTable.removeView(finalTableRow1);
+//                                passwordDialog.dismiss();
+//                            } else {
+//                                Toast.makeText(InventoryReport.this, "Not Authorized!", Toast.LENGTH_SHORT).show();
+//                                password.setText("");
+//                            }
 //                        }
 //                    });
-//                    builder.show();
-                    return false;
-                }
-            });
+//
+//                    passwordDialog.show();
+////                    AlertDialog.Builder builder = new AlertDialog.Builder(InventoryReport.this);
+////                    builder.setMessage("Are you want delete bundle number: " + bundleNumber + " ?");
+////                    builder.setTitle("Delete");
+////                    builder.setIcon(R.drawable.ic_warning_black_24dp);
+////                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+////                        @Override
+////                        public void onClick(DialogInterface dialog, int which) {
+////                            new JSONTask2().execute();
+////                            bundlesTable.removeView(finalTableRow1);
+////                        }
+////                    });
+////                    builder.show();
+//                    return false;
+//                }
+//            });
 
 //            TableRow clickTableRow = tableRow;
 //            tableRow.setOnLongClickListener(new View.OnLongClickListener() {
@@ -637,8 +641,8 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         Log.e("follow", "filltable " + filteredList.size());
     }
 
-    TableRow fillTableRows(TableRow tableRow, String bundlNo, String length, String width, String thic, String grade, String noOfPieces, String location, String area,int index) {
-        for (int i = 0; i < 9; i++) {
+    TableRow fillTableRows(TableRow tableRow, String bundlNo, String length, String width, String thic, String grade, String noOfPieces, String location, String area, int index, String serial) {
+        for (int i = 0; i < 10; i++) {
             TextView textView = new TextView(this);
             textView.setBackgroundResource(R.color.light_orange);
             TableRow.LayoutParams textViewParam;
@@ -649,48 +653,54 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 //            textView.setLayoutParams(textViewParam);
             switch (i) {
                 case 0:
+                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+                    textViewParam.setMargins(1, 5, 1, 1);
+                    textView.setLayoutParams(textViewParam);
+                    textView.setText(serial);
+                    break;
+                case 1:
                     textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 3.4f);
                     textViewParam.setMargins(1, 5, 1, 1);
                     textView.setLayoutParams(textViewParam);
                     textView.setText(bundlNo);
                     break;
-                case 1:
+                case 2:
                     textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
                     textViewParam.setMargins(1, 5, 1, 1);
                     textView.setLayoutParams(textViewParam);
                     textView.setText(length);
                     break;
-                case 2:
+                case 3:
                     textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
                     textViewParam.setMargins(1, 5, 1, 1);
                     textView.setLayoutParams(textViewParam);
                     textView.setText(width);
                     break;
-                case 3:
+                case 4:
                     textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
                     textViewParam.setMargins(1, 5, 1, 1);
                     textView.setLayoutParams(textViewParam);
                     textView.setText(thic);
                     break;
-                case 4:
+                case 5:
                     textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
                     textViewParam.setMargins(1, 5, 1, 1);
                     textView.setLayoutParams(textViewParam);
                     textView.setText(grade);
                     break;
-                case 5:
+                case 6:
                     textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
                     textViewParam.setMargins(1, 5, 1, 1);
                     textView.setLayoutParams(textViewParam);
                     textView.setText(noOfPieces);
                     break;
-                case 6:
+                case 7:
                     textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1.5f);
                     textViewParam.setMargins(1, 5, 1, 1);
                     textView.setLayoutParams(textViewParam);
                     textView.setText(location);
                     break;
-                case 7:
+                case 8:
                     textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
                     textViewParam.setMargins(1, 5, 1, 1);
                     textView.setLayoutParams(textViewParam);
@@ -704,15 +714,15 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 ////                    textView.setTextColor(ContextCompat.getColor(this, R.color.white));
 //                    textView.setBackgroundResource(R.drawable.ic_print_24dp);
 //                    break;
-                case 8:
+                case 9:
                     CheckBox checkBox = new CheckBox(this);
                     textViewParam = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
                     textViewParam.setMargins(1, 5, 1, 1);
                     checkBox.setLayoutParams(textViewParam);
                     checkBox.setText("");
-                    checkBox.setTag(""+index);
+                    checkBox.setTag("" + index);
                     checkBox.setTextColor(ContextCompat.getColor(this, R.color.white));
-                    checkBox.setBackgroundResource( R.color.light_orange);
+                    checkBox.setBackgroundResource(R.color.light_orange);
                     tableRow.addView(checkBox);
                     break;
             }
@@ -911,10 +921,49 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                     @Override
                     public void onClick(View v) {
                         if (password.getText().toString().equals("301190")) {
-                            for (int n = 0; n < filtered.size(); n++)
-                                jsonArrayBundles.put(filtered.get(n).getJSONObject());
+                            bundleInfoForPrint.clear();
+                            for (int i = 0; i < bundlesTable.getChildCount(); i++) {
+                                TableRow table = (TableRow) bundlesTable.getChildAt(i);
+                                CheckBox bundleCheck = (CheckBox) table.getChildAt(9);
+                                if (bundleCheck.isChecked()) {
+                                    BundleInfo bundleInfo = new BundleInfo();
+                                    bundleInfo = filtered.get(Integer.parseInt(bundleCheck.getTag().toString()));
+                                    bundleInfoForPrint.add(bundleInfo);
+                                    jsonArrayBundles.put(bundleInfoForPrint.get(bundleInfoForPrint.size() - 1).getJSONObject());
+                                }
+                            }
+
                             new JSONTask3().execute();
                             passwordDialog.dismiss();
+//                            bundleInfoForPrint.clear();
+
+//                            new android.support.v7.app.AlertDialog.Builder(InventoryReport.this)
+//                                    .setTitle("Confirm Delete")
+//                                    .setMessage("Are you sure you want to delete checked data ?!")
+//                                    .setIcon(android.R.drawable.ic_dialog_alert)
+//                                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+//                                        public void onClick(DialogInterface dialog, int whichButton) {
+//
+//                                            List<BundleInfo> BundleDelete=new ArrayList<>();
+//
+//                                            for (int i = 0; i < bundlesTable.getChildCount(); i++) {
+//                                                TableRow table = (TableRow) bundlesTable.getChildAt(i);
+//                                                CheckBox bundleCheck = (CheckBox) table.getChildAt(9);
+//                                                TextView bundleNo = (TextView) table.getChildAt(1);
+//                                                if (bundleCheck.isChecked()) {
+//                                                    jsonArrayBundles.put(filtered.get(Integer.parseInt(bundleNo.getTag().toString())));
+//                                                }
+//                                            }
+//
+//                                            new JSONTask3().execute();
+//                                            passwordDialog.dismiss();
+//                                            bundleInfoForPrint.clear();
+//
+//                                        }
+//                                    })
+//                                    .setNegativeButton("Cancel", null).show();
+
+
                         } else {
                             Toast.makeText(InventoryReport.this, "Not Authorized!", Toast.LENGTH_SHORT).show();
                             password.setText("");
@@ -952,7 +1001,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                 Log.v("", "Permission is revoked");
                 ActivityCompat.requestPermissions(
                         this,
-                        new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         1);
                 return false;
             }
@@ -1041,8 +1090,10 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
             Log.e("inventory report", "json 2 " + s);
             if (s != null) {
                 if (s.contains("DELETE BUNDLE SUCCESS")) {
+                    bundlesTable.removeView(tableRowToDelete);
                     bundleInfoServer2.remove(index);
-                    databaseHandler.deleteBundle(bundleNumber);
+//                    databaseHandler.deleteBundle(bundleNumber);
+                    Toast.makeText(InventoryReport.this, "Deleted successfully", Toast.LENGTH_SHORT).show();
                     filters();
                     Log.e("inventoryReport", "****Success");
                 } else {
@@ -1110,16 +1161,16 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
             Log.e("inventory report", "json 3 " + s);
             if (s != null) {
                 if (s.contains("DELETE ALL BUNDLES SUCCESS")) {
-                    for (int i = 0; i < filtered.size(); i++) {
-                        databaseHandler.deleteBundle(filtered.get(i).getBundleNo());
+                    for (int i = 0; i < bundleInfoForPrint.size(); i++) {
+//                        databaseHandler.deleteBundle(filtered.get(i).getBundleNo());
                         for (int k = 0; k < bundleInfoServer2.size(); k++)
-                            if (bundleInfoServer2.get(k).getBundleNo().equals(filtered.get(i).getBundleNo())) {
+                            if (bundleInfoServer2.get(k).getBundleNo().equals(bundleInfoForPrint.get(i).getBundleNo())) {
                                 bundleInfoServer2.remove(k);
                                 k = bundleInfoServer2.size();
                             }
                     }
 //                    bundlesForDelete.clear();
-                    bundlesTable.removeAllViews();
+//                    bundlesTable.removeAllViews();
                     filters();
                     Log.e("tag", "****Success");
                 } else {
