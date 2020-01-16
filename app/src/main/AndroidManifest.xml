@@ -35,6 +35,9 @@
             android:name=".AddToInventory"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
+            android:name=".stage_one.GenerateBarCode"
+            android:screenOrientation="sensorLandscape" />
+        <activity
             android:name=".Stage3"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity

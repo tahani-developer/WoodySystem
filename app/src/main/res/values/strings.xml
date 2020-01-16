@@ -93,6 +93,8 @@
     <string name="location_of_acceptance">Location Of Acceptance</string>
     <string name="ttn_no">TTN Number</string>
     <string name="rejection_list">Rejection List</string>
+    <string name="generate_Barcode">Generate Barcode</string>
+
 
 
 </resources>

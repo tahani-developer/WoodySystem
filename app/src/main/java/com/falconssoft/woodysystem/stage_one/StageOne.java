@@ -52,6 +52,8 @@ public class StageOne extends AppCompatActivity implements View.OnClickListener 
                 startActivity(intent2);
                 break;
             case R.id.stage1_generate_barcode:
+                Intent intent3 = new Intent(this, GenerateBarCode.class);
+                startActivity(intent3);
                 break;
         }
     }
