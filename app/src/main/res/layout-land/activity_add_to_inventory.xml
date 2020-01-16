@@ -242,6 +242,7 @@
                         android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_weight="2"
+                        android:nextFocusDown="@id/addToInventory_backing_list"
                         android:ems="10"
                         android:inputType="number" />
 
@@ -264,17 +265,17 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:textSize="18sp"
-                        android:text="@string/loading_order_no" />
+                        android:text="@string/backing_list" />
 
                     <EditText
-                        android:id="@+id/addToInventory_loading_order_no"
+                        android:id="@+id/addToInventory_backing_list"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_weight="2"
                         android:ems="10"
-                        android:inputType="number" />
+                         />
 
                 </LinearLayout>
 

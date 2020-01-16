@@ -13,8 +13,9 @@
     <color name="orange">#FF7500</color>
     <color name="light_orange">#FAEBD7</color>
     <color name="light_orange_2">#DD792E</color>
+    <color name="light_orange_3">#F7CEBF</color>
     <color name="orangeHover">#EC9568</color>
-<!--    F1712F-->
+    <!--    F1712F-->
     <color name="alpha_black">#320C0C0C</color>
     <color name="alpha_black_dark">#680C0C0C</color>
     <color name="alpha_white">#C1FAFAFA</color>
