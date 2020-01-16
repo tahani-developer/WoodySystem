@@ -25,6 +25,7 @@
     <string name="no_bundle"># Bundles</string>
     <string name="no_pieces"># Pieces</string>
     <string name="loading_order_no">L.order No</string>
+    <string name="backing_list">Backing List</string>
 
     <string name="company_name">Company Name</string>
     <string name="ip_address">IP Address</string>
@@ -93,6 +94,9 @@
     <string name="location_of_acceptance">Location Of Acceptance</string>
     <string name="ttn_no">TTN Number</string>
     <string name="rejection_list">Rejection List</string>
+    <string name="new_supplier">New Supplier</string>
+    <string name="find_supplier">Find Supplier</string>
+
 
 
 </resources>

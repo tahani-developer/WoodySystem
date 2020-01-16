@@ -35,9 +35,9 @@
             android:drawableStart="@drawable/axe"
             android:drawableLeft="@drawable/axe"
             android:drawablePadding="10dp"
-            android:gravity="start"
-            android:text="@string/new_raw"
             android:fontFamily="serif"
+            android:gravity="start"
+            android:text="@string/new_supplier"
             android:textColor="@color/orange"
             android:textSize="30sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -95,19 +95,21 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/supplier_no"
                     android:fontFamily="serif"
+                    android:padding="2dp"
+                    android:text="@string/supplier_no"
                     android:textColor="@color/white"
-                    android:textSize="15sp" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
-                    android:text="@string/supplier_name"
                     android:fontFamily="serif"
+                    android:padding="2dp"
+                    android:text="@string/supplier_name"
                     android:textColor="@color/white"
-                    android:textSize="15sp" />
+                    android:textSize="18sp" />
 
             </TableRow>
 
