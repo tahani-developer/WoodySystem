@@ -1,21 +1,18 @@
-package com.falconssoft.woodysystem.reports;
+package com.falconssoft.woodysystem.stage_one;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.CancellationSignal;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
@@ -23,16 +20,11 @@ import android.print.PageRange;
 import android.print.PrintAttributes;
 import android.print.PrintDocumentAdapter;
 import android.print.PrintDocumentInfo;
-import android.print.PrintJob;
-import android.print.PrintJobInfo;
 import android.print.PrintManager;
-import android.print.PrinterInfo;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.print.PrintHelper;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -48,9 +40,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.falconssoft.woodysystem.DatabaseHandler;
-import com.falconssoft.woodysystem.PrinterCommands;
 import com.falconssoft.woodysystem.R;
-import com.falconssoft.woodysystem.ReportsActivity;
 import com.falconssoft.woodysystem.WoodPresenter;
 import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.Settings;
@@ -74,7 +64,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -95,7 +84,7 @@ import java.util.Map;
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.WHITE;
 
-public class BundlesReport extends AppCompatActivity {
+public class GenerateBarCode extends AppCompatActivity {
 
     private TableLayout bundlesTable;
     private DatabaseHandler databaseHandler;
@@ -117,7 +106,7 @@ public class BundlesReport extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bundles_report);
+        setContentView(R.layout.activity_bundles_print_stag_one);
 
         presenter = new WoodPresenter(this);
         printAll = findViewById(R.id.loading_order_report_printAll);
@@ -129,8 +118,8 @@ public class BundlesReport extends AppCompatActivity {
 
         bundlesTable = findViewById(R.id.addToInventory_table);
         databaseHandler = new DatabaseHandler(this);
-        presenter.getPrintBarcodeData(this);
-//        fillTable();
+//        presenter.getPrintBarcodeData(GenerateBarCode.this);
+        fillTable();
 
         checkBoxPrinter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,14 +129,16 @@ public class BundlesReport extends AppCompatActivity {
 
                     for (int i = 0; i < bundlesTable.getChildCount(); i++) {
                         TableRow table = (TableRow) bundlesTable.getChildAt(i);
-                        CheckBox bundleCheck = (CheckBox) table.getChildAt(10);
+                        CheckBox bundleCheck = (CheckBox) table.getChildAt(9);
                         bundleCheck.setChecked(true);
+//                        String thic2=isContenValueAfterDot("38.0");
+//                        isContenValueAfterDot("38.012");
 
                     }
                 } else {
                     for (int i = 0; i < bundlesTable.getChildCount(); i++) {
                         TableRow table = (TableRow) bundlesTable.getChildAt(i);
-                        CheckBox bundleCheck = (CheckBox) table.getChildAt(10);
+                        CheckBox bundleCheck = (CheckBox) table.getChildAt(9);
                         bundleCheck.setChecked(false);
 
                     }
@@ -166,7 +157,7 @@ public class BundlesReport extends AppCompatActivity {
                     bundleInfoForPrint.clear();
                     for (int i = 0; i < bundlesTable.getChildCount(); i++) {
                         TableRow table = (TableRow) bundlesTable.getChildAt(i);
-                        CheckBox bundleCheck = (CheckBox) table.getChildAt(10);
+                        CheckBox bundleCheck = (CheckBox) table.getChildAt(9);
                         if (bundleCheck.isChecked()) {
                             Log.e("bundelCheak", "" + i + "  " + bundleInfos.get(Integer.parseInt(bundleCheck.getTag().toString())).getBundleNo());
                             bundleInfoForPrint.add(bundleInfos.get(Integer.parseInt(bundleCheck.getTag().toString())));
@@ -198,7 +189,7 @@ public class BundlesReport extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View v) {
-                new android.support.v7.app.AlertDialog.Builder(BundlesReport.this)
+                new android.support.v7.app.AlertDialog.Builder(GenerateBarCode.this)
                         .setTitle("Confirm Hide")
                         .setMessage("Are you sure you want to hide checked data ?!")
                         .setIcon(android.R.drawable.ic_dialog_alert)
@@ -209,7 +200,7 @@ public class BundlesReport extends AppCompatActivity {
                                 bundlesNoRows = new ArrayList<>();
                                 for (int i = 0; i < bundlesTable.getChildCount(); i++) {
                                     TableRow table = (TableRow) bundlesTable.getChildAt(i);
-                                    CheckBox bundleCheck = (CheckBox) table.getChildAt(10);
+                                    CheckBox bundleCheck = (CheckBox) table.getChildAt(9);
                                     TextView bundleNo = (TextView) table.getChildAt(1);
                                     if (bundleCheck.isChecked()) {
                                         bundlesNoRows.add(table);
@@ -222,7 +213,7 @@ public class BundlesReport extends AppCompatActivity {
                                     }
                                 }
 
-                                new JSONTask3().execute();
+//                                new JSONTask3().execute();
 
 //                                for (int i = 0; i < bundleInfoForPrint.size(); i++) {
 //                                    databaseHandler.updateAllPrinting(bundleInfoForPrint.get(i).getBundleNo(), 1);
@@ -254,8 +245,35 @@ public class BundlesReport extends AppCompatActivity {
 
     public void fillTable() {
         Log.e("compare", "" + presenter.getBundleReportList().size());
-        for (int i = 0; i < presenter.getBundleReportList().size(); i++)
-            bundleInfos.add(presenter.getBundleReportList().get(i));
+//        for (int i = 0; i < presenter.getBundleReportList().size(); i++)
+//            bundleInfos.add(presenter.getBundleReportList().get(i));
+
+        for(int i=0;i<5;i++){
+
+            BundleInfo bundleInfo = new BundleInfo();
+            if(i==4){
+                bundleInfo.setThickness(38.124);
+            }else{
+                bundleInfo.setThickness(38);
+            }
+
+            bundleInfo.setWidth(100);
+            bundleInfo.setLength(547);
+            bundleInfo.setGrade("Fresh");
+            bundleInfo.setNoOfPieces(100);
+            bundleInfo.setBundleNo("FRAmm38.100.547.100."+(9+i));
+            bundleInfo.setLocation("Amman");
+            bundleInfo.setArea("Zone1");
+            bundleInfo.setBarcode("");
+            bundleInfo.setOrdered(1);
+//                      bundleInfo.setPicture(innerObject.getString("PIC"));
+            bundleInfo.setAddingDate("");
+            bundleInfo.setUserNo("");
+            bundleInfo.setSerialNo((9+i)+"");
+            bundleInfos.add(bundleInfo);
+        }
+
+
         Log.e("compare2", "" + bundleInfos.size());
 
         generalSettings = new Settings();
@@ -288,7 +306,6 @@ public class BundlesReport extends AppCompatActivity {
                         , R.color.light_orange
                         , m
                         , bundleInfos.get(m).getSerialNo()
-                        , bundleInfos.get(m).getBackingList()
                 );
                 bundlesTable.addView(tableRow);
 
@@ -349,7 +366,7 @@ public class BundlesReport extends AppCompatActivity {
         }
     }
 
-    TableRow fillTableRows(TableRow tableRow, String bundlNo, String length, String width, String thic, String grade, String noOfPieces, String location, String area, int backgroundColor, int indexInList, String serialNo, String backingList) {
+    TableRow fillTableRows(TableRow tableRow, String bundlNo, String length, String width, String thic, String grade, String noOfPieces, String location, String area, int backgroundColor, int indexInList, String serialNo) {
 
         for (int i = 0; i < 11; i++) {
             TextView textView = new TextView(this);
@@ -426,13 +443,6 @@ public class BundlesReport extends AppCompatActivity {
                     textView.setText(area);
                     break;
                 case 9:
-                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
-                    textViewParam.setMargins(1, 5, 1, 1);
-                    textView.setPadding(1, 6, 1, 7);
-                    textView.setLayoutParams(textViewParam);
-                    textView.setText(backingList);
-                    break;
-                case 10:
                     CheckBox checkBox = new CheckBox(this);
                     textViewParam = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
                     textViewParam.setMargins(1, 5, 1, 1);
@@ -443,6 +453,7 @@ public class BundlesReport extends AppCompatActivity {
                     checkBox.setBackgroundResource(backgroundColor);
                     tableRow.addView(checkBox);
                     break;
+
             }
             tableRow.addView(textView);
         }
@@ -468,7 +479,7 @@ public class BundlesReport extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void PrintAll(File file) {
-        PrintManager printManager = (PrintManager) BundlesReport.this.getSystemService(Context.PRINT_SERVICE);
+        PrintManager printManager = (PrintManager) GenerateBarCode.this.getSystemService(Context.PRINT_SERVICE);
         String jobName = " Document";
 
 
@@ -544,7 +555,7 @@ public class BundlesReport extends AppCompatActivity {
 //        Date date = new Date() ;
 //        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(date);
 
-        File myFile = new File(pdfFolder + "kk" + ".pdf");
+        File myFile = new File(pdfFolder + "Genarated" + ".pdf");
         return myFile;
     }
 
@@ -577,7 +588,7 @@ public class BundlesReport extends AppCompatActivity {
             for (int i = 0; i < bundleInfoForPrint.size(); i++) {
                 if (bundleInfoForPrint.get(i).getIsPrinted() != 1) {
                     Bitmap bitmap = writeBarcode(String.valueOf(bundleInfoForPrint.get(i).getBundleNo()), String.valueOf(bundleInfoForPrint.get(i).getLength()), String.valueOf(bundleInfoForPrint.get(i).getWidth()),
-                            String.valueOf(bundleInfoForPrint.get(i).getThickness()), String.valueOf(bundleInfoForPrint.get(i).getGrade()), String.valueOf(bundleInfoForPrint.get(i).getNoOfPieces()));
+                            String.valueOf(bundleInfoForPrint.get(i).getThickness()), String.valueOf(bundleInfoForPrint.get(i).getGrade()), String.valueOf(bundleInfoForPrint.get(i).getNoOfPieces()),"Supplier Name", String.valueOf(bundleInfoForPrint.get(i).getNoOfPieces()));
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
                     Image signature;
@@ -636,13 +647,14 @@ public class BundlesReport extends AppCompatActivity {
 //        printManager.print(jobName, pda, attrib);
 //    }
 
-    public Bitmap writeBarcode(String data, String length, String width, String thic, String grades, String pcs) {
-        final Dialog dialog = new Dialog(BundlesReport.this);
+    public Bitmap writeBarcode(String data, String length, String width, String thic, String grades, String pcs,String SuplierName,String serialNo) {
+        final Dialog dialog = new Dialog(GenerateBarCode.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(true);
-        dialog.setContentView(R.layout.barcode_design);
-        TextView companyName, bundelNo, TLW, pcsNo, grade;
+        dialog.setContentView(R.layout.barcode_design_stage_one);
+        TextView companyName, bundelNo, TLW, pcsNo, grade,RejectNo;
 
+        RejectNo= (TextView) dialog.findViewById(R.id.RejectNo);
         companyName = (TextView) dialog.findViewById(R.id.companyName);
         bundelNo = (TextView) dialog.findViewById(R.id.bundelNo);
         TLW = (TextView) dialog.findViewById(R.id.TLW);
@@ -650,12 +662,18 @@ public class BundlesReport extends AppCompatActivity {
         grade = (TextView) dialog.findViewById(R.id.grade);
         ImageView iv = (ImageView) dialog.findViewById(R.id.barcode);
 
-        companyName.setText(generalSettings.getCompanyName());
+        companyName.setText(SuplierName);
         bundelNo.setText(data);
         TLW.setText(thic + " X " + width + " X " + length);
         pcsNo.setText(pcs);
         grade.setText(grades);
 
+        String thic2=isContenValueAfterDot(thic);
+        String width2=isContenValueAfterDot(width);
+        String length2=isContenValueAfterDot(length);
+
+
+        RejectNo.setText(thic2 + "." + width2 + "." + length2+"."+pcs+"."+serialNo);
 
         LinearLayout linearView = (LinearLayout) dialog.findViewById(R.id.design);
 
@@ -689,6 +707,22 @@ public class BundlesReport extends AppCompatActivity {
 //        dialog.show();
 
         return bitmaps;
+
+    }
+
+    String isContenValueAfterDot(String string){
+
+        String isConten="";
+        String afterDot=string.substring(string.indexOf(".")+1,string.length());
+        Log.e("afterDot",""+afterDot+"      "+string);
+        if(!(Integer.parseInt(afterDot)>0)){
+            isConten=string.substring(0,string.indexOf("."));
+        }else{
+            isConten=string;
+        }
+        Log.e("afterDotreturn",""+afterDot+"      "+isConten);
+
+        return isConten;
 
     }
 
@@ -740,7 +774,7 @@ public class BundlesReport extends AppCompatActivity {
 
     public boolean isStoragePermissionGranted() {
         if (Build.VERSION.SDK_INT >= 23) {
-            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 Log.v("", "Permission is granted");
                 return true;
             } else {
@@ -839,11 +873,11 @@ public class BundlesReport extends AppCompatActivity {
                     bundlesTable.removeView(hidedTableRow);
                     Log.e("BundleReport", "****Success");
                 } else {
-                    Toast.makeText(BundlesReport.this, "Failed to export data!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(GenerateBarCode.this, "Failed to export data!", Toast.LENGTH_SHORT).show();
 //                    Log.e("inventoryReport", "****Failed to export data");
                 }
             } else {
-                Toast.makeText(BundlesReport.this, "No internet connection!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(GenerateBarCode.this, "No internet connection!", Toast.LENGTH_SHORT).show();
 //                Log.e("inventoryReport", "****Failed to export data Please check internet connection");
             }
         }
@@ -908,11 +942,11 @@ public class BundlesReport extends AppCompatActivity {
                     }
                     Log.e("tag", "****Success");
                 } else {
-                    Toast.makeText(BundlesReport.this, "Failed to export data!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(GenerateBarCode.this, "Failed to export data!", Toast.LENGTH_SHORT).show();
 //                    Log.e("tag", "****Failed to export data");
                 }
             } else {
-                Toast.makeText(BundlesReport.this, "No internet connection!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(GenerateBarCode.this, "No internet connection!", Toast.LENGTH_SHORT).show();
 //                Log.e("tag", "****Failed to export data Please check internet connection");
             }
         }

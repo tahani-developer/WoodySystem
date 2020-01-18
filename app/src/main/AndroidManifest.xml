@@ -11,7 +11,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".stage_one.StageOne"></activity>
+        <activity android:name=".stage_one.AddNewSupplier"></activity>
+        <activity android:name=".stage_one.StageOne" />
         <activity android:name=".stage_one.AddNewRaw" />
         <activity android:name=".stage_one.AcceptRow" />
         <activity
@@ -33,6 +34,9 @@
         <activity
             android:name=".AddToInventory"
             android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".stage_one.GenerateBarCode"
+            android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".Stage3"
             android:windowSoftInputMode="stateAlwaysHidden" />

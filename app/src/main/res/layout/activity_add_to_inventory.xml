@@ -54,6 +54,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -68,11 +72,8 @@
                     android:id="@+id/addToInventory_linear_two"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
                     android:layout_weight="1"
                     android:background="@drawable/shape_with_corner"
                     android:orientation="horizontal"
@@ -104,9 +105,6 @@
                     android:id="@+id/addToInventory_linear_eight"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginRight="20dp"
                     android:layout_weight="1"
                     android:background="@drawable/shape_with_corner"
                     android:orientation="horizontal"
@@ -118,17 +116,17 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:textSize="18sp"
-                        android:text="@string/loading_order_no" />
+                        android:text="@string/b_list" />
 
                     <EditText
-                        android:id="@+id/addToInventory_loading_order_no"
+                        android:id="@+id/addToInventory_backing_list"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_weight="2"
                         android:ems="10"
-                        android:inputType="numberDecimal" />
+                        />
 
                 </LinearLayout>
 
@@ -145,10 +143,8 @@
                     android:id="@+id/addToInventory_linear_one"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
                     android:layout_weight="1"
                     android:background="@drawable/shape_with_corner"
                     android:orientation="horizontal"
@@ -174,13 +170,10 @@
                         android:inputType="numberDecimal" />
                 </LinearLayout>
 
-
                 <LinearLayout
                     android:id="@+id/addToInventory_linear_four"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginRight="20dp"
                     android:layout_weight="1"
                     android:background="@drawable/shape_with_corner"
                     android:orientation="horizontal"
@@ -220,10 +213,8 @@
                     android:id="@+id/addToInventory_linear_three"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
                     android:layout_weight="1"
                     android:background="@drawable/shape_with_corner"
                     android:orientation="horizontal"
@@ -250,13 +241,10 @@
 
                 </LinearLayout>
 
-
                 <LinearLayout
                     android:id="@+id/addToInventory_linear_six"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginRight="20dp"
                     android:layout_weight="1"
                     android:background="@drawable/shape_with_corner"
                     android:orientation="horizontal"
@@ -282,7 +270,6 @@
                         android:layout_weight="2"
                         />
                 </LinearLayout>
-
             </LinearLayout>
 
             <LinearLayout
@@ -295,10 +282,8 @@
                     android:id="@+id/addToInventory_linear_five"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
                     android:layout_weight="1"
                     android:background="@drawable/shape_with_corner"
                     android:orientation="horizontal"
@@ -325,13 +310,10 @@
 
                 </LinearLayout>
 
-
                 <LinearLayout
                     android:id="@+id/description_linear"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginRight="20dp"
                     android:layout_weight="1"
                     android:background="@drawable/shape_with_corner"
                     android:orientation="horizontal"
@@ -341,11 +323,11 @@
                         android:id="@+id/textView9"
                         android:layout_width="40dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
-                        android:textSize="18sp"
-                        android:text="@string/description" />
+                        android:layout_weight="1"
+                        android:text="@string/details"
+                        android:textSize="18sp" />
 
                     <Spinner
                         android:id="@+id/addToInventory_description"
@@ -371,10 +353,8 @@
                     android:id="@+id/addToInventory_linear_seven"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
                     android:layout_weight="1"
                     android:background="@drawable/shape_with_corner"
                     android:orientation="horizontal"
@@ -395,18 +375,14 @@
                         android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_weight="2"
-                        android:nextFocusDown="@id/addToInventory_loading_order_no"
+                        android:nextFocusDown="@id/addToInventory_backing_list"
                         android:ems="10"
                         android:inputType="numberDecimal" />
-
-
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginRight="20dp"
                     android:layout_weight="1"
                     android:background="@drawable/shape_with_corner"
                     android:orientation="horizontal">
@@ -446,93 +422,102 @@
             app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
             app:layout_constraintVertical_bias="0.0">
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/light_orange_2">
+<!--            <TableRow-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:background="@color/light_orange_2">-->
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/bundle_no"
-                    android:fontFamily="serif"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
+<!--                <TextView-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="@string/bundle_no"-->
+<!--                    android:fontFamily="serif"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    android:textSize="15sp" />-->
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/length"
-                    android:fontFamily="serif"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
+<!--                <TextView-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="@string/length"-->
+<!--                    android:fontFamily="serif"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    android:textSize="15sp" />-->
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/width"
-                    android:fontFamily="serif"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
+<!--                <TextView-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="@string/width"-->
+<!--                    android:fontFamily="serif"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    android:textSize="15sp" />-->
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/th"
-                    android:fontFamily="serif"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
+<!--                <TextView-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="@string/th"-->
+<!--                    android:fontFamily="serif"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    android:textSize="15sp" />-->
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/grade"
-                    android:fontFamily="serif"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
+<!--                <TextView-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="@string/grade"-->
+<!--                    android:fontFamily="serif"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    android:textSize="15sp" />-->
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/no_of_pieces"
-                    android:fontFamily="serif"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
+<!--                <TextView-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="@string/no_of_pieces"-->
+<!--                    android:fontFamily="serif"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    android:textSize="15sp" />-->
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/location"
-                    android:fontFamily="serif"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
+<!--                <TextView-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="@string/loc"-->
+<!--                    android:fontFamily="serif"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    android:textSize="15sp" />-->
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/area"
-                    android:fontFamily="serif"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
+<!--                <TextView-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="@string/area"-->
+<!--                    android:fontFamily="serif"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    android:textSize="15sp" />-->
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/detail"
-                    android:fontFamily="serif"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
+<!--                <TextView-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="@string/details"-->
+<!--                    android:fontFamily="serif"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    android:textSize="15sp" />-->
 
-            </TableRow>
+<!--                <TextView-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="@string/b_list"-->
+<!--                    android:fontFamily="serif"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    android:textSize="15sp" />-->
+
+<!--            </TableRow>-->
 
             <ScrollView
                 android:layout_width="match_parent"
@@ -560,6 +545,5 @@
                 android:layout_marginTop="2dp"
                 android:background="@color/light_orange_2"/>
         </LinearLayout>
-
     </android.support.constraint.ConstraintLayout>
 </RelativeLayout>

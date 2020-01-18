@@ -300,6 +300,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
 //                    bundleInfo.setPicture(innerObject.getString("PIC"));
                         bundleInfo.setAddingDate(innerObject.getString("BUNDLE_DATE"));
                         bundleInfo.setSerialNo(innerObject.getString("B_SERIAL"));
+                        bundleInfo.setBackingList(innerObject.getString("BACKING_LIST"));
 
                         bundleInfoServer2.add(bundleInfo);
                         bundleInfoServer.add(bundleInfo);
@@ -377,6 +378,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                         bundleInfo.setAddingDate(innerObject.getString("BUNDLE_DATE"));
                         bundleInfo.setUserNo(innerObject.getString("USER_NO"));
                         bundleInfo.setSerialNo(innerObject.getString("B_SERIAL"));
+                        bundleInfo.setBackingList(innerObject.getString("BACKING_LIST"));
 
                         bundleReportList.add(bundleInfo); // for first report
                     }
