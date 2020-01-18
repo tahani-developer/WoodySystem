@@ -119,7 +119,7 @@ public class GenerateBarCode extends AppCompatActivity {
         bundlesTable = findViewById(R.id.addToInventory_table);
         databaseHandler = new DatabaseHandler(this);
 //        presenter.getPrintBarcodeData(GenerateBarCode.this);
-//        fillTable();
+        fillTable();
 
         checkBoxPrinter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,6 +131,8 @@ public class GenerateBarCode extends AppCompatActivity {
                         TableRow table = (TableRow) bundlesTable.getChildAt(i);
                         CheckBox bundleCheck = (CheckBox) table.getChildAt(9);
                         bundleCheck.setChecked(true);
+//                        String thic2=isContenValueAfterDot("38.0");
+//                        isContenValueAfterDot("38.012");
 
                     }
                 } else {
@@ -211,7 +213,7 @@ public class GenerateBarCode extends AppCompatActivity {
                                     }
                                 }
 
-                                new JSONTask3().execute();
+//                                new JSONTask3().execute();
 
 //                                for (int i = 0; i < bundleInfoForPrint.size(); i++) {
 //                                    databaseHandler.updateAllPrinting(bundleInfoForPrint.get(i).getBundleNo(), 1);
@@ -243,8 +245,35 @@ public class GenerateBarCode extends AppCompatActivity {
 
     public void fillTable() {
         Log.e("compare", "" + presenter.getBundleReportList().size());
-        for (int i = 0; i < presenter.getBundleReportList().size(); i++)
-            bundleInfos.add(presenter.getBundleReportList().get(i));
+//        for (int i = 0; i < presenter.getBundleReportList().size(); i++)
+//            bundleInfos.add(presenter.getBundleReportList().get(i));
+
+        for(int i=0;i<5;i++){
+
+            BundleInfo bundleInfo = new BundleInfo();
+            if(i==4){
+                bundleInfo.setThickness(38.124);
+            }else{
+                bundleInfo.setThickness(38);
+            }
+
+            bundleInfo.setWidth(100);
+            bundleInfo.setLength(547);
+            bundleInfo.setGrade("Fresh");
+            bundleInfo.setNoOfPieces(100);
+            bundleInfo.setBundleNo("FRAmm38.100.547.100."+(9+i));
+            bundleInfo.setLocation("Amman");
+            bundleInfo.setArea("Zone1");
+            bundleInfo.setBarcode("");
+            bundleInfo.setOrdered(1);
+//                      bundleInfo.setPicture(innerObject.getString("PIC"));
+            bundleInfo.setAddingDate("");
+            bundleInfo.setUserNo("");
+            bundleInfo.setSerialNo((9+i)+"");
+            bundleInfos.add(bundleInfo);
+        }
+
+
         Log.e("compare2", "" + bundleInfos.size());
 
         generalSettings = new Settings();
@@ -526,7 +555,7 @@ public class GenerateBarCode extends AppCompatActivity {
 //        Date date = new Date() ;
 //        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(date);
 
-        File myFile = new File(pdfFolder + "kk" + ".pdf");
+        File myFile = new File(pdfFolder + "Genarated" + ".pdf");
         return myFile;
     }
 
@@ -559,7 +588,7 @@ public class GenerateBarCode extends AppCompatActivity {
             for (int i = 0; i < bundleInfoForPrint.size(); i++) {
                 if (bundleInfoForPrint.get(i).getIsPrinted() != 1) {
                     Bitmap bitmap = writeBarcode(String.valueOf(bundleInfoForPrint.get(i).getBundleNo()), String.valueOf(bundleInfoForPrint.get(i).getLength()), String.valueOf(bundleInfoForPrint.get(i).getWidth()),
-                            String.valueOf(bundleInfoForPrint.get(i).getThickness()), String.valueOf(bundleInfoForPrint.get(i).getGrade()), String.valueOf(bundleInfoForPrint.get(i).getNoOfPieces()),"");
+                            String.valueOf(bundleInfoForPrint.get(i).getThickness()), String.valueOf(bundleInfoForPrint.get(i).getGrade()), String.valueOf(bundleInfoForPrint.get(i).getNoOfPieces()),"Supplier Name", String.valueOf(bundleInfoForPrint.get(i).getNoOfPieces()));
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
                     Image signature;
@@ -618,7 +647,7 @@ public class GenerateBarCode extends AppCompatActivity {
 //        printManager.print(jobName, pda, attrib);
 //    }
 
-    public Bitmap writeBarcode(String data, String length, String width, String thic, String grades, String pcs,String SuplierName) {
+    public Bitmap writeBarcode(String data, String length, String width, String thic, String grades, String pcs,String SuplierName,String serialNo) {
         final Dialog dialog = new Dialog(GenerateBarCode.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(true);
@@ -638,7 +667,13 @@ public class GenerateBarCode extends AppCompatActivity {
         TLW.setText(thic + " X " + width + " X " + length);
         pcsNo.setText(pcs);
         grade.setText(grades);
-        RejectNo.setText(thic + " X " + width + " X " + length);
+
+        String thic2=isContenValueAfterDot(thic);
+        String width2=isContenValueAfterDot(width);
+        String length2=isContenValueAfterDot(length);
+
+
+        RejectNo.setText(thic2 + "." + width2 + "." + length2+"."+pcs+"."+serialNo);
 
         LinearLayout linearView = (LinearLayout) dialog.findViewById(R.id.design);
 
@@ -672,6 +707,22 @@ public class GenerateBarCode extends AppCompatActivity {
 //        dialog.show();
 
         return bitmaps;
+
+    }
+
+    String isContenValueAfterDot(String string){
+
+        String isConten="";
+        String afterDot=string.substring(string.indexOf(".")+1,string.length());
+        Log.e("afterDot",""+afterDot+"      "+string);
+        if(!(Integer.parseInt(afterDot)>0)){
+            isConten=string.substring(0,string.indexOf("."));
+        }else{
+            isConten=string;
+        }
+        Log.e("afterDotreturn",""+afterDot+"      "+isConten);
+
+        return isConten;
 
     }
 
