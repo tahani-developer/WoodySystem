@@ -98,6 +98,14 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+//        Intent intent = new Intent(ReportsActivity.this , Stage3.class);
+//        startActivity(intent);
+        finish();
+    }
+
 //    public void setSlideAnimation() {
 //        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
 //    }

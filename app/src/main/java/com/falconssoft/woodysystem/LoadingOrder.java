@@ -253,9 +253,9 @@ public class LoadingOrder extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
-        Intent intent = new Intent(LoadingOrder.this, Stage3.class);
-        startActivity(intent);
+//        Intent intent = new Intent(LoadingOrder.this, Stage3.class);
+//        startActivity(intent);
+        finish();
     }
 
     private class JSONTask extends AsyncTask<String, String, List<BundleInfo>> {
@@ -300,8 +300,8 @@ public class LoadingOrder extends AppCompatActivity {
 
                         if (innerObject.getInt("ORDERED") == 0
                                 && innerObject.getString("LOCATION").equals(DHandler.getSettings().getStore())
-                                && (!(innerObject.getString("BACKING_LIST").equals("")))
-                                && (!(innerObject.getString("BACKING_LIST").equals("null")))) {
+                                && ((innerObject.getString("BACKING_LIST").equals(""))
+                                || (innerObject.getString("BACKING_LIST").equals("null")))) {
 
                                 BundleInfo bundleInfo = new BundleInfo();
                                 bundleInfo.setThickness(innerObject.getDouble("THICKNESS"));
