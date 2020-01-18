@@ -66,7 +66,7 @@ public class LoadingOrder extends AppCompatActivity {
 //        bundles = DHandler.getBundleInfo();
 
         bundles = new ArrayList<>();
-        
+
         new JSONTask().execute();
 
         filteredList = new ArrayList<>();
@@ -254,7 +254,7 @@ public class LoadingOrder extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
 
-        Intent intent = new Intent(LoadingOrder.this , Stage3.class);
+        Intent intent = new Intent(LoadingOrder.this, Stage3.class);
         startActivity(intent);
     }
 
@@ -298,24 +298,28 @@ public class LoadingOrder extends AppCompatActivity {
                     for (int i = 0; i < parentArrayOrders.length(); i++) {
                         JSONObject innerObject = parentArrayOrders.getJSONObject(i);
 
-                        BundleInfo bundleInfo = new BundleInfo();
-                        bundleInfo.setThickness(innerObject.getDouble("THICKNESS"));
-                        bundleInfo.setWidth(innerObject.getDouble("WIDTH"));
-                        bundleInfo.setLength(innerObject.getDouble("LENGTH"));
-                        bundleInfo.setGrade(innerObject.getString("GRADE"));
-                        bundleInfo.setNoOfPieces(innerObject.getInt("PIECES"));
-                        bundleInfo.setBundleNo(innerObject.getString("BUNDLE_NO"));
-                        bundleInfo.setLocation(innerObject.getString("LOCATION"));
-                        bundleInfo.setArea(innerObject.getString("AREA"));
-                        bundleInfo.setBarcode(innerObject.getString("BARCODE"));
-                        bundleInfo.setOrdered(innerObject.getInt("ORDERED"));
-                        bundleInfo.setAddingDate(innerObject.getString("BUNDLE_DATE"));
-                        bundleInfo.setChecked(false);
+                        if (innerObject.getInt("ORDERED") == 0
+                                && innerObject.getString("LOCATION").equals(DHandler.getSettings().getStore())
+                                && (!(innerObject.getString("BACKING_LIST").equals("")))
+                                && (!(innerObject.getString("BACKING_LIST").equals("null")))) {
 
-                        if (innerObject.getInt("ORDERED") == 0 &&
-                                innerObject.getString("LOCATION").equals(DHandler.getSettings().getStore()))
-                            bundles.add(bundleInfo);
+                                BundleInfo bundleInfo = new BundleInfo();
+                                bundleInfo.setThickness(innerObject.getDouble("THICKNESS"));
+                                bundleInfo.setWidth(innerObject.getDouble("WIDTH"));
+                                bundleInfo.setLength(innerObject.getDouble("LENGTH"));
+                                bundleInfo.setGrade(innerObject.getString("GRADE"));
+                                bundleInfo.setNoOfPieces(innerObject.getInt("PIECES"));
+                                bundleInfo.setBundleNo(innerObject.getString("BUNDLE_NO"));
+                                bundleInfo.setLocation(innerObject.getString("LOCATION"));
+                                bundleInfo.setArea(innerObject.getString("AREA"));
+                                bundleInfo.setBarcode(innerObject.getString("BARCODE"));
+                                bundleInfo.setOrdered(innerObject.getInt("ORDERED"));
+                                bundleInfo.setAddingDate(innerObject.getString("BUNDLE_DATE"));
+                                bundleInfo.setBackingList(innerObject.getString("BACKING_LIST"));
+                                bundleInfo.setChecked(false);
 
+                                bundles.add(bundleInfo);
+                        }
                     }
                 } catch (JSONException e) {
                     Log.e("Import Data2", e.getMessage().toString());

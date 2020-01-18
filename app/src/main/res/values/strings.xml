@@ -19,13 +19,14 @@
     <string name="loc">Loc</string>
     <string name="area">Area</string>
     <string name="description">Description</string>
-    <string name="detail">Detail</string>
+    <string name="details">Details</string>
     <string name="from">From</string>
     <string name="to">To</string>
     <string name="no_bundle"># Bundles</string>
     <string name="no_pieces"># Pieces</string>
     <string name="loading_order_no">L.order No</string>
     <string name="backing_list">Backing List</string>
+    <string name="b_list">B.List</string>
 
     <string name="company_name">Company Name</string>
     <string name="ip_address">IP Address</string>

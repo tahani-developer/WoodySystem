@@ -168,84 +168,84 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                         if (!TextUtils.isEmpty(width.getText().toString())) {
                             if (!TextUtils.isEmpty(length.getText().toString())) {
                                 if (!TextUtils.isEmpty(noOfPieces.getText().toString())) {
-                                    if (!TextUtils.isEmpty(backingList.getText().toString())) {
+//                                    if (!TextUtils.isEmpty(backingList.getText().toString())) {
 //                                    String serial = presenter.getSerialNo();
 //                                    Log.e("serial", " " + !serial.equals(""));
 //                                    Log.e("serial", " " + !serial.equals(null));
 //                                    Log.e("serialNumber", "" + serial);
 //                                    if ((!serial.equals("")) && (!serial.equals(null))) { //(!SettingsFile.serialNumber.equals("")) && (!SettingsFile.serialNumber.equals(null))
-                                    String locationString = null, gradeString = null, detailString = null;
-                                    switch (gradeText) {
-                                        case "Fresh":
-                                            gradeString = "FR";
-                                            break;
-                                        case "BS":
-                                            gradeString = "BS";
-                                            break;
-                                        case "Reject":
-                                            gradeString = "RJ";
-                                            break;
-                                        case "KD":
-                                            gradeString = "KD";
-                                            break;
-                                    }
+                                        String locationString = null, gradeString = null, detailString = null;
+                                        switch (gradeText) {
+                                            case "Fresh":
+                                                gradeString = "FR";
+                                                break;
+                                            case "BS":
+                                                gradeString = "BS";
+                                                break;
+                                            case "Reject":
+                                                gradeString = "RJ";
+                                                break;
+                                            case "KD":
+                                                gradeString = "KD";
+                                                break;
+                                        }
 
-                                    switch (generalSettings.getStore()) {
-                                        case "Amman":
-                                            locationString = "Amm";
-                                            break;
-                                        case "Kalinovka":
-                                            locationString = "Kal";
-                                            break;
-                                        case "Rudniya Store":
-                                            locationString = "Rud";
-                                            break;
-                                        case "Rudniya Sawmill":
-                                            locationString = "RLP";
-                                            break;
-                                    }
+                                        switch (generalSettings.getStore()) {
+                                            case "Amman":
+                                                locationString = "Amm";
+                                                break;
+                                            case "Kalinovka":
+                                                locationString = "Kal";
+                                                break;
+                                            case "Rudniya Store":
+                                                locationString = "Rud";
+                                                break;
+                                            case "Rudniya Sawmill":
+                                                locationString = "RLP";
+                                                break;
+                                        }
 
-                                    switch (descriptionText) {
-                                        case "Bundle Origin":
-                                            detailString = "Origin";
-                                            break;
-                                        case "Finland Wood":
-                                            detailString = "FIN";
-                                            break;
-                                        case "Decore Wood":
-                                            detailString = "Decore";
-                                            break;
-                                        case "German Wood":
-                                            detailString = "DEU";
-                                            break;
-                                        case "Romanian Wood":
-                                            detailString = "ROU";
-                                            break;
-                                        case "Russian Wood":
-                                            detailString = "RUS";
-                                            break;
-                                        case "Ukrainian Wood":
-                                            detailString = "UKR";
-                                            break;
-                                        case "Canadian Wood":
-                                            detailString = "CAN";
-                                            break;
-                                        case "Swedian Wood":
-                                            detailString = "SWE";
-                                            break;
-                                        case "Latvian Wood":
-                                            detailString = "LVA";
-                                            break;
-                                    }
+                                        switch (descriptionText) {
+                                            case "Bundle Origin":
+                                                detailString = "Origin";
+                                                break;
+                                            case "Finland Wood":
+                                                detailString = "FIN";
+                                                break;
+                                            case "Decore Wood":
+                                                detailString = "Decore";
+                                                break;
+                                            case "German Wood":
+                                                detailString = "DEU";
+                                                break;
+                                            case "Romanian Wood":
+                                                detailString = "ROU";
+                                                break;
+                                            case "Russian Wood":
+                                                detailString = "RUS";
+                                                break;
+                                            case "Ukrainian Wood":
+                                                detailString = "UKR";
+                                                break;
+                                            case "Canadian Wood":
+                                                detailString = "CAN";
+                                                break;
+                                            case "Swedian Wood":
+                                                detailString = "SWE";
+                                                break;
+                                            case "Latvian Wood":
+                                                detailString = "LVA";
+                                                break;
+                                        }
 //                                    Log.e("serial" , " " + SettingsFile.serialNumber);
 
-                                    bundleNoString = "" + gradeString
-                                            + locationString
-                                            + thicknessText
-                                            + "." + widthText
-                                            + "." + lengthText
-                                            + "." + noOfPiecesText
-                                            + "." + serialNoText;//presenter.getSerialNo();//SettingsFile.serialNumber
+                                        bundleNoString = "" + gradeString
+                                                + locationString
+                                                + thicknessText
+                                                + "." + widthText
+                                                + "." + lengthText
+                                                + "." + noOfPiecesText
+                                                + "." + serialNoText;//presenter.getSerialNo();//SettingsFile.serialNumber
 
 //                                    List<String> checkBarcodeList = databaseHandler.getBundleNo();
 //                                    for (int m = 0; m < checkBarcodeList.size(); m++)
@@ -255,114 +255,122 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 //                                        }
 
 //                                    if (!foundBarcode) {
-                                    jsonArrayBundles = new JSONArray();
-                                    linearLayoutView.setVisibility(View.VISIBLE);
-                                    mState = true;
+                                        jsonArrayBundles = new JSONArray();
+                                        if (bundlesTable.getChildCount() == 0) {
+                                            linearLayoutView.setVisibility(View.VISIBLE);
+                                            mState = true;
+                                            addTableHeader();
+                                        }
 
-                                    Date date = Calendar.getInstance().getTime();
-                                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                                    String generateDate = simpleDateFormat.format(date);
+                                        Date date = Calendar.getInstance().getTime();
+                                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                                        String generateDate = simpleDateFormat.format(date);
 
-                                    Log.e("addToInventory/", "serial/" + serialNoText);
-                                    newBundle = new BundleInfo(Double.parseDouble(thicknessText)
-                                            , Double.parseDouble(lengthText)
-                                            , Double.parseDouble(widthText)
-                                            , gradeText
-                                            , Integer.parseInt(noOfPiecesText)
-                                            , bundleNoString
-                                            , generalSettings.getStore()
-                                            , areaText
-                                            , generateDate
-                                            , 0
-                                            , descriptionText
-                                            , serialNoText
-                                            , generalSettings.getUserNo());//presenter.getSerialNo());//SettingsFile.serialNumber
+                                        Log.e("addToInventory/", "serial/" + serialNoText);
+                                        newBundle = new BundleInfo(Double.parseDouble(thicknessText)
+                                                , Double.parseDouble(lengthText)
+                                                , Double.parseDouble(widthText)
+                                                , gradeText
+                                                , Integer.parseInt(noOfPiecesText)
+                                                , bundleNoString
+                                                , generalSettings.getStore()
+                                                , areaText
+                                                , generateDate
+                                                , 0
+                                                , descriptionText
+                                                , serialNoText
+                                                , generalSettings.getUserNo()
+                                                , backingListText);//presenter.getSerialNo());//SettingsFile.serialNumber
 
-                                    bundleInfoList.add(newBundle);
+                                        bundleInfoList.add(newBundle);
 //                                    Log.e("date is", generateDate);
 
-                                    TableRow tableRow = new TableRow(this);
-                                    for (int i = 0; i < 9; i++) {
-                                        TextView textView = new TextView(this);
-                                        textView.setBackgroundResource(R.color.light_orange);
-                                        TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f);
-                                        textViewParam.setMargins(1, 5, 1, 1);
-                                        textView.setTextSize(15);
-                                        textView.setTextColor(ContextCompat.getColor(this, R.color.gray_dark_one));
-                                        textView.setLayoutParams(textViewParam);
-                                        switch (i) {
-                                            case 0:
-                                                TableRow.LayoutParams param = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
-                                                param.setMargins(1, 5, 1, 1);
-                                                textView.setLayoutParams(param);
-                                                textView.setText(bundleNoString);
-                                                break;
-                                            case 1:
-                                                textView.setText(lengthText);
-                                                break;
-                                            case 2:
-                                                textView.setText(widthText);
-                                                break;
-                                            case 3:
-                                                textView.setText(thicknessText);
-                                                break;
-                                            case 4:
-                                                textView.setText(gradeText);
-                                                break;
-                                            case 5:
-                                                textView.setText(noOfPiecesText);
-                                                break;
-                                            case 6:
-                                                textView.setText(generalSettings.getStore());
-                                                break;
-                                            case 7:
-                                                textView.setText(areaText);
-                                                break;
-                                            case 8:
-                                                textView.setText(detailString);
-                                                break;
+                                        TableRow tableRow = new TableRow(this);
+                                        for (int i = 0; i < 10; i++) {
+                                            TextView textView = new TextView(this);
+                                            textView.setBackgroundResource(R.color.light_orange);
+                                            TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f);
+                                            textViewParam.setMargins(1, 5, 1, 1);
+                                            textView.setTextSize(15);
+                                            textView.setTextColor(ContextCompat.getColor(this, R.color.gray_dark_one));
+                                            textView.setLayoutParams(textViewParam);
+                                            switch (i) {
+                                                case 0:
+                                                    TableRow.LayoutParams param = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
+                                                    param.setMargins(1, 5, 1, 1);
+                                                    textView.setLayoutParams(param);
+                                                    textView.setText(bundleNoString);
+                                                    break;
+                                                case 1:
+                                                    textView.setText(lengthText);
+                                                    break;
+                                                case 2:
+                                                    textView.setText(widthText);
+                                                    break;
+                                                case 3:
+                                                    textView.setText(thicknessText);
+                                                    break;
+                                                case 4:
+                                                    textView.setText(gradeText);
+                                                    break;
+                                                case 5:
+                                                    textView.setText(noOfPiecesText);
+                                                    break;
+                                                case 6:
+                                                    textView.setText(generalSettings.getStore());
+                                                    break;
+                                                case 7:
+                                                    textView.setText(areaText);
+                                                    break;
+                                                case 8:
+                                                    textView.setText(detailString);
+                                                    break;
+                                                case 9:
+                                                    textView.setText(backingListText);
+                                                    break;
+                                            }
+                                            tableRow.addView(textView);
                                         }
-                                        tableRow.addView(textView);
-                                    }
-                                    jsonArrayBundles.put(newBundle.getJSONObject());
-                                    publicTableRow = tableRow;
-//                                    bundlesTable.addView(tableRow);
-                                    new JSONTask().execute();
+                                        jsonArrayBundles.put(newBundle.getJSONObject());
+                                        publicTableRow = tableRow;
+//                                      bundlesTable.addView(tableRow);
+                                        new JSONTask().execute();
 
-                                    thickness.setText("");
-                                    length.setText("");
-                                    width.setText("");
-                                    noOfPieces.setText("");
-                                    serialNo.setText("");
+                                        thickness.setText("");
+                                        length.setText("");
+                                        width.setText("");
+                                        noOfPieces.setText("");
+                                        serialNo.setText("");
+                                        backingList.setText("");
 //                                        locationSpinner.setSelection(0);
-                                    areaSpinner.setSelection(0);
-                                    gradeSpinner.setSelection(0);
-                                    descriptionSpinner.setSelection(0);
+                                        areaSpinner.setSelection(0);
+                                        gradeSpinner.setSelection(0);
+                                        descriptionSpinner.setSelection(0);
 
-                                    tableRow.setOnLongClickListener(new View.OnLongClickListener() {
-                                        @Override
-                                        public boolean onLongClick(View v) {
+                                        tableRow.setOnLongClickListener(new View.OnLongClickListener() {
+                                            @Override
+                                            public boolean onLongClick(View v) {
 //                                                TextView textView = ((TextView) tableRow.getChildAt(0));
 //                                                tableRow.setBackgroundResource(R.color.light_orange_2);
-                                            String bundleNo = ((TextView) tableRow.getChildAt(0)).getText().toString();
-                                            Log.e("b", bundleNo);
-                                            AlertDialog.Builder builder = new AlertDialog.Builder(AddToInventory.this);
-                                            builder.setMessage("Are you want delete bundle number: " + bundleNo + " ?");
-                                            builder.setTitle("Delete");
-                                            builder.setIcon(R.drawable.ic_warning_black_24dp);
-                                            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    bundlesTable.removeView(tableRow);
-                                                    bundleNumber = bundleNo;
-                                                    new JSONTask2().execute();
-                                                }
-                                            });
-                                            builder.show();
-                                            return false;
-                                        }
-                                    });
-                                    serialNo.requestFocus();
+                                                String bundleNo = ((TextView) tableRow.getChildAt(0)).getText().toString();
+                                                Log.e("b", bundleNo);
+                                                AlertDialog.Builder builder = new AlertDialog.Builder(AddToInventory.this);
+                                                builder.setMessage("Are you want delete bundle number: " + bundleNo + " ?");
+                                                builder.setTitle("Delete");
+                                                builder.setIcon(R.drawable.ic_warning_black_24dp);
+                                                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        bundlesTable.removeView(tableRow);
+                                                        bundleNumber = bundleNo;
+                                                        new JSONTask2().execute();
+                                                    }
+                                                });
+                                                builder.show();
+                                                return false;
+                                            }
+                                        });
+                                        serialNo.requestFocus();
 //                                            presenter.setSerialNo("");
 //                                        SettingsFile.serialNumber = "";
 //                                    } else {
@@ -375,9 +383,9 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 ////                                        presenter.getImportData();
 //                                        Toast.makeText(this, "No serial number is generated!", Toast.LENGTH_SHORT).show();
 //                                    }
-                                } else {
-                                    backingList.setError("Required!");
-                                }
+//                                    } else {
+//                                        backingList.setError("Required!");
+//                                    }
                                 } else {
                                     noOfPieces.setError("Required!");
                                 }
@@ -396,6 +404,56 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                 break;
 
         }
+    }
+
+    void addTableHeader() {
+        TableRow tableRow = new TableRow(this);
+        for (int i = 0; i < 10; i++) {
+            TextView textView = new TextView(this);
+            textView.setBackgroundResource(R.color.orange);
+            TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f);
+//            textViewParam.setMargins(1, 5, 1, 1);
+            textView.setTextSize(15);
+            textView.setTextColor(ContextCompat.getColor(this, R.color.white));
+            textView.setLayoutParams(textViewParam);
+            switch (i) {
+                case 0:
+                    TableRow.LayoutParams param = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
+//                    param.setMargins(1, 5, 1, 1);
+                    textView.setLayoutParams(param);
+                    textView.setText("Bundle#");
+                    break;
+                case 1:
+                    textView.setText("Length");
+                    break;
+                case 2:
+                    textView.setText("Width");
+                    break;
+                case 3:
+                    textView.setText("Thic");
+                    break;
+                case 4:
+                    textView.setText("Grade");
+                    break;
+                case 5:
+                    textView.setText("Pieces");
+                    break;
+                case 6:
+                    textView.setText("#Loc");
+                    break;
+                case 7:
+                    textView.setText("Area");
+                    break;
+                case 8:
+                    textView.setText("Details");
+                    break;
+                case 9:
+                    textView.setText("B.List");
+                    break;
+            }
+            tableRow.addView(textView);
+        }
+        bundlesTable.addView(tableRow);
     }
 
     @Override
