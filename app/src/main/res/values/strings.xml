@@ -98,6 +98,8 @@
     <string name="new_supplier">New Supplier</string>
     <string name="find_supplier">Find Supplier</string>
 
+    <string name="generate_Barcode">Generate Barcode</string>
+
 
 
 </resources>
