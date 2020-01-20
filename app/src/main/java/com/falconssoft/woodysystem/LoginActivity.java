@@ -214,7 +214,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 storesAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, storesList);
                 storesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 storesSpinner.setAdapter(storesAdapter);
-
 //                if (!(localIpAddress == null) && (!(localCompanyName == null))) {
 //                    if ((!localIpAddress.equals("")) && (!localCompanyName.equals(""))) {
                 companyName.setText(localCompanyName);
@@ -258,11 +257,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         if (!TextUtils.isEmpty(companyName.getText().toString())) {
                             if (!TextUtils.isEmpty(ipAddress.getText().toString())) {
                                 Log.e("aaaaaaa1", "");
-                                woodPresenter.getUsersData(LoginActivity.this);
                                 settings.setCompanyName(companyName.getText().toString());
                                 settings.setIpAddress(ipAddress.getText().toString());
                                 databaseHandler.deleteSettings();
                                 databaseHandler.addSettings(settings);
+                                woodPresenter.getUsersData(LoginActivity.this);
                                 Toast.makeText(LoginActivity.this, "Saved Successfully", Toast.LENGTH_SHORT).show();
                                 settingDialog.dismiss();
                             } else {
