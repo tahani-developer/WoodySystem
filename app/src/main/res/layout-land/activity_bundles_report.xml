@@ -197,7 +197,7 @@
             android:layout_width="match_parent"
             android:layout_height="5dp"
             android:layout_marginTop="2dp"
-            android:background="@color/light_orange_2" />
+            android:background="@color/orange" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

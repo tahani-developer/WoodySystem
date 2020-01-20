@@ -101,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         stage3.startAnimation(scale);
 
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -120,7 +121,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-//    public void setSlideAnimation() {
+    @Override
+    public void onBackPressed() {
+       finish();
+    }
+
+    //    public void setSlideAnimation() {
 //        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
 //    }
 

@@ -2,6 +2,7 @@ package com.falconssoft.woodysystem;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -665,4 +666,11 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+//        Intent intent = new Intent(AddToInventory.this , Stage3.class);
+//        startActivity(intent);
+        finish();
+    }
 }
