@@ -63,7 +63,7 @@ public class BundleInfo {
         this.hideFlag = hideFlag;
     }
 
-    public BundleInfo(double thickness, double length, double width, String grade, int noOfPieces, String bundleNo, String location, String area, String addingDate, int isPrinted, String description, String serialNo, String userNo, String backingList) {
+    public BundleInfo(double thickness, double length, double width, String grade, int noOfPieces, String bundleNo, String location, String area, String addingDate, int isPrinted, String description, String serialNo, String userNo, String backingList, int ordered) {
         this.thickness = thickness;
         this.length = length;
         this.width = width;
@@ -78,6 +78,7 @@ public class BundleInfo {
         this.serialNo = serialNo;
         this.userNo = userNo;
         this.backingList = backingList;
+        this.ordered = ordered;
     }
 
     public String getBackingList() {
