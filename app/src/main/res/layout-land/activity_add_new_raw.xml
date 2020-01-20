@@ -158,7 +158,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
-                        android:layout_weight="2.5"
+                        android:layout_weight="2"
                         android:ems="10"
                         android:inputType="numberDecimal"
                         android:nextFocusDown="@id/addNewRaw_width" />
@@ -234,7 +234,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
-                        android:layout_weight="2.5"
+                        android:layout_weight="2"
                         android:ems="10"
                         android:inputType="numberDecimal"
                         android:nextFocusDown="@id/addNewRaw_no_of_pieces" />
@@ -267,7 +267,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
-                        android:layout_weight="2.5"
+                        android:layout_weight="2"
                         android:ems="10"
                         android:inputType="numberDecimal"
                         android:nextFocusDown="@id/addNewRaw_no_of_bundles" />
@@ -326,7 +326,7 @@
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/light_orange_2">
+                android:background="@color/orange">
 
                 <TextView
                     android:layout_width="0dp"

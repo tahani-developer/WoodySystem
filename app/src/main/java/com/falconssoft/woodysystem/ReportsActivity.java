@@ -14,7 +14,7 @@ import com.falconssoft.woodysystem.reports.LoadingOrderReport;
 
 public class ReportsActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private TextView bundlesReport, ordersReport, inventoryReport,report2,report3,report4;
+    private TextView bundlesReport, ordersReport, inventoryReport;
     private ScaleAnimation scale;
 
     @Override
@@ -25,9 +25,6 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
         bundlesReport = findViewById(R.id.reports_bundles);
         ordersReport = findViewById(R.id.reports_orders);
         inventoryReport = findViewById(R.id.reports_inventory);
-        report2 = findViewById(R.id.reports_textView10);
-        report3 = findViewById(R.id.reports_textView11);
-        report4 = findViewById(R.id.reports_textView12);
 
         bundlesReport.setOnClickListener(this);
         ordersReport.setOnClickListener(this);
@@ -77,25 +74,6 @@ public class ReportsActivity extends AppCompatActivity implements View.OnClickLi
         scale.setDuration(600);
         scale.setInterpolator(new OvershootInterpolator());
         inventoryReport.startAnimation(scale);
-
-        scale = new ScaleAnimation(0, 1, 0, 1, ScaleAnimation.RELATIVE_TO_SELF, .5f, ScaleAnimation.RELATIVE_TO_SELF, .5f);
-        scale.setStartOffset(400);
-        scale.setDuration(700);
-        scale.setInterpolator(new OvershootInterpolator());
-        report2.startAnimation(scale);
-
-        scale = new ScaleAnimation(0, 1, 0, 1, ScaleAnimation.RELATIVE_TO_SELF, .5f, ScaleAnimation.RELATIVE_TO_SELF, .5f);
-        scale.setStartOffset(400);
-        scale.setDuration(800);
-        scale.setInterpolator(new OvershootInterpolator());
-        report3.startAnimation(scale);
-
-        scale = new ScaleAnimation(0, 1, 0, 1, ScaleAnimation.RELATIVE_TO_SELF, .5f, ScaleAnimation.RELATIVE_TO_SELF, .5f);
-        scale.setStartOffset(400);
-        scale.setDuration(900);
-        scale.setInterpolator(new OvershootInterpolator());
-        report4.startAnimation(scale);
-
     }
 
     @Override
