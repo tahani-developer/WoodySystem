@@ -300,8 +300,8 @@ public class LoadingOrder extends AppCompatActivity {
 
                         if (innerObject.getInt("ORDERED") == 0
                                 && innerObject.getString("LOCATION").equals(DHandler.getSettings().getStore())
-                                && (!(innerObject.getString("BACKING_LIST").equals("")))
-                                && (!(innerObject.getString("BACKING_LIST").equals("null")))) {
+                                && ((innerObject.getString("BACKING_LIST").equals(""))
+                                || (innerObject.getString("BACKING_LIST").equals("null")))) {
 
                                 BundleInfo bundleInfo = new BundleInfo();
                                 bundleInfo.setThickness(innerObject.getDouble("THICKNESS"));
