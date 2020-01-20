@@ -28,6 +28,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.print.PrintHelper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -48,6 +49,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.falconssoft.woodysystem.DatabaseHandler;
+import com.falconssoft.woodysystem.ItemsListAdapter;
+import com.falconssoft.woodysystem.LoadingOrder;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.WoodPresenter;
 import com.falconssoft.woodysystem.models.BundleInfo;
@@ -123,10 +126,12 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private Date date;
     private String serialNumber;
     private int index;
+    private SearchView searchViewTh, searchViewW, searchViewL;
     private CheckBox checkBoxPrint;
     private List<BundleInfo> bundleInfoForPrint = new ArrayList<>();
     private Button printAll, delete;
     private TableRow tableRowToDelete = null;
+    private String f1 = "", f2 = "", f3 = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,6 +159,9 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         checkBoxPrint = findViewById(R.id.checkBoxPrint);
         printAll = findViewById(R.id.printAll);
         delete = findViewById(R.id.delete);
+        searchViewTh = (SearchView) findViewById(R.id.mSearchTh);
+        searchViewW = (SearchView) findViewById(R.id.mSearchW);
+        searchViewL = (SearchView) findViewById(R.id.mSearchL);
 
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         dateFrom.setText(df.format(date));
@@ -295,6 +303,54 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                         })
                         .setNegativeButton("Cancel", null).show();
 
+            }
+        });
+
+        searchViewTh.setOnQueryTextListener(new android.support.v7.widget.SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+
+                f1 = query;
+                filters();
+
+                return false;
+            }
+        });
+
+        searchViewW.setOnQueryTextListener(new android.support.v7.widget.SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+
+                f2 = query;
+                filters();
+
+                return false;
+            }
+        });
+
+        searchViewL.setOnQueryTextListener(new android.support.v7.widget.SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+
+                f3 = query;
+                filters();
+
+                return false;
             }
         });
 
@@ -499,7 +555,17 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                 if (areaField.equals("All") || areaField.equals(dateFiltered.get(k).getArea())) {
                     if (orderedField.equals("All") || orderedField.equals(dateFiltered2)) {
 
-                        filtered.add(dateFiltered.get(k));
+//                        filtered.add(dateFiltered.get(k));
+
+//                        List<BundleInfo> tempList = new ArrayList<>();
+
+                            if (
+                                    (("" + dateFiltered.get(k).getThickness()).toUpperCase().startsWith(f1) || f1.equals("")) &&
+                                            (("" + dateFiltered.get(k).getWidth()).toUpperCase().startsWith(f2) || f2.equals("")) &&
+                                            (("" + dateFiltered.get(k).getLength()).toUpperCase().startsWith(f3) || f3.equals("")))
+                                filtered.add(dateFiltered.get(k));
+
+
                     }
                 }
             }
