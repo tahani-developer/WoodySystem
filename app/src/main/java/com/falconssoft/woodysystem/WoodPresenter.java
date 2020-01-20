@@ -52,6 +52,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
     private StringRequest packingListJsonObjectRequest;
     private String urlPackingList;
 
+    private LoginActivity loginActivity;
     private InventoryReport inventoryReport;//= new InventoryReport();
     private BundlesReport bundlesReport;
 
@@ -176,7 +177,8 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
 
     //------------------------------------------- Get Users ----------------------------------------
 
-    void getUsersData() {
+    void getUsersData(LoginActivity loginActivity) {
+        this.loginActivity = loginActivity;
         settings = databaseHandler.getSettings();
         urlUsers = "http://" + settings.getIpAddress() + "/import.php?FLAG=0";//http://10.0.0.214/woody/import.php?FLAG=0
         Log.e("presenter/urlUsers ", "" + urlUsers);
@@ -189,7 +191,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
 
         @Override
         public void onErrorResponse(VolleyError error) {
-            getUsersData();
+//            getUsersData();
             Log.e("presenter/users/err ", "" + settings.getIpAddress() + " *** " + urlUsers + " *** " + error);
             if (error instanceof NetworkError) {
             } else if (error instanceof ServerError) {
@@ -236,6 +238,8 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                     Log.e("presenter:obj3 ", "" + innerObject.toString());
                     Users users = new Users(innerObject.getString("USER_NAME"), innerObject.getString("PASSWORD"));
                     Log.e("presenter:obj4", "" + innerObject.getString("USER_NAME"));
+
+                    loginActivity.getUsersDataMethod(innerObject.getString("USER_NAME"), innerObject.getString("PASSWORD") );
                     SettingsFile.usersList.add(users);
                     databaseHandler.addNewUser(users);
                 }
@@ -435,7 +439,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                     response = new String(response.getBytes("ISO-8859-1"), "UTF-8");
 //                    response = response.substring(response.indexOf("{"));
 
-               getBundlesData(inventoryReport);
+                getBundlesData(inventoryReport);
 //                inventoryReport.updaterPackingListInRaw();
                 Log.e("presenter/packingList", "/res/" + response);
 //                JSONObject object = new JSONObject(response);
