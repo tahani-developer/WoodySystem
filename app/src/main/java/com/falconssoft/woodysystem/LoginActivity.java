@@ -52,6 +52,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private WoodPresenter woodPresenter;
     private Settings generalSettings;
     private String localCompanyName, localIpAddress, localStore;
+    private String globalUsername, globalPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,22 +63,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         generalSettings = new Settings();
         generalSettings = databaseHandler.getSettings();
         woodPresenter = new WoodPresenter(this);
-//        woodPresenter.getImportData();
+        woodPresenter.getUsersData(LoginActivity.this);
         localCompanyName = generalSettings.getCompanyName();
         localIpAddress = generalSettings.getIpAddress();
         localStore = generalSettings.getStore();
 
         Log.e("bool", "" + (!(localIpAddress == null)));
-
-        if (!(localIpAddress == null) && (!(localCompanyName == null))) {
-            if ((!localIpAddress.equals("")) && (!localCompanyName.toString().equals(""))) {
-                woodPresenter.getUsersData();
-            } else {
-            }
-        } else {
-            Toast.makeText(this, "Please fill settings!", Toast.LENGTH_SHORT).show();
-        }
-
+//        if (!(localIpAddress == null) && (!(localCompanyName == null))) {
+//            if ((!localIpAddress.equals("")) && (!localCompanyName.toString().equals(""))) {
+//                woodPresenter.getUsersData(LoginActivity.this);
+//            } else {
+//            }
+//        } else {
+//            Toast.makeText(this, "Please fill settings!", Toast.LENGTH_SHORT).show();
+//        }
         username = findViewById(R.id.login_username);
         password = findViewById(R.id.login_password);
         logoImage = findViewById(R.id.login_logo);
@@ -136,43 +135,57 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 dialog.show();
                 break;
             case R.id.login_login_btn:
+                generalSettings = databaseHandler.getSettings();
                 String usernameText = username.getText().toString();
                 String passwordText = password.getText().toString();
                 boolean found = false;
                 localCompanyName = generalSettings.getCompanyName();
                 localIpAddress = generalSettings.getIpAddress();
                 localStore = generalSettings.getStore();
+
+                if (usernameText.equals(globalUsername)//usersList.get(i).getUsername()
+                        && passwordText.equals(globalPassword)) { //usersList.get(i).getPassword()
+                    found = true;
+//                    i = usersList.size();
+                    databaseHandler.updateSettingsUserNo(usernameText);
+//                                    databaseHandler.addSettingsUserNo(usernameText);
+                    Intent intent2 = new Intent(this, MainActivity.class);
+                    startActivity(intent2);
+                }
+
+                if (!found) {
+                    Toast.makeText(this, "Username or password is wrong or check settings! ", Toast.LENGTH_SHORT).show();}
 //                Intent intent = new Intent(this, MainActivity.class);
 //                startActivity(intent);
 //                setSlideAnimation();
-                if (!(localIpAddress == null) && (!(localCompanyName == null))) {
-                    if ((!localIpAddress.equals("")) && (!localCompanyName.equals(""))) {
-//                            usersList = databaseHandler.getUsers();
-                        if (usersList.size() > 0) {
-                            for (int i = 0; i < usersList.size(); i++)
-                                if (usernameText.equals(usersList.get(i).getUsername())
-                                        && passwordText.equals(usersList.get(i).getPassword())) {
-                                    found = true;
-                                    i = usersList.size();
-                                    databaseHandler.updateSettingsUserNo(usernameText);
-//                                    databaseHandler.addSettingsUserNo(usernameText);
-                                    Intent intent2 = new Intent(this, MainActivity.class);
-                                    startActivity(intent2);
-                                }
-
-                            if (!found) {
-                                Toast.makeText(this, "Username or password is wrong or check settings! ", Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            Toast.makeText(this, "Please check internet connection!!!!", Toast.LENGTH_SHORT).show();
-                        }
-
-                    } else {
-                        Toast.makeText(this, "Please fill settings first!!!!", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(this, "Please fill settings first!!!!", Toast.LENGTH_SHORT).show();
-                }
+//                if (!(localIpAddress == null) && (!(localCompanyName == null))) {
+//                    if ((!localIpAddress.equals("")) && (!localCompanyName.equals(""))) {
+////                            usersList = databaseHandler.getUsers();
+//                        if (usersList.size() > 0) {
+//                            for (int i = 0; i < usersList.size(); i++)
+//                                if (usernameText.equals(globalUsername)//usersList.get(i).getUsername()
+//                                        && passwordText.equals(globalPassword)) { //usersList.get(i).getPassword()
+//                                    found = true;
+//                                    i = usersList.size();
+//                                    databaseHandler.updateSettingsUserNo(usernameText);
+////                                    databaseHandler.addSettingsUserNo(usernameText);
+//                                    Intent intent2 = new Intent(this, MainActivity.class);
+//                                    startActivity(intent2);
+//                                }
+//
+//                            if (!found) {
+//                                Toast.makeText(this, "Username or password is wrong or check settings! ", Toast.LENGTH_SHORT).show();
+//                            }
+//                        } else {
+//                            Toast.makeText(this, "Please check internet connection!!!!", Toast.LENGTH_SHORT).show();
+//                        }
+//
+//                    } else {
+//                        Toast.makeText(this, "Please fill settings first!!!!", Toast.LENGTH_SHORT).show();
+//                    }
+//                } else {
+//                    Toast.makeText(this, "Please fill settings first!!!!", Toast.LENGTH_SHORT).show();
+//                }
 
                 break;
             case R.id.login_logo:
@@ -244,11 +257,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     public void onClick(View v) {
                         if (!TextUtils.isEmpty(companyName.getText().toString())) {
                             if (!TextUtils.isEmpty(ipAddress.getText().toString())) {
+                                Log.e("aaaaaaa1", "");
+                                woodPresenter.getUsersData(LoginActivity.this);
                                 settings.setCompanyName(companyName.getText().toString());
                                 settings.setIpAddress(ipAddress.getText().toString());
                                 databaseHandler.deleteSettings();
                                 databaseHandler.addSettings(settings);
-                                woodPresenter.getUsersData();
                                 Toast.makeText(LoginActivity.this, "Saved Successfully", Toast.LENGTH_SHORT).show();
                                 settingDialog.dismiss();
                             } else {
@@ -262,6 +276,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 settingDialog.show();
                 break;
         }
+
+    }
+
+    public void getUsersDataMethod(String username, String password) {
+        this.globalUsername = username;
+        this.globalPassword = password;
 
     }
 

@@ -683,6 +683,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                 @Override
                 public boolean onLongClick(View v) {
                     serialNumber = ((TextView) finalTableRow1.getChildAt(0)).getText().toString();
+                   String bundleNumber = ((TextView) finalTableRow1.getChildAt(1)).getText().toString();
                     Log.e("serialNumber", serialNumber);
 
                     Dialog packingListDialog = new Dialog(InventoryReport.this);
@@ -692,6 +693,10 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 
                     EditText packingList = packingListDialog.findViewById(R.id.packingList_dialog_packing_list);
                     TextView done = packingListDialog.findViewById(R.id.packingList_dialog_done);
+                    TextView bundleNo = packingListDialog.findViewById(R.id.packingList_dialog_bundle_no);
+
+                    bundleNo.setText("Bundle: " + bundleNumber);
+
 
                     done.setOnClickListener(new View.OnClickListener() {
                         @Override
