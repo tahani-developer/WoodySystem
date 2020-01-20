@@ -253,8 +253,8 @@ public class LoadingOrder extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-//        Intent intent = new Intent(LoadingOrder.this, Stage3.class);
-//        startActivity(intent);
+        Intent intent = new Intent(LoadingOrder.this, Stage3.class);
+        startActivity(intent);
         finish();
     }
 
