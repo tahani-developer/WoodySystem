@@ -78,7 +78,7 @@ public class Stage3 extends AppCompatActivity implements View.OnClickListener {
 //                setSlideAnimation();
                 break;
         }
-    } 
+    }
 
     @Override
     public void onBackPressed() {
