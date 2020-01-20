@@ -265,7 +265,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:textSize="18sp"
-                        android:text="@string/b_list" />
+                        android:text="@string/p_list" />
 
                     <EditText
                         android:id="@+id/addToInventory_backing_list"

@@ -25,8 +25,8 @@
     <string name="no_bundle"># Bundles</string>
     <string name="no_pieces"># Pieces</string>
     <string name="loading_order_no">L.order No</string>
-    <string name="backing_list">Backing List</string>
-    <string name="b_list">B.List</string>
+    <string name="packing_list">Packing List</string>
+    <string name="p_list">P.List</string>
 
     <string name="company_name">Company Name</string>
     <string name="ip_address">IP Address</string>
@@ -64,6 +64,7 @@
     <string name="orders">Orders Report</string>
     <string name="inventory_report">Inventory Report</string>
     <string name="loading_order_report">Loading Order Report</string>
+    <string name="loading_order_report2">Loading Order Report</string>
     <string name="placing_no_">Truck No</string>
     <string name="order_no_">Order No</string>
     <string name="container_no_">Container No</string>
@@ -99,6 +100,7 @@
     <string name="find_supplier">Find Supplier</string>
 
     <string name="generate_Barcode">Generate Barcode</string>
+    <string name="ordered">Ordered</string>
 
 
 
