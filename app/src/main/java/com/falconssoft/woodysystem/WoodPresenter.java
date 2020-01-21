@@ -235,11 +235,13 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                 Log.e("presenter:obj2", "" + array.toString());
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject innerObject = array.getJSONObject(i);
-                    Log.e("presenter:obj3 ", "" + innerObject.toString());
-                    Users users = new Users(innerObject.getString("USER_NAME"), innerObject.getString("PASSWORD"));
+                    String username  = innerObject.getString("USER_NAME");
+                    String password  =innerObject.getString("PASSWORD") ;
+                    Log.e("presenter:obj3 ", "" +username + password);
+                    Users users = new Users(username, password);
                     Log.e("presenter:obj4", "" + innerObject.getString("USER_NAME"));
 
-                    loginActivity.getUsersDataMethod(innerObject.getString("USER_NAME"), innerObject.getString("PASSWORD") );
+                    loginActivity.getUsersDataMethod(username, password);
                     SettingsFile.usersList.add(users);
                     databaseHandler.addNewUser(users);
                 }
