@@ -21,6 +21,7 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.Settings;
@@ -346,16 +347,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 //                                      bundlesTable.addView(tableRow);
                                     new JSONTask().execute();
 
-                                    thickness.setText("");
-                                    length.setText("");
-                                    width.setText("");
-                                    noOfPieces.setText("");
-                                    serialNo.setText("");
-                                    backingList.setText("");
-//                                  locationSpinner.setSelection(0);
-                                    areaSpinner.setSelection(0);
-                                    gradeSpinner.setSelection(0);
-                                    descriptionSpinner.setSelection(0);
+
 
                                     tableRow.setOnLongClickListener(new View.OnLongClickListener() {
                                         @Override
@@ -597,16 +589,29 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 //                    presenter.getImportData();
                     Log.e("addToInventory", "" + publicTableRow);
                     bundlesTable.addView(publicTableRow);
+
+                    thickness.setText("");
+                    length.setText("");
+                    width.setText("");
+                    noOfPieces.setText("");
+                    serialNo.setText("");
+                    backingList.setText("");
+//                                  locationSpinner.setSelection(0);
+                    areaSpinner.setSelection(0);
+                    gradeSpinner.setSelection(0);
+                    descriptionSpinner.setSelection(0);
                     Log.e("tag", "****Success");
                 } else {
 //                    presenter.setSerialNo("");
 //                    SettingsFile.serialNumber = "";
                     Log.e("tag", "****Failed to export data");
+                    Toast.makeText(AddToInventory.this , "Failed to export data Please check internet connection" , Toast.LENGTH_LONG).show();
                 }
             } else {
 //                presenter.setSerialNo("");
 //                SettingsFile.serialNumber = "";
                 Log.e("tag", "****Failed to export data Please check internet connection");
+                Toast.makeText(AddToInventory.this , "Failed to export data Please check internet connection" , Toast.LENGTH_LONG).show();
             }
         }
     }
