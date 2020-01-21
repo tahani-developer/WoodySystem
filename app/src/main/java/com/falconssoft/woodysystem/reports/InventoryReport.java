@@ -559,11 +559,11 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 
 //                        List<BundleInfo> tempList = new ArrayList<>();
 
-                            if (
-                                    (("" + dateFiltered.get(k).getThickness()).toUpperCase().startsWith(f1) || f1.equals("")) &&
-                                            (("" + dateFiltered.get(k).getWidth()).toUpperCase().startsWith(f2) || f2.equals("")) &&
-                                            (("" + dateFiltered.get(k).getLength()).toUpperCase().startsWith(f3) || f3.equals("")))
-                                filtered.add(dateFiltered.get(k));
+                        if (
+                                (("" + dateFiltered.get(k).getThickness()).toUpperCase().startsWith(f1) || f1.equals("")) &&
+                                        (("" + dateFiltered.get(k).getWidth()).toUpperCase().startsWith(f2) || f2.equals("")) &&
+                                        (("" + dateFiltered.get(k).getLength()).toUpperCase().startsWith(f3) || f3.equals("")))
+                            filtered.add(dateFiltered.get(k));
 
 
                     }
@@ -683,7 +683,8 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                 @Override
                 public boolean onLongClick(View v) {
                     serialNumber = ((TextView) finalTableRow1.getChildAt(0)).getText().toString();
-                   String bundleNumber = ((TextView) finalTableRow1.getChildAt(1)).getText().toString();
+                    String bundleNumber = ((TextView) finalTableRow1.getChildAt(1)).getText().toString();
+                    String location = ((TextView) finalTableRow1.getVirtualChildAt(7)).getText().toString();
                     Log.e("serialNumber", serialNumber);
 
                     Dialog packingListDialog = new Dialog(InventoryReport.this);
@@ -702,7 +703,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                         @Override
                         public void onClick(View v) {
                             if (!packingList.getText().toString().equals("")) {
-                                woodPresenter.updatePackingList(InventoryReport.this, serialNumber, packingList.getText().toString());
+                                woodPresenter.updatePackingList(InventoryReport.this, bundleNumber, packingList.getText().toString(), location);
                                 packingListDialog.dismiss();
                             }
                         }

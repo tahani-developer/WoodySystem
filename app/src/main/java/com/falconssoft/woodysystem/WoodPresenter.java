@@ -415,11 +415,13 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
 
     //-------------------------------------------- update p.list from inventory report Data------------------------------------------/
 
-    public void updatePackingList(InventoryReport inventoryReport, String serialNumber, String packingList) {
+    public void updatePackingList(InventoryReport inventoryReport, String bundleNumber, String packingList, String location) {
         settings = databaseHandler.getSettings();
         this.inventoryReport = inventoryReport;
 //export.php?ADD_PACKING_LIST=1&BUNDLE_NO='" + bundleNo + "'&PACKING_LIST='" + packingList + "'");
-        urlPackingList = "http://" + settings.getIpAddress() + "/export.php?ADD_PACKING_LIST=1&BUNDLE_NO=" + serialNumber + "&PACKING_LIST=\"" + packingList + "\"";//http://5.189.130.98:8085/import.php?FLAG=3
+        urlPackingList = "http://" + settings.getIpAddress() + "/export.php?ADD_PACKING_LIST=1&BUNDLE_NO=\"" + bundleNumber + "\""
+                + "&PACKING_LIST=\"" + packingList + "\""
+                + "&LOCATION=\"" + location + "\"";//http://5.189.130.98:8085/import.php?FLAG=3
         Log.e("presenter/ ", "urlPackingList " + urlPackingList);
 
         packingListJsonObjectRequest = new StringRequest(Request.Method.GET, urlPackingList, new UpdatePackingListClass(), new UpdatePackingListClass());
