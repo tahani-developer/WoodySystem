@@ -164,7 +164,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         searchViewL = (SearchView) findViewById(R.id.mSearchL);
 
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-        dateFrom.setText(df.format(date));
+        dateFrom.setText("1/12/2019");
         dateTo.setText(df.format(date));
 
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_to_right);
