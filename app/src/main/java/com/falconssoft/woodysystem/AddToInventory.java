@@ -112,15 +112,6 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         gradeSpinner.setAdapter(gradeAdapter);
         gradeSpinner.setOnItemSelectedListener(this);
 
-//        locationList.add("Amman");
-//        locationList.add("Kalinovka");
-//        locationList.add("Rudniya Store");
-//        locationList.add("Rudniya Sawmill");
-//        locationAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, locationList);
-//        locationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        locationSpinner.setAdapter(locationAdapter);
-//        locationSpinner.setOnItemSelectedListener(this);
-
         areaList.add("Zone 1");
         areaList.add("Zone 2");
         areaList.add("Zone 3");
@@ -147,8 +138,6 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_to_right);
         textView.startAnimation(animation);
 
-//        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
-//        addToInventory.startAnimation(animation);
     }
 
     @Override
@@ -165,18 +154,13 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         switch (v.getId()) {
             case R.id.addToInventory_add_button:
 //                boolean foundBarcode = false;
-//http://5.189.130.98:8085/import.php?FLAG=1.
+//              http://5.189.130.98:8085/import.php?FLAG=1.
                 if (!TextUtils.isEmpty(serialNo.getText().toString())) {
                     if (!TextUtils.isEmpty(thickness.getText().toString())) {
                         if (!TextUtils.isEmpty(width.getText().toString())) {
                             if (!TextUtils.isEmpty(length.getText().toString())) {
                                 if (!TextUtils.isEmpty(noOfPieces.getText().toString())) {
-//                                    if (!TextUtils.isEmpty(backingList.getText().toString())) {
-//                                    String serial = presenter.getSerialNo();
-//                                    Log.e("serial", " " + !serial.equals(""));
-//                                    Log.e("serial", " " + !serial.equals(null));
-//                                    Log.e("serialNumber", "" + serial);
-//                                    if ((!serial.equals("")) && (!serial.equals(null))) { //(!SettingsFile.serialNumber.equals("")) && (!SettingsFile.serialNumber.equals(null))
+
                                     String locationString = null, gradeString = null, detailString = null;
                                     switch (gradeText) {
                                         case "Fresh":
@@ -373,21 +357,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                         }
                                     });
                                     serialNo.requestFocus();
-//                                            presenter.setSerialNo("");
-//                                        SettingsFile.serialNumber = "";
-//                                    } else {
-//                                        Toast.makeText(this, "Barcode already exist", Toast.LENGTH_SHORT).show();
-//                                    }
-//                                    Log.e("serial" , " " + SettingsFile.serialNumber);
 
-//                                    presenter.getImportData();
-//                                    } else {
-////                                        presenter.getImportData();
-//                                        Toast.makeText(this, "No serial number is generated!", Toast.LENGTH_SHORT).show();
-//                                    }
-//                                    } else {
-//                                        backingList.setError("Required!");
-//                                    }
                                 } else {
                                     noOfPieces.setError("Required!");
                                 }
@@ -506,31 +476,10 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                 break;
         }
 
-//        Log.e("item", gradeText);
-//        Log.e("item", locationText);
-//        Log.e("item", areaText);
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-//        gradeText = "Fresh";
-//        locationText = "Loc 1";
-
-    }
-
-//    public void onBackPressed() {
-//        super.onBackPressed();
-//        Intent intent = new Intent(AddToInventory.this, Stage3.class);
-//        startActivity(intent);
-////        finish();
-//    }
-
-//    @Override
-//    public void finish() {
-//        super.finish();
-////        setSlideAnimation();
-//        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
-//    }
+    public void onNothingSelected(AdapterView<?> parent) {}
 
     private class JSONTask extends AsyncTask<String, String, String> {
 
