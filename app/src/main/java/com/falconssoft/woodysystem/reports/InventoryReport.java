@@ -1286,6 +1286,9 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 //                    bundlesForDelete.clear();
 //                    bundlesTable.removeAllViews();
                     filters();
+                    if(checkBoxPrint.isChecked()){
+                        checkBoxPrint.setChecked(false);
+                    }
                     Log.e("tag", "****Success");
                 } else {
                     Toast.makeText(InventoryReport.this, "Failed to export data!", Toast.LENGTH_SHORT).show();
