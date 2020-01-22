@@ -112,18 +112,11 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         gradeSpinner.setAdapter(gradeAdapter);
         gradeSpinner.setOnItemSelectedListener(this);
 
-//        locationList.add("Amman");
-//        locationList.add("Kalinovka");
-//        locationList.add("Rudniya Store");
-//        locationList.add("Rudniya Sawmill");
-//        locationAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, locationList);
-//        locationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        locationSpinner.setAdapter(locationAdapter);
-//        locationSpinner.setOnItemSelectedListener(this);
-
         areaList.add("Zone 1");
         areaList.add("Zone 2");
         areaList.add("Zone 3");
+        areaList.add("Zone 4");
+        areaList.add("Zone 5");
         areaAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, areaList);
         areaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         areaSpinner.setAdapter(areaAdapter);

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -27,10 +28,22 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.falconssoft.woodysystem.models.Orders;
+import com.falconssoft.woodysystem.models.Pictures;
 import com.falconssoft.woodysystem.models.Settings;
 import com.falconssoft.woodysystem.models.Users;
+import com.falconssoft.woodysystem.reports.LoadingOrderReport;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,13 +73,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login);
 
         databaseHandler = new DatabaseHandler(this);
-        generalSettings = new Settings();
-        generalSettings = databaseHandler.getSettings();
-        woodPresenter = new WoodPresenter(this);
-        woodPresenter.getUsersData(LoginActivity.this);
+//        generalSettings = new Settings();
+        generalSettings = new DatabaseHandler(this).getSettings();
+//        generalSettings = databaseHandler.getSettings();
+//        woodPresenter = new WoodPresenter(this);
+//        woodPresenter.getUsersData(LoginActivity.this);
         localCompanyName = generalSettings.getCompanyName();
         localIpAddress = generalSettings.getIpAddress();
         localStore = generalSettings.getStore();
+
+        new JSONTask().execute();
 
         Log.e("bool", "" + (!(localIpAddress == null)));
 //        if (!(localIpAddress == null) && (!(localCompanyName == null))) {
@@ -261,8 +277,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 settings.setIpAddress(ipAddress.getText().toString());
                                 databaseHandler.deleteSettings();
                                 databaseHandler.addSettings(settings);
-                                woodPresenter.getUsersData(LoginActivity.this);
+//                                woodPresenter.getUsersData(LoginActivity.this);
                                 Toast.makeText(LoginActivity.this, "Saved Successfully", Toast.LENGTH_SHORT).show();
+
+                                generalSettings = new DatabaseHandler(LoginActivity.this).getSettings();
+                                new JSONTask().execute();
                                 settingDialog.dismiss();
                             } else {
                                 ipAddress.setError("Required");
@@ -297,6 +316,100 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         }
     }
+
+    private class JSONTask extends AsyncTask<String, String, List<Orders>> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected List<Orders> doInBackground(String... params) {
+            URLConnection connection = null;
+            BufferedReader reader = null;
+
+            try {
+
+                URL url = new URL("http://" + generalSettings.getIpAddress() + "/import.php?FLAG=0");
+
+                URLConnection conn = url.openConnection();
+                conn.setDoOutput(true);
+
+                reader = new BufferedReader(new
+                        InputStreamReader(conn.getInputStream()));
+
+                StringBuilder sb = new StringBuilder();
+                String line = null;
+
+                // Read Server Response
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                String finalJson = sb.toString();
+                Log.e("finalJson*********", finalJson);
+
+                JSONObject parentObject = new JSONObject(finalJson);
+
+                try {
+                    JSONArray parentArrayOrders = parentObject.getJSONArray("USERS");
+
+//                    for (int i = 0; i < parentArrayOrders.length(); i++) {
+                        JSONObject finalObject = parentArrayOrders.getJSONObject(0);
+
+//                        Orders order = new Orders();
+                    globalUsername = finalObject.getString("USER_NAME");
+                    globalPassword = finalObject.getString("PASSWORD") ;
+//                        orders.add(order);
+//                    }
+                } catch (JSONException e) {
+                    Log.e("Import Data2", e.getMessage().toString());
+                }
+
+            } catch (MalformedURLException e) {
+                Log.e("Customer", "********ex1");
+                e.printStackTrace();
+            } catch (IOException e) {
+                Log.e("Customer", e.getMessage().toString());
+                e.printStackTrace();
+
+            } catch (JSONException e) {
+                Log.e("Customer", "********ex3  " + e.toString());
+                e.printStackTrace();
+            } finally {
+                Log.e("Customer", "********finally");
+                if (connection != null) {
+                    Log.e("Customer", "********ex4");
+                    // connection.disconnect();
+                }
+                try {
+                    if (reader != null) {
+                        reader.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(final List<Orders> result) {
+            super.onPostExecute(result);
+
+            if (result != null) {
+//                Log.e("result", "*****************" + orders.size());
+//                fillTable(orders);
+//                storeInDatabase();
+            } else {
+                Toast.makeText(LoginActivity.this, "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 
 //    public void setSlideAnimation() {
 //        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
