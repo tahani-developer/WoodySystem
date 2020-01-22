@@ -102,6 +102,11 @@
     <string name="generate_Barcode">Generate Barcode</string>
     <string name="ordered">Ordered</string>
 
-
+    <string name="edit">Edit</string>
+    <string name="q1">Are you want delete bundle number: </string>
+    <string name="yes">Yes</string>
+    <string name="cancel">Cancel</string>
+    <string name="action">Choose Action</string>
+    <string name="update">Update</string>
 
 </resources>
