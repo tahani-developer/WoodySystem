@@ -159,6 +159,7 @@ public class LoadingOrderReport extends AppCompatActivity {
 
         myCalendar = Calendar.getInstance();
 
+        from.setText("1/12/2019");
         to.setText(sdf.format(myCalendar.getTime()));
 
         from.setOnClickListener(new View.OnClickListener() {
@@ -180,6 +181,8 @@ public class LoadingOrderReport extends AppCompatActivity {
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
+
+        fillTable(orders);
 
     }
 
