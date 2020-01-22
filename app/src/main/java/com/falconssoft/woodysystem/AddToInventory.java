@@ -77,7 +77,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
     private String locationString = null, gradeString = null, detailString = null;
     private  Date date;
     private SimpleDateFormat simpleDateFormat;
-    private String generateDate, oldBundleNoString;
+    private String generateDate, oldBundleNoString, newBundleNoString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -197,51 +197,6 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                     editTableRow(tableRow, bundleNoString, lengthText, widthText, thicknessText
                                             , noOfPiecesText, generalSettings.getStore(), packingListText);
 
-//                                    for (int i = 0; i < 10; i++) {
-//                                        TextView textView = new TextView(this);
-//                                        textView.setBackgroundResource(R.color.light_orange);
-//                                        TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f);
-//                                        textViewParam.setMargins(1, 5, 1, 1);
-//                                        textView.setTextSize(15);
-//                                        textView.setTextColor(ContextCompat.getColor(this, R.color.gray_dark_one));
-//                                        textView.setLayoutParams(textViewParam);
-//                                        switch (i) {
-//                                            case 0:
-//                                                TableRow.LayoutParams param = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
-//                                                param.setMargins(1, 5, 1, 1);
-//                                                textView.setLayoutParams(param);
-//                                                textView.setText(bundleNoString);
-//                                                break;
-//                                            case 1:
-//                                                textView.setText(lengthText);
-//                                                break;
-//                                            case 2:
-//                                                textView.setText(widthText);
-//                                                break;
-//                                            case 3:
-//                                                textView.setText(thicknessText);
-//                                                break;
-//                                            case 4:
-//                                                textView.setText(gradeText);
-//                                                break;
-//                                            case 5:
-//                                                textView.setText(noOfPiecesText);
-//                                                break;
-//                                            case 6:
-//                                                textView.setText(generalSettings.getStore());
-//                                                break;
-//                                            case 7:
-//                                                textView.setText(areaText);
-//                                                break;
-//                                            case 8:
-//                                                textView.setText(detailString);
-//                                                break;
-//                                            case 9:
-//                                                textView.setText(packingListText);
-//                                                break;
-//                                        }
-//                                        tableRow.addView(textView);
-//                                    }
                                     jsonArrayBundles.put(newBundle.getJSONObject());
                                     publicTableRow = tableRow;
 //                                      bundlesTable.addView(tableRow);
@@ -441,32 +396,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                     update.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-//                                                                String bundleNoString = ((TextView) tableRow1.getChildAt(0)).getText().toString();
-//                                                                String lengthText = ((TextView) tableRow1.getChildAt(1)).getText().toString();
-//                                                                String widthText = ((TextView) tableRow1.getChildAt(2)).getText().toString();
-//                                                                String thicknessText = ((TextView) tableRow1.getChildAt(3)).getText().toString();
-//                                                                String gradeText = ((TextView) tableRow1.getChildAt(4)).getText().toString();
-//                                                                String noOfPiecesText = ((TextView) tableRow1.getChildAt(5)).getText().toString();
-//                                                                String locationText = ((TextView) tableRow1.getChildAt(6)).getText().toString();
-//                                                                String areaText = ((TextView) tableRow1.getChildAt(7)).getText().toString();
-//                                                                String detailsText = ((TextView) tableRow1.getChildAt(8)).getText().toString();
-//                                                                String backingListText = ((TextView) tableRow1.getChildAt(9)).getText().toString();
-//
-//                                                                if (!TextUtils.isEmpty(lengthText)) {
-//                                                                    if (!TextUtils.isEmpty(widthText)) {
-//                                                                        if (!TextUtils.isEmpty(thicknessText)) {
-//                                                                            if (!TextUtils.isEmpty(gradeText)) {
-//                                                                                if (!TextUtils.isEmpty(noOfPiecesText)) {
-//                                                                                    if (!TextUtils.isEmpty(areaText)) {
-//                                                                                        if (!TextUtils.isEmpty(detailsText)) {
-//
-//                                                                                        }
-//                                                                                    }
-//                                                                                }
-//                                                                            }
-//                                                                        }
-//                                                                    }
-//                                                                }
+
                             if (!TextUtils.isEmpty(thickness.getText().toString())) {
                                 if (!TextUtils.isEmpty(width.getText().toString())) {
                                     if (!TextUtils.isEmpty(length.getText().toString())) {
@@ -479,6 +409,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                             String packingListText2 = packingList.getText().toString();
                                             String newBundleNoString;
 
+                                            chooseSpinnersContent();
                                             newBundleNoString = "" + gradeString
                                                     + locationString
                                                     + thicknessText2
@@ -519,7 +450,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                             String widthText2 = width.getText().toString();
                                             String noOfPiecesText2 = noOfPieces.getText().toString();
                                             String packingListText2 = packingList.getText().toString();
-                                            String newBundleNoString;
+                                             newBundleNoString = "";
 
                                             chooseSpinnersContent();
                                             newBundleNoString = "" + gradeString
@@ -552,6 +483,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                                     , 0);//presenter.getSerialNo());//SettingsFile.serialNumber
 
                                             new JSONTask4().execute();
+//                                            oldBundleNoString = newBundleNoString;
                                         } else {
                                             noOfPieces.setError("Required!");
                                         }
@@ -951,7 +883,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
                 nameValuePairs.add(new BasicNameValuePair("UPDATE_BUNDLE", "1"));
                 nameValuePairs.add(new BasicNameValuePair("BUNDLE_NO", oldBundleNoString)); // the old bundle number
-                nameValuePairs.add(new BasicNameValuePair("BUNDLE_INFO", newBundle.getJSONObject().toString())); // the updated bundle info
+                nameValuePairs.add(new BasicNameValuePair("OBJECT_INFO", newBundle.getJSONObject().toString())); // the updated bundle info
 
                 request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
@@ -984,9 +916,10 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (s != null) {
-                if (s.contains("DELETE BUNDLE SUCCESS")) {
-                    bundlesTable.removeView(publicTableRow);
-                    bundlesTable.addView(updaterTableRow);
+                if (s.contains("UPDATE BUNDLE SUCCESS")) {
+                    oldBundleNoString = newBundle.getBundleNo();
+//                    bundlesTable.removeView(publicTableRow);
+//                    bundlesTable.addView(updaterTableRow);
 //                    databaseHandler.deleteBundle(bundleNumber);
                     Log.e("tag", "updated bundle raw/Success");
                 } else {
@@ -1001,6 +934,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+//        Intent intent = new Intent(AddToInventory.this , Stage3.class);
+//        startActivity(intent);
         finish();
     }
 }
