@@ -60,24 +60,20 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
     private DatabaseHandler databaseHandler;
     private Animation animation;
     private List<String> gradeList = new ArrayList<>();
-    //    private List<String> locationList = new ArrayList<>();
     private List<String> areaList = new ArrayList<>();
     private List<String> descriptionList = new ArrayList<>();
     private ArrayAdapter<String> gradeAdapter, areaAdapter, descriptionaAdapter;//, locationAdapter
     private String gradeText = "Fresh", areaText = "Zone 1", descriptionText = "Bundle Origin", locationText;//, locationText = "Loc 1" ===> used for fill from adapter
     private JSONArray jsonArrayBundles;
-    private String bundleNoString;
     private boolean mState = false;
     private final String STATE_VISIBILITY = "state-visibility";
-    //    private WoodPresenter presenter;
     private Settings generalSettings;
-    String bundleNumber;
-    private TableRow publicTableRow = null, updaterTableRow = null;
-    TableRow tableRow1;
-    private String locationString = null, gradeString = null, detailString = null;
-    private  Date date;
+    private TableRow publicTableRow = null, updaterTableRow = null, tableRow1;
+    private String locationString = null, gradeString = null, detailString = null, generateDate, bundleNumber, oldBundleNoString, newBundleNoString, bundleNoString;
+    private Date date;
     private SimpleDateFormat simpleDateFormat;
-    private String generateDate, oldBundleNoString, newBundleNoString;
+    private Dialog dialog;
+//    private List<TableRow> tableRowList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,7 +174,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                             , Double.parseDouble(lengthText)
                                             , Double.parseDouble(widthText)
                                             , gradeText
-                                            , Integer.parseInt(noOfPiecesText)
+                                            , Double.parseDouble(noOfPiecesText)
                                             , bundleNoString
                                             , generalSettings.getStore()
                                             , areaText
@@ -196,6 +192,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                     TableRow tableRow = new TableRow(this);
                                     editTableRow(tableRow, bundleNoString, lengthText, widthText, thicknessText
                                             , noOfPiecesText, generalSettings.getStore(), packingListText);
+//                                    tableRowList.add(tableRow);
 
                                     jsonArrayBundles.put(newBundle.getJSONObject());
                                     publicTableRow = tableRow;
@@ -205,22 +202,6 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                     tableRow.setOnLongClickListener(new View.OnLongClickListener() {
                                         @Override
                                         public boolean onLongClick(View v) {
-//                                            String bundleNo = ((TextView) tableRow.getChildAt(0)).getText().toString();
-//                                            Log.e("b", bundleNo);
-//                                            AlertDialog.Builder builder = new AlertDialog.Builder(AddToInventory.this);
-//                                            builder.setMessage("Are you want delete bundle number: " + bundleNo + " ?");
-//                                            builder.setTitle("Delete");
-//                                            builder.setIcon(R.drawable.ic_warning_black_24dp);
-//                                            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//                                                @Override
-//                                                public void onClick(DialogInterface dialog, int which) {
-//                                                    bundlesTable.removeView(tableRow);
-//                                                    bundleNumber = bundleNo;
-//                                                    new JSONTask2().execute();
-//                                                }
-//                                            });
-//                                            builder.show();
-//                                            return false;
                                             publicTableRow = tableRow;
                                             showOperationDialog(tableRow);
                                             return false;
@@ -299,12 +280,12 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 
     void showOperationDialog(TableRow tableRow) {
 
-        Dialog dialog = new Dialog(AddToInventory.this);
+        dialog = new Dialog(AddToInventory.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.choose_operation_dialog);
 
-         oldBundleNoString = ((TextView) tableRow.getChildAt(0)).getText().toString(); ///////////////////
-        String serialString = oldBundleNoString.substring(bundleNoString.lastIndexOf(".") + 1);
+        oldBundleNoString = ((TextView) tableRow.getChildAt(0)).getText().toString(); ///////////////////
+        String serialString = oldBundleNoString.substring(oldBundleNoString.lastIndexOf(".") + 1);
         String lengthString = ((TextView) tableRow.getChildAt(1)).getText().toString();
         String widthString = ((TextView) tableRow.getChildAt(2)).getText().toString();
         String thicknessString = ((TextView) tableRow.getChildAt(3)).getText().toString();
@@ -450,7 +431,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                             String widthText2 = width.getText().toString();
                                             String noOfPiecesText2 = noOfPieces.getText().toString();
                                             String packingListText2 = packingList.getText().toString();
-                                             newBundleNoString = "";
+                                            int orderedText2 = 0;
+                                            newBundleNoString = "";
 
                                             chooseSpinnersContent();
                                             newBundleNoString = "" + gradeString
@@ -466,11 +448,15 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                                     , noOfPiecesText2, locationString, packingListText2);
                                             updaterTableRow = tableRow1;
 
+                                            if ((!packingListText2.equals(""))) {
+                                                orderedText2 = 1;
+                                            }
+
                                             newBundle = new BundleInfo(Double.parseDouble(thicknessText2)
                                                     , Double.parseDouble(lengthText2)
                                                     , Double.parseDouble(widthText2)
                                                     , gradeText
-                                                    , Integer.parseInt(noOfPiecesText2)
+                                                    , Double.parseDouble(noOfPiecesText2)
                                                     , newBundleNoString
                                                     , generalSettings.getStore()
                                                     , areaText
@@ -480,8 +466,10 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                                     , serialString
                                                     , generalSettings.getUserNo()
                                                     , packingListText2
-                                                    , 0);//presenter.getSerialNo());//SettingsFile.serialNumber
+                                                    , orderedText2);//presenter.getSerialNo());//SettingsFile.serialNumber
 
+//                                            tableRowList.remove(tableRow);
+//                                            tableRowList.add(updaterTableRow);
                                             new JSONTask4().execute();
 //                                            oldBundleNoString = newBundleNoString;
                                         } else {
@@ -617,6 +605,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
             textView.setBackgroundResource(R.color.light_orange);
             TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f);
             textViewParam.setMargins(1, 5, 1, 1);
+            textView.setPadding(0,10,0,10);
             textView.setTextSize(15);
             textView.setTextColor(ContextCompat.getColor(this, R.color.gray_dark_one));
             textView.setLayoutParams(textViewParam);
@@ -624,6 +613,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                 case 0:
                     TableRow.LayoutParams param = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
                     param.setMargins(1, 5, 1, 1);
+                    textView.setPadding(0,10,0,10);
                     textView.setLayoutParams(param);
                     textView.setText(bundleNoString);
                     break;
@@ -661,38 +651,6 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-//        linearLayoutView.getVisibility();
-        outState.putBoolean(STATE_VISIBILITY, mState);
-
-        List<TableRow> tableRows = new ArrayList<>();
-        int rowcount = bundlesTable.getChildCount();
-        for (int i = 0; i < rowcount; i++) {
-            TableRow row = (TableRow) bundlesTable.getChildAt(i);
-            tableRows.add(row);
-        }
-        outState.putSerializable("table", (Serializable) tableRows);
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-
-        // Restore state members from saved instance
-        mState = savedInstanceState.getBoolean(STATE_VISIBILITY);
-        linearLayoutView.setVisibility(mState ? View.VISIBLE : View.GONE);
-//        presenter.getImportData();
-        List<TableRow> tableRows = (List<TableRow>) savedInstanceState.getSerializable("table");
-        for (int i = 0; i < tableRows.size(); i++) {
-            if (tableRows.get(i).getParent() != null) {
-                ((ViewGroup) tableRows.get(i).getParent()).removeView(tableRows.get(i)); // <- fix
-            }
-            bundlesTable.addView(tableRows.get(i));
-        }
-        super.onRestoreInstanceState(savedInstanceState);
-    }
-
-    @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         switch (parent.getId()) {
             case R.id.addToInventory_grade:
@@ -722,7 +680,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 
         @Override
         protected void onPreExecute() {
-            super.onPreExecute();}
+            super.onPreExecute();
+        }
 
         @Override
         protected String doInBackground(String... params) {
@@ -771,7 +730,10 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                 if (s.contains("BUNDLE_INFO SUCCESS")) {
 //                    databaseHandler.addNewBundle(newBundle);
 //                    presenter.getImportData();
-                    Log.e("addToInventory", "" + publicTableRow);
+                    int i = bundlesTable.getChildCount();
+                    publicTableRow.setTag("" + i);
+                    Log.e("addToInventory", "" + publicTableRow + "   " + i + "      " + publicTableRow.getTag().toString());
+
                     bundlesTable.addView(publicTableRow);
 
                     thickness.setText("");
@@ -852,6 +814,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
             super.onPostExecute(s);
             if (s != null) {
                 if (s.contains("DELETE BUNDLE SUCCESS")) {
+//                    tableRowList.remove(publicTableRow);
+//                    fillBundlesTable();
                     bundlesTable.removeView(publicTableRow);
 //                    databaseHandler.deleteBundle(bundleNumber);
                     Log.e("tag", "****Success");
@@ -918,9 +882,52 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
             if (s != null) {
                 if (s.contains("UPDATE BUNDLE SUCCESS")) {
                     oldBundleNoString = newBundle.getBundleNo();
-//                    bundlesTable.removeView(publicTableRow);
-//                    bundlesTable.addView(updaterTableRow);
-//                    databaseHandler.deleteBundle(bundleNumber);
+                    dialog.dismiss();
+                    Log.e("addNewToInventory", "" + "   " + "      " + publicTableRow.getTag().toString());
+                    for (int i = 0; i < 10; i++) {
+//    Log.e("addNewToInventory_in ", "" + "   "+i+"      "+updaterTableRow.getTag().toString());
+                        TextView textView = (TextView) publicTableRow.getChildAt(i);
+
+                        switch (i) {
+
+                            case 0:
+                                textView.setText(newBundle.getBundleNo());
+                                break;
+                            case 1:
+                                textView.setText("" + newBundle.getLength());
+                                break;
+
+                            case 2:
+                                textView.setText("" + newBundle.getWidth());
+                                break;
+                            case 3:
+                                textView.setText("" + newBundle.getThickness());
+                                break;
+
+                            case 4:
+                                textView.setText("" + newBundle.getGrade());
+                                break;
+                            case 5:
+                                textView.setText("" + newBundle.getNoOfPieces());
+                                break;
+                            case 6:
+                                textView.setText("" + newBundle.getLocation());
+                                break;
+                            case 7:
+                                textView.setText("" + newBundle.getArea());
+
+                                break;
+                            case 8:
+                                textView.setText("" + newBundle.getDescription());
+                                break;
+                            case 9:
+                                textView.setText("" + newBundle.getBackingList());
+                                break;
+
+
+                        }
+
+                    }
                     Log.e("tag", "updated bundle raw/Success");
                 } else {
                     Log.e("tag", "updated bundle raw/Failed to export data");
@@ -929,6 +936,38 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                 Log.e("tag", "updated bundle raw/Failed to export data Please check internet connection");
             }
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+//        linearLayoutView.getVisibility();
+        outState.putBoolean(STATE_VISIBILITY, mState);
+
+        List<TableRow> tableRows = new ArrayList<>();
+        int rowcount = bundlesTable.getChildCount();
+        for (int i = 0; i < rowcount; i++) {
+            TableRow row = (TableRow) bundlesTable.getChildAt(i);
+            tableRows.add(row);
+        }
+        outState.putSerializable("table", (Serializable) tableRows);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+
+        // Restore state members from saved instance
+        mState = savedInstanceState.getBoolean(STATE_VISIBILITY);
+        linearLayoutView.setVisibility(mState ? View.VISIBLE : View.GONE);
+//        presenter.getImportData();
+        List<TableRow> tableRows = (List<TableRow>) savedInstanceState.getSerializable("table");
+        for (int i = 0; i < tableRows.size(); i++) {
+            if (tableRows.get(i).getParent() != null) {
+                ((ViewGroup) tableRows.get(i).getParent()).removeView(tableRows.get(i)); // <- fix
+            }
+            bundlesTable.addView(tableRows.get(i));
+        }
+        super.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override

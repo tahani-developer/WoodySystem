@@ -253,7 +253,7 @@ public class LoadingOrderReport extends AppCompatActivity {
                         order.setWidth(finalObject.getDouble("WIDTH"));
                         order.setLength(finalObject.getDouble("LENGTH"));
                         order.setGrade(finalObject.getString("GRADE"));
-                        order.setNoOfPieces(finalObject.getInt("PIECES"));
+                        order.setNoOfPieces(finalObject.getDouble("PIECES"));
                         order.setBundleNo(finalObject.getString("BUNDLE_NO"));
                         order.setLocation(finalObject.getString("LOCATION"));
                         order.setArea(finalObject.getString("AREA"));
