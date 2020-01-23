@@ -322,7 +322,7 @@
                             android:layout_weight="2"
                             android:nextFocusDown="@id/choose_operation_packing_list"
                             android:ems="10"
-                            android:inputType="number" />
+                            android:inputType="numberDecimal" />
 
                     </LinearLayout>
 
