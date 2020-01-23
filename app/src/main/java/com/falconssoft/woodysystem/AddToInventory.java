@@ -68,7 +68,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
     private boolean mState = false;
     private final String STATE_VISIBILITY = "state-visibility";
     private Settings generalSettings;
-    private TableRow publicTableRow = null, updaterTableRow = null, tableRow1;
+    private TableRow publicTableRow = null, tableRow1;
     private String locationString = null, gradeString = null, detailString = null, generateDate, bundleNumber, oldBundleNoString, newBundleNoString, bundleNoString;
     private Date date;
     private SimpleDateFormat simpleDateFormat;
@@ -455,7 +455,6 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                             tableRow1.removeAllViews();
                                             editTableRow(tableRow1, newBundleNoString, lengthText2, widthText2, thicknessText2
                                                     , noOfPiecesText2, locationString, packingListText2);
-                                            updaterTableRow = tableRow1;
                                             updatedTable.addView(tableRow1);
 
                                             if ((!packingListText2.equals(""))) {
@@ -478,8 +477,6 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                                     , packingListText2
                                                     , orderedText2);//presenter.getSerialNo());//SettingsFile.serialNumber
 
-//                                            tableRowList.remove(tableRow);
-//                                            tableRowList.add(updaterTableRow);
                                             new JSONTask4().execute();
 //                                            oldBundleNoString = newBundleNoString;
                                         } else {
@@ -897,10 +894,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                 if (s.contains("UPDATE BUNDLE SUCCESS")) {
                     oldBundleNoString = newBundle.getBundleNo();
                     dialog.dismiss();
-//                    updatedTable.addView(updaterTableRow);
                     Log.e("addNewToInventory", "" + "   " + "      " + publicTableRow.getTag().toString());
                     for (int i = 0; i < 10; i++) {
-//    Log.e("addNewToInventory_in ", "" + "   "+i+"      "+updaterTableRow.getTag().toString());
                         TextView textView = (TextView) publicTableRow.getChildAt(i);
 
                         switch (i) {
