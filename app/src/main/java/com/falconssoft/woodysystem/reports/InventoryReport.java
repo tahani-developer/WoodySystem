@@ -544,21 +544,13 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 //        Log.e("follow", fromDate + " to " + toDate + " size1 " + bundleInfoServer.size() + " size2 " + dateFiltered.size());
 
         for (int k = 0; k < dateFiltered.size(); k++) {
-//            Log.e("-------------------", dateFiltered.get(k).getAddingDate());
-//            Log.e("location", dateFiltered.get(k).getLocation());
             String dateFiltered2 = String.valueOf(dateFiltered.get(k).getOrdered());
-
-//            Log.e("follow2/", "orderedField " + (!orderedField.equals("All")));
-//            Log.e("follow2/", "dateFiltered " + orderedField.equals(dateFiltered2));
-//            Log.e("follow2/", "" + ((!orderedField.equals("All")) && orderedField.equals(dateFiltered2)));
             if (loc.equals("All") || loc.equals(dateFiltered.get(k).getLocation())) {
                 if (areaField.equals("All") || areaField.equals(dateFiltered.get(k).getArea())) {
                     if (orderedField.equals("All") || orderedField.equals(dateFiltered2)) {
-
 //                        filtered.add(dateFiltered.get(k));
 
 //                        List<BundleInfo> tempList = new ArrayList<>();
-
                         if (
                                 (("" + dateFiltered.get(k).getThickness()).toUpperCase().startsWith(f1) || f1.equals("")) &&
                                         (("" + dateFiltered.get(k).getWidth()).toUpperCase().startsWith(f2) || f2.equals("")) &&
@@ -569,52 +561,6 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                     }
                 }
             }
-//            if ((!loc.equals("All")) && (!areaField.equals("All")) && (!orderedField.equals("All"))
-//                    && loc.equals(dateFiltered.get(k).getLocation())
-//                    && areaField.equals(dateFiltered.get(k).getArea())
-//                    && orderedField.equals(dateFiltered2)) { // not of them is all
-//                filtered.add(dateFiltered.get(k));
-//
-//            } else if ((!loc.equals("All")) && (!areaField.equals("All"))
-//                    && loc.equals(dateFiltered.get(k).getLocation())
-//                    && areaField.equals(dateFiltered.get(k).getArea())) { // loc and area specific
-//                filtered.add(dateFiltered.get(k));
-//
-//            } else if ((!loc.equals("All")) && (!orderedField.equals("All"))
-//                    && loc.equals(dateFiltered.get(k).getLocation())
-//                    && orderedField.equals(dateFiltered2)) {// loc and ordered specific
-//                filtered.add(dateFiltered.get(k));
-//
-//            } else if ((!areaField.equals("All")) && (!orderedField.equals("All"))
-//                    && areaField.equals(dateFiltered.get(k).getArea())
-//                    && orderedField.equals(dateFiltered2)) {// area and ordered specific
-//                filtered.add(dateFiltered.get(k));
-//
-//            } else if ((!loc.equals("All")) && loc.equals(dateFiltered.get(k).getLocation())) {// loc is specific
-//                filtered.add(dateFiltered.get(k));
-//
-//            } else if ((!areaField.equals("All")) && areaField.equals(dateFiltered.get(k).getArea())) {// area is specific
-//                filtered.add(dateFiltered.get(k));
-//
-//            } else if ((!orderedField.equals("All")) && orderedField.equals(dateFiltered2)) {// ordered is specific
-//                filtered.add(dateFiltered.get(k));
-//
-//            } else if ((loc.equals("All")) && (areaField.equals("All")) && (orderedField.equals("All"))){ // all of them
-//                filtered.add(dateFiltered.get(k));
-//            }
-
-//            if ((!loc.equals("All")) && (!areaField.equals("All"))
-//                    && loc.equals(dateFiltered.get(k).getLocation())
-//                    && areaField.equals(dateFiltered.get(k).getArea()))
-//                filtered.add(dateFiltered.get(k));
-//            else if ((!loc.equals("All")) && areaField.equals("All")
-//                    && loc.equals(dateFiltered.get(k).getLocation())) {
-//                filtered.add(dateFiltered.get(k));
-//            } else if (loc.equals("All") && (!areaField.equals("All"))
-//                    && areaField.equals(dateFiltered.get(k).getArea()))
-//                filtered.add(dateFiltered.get(k));
-//            else if (loc.equals("All") && areaField.equals("All"))
-//                filtered.add(dateFiltered.get(k));
         }
         Log.e("follow/", "size3/filtered/" + filtered.size());
         fillTable(filtered);
