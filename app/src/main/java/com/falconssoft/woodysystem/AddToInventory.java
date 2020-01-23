@@ -52,7 +52,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
     private static final int BLACK = 0xFF000000;
     private EditText thickness, length, width, noOfPieces, serialNo, packingList;
     private Spinner gradeSpinner, areaSpinner, descriptionSpinner;//, locationSpinner
-    private TableLayout bundlesTable;
+    private TableLayout bundlesTable, updatedTable;
     private LinearLayout linearLayoutView;
     private TextView textView, addToInventory;
     private BundleInfo newBundle;
@@ -124,6 +124,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         String widthText = width.getText().toString();
         String noOfPiecesText = noOfPieces.getText().toString();
         String packingListText = packingList.getText().toString();
+
         locationText = generalSettings.getStore();
         int orderedText = 0;
 
@@ -157,7 +158,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                     if (bundlesTable.getChildCount() == 0) {
                                         linearLayoutView.setVisibility(View.VISIBLE);
                                         mState = true;
-                                        addTableHeader();
+                                        addTableHeader(bundlesTable);
                                     }
 
 
@@ -228,7 +229,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    void addTableHeader() {
+    void addTableHeader(TableLayout tableLayout) {
         TableRow tableRow = new TableRow(this);
         for (int i = 0; i < 10; i++) {
             TextView textView = new TextView(this);
@@ -240,7 +241,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
             textView.setLayoutParams(textViewParam);
             switch (i) {
                 case 0:
-                    TableRow.LayoutParams param = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
+                    TableRow.LayoutParams param = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.MATCH_PARENT);
 //                    param.setMargins(1, 5, 1, 1);
                     textView.setLayoutParams(param);
                     textView.setText("Bundle#");
@@ -275,7 +276,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
             }
             tableRow.addView(textView);
         }
-        bundlesTable.addView(tableRow);
+        tableLayout.addView(tableRow);
+//        bundlesTable.addView(tableRow);
     }
 
     void showOperationDialog(TableRow tableRow) {
@@ -305,7 +307,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 
         RadioButton edit = dialog.findViewById(R.id.choose_operation_edit_rb);
         LinearLayout editLinear = dialog.findViewById(R.id.choose_operation_edit_linear);
-        tableRow1 = dialog.findViewById(R.id.choose_operation_edit_tableRow);
+        tableRow1 = new TableRow(this);//dialog.findViewById(R.id.choose_operation_edit_tableRow);
+        updatedTable = dialog.findViewById(R.id.choose_operation_edit_tableLayout);
         EditText thickness = dialog.findViewById(R.id.choose_operation_thickness);
         EditText length = dialog.findViewById(R.id.choose_operation_length);
         EditText width = dialog.findViewById(R.id.choose_operation_width);
@@ -382,6 +385,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                 if (!TextUtils.isEmpty(width.getText().toString())) {
                                     if (!TextUtils.isEmpty(length.getText().toString())) {
                                         if (!TextUtils.isEmpty(noOfPieces.getText().toString())) {
+                                            updatedTable.removeAllViews();
+                                            addTableHeader(updatedTable);
 
                                             String thicknessText2 = thickness.getText().toString();
                                             String lengthText2 = length.getText().toString();
@@ -402,6 +407,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                             tableRow1.removeAllViews();
                                             editTableRow(tableRow1, newBundleNoString, lengthText2, widthText2, thicknessText2
                                                     , noOfPiecesText2, locationString, packingListText2);
+                                            updatedTable.addView(tableRow1);
 
                                         } else {
                                             noOfPieces.setError("Required!");
@@ -426,6 +432,9 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                     if (!TextUtils.isEmpty(length.getText().toString())) {
                                         if (!TextUtils.isEmpty(noOfPieces.getText().toString())) {
 
+                                            updatedTable.removeAllViews();
+                                            addTableHeader(updatedTable);
+
                                             String thicknessText2 = thickness.getText().toString();
                                             String lengthText2 = length.getText().toString();
                                             String widthText2 = width.getText().toString();
@@ -447,6 +456,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                             editTableRow(tableRow1, newBundleNoString, lengthText2, widthText2, thicknessText2
                                                     , noOfPiecesText2, locationString, packingListText2);
                                             updaterTableRow = tableRow1;
+                                            updatedTable.addView(tableRow1);
 
                                             if ((!packingListText2.equals(""))) {
                                                 orderedText2 = 1;
@@ -746,6 +756,10 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                     areaSpinner.setSelection(0);
                     gradeSpinner.setSelection(0);
                     descriptionSpinner.setSelection(0);
+                    gradeText = "Fresh";
+                    areaText = "Zone 1";
+                    descriptionText = "Bundle Origin";
+
                     Log.e("tag", "****Success");
                 } else {
 //                    presenter.setSerialNo("");
@@ -883,6 +897,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                 if (s.contains("UPDATE BUNDLE SUCCESS")) {
                     oldBundleNoString = newBundle.getBundleNo();
                     dialog.dismiss();
+//                    updatedTable.addView(updaterTableRow);
                     Log.e("addNewToInventory", "" + "   " + "      " + publicTableRow.getTag().toString());
                     for (int i = 0; i < 10; i++) {
 //    Log.e("addNewToInventory_in ", "" + "   "+i+"      "+updaterTableRow.getTag().toString());

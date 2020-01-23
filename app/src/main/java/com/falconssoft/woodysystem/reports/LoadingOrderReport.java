@@ -747,6 +747,10 @@ public class LoadingOrderReport extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();}
 }
 
 

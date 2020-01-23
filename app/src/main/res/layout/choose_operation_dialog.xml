@@ -484,7 +484,7 @@
                         android:layout_margin="10dp"
                         android:fontFamily="serif"
                         android:gravity="start"
-                        android:text="@string/update"
+                        android:text="@string/show"
                         android:textSize="18sp" />
 
                     <TextView
@@ -501,111 +501,15 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/orange"
-                android:layout_marginTop="10dp">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/bundle_no"
-                    android:fontFamily="serif"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/length"
-                    android:fontFamily="serif"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/width"
-                    android:fontFamily="serif"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/thickness"
-                    android:fontFamily="serif"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/grade"
-                    android:fontFamily="serif"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/no_pieces"
-                    android:fontFamily="serif"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/loc"
-                    android:fontFamily="serif"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/area"
-                    android:fontFamily="serif"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/details"
-                    android:fontFamily="serif"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/p_list"
-                    android:fontFamily="serif"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/choose_operation_edit_tableRow"
+            <TableLayout
+                android:id="@+id/choose_operation_edit_tableLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="10dp">
 
-            </TableRow>
+            </TableLayout>
 
         </LinearLayout>
 

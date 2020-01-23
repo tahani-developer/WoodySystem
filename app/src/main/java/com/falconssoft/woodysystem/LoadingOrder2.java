@@ -496,9 +496,9 @@ public class LoadingOrder2 extends AppCompatActivity {
 
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = new Intent(LoadingOrder2.this, LoadingOrder.class);
-        startActivity(intent);
         finish();
+//        Intent intent = new Intent(LoadingOrder2.this, LoadingOrder.class);
+//        startActivity(intent);
     }
 
     public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
