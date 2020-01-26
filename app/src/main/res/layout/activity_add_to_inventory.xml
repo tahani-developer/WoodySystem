@@ -33,7 +33,7 @@
                 android:id="@+id/addToInventory_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="4"
+                android:layout_weight="5"
                 android:drawableStart="@drawable/axe"
                 android:drawableLeft="@drawable/axe"
                 android:drawablePadding="10dp"
@@ -46,6 +46,21 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/addToInventory_add_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="7dp"
+                android:paddingBottom="7dp"
+                android:paddingStart="20dp"
+                android:paddingLeft="20dp"
+                android:paddingEnd="20dp"
+                android:paddingRight="20dp"
+                android:background="@drawable/frame_shape"
+                android:drawableStart="@drawable/ic_add_white_32dp"
+                android:drawableLeft="@drawable/ic_add_white_32dp"
+                />
 
         </LinearLayout>
 
@@ -102,7 +117,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/addToInventory_linear_eight"
+                    android:id="@+id/addToInventory_linear_seven"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -111,23 +126,22 @@
                     android:padding="5dp">
 
                     <TextView
-                        android:id="@+id/textView11"
+                        android:id="@+id/textView5"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:textSize="18sp"
-                        android:text="@string/p_list" />
+                        android:text="@string/no_of_pieces" />
 
                     <EditText
-                        android:id="@+id/addToInventory_backing_list"
+                        android:id="@+id/addToInventory_no_of_pieces"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_weight="2"
                         android:ems="10"
-                        />
-
+                        android:inputType="numberDecimal" />
                 </LinearLayout>
 
 
@@ -338,65 +352,6 @@
                         android:layout_marginTop="12dp"
                         android:layout_weight="2"
                         />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:id="@+id/addToInventory_linear_seven"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/shape_with_corner"
-                    android:orientation="horizontal"
-                    android:padding="5dp">
-
-                    <TextView
-                        android:id="@+id/textView5"
-                        android:layout_width="150dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="18sp"
-                        android:text="@string/no_of_pieces" />
-
-                    <EditText
-                        android:id="@+id/addToInventory_no_of_pieces"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="2"
-                        android:nextFocusDown="@id/addToInventory_backing_list"
-                        android:ems="10"
-                        android:inputType="numberDecimal" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/shape_with_corner"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/addToInventory_add_button"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="15dp"
-                        android:paddingBottom="15dp"
-                        android:background="@drawable/frame_shape"
-                        android:textColor="@color/white"
-                        android:textSize="20sp"
-                        android:text="@string/add" />
 
                 </LinearLayout>
 

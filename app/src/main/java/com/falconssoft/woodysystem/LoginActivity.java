@@ -223,6 +223,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 localIpAddress = generalSettings.getIpAddress();
                 localStore = generalSettings.getStore();
 
+                storesList.clear();
                 storesList.add("Amman");
                 storesList.add("Kalinovka");
                 storesList.add("Rudniya Store");
