@@ -315,7 +315,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         EditText noOfPieces = dialog.findViewById(R.id.choose_operation_no_of_pieces);
         EditText packingList = dialog.findViewById(R.id.choose_operation_packing_list);
         TextView serialNo = dialog.findViewById(R.id.choose_operation_serial_no);
-        gradeSpinner = dialog.findViewById(R.id.choose_operation_grade);
+         gradeSpinner = dialog.findViewById(R.id.choose_operation_grade);
         areaSpinner = dialog.findViewById(R.id.choose_operation_area);
         descriptionSpinner = dialog.findViewById(R.id.choose_operation_description);
         TextView update = dialog.findViewById(R.id.choose_operation_update);
