@@ -725,7 +725,7 @@ public class GenerateBarCode extends AppCompatActivity {
         return isConten;
 
     }
-
+ 
     Bitmap encodeAsBitmap(String contents, BarcodeFormat format, int img_width, int img_height) throws WriterException {
         String contentsToEncode = contents;
         if (contentsToEncode == null) {
