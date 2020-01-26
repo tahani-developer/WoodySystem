@@ -256,29 +256,6 @@ public class LoadingOrder2 extends AppCompatActivity {
                             if (!TextUtils.isEmpty(dateOfLoad.getText().toString())) {
                                 if (!TextUtils.isEmpty(destination.getText().toString())) {
 
-//                                    emailTitle = "Order No: " + orderNo.getText().toString();
-                                    /**  progressDialog.show();
-                                     sendBundle();
-                                     //                                    Toast.makeText(LoadingOrder2.this, "Saved !", Toast.LENGTH_LONG).show();
-                                     //                                    for(int i = 0 ; i<pics.size() ; i++)
-                                     //                                        pics.set(i,null);
-                                     //                                    onResume();
-                                     if (checkImageExist) {
-                                     Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
-                                     intent.putExtra(Intent.EXTRA_EMAIL, new String[]{recipientName});
-                                     intent.putExtra(Intent.EXTRA_SUBJECT, emailTitle);
-                                     intent.setType("image/png");
-                                     ArrayList<Uri> uriArrayList = new ArrayList<>();
-                                     Log.e("size", "" + imagesFileList.size());
-                                     for (int i = 0; i < imagesFileList.size(); i++) {
-                                     uriArrayList.add(Uri.fromFile(imagesFileList.get(i)));
-                                     }
-                                     //                                    intent.putExtra(Intent.EXTRA_STREAM, array);
-                                     intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uriArrayList);
-                                     startActivity(Intent.createChooser(intent, "Share you on the jobing"));
-                                     }
-                                     //Log.d("URI@!@#!#!@##!", Uri.fromFile(pic).toString() + "   " + pic.exists());
-                                     */
                                     Toast.makeText(LoadingOrder2.this, "Saved Successfully", Toast.LENGTH_SHORT).show();
                                     sendBundle();
 
@@ -306,36 +283,8 @@ public class LoadingOrder2 extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                /**        emailContent = "Placing Number: \t" + placingNo.getText().toString()
-                 + "<br>" + "Order Number: \t" + orderNo.getText().toString()
-                 + "<br>" + "Container Number: \t" + containerNo.getText().toString()
-                 + "<br>" + "Date Of Load: \t" + dateOfLoad.getText().toString()
-                 + "<br>" + "Destination: \t" + destination.getText().toString()
-                 + "<br><br><br>";
 
-                 emailContent += "<table style=\"width:100%; border:1px solid black;border-collapse: collapse;\">" +
-                 "  <tr style=\"border:1px solid black;border-collapse: collapse;\">" +
-                 "    <th style=\"border:1px solid black;border-collapse: collapse;\">Area</th>" +
-                 "    <th style=\"border:1px solid black;border-collapse: collapse;\">Location</th>" +
-                 "    <th style=\"border:1px solid black;border-collapse: collapse;\">No Of Pieces</th>" +
-                 "    <th style=\"border:1px solid black;border-collapse: collapse;\">Grade</th>" +
-                 "    <th style=\"border:1px solid black;border-collapse: collapse;\">Length</th>" +
-                 "    <th style=\"border:1px solid black;border-collapse: collapse;\">Width</th>" +
-                 "    <th style=\"border:1px solid black;border-collapse: collapse;\">Thickness</th>" +
-                 "    <th style=\"border:1px solid black;border-collapse: collapse;\">Bundle Number</th>" +
-                 "  </tr>";
-                 */
                 for (int i = 0; i < bundles.size(); i++) {
-//                    emailContent += "<tr>" +
-//                            "<td>" + bundles.get(i).getArea() + "</td>" +
-//                            "<td>" + bundles.get(i).getLocation() + "</td>" +
-//                            "<td>" + bundles.get(i).getNoOfPieces() + "</td>" +
-//                            "<td>" + bundles.get(i).getGrade() + "</td>" +
-//                            "<td>" + bundles.get(i).getLength() + "</td>" +
-//                            "<td>" + bundles.get(i).getWidth() + "</td>" +
-//                            "<td>" + bundles.get(i).getThickness() + "</td>" +
-//                            "<td>" + bundles.get(i).getBundleNo() + "</td>" +
-//                            "</tr>";
 
                     order = new Orders(bundles.get(i).getThickness()
                             , bundles.get(i).getWidth()
@@ -359,8 +308,6 @@ public class LoadingOrder2 extends AppCompatActivity {
 
                     databaseHandler.updateTableBundles(bundles.get(i).getBundleNo());
                 }
-//                emailContent += "</table>";
-
 
                 picture = new Pictures(orderNo.getText().toString()
                         , pics.get(0)
@@ -375,16 +322,13 @@ public class LoadingOrder2 extends AppCompatActivity {
                 jsonArrayPics.put(picture.getJSONObject());
 
                 databaseHandler.addPictures(picture);
-//                                    printReport();
-
-//                                    new SendMailTask(LoadingOrder2.this).execute(senderName, senderPassword
-//                                            , recipientName, emailTitle, mainContent);
 
                 new JSONTask().execute();
 
 
                 Intent intent = new Intent(LoadingOrder2.this, LoadingOrder.class);
                 startActivity(intent);
+                finish();
                 progressDialog.dismiss();
 
             }
@@ -437,68 +381,39 @@ public class LoadingOrder2 extends AppCompatActivity {
                         case 1:
                             img1.setImageBitmap(thumbnail);
                             pics.set(0, BitMapToString(thumbnail));
-//                            String root1 = Environment.getExternalStorageDirectory().getAbsolutePath();
-//                            picture = new File(root1, "pic1.png");
                             break;
                         case 2:
                             img2.setImageBitmap(thumbnail);
                             pics.set(1, BitMapToString(thumbnail));
-//                            String root2 = Environment.getExternalStorageDirectory().getAbsolutePath();
-//                            picture = new File(root2, "pic2.png");
                             break;
                         case 3:
                             img3.setImageBitmap(thumbnail);
                             pics.set(2, BitMapToString(thumbnail));
-//                            String root3 = Environment.getExternalStorageDirectory().getAbsolutePath();
-//                            picture = new File(root3, "pic3.png");
                             break;
                         case 4:
                             img4.setImageBitmap(thumbnail);
                             pics.set(3, BitMapToString(thumbnail));
-//                            String root4 = Environment.getExternalStorageDirectory().getAbsolutePath();
-//                            picture = new File(root4, "pic4.png");
                             break;
                         case 5:
                             img5.setImageBitmap(thumbnail);
                             pics.set(4, BitMapToString(thumbnail));
-//                            String root5 = Environment.getExternalStorageDirectory().getAbsolutePath();
-//                            picture = new File(root5, "pic5.png");
                             break;
                         case 6:
                             img6.setImageBitmap(thumbnail);
                             pics.set(5, BitMapToString(thumbnail));
-//                            String root6 = Environment.getExternalStorageDirectory().getAbsolutePath();
-//                            picture = new File(root6, "pic6.png");
                             break;
                         case 7:
                             img7.setImageBitmap(thumbnail);
                             pics.set(6, BitMapToString(thumbnail));
-//                            String root7 = Environment.getExternalStorageDirectory().getAbsolutePath();
-//                            picture = new File(root7, "pic7.png");
                             break;
                         case 8:
                             img8.setImageBitmap(thumbnail);
                             pics.set(7, BitMapToString(thumbnail));
-//                            String root8 = Environment.getExternalStorageDirectory().getAbsolutePath();
-//                            picture = new File(root8, "pic8.png");
                             break;
 
                     }
 
                 }
-                /**  FileOutputStream out = null;
-                 try {
-                 out = new FileOutputStream(picture);
-                 thumbnail.compress(Bitmap.CompressFormat.PNG, 100, out);
-                 out.flush();
-                 out.close();
-                 } catch (FileNotFoundException e) {
-                 e.printStackTrace();
-                 } catch (IOException e) {
-                 e.printStackTrace();
-                 }
-                 imagesFileList.add(picture);
-                 */
             }
         }
     }
@@ -517,192 +432,6 @@ public class LoadingOrder2 extends AppCompatActivity {
         }
     }
 
-    /**
-     * void printReport() {
-     * try {
-     * findBT();
-     * openBT();
-     * } catch (IOException e) {
-     * e.printStackTrace();
-     * }
-     * }
-     * <p>
-     * void findBT() {
-     * <p>
-     * try {
-     * mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-     * <p>
-     * if (mBluetoothAdapter == null) {
-     * //                myLabel.setText("No bluetooth adapter available");
-     * }
-     * <p>
-     * if (!mBluetoothAdapter.isEnabled()) {
-     * Intent enableBluetooth = new Intent(
-     * BluetoothAdapter.ACTION_REQUEST_ENABLE);
-     * startActivityForResult(enableBluetooth, 0);
-     * }
-     * <p>
-     * Set<BluetoothDevice> pairedDevices = mBluetoothAdapter
-     * .getBondedDevices();
-     * if (pairedDevices.size() > 0) {
-     * for (BluetoothDevice device : pairedDevices) {
-     * <p>
-     * mmDevice = device;
-     * }
-     * }
-     * <p>
-     * } catch (NullPointerException e) {
-     * e.printStackTrace();
-     * } catch (Exception e) {
-     * e.printStackTrace();
-     * }
-     * }
-     * <p>
-     * void openBT() throws IOException {
-     * try {
-     * Log.e("open", "'yes");
-     * // Standard SerialPortService ID
-     * UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
-     * mmSocket = mmDevice.createRfcommSocketToServiceRecord(uuid);
-     * mmSocket.connect();
-     * mmOutputStream = mmSocket.getOutputStream();
-     * mmInputStream = mmSocket.getInputStream();
-     * <p>
-     * sendData();
-     * <p>
-     * } catch (NullPointerException e) {
-     * e.printStackTrace();
-     * } catch (Exception e) {
-     * e.printStackTrace();
-     * }
-     * }
-     * <p>
-     * void sendData() throws IOException {
-     * try {
-     * <p>
-     * Thread.sleep(1000);
-     * <p>
-     * printCustom("Woody System" + "\n", 1, 1);
-     * mmOutputStream.write(PrinterCommands.FEED_LINE);
-     * printCustom("Placing Number   : " + placingNo.getText().toString() + "\n", 1, 0);
-     * mmOutputStream.write(PrinterCommands.FEED_LINE);
-     * printCustom("Order Number     : " + orderNo.getText().toString() + "\n", 1, 0);
-     * mmOutputStream.write(PrinterCommands.FEED_LINE);
-     * printCustom("Container Number : " + containerNo.getText().toString() + "\n", 1, 0);
-     * mmOutputStream.write(PrinterCommands.FEED_LINE);
-     * printCustom("Date Of Load     : " + dateOfLoad.getText().toString() + "\n", 1, 0);
-     * mmOutputStream.write(PrinterCommands.FEED_LINE);
-     * printCustom("Destination      : " + destination.getText().toString() + "\n", 1, 0);
-     * <p>
-     * printCustom("----------------------------------------------" + "\n", 1, 0);
-     * <p>
-     * <p>
-     * printCustom("Th      W       L    Grade  #Pieces  Bundle# Location  Area" + "\n", 0, 0);
-     * printCustom("----------------------------------------------", 1, 0);
-     * <p>
-     * <p>
-     * String itemsString = "";
-     * for (int i = 0; i < bundles.size(); i++) {
-     * String row = bundles.get(i).getThickness() + "                                             ";
-     * row = row.substring(0, 6) + bundles.get(i).getWidth() + row.substring(6, row.length());
-     * row = row.substring(0, 15) + bundles.get(i).getLength() + row.substring(15, row.length());
-     * row = row.substring(0, 21) + bundles.get(i).getGrade() + row.substring(21, row.length());
-     * row = row.substring(0, 30) + bundles.get(i).getNoOfPieces() + row.substring(30, row.length());
-     * row = row.substring(0, 40) + bundles.get(i).getBundleNo() + row.substring(40, row.length());
-     * row = row.substring(0, 47) + bundles.get(i).getLocation() + row.substring(47, row.length());
-     * row = row.substring(0, 56) + bundles.get(i).getArea();
-     * row = row.trim();
-     * itemsString = itemsString + "\n" + row;
-     * }
-     * printCustom(itemsString + "\n", 0, 0);
-     * mainContent = mainContent + itemsString;
-     * <p>
-     * printCustom("----------------------------------------------" + "\n", 1, 0);
-     * <p>
-     * mmOutputStream.write(PrinterCommands.FEED_LINE);
-     * printCustom("\n", 1, 0);
-     * printCustom("\n", 1, 0);
-     * mmOutputStream.write(PrinterCommands.ESC_ALIGN_CENTER);
-     * mmOutputStream.write(PrinterCommands.ESC_ALIGN_CENTER);
-     * mmOutputStream.write(PrinterCommands.ESC_ALIGN_CENTER);
-     * mmOutputStream.write(PrinterCommands.ESC_ALIGN_CENTER);
-     * <p>
-     * closeBT();
-     * <p>
-     * } catch (NullPointerException e) {
-     * e.printStackTrace();
-     * } catch (Exception e) {
-     * e.printStackTrace();
-     * }
-     * <p>
-     * }
-     * <p>
-     * private void printCustom(String msg, int size, int align) {
-     * //Print config "mode"
-     * byte[] cc = new byte[]{0x1B, 0x21, 0x03};  // 0- normal size text
-     * //byte[] cc1 = new byte[]{0x1B,0x21,0x00};  // 0- normal size text
-     * byte[] bb = new byte[]{0x1B, 0x21, 0x08};  // 1- only bold text
-     * byte[] bb2 = new byte[]{0x1B, 0x21, 0x20}; // 2- bold with medium text
-     * byte[] bb3 = new byte[]{0x1B, 0x21, 0x10}; // 3- bold with large text
-     * try {
-     * switch (size) {
-     * case 0:
-     * mmOutputStream.write(cc);
-     * break;
-     * case 1:
-     * mmOutputStream.write(bb);
-     * break;
-     * case 2:
-     * mmOutputStream.write(bb2);
-     * break;
-     * case 3:
-     * mmOutputStream.write(bb3);
-     * break;
-     * }
-     * <p>
-     * switch (align) {
-     * case 0:
-     * //left align
-     * mmOutputStream.write(PrinterCommands.ESC_ALIGN_LEFT);
-     * break;
-     * case 1:
-     * //center align
-     * mmOutputStream.write(PrinterCommands.ESC_ALIGN_CENTER);
-     * break;
-     * case 2:
-     * //right align
-     * mmOutputStream.write(PrinterCommands.ESC_ALIGN_RIGHT);
-     * break;
-     * }
-     * //            Arabic864 arabic = new Arabic864();
-     * //            byte[] arabicArr = arabic.Convert(msg, false);
-     * mmOutputStream.write(msg.getBytes());
-     * //             mmOutputStream.write(msg.getBytes());
-     * <p>
-     * //outputStream.write(cc);
-     * //printNewLine();
-     * } catch (IOException e) {
-     * e.printStackTrace();
-     * }
-     * <p>
-     * }
-     * <p>
-     * void closeBT() throws IOException {
-     * try {
-     * stopWorker = true;
-     * mmOutputStream.close();
-     * mmInputStream.close();
-     * <p>
-     * mmSocket.close();
-     * //            mmSocket=null;
-     * //            myLabel.setText("Bluetooth Closed");
-     * } catch (NullPointerException e) {
-     * e.printStackTrace();
-     * } catch (Exception e) {
-     * e.printStackTrace();
-     * }
-     * }
-     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -765,19 +494,12 @@ public class LoadingOrder2 extends AppCompatActivity {
 
     }
 
-//    public void onBackPressed() {
-//        super.onBackPressed();
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
 //        Intent intent = new Intent(LoadingOrder2.this, LoadingOrder.class);
 //        startActivity(intent);
-//        finish();
-//    }
-//
-//    @Override
-//    public void finish() {
-//        super.finish();
-////        setSlideAnimation();
-//        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
-//    }
+    }
 
     public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
         if (bm != null) {
@@ -874,7 +596,6 @@ public class LoadingOrder2 extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-
 
             if (s != null) {
                 if (s.contains("BUNDLE_ORDER SUCCESS")) {

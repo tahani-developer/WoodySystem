@@ -28,6 +28,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.print.PrintHelper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -38,6 +39,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -47,6 +49,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.falconssoft.woodysystem.DatabaseHandler;
+import com.falconssoft.woodysystem.ItemsListAdapter;
+import com.falconssoft.woodysystem.LoadingOrder;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.WoodPresenter;
 import com.falconssoft.woodysystem.models.BundleInfo;
@@ -105,25 +109,33 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     public static List<BundleInfo> bundleInfoServer2 = new ArrayList<>();
     private List<String> locationList = new ArrayList<>();
     private List<String> areaList = new ArrayList<>();
+    private List<String> orderedList = new ArrayList<>();
+    private List<String> plList = new ArrayList<>();
+    private List<String> gradeList = new ArrayList<>();
     private List<BundleInfo> bundlesForDelete = new ArrayList<>();
     private List<BundleInfo> dateFiltered, filtered;
     private JSONArray jsonArrayBundles = new JSONArray();
     private WoodPresenter woodPresenter;
     private Animation animation;
     private TextView textView, noOfBundles, noOfPieces, cubicField, deleteAll, dateFrom, dateTo;
-    private Spinner location, area;
+    private Spinner location, area, ordered, pList, grade;
     private ArrayAdapter<String> locationAdapter;
     private ArrayAdapter<String> areaAdapter;
-    private String loc = "All", areaField = "All";
+    private ArrayAdapter<String> orderedAdapter;
+    private ArrayAdapter<String> gradeAdapter;
+    private ArrayAdapter<String> plAdapter;
+    private String loc = "All", areaField = "All", orderedField = "All", plField = "All", gradeFeld = "All";
     private Settings generalSettings;
     private Calendar calendar;
     private Date date;
-    private String bundleNumber;
+    private String serialNumber;
     private int index;
+    private SearchView searchViewTh, searchViewW, searchViewL;
     private CheckBox checkBoxPrint;
     private List<BundleInfo> bundleInfoForPrint = new ArrayList<>();
     private Button printAll, delete;
     private TableRow tableRowToDelete = null;
+    private String f1 = "", f2 = "", f3 = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,6 +152,9 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         bundlesTable = findViewById(R.id.inventory_report_table);
         location = findViewById(R.id.inventory_report_location);
         area = findViewById(R.id.inventory_report_area);
+        pList = findViewById(R.id.inventory_report_pl);
+        grade = findViewById(R.id.inventory_report_grade);
+//        ordered = findViewById(R.id.inventory_report_ordered);
         textView = findViewById(R.id.inventory_report_tv);
         dateFrom = findViewById(R.id.inventory_report_from);
         dateTo = findViewById(R.id.inventory_report_to);
@@ -150,9 +165,12 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         checkBoxPrint = findViewById(R.id.checkBoxPrint);
         printAll = findViewById(R.id.printAll);
         delete = findViewById(R.id.delete);
+        searchViewTh = (SearchView) findViewById(R.id.mSearchTh);
+        searchViewW = (SearchView) findViewById(R.id.mSearchW);
+        searchViewL = (SearchView) findViewById(R.id.mSearchL);
 
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-        dateFrom.setText(df.format(date));
+        dateFrom.setText("1/12/2019");
         dateTo.setText(df.format(date));
 
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_to_right);
@@ -163,7 +181,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         locationList.add("Kalinovka");
         locationList.add("Rudniya Store");
         locationList.add("Rudniya Sawmill");
-        locationAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, locationList);
+        locationAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, locationList);
         locationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         location.setAdapter(locationAdapter);
 
@@ -171,9 +189,34 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         areaList.add("Zone 1");
         areaList.add("Zone 2");
         areaList.add("Zone 3");
-        areaAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, areaList);
+        areaList.add("Zone 4");
+        areaList.add("Zone 5");
+        areaAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, areaList);
         areaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         area.setAdapter(areaAdapter);
+
+//        orderedList.add("All");
+//        orderedList.add("Ordered");
+//        orderedList.add("Not Ordered");
+//        orderedAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, orderedList);
+//        orderedAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        ordered.setAdapter(orderedAdapter);
+
+        plList.add("All");
+        plList.add("P_List");
+        plList.add("Not P_List");
+        plAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, plList);
+        plAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        pList.setAdapter(plAdapter);
+
+        gradeList.add("All");
+        gradeList.add("Fresh");
+        gradeList.add("BS");
+        gradeList.add("Reject");
+        gradeList.add("KD");
+        gradeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, gradeList);
+        gradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        grade.setAdapter(gradeAdapter);
 
         woodPresenter.getBundlesData(this);
         deleteAll.setOnClickListener(this);
@@ -181,6 +224,9 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         dateTo.setOnClickListener(this);
         location.setOnItemSelectedListener(this);
         area.setOnItemSelectedListener(this);
+//        ordered.setOnItemSelectedListener(this);
+        pList.setOnItemSelectedListener(this);
+        grade.setOnItemSelectedListener(this);
 
         for (int v = 0; v < bundleInfoServer2.size(); v++) {
             BundleInfo fake = new BundleInfo();
@@ -197,14 +243,14 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 
                     for (int i = 0; i < bundlesTable.getChildCount(); i++) {
                         TableRow table = (TableRow) bundlesTable.getChildAt(i);
-                        CheckBox bundleCheck = (CheckBox) table.getChildAt(9);
+                        CheckBox bundleCheck = (CheckBox) table.getChildAt(0);
                         bundleCheck.setChecked(true);
 
                     }
                 } else {
                     for (int i = 0; i < bundlesTable.getChildCount(); i++) {
                         TableRow table = (TableRow) bundlesTable.getChildAt(i);
-                        CheckBox bundleCheck = (CheckBox) table.getChildAt(9);
+                        CheckBox bundleCheck = (CheckBox) table.getChildAt(0);
                         bundleCheck.setChecked(false);
 
                     }
@@ -222,7 +268,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                     bundleInfoForPrint.clear();
                     for (int i = 0; i < bundlesTable.getChildCount(); i++) {
                         TableRow table = (TableRow) bundlesTable.getChildAt(i);
-                        CheckBox bundleCheck = (CheckBox) table.getChildAt(9);
+                        CheckBox bundleCheck = (CheckBox) table.getChildAt(10);
                         if (bundleCheck.isChecked()) {
                             Log.e("bundelCheak", "" + i + "  " + filtered.get(Integer.parseInt(bundleCheck.getTag().toString())).getBundleNo());
                             bundleInfoForPrint.add(filtered.get(Integer.parseInt(bundleCheck.getTag().toString())));
@@ -266,7 +312,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 
                                 for (int i = 0; i < bundlesTable.getChildCount(); i++) {
                                     TableRow table = (TableRow) bundlesTable.getChildAt(i);
-                                    CheckBox bundleCheck = (CheckBox) table.getChildAt(9);
+                                    CheckBox bundleCheck = (CheckBox) table.getChildAt(10);
                                     TextView bundleNo = (TextView) table.getChildAt(1);
                                     if (bundleCheck.isChecked()) {
 //                                        Log.e("bundelCheak", "" + i + "  " + bundleInfos.get(Integer.parseInt(bundleCheck.getTag().toString())).getBundleNo());
@@ -283,6 +329,54 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                         })
                         .setNegativeButton("Cancel", null).show();
 
+            }
+        });
+
+        searchViewTh.setOnQueryTextListener(new android.support.v7.widget.SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+
+                f1 = query;
+                filters();
+
+                return false;
+            }
+        });
+
+        searchViewW.setOnQueryTextListener(new android.support.v7.widget.SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+
+                f2 = query;
+                filters();
+
+                return false;
+            }
+        });
+
+        searchViewL.setOnQueryTextListener(new android.support.v7.widget.SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+
+                f3 = query;
+                filters();
+
+                return false;
             }
         });
 
@@ -450,7 +544,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 
     public void filters() {
         bundleInfoServer.clear();
-        Log.e("inventoryReport", "/bundleInfoServer2/size/" + bundleInfoServer2.size());
+//        Log.e("inventoryReport", "/bundleInfoServer2/size/" + bundleInfoServer2.size());
         for (int v = 0; v < bundleInfoServer2.size(); v++) {
             BundleInfo fake = new BundleInfo();
             fake = bundleInfoServer2.get(v);
@@ -461,7 +555,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         filtered = new ArrayList<>();
         dateFiltered = new ArrayList<>();
 
-        Log.e("follow", fromDate + " to " + toDate + " size1 " + bundleInfoServer.size() + " loc&area " + loc + areaField);
+//        Log.e("follow", fromDate + " to " + toDate + " size1 " + bundleInfoServer.size() + " loc: " + loc + "   area: " + areaField + "  ordered: " + orderedField);
 
         for (int m = 0; m < bundleInfoServer.size(); m++) {
             JSONObject jsonObject = bundleInfoServer.get(m).getJSONObject();
@@ -476,21 +570,23 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 //        Log.e("follow", fromDate + " to " + toDate + " size1 " + bundleInfoServer.size() + " size2 " + dateFiltered.size());
 
         for (int k = 0; k < dateFiltered.size(); k++) {
-//            Log.e("-------------------", dateFiltered.get(k).getAddingDate());
-//            Log.e("location", dateFiltered.get(k).getLocation());
-            if ((!loc.equals("All")) && (!areaField.equals("All"))
-                    && loc.equals(dateFiltered.get(k).getLocation())
-                    && areaField.equals(dateFiltered.get(k).getArea()))
-                filtered.add(dateFiltered.get(k));
-            else if ((!loc.equals("All")) && areaField.equals("All")
-                    && loc.equals(dateFiltered.get(k).getLocation())) {
-                filtered.add(dateFiltered.get(k));
-            } else if (loc.equals("All") && (!areaField.equals("All"))
-                    && areaField.equals(dateFiltered.get(k).getArea()))
-                filtered.add(dateFiltered.get(k));
-            else if (loc.equals("All") && areaField.equals("All"))
-                filtered.add(dateFiltered.get(k));
+            String dateFiltered2 = String.valueOf(dateFiltered.get(k).getOrdered());
+            if (loc.equals("All") || loc.equals(dateFiltered.get(k).getLocation())) {
+                if (areaField.equals("All") || areaField.equals(dateFiltered.get(k).getArea())) {
+//                    if (orderedField.equals("All") || orderedField.equals(dateFiltered2)) {
+                        if (gradeFeld.equals("All") || gradeFeld.equals(dateFiltered.get(k).getGrade())) {
+                            if (plField.equals("All") || (plField.equals("0") && dateFiltered.get(k).getBackingList().equals("null")) || (plField.equals("1") && !dateFiltered.get(k).getBackingList().equals("null"))) {
 
+                                if ((("" + dateFiltered.get(k).getThickness()).toUpperCase().startsWith(f1) || f1.equals("")) &&
+                                        (("" + dateFiltered.get(k).getWidth()).toUpperCase().startsWith(f2) || f2.equals("")) &&
+                                        (("" + dateFiltered.get(k).getLength()).toUpperCase().startsWith(f3) || f3.equals("")))
+
+                                    filtered.add(dateFiltered.get(k));
+                            }
+                        }
+//                    }
+                }
+            }
         }
         Log.e("follow/", "size3/filtered/" + filtered.size());
         fillTable(filtered);
@@ -530,7 +626,9 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                     , filteredList.get(m).getLocation()
                     , filteredList.get(m).getArea()
                     , m
-                    , filteredList.get(m).getSerialNo());
+                    , filteredList.get(m).getSerialNo()
+                    , filteredList.get(m).getBackingList()
+            );
             bundlesTable.addView(tableRow);
 //            TableRow finalTableRow = tableRow;
 //            tableRow.getVirtualChildAt(8).setOnClickListener(new View.OnClickListener() {
@@ -552,61 +650,41 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 //
 //                }
 //            });
-//            TableRow finalTableRow1 = tableRow;
-//            tableRow.setOnLongClickListener(new View.OnLongClickListener() {
-//                @Override
-//                public boolean onLongClick(View v) {
-////                                                TextView textView = ((TextView) tableRow.getChildAt(0));
-////                                                tableRow.setBackgroundResource(R.color.light_orange_2);
-//                    bundleNumber = ((TextView) finalTableRow1.getChildAt(0)).getText().toString();
-//                    index = 0;
-//                    Log.e("b", bundleNumber);
-//                    for (int i = 0; i < bundleInfoServer2.size(); i++)
-//                        if (bundleNumber.equals(bundleInfoServer2.get(i).getBundleNo())) {
-//                            index = i;
-//                            break;
-//                        }
-//
-//                    Dialog passwordDialog = new Dialog(InventoryReport.this);
-//                    passwordDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//                    passwordDialog.setContentView(R.layout.password_dialog);
-//                    passwordDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//
-//                    TextInputEditText password = passwordDialog.findViewById(R.id.password_dialog_password);
-//                    TextView done = passwordDialog.findViewById(R.id.password_dialog_done);
-//
-//                    done.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            if (password.getText().toString().equals("301190")) {
-//                                tableRowToDelete = finalTableRow1;
-//                                new JSONTask2().execute();
-////                                bundlesTable.removeView(finalTableRow1);
-//                                passwordDialog.dismiss();
-//                            } else {
-//                                Toast.makeText(InventoryReport.this, "Not Authorized!", Toast.LENGTH_SHORT).show();
-//                                password.setText("");
-//                            }
-//                        }
-//                    });
-//
-//                    passwordDialog.show();
-////                    AlertDialog.Builder builder = new AlertDialog.Builder(InventoryReport.this);
-////                    builder.setMessage("Are you want delete bundle number: " + bundleNumber + " ?");
-////                    builder.setTitle("Delete");
-////                    builder.setIcon(R.drawable.ic_warning_black_24dp);
-////                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-////                        @Override
-////                        public void onClick(DialogInterface dialog, int which) {
-////                            new JSONTask2().execute();
-////                            bundlesTable.removeView(finalTableRow1);
-////                        }
-////                    });
-////                    builder.show();
-//                    return false;
-//                }
-//            });
+            TableRow finalTableRow1 = tableRow;
+            tableRow.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    serialNumber = ((TextView) finalTableRow1.getChildAt(1)).getText().toString();
+                    String bundleNumber = ((TextView) finalTableRow1.getChildAt(2)).getText().toString();
+                    String location = ((TextView) finalTableRow1.getVirtualChildAt(8)).getText().toString();
+                    Log.e("serialNumber", serialNumber);
 
+                    Dialog packingListDialog = new Dialog(InventoryReport.this);
+                    packingListDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    packingListDialog.setContentView(R.layout.packing_list_dialog);
+                    packingListDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                    EditText packingList = packingListDialog.findViewById(R.id.packingList_dialog_packing_list);
+                    TextView done = packingListDialog.findViewById(R.id.packingList_dialog_done);
+                    TextView bundleNo = packingListDialog.findViewById(R.id.packingList_dialog_bundle_no);
+
+                    bundleNo.setText("Bundle: " + bundleNumber);
+
+
+                    done.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (!packingList.getText().toString().equals("")) {
+                                woodPresenter.updatePackingList(InventoryReport.this, bundleNumber, packingList.getText().toString(), location);
+                                packingListDialog.dismiss();
+                            }
+                        }
+                    });
+
+                    packingListDialog.show();
+                    return false;
+                }
+            });
 //            TableRow clickTableRow = tableRow;
 //            tableRow.setOnLongClickListener(new View.OnLongClickListener() {
 //                @Override
@@ -641,80 +719,21 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         Log.e("follow", "filltable " + filteredList.size());
     }
 
-    TableRow fillTableRows(TableRow tableRow, String bundlNo, String length, String width, String thic, String grade, String noOfPieces, String location, String area, int index, String serial) {
-        for (int i = 0; i < 10; i++) {
+    TableRow fillTableRows(TableRow tableRow, String bundlNo, String length, String width, String thic, String grade, String noOfPieces, String location, String area, int index, String serial, String backingList) {
+        for (int i = 0; i < 11; i++) {
             TextView textView = new TextView(this);
             textView.setBackgroundResource(R.color.light_orange);
-            TableRow.LayoutParams textViewParam;
+            TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
 //            TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
 //            textViewParam.setMargins(1, 5, 1, 1);
             textView.setTextSize(15);
             textView.setTextColor(ContextCompat.getColor(this, R.color.gray_dark_one));
-//            textView.setLayoutParams(textViewParam);
+            textViewParam.setMargins(1, 5, 1, 1);
+            textView.setPadding(1, 6, 1, 7);
+            textView.setLayoutParams(textViewParam);
             switch (i) {
+
                 case 0:
-                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
-                    textViewParam.setMargins(1, 5, 1, 1);
-                    textView.setLayoutParams(textViewParam);
-                    textView.setText(serial);
-                    break;
-                case 1:
-                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 3.4f);
-                    textViewParam.setMargins(1, 5, 1, 1);
-                    textView.setLayoutParams(textViewParam);
-                    textView.setText(bundlNo);
-                    break;
-                case 2:
-                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
-                    textViewParam.setMargins(1, 5, 1, 1);
-                    textView.setLayoutParams(textViewParam);
-                    textView.setText(length);
-                    break;
-                case 3:
-                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
-                    textViewParam.setMargins(1, 5, 1, 1);
-                    textView.setLayoutParams(textViewParam);
-                    textView.setText(width);
-                    break;
-                case 4:
-                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
-                    textViewParam.setMargins(1, 5, 1, 1);
-                    textView.setLayoutParams(textViewParam);
-                    textView.setText(thic);
-                    break;
-                case 5:
-                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
-                    textViewParam.setMargins(1, 5, 1, 1);
-                    textView.setLayoutParams(textViewParam);
-                    textView.setText(grade);
-                    break;
-                case 6:
-                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
-                    textViewParam.setMargins(1, 5, 1, 1);
-                    textView.setLayoutParams(textViewParam);
-                    textView.setText(noOfPieces);
-                    break;
-                case 7:
-                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1.5f);
-                    textViewParam.setMargins(1, 5, 1, 1);
-                    textView.setLayoutParams(textViewParam);
-                    textView.setText(location);
-                    break;
-                case 8:
-                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
-                    textViewParam.setMargins(1, 5, 1, 1);
-                    textView.setLayoutParams(textViewParam);
-                    textView.setText(area);
-                    break;
-//                case 8:
-//                    textViewParam = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
-//                    textViewParam.setMargins(1, 5, 10, 1);
-//                    textView.setLayoutParams(textViewParam);
-////                    textView.setText("Print");
-////                    textView.setTextColor(ContextCompat.getColor(this, R.color.white));
-//                    textView.setBackgroundResource(R.drawable.ic_print_24dp);
-//                    break;
-                case 9:
                     CheckBox checkBox = new CheckBox(this);
                     textViewParam = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
                     textViewParam.setMargins(1, 5, 1, 1);
@@ -725,8 +744,71 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                     checkBox.setBackgroundResource(R.color.light_orange);
                     tableRow.addView(checkBox);
                     break;
+                case 1:
+//                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+//                    textViewParam.setMargins(1, 5, 1, 1);
+//                    textView.setLayoutParams(textViewParam);
+                    textView.setText(serial);
+                    break;
+                case 2:
+                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 3.4f);
+                    textViewParam.setMargins(1, 5, 1, 1);
+                    textView.setLayoutParams(textViewParam);
+                    textView.setText(bundlNo);
+                    break;
+                case 3:
+                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+                    textViewParam.setMargins(1, 5, 1, 1);
+                    textView.setLayoutParams(textViewParam);
+                    textView.setText(length);
+                    break;
+                case 4:
+                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+                    textViewParam.setMargins(1, 5, 1, 1);
+                    textView.setLayoutParams(textViewParam);
+                    textView.setText(width);
+                    break;
+                case 5:
+                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+                    textViewParam.setMargins(1, 5, 1, 1);
+                    textView.setLayoutParams(textViewParam);
+                    textView.setText(thic);
+                    break;
+                case 6:
+                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+                    textViewParam.setMargins(1, 5, 1, 1);
+                    textView.setLayoutParams(textViewParam);
+                    textView.setText(grade);
+                    break;
+                case 7:
+                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+                    textViewParam.setMargins(1, 5, 1, 1);
+                    textView.setLayoutParams(textViewParam);
+                    textView.setText(noOfPieces);
+                    break;
+                case 8:
+                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1.5f);
+                    textViewParam.setMargins(1, 5, 1, 1);
+                    textView.setLayoutParams(textViewParam);
+                    textView.setText(location);
+                    break;
+                case 9:
+                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+                    textViewParam.setMargins(1, 5, 1, 1);
+                    textView.setLayoutParams(textViewParam);
+                    textView.setText(area);
+                    break;
+                case 10:
+                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+                    textViewParam.setMargins(1, 5, 1, 1);
+                    textView.setLayoutParams(textViewParam);
+                    textView.setText(backingList);
+                    break;
+
             }
-            tableRow.addView(textView);
+            if (i != 0) {
+                tableRow.addView(textView);
+            }
         }
         return tableRow;
     }
@@ -883,12 +965,33 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                 areaField = parent.getSelectedItem().toString();
                 filters();
                 break;
+//            case R.id.inventory_report_ordered:
+//                orderedField = parent.getSelectedItem().toString();
+//                if (orderedField.equals("Ordered"))
+//                    orderedField = "1";
+//                else if (orderedField.equals("Not Ordered"))
+//                    orderedField = "0";
+//                Log.e("orderedspinner", orderedField);
+//                filters();
+//                break;
+            case R.id.inventory_report_pl:
+                plField = parent.getSelectedItem().toString();
+                if (plField.equals("P_List"))
+                    plField = "1";
+                else if (plField.equals("Not P_List"))
+                    plField = "0";
+                Log.e("P_Listpinner", plField);
+                filters();
+                break;
+            case R.id.inventory_report_grade:
+                gradeFeld = parent.getSelectedItem().toString();
+                filters();
+                break;
         }
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-
     }
 
     @Override
@@ -924,7 +1027,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                             bundleInfoForPrint.clear();
                             for (int i = 0; i < bundlesTable.getChildCount(); i++) {
                                 TableRow table = (TableRow) bundlesTable.getChildAt(i);
-                                CheckBox bundleCheck = (CheckBox) table.getChildAt(9);
+                                CheckBox bundleCheck = (CheckBox) table.getChildAt(10);
                                 if (bundleCheck.isChecked()) {
                                     BundleInfo bundleInfo = new BundleInfo();
                                     bundleInfo = filtered.get(Integer.parseInt(bundleCheck.getTag().toString()));
@@ -990,7 +1093,6 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 
     }
 
-
     public boolean isStoragePermissionGranted() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
@@ -1014,8 +1116,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             Log.v("", "Permission: " + permissions[0] + "was "
@@ -1055,7 +1156,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
                 nameValuePairs.add(new BasicNameValuePair("DELETE_BUNDLE", "1"));
-                nameValuePairs.add(new BasicNameValuePair("BUNDLE_NO", bundleNumber));
+                nameValuePairs.add(new BasicNameValuePair("BUNDLE_NO", serialNumber));
 
                 request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
@@ -1092,7 +1193,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                 if (s.contains("DELETE BUNDLE SUCCESS")) {
                     bundlesTable.removeView(tableRowToDelete);
                     bundleInfoServer2.remove(index);
-//                    databaseHandler.deleteBundle(bundleNumber);
+//                    databaseHandler.deleteBundle(serialNumber);
                     Toast.makeText(InventoryReport.this, "Deleted successfully", Toast.LENGTH_SHORT).show();
                     filters();
                     Log.e("inventoryReport", "****Success");
@@ -1172,6 +1273,9 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 //                    bundlesForDelete.clear();
 //                    bundlesTable.removeAllViews();
                     filters();
+                    if (checkBoxPrint.isChecked()) {
+                        checkBoxPrint.setChecked(false);
+                    }
                     Log.e("tag", "****Success");
                 } else {
                     Toast.makeText(InventoryReport.this, "Failed to export data!", Toast.LENGTH_SHORT).show();
@@ -1183,6 +1287,10 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
             }
         }
     }
+
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();}
 
 //    public void setSlideAnimation() {
 //        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);

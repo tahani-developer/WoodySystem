@@ -19,13 +19,14 @@
     <string name="loc">Loc</string>
     <string name="area">Area</string>
     <string name="description">Description</string>
-    <string name="detail">Detail</string>
+    <string name="details">Details</string>
     <string name="from">From</string>
     <string name="to">To</string>
     <string name="no_bundle"># Bundles</string>
     <string name="no_pieces"># Pieces</string>
     <string name="loading_order_no">L.order No</string>
-    <string name="backing_list">Backing List</string>
+    <string name="packing_list">Packing List</string>
+    <string name="p_list">P.List</string>
 
     <string name="company_name">Company Name</string>
     <string name="ip_address">IP Address</string>
@@ -63,6 +64,7 @@
     <string name="orders">Orders Report</string>
     <string name="inventory_report">Inventory Report</string>
     <string name="loading_order_report">Loading Order Report</string>
+    <string name="loading_order_report2">Loading Order Report</string>
     <string name="placing_no_">Truck No</string>
     <string name="order_no_">Order No</string>
     <string name="container_no_">Container No</string>
@@ -98,7 +100,13 @@
     <string name="find_supplier">Find Supplier</string>
 
     <string name="generate_Barcode">Generate Barcode</string>
+    <string name="ordered">Ordered</string>
 
-
+    <string name="edit">Edit</string>
+    <string name="q1">Are you want delete bundle number: </string>
+    <string name="yes">Yes</string>
+    <string name="cancel">Cancel</string>
+    <string name="action">Choose Action</string>
+    <string name="show">Show</string>
 
 </resources>

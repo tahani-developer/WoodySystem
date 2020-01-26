@@ -83,8 +83,9 @@ public class Stage3 extends AppCompatActivity implements View.OnClickListener {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = new Intent(Stage3.this , MainActivity.class);
-        startActivity(intent);
+        finish();
+//        Intent intent = new Intent(Stage3.this , MainActivity.class);
+//        startActivity(intent);
     }
 
     //    public void setSlideAnimation() {

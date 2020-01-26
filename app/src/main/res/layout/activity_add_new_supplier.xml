@@ -51,49 +51,66 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:background="@drawable/shape_with_corner"
             android:orientation="horizontal"
-            android:padding="5dp">
+           >
 
-            <TextView
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:background="@drawable/shape_with_corner"
+                android:orientation="horizontal">
+
+               <TextView
                 android:id="@+id/textView14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:text="@string/supplier_name"
                 app:fontFamily="serif" />
 
-            <EditText
+               <EditText
                 android:id="@+id/editText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:ems="10"
                 android:inputType="textPersonName" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/textView15"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_margin="5dp"
-                android:layout_weight="0"
-                android:background="@drawable/ic_add_circle_24dp" />
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_weight=".1"
+                android:drawableStart="@drawable/ic_add_white_32dp"
+                android:drawableLeft="@drawable/ic_add_white_32dp"
+                android:paddingStart="10dp"
+                android:paddingLeft="10dp"
+                android:background="@drawable/frame_shape" />
         </LinearLayout>
 
         <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp">
 
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/light_orange_2">
+                android:background="@color/orange">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="1.5"
                     android:fontFamily="serif"
                     android:padding="3dp"
                     android:text="@string/supplier_no"
@@ -124,7 +141,7 @@
                     android:layout_marginLeft="3dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="3dp"
-                    android:layout_marginRight="3dp"></TableLayout>
+                    android:layout_marginRight="3dp" />
 
             </ScrollView>
 
@@ -132,7 +149,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="5dp"
                 android:layout_marginTop="2dp"
-                android:background="@color/light_orange_2"/>
+                android:background="@color/orange"/>
     </TableLayout>
     </LinearLayout>
 

@@ -17,14 +17,17 @@
     <string name="num_pcs"># Шматок</string>
     <string name="bundle_num">Пачка #</string>
     <string name="location">Location</string>
-    <string name="loc">Місцезнаходження</string>
+    <string name="loc">Loc</string>
     <string name="area">Площа</string>
     <string name="description">Опис</string>
-    <string name="detail">Деталь</string>
+    <string name="details">Деталь</string>
     <string name="from">З</string>
     <string name="to">До</string>
     <string name="no_bundle"># Пачка</string>
     <string name="no_pieces"># Pieces</string>
+    <string name="loading_order_no">L.order No</string>
+    <string name="packing_list">Packing List</string>
+    <string name="p_list">P.List</string>
 
     <string name="company_name">Назва компанії</string>
     <string name="ip_address">IP-адреса</string>
@@ -58,10 +61,11 @@
     <string name="barcode">Barcode</string>
 
     <string name="bundles">Звіт про пакети</string>
-    <string name="print_barcode_report">Print Barcode</string>
+    <string name="print_barcode_report">Роздрукувати штрих-код</string>
     <string name="orders">Замовлення</string>
     <string name="inventory_report">Інвентар</string>
-    <string name="loading_order_report">Замовлення на завантаження</string>
+    <string name="loading_order_report">Замовлення на \n завантаження</string>
+    <string name="loading_order_report2">Замовлення на завантаження</string>
     <string name="placing_no_">Вантажівка #</string>
     <string name="order_no_">Замовлення #</string>
     <string name="container_no_">Контейнер #</string>
@@ -72,6 +76,38 @@
     <string name="print_all">Роздрукувати все</string>
     <string name="delete_all">Видалити все</string>
     <string name="print">Друк</string>
+    <string name="serial">Serial</string>
     <string name="serial_no">Серійний</string>
     <string name="delete">Видалити</string>
+    <string name="hide">Сховати</string>
+
+    <string name="new_raw">Нова сира</string>
+    <string name="supplier_no">Постачальник #</string>
+    <string name="supplier_name">Постачальник</string>
+    <string name="raw_thickness">Thickness</string>
+    <string name="search">Пошук ...</string>
+    <string name="acceptance_info">Інформація про прийняття</string>
+<!--    <string name="acceptance_info">Acceptance Info</string>-->
+
+    <string name="generate_barcode">Створення штрих-коду</string>
+
+    <string name="accept_raw">Прийняти рядок</string>
+    <string name="name_of_supplier">Name Of Supplier</string>
+    <string name="truck_no">Truck Number</string>
+    <string name="date_of_acceptance">Date Of Acceptance</string>
+    <string name="name_of_person_to_accept">Name Of Person To Accept</string>
+    <string name="location_of_acceptance">Location Of Acceptance</string>
+    <string name="ttn_no">TTN Number</string>
+    <string name="rejection_list">Rejection List</string>
+    <string name="new_supplier">Новий постачальник</string>
+    <string name="find_supplier">Знайти постачальника</string>
+    <string name="generate_Barcode">Generate Barcode</string>
+    <string name="ordered">Ordered</string>
+
+    <string name="edit">Редагувати</string>
+    <string name="q1">Ви хочете видалити номер пакета: </string>
+    <string name="yes">Так</string>
+    <string name="cancel">Скасувати</string>
+    <string name="action">Виберіть Дія</string>
+    <string name="show">Показати</string>
 </resources>

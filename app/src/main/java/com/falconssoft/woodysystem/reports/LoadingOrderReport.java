@@ -92,6 +92,10 @@ public class LoadingOrderReport extends AppCompatActivity {
     private DatabaseHandler MHandler;
     List<BundleInfo> bundleInfos;
 
+    String myFormat ;
+    SimpleDateFormat sdf;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,6 +115,9 @@ public class LoadingOrderReport extends AppCompatActivity {
         location = (Spinner) findViewById(R.id.Loding_Order_Location);
         from = (EditText) findViewById(R.id.Loding_Order_from);
         to = (EditText) findViewById(R.id.Loding_Order_to);
+
+        myFormat = "dd/MM/yyyy";
+        sdf = new SimpleDateFormat(myFormat, Locale.US);
 
         List<String> locationList = new ArrayList<>();
         locationList.add("");
@@ -152,6 +159,9 @@ public class LoadingOrderReport extends AppCompatActivity {
 
         myCalendar = Calendar.getInstance();
 
+        from.setText("1/12/2019");
+        to.setText(sdf.format(myCalendar.getTime()));
+
         from.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -171,6 +181,8 @@ public class LoadingOrderReport extends AppCompatActivity {
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
+
+        fillTable(orders);
 
     }
 
@@ -241,7 +253,7 @@ public class LoadingOrderReport extends AppCompatActivity {
                         order.setWidth(finalObject.getDouble("WIDTH"));
                         order.setLength(finalObject.getDouble("LENGTH"));
                         order.setGrade(finalObject.getString("GRADE"));
-                        order.setNoOfPieces(finalObject.getInt("PIECES"));
+                        order.setNoOfPieces(finalObject.getDouble("PIECES"));
                         order.setBundleNo(finalObject.getString("BUNDLE_NO"));
                         order.setLocation(finalObject.getString("LOCATION"));
                         order.setArea(finalObject.getString("AREA"));
@@ -583,8 +595,7 @@ public class LoadingOrderReport extends AppCompatActivity {
                 myCalendar.set(Calendar.MONTH, month);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                String myFormat = "dd/MM/yyyy";
-                SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
 
                 if (flag == 0)
                     from.setText(sdf.format(myCalendar.getTime()));
@@ -736,6 +747,10 @@ public class LoadingOrderReport extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();}
 }
 
 

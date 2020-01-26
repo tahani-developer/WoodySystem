@@ -11,7 +11,7 @@ public class Orders {
     private double length;
     private double width;
     private String grade;
-    private int noOfPieces;
+    private Double noOfPieces;
     private String bundleNo;
     private String location;
     private String area;
@@ -25,7 +25,7 @@ public class Orders {
     public Orders() {
     }
 
-    public Orders(double thickness, double length, double width, String grade, int noOfPieces, String bundleNo, String location, String area
+    public Orders(double thickness, double length, double width, String grade, Double noOfPieces, String bundleNo, String location, String area
             , String placingNo, String orderNo, String containerNo, String dateOfLoad, String destination, String picture) {
         this.thickness = thickness;
         this.length = length;
@@ -75,11 +75,11 @@ public class Orders {
         this.grade = grade;
     }
 
-    public int getNoOfPieces() {
+    public Double getNoOfPieces() {
         return noOfPieces;
     }
 
-    public void setNoOfPieces(int noOfPieces) {
+    public void setNoOfPieces(Double noOfPieces) {
         this.noOfPieces = noOfPieces;
     }
 

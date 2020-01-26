@@ -38,50 +38,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         stage2 = (TextView) findViewById(R.id.s2);
         stage3 = (TextView) findViewById(R.id.s3);
 
-       callAnimation();
+        callAnimation();
 
         stage1.setOnClickListener(this);
         stage2.setOnClickListener(this);
         stage3.setOnClickListener(this);
 
-//        stage1.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View view, MotionEvent event) {
-//                if(event.getAction() == MotionEvent.ACTION_UP) {
-//                    relativeLayout.setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.stages));
-//                } else if(event.getAction() == MotionEvent.ACTION_DOWN) {
-//                    relativeLayout.setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.stages1));
-//                }
-//                return false;
-//            }
-//        });
-//
-//        stage2.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View view, MotionEvent event) {
-//                if(event.getAction() == MotionEvent.ACTION_UP) {
-//                    relativeLayout.setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.stages));
-//                } else if(event.getAction() == MotionEvent.ACTION_DOWN) {
-//                    relativeLayout.setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.stages2));
-//                }
-//                return false;
-//            }
-//        });
-//
-//        stage3.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View view, MotionEvent event) {
-//                if(event.getAction() == MotionEvent.ACTION_UP) {
-//                    relativeLayout.setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.stages));
-//                } else if(event.getAction() == MotionEvent.ACTION_DOWN) {
-//                    relativeLayout.setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.stages3));
-//                }
-//                return false;
-//            }
-//        });
     }
 
-    public void callAnimation(){
+    public void callAnimation() {
         scale = new ScaleAnimation(0, 1, 0, 1, ScaleAnimation.INFINITE, .8f, ScaleAnimation.RELATIVE_TO_SELF, .8f);
         scale.setStartOffset(300);
         scale.setDuration(700);
@@ -101,11 +66,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         stage3.startAnimation(scale);
 
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.s1:
-                Intent intent1 = new Intent(MainActivity.this , StageOne.class);
+                Intent intent1 = new Intent(MainActivity.this, StageOne.class);
                 startActivity(intent1);
                 break;
             case R.id.s2:
@@ -120,7 +86,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-//    public void setSlideAnimation() {
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
+    //    public void setSlideAnimation() {
 //        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
 //    }
 

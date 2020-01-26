@@ -30,18 +30,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:layout_weight="1"
-                android:drawableStart="@drawable/axe"
-                android:drawableLeft="@drawable/axe"
-               android:paddingStart="350dp"
-                android:paddingLeft="350dp"
-                android:drawablePadding="-250dp"
                 android:fontFamily="serif"
                 android:gravity="center"
                 android:text="@string/print_barcode_report"
                 android:textColor="@color/orange"
                 android:textSize="30sp" />
 
-                <Button
+            <Button
                     android:id="@+id/loading_order_report_printAll"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
@@ -83,7 +78,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:layout_width="0dp"
@@ -92,7 +87,7 @@
                 android:fontFamily="serif"
                 android:text="@string/bundle_no"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:layout_width="0dp"
@@ -101,7 +96,7 @@
                 android:fontFamily="serif"
                 android:text="@string/l"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:layout_width="0dp"
@@ -110,7 +105,7 @@
                 android:fontFamily="serif"
                 android:text="@string/w"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:layout_width="0dp"
@@ -119,7 +114,7 @@
                 android:fontFamily="serif"
                 android:text="@string/th"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:layout_width="0dp"
@@ -128,7 +123,7 @@
                 android:fontFamily="serif"
                 android:text="@string/grade"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:layout_width="0dp"
@@ -137,16 +132,16 @@
                 android:fontFamily="serif"
                 android:text="@string/no_pieces"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.2"
                 android:fontFamily="serif"
-                android:text="@string/location"
+                android:text="@string/loc"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:layout_width="0dp"
@@ -155,7 +150,16 @@
                 android:fontFamily="serif"
                 android:text="@string/area"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:text="@string/p_list"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
 
             <CheckBox
                 android:id="@+id/checkBoxPrinter"
@@ -188,7 +192,7 @@
             android:layout_width="match_parent"
             android:layout_height="5dp"
             android:layout_marginTop="2dp"
-            android:background="@color/light_orange_2" />
+            android:background="@color/orange" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

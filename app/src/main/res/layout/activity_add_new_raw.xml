@@ -334,14 +334,14 @@
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/light_orange_2">
+                android:background="@color/orange">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:fontFamily="serif"
                     android:text="@string/supplier_no"
-                    android:fontFamily="serif"
                     android:textColor="@color/white"
                     android:textSize="15sp" />
 
@@ -349,8 +349,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:fontFamily="serif"
                     android:text="@string/raw_thickness"
-                    android:fontFamily="serif"
                     android:textColor="@color/white"
                     android:textSize="15sp" />
 
@@ -358,8 +358,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:fontFamily="serif"
                     android:text="@string/width"
-                    android:fontFamily="serif"
                     android:textColor="@color/white"
                     android:textSize="15sp" />
 
@@ -367,8 +367,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:fontFamily="serif"
                     android:text="@string/length"
-                    android:fontFamily="serif"
                     android:textColor="@color/white"
                     android:textSize="15sp" />
 
@@ -376,8 +376,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:fontFamily="serif"
                     android:text="@string/no_of_pieces"
-                    android:fontFamily="serif"
                     android:textColor="@color/white"
                     android:textSize="15sp" />
 
@@ -385,8 +385,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/bundle_no"
                     android:fontFamily="serif"
+                    android:text="@string/bundle_no"
                     android:textColor="@color/white"
                     android:textSize="15sp" />
             </TableRow>
@@ -413,7 +413,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="5dp"
                 android:layout_marginTop="2dp"
-                android:background="@color/light_orange_2"/>
+                android:background="@color/orange" />
         </LinearLayout>
 
     </android.support.constraint.ConstraintLayout>

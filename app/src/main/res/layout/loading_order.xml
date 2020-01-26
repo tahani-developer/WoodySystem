@@ -27,9 +27,9 @@
             android:background="@drawable/frame_shape"
             android:drawableStart="@drawable/ic_search_white_24dp"
             android:drawableLeft="@drawable/ic_search_white_24dp"
-            android:paddingStart="170dp"
-            android:paddingLeft="170dp"
-            android:drawablePadding="-130dp"
+            android:paddingStart="140dp"
+            android:paddingLeft="140dp"
+            android:drawablePadding="-100dp"
             android:text="@string/search_by_barcode"
             android:fontFamily="serif"
             android:textColor="@color/white" />
@@ -130,7 +130,7 @@
     <GridView
         android:id="@+id/items"
         android:layout_width="match_parent"
-        android:layout_height="730dp"
+        android:layout_height="710dp"
         android:numColumns="2"
         />
 
@@ -141,9 +141,6 @@
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:background="@drawable/frame_shape"
-        android:drawableStart="@drawable/bundle"
-        android:drawableLeft="@drawable/bundle"
-        android:paddingLeft="20dp"
         android:text="@string/done"
         android:fontFamily="serif"
         android:textAllCaps="false"

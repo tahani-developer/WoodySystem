@@ -140,14 +140,14 @@ public class BundlesReport extends AppCompatActivity {
 
                     for (int i = 0; i < bundlesTable.getChildCount(); i++) {
                         TableRow table = (TableRow) bundlesTable.getChildAt(i);
-                        CheckBox bundleCheck = (CheckBox) table.getChildAt(9);
+                        CheckBox bundleCheck = (CheckBox) table.getChildAt(10);
                         bundleCheck.setChecked(true);
 
                     }
                 } else {
                     for (int i = 0; i < bundlesTable.getChildCount(); i++) {
                         TableRow table = (TableRow) bundlesTable.getChildAt(i);
-                        CheckBox bundleCheck = (CheckBox) table.getChildAt(9);
+                        CheckBox bundleCheck = (CheckBox) table.getChildAt(10);
                         bundleCheck.setChecked(false);
 
                     }
@@ -166,7 +166,7 @@ public class BundlesReport extends AppCompatActivity {
                     bundleInfoForPrint.clear();
                     for (int i = 0; i < bundlesTable.getChildCount(); i++) {
                         TableRow table = (TableRow) bundlesTable.getChildAt(i);
-                        CheckBox bundleCheck = (CheckBox) table.getChildAt(9);
+                        CheckBox bundleCheck = (CheckBox) table.getChildAt(10);
                         if (bundleCheck.isChecked()) {
                             Log.e("bundelCheak", "" + i + "  " + bundleInfos.get(Integer.parseInt(bundleCheck.getTag().toString())).getBundleNo());
                             bundleInfoForPrint.add(bundleInfos.get(Integer.parseInt(bundleCheck.getTag().toString())));
@@ -200,16 +200,16 @@ public class BundlesReport extends AppCompatActivity {
             public void onClick(View v) {
                 new android.support.v7.app.AlertDialog.Builder(BundlesReport.this)
                         .setTitle("Confirm Hide")
-                        .setMessage("Are you sure you want to hide checked data ?!")
+                        .setMessage("Are you want hide checked data ?!")
                         .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() { // Html.fromHtml("<font color='#FF7F27'>Yes</font>")
                             public void onClick(DialogInterface dialog, int whichButton) {
 
                                 jsonArrayBundles = new JSONArray();
                                 bundlesNoRows = new ArrayList<>();
                                 for (int i = 0; i < bundlesTable.getChildCount(); i++) {
                                     TableRow table = (TableRow) bundlesTable.getChildAt(i);
-                                    CheckBox bundleCheck = (CheckBox) table.getChildAt(9);
+                                    CheckBox bundleCheck = (CheckBox) table.getChildAt(10);
                                     TextView bundleNo = (TextView) table.getChildAt(1);
                                     if (bundleCheck.isChecked()) {
                                         bundlesNoRows.add(table);
@@ -288,6 +288,7 @@ public class BundlesReport extends AppCompatActivity {
                         , R.color.light_orange
                         , m
                         , bundleInfos.get(m).getSerialNo()
+                        , bundleInfos.get(m).getBackingList()
                 );
                 bundlesTable.addView(tableRow);
 
@@ -348,7 +349,7 @@ public class BundlesReport extends AppCompatActivity {
         }
     }
 
-    TableRow fillTableRows(TableRow tableRow, String bundlNo, String length, String width, String thic, String grade, String noOfPieces, String location, String area, int backgroundColor, int indexInList, String serialNo) {
+    TableRow fillTableRows(TableRow tableRow, String bundlNo, String length, String width, String thic, String grade, String noOfPieces, String location, String area, int backgroundColor, int indexInList, String serialNo, String backingList) {
 
         for (int i = 0; i < 11; i++) {
             TextView textView = new TextView(this);
@@ -425,6 +426,13 @@ public class BundlesReport extends AppCompatActivity {
                     textView.setText(area);
                     break;
                 case 9:
+                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+                    textViewParam.setMargins(1, 5, 1, 1);
+                    textView.setPadding(1, 6, 1, 7);
+                    textView.setLayoutParams(textViewParam);
+                    textView.setText(backingList);
+                    break;
+                case 10:
                     CheckBox checkBox = new CheckBox(this);
                     textViewParam = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
                     textViewParam.setMargins(1, 5, 1, 1);
@@ -435,7 +443,6 @@ public class BundlesReport extends AppCompatActivity {
                     checkBox.setBackgroundResource(backgroundColor);
                     tableRow.addView(checkBox);
                     break;
-
             }
             tableRow.addView(textView);
         }
@@ -910,6 +917,10 @@ public class BundlesReport extends AppCompatActivity {
             }
         }
     }
+
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();}
 }
 
 

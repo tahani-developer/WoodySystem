@@ -49,6 +49,10 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
     private StringRequest printBarcodeObjectRequest; // first report
     private String urlBundles;
 
+    private StringRequest packingListJsonObjectRequest;
+    private String urlPackingList;
+
+    private LoginActivity loginActivity;
     private InventoryReport inventoryReport;//= new InventoryReport();
     private BundlesReport bundlesReport;
 
@@ -173,7 +177,8 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
 
     //------------------------------------------- Get Users ----------------------------------------
 
-    void getUsersData() {
+    void getUsersData(LoginActivity loginActivity) {
+        this.loginActivity = loginActivity;
         settings = databaseHandler.getSettings();
         urlUsers = "http://" + settings.getIpAddress() + "/import.php?FLAG=0";//http://10.0.0.214/woody/import.php?FLAG=0
         Log.e("presenter/urlUsers ", "" + urlUsers);
@@ -186,7 +191,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
 
         @Override
         public void onErrorResponse(VolleyError error) {
-            getUsersData();
+//            getUsersData();
             Log.e("presenter/users/err ", "" + settings.getIpAddress() + " *** " + urlUsers + " *** " + error);
             if (error instanceof NetworkError) {
             } else if (error instanceof ServerError) {
@@ -230,9 +235,13 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                 Log.e("presenter:obj2", "" + array.toString());
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject innerObject = array.getJSONObject(i);
-                    Log.e("presenter:obj3 ", "" + innerObject.toString());
-                    Users users = new Users(innerObject.getString("USER_NAME"), innerObject.getString("PASSWORD"));
+                    String username  = innerObject.getString("USER_NAME");
+                    String password  =innerObject.getString("PASSWORD") ;
+                    Log.e("presenter:obj3 ", "" +username + password);
+                    Users users = new Users(username, password);
                     Log.e("presenter:obj4", "" + innerObject.getString("USER_NAME"));
+
+                    loginActivity.getUsersDataMethod(username, password);
                     SettingsFile.usersList.add(users);
                     databaseHandler.addNewUser(users);
                 }
@@ -277,33 +286,35 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                     response = new String(response.getBytes("ISO-8859-1"), "UTF-8");
 //                    response = response.substring(response.indexOf("{"));
 
-                Log.e("presenter/bundle/res ", "" + response);
+//                Log.e("presenter/bundle/res ", "" + response);
                 JSONObject object = new JSONObject(response);
 //                Log.e("presenter:bun1", "" + object.toString());
                 JSONArray array = object.getJSONArray("BUNDLE_INFO");
                 Log.e("presenter:bun2", "" + array.length());
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject innerObject = array.getJSONObject(i);//ORDERED
-                    Log.e("presenter:bun3 ", "" + innerObject.toString());
-                    if (innerObject.getInt("ORDERED") == 0) {
-                        BundleInfo bundleInfo = new BundleInfo();
-                        bundleInfo.setThickness(innerObject.getDouble("THICKNESS"));
-                        bundleInfo.setWidth(innerObject.getDouble("WIDTH"));
-                        bundleInfo.setLength(innerObject.getDouble("LENGTH"));
-                        bundleInfo.setGrade(innerObject.getString("GRADE"));
-                        bundleInfo.setNoOfPieces(innerObject.getInt("PIECES"));
-                        bundleInfo.setBundleNo(innerObject.getString("BUNDLE_NO"));
-                        bundleInfo.setLocation(innerObject.getString("LOCATION"));
-                        bundleInfo.setArea(innerObject.getString("AREA"));
-                        bundleInfo.setBarcode(innerObject.getString("BARCODE"));
-                        bundleInfo.setOrdered(innerObject.getInt("ORDERED"));
+//                    Log.e("presenter:bun3 ", "" + innerObject.toString());
+//                    if (innerObject.getInt("ORDERED") == 0) {
+                    BundleInfo bundleInfo = new BundleInfo();
+                    bundleInfo.setThickness(innerObject.getDouble("THICKNESS"));
+                    bundleInfo.setWidth(innerObject.getDouble("WIDTH"));
+                    bundleInfo.setLength(innerObject.getDouble("LENGTH"));
+                    bundleInfo.setGrade(innerObject.getString("GRADE"));
+                    bundleInfo.setNoOfPieces(innerObject.getDouble("PIECES"));
+                    bundleInfo.setBundleNo(innerObject.getString("BUNDLE_NO"));
+                    bundleInfo.setLocation(innerObject.getString("LOCATION"));
+                    bundleInfo.setArea(innerObject.getString("AREA"));
+                    bundleInfo.setBarcode(innerObject.getString("BARCODE"));
+                    bundleInfo.setOrdered(innerObject.getInt("ORDERED"));
 //                    bundleInfo.setPicture(innerObject.getString("PIC"));
-                        bundleInfo.setAddingDate(innerObject.getString("BUNDLE_DATE"));
-                        bundleInfo.setSerialNo(innerObject.getString("B_SERIAL"));
+                    bundleInfo.setAddingDate(innerObject.getString("BUNDLE_DATE"));
+                    bundleInfo.setSerialNo(innerObject.getString("B_SERIAL"));
+                    bundleInfo.setBackingList(innerObject.getString("BACKING_LIST"));
+                    Log.e("presenter:bun3 ", "" + bundleInfo.getBackingList());
 
-                        bundleInfoServer2.add(bundleInfo);
-                        bundleInfoServer.add(bundleInfo);
-                    }
+                    bundleInfoServer2.add(bundleInfo);
+                    bundleInfoServer.add(bundleInfo);
+//                    }
                 }
                 Log.e("bundleInfoServer", "/size/" + bundleInfoServer.size());
                 inventoryReport.filters();
@@ -358,8 +369,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject innerObject = array.getJSONObject(i);//ORDERED
                     Log.e("presenter:bun3 ", "" + innerObject.toString());
-                    if ((innerObject.getInt("ORDERED") == 0)
-                            && (innerObject.getString("USER_NO").equals(settings.getUserNo()))
+                    if ( (innerObject.getString("USER_NO").equals(settings.getUserNo()))
                             && (innerObject.getString("LOCATION").equals(settings.getStore()))
                             && (innerObject.getString("IS_PRINTED").equals("0"))) {
                         BundleInfo bundleInfo = new BundleInfo();
@@ -367,7 +377,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                         bundleInfo.setWidth(innerObject.getDouble("WIDTH"));
                         bundleInfo.setLength(innerObject.getDouble("LENGTH"));
                         bundleInfo.setGrade(innerObject.getString("GRADE"));
-                        bundleInfo.setNoOfPieces(innerObject.getInt("PIECES"));
+                        bundleInfo.setNoOfPieces(innerObject.getDouble("PIECES"));
                         bundleInfo.setBundleNo(innerObject.getString("BUNDLE_NO"));
                         bundleInfo.setLocation(innerObject.getString("LOCATION"));
                         bundleInfo.setArea(innerObject.getString("AREA"));
@@ -377,6 +387,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                         bundleInfo.setAddingDate(innerObject.getString("BUNDLE_DATE"));
                         bundleInfo.setUserNo(innerObject.getString("USER_NO"));
                         bundleInfo.setSerialNo(innerObject.getString("B_SERIAL"));
+                        bundleInfo.setBackingList(innerObject.getString("BACKING_LIST"));
 
                         bundleReportList.add(bundleInfo); // for first report
                     }
@@ -401,4 +412,56 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
     public List<BundleInfo> getBundleReportList() {
         return bundleReportList;
     }
+
+    //-------------------------------------------- update p.list from inventory report Data------------------------------------------/
+
+    public void updatePackingList(InventoryReport inventoryReport, String bundleNumber, String packingList, String location) {
+        settings = databaseHandler.getSettings();
+        this.inventoryReport = inventoryReport;
+//export.php?ADD_PACKING_LIST=1&BUNDLE_NO='" + bundleNo + "'&PACKING_LIST='" + packingList + "'");
+        urlPackingList = "http://" + settings.getIpAddress() + "/export.php?ADD_PACKING_LIST=1&BUNDLE_NO=\"" + bundleNumber + "\""
+                + "&PACKING_LIST=\"" + packingList + "\""
+                + "&LOCATION=\"" + location + "\"";//http://5.189.130.98:8085/import.php?FLAG=3
+        Log.e("presenter/ ", "urlPackingList " + urlPackingList);
+
+        packingListJsonObjectRequest = new StringRequest(Request.Method.GET, urlPackingList, new UpdatePackingListClass(), new UpdatePackingListClass());
+        requestQueue.add(packingListJsonObjectRequest);
+    }
+
+    class UpdatePackingListClass implements Response.Listener<String>, Response.ErrorListener {
+
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            Log.e("presenter/packingList", "/err/" + error);
+        }
+
+        @Override
+        public void onResponse(String response) {
+            try {
+                if (response.indexOf("{") == 3)
+                    response = new String(response.getBytes("ISO-8859-1"), "UTF-8");
+//                    response = response.substring(response.indexOf("{"));
+
+                getBundlesData(inventoryReport);
+//                inventoryReport.updaterPackingListInRaw();
+                Log.e("presenter/packingList", "/res/" + response);
+//                JSONObject object = new JSONObject(response);
+//                Log.e("presenter:bun1", "" + object.toString());
+//                JSONArray array = object.getJSONArray("BUNDLE_INFO");
+//                Log.e("presenter:bun2", "" + array.length());
+//                inventoryReport.filters();
+
+//                inventoryReport.fillTable(bundleInfoServer);
+////                Log.e("presenter3: import ", "" + SettingsFile.serialNumber);
+//
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            } catch (UnsupportedEncodingException e) {
+//                e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }

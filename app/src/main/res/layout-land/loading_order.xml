@@ -29,9 +29,9 @@
             android:background="@drawable/frame_shape"
             android:drawableStart="@drawable/ic_search_white_24dp"
             android:drawableLeft="@drawable/ic_search_white_24dp"
-            android:paddingStart="370dp"
-            android:paddingLeft="370dp"
-            android:drawablePadding="-280dp"
+            android:paddingStart="350dp"
+            android:paddingLeft="350dp"
+            android:drawablePadding="-240dp"
            />
 
         <ImageButton
@@ -49,7 +49,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:layout_marginBottom="10dp"
         android:orientation="horizontal">
 
@@ -151,7 +151,7 @@
     <GridView
         android:id="@+id/items"
         android:layout_width="match_parent"
-        android:layout_height="410dp"
+        android:layout_height="390dp"
         android:gravity="center"
         android:background="@color/alpha_black"
         android:numColumns="3" />
@@ -163,11 +163,6 @@
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:background="@drawable/frame_shape"
-        android:drawableStart="@drawable/bundle"
-        android:drawableLeft="@drawable/bundle"
-        android:paddingStart="70dp"
-        android:paddingLeft="70dp"
-        android:drawablePadding="-70dp"
         android:text="@string/done"
         android:fontFamily="serif"
         android:textAllCaps="false"
