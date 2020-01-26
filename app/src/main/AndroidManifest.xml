@@ -39,7 +39,10 @@
         <activity android:name=".stage_one.AcceptRow" />
         <activity
             android:name=".reports.InventoryReport"
-            android:screenOrientation="sensorLandscape" />
+            android:screenOrientation="sensorLandscape" >
+
+
+        </activity>
         <activity
             android:name=".reports.BundlesReport"
             android:screenOrientation="sensorLandscape" />
@@ -66,7 +69,9 @@
             android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".Stage3"
-            android:windowSoftInputMode="stateAlwaysHidden" />
+            android:windowSoftInputMode="stateAlwaysHidden" >
+
+        </activity>
         <activity
             android:name=".LoadingOrder"
             android:windowSoftInputMode="stateAlwaysHidden" />

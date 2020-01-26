@@ -464,6 +464,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                             tableRow1.removeAllViews();
                                             editTableRow(tableRow1, newBundleNoString, lengthText2, widthText2, thicknessText2
                                                     , noOfPiecesText2, locationString, packingListText2);
+
+                                            Log.e("***" , lengthText2);
                                             updaterTableRow = tableRow1;
 
                                             newBundle = new BundleInfo(Double.parseDouble(thicknessText2)
@@ -529,13 +531,13 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         areaSpinner.setAdapter(areaAdapter);
         areaSpinner.setOnItemSelectedListener(this);
 
+        descriptionList.add("Ukrainian Wood");
         descriptionList.add("Bundle Origin");
         descriptionList.add("Finland Wood");
         descriptionList.add("Decore Wood");
         descriptionList.add("German Wood");
         descriptionList.add("Romanian Wood");
         descriptionList.add("Russian Wood");
-        descriptionList.add("Ukrainian Wood");
         descriptionList.add("Canadian Wood");
         descriptionList.add("Swedian Wood");
         descriptionList.add("Latvian Wood");

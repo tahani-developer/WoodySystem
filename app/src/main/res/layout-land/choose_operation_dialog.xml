@@ -484,7 +484,7 @@
                         android:layout_margin="10dp"
                         android:fontFamily="serif"
                         android:gravity="start"
-                        android:text="@string/update"
+                        android:text="Apply"
                         android:textSize="18sp" />
 
                     <TextView
