@@ -12,7 +12,7 @@ public class BundleInfo {
     private double length;
     private double width;
     private String grade;
-    private int noOfPieces;
+    private double noOfPieces;
     private String bundleNo;
     private String location;
     private String area;
@@ -36,7 +36,7 @@ public class BundleInfo {
     public BundleInfo() {
     }
 
-    public BundleInfo(double thickness, double length, double width, String grade, int noOfPieces, String bundleNo, String location, String area, String barcode, String pic) {
+    public BundleInfo(double thickness, double length, double width, String grade, double noOfPieces, String bundleNo, String location, String area, String barcode, String pic) {
         this.thickness = thickness;
         this.length = length;
         this.width = width;
@@ -49,7 +49,7 @@ public class BundleInfo {
         this.picture = pic;
     }
 
-    public BundleInfo(double thickness, double length, double width, String grade, int noOfPieces, String bundleNo, String location, String area, String barcode, String pic, String hideFlag) {
+    public BundleInfo(double thickness, double length, double width, String grade, double noOfPieces, String bundleNo, String location, String area, String barcode, String pic, String hideFlag) {
         this.thickness = thickness;
         this.length = length;
         this.width = width;
@@ -63,7 +63,7 @@ public class BundleInfo {
         this.hideFlag = hideFlag;
     }
 
-    public BundleInfo(double thickness, double length, double width, String grade, int noOfPieces, String bundleNo, String location, String area, String addingDate, int isPrinted, String description, String serialNo, String userNo, String backingList, int ordered) {
+    public BundleInfo(double thickness, double length, double width, String grade, double noOfPieces, String bundleNo, String location, String area, String addingDate, int isPrinted, String description, String serialNo, String userNo, String backingList, int ordered) {
         this.thickness = thickness;
         this.length = length;
         this.width = width;
@@ -161,11 +161,11 @@ public class BundleInfo {
         this.grade = grade;
     }
 
-    public int getNoOfPieces() {
+    public double getNoOfPieces() {
         return noOfPieces;
     }
 
-    public void setNoOfPieces(int noOfPieces) {
+    public void setNoOfPieces(double noOfPieces) {
         this.noOfPieces = noOfPieces;
     }
 

@@ -103,4 +103,11 @@
     <string name="find_supplier">Знайти постачальника</string>
     <string name="generate_Barcode">Generate Barcode</string>
     <string name="ordered">Ordered</string>
+
+    <string name="edit">Редагувати</string>
+    <string name="q1">Ви хочете видалити номер пакета: </string>
+    <string name="yes">Так</string>
+    <string name="cancel">Скасувати</string>
+    <string name="action">Виберіть Дія</string>
+    <string name="show">Показати</string>
 </resources>

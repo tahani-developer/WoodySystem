@@ -200,9 +200,9 @@ public class BundlesReport extends AppCompatActivity {
             public void onClick(View v) {
                 new android.support.v7.app.AlertDialog.Builder(BundlesReport.this)
                         .setTitle("Confirm Hide")
-                        .setMessage("Are you sure you want to hide checked data ?!")
+                        .setMessage("Are you want hide checked data ?!")
                         .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() { // Html.fromHtml("<font color='#FF7F27'>Yes</font>")
                             public void onClick(DialogInterface dialog, int whichButton) {
 
                                 jsonArrayBundles = new JSONArray();
@@ -917,6 +917,10 @@ public class BundlesReport extends AppCompatActivity {
             }
         }
     }
+
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();}
 }
 
 

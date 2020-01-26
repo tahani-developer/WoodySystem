@@ -300,7 +300,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                     bundleInfo.setWidth(innerObject.getDouble("WIDTH"));
                     bundleInfo.setLength(innerObject.getDouble("LENGTH"));
                     bundleInfo.setGrade(innerObject.getString("GRADE"));
-                    bundleInfo.setNoOfPieces(innerObject.getInt("PIECES"));
+                    bundleInfo.setNoOfPieces(innerObject.getDouble("PIECES"));
                     bundleInfo.setBundleNo(innerObject.getString("BUNDLE_NO"));
                     bundleInfo.setLocation(innerObject.getString("LOCATION"));
                     bundleInfo.setArea(innerObject.getString("AREA"));
@@ -377,7 +377,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                         bundleInfo.setWidth(innerObject.getDouble("WIDTH"));
                         bundleInfo.setLength(innerObject.getDouble("LENGTH"));
                         bundleInfo.setGrade(innerObject.getString("GRADE"));
-                        bundleInfo.setNoOfPieces(innerObject.getInt("PIECES"));
+                        bundleInfo.setNoOfPieces(innerObject.getDouble("PIECES"));
                         bundleInfo.setBundleNo(innerObject.getString("BUNDLE_NO"));
                         bundleInfo.setLocation(innerObject.getString("LOCATION"));
                         bundleInfo.setArea(innerObject.getString("AREA"));

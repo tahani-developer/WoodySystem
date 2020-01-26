@@ -107,6 +107,6 @@
     <string name="yes">Yes</string>
     <string name="cancel">Cancel</string>
     <string name="action">Choose Action</string>
-    <string name="update">Update</string>
+    <string name="show">Show</string>
 
 </resources>
