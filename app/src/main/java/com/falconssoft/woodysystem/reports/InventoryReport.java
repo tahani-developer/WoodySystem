@@ -110,17 +110,21 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private List<String> locationList = new ArrayList<>();
     private List<String> areaList = new ArrayList<>();
     private List<String> orderedList = new ArrayList<>();
+    private List<String> plList = new ArrayList<>();
+    private List<String> gradeList = new ArrayList<>();
     private List<BundleInfo> bundlesForDelete = new ArrayList<>();
     private List<BundleInfo> dateFiltered, filtered;
     private JSONArray jsonArrayBundles = new JSONArray();
     private WoodPresenter woodPresenter;
     private Animation animation;
     private TextView textView, noOfBundles, noOfPieces, cubicField, deleteAll, dateFrom, dateTo;
-    private Spinner location, area, ordered;
+    private Spinner location, area, ordered, pList, grade;
     private ArrayAdapter<String> locationAdapter;
     private ArrayAdapter<String> areaAdapter;
     private ArrayAdapter<String> orderedAdapter;
-    private String loc = "All", areaField = "All", orderedField = "All";
+    private ArrayAdapter<String> gradeAdapter;
+    private ArrayAdapter<String> plAdapter;
+    private String loc = "All", areaField = "All", orderedField = "All", plField = "All", gradeFeld = "All";
     private Settings generalSettings;
     private Calendar calendar;
     private Date date;
@@ -148,7 +152,9 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         bundlesTable = findViewById(R.id.inventory_report_table);
         location = findViewById(R.id.inventory_report_location);
         area = findViewById(R.id.inventory_report_area);
-        ordered = findViewById(R.id.inventory_report_ordered);
+        pList = findViewById(R.id.inventory_report_pl);
+        grade = findViewById(R.id.inventory_report_grade);
+//        ordered = findViewById(R.id.inventory_report_ordered);
         textView = findViewById(R.id.inventory_report_tv);
         dateFrom = findViewById(R.id.inventory_report_from);
         dateTo = findViewById(R.id.inventory_report_to);
@@ -183,16 +189,34 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         areaList.add("Zone 1");
         areaList.add("Zone 2");
         areaList.add("Zone 3");
+        areaList.add("Zone 4");
+        areaList.add("Zone 5");
         areaAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, areaList);
         areaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         area.setAdapter(areaAdapter);
 
-        orderedList.add("All");
-        orderedList.add("Ordered");
-        orderedList.add("Not Ordered");
-        orderedAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, orderedList);
-        orderedAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        ordered.setAdapter(orderedAdapter);
+//        orderedList.add("All");
+//        orderedList.add("Ordered");
+//        orderedList.add("Not Ordered");
+//        orderedAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, orderedList);
+//        orderedAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        ordered.setAdapter(orderedAdapter);
+
+        plList.add("All");
+        plList.add("P_List");
+        plList.add("Not P_List");
+        plAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, plList);
+        plAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        pList.setAdapter(plAdapter);
+
+        gradeList.add("All");
+        gradeList.add("Fresh");
+        gradeList.add("BS");
+        gradeList.add("Reject");
+        gradeList.add("KD");
+        gradeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, gradeList);
+        gradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        grade.setAdapter(gradeAdapter);
 
         woodPresenter.getBundlesData(this);
         deleteAll.setOnClickListener(this);
@@ -200,7 +224,9 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         dateTo.setOnClickListener(this);
         location.setOnItemSelectedListener(this);
         area.setOnItemSelectedListener(this);
-        ordered.setOnItemSelectedListener(this);
+//        ordered.setOnItemSelectedListener(this);
+        pList.setOnItemSelectedListener(this);
+        grade.setOnItemSelectedListener(this);
 
         for (int v = 0; v < bundleInfoServer2.size(); v++) {
             BundleInfo fake = new BundleInfo();
@@ -217,14 +243,14 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 
                     for (int i = 0; i < bundlesTable.getChildCount(); i++) {
                         TableRow table = (TableRow) bundlesTable.getChildAt(i);
-                        CheckBox bundleCheck = (CheckBox) table.getChildAt(10);
+                        CheckBox bundleCheck = (CheckBox) table.getChildAt(0);
                         bundleCheck.setChecked(true);
 
                     }
                 } else {
                     for (int i = 0; i < bundlesTable.getChildCount(); i++) {
                         TableRow table = (TableRow) bundlesTable.getChildAt(i);
-                        CheckBox bundleCheck = (CheckBox) table.getChildAt(10);
+                        CheckBox bundleCheck = (CheckBox) table.getChildAt(0);
                         bundleCheck.setChecked(false);
 
                     }
@@ -547,18 +573,18 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
             String dateFiltered2 = String.valueOf(dateFiltered.get(k).getOrdered());
             if (loc.equals("All") || loc.equals(dateFiltered.get(k).getLocation())) {
                 if (areaField.equals("All") || areaField.equals(dateFiltered.get(k).getArea())) {
-                    if (orderedField.equals("All") || orderedField.equals(dateFiltered2)) {
-//                        filtered.add(dateFiltered.get(k));
+//                    if (orderedField.equals("All") || orderedField.equals(dateFiltered2)) {
+                        if (gradeFeld.equals("All") || gradeFeld.equals(dateFiltered.get(k).getGrade())) {
+                            if (plField.equals("All") || (plField.equals("0") && dateFiltered.get(k).getBackingList().equals("null")) || (plField.equals("1") && !dateFiltered.get(k).getBackingList().equals("null"))) {
 
-//                        List<BundleInfo> tempList = new ArrayList<>();
-                        if (
-                                (("" + dateFiltered.get(k).getThickness()).toUpperCase().startsWith(f1) || f1.equals("")) &&
+                                if ((("" + dateFiltered.get(k).getThickness()).toUpperCase().startsWith(f1) || f1.equals("")) &&
                                         (("" + dateFiltered.get(k).getWidth()).toUpperCase().startsWith(f2) || f2.equals("")) &&
                                         (("" + dateFiltered.get(k).getLength()).toUpperCase().startsWith(f3) || f3.equals("")))
-                            filtered.add(dateFiltered.get(k));
 
-
-                    }
+                                    filtered.add(dateFiltered.get(k));
+                            }
+                        }
+//                    }
                 }
             }
         }
@@ -628,9 +654,9 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
             tableRow.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    serialNumber = ((TextView) finalTableRow1.getChildAt(0)).getText().toString();
-                    String bundleNumber = ((TextView) finalTableRow1.getChildAt(1)).getText().toString();
-                    String location = ((TextView) finalTableRow1.getVirtualChildAt(7)).getText().toString();
+                    serialNumber = ((TextView) finalTableRow1.getChildAt(1)).getText().toString();
+                    String bundleNumber = ((TextView) finalTableRow1.getChildAt(2)).getText().toString();
+                    String location = ((TextView) finalTableRow1.getVirtualChildAt(8)).getText().toString();
                     Log.e("serialNumber", serialNumber);
 
                     Dialog packingListDialog = new Dialog(InventoryReport.this);
@@ -706,67 +732,8 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
             textView.setPadding(1, 6, 1, 7);
             textView.setLayoutParams(textViewParam);
             switch (i) {
+
                 case 0:
-//                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
-//                    textViewParam.setMargins(1, 5, 1, 1);
-//                    textView.setLayoutParams(textViewParam);
-                    textView.setText(serial);
-                    break;
-                case 1:
-                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 3.4f);
-                    textViewParam.setMargins(1, 5, 1, 1);
-                    textView.setLayoutParams(textViewParam);
-                    textView.setText(bundlNo);
-                    break;
-                case 2:
-                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
-                    textViewParam.setMargins(1, 5, 1, 1);
-                    textView.setLayoutParams(textViewParam);
-                    textView.setText(length);
-                    break;
-                case 3:
-                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
-                    textViewParam.setMargins(1, 5, 1, 1);
-                    textView.setLayoutParams(textViewParam);
-                    textView.setText(width);
-                    break;
-                case 4:
-                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
-                    textViewParam.setMargins(1, 5, 1, 1);
-                    textView.setLayoutParams(textViewParam);
-                    textView.setText(thic);
-                    break;
-                case 5:
-                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
-                    textViewParam.setMargins(1, 5, 1, 1);
-                    textView.setLayoutParams(textViewParam);
-                    textView.setText(grade);
-                    break;
-                case 6:
-                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
-                    textViewParam.setMargins(1, 5, 1, 1);
-                    textView.setLayoutParams(textViewParam);
-                    textView.setText(noOfPieces);
-                    break;
-                case 7:
-                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1.5f);
-                    textViewParam.setMargins(1, 5, 1, 1);
-                    textView.setLayoutParams(textViewParam);
-                    textView.setText(location);
-                    break;
-                case 8:
-                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
-                    textViewParam.setMargins(1, 5, 1, 1);
-                    textView.setLayoutParams(textViewParam);
-                    textView.setText(area);
-                    break;
-                case 9:
-                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
-                    textViewParam.setMargins(1, 5, 1, 1);
-                    textView.setLayoutParams(textViewParam);
-                    textView.setText(backingList);
-                    break;
-                case 10:
                     CheckBox checkBox = new CheckBox(this);
                     textViewParam = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
                     textViewParam.setMargins(1, 5, 1, 1);
@@ -777,8 +744,69 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                     checkBox.setBackgroundResource(R.color.light_orange);
                     tableRow.addView(checkBox);
                     break;
+                case 1:
+//                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+//                    textViewParam.setMargins(1, 5, 1, 1);
+//                    textView.setLayoutParams(textViewParam);
+                    textView.setText(serial);
+                    break;
+                case 2:
+                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 3.4f);
+                    textViewParam.setMargins(1, 5, 1, 1);
+                    textView.setLayoutParams(textViewParam);
+                    textView.setText(bundlNo);
+                    break;
+                case 3:
+                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+                    textViewParam.setMargins(1, 5, 1, 1);
+                    textView.setLayoutParams(textViewParam);
+                    textView.setText(length);
+                    break;
+                case 4:
+                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+                    textViewParam.setMargins(1, 5, 1, 1);
+                    textView.setLayoutParams(textViewParam);
+                    textView.setText(width);
+                    break;
+                case 5:
+                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+                    textViewParam.setMargins(1, 5, 1, 1);
+                    textView.setLayoutParams(textViewParam);
+                    textView.setText(thic);
+                    break;
+                case 6:
+                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+                    textViewParam.setMargins(1, 5, 1, 1);
+                    textView.setLayoutParams(textViewParam);
+                    textView.setText(grade);
+                    break;
+                case 7:
+                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+                    textViewParam.setMargins(1, 5, 1, 1);
+                    textView.setLayoutParams(textViewParam);
+                    textView.setText(noOfPieces);
+                    break;
+                case 8:
+                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1.5f);
+                    textViewParam.setMargins(1, 5, 1, 1);
+                    textView.setLayoutParams(textViewParam);
+                    textView.setText(location);
+                    break;
+                case 9:
+                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+                    textViewParam.setMargins(1, 5, 1, 1);
+                    textView.setLayoutParams(textViewParam);
+                    textView.setText(area);
+                    break;
+                case 10:
+                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+                    textViewParam.setMargins(1, 5, 1, 1);
+                    textView.setLayoutParams(textViewParam);
+                    textView.setText(backingList);
+                    break;
+
             }
-            if (i != 10) {
+            if (i != 0) {
                 tableRow.addView(textView);
             }
         }
@@ -937,13 +965,26 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                 areaField = parent.getSelectedItem().toString();
                 filters();
                 break;
-            case R.id.inventory_report_ordered:
-                orderedField = parent.getSelectedItem().toString();
-                if (orderedField.equals("Ordered"))
-                    orderedField = "1";
-                else if (orderedField.equals("Not Ordered"))
-                    orderedField = "0";
-                Log.e("orderedspinner", orderedField);
+//            case R.id.inventory_report_ordered:
+//                orderedField = parent.getSelectedItem().toString();
+//                if (orderedField.equals("Ordered"))
+//                    orderedField = "1";
+//                else if (orderedField.equals("Not Ordered"))
+//                    orderedField = "0";
+//                Log.e("orderedspinner", orderedField);
+//                filters();
+//                break;
+            case R.id.inventory_report_pl:
+                plField = parent.getSelectedItem().toString();
+                if (plField.equals("P_List"))
+                    plField = "1";
+                else if (plField.equals("Not P_List"))
+                    plField = "0";
+                Log.e("P_Listpinner", plField);
+                filters();
+                break;
+            case R.id.inventory_report_grade:
+                gradeFeld = parent.getSelectedItem().toString();
                 filters();
                 break;
         }
@@ -1232,7 +1273,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 //                    bundlesForDelete.clear();
 //                    bundlesTable.removeAllViews();
                     filters();
-                    if(checkBoxPrint.isChecked()){
+                    if (checkBoxPrint.isChecked()) {
                         checkBoxPrint.setChecked(false);
                     }
                     Log.e("tag", "****Success");
