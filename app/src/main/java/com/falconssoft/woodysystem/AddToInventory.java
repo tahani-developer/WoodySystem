@@ -50,7 +50,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 
     private static final int WHITE = 0xFFFFFFFF;
     private static final int BLACK = 0xFF000000;
-    private EditText thickness, length, width, noOfPieces, serialNo, packingList;
+    private EditText thickness, length, width, noOfPieces, serialNo;
     private Spinner gradeSpinner, areaSpinner, descriptionSpinner;//, locationSpinner
     private TableLayout bundlesTable, updatedTable;
     private LinearLayout linearLayoutView;
@@ -63,13 +63,13 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
     private List<String> areaList = new ArrayList<>();
     private List<String> descriptionList = new ArrayList<>();
     private ArrayAdapter<String> gradeAdapter, areaAdapter, descriptionaAdapter;//, locationAdapter
-    private String gradeText = "Fresh", areaText = "Zone 1", descriptionText = "Bundle Origin", locationText;//, locationText = "Loc 1" ===> used for fill from adapter
+    private String gradeText = "Fresh", areaText = "Zone 1", descriptionText = "Ukrainian Wood", locationText;//, locationText = "Loc 1" ===> used for fill from adapter
     private JSONArray jsonArrayBundles;
     private boolean mState = false;
     private final String STATE_VISIBILITY = "state-visibility";
     private Settings generalSettings;
     private TableRow publicTableRow = null, tableRow1;
-    private String locationString = null, gradeString = null, detailString = null, generateDate, bundleNumber, oldBundleNoString, newBundleNoString, bundleNoString;
+    private String locationString = null, gradeString = null, detailString = null, generateDate, bundleNumber, oldBundleNoString, newBundleNoString, bundleNoString, packingListText = "null";
     private Date date;
     private SimpleDateFormat simpleDateFormat;
     private Dialog dialog;
@@ -92,7 +92,6 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         noOfPieces = findViewById(R.id.addToInventory_no_of_pieces);
         gradeSpinner = findViewById(R.id.addToInventory_grade);
         serialNo = findViewById(R.id.addToInventory_serial_no);
-        packingList = findViewById(R.id.addToInventory_backing_list);
 //        locationSpinner = findViewById(R.id.addToInventory_location);
         areaSpinner = findViewById(R.id.addToInventory_area);
         descriptionSpinner = findViewById(R.id.addToInventory_description);
@@ -123,7 +122,6 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         String lengthText = length.getText().toString();
         String widthText = width.getText().toString();
         String noOfPiecesText = noOfPieces.getText().toString();
-        String packingListText = packingList.getText().toString();
 
         locationText = generalSettings.getStore();
         int orderedText = 0;
@@ -138,10 +136,6 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                         if (!TextUtils.isEmpty(width.getText().toString())) {
                             if (!TextUtils.isEmpty(length.getText().toString())) {
                                 if (!TextUtils.isEmpty(noOfPieces.getText().toString())) {
-
-                                    locationString = null;
-                                    gradeString = null;
-                                    detailString = null;
 
                                     chooseSpinnersContent();
 
@@ -161,14 +155,6 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                         addTableHeader(bundlesTable);
                                     }
 
-
-                                    Log.e("addToInventory1 ", "" + (!packingListText.equals("")));
-                                    Log.e("addToInventory2 ", "" + (!packingListText.equals("null")));
-                                    Log.e("addToInventory3 ", "" + (!packingListText.equals(null)));
-
-                                    if ((!packingListText.equals(""))) {
-                                        orderedText = 1;
-                                    }
                                     Log.e("addToInventory/", "ordered/" + orderedText);
 
                                     newBundle = new BundleInfo(Double.parseDouble(thicknessText)
@@ -184,7 +170,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                             , descriptionText
                                             , serialNoText
                                             , generalSettings.getUserNo()
-                                            , packingListText
+                                            , "null"
                                             , orderedText);//presenter.getSerialNo());//SettingsFile.serialNumber
 
                                     bundleInfoList.add(newBundle);
@@ -192,7 +178,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 
                                     TableRow tableRow = new TableRow(this);
                                     editTableRow(tableRow, bundleNoString, lengthText, widthText, thicknessText
-                                            , noOfPiecesText, generalSettings.getStore(), packingListText);
+                                            , noOfPiecesText, generalSettings.getStore());
 //                                    tableRowList.add(tableRow);
 
                                     jsonArrayBundles.put(newBundle.getJSONObject());
@@ -231,7 +217,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 
     void addTableHeader(TableLayout tableLayout) {
         TableRow tableRow = new TableRow(this);
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 9; i++) {
             TextView textView = new TextView(this);
             textView.setBackgroundResource(R.color.orange);
             TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f);
@@ -270,9 +256,6 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                 case 8:
                     textView.setText("Details");
                     break;
-                case 9:
-                    textView.setText("B.List");
-                    break;
             }
             tableRow.addView(textView);
         }
@@ -296,7 +279,6 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         String locationString2 = ((TextView) tableRow.getChildAt(6)).getText().toString();
         String areaString2 = ((TextView) tableRow.getChildAt(7)).getText().toString();
         String detailsString2 = ((TextView) tableRow.getChildAt(8)).getText().toString();
-        String packingListString = ((TextView) tableRow.getChildAt(9)).getText().toString();
 
         RadioGroup radioGroup = dialog.findViewById(R.id.choose_operation_radioGroup);
         RadioButton delete = dialog.findViewById(R.id.choose_operation_delete_rb);
@@ -313,7 +295,6 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         EditText length = dialog.findViewById(R.id.choose_operation_length);
         EditText width = dialog.findViewById(R.id.choose_operation_width);
         EditText noOfPieces = dialog.findViewById(R.id.choose_operation_no_of_pieces);
-        EditText packingList = dialog.findViewById(R.id.choose_operation_packing_list);
         TextView serialNo = dialog.findViewById(R.id.choose_operation_serial_no);
          gradeSpinner = dialog.findViewById(R.id.choose_operation_grade);
         areaSpinner = dialog.findViewById(R.id.choose_operation_area);
@@ -325,20 +306,20 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         deleteLinear.setVisibility(View.GONE);
         editLinear.setVisibility(View.GONE);
 
-        int index = gradeList.indexOf(gradeString2);
-        gradeText = gradeAdapter.getItem(index);
-        gradeSpinner.setSelection(index);
-
-        int index2 = areaList.indexOf(areaString2);
-        areaText = areaAdapter.getItem(index2);
-        areaSpinner.setSelection(index2);
-
-        int index3 = descriptionList.indexOf(detailsString2);
-        descriptionText = descriptionaAdapter.getItem(index3);
-        descriptionSpinner.setSelection(index3);
+        setSpinnerSelectionPosition(gradeString2, areaString2, detailsString2);
+//        int index = gradeList.indexOf(gradeString2);
+//        gradeText = gradeAdapter.getItem(index);
+//        gradeSpinner.setSelection(index);
+//
+//        int index2 = areaList.indexOf(areaString2);
+//        areaText = areaAdapter.getItem(index2);
+//        areaSpinner.setSelection(index2);
+//
+//        int index3 = descriptionList.indexOf(detailsString2);
+//        descriptionText = descriptionaAdapter.getItem(index3);
+//        descriptionSpinner.setSelection(index3);
 
 //     chooseSpinnersContent();
-
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -375,7 +356,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                     width.setText(widthString);
                     length.setText(lengthString);
                     noOfPieces.setText(noOfPiecesString);
-                    packingList.setText(packingListString);
+//                    packingList.setText(packingListString);
 
                     update.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -392,7 +373,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                             String lengthText2 = length.getText().toString();
                                             String widthText2 = width.getText().toString();
                                             String noOfPiecesText2 = noOfPieces.getText().toString();
-                                            String packingListText2 = packingList.getText().toString();
+//                                            String packingListText2 = packingList.getText().toString();
                                             String newBundleNoString;
 
                                             chooseSpinnersContent();
@@ -406,7 +387,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 
                                             tableRow1.removeAllViews();
                                             editTableRow(tableRow1, newBundleNoString, lengthText2, widthText2, thicknessText2
-                                                    , noOfPiecesText2, locationString, packingListText2);
+                                                    , noOfPiecesText2, locationString);
                                             updatedTable.addView(tableRow1);
 
                                         } else {
@@ -439,7 +420,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                             String lengthText2 = length.getText().toString();
                                             String widthText2 = width.getText().toString();
                                             String noOfPiecesText2 = noOfPieces.getText().toString();
-                                            String packingListText2 = packingList.getText().toString();
+//                                            String packingListText2 = packingList.getText().toString();
                                             int orderedText2 = 0;
                                             newBundleNoString = "";
 
@@ -454,12 +435,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 
                                             tableRow1.removeAllViews();
                                             editTableRow(tableRow1, newBundleNoString, lengthText2, widthText2, thicknessText2
-                                                    , noOfPiecesText2, locationString, packingListText2);
+                                                    , noOfPiecesText2, locationString);
                                             updatedTable.addView(tableRow1);
-
-                                            if ((!packingListText2.equals(""))) {
-                                                orderedText2 = 1;
-                                            }
 
                                             newBundle = new BundleInfo(Double.parseDouble(thicknessText2)
                                                     , Double.parseDouble(lengthText2)
@@ -474,7 +451,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                                     , descriptionText
                                                     , serialString
                                                     , generalSettings.getUserNo()
-                                                    , packingListText2
+                                                    , packingListText
                                                     , orderedText2);//presenter.getSerialNo());//SettingsFile.serialNumber
 
                                             new JSONTask4().execute();
@@ -498,6 +475,20 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         });
         dialog.show();
 
+    }
+
+    void setSpinnerSelectionPosition(String grade, String area, String details) {
+        int index = gradeList.indexOf(grade);
+        gradeText = gradeAdapter.getItem(index);
+        gradeSpinner.setSelection(index, true);
+
+        int index2 = areaList.indexOf(area);
+        areaText = areaAdapter.getItem(index2);
+        areaSpinner.setSelection(index2, true);
+
+        int index3 = descriptionList.indexOf(details);
+        descriptionText = descriptionaAdapter.getItem(index3);
+        descriptionSpinner.setSelection(index3, true);
     }
 
     void fillSpinnerAdapter(Spinner gradeSpinner, Spinner areaSpinner, Spinner descriptionSpinner) {
@@ -606,13 +597,13 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
     }
 
     void editTableRow(TableRow tableRow, String bundleNoString, String lengthText, String widthText, String thicknessText
-            , String noOfPiecesText, String storeText, String packingListText) {
-        for (int i = 0; i < 10; i++) {
+            , String noOfPiecesText, String storeText) {
+        for (int i = 0; i < 9; i++) {
             TextView textView = new TextView(this);
             textView.setBackgroundResource(R.color.light_orange);
             TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f);
             textViewParam.setMargins(1, 5, 1, 1);
-            textView.setPadding(0,10,0,10);
+            textView.setPadding(0, 10, 0, 10);
             textView.setTextSize(15);
             textView.setTextColor(ContextCompat.getColor(this, R.color.gray_dark_one));
             textView.setLayoutParams(textViewParam);
@@ -620,7 +611,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                 case 0:
                     TableRow.LayoutParams param = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
                     param.setMargins(1, 5, 1, 1);
-                    textView.setPadding(0,10,0,10);
+                    textView.setPadding(0, 10, 0, 10);
                     textView.setLayoutParams(param);
                     textView.setText(bundleNoString);
                     break;
@@ -648,9 +639,6 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                 case 8:
                     textView.setText(descriptionText);
                     break;
-                case 9:
-                    textView.setText(packingListText);
-                    break;
             }
             tableRow.addView(textView);
         }
@@ -664,9 +652,6 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
             case R.id.choose_operation_grade:
                 gradeText = parent.getItemAtPosition(position).toString();
                 break;
-//            case R.id.addToInventory_location:
-//                locationText = parent.getItemAtPosition(position).toString();
-//                break;
             case R.id.addToInventory_area:
             case R.id.choose_operation_area:
                 areaText = parent.getItemAtPosition(position).toString();
@@ -748,14 +733,14 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                     width.setText("");
                     noOfPieces.setText("");
                     serialNo.setText("");
-                    packingList.setText("");
-//                                  locationSpinner.setSelection(0);
-                    areaSpinner.setSelection(0);
-                    gradeSpinner.setSelection(0);
-                    descriptionSpinner.setSelection(0);
+//                    areaSpinner.setSelection(0);
+//                    gradeSpinner.setSelection(0);
+//                    descriptionSpinner.setSelection(0);
                     gradeText = "Fresh";
                     areaText = "Zone 1";
-                    descriptionText = "Bundle Origin";
+                    descriptionText = "Ukrainian Wood";
+
+                    setSpinnerSelectionPosition(gradeText, areaText, descriptionText);
 
                     Log.e("tag", "****Success");
                 } else {
@@ -893,27 +878,27 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
             if (s != null) {
                 if (s.contains("UPDATE BUNDLE SUCCESS")) {
                     oldBundleNoString = newBundle.getBundleNo();
+                    gradeText = "Fresh";
+                    areaText = "Zone 1";
+                    descriptionText = "Ukrainian Wood";
+                    setSpinnerSelectionPosition(gradeText, areaText, descriptionText);
                     dialog.dismiss();
                     Log.e("addNewToInventory", "" + "   " + "      " + publicTableRow.getTag().toString());
-                    for (int i = 0; i < 10; i++) {
+                    for (int i = 0; i < 9; i++) {
                         TextView textView = (TextView) publicTableRow.getChildAt(i);
-
                         switch (i) {
-
                             case 0:
                                 textView.setText(newBundle.getBundleNo());
                                 break;
                             case 1:
                                 textView.setText("" + newBundle.getLength());
                                 break;
-
                             case 2:
                                 textView.setText("" + newBundle.getWidth());
                                 break;
                             case 3:
                                 textView.setText("" + newBundle.getThickness());
                                 break;
-
                             case 4:
                                 textView.setText("" + newBundle.getGrade());
                                 break;
@@ -925,19 +910,16 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                 break;
                             case 7:
                                 textView.setText("" + newBundle.getArea());
-
                                 break;
                             case 8:
                                 textView.setText("" + newBundle.getDescription());
                                 break;
-                            case 9:
-                                textView.setText("" + newBundle.getBackingList());
-                                break;
-
-
                         }
-
                     }
+                    areaSpinner.setSelection(0);
+                    gradeSpinner.setSelection(0);
+                    descriptionSpinner.setSelection(0);
+
                     Log.e("tag", "updated bundle raw/Success");
                 } else {
                     Log.e("tag", "updated bundle raw/Failed to export data");
