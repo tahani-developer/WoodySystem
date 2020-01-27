@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/wooddecor"
+    android:id="@+id/inventory_report_container"
     tools:context=".reports.InventoryReport"
     tools:ignore="MissingDefaultResource">
 
