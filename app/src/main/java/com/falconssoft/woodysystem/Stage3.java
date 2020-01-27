@@ -3,6 +3,7 @@ package com.falconssoft.woodysystem;
 import android.os.Bundle;
 import android.content.Intent;
 
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.util.Log;
@@ -26,6 +27,7 @@ public class Stage3 extends AppCompatActivity implements View.OnClickListener {
     private DatabaseHandler databaseHandler;
 //    private List<String> list = new ArrayList<>();
     private Settings settings;
+    private long mLastClickTime = 0,mLastClickTime2 = 0, mLastClickTime3 = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,20 +64,28 @@ public class Stage3 extends AppCompatActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.stage3_enter_inventory:
-//                presenter.getImportData();
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    break;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 Intent intent = new Intent(this, AddToInventory.class);
                 startActivity(intent);
-//                setSlideAnimation();
                 break;
             case R.id.stage3_loading_order:
+                if (SystemClock.elapsedRealtime() - mLastClickTime2 < 1000) {
+                    break;
+                }
+                mLastClickTime2 = SystemClock.elapsedRealtime();
                 Intent intent2 = new Intent(this, LoadingOrder.class);
                 startActivity(intent2);
-//                setSlideAnimation();
                 break;
             case R.id.stage3_reports:
+                if (SystemClock.elapsedRealtime() - mLastClickTime3 < 1000) {
+                    break;
+                }
+                mLastClickTime3 = SystemClock.elapsedRealtime();
                 Intent intent3 = new Intent(this, ReportsActivity.class);
                 startActivity(intent3);
-//                setSlideAnimation();
                 break;
         }
     }
@@ -84,26 +94,7 @@ public class Stage3 extends AppCompatActivity implements View.OnClickListener {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
-//        Intent intent = new Intent(Stage3.this , MainActivity.class);
-//        startActivity(intent);
     }
 
-    //    public void setSlideAnimation() {
-//        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
-//    }
-
-//    public void onBackPressed() {
-//        super.onBackPressed();
-//        Intent intent = new Intent(Stage3.this, MainActivity.class);
-//        startActivity(intent);
-//        setSlideAnimation();
-//        finish();
-//    }
-
-//    @Override
-//    public void finish() {
-//        super.finish();
-//        setSlideAnimation();
-//    }
 
 }

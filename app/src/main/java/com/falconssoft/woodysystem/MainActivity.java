@@ -2,6 +2,7 @@ package com.falconssoft.woodysystem;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.SystemClock;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView stage1, stage2, stage3;
     private ScaleAnimation scale;
     private ImageView pictureOne, pictureTwo, pictureThree;
+    private long mLastClickTime = 0, mLastClickTime3 = 0;
 //    private Animation animation;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -71,6 +73,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.s1:
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    break;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 Intent intent1 = new Intent(MainActivity.this, StageOne.class);
                 startActivity(intent1);
                 break;
@@ -79,6 +85,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                startActivity(intent);
                 break;
             case R.id.s3:
+                if (SystemClock.elapsedRealtime() - mLastClickTime3 < 1000) {
+                    break;
+                }
+                mLastClickTime3 = SystemClock.elapsedRealtime();
                 Intent intent2 = new Intent(MainActivity.this, Stage3.class);
                 startActivity(intent2);
 //                setSlideAnimation();

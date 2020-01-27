@@ -3,8 +3,10 @@ package com.falconssoft.woodysystem;
 import android.app.Dialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +20,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -50,8 +53,9 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 
     private static final int WHITE = 0xFFFFFFFF;
     private static final int BLACK = 0xFF000000;
-    private EditText thickness, length, width, noOfPieces, serialNo, packingList;
-    private Spinner gradeSpinner, areaSpinner, descriptionSpinner;//, locationSpinner
+    private Snackbar snackbar;
+    private EditText thickness, length, width, noOfPieces, serialNo;
+    private Spinner gradeSpinner, areaSpinner, descriptionSpinner, gradeSpinner2, areaSpinner2, descriptionSpinner2;//, locationSpinner
     private TableLayout bundlesTable, updatedTable;
     private LinearLayout linearLayoutView;
     private TextView textView, addToInventory;
@@ -63,16 +67,18 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
     private List<String> areaList = new ArrayList<>();
     private List<String> descriptionList = new ArrayList<>();
     private ArrayAdapter<String> gradeAdapter, areaAdapter, descriptionaAdapter;//, locationAdapter
-    private String gradeText = "Fresh", areaText = "Zone 1", descriptionText = "Bundle Origin", locationText;//, locationText = "Loc 1" ===> used for fill from adapter
+    private String gradeText = "Fresh", areaText = "Zone 1", descriptionText = "Ukrainian Wood", locationText;//, locationText = "Loc 1" ===> used for fill from adapter
     private JSONArray jsonArrayBundles;
     private boolean mState = false;
     private final String STATE_VISIBILITY = "state-visibility";
     private Settings generalSettings;
     private TableRow publicTableRow = null, tableRow1;
-    private String locationString = null, gradeString = null, detailString = null, generateDate, bundleNumber, oldBundleNoString, newBundleNoString, bundleNoString;
+    private String locationString = null, gradeString = null, detailString = null, generateDate, bundleNumber, oldBundleNoString, newBundleNoString, bundleNoString, packingListText = "null";
     private Date date;
     private SimpleDateFormat simpleDateFormat;
     private Dialog dialog;
+    private String takeThick, takeWidth, takeLength, takeNoOfPieces; // used in choose action dialog
+    private RelativeLayout coordinatorLayout;
 //    private List<TableRow> tableRowList = new ArrayList<>();
 
     @Override
@@ -85,6 +91,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         generalSettings = new Settings();
         generalSettings = databaseHandler.getSettings();
         bundleInfoList = new ArrayList<>();
+        coordinatorLayout = findViewById(R.id.addToInventory_container);
 
         thickness = findViewById(R.id.addToInventory_thickness);
         length = findViewById(R.id.addToInventory_length);
@@ -92,7 +99,6 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         noOfPieces = findViewById(R.id.addToInventory_no_of_pieces);
         gradeSpinner = findViewById(R.id.addToInventory_grade);
         serialNo = findViewById(R.id.addToInventory_serial_no);
-        packingList = findViewById(R.id.addToInventory_backing_list);
 //        locationSpinner = findViewById(R.id.addToInventory_location);
         areaSpinner = findViewById(R.id.addToInventory_area);
         descriptionSpinner = findViewById(R.id.addToInventory_description);
@@ -123,27 +129,23 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         String lengthText = length.getText().toString();
         String widthText = width.getText().toString();
         String noOfPiecesText = noOfPieces.getText().toString();
-        String packingListText = packingList.getText().toString();
-
         locationText = generalSettings.getStore();
-        int orderedText = 0;
+//        int orderedText = 0;
 
-//         String bundleNoString;,
         switch (v.getId()) {
             case R.id.addToInventory_add_button:
-//                boolean foundBarcode = false;
-//              http://5.189.130.98:8085/import.php?FLAG=1.
-                if (!TextUtils.isEmpty(serialNo.getText().toString())) {
-                    if (!TextUtils.isEmpty(thickness.getText().toString())) {
-                        if (!TextUtils.isEmpty(width.getText().toString())) {
-                            if (!TextUtils.isEmpty(length.getText().toString())) {
-                                if (!TextUtils.isEmpty(noOfPieces.getText().toString())) {
-
-                                    locationString = null;
-                                    gradeString = null;
-                                    detailString = null;
+                if (!TextUtils.isEmpty(serialNoText)) {
+                    if ((!TextUtils.isEmpty(thicknessText)) && (!checkValidData(thicknessText))) {
+                        if ((!TextUtils.isEmpty(widthText)) && (!checkValidData(widthText))) {
+                            if ((!TextUtils.isEmpty(lengthText)) && (!checkValidData(lengthText))) {
+                                if ((!TextUtils.isEmpty(noOfPiecesText)) && (!checkValidData(noOfPiecesText))) {
 
                                     chooseSpinnersContent();
+
+                                    thicknessText = formatDecimalValue(thicknessText);
+                                    widthText = formatDecimalValue(widthText);
+                                    lengthText = formatDecimalValue(lengthText);
+                                    noOfPiecesText = formatDecimalValue(noOfPiecesText);
 
                                     bundleNoString = "" + gradeString
                                             + locationString
@@ -161,16 +163,6 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                         addTableHeader(bundlesTable);
                                     }
 
-
-                                    Log.e("addToInventory1 ", "" + (!packingListText.equals("")));
-                                    Log.e("addToInventory2 ", "" + (!packingListText.equals("null")));
-                                    Log.e("addToInventory3 ", "" + (!packingListText.equals(null)));
-
-                                    if ((!packingListText.equals(""))) {
-                                        orderedText = 1;
-                                    }
-                                    Log.e("addToInventory/", "ordered/" + orderedText);
-
                                     newBundle = new BundleInfo(Double.parseDouble(thicknessText)
                                             , Double.parseDouble(lengthText)
                                             , Double.parseDouble(widthText)
@@ -184,15 +176,15 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                             , descriptionText
                                             , serialNoText
                                             , generalSettings.getUserNo()
-                                            , packingListText
-                                            , orderedText);//presenter.getSerialNo());//SettingsFile.serialNumber
+                                            , "null"
+                                            , 0);//presenter.getSerialNo());//SettingsFile.serialNumber
 
                                     bundleInfoList.add(newBundle);
 //                                    Log.e("date is", generateDate);
 
                                     TableRow tableRow = new TableRow(this);
                                     editTableRow(tableRow, bundleNoString, lengthText, widthText, thicknessText
-                                            , noOfPiecesText, generalSettings.getStore(), packingListText);
+                                            , noOfPiecesText, generalSettings.getStore());
 //                                    tableRowList.add(tableRow);
 
                                     jsonArrayBundles.put(newBundle.getJSONObject());
@@ -229,9 +221,32 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    boolean checkValidData(String word) {
+        Log.e("checkValidData4", word + ((word.length() == 1)));
+        Log.e("checkValidData4", word + ((word.contains("."))));
+        Log.e("checkValidData4", word + ((word.length() == 1) && (word.equals("."))));
+        if ((word.length() == 1) && (word.contains(".")))
+            return true;
+        return false;
+    }
+
+    String formatDecimalValue(String value) {
+        String charOne = String.valueOf(value.charAt(0));
+        String charEnd = String.valueOf(value.charAt(value.length() - 1));
+
+        if (charOne.equals("."))
+            return ("0" + value);
+        else if (charEnd.equals(".")) {
+            value = value.substring(0, value.length() - 1);
+//            Log.e("checkValidData3", "" +value);
+            return (value);
+        }
+        return value;
+    }
+
     void addTableHeader(TableLayout tableLayout) {
         TableRow tableRow = new TableRow(this);
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 9; i++) {
             TextView textView = new TextView(this);
             textView.setBackgroundResource(R.color.orange);
             TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f);
@@ -247,19 +262,19 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                     textView.setText("Bundle#");
                     break;
                 case 1:
-                    textView.setText("Length");
+                    textView.setText("Thic");
                     break;
                 case 2:
                     textView.setText("Width");
                     break;
                 case 3:
-                    textView.setText("Thic");
+                    textView.setText("Length");
                     break;
                 case 4:
-                    textView.setText("Grade");
+                    textView.setText("Pieces");
                     break;
                 case 5:
-                    textView.setText("Pieces");
+                    textView.setText("Grade");
                     break;
                 case 6:
                     textView.setText("#Loc");
@@ -269,9 +284,6 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                     break;
                 case 8:
                     textView.setText("Details");
-                    break;
-                case 9:
-                    textView.setText("B.List");
                     break;
             }
             tableRow.addView(textView);
@@ -288,15 +300,14 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 
         oldBundleNoString = ((TextView) tableRow.getChildAt(0)).getText().toString(); ///////////////////
         String serialString = oldBundleNoString.substring(oldBundleNoString.lastIndexOf(".") + 1);
-        String lengthString = ((TextView) tableRow.getChildAt(1)).getText().toString();
+        String thicknessString = ((TextView) tableRow.getChildAt(1)).getText().toString();
         String widthString = ((TextView) tableRow.getChildAt(2)).getText().toString();
-        String thicknessString = ((TextView) tableRow.getChildAt(3)).getText().toString();
-        String gradeString2 = ((TextView) tableRow.getChildAt(4)).getText().toString();
-        String noOfPiecesString = ((TextView) tableRow.getChildAt(5)).getText().toString();
+        String lengthString = ((TextView) tableRow.getChildAt(3)).getText().toString();
+        String noOfPiecesString = ((TextView) tableRow.getChildAt(4)).getText().toString();
+        String gradeString2 = ((TextView) tableRow.getChildAt(5)).getText().toString();
         String locationString2 = ((TextView) tableRow.getChildAt(6)).getText().toString();
         String areaString2 = ((TextView) tableRow.getChildAt(7)).getText().toString();
         String detailsString2 = ((TextView) tableRow.getChildAt(8)).getText().toString();
-        String packingListString = ((TextView) tableRow.getChildAt(9)).getText().toString();
 
         RadioGroup radioGroup = dialog.findViewById(R.id.choose_operation_radioGroup);
         RadioButton delete = dialog.findViewById(R.id.choose_operation_delete_rb);
@@ -313,32 +324,31 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         EditText length = dialog.findViewById(R.id.choose_operation_length);
         EditText width = dialog.findViewById(R.id.choose_operation_width);
         EditText noOfPieces = dialog.findViewById(R.id.choose_operation_no_of_pieces);
-        EditText packingList = dialog.findViewById(R.id.choose_operation_packing_list);
         TextView serialNo = dialog.findViewById(R.id.choose_operation_serial_no);
-        gradeSpinner = dialog.findViewById(R.id.choose_operation_grade);
-        areaSpinner = dialog.findViewById(R.id.choose_operation_area);
-        descriptionSpinner = dialog.findViewById(R.id.choose_operation_description);
+        gradeSpinner2 = dialog.findViewById(R.id.choose_operation_grade);
+        areaSpinner2 = dialog.findViewById(R.id.choose_operation_area);
+        descriptionSpinner2 = dialog.findViewById(R.id.choose_operation_description);
         TextView update = dialog.findViewById(R.id.choose_operation_update);
         TextView editSave = dialog.findViewById(R.id.choose_operation_edit_save);
-        fillSpinnerAdapter(gradeSpinner, areaSpinner, descriptionSpinner);
+        fillSpinnerAdapter(gradeSpinner2, areaSpinner2, descriptionSpinner2);
 
         deleteLinear.setVisibility(View.GONE);
         editLinear.setVisibility(View.GONE);
 
-        int index = gradeList.indexOf(gradeString2);
-        gradeText = gradeAdapter.getItem(index);
-        gradeSpinner.setSelection(index);
-
-        int index2 = areaList.indexOf(areaString2);
-        areaText = areaAdapter.getItem(index2);
-        areaSpinner.setSelection(index2);
-
-        int index3 = descriptionList.indexOf(detailsString2);
-        descriptionText = descriptionaAdapter.getItem(index3);
-        descriptionSpinner.setSelection(index3);
+        setSpinnerSelectionPosition(gradeSpinner2, areaSpinner2, descriptionSpinner2, gradeString2, areaString2, detailsString2);
+//        int index = gradeList.indexOf(gradeString2);
+//        gradeText = gradeAdapter.getItem(index);
+//        gradeSpinner.setSelection(index);
+//
+//        int index2 = areaList.indexOf(areaString2);
+//        areaText = areaAdapter.getItem(index2);
+//        areaSpinner.setSelection(index2);
+//
+//        int index3 = descriptionList.indexOf(detailsString2);
+//        descriptionText = descriptionaAdapter.getItem(index3);
+//        descriptionSpinner.setSelection(index3);
 
 //     chooseSpinnersContent();
-
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -375,38 +385,41 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                     width.setText(widthString);
                     length.setText(lengthString);
                     noOfPieces.setText(noOfPiecesString);
-                    packingList.setText(packingListString);
 
                     update.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            takeThick = thickness.getText().toString();
+                            takeWidth = width.getText().toString();
+                            takeLength = length.getText().toString();
+                            takeNoOfPieces = noOfPieces.getText().toString();
 
-                            if (!TextUtils.isEmpty(thickness.getText().toString())) {
-                                if (!TextUtils.isEmpty(width.getText().toString())) {
-                                    if (!TextUtils.isEmpty(length.getText().toString())) {
-                                        if (!TextUtils.isEmpty(noOfPieces.getText().toString())) {
+                            if ((!TextUtils.isEmpty(takeThick)) && (!checkValidData(takeThick))) {
+                                if ((!TextUtils.isEmpty(takeWidth)) && (!checkValidData(takeWidth))) {
+                                    if ((!TextUtils.isEmpty(takeLength)) && (!checkValidData(takeLength))) {
+                                        if ((!TextUtils.isEmpty(takeNoOfPieces)) && (!checkValidData(takeNoOfPieces))) {
+
                                             updatedTable.removeAllViews();
                                             addTableHeader(updatedTable);
-
-                                            String thicknessText2 = thickness.getText().toString();
-                                            String lengthText2 = length.getText().toString();
-                                            String widthText2 = width.getText().toString();
-                                            String noOfPiecesText2 = noOfPieces.getText().toString();
-                                            String packingListText2 = packingList.getText().toString();
                                             String newBundleNoString;
-
                                             chooseSpinnersContent();
+
+                                            takeThick = formatDecimalValue(takeThick);
+                                            takeWidth = formatDecimalValue(takeWidth);
+                                            takeLength = formatDecimalValue(takeLength);
+                                            takeNoOfPieces = formatDecimalValue(takeNoOfPieces);
+
                                             newBundleNoString = "" + gradeString
                                                     + locationString
-                                                    + thicknessText2
-                                                    + "." + widthText2
-                                                    + "." + lengthText2
-                                                    + "." + noOfPiecesText2
+                                                    + takeThick
+                                                    + "." + takeWidth
+                                                    + "." + takeLength
+                                                    + "." + takeNoOfPieces
                                                     + "." + serialString;
 
                                             tableRow1.removeAllViews();
-                                            editTableRow(tableRow1, newBundleNoString, lengthText2, widthText2, thicknessText2
-                                                    , noOfPiecesText2, locationString, packingListText2);
+                                            editTableRow(tableRow1, newBundleNoString, takeLength, takeWidth, takeThick
+                                                    , takeNoOfPieces, locationString);
                                             updatedTable.addView(tableRow1);
 
                                         } else {
@@ -427,45 +440,44 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                     editSave.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if (!TextUtils.isEmpty(thickness.getText().toString())) {
-                                if (!TextUtils.isEmpty(width.getText().toString())) {
-                                    if (!TextUtils.isEmpty(length.getText().toString())) {
-                                        if (!TextUtils.isEmpty(noOfPieces.getText().toString())) {
+                            takeThick = thickness.getText().toString();
+                            takeWidth = width.getText().toString();
+                            takeLength = length.getText().toString();
+                            takeNoOfPieces = noOfPieces.getText().toString();
+
+                            if ((!TextUtils.isEmpty(takeThick)) && (!checkValidData(takeThick))) {
+                                if ((!TextUtils.isEmpty(takeWidth)) && (!checkValidData(takeWidth))) {
+                                    if ((!TextUtils.isEmpty(takeLength)) && (!checkValidData(takeLength))) {
+                                        if ((!TextUtils.isEmpty(takeNoOfPieces)) && (!checkValidData(takeNoOfPieces))) {
 
                                             updatedTable.removeAllViews();
                                             addTableHeader(updatedTable);
-
-                                            String thicknessText2 = thickness.getText().toString();
-                                            String lengthText2 = length.getText().toString();
-                                            String widthText2 = width.getText().toString();
-                                            String noOfPiecesText2 = noOfPieces.getText().toString();
-                                            String packingListText2 = packingList.getText().toString();
-                                            int orderedText2 = 0;
                                             newBundleNoString = "";
-
                                             chooseSpinnersContent();
+
+                                            takeThick = formatDecimalValue(takeThick);
+                                            takeWidth = formatDecimalValue(takeWidth);
+                                            takeLength = formatDecimalValue(takeLength);
+                                            takeNoOfPieces = formatDecimalValue(takeNoOfPieces);
+
                                             newBundleNoString = "" + gradeString
                                                     + locationString
-                                                    + thicknessText2
-                                                    + "." + widthText2
-                                                    + "." + lengthText2
-                                                    + "." + noOfPiecesText2
+                                                    + takeThick
+                                                    + "." + takeWidth
+                                                    + "." + takeLength
+                                                    + "." + takeNoOfPieces
                                                     + "." + serialString;
 
                                             tableRow1.removeAllViews();
-                                            editTableRow(tableRow1, newBundleNoString, lengthText2, widthText2, thicknessText2
-                                                    , noOfPiecesText2, locationString, packingListText2);
+                                            editTableRow(tableRow1, newBundleNoString, takeLength, takeWidth, takeThick
+                                                    , takeNoOfPieces, locationString);
                                             updatedTable.addView(tableRow1);
 
-                                            if ((!packingListText2.equals(""))) {
-                                                orderedText2 = 1;
-                                            }
-
-                                            newBundle = new BundleInfo(Double.parseDouble(thicknessText2)
-                                                    , Double.parseDouble(lengthText2)
-                                                    , Double.parseDouble(widthText2)
+                                            newBundle = new BundleInfo(Double.parseDouble(takeThick)
+                                                    , Double.parseDouble(takeLength)
+                                                    , Double.parseDouble(takeWidth)
                                                     , gradeText
-                                                    , Double.parseDouble(noOfPiecesText2)
+                                                    , Double.parseDouble(takeNoOfPieces)
                                                     , newBundleNoString
                                                     , generalSettings.getStore()
                                                     , areaText
@@ -474,8 +486,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                                     , descriptionText
                                                     , serialString
                                                     , generalSettings.getUserNo()
-                                                    , packingListText2
-                                                    , orderedText2);//presenter.getSerialNo());//SettingsFile.serialNumber
+                                                    , packingListText
+                                                    , 0);//presenter.getSerialNo());//SettingsFile.serialNumber
 
                                             new JSONTask4().execute();
 //                                            oldBundleNoString = newBundleNoString;
@@ -498,6 +510,20 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         });
         dialog.show();
 
+    }
+
+    void setSpinnerSelectionPosition(Spinner gradeSpinner, Spinner areaSpinner, Spinner descriptionSpinner, String grade, String area, String details) {
+        int index = gradeList.indexOf(grade);
+        gradeText = gradeAdapter.getItem(index);
+        gradeSpinner.setSelection(index, true);
+
+        int index2 = areaList.indexOf(area);
+        areaText = areaAdapter.getItem(index2);
+        areaSpinner.setSelection(index2, true);
+
+        int index3 = descriptionList.indexOf(details);
+        descriptionText = descriptionaAdapter.getItem(index3);
+        descriptionSpinner.setSelection(index3, true);
     }
 
     void fillSpinnerAdapter(Spinner gradeSpinner, Spinner areaSpinner, Spinner descriptionSpinner) {
@@ -606,13 +632,13 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
     }
 
     void editTableRow(TableRow tableRow, String bundleNoString, String lengthText, String widthText, String thicknessText
-            , String noOfPiecesText, String storeText, String packingListText) {
-        for (int i = 0; i < 10; i++) {
+            , String noOfPiecesText, String storeText) {
+        for (int i = 0; i < 9; i++) {
             TextView textView = new TextView(this);
             textView.setBackgroundResource(R.color.light_orange);
             TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f);
             textViewParam.setMargins(1, 5, 1, 1);
-            textView.setPadding(0,10,0,10);
+            textView.setPadding(0, 10, 0, 10);
             textView.setTextSize(15);
             textView.setTextColor(ContextCompat.getColor(this, R.color.gray_dark_one));
             textView.setLayoutParams(textViewParam);
@@ -620,24 +646,24 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                 case 0:
                     TableRow.LayoutParams param = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
                     param.setMargins(1, 5, 1, 1);
-                    textView.setPadding(0,10,0,10);
+                    textView.setPadding(0, 10, 0, 10);
                     textView.setLayoutParams(param);
                     textView.setText(bundleNoString);
                     break;
                 case 1:
-                    textView.setText(lengthText);
+                    textView.setText(thicknessText);
                     break;
                 case 2:
                     textView.setText(widthText);
                     break;
                 case 3:
-                    textView.setText(thicknessText);
+                    textView.setText(lengthText);
                     break;
                 case 4:
-                    textView.setText(gradeText);
+                    textView.setText(noOfPiecesText);
                     break;
                 case 5:
-                    textView.setText(noOfPiecesText);
+                    textView.setText(gradeText);
                     break;
                 case 6:
                     textView.setText(storeText);
@@ -647,9 +673,6 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                     break;
                 case 8:
                     textView.setText(descriptionText);
-                    break;
-                case 9:
-                    textView.setText(packingListText);
                     break;
             }
             tableRow.addView(textView);
@@ -664,9 +687,6 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
             case R.id.choose_operation_grade:
                 gradeText = parent.getItemAtPosition(position).toString();
                 break;
-//            case R.id.addToInventory_location:
-//                locationText = parent.getItemAtPosition(position).toString();
-//                break;
             case R.id.addToInventory_area:
             case R.id.choose_operation_area:
                 areaText = parent.getItemAtPosition(position).toString();
@@ -748,14 +768,14 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                     width.setText("");
                     noOfPieces.setText("");
                     serialNo.setText("");
-                    packingList.setText("");
-//                                  locationSpinner.setSelection(0);
-                    areaSpinner.setSelection(0);
-                    gradeSpinner.setSelection(0);
-                    descriptionSpinner.setSelection(0);
+//                    areaSpinner.setSelection(0);
+//                    gradeSpinner.setSelection(0);
+//                    descriptionSpinner.setSelection(0);
                     gradeText = "Fresh";
                     areaText = "Zone 1";
-                    descriptionText = "Bundle Origin";
+                    descriptionText = "Ukrainian Wood";
+
+                    setSpinnerSelectionPosition(gradeSpinner, areaSpinner, descriptionSpinner, gradeText, areaText, descriptionText);
 
                     Log.e("tag", "****Success");
                 } else {
@@ -828,6 +848,12 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 //                    tableRowList.remove(publicTableRow);
 //                    fillBundlesTable();
                     bundlesTable.removeView(publicTableRow);
+                    snackbar = Snackbar.make(coordinatorLayout, Html.fromHtml("<font color=\"#4799D8\">Deleted Successfully</font>"), Snackbar.LENGTH_SHORT);//Updated Successfully
+                    View snackbarLayout = snackbar.getView();
+                    TextView textViewSnackbar = (TextView) snackbarLayout.findViewById(android.support.design.R.id.snackbar_text);
+                    textViewSnackbar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check_24dp, 0, 0, 0);
+//                    textView.setCompoundDrawablePadding(10);//getResources().getDimensionPixelOffset(R.dimen.snackbar_icon_padding
+                    snackbar.show();
 //                    databaseHandler.deleteBundle(bundleNumber);
                     Log.e("tag", "****Success");
                 } else {
@@ -893,51 +919,55 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
             if (s != null) {
                 if (s.contains("UPDATE BUNDLE SUCCESS")) {
                     oldBundleNoString = newBundle.getBundleNo();
+                    gradeText = "Fresh";
+                    areaText = "Zone 1";
+                    descriptionText = "Ukrainian Wood";
+                    setSpinnerSelectionPosition(gradeSpinner2, areaSpinner2, descriptionSpinner2, gradeText, areaText, descriptionText);
+                    setSpinnerSelectionPosition(gradeSpinner, areaSpinner, descriptionSpinner, gradeText, areaText, descriptionText);
                     dialog.dismiss();
+                    snackbar = Snackbar.make(coordinatorLayout, Html.fromHtml("<font color=\"#4799D8\">Updated Successfully</font>"), Snackbar.LENGTH_SHORT);//Updated Successfully
+                    View snackbarLayout = snackbar.getView();
+                    TextView textViewSnackbar = (TextView) snackbarLayout.findViewById(android.support.design.R.id.snackbar_text);
+                    textViewSnackbar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check_24dp, 0, 0, 0);
+//                    textView.setCompoundDrawablePadding(10);//getResources().getDimensionPixelOffset(R.dimen.snackbar_icon_padding
+                    snackbar.show();
                     Log.e("addNewToInventory", "" + "   " + "      " + publicTableRow.getTag().toString());
-                    for (int i = 0; i < 10; i++) {
+                    for (int i = 0; i < 9; i++) {
                         TextView textView = (TextView) publicTableRow.getChildAt(i);
-
                         switch (i) {
-
                             case 0:
                                 textView.setText(newBundle.getBundleNo());
                                 break;
                             case 1:
-                                textView.setText("" + newBundle.getLength());
+                                textView.setText("" + newBundle.getThickness());
                                 break;
-
                             case 2:
                                 textView.setText("" + newBundle.getWidth());
                                 break;
                             case 3:
-                                textView.setText("" + newBundle.getThickness());
+                                textView.setText("" + newBundle.getLength());
                                 break;
-
                             case 4:
-                                textView.setText("" + newBundle.getGrade());
+                                textView.setText("" + newBundle.getNoOfPieces());
                                 break;
                             case 5:
-                                textView.setText("" + newBundle.getNoOfPieces());
+                                textView.setText("" + newBundle.getGrade());
                                 break;
                             case 6:
                                 textView.setText("" + newBundle.getLocation());
                                 break;
                             case 7:
                                 textView.setText("" + newBundle.getArea());
-
                                 break;
                             case 8:
                                 textView.setText("" + newBundle.getDescription());
                                 break;
-                            case 9:
-                                textView.setText("" + newBundle.getBackingList());
-                                break;
-
-
                         }
-
                     }
+                    areaSpinner.setSelection(0);
+                    gradeSpinner.setSelection(0);
+                    descriptionSpinner.setSelection(0);
+
                     Log.e("tag", "updated bundle raw/Success");
                 } else {
                     Log.e("tag", "updated bundle raw/Failed to export data");

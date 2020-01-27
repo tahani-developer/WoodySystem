@@ -26,7 +26,7 @@
     <string name="no_bundle"># Пачка</string>
     <string name="no_pieces"># Pieces</string>
     <string name="loading_order_no">L.order No</string>
-    <string name="packing_list">Packing List</string>
+    <string name="packing_list">Список упаковки</string>
     <string name="p_list">P.List</string>
 
     <string name="company_name">Назва компанії</string>

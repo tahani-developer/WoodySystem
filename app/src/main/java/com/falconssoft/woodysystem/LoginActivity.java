@@ -223,6 +223,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 localIpAddress = generalSettings.getIpAddress();
                 localStore = generalSettings.getStore();
 
+                storesList.clear();
                 storesList.add("Amman");
                 storesList.add("Kalinovka");
                 storesList.add("Rudniya Store");
@@ -405,7 +406,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 //                fillTable(orders);
 //                storeInDatabase();
             } else {
-                Toast.makeText(LoginActivity.this, "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(LoginActivity.this, "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();
             }
         }
     }
