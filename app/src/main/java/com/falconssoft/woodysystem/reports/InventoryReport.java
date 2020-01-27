@@ -268,7 +268,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                     bundleInfoForPrint.clear();
                     for (int i = 0; i < bundlesTable.getChildCount(); i++) {
                         TableRow table = (TableRow) bundlesTable.getChildAt(i);
-                        CheckBox bundleCheck = (CheckBox) table.getChildAt(10);
+                        CheckBox bundleCheck = (CheckBox) table.getChildAt(0);
                         if (bundleCheck.isChecked()) {
                             Log.e("bundelCheak", "" + i + "  " + filtered.get(Integer.parseInt(bundleCheck.getTag().toString())).getBundleNo());
                             bundleInfoForPrint.add(filtered.get(Integer.parseInt(bundleCheck.getTag().toString())));
@@ -312,7 +312,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 
                                 for (int i = 0; i < bundlesTable.getChildCount(); i++) {
                                     TableRow table = (TableRow) bundlesTable.getChildAt(i);
-                                    CheckBox bundleCheck = (CheckBox) table.getChildAt(10);
+                                    CheckBox bundleCheck = (CheckBox) table.getChildAt(0);
                                     TextView bundleNo = (TextView) table.getChildAt(1);
                                     if (bundleCheck.isChecked()) {
 //                                        Log.e("bundelCheak", "" + i + "  " + bundleInfos.get(Integer.parseInt(bundleCheck.getTag().toString())).getBundleNo());
@@ -1027,7 +1027,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                             bundleInfoForPrint.clear();
                             for (int i = 0; i < bundlesTable.getChildCount(); i++) {
                                 TableRow table = (TableRow) bundlesTable.getChildAt(i);
-                                CheckBox bundleCheck = (CheckBox) table.getChildAt(10);
+                                CheckBox bundleCheck = (CheckBox) table.getChildAt(0);
                                 if (bundleCheck.isChecked()) {
                                     BundleInfo bundleInfo = new BundleInfo();
                                     bundleInfo = filtered.get(Integer.parseInt(bundleCheck.getTag().toString()));
