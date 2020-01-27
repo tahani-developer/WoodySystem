@@ -680,12 +680,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 
                             woodPresenter.updatePackingList(InventoryReport.this, bundleNumber, newPackingList, location);
                             packingListDialog.dismiss();
-                            snackbar = Snackbar.make(containerLayout, Html.fromHtml("<font color=\"#4799D8\">Updated Successfully</font>"), Snackbar.LENGTH_SHORT);
-                            View snackbarLayout = snackbar.getView();
-                            TextView textViewSnackbar = (TextView) snackbarLayout.findViewById(android.support.design.R.id.snackbar_text);
-                            textViewSnackbar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check_24dp, 0, 0, 0);
-//                    textView.setCompoundDrawablePadding(10);//getResources().getDimensionPixelOffset(R.dimen.snackbar_icon_padding
-                            snackbar.show();
+
                         }
                     });
 
@@ -702,6 +697,15 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 //        bundlesForDelete = filteredList;
 
         Log.e("follow", "filltable " + filteredList.size());
+    }
+
+    public void updatedPackingList(){
+        snackbar = Snackbar.make(containerLayout, Html.fromHtml("<font color=\"#4799D8\">Updated Successfully</font>"), Snackbar.LENGTH_SHORT);
+        View snackbarLayout = snackbar.getView();
+        TextView textViewSnackbar = (TextView) snackbarLayout.findViewById(android.support.design.R.id.snackbar_text);
+        textViewSnackbar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check_24dp, 0, 0, 0);
+//                    textView.setCompoundDrawablePadding(10);//getResources().getDimensionPixelOffset(R.dimen.snackbar_icon_padding
+        snackbar.show();
     }
 
     TableRow fillTableRows(TableRow tableRow, String bundlNo, String length, String width, String thic, String grade, String noOfPieces, String location, String area, int index, String serial, String backingList) {
