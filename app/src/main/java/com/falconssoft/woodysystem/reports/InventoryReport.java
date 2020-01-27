@@ -608,8 +608,8 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 //        bundlesTable.addView(tableRowBasic);
         bundlesTable.removeAllViews();
         TableRow tableRow;
-        int sumOfBundles = 0, sumOfPieces = 0;
-        double sumOfCubic = 0;
+        int sumOfBundles = 0;
+        double sumOfCubic = 0, sumOfPieces = 0;
         for (int m = 0; m < filteredList.size(); m++) {
             sumOfBundles += 1;
             sumOfPieces += filteredList.get(m).getNoOfPieces();
@@ -696,7 +696,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         }
 
         noOfBundles.setText("" + sumOfBundles);
-        noOfPieces.setText("" + sumOfPieces);
+        noOfPieces.setText("" + String.format("%.5f", sumOfPieces));
         cubicField.setText("" + String.format("%.3f", (sumOfCubic / 1000000000)));
 //        bundlesForDelete.clear();
 //        bundlesForDelete = filteredList;
