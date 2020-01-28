@@ -441,9 +441,8 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                 if (response.indexOf("{") == 3)
                     response = new String(response.getBytes("ISO-8859-1"), "UTF-8");
 //                    response = response.substring(response.indexOf("{"));
-
+                inventoryReport.updatedPackingList();
                 getBundlesData(inventoryReport);
-//                inventoryReport.updaterPackingListInRaw();
                 Log.e("presenter/packingList", "/res/" + response);
 //                JSONObject object = new JSONObject(response);
 //                Log.e("presenter:bun1", "" + object.toString());

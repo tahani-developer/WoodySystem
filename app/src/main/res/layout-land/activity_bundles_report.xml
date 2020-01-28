@@ -94,7 +94,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="serif"
-                android:text="@string/l"
+                android:text="@string/th"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
@@ -112,16 +112,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.8"
                 android:fontFamily="serif"
-                android:text="@string/th"
-                android:textColor="@color/white"
-                android:textSize="18sp" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.9"
-                android:fontFamily="serif"
-                android:text="@string/grade"
+                android:text="@string/l"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
@@ -131,6 +122,15 @@
                 android:layout_weight="1"
                 android:fontFamily="serif"
                 android:text="@string/no_pieces"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.9"
+                android:fontFamily="serif"
+                android:text="@string/grade"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
