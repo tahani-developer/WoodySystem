@@ -267,11 +267,11 @@ public class BundlesReport extends AppCompatActivity {
                 tableRow = new TableRow(this);
                 tableRow = fillTableRows(tableRow
                         , bundleInfos.get(m).getBundleNo()
-                        , "" + bundleInfos.get(m).getLength()
-                        , "" + bundleInfos.get(m).getWidth()
-                        , "" + bundleInfos.get(m).getThickness()
+                        , "" + (int) bundleInfos.get(m).getLength()
+                        , "" + (int) bundleInfos.get(m).getWidth()
+                        , "" + (int) bundleInfos.get(m).getThickness()
                         , bundleInfos.get(m).getGrade()
-                        , "" + bundleInfos.get(m).getNoOfPieces()
+                        , "" + (int) bundleInfos.get(m).getNoOfPieces()
                         , bundleInfos.get(m).getLocation()
                         , bundleInfos.get(m).getArea()
                         , R.color.light_orange
@@ -892,7 +892,8 @@ public class BundlesReport extends AppCompatActivity {
 
     public void onBackPressed() {
         super.onBackPressed();
-        finish();}
+        finish();
+    }
 }
 
 

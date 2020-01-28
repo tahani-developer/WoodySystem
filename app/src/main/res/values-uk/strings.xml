@@ -109,7 +109,7 @@
     <string name="yes">Так</string>
     <string name="cancel">Скасувати</string>
     <string name="action">Виберіть Дія</string>
-    <string name="show">Показати</string>
+    <string name="apply">Застосувати</string>
 
     <string name="search_width">Поиск по ширине</string>
     <string name="search_length">Поиск по длине</string>

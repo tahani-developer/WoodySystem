@@ -147,6 +147,11 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                     lengthText = formatDecimalValue(lengthText);
                                     noOfPiecesText = formatDecimalValue(noOfPiecesText);
 
+                                    thicknessText = isContainValueAfterDot(thicknessText);
+                                    widthText = isContainValueAfterDot(widthText);
+                                    lengthText = isContainValueAfterDot(lengthText);
+                                    noOfPiecesText = isContainValueAfterDot(noOfPiecesText);
+
                                     bundleNoString = "" + gradeString
                                             + locationString
                                             + thicknessText
@@ -219,6 +224,21 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                 }
                 break;
         }
+    }
+
+    String isContainValueAfterDot(String string) {
+        String isConten = "";
+        String afterDot = string.substring(string.indexOf(".") + 1, string.length());
+        Log.e("afterDot", "" + afterDot + "      " + string);
+        if (!(Integer.parseInt(afterDot) > 0)) {
+            isConten = string.substring(0, string.indexOf("."));
+        } else {
+            isConten = string;
+        }
+        Log.e("afterDotreturn", "" + afterDot + "      " + isConten);
+
+        return isConten;
+
     }
 
     boolean checkValidData(String word) {
@@ -409,6 +429,11 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                             takeLength = formatDecimalValue(takeLength);
                                             takeNoOfPieces = formatDecimalValue(takeNoOfPieces);
 
+                                            takeThick = isContainValueAfterDot(takeThick);
+                                            takeWidth = isContainValueAfterDot(takeWidth);
+                                            takeLength = isContainValueAfterDot(takeLength);
+                                            takeNoOfPieces = isContainValueAfterDot(takeNoOfPieces);
+
                                             newBundleNoString = "" + gradeString
                                                     + locationString
                                                     + takeThick
@@ -460,6 +485,11 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                             takeLength = formatDecimalValue(takeLength);
                                             takeNoOfPieces = formatDecimalValue(takeNoOfPieces);
 
+                                            takeThick = isContainValueAfterDot(takeThick);
+                                            takeWidth = isContainValueAfterDot(takeWidth);
+                                            takeLength = isContainValueAfterDot(takeLength);
+                                            takeNoOfPieces = isContainValueAfterDot(takeNoOfPieces);
+
                                             newBundleNoString = "" + gradeString
                                                     + locationString
                                                     + takeThick
@@ -489,6 +519,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                                     , packingListText
                                                     , 0);//presenter.getSerialNo());//SettingsFile.serialNumber
 
+//                                            publicTableRow = tableRow1;
                                             new JSONTask4().execute();
 //                                            oldBundleNoString = newBundleNoString;
                                         } else {
@@ -931,7 +962,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                     textViewSnackbar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check_24dp, 0, 0, 0);
 //                    textView.setCompoundDrawablePadding(10);//getResources().getDimensionPixelOffset(R.dimen.snackbar_icon_padding
                     snackbar.show();
-                    Log.e("addNewToInventory", "" + "   " + "      " + publicTableRow.getTag().toString());
+//                    Log.e("addNewToInventory", "" + "   " + "      " + publicTableRow.getTag().toString());
                     for (int i = 0; i < 9; i++) {
                         TextView textView = (TextView) publicTableRow.getChildAt(i);
                         switch (i) {
@@ -939,16 +970,16 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                 textView.setText(newBundle.getBundleNo());
                                 break;
                             case 1:
-                                textView.setText("" + newBundle.getThickness());
+                                textView.setText(isContainValueAfterDot("" + newBundle.getThickness()));
                                 break;
                             case 2:
-                                textView.setText("" + newBundle.getWidth());
+                                textView.setText(isContainValueAfterDot("" + newBundle.getWidth()));
                                 break;
                             case 3:
-                                textView.setText("" + newBundle.getLength());
+                                textView.setText(isContainValueAfterDot("" + newBundle.getLength()));
                                 break;
                             case 4:
-                                textView.setText("" + newBundle.getNoOfPieces());
+                                textView.setText(isContainValueAfterDot("" + newBundle.getNoOfPieces()));
                                 break;
                             case 5:
                                 textView.setText("" + newBundle.getGrade());

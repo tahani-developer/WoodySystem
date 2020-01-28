@@ -107,7 +107,7 @@
     <string name="yes">Yes</string>
     <string name="cancel">Cancel</string>
     <string name="action">Choose Action</string>
-    <string name="show">Show</string>
+    <string name="apply">Apply</string>
 
     <string name="search_width">Search Width</string>
     <string name="search_length">Search Length</string>

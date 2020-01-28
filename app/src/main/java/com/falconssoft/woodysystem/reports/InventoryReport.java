@@ -606,11 +606,11 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
             tableRow = new TableRow(this);
             tableRow = fillTableRows(tableRow
                     , filteredList.get(m).getBundleNo()
-                    , "" + filteredList.get(m).getLength()
-                    , "" + filteredList.get(m).getWidth()
-                    , "" + filteredList.get(m).getThickness()
+                    , "" + (int)(filteredList.get(m).getLength())
+                    , "" + (int)(filteredList.get(m).getWidth())
+                    , "" + (int)(filteredList.get(m).getThickness())
                     , filteredList.get(m).getGrade()
-                    , "" + filteredList.get(m).getNoOfPieces()
+                    , "" + (int)(filteredList.get(m).getNoOfPieces())
                     , filteredList.get(m).getLocation()
                     , filteredList.get(m).getArea()
                     , m

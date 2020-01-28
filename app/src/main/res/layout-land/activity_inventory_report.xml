@@ -75,8 +75,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="serif"
                     android:paddingLeft="5dp"
-                    android:text="@string/location"
-
+                    android:text="@string/loc"
                     android:textSize="18sp" />
 
                 <Spinner
@@ -143,7 +142,6 @@
                     android:layout_height="wrap_content" />
 
             </LinearLayout>
-
 
             <LinearLayout
                 android:id="@+id/inventory_report_linear_three"
@@ -212,7 +210,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:layout_marginBottom="10dp"
             android:gravity="center"
             android:orientation="horizontal">
