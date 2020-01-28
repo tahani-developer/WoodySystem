@@ -278,7 +278,7 @@ public class LoadingOrder extends AppCompatActivity {
 
                 reader = new BufferedReader(new
                         InputStreamReader(conn.getInputStream()));
-
+ 
                 StringBuilder sb = new StringBuilder();
                 String line = null;
 
