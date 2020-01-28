@@ -848,7 +848,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 //                    tableRowList.remove(publicTableRow);
 //                    fillBundlesTable();
                     bundlesTable.removeView(publicTableRow);
-                    snackbar = Snackbar.make(coordinatorLayout, Html.fromHtml("<font color=\"#4799D8\">Deleted Successfully</font>"), Snackbar.LENGTH_SHORT);//Updated Successfully
+                    snackbar = Snackbar.make(coordinatorLayout, Html.fromHtml("<font color=\"#3167F0\">Deleted Successfully</font>"), Snackbar.LENGTH_SHORT);//Updated Successfully
                     View snackbarLayout = snackbar.getView();
                     TextView textViewSnackbar = (TextView) snackbarLayout.findViewById(android.support.design.R.id.snackbar_text);
                     textViewSnackbar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check_24dp, 0, 0, 0);
@@ -925,7 +925,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                     setSpinnerSelectionPosition(gradeSpinner2, areaSpinner2, descriptionSpinner2, gradeText, areaText, descriptionText);
                     setSpinnerSelectionPosition(gradeSpinner, areaSpinner, descriptionSpinner, gradeText, areaText, descriptionText);
                     dialog.dismiss();
-                    snackbar = Snackbar.make(coordinatorLayout, Html.fromHtml("<font color=\"#4799D8\">Updated Successfully</font>"), Snackbar.LENGTH_SHORT);//Updated Successfully
+                    snackbar = Snackbar.make(coordinatorLayout, Html.fromHtml("<font color=\"#3167F0\">Updated Successfully</font>"), Snackbar.LENGTH_SHORT);//Updated Successfully
                     View snackbarLayout = snackbar.getView();
                     TextView textViewSnackbar = (TextView) snackbarLayout.findViewById(android.support.design.R.id.snackbar_text);
                     textViewSnackbar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check_24dp, 0, 0, 0);

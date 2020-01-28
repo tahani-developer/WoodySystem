@@ -594,18 +594,6 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     }
 
     public void fillTable(List<BundleInfo> filteredList) {
-//        bundleInfos = databaseHandler.getAllBundleInfo("0");
-//        TableRow tableRowBasic = new TableRow(this);
-//        tableRowBasic = fillTableRows(tableRowBasic
-//                , "Bundle#"
-//                , "Length"
-//                , "Width"
-//                , "Thick"
-//                , "Grade"
-//                , "#Pieces"
-//                , "Location"
-//                , "Area");
-//        bundlesTable.addView(tableRowBasic);
         bundlesTable.removeAllViews();
         TableRow tableRow;
         int sumOfBundles = 0;
@@ -700,7 +688,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     }
 
     public void updatedPackingList(){
-        snackbar = Snackbar.make(containerLayout, Html.fromHtml("<font color=\"#4799D8\">Updated Successfully</font>"), Snackbar.LENGTH_SHORT);
+        snackbar = Snackbar.make(containerLayout, Html.fromHtml("<font color=\"#3167F0\">Updated Successfully</font>"), Snackbar.LENGTH_SHORT);
         View snackbarLayout = snackbar.getView();
         TextView textViewSnackbar = (TextView) snackbarLayout.findViewById(android.support.design.R.id.snackbar_text);
         textViewSnackbar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check_24dp, 0, 0, 0);
@@ -708,7 +696,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         snackbar.show();
     }
 
-    TableRow fillTableRows(TableRow tableRow, String bundlNo, String length, String width, String thic, String grade, String noOfPieces, String location, String area, int index, String serial, String backingList) {
+    TableRow fillTableRows(TableRow tableRow, String bundleNo, String length, String width, String thic, String grade, String noOfPieces, String location, String area, int index, String serial, String backingList) {
         for (int i = 0; i < 11; i++) {
             TextView textView = new TextView(this);
             textView.setBackgroundResource(R.color.light_orange);
@@ -740,13 +728,13 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                     textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 3.4f);
                     textViewParam.setMargins(1, 5, 1, 1);
                     textView.setLayoutParams(textViewParam);
-                    textView.setText(bundlNo);
+                    textView.setText(bundleNo);
                     break;
                 case 3:
                     textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
                     textViewParam.setMargins(1, 5, 1, 1);
                     textView.setLayoutParams(textViewParam);
-                    textView.setText(length);
+                    textView.setText(thic);
                     break;
                 case 4:
                     textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
@@ -758,19 +746,19 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                     textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
                     textViewParam.setMargins(1, 5, 1, 1);
                     textView.setLayoutParams(textViewParam);
-                    textView.setText(thic);
+                    textView.setText(length);
                     break;
                 case 6:
                     textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
                     textViewParam.setMargins(1, 5, 1, 1);
                     textView.setLayoutParams(textViewParam);
-                    textView.setText(grade);
+                    textView.setText(noOfPieces);
                     break;
                 case 7:
                     textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
                     textViewParam.setMargins(1, 5, 1, 1);
                     textView.setLayoutParams(textViewParam);
-                    textView.setText(noOfPieces);
+                    textView.setText(grade);
                     break;
                 case 8:
                     textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1.5f);
@@ -1204,7 +1192,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                                 k = bundleInfoServer2.size();
                             }
                     }
-                    snackbar = Snackbar.make(containerLayout, Html.fromHtml("<font color=\"#4799D8\">Deleted Successfully</font>"), Snackbar.LENGTH_SHORT);
+                    snackbar = Snackbar.make(containerLayout, Html.fromHtml("<font color=\"#3167F0\">Deleted Successfully</font>"), Snackbar.LENGTH_SHORT);
                     View snackbarLayout = snackbar.getView();
                     TextView textViewSnackbar = (TextView) snackbarLayout.findViewById(android.support.design.R.id.snackbar_text);
                     textViewSnackbar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check_24dp, 0, 0, 0);

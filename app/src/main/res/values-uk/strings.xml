@@ -2,31 +2,31 @@
 <resources>
     <string name="app_name">Деревна система</string>
 
-    <string name="stage1">1 етап</string>
-    <string name="stage2">2 етап</string>
-    <string name="stage3">3 етап</string>
+    <string name="stage1">Этап 1</string>
+    <string name="stage2">Этап 2</string>
+    <string name="stage3">Этап 3</string>
 
-    <string name="enter_inventory">Введіть інвентар</string>
-    <string name="loading_order">Порядок завантаження</string>
-    <string name="reports">Звіти</string>
+    <string name="enter_inventory">Внести инвентарь</string>
+    <string name="loading_order">Звгрузка заказа</string>
+    <string name="reports">Отчеты</string>
 
-    <string name="th">Тhic</string>
-    <string name="w">Width</string>
-    <string name="l">Length</string>
+    <string name="th">Толщина</string>
+    <string name="w">Ширина</string>
+    <string name="l">Длина</string>
     <string name="grade">Сорт</string>
     <string name="num_pcs"># Шматок</string>
     <string name="bundle_num">Пачка #</string>
-    <string name="location">Location</string>
+    <string name="location">Место расположения</string>
     <string name="loc">Loc</string>
-    <string name="area">Площа</string>
-    <string name="description">Опис</string>
-    <string name="details">Деталь</string>
-    <string name="from">З</string>
-    <string name="to">До</string>
+    <string name="area">зона</string>
+    <string name="description">Детали</string>
+    <string name="details">Детали</string>
+    <string name="from">от/из</string>
+    <string name="to">к/в</string>
     <string name="no_bundle"># Пачка</string>
     <string name="no_pieces"># Pieces</string>
     <string name="loading_order_no">L.order No</string>
-    <string name="packing_list">Список упаковки</string>
+    <string name="packing_list">Упаковочный лист</string>
     <string name="p_list">P.List</string>
 
     <string name="company_name">Назва компанії</string>
@@ -34,57 +34,57 @@
     <string name="store">Магазин</string>
 
     <string name="placing_no">Truck No</string>
-    <string name="order_no">Order No</string>
-    <string name="container_no">Container No</string>
-    <string name="date_of_load">Date Of Load</string>
-    <string name="destination">Destination</string>
+    <string name="order_no">Заказ номер/№</string>
+    <string name="container_no">Контейнер номер/№</string>
+    <string name="date_of_load">Дата загрузки</string>
+    <string name="destination">Место назначения</string>
     <string name="date">Дата</string>
 
     <string name="clear_fields">Очистити поля</string>
-    <string name="new_bundle">Новий пакет</string>
-    <string name="thickness">Товщина</string>
+    <string name="new_bundle">Новая пачка</string>
+    <string name="thickness">Толщина</string>
     <string name="width">Ширина</string>
-    <string name="length">Довжина</string>
-    <string name="no_of_pieces"># Шматки</string>
+    <string name="length">Длина</string>
+    <string name="no_of_pieces">Штуки</string>
     <string name="bundle_no">Пачка #</string>
     <string name="cubic">Кубічний</string>
 
-    <string name="username">Імя користувача</string>
+    <string name="username">Имя пользователя</string>
     <string name="password">Пароль</string>
 
-    <string name="search_by_barcode">Пошук за штрих-кодом</string>
-    <string name="login">Вхід</string>
-    <string name="add">Додайте</string>
-    <string name="done">Зроблено</string>
+    <string name="search_by_barcode">Поиск по штрих-коду</string>
+    <string name="login">Логин</string>
+    <string name="add">Добавлять</string>
+    <string name="done">Выполнено</string>
     <string name="save">Зберегти</string>
     <string name="generate_bundle_no">Створіть пакет #</string>
     <string name="barcode">Barcode</string>
 
-    <string name="bundles">Звіт про пакети</string>
+    <string name="bundles">Пачка</string>
     <string name="print_barcode_report">Роздрукувати штрих-код</string>
     <string name="orders">Замовлення</string>
-    <string name="inventory_report">Інвентар</string>
-    <string name="loading_order_report">Замовлення на \n завантаження</string>
-    <string name="loading_order_report2">Замовлення на завантаження</string>
+    <string name="inventory_report">Отчет инвентаризации</string>
+    <string name="loading_order_report">Отчет по \n звгрузке заказа</string>
+    <string name="loading_order_report2">Отчет по звгрузке заказа</string>
     <string name="placing_no_">Вантажівка #</string>
-    <string name="order_no_">Замовлення #</string>
-    <string name="container_no_">Контейнер #</string>
+    <string name="order_no_">Заказ номер/№</string>
+    <string name="container_no_">Контейнер номер/№</string>
 
     <string name="about_developers">Про розробників</string>
     <string name="falcons_soft">Соколи мякі</string>
-    <string name="report">Звіт</string>
-    <string name="print_all">Роздрукувати все</string>
+    <string name="report">Отчеты</string>
+    <string name="print_all">Печать все</string>
     <string name="delete_all">Видалити все</string>
-    <string name="print">Друк</string>
+    <string name="print">Печать</string>
     <string name="serial">Serial</string>
-    <string name="serial_no">Серійний</string>
+    <string name="serial_no">Серийный номер</string>
     <string name="delete">Видалити</string>
-    <string name="hide">Сховати</string>
+    <string name="hide">Прятать</string>
 
     <string name="new_raw">Нова сира</string>
     <string name="supplier_no">Постачальник #</string>
     <string name="supplier_name">Постачальник</string>
-    <string name="raw_thickness">Thickness</string>
+    <string name="raw_thickness">Толщина</string>
     <string name="search">Пошук ...</string>
     <string name="acceptance_info">Інформація про прийняття</string>
 <!--    <string name="acceptance_info">Acceptance Info</string>-->
@@ -93,7 +93,7 @@
 
     <string name="accept_raw">Прийняти рядок</string>
     <string name="name_of_supplier">Name Of Supplier</string>
-    <string name="truck_no">Truck Number</string>
+    <string name="truck_no">Грузовик номер/№</string>
     <string name="date_of_acceptance">Date Of Acceptance</string>
     <string name="name_of_person_to_accept">Name Of Person To Accept</string>
     <string name="location_of_acceptance">Location Of Acceptance</string>
@@ -110,4 +110,29 @@
     <string name="cancel">Скасувати</string>
     <string name="action">Виберіть Дія</string>
     <string name="show">Показати</string>
+
+    <string name="search_width">Поиск по ширине</string>
+    <string name="search_length">Поиск по длине</string>
+    <string name="search_thic">SПоиск по толщине</string>
+
+    <string name="fresh">Свежый</string>
+    <string name="bs">BS</string>
+    <string name="reject">Reject</string>
+
+    <string name="zone_1">Зона 1</string>
+    <string name="zone_2">Зона 2</string>
+    <string name="zone_3">Зона 3</string>
+    <string name="zone_4">Зона 4</string>
+    <string name="zone_5">Зона 5</string>
+
+    <string name="ukranian_wood">Украинская древисина</string>
+    <string name="bundle_origin">Происхождение пачки</string>
+    <string name="finland_wood">Финляндская древисина</string>
+    <string name="decore_wood">Декоративная древисина</string>
+    <string name="german_wood">Немецкая древисина</string>
+    <string name="romanian_wood">Румынская древисина</string>
+    <string name="russian_wood">Русская древисина</string>
+    <string name="canadian_wood">Канадская древисина</string>
+    <string name="swedian_wood">Швецкая древисина</string>
+    <string name="latvian_wood">Латвийская древисина</string>
 </resources>
