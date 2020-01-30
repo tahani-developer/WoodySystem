@@ -22,7 +22,7 @@
         <LinearLayout
             android:id="@+id/stage3_enter_inventory"
             android:layout_width="250dp"
-            android:layout_height="180dp"
+            android:layout_height="200dp"
             android:layout_marginStart="100dp"
             android:layout_marginLeft="100dp"
             android:layout_marginTop="150dp"
@@ -31,10 +31,10 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="120dp"
+                android:layout_height="90dp"
                 android:layout_marginTop="5dp"
-                android:background="@drawable/cabin"
+                android:background="@drawable/wbundlereal"
                 android:scaleType="fitCenter" />
 
             <TextView
@@ -42,10 +42,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="10dp"
+                android:fontFamily="serif"
                 android:gravity="center_horizontal"
                 android:lineSpacingExtra="15dp"
                 android:text="@string/enter_inventory"
-                android:fontFamily="serif"
                 android:textColor="@color/white"
                 android:textSize="25sp" />
         </LinearLayout>
@@ -53,7 +53,7 @@
         <LinearLayout
             android:id="@+id/stage3_loading_order"
             android:layout_width="250dp"
-            android:layout_height="180dp"
+            android:layout_height="200dp"
             android:layout_marginStart="20dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="150dp"
@@ -62,10 +62,10 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="120dp"
-                android:layout_height="120dp"
+                android:layout_width="130dp"
+                android:layout_height="80dp"
                 android:layout_marginTop="3dp"
-                android:background="@drawable/woortruck"
+                android:background="@drawable/woodtruck"
                 android:scaleType="fitCenter" />
 
             <TextView
@@ -84,21 +84,21 @@
         <LinearLayout
             android:id="@+id/stage3_reports"
             android:layout_width="250dp"
-            android:layout_height="180dp"
+            android:layout_height="200dp"
             android:layout_marginStart="20dp"
             android:layout_marginLeft="20dp"
+            android:layout_marginTop="150dp"
             android:layout_marginEnd="50dp"
             android:layout_marginRight="50dp"
-            android:layout_marginTop="150dp"
             android:background="@drawable/frame_shape"
             android:gravity="center"
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="100dp"
+                android:layout_width="120dp"
                 android:layout_height="100dp"
                 android:layout_marginTop="5dp"
-                android:background="@drawable/report1"
+                android:background="@drawable/real_report"
                 android:scaleType="fitCenter" />
 
             <TextView
@@ -106,10 +106,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="10dp"
+                android:fontFamily="serif"
                 android:gravity="center_horizontal"
                 android:lineSpacingExtra="15dp"
                 android:text="@string/reports"
-                android:fontFamily="serif"
                 android:textColor="@color/white"
                 android:textSize="25sp" />
         </LinearLayout>
