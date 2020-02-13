@@ -290,7 +290,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                 JSONObject object = new JSONObject(response);
 //                Log.e("presenter:bun1", "" + object.toString());
                 JSONArray array = object.getJSONArray("BUNDLE_INFO");
-                Log.e("presenter:bun2", "" + array.length());
+//                Log.e("presenter:bun2", "" + array.length());
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject innerObject = array.getJSONObject(i);//ORDERED
 //                    Log.e("presenter:bun3 ", "" + innerObject.toString());
@@ -310,13 +310,13 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                     bundleInfo.setAddingDate(innerObject.getString("BUNDLE_DATE"));
                     bundleInfo.setSerialNo(innerObject.getString("B_SERIAL"));
                     bundleInfo.setBackingList(innerObject.getString("BACKING_LIST"));
-                    Log.e("presenter:bun3 ", "" + bundleInfo.getBackingList());
+//                    Log.e("presenter:bun3 ", "" + bundleInfo.getBackingList());
 
                     bundleInfoServer2.add(bundleInfo);
                     bundleInfoServer.add(bundleInfo);
 //                    }
                 }
-                Log.e("bundleInfoServer", "/size/" + bundleInfoServer.size());
+//                Log.e("bundleInfoServer", "/size/" + bundleInfoServer.size());
                 inventoryReport.filters();
 
 //                inventoryReport.fillTable(bundleInfoServer);
@@ -361,14 +361,14 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                     response = new String(response.getBytes("ISO-8859-1"), "UTF-8");
 //                    response = response.substring(response.indexOf("{"));
 
-                Log.e("presenter/printBarcode", "/res" + response);
+//                Log.e("presenter/printBarcode", "/res" + response);
                 JSONObject object = new JSONObject(response);
 //                Log.e("presenter:bun1", "" + object.toString());
                 JSONArray array = object.getJSONArray("BUNDLE_INFO");
-                Log.e("presenter:bun2", "" + array.length());
+//                Log.e("presenter:bun2", "" + array.length());
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject innerObject = array.getJSONObject(i);//ORDERED
-                    Log.e("presenter:bun3 ", "" + innerObject.toString());
+//                    Log.e("presenter:bun3 ", "" + innerObject.toString());
                     if ( (innerObject.getString("USER_NO").equals(settings.getUserNo()))
                             && (innerObject.getString("LOCATION").equals(settings.getStore()))
                             && (innerObject.getString("IS_PRINTED").equals("0"))) {
@@ -422,7 +422,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
         urlPackingList = "http://" + settings.getIpAddress() + "/export.php?ADD_PACKING_LIST=1&BUNDLE_NO=\"" + bundleNumber + "\""
                 + "&PACKING_LIST=\"" + packingList + "\""
                 + "&LOCATION=\"" + location + "\"";//http://5.189.130.98:8085/import.php?FLAG=3
-        Log.e("presenter/ ", "urlPackingList " + urlPackingList);
+//        Log.e("presenter/ ", "urlPackingList " + urlPackingList);
 
         packingListJsonObjectRequest = new StringRequest(Request.Method.GET, urlPackingList, new UpdatePackingListClass(), new UpdatePackingListClass());
         requestQueue.add(packingListJsonObjectRequest);
@@ -443,7 +443,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
 //                    response = response.substring(response.indexOf("{"));
                 inventoryReport.updatedPackingList();
                 getBundlesData(inventoryReport);
-                Log.e("presenter/packingList", "/res/" + response);
+//                Log.e("presenter/packingList", "/res/" + response);
 //                JSONObject object = new JSONObject(response);
 //                Log.e("presenter:bun1", "" + object.toString());
 //                JSONArray array = object.getJSONArray("BUNDLE_INFO");

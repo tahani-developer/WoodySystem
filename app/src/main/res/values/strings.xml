@@ -1,9 +1,10 @@
 <resources>
     <string name="app_name">Wood System</string>
+    <string name="version">Version 15.0</string>
 
-    <string name="stage1">Stage 1</string>
+    <string name="stage1">Acceptance &amp; Quality Control</string>
     <string name="stage2">Stage 2</string>
-    <string name="stage3">Stage 3</string>
+    <string name="stage3">Inventory &amp; Loading</string>
 
     <string name="enter_inventory">Enter Inventory</string>
     <string name="loading_order">Loading Order</string>

@@ -9,20 +9,21 @@
     tools:context=".reports.InventoryReport"
     tools:ignore="MissingDefaultResource">
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/alpha_black_dark"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+       >
 
         <LinearLayout
+            android:id="@+id/inventory_report_linear1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
 
             <TextView
@@ -54,9 +55,14 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/inventory_report_linear2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/inventory_report_linear1"
+            >
 
             <LinearLayout
                 android:id="@+id/inventory_report_linear_one"
@@ -208,11 +214,15 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/inventory_report_linear3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/inventory_report_linear2">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -339,9 +349,14 @@
         </LinearLayout>
 
         <TableRow
+            android:id="@+id/inventory_report_linear4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/orange">
+            android:layout_marginTop="5dp"
+            android:background="@color/orange"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/inventory_report_linear3">
 
             <CheckBox
                 android:id="@+id/checkBoxPrint"
@@ -443,8 +458,16 @@
         </TableRow>
 
         <ScrollView
+            android:id="@+id/inventory_report_linear5"
             android:layout_width="match_parent"
-            android:layout_height="280dp">
+            android:layout_height="0dp"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/inventory_report_linear6"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/inventory_report_linear4"
+            app:layout_constraintVertical_bias="0.0">
 
             <TableLayout
                 android:id="@+id/inventory_report_table"
@@ -461,18 +484,30 @@
         </ScrollView>
 
         <View
+            android:id="@+id/inventory_report_linear6"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="2dp"
             android:layout_marginTop="1dp"
-            android:background="@color/white" />
-
+            android:layout_marginBottom="5dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/inventory_report_linear7"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+/>
         <LinearLayout
+            android:id="@+id/inventory_report_linear7"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="5dp"
-            android:orientation="horizontal">
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+          >
 
             <LinearLayout
                 android:layout_width="250dp"
@@ -608,6 +643,6 @@
 
         </LinearLayout>
 
-    </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>

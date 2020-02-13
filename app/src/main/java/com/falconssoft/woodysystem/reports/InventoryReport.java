@@ -1219,21 +1219,4 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         finish();
     }
 
-//    public void setSlideAnimation() {
-//        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
-//    }
-//
-//    public void onBackPressed() {
-//        super.onBackPressed();
-//        Intent intent = new Intent(InventoryReport.this, ReportsActivity.class);
-//        startActivity(intent);
-//        setSlideAnimation();
-//        finish();
-//    }
-
-//    @Override
-//    public void finish() {
-//        super.finish();
-//        setSlideAnimation();
-//    }
 }

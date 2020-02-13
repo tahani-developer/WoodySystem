@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--    large-->
+
+    <!--  portrait main-->
+    <dimen name="main_views">250dp</dimen>
+    <dimen name="main_views2">240dp</dimen>
+    <!--  land main-->
+    <dimen name="main_views_land">250dp</dimen>
+    <dimen name="main_views2_land">250dp</dimen>
+    <dimen name="main_views3_land">270dp</dimen>
+
+    <!--  portrait stage 3-->
+    <dimen name="stage3_views">350dp</dimen>
+    <dimen name="stage3_views2">280dp</dimen>
+    <!--  land stage 3-->
+    <dimen name="stage3_views_land">350dp</dimen>
+    <dimen name="stage3_views2_land">300dp</dimen>
+
+
+    <!--    origin -->
+    <!--  portrait main-->
+<!--    <dimen name="main_views">220dp</dimen>-->
+<!--    <dimen name="main_views2">200dp</dimen>-->
+<!--&lt;!&ndash;      land main&ndash;&gt;-->
+<!--    <dimen name="main_views_land">220dp</dimen>-->
+<!--    <dimen name="main_views2_land">230dp</dimen>-->
+<!--    <dimen name="main_views3_land">250dp</dimen>-->
+
+
+<!--    &lt;!&ndash;  portrait stage 3&ndash;&gt;-->
+<!--    <dimen name="stage3_views">250dp</dimen>-->
+<!--    <dimen name="stage3_views2">240dp</dimen>-->
+<!--    &lt;!&ndash;  land stage 3&ndash;&gt;-->
+<!--    <dimen name="stage3_views_land">250dp</dimen>-->
+<!--    <dimen name="stage3_views2_land">250dp</dimen>-->
+</resources>

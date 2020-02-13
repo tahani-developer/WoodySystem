@@ -1,0 +1,21 @@
+
+
+<!--  portrait -->
+    <!--    large-->
+    <dimen name="main_views">250</dimen>
+    <dimen name="main_views_text">240</dimen>
+
+
+    <!--    origin-->
+    <dimen name="main_views">220</dimen>
+    <dimen name="main_views_text">220</dimen>
+
+<!--    land-->
+    <!--    large-->
+    <dimen name="main_views">220</dimen>
+    <dimen name="main_views_text">200</dimen>
+
+
+    <!--    origin-->
+    <dimen name="main_views">220</dimen>
+    <dimen name="main_views_text">200</dimen>

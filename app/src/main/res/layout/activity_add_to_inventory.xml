@@ -142,6 +142,7 @@
                         android:layout_marginRight="10dp"
                         android:layout_weight="2"
                         android:ems="10"
+                        android:imeOptions="actionDone"
                         android:inputType="numberDecimal" />
                 </LinearLayout>
 
@@ -363,13 +364,13 @@
         <LinearLayout
             android:id="@+id/addToInventory_table_view"
             android:layout_width="match_parent"
-            android:layout_height="520dp"
-            android:background="@color/alpha_black"
+            android:layout_height="match_parent"
             android:layout_marginStart="1dp"
             android:layout_marginLeft="1dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="320dp"
             android:layout_marginEnd="1dp"
             android:layout_marginRight="1dp"
+            android:background="@color/alpha_black"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -380,8 +381,9 @@
 
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="490dp"
-                >
+                android:layout_height="wrap_content"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="333dp">
 
                 <TableLayout
                     android:id="@+id/addToInventory_table"
@@ -391,14 +393,15 @@
                     android:layout_marginLeft="3dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="3dp"
-                    android:layout_marginRight="3dp"/>
+                    android:layout_marginRight="3dp" />
             </ScrollView>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="5dp"
-                android:layout_marginTop="2dp"
-                android:background="@color/orange" />
+                android:background="@color/orange"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="825dp" />
         </LinearLayout>
     </android.support.constraint.ConstraintLayout>
 </RelativeLayout>
