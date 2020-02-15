@@ -1,38 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!--    large-->
+    <!--    large size-->
 
     <!--  portrait main-->
-    <dimen name="main_views">250dp</dimen>
-    <dimen name="main_views2">240dp</dimen>
-    <!--  land main-->
-    <dimen name="main_views_land">250dp</dimen>
-    <dimen name="main_views2_land">250dp</dimen>
-    <dimen name="main_views3_land">270dp</dimen>
+<!--    <dimen name="main_views">250dp</dimen>-->
+<!--    <dimen name="main_views2">240dp</dimen>-->
+<!--    <dimen name="main_p_margin1_end">60dp</dimen>-->
+<!--    <dimen name="main_p_margin1_bottom">657dp</dimen>-->
+<!--    <dimen name="main_p_margin2_end">331dp</dimen>-->
+<!--    <dimen name="main_p_margin2_bottom">603dp</dimen>-->
+<!--    <dimen name="main_p_margin3_end">30dp</dimen>-->
+<!--    <dimen name="main_p_margin3_bottom">380dp</dimen>-->
+<!--    <dimen name="main_p_margin4_end">300dp</dimen>-->
+<!--    <dimen name="main_p_margin4_bottom">340dp</dimen>-->
+<!--    <dimen name="main_p_margin5_end">80dp</dimen>-->
+<!--    <dimen name="main_p_margin5_bottom">80dp</dimen>-->
+<!--    <dimen name="main_p_margin6_end">352dp</dimen>-->
+<!--    <dimen name="main_p_margin6_bottom">60dp</dimen>-->
+<!--    &lt;!&ndash;  land main&ndash;&gt;-->
+<!--    <dimen name="main_views_land">250dp</dimen>-->
+<!--    <dimen name="main_views2_land">250dp</dimen>-->
+<!--    <dimen name="main_views3_land">270dp</dimen>-->
+<!--    <dimen name="main_margin1_start">120dp</dimen>-->
+<!--    <dimen name="main_margin1_bottom">250dp</dimen>-->
+<!--    <dimen name="main_margin2_all">60dp</dimen>-->
+
+<!--&lt;!&ndash;    ****************************************************************************&ndash;&gt;-->
+<!--    &lt;!&ndash;  portrait stage 3&ndash;&gt;-->
+<!--    <dimen name="stage3_views">350dp</dimen>-->
+<!--    <dimen name="stage3_views2">280dp</dimen>-->
+<!--    <dimen name="stage3_p_margin_top">172dp</dimen>-->
+<!--    <dimen name="stage3_p_margin2_top">20dp</dimen>-->
+<!--    &lt;!&ndash;  land stage 3&ndash;&gt;-->
+<!--    <dimen name="stage3_views_land">350dp</dimen>-->
+<!--    <dimen name="stage3_views2_land">300dp</dimen>-->
+<!--    <dimen name="stage3_margin1_start">100dp</dimen>-->
+<!--    <dimen name="stage3_margin2_start">20dp</dimen>-->
+<!--    <dimen name="stage3_margin_top">190dp</dimen>-->
+<!--    <dimen name="stage3_margin_end">50dp</dimen>-->
+
+<!--    &lt;!&ndash;    ****************************************************************************&ndash;&gt;-->
+<!--    &lt;!&ndash;  portrait reports activity&ndash;&gt;-->
+<!--    <dimen name="reports_p_margin_start">100dp</dimen>-->
+<!--    <dimen name="reports_p_margin_end">100dp</dimen>-->
+<!--    <dimen name="reports_p_margin_top">264dp</dimen>-->
+<!--    <dimen name="reports_p_margin2_top">50dp</dimen>-->
+<!--    &lt;!&ndash;  land reports activity&ndash;&gt;-->
+<!--    <dimen name="reports_margin_start">228dp</dimen>-->
+<!--    <dimen name="reports_margin_end">80dp</dimen>-->
+<!--    <dimen name="reports_margin_top">220dp</dimen>-->
+<!--    <dimen name="reports_margin2_start">72dp</dimen>-->
+
+<!--    &lt;!&ndash;    ****************************************************************************&ndash;&gt;-->
+<!--    &lt;!&ndash;  portrait stage 1&ndash;&gt;-->
+<!--    <dimen name="stage1_p_margin_top">144dp</dimen>-->
+<!--    <dimen name="stage1_p_margin2_top">30dp</dimen>-->
+<!--    <dimen name="stage1_p_margin_start">120dp</dimen>-->
+<!--    &lt;!&ndash;  land stage 1&ndash;&gt;-->
+<!--    <dimen name="stage1_margin1_start">100dp</dimen>-->
+<!--    <dimen name="stage1_margin2_start">20dp</dimen>-->
+<!--    <dimen name="stage1_margin_top">190dp</dimen>-->
+<!--    <dimen name="stage1_margin_end">50dp</dimen>-->
+
+
+    <!--    ****************************************************************************-->
+    <!--    ****************************************************************************-->
+    <!--    ****************************************************************************-->
+
+    <!--    origin size-->
+<!--      portrait main-->
+    <dimen name="main_views">220dp</dimen>
+    <dimen name="main_views2">200dp</dimen>
+    <dimen name="main_p_margin1_end">60dp</dimen>
+    <dimen name="main_p_margin1_bottom">550dp</dimen>
+    <dimen name="main_p_margin2_end">300dp</dimen>
+    <dimen name="main_p_margin2_bottom">530dp</dimen>
+    <dimen name="main_p_margin3_end">30dp</dimen>
+    <dimen name="main_p_margin3_bottom">330dp</dimen>
+    <dimen name="main_p_margin4_end">250dp</dimen>
+    <dimen name="main_p_margin4_bottom">300dp</dimen>
+    <dimen name="main_p_margin5_end">50dp</dimen>
+    <dimen name="main_p_margin5_bottom">70dp</dimen>
+    <dimen name="main_p_margin6_end">290dp</dimen>
+    <dimen name="main_p_margin6_bottom">80dp</dimen>
+<!--&lt;!&ndash;      land main&ndash;&gt;-->
+    <dimen name="main_views_land">220dp</dimen>
+    <dimen name="main_views2_land">230dp</dimen>
+    <dimen name="main_views3_land">250dp</dimen>
+    <dimen name="main_margin1_start">80dp</dimen>
+    <dimen name="main_margin1_bottom">180dp</dimen>
+    <dimen name="main_margin2_all">60dp</dimen>
 
     <!--  portrait stage 3-->
-    <dimen name="stage3_views">350dp</dimen>
-    <dimen name="stage3_views2">280dp</dimen>
+    <dimen name="stage3_views">250dp</dimen>
+    <dimen name="stage3_views2">240dp</dimen>
+    <dimen name="stage3_p_margin_top">90dp</dimen>
+    <dimen name="stage3_p_margin2_top">20dp</dimen>
     <!--  land stage 3-->
-    <dimen name="stage3_views_land">350dp</dimen>
-    <dimen name="stage3_views2_land">300dp</dimen>
+    <dimen name="stage3_views_land">250dp</dimen>
+    <dimen name="stage3_views2_land">250dp</dimen>
+    <dimen name="stage3_margin1_start">80dp</dimen>
+    <dimen name="stage3_margin2_start">20dp</dimen>
+    <dimen name="stage3_margin_top">150dp</dimen>
+    <dimen name="stage3_margin_end">50dp</dimen>
+
+    <!--    ****************************************************************************-->
+    <!--  portrait reports activity-->
+    <dimen name="reports_p_margin_start">100dp</dimen>
+    <dimen name="reports_p_margin_end">100dp</dimen>
+    <dimen name="reports_p_margin_top">100dp</dimen>
+    <dimen name="reports_p_margin2_top">50dp</dimen>
+    <!--  land reports activity-->
+    <dimen name="reports_margin_start">80dp</dimen>
+    <dimen name="reports_margin_end">80dp</dimen>
+    <dimen name="reports_margin_top">160dp</dimen>
+    <dimen name="reports_margin2_start">72dp</dimen>
+
+    <!--    ****************************************************************************-->
+    <!--  portrait stage 1-->
+    <dimen name="stage1_p_margin_top">80dp</dimen>
+    <dimen name="stage1_p_margin2_top">10dp</dimen>
+    <dimen name="stage1_p_margin_start">90dp</dimen>
+    <!--  land stage 1-->
+    <dimen name="stage1_margin1_start">80dp</dimen>
+    <dimen name="stage1_margin2_start">20dp</dimen>
+    <dimen name="stage1_margin_top">150dp</dimen>
+    <dimen name="stage1_margin_end">50dp</dimen>
 
 
-    <!--    origin -->
-    <!--  portrait main-->
-<!--    <dimen name="main_views">220dp</dimen>-->
-<!--    <dimen name="main_views2">200dp</dimen>-->
-<!--&lt;!&ndash;      land main&ndash;&gt;-->
-<!--    <dimen name="main_views_land">220dp</dimen>-->
-<!--    <dimen name="main_views2_land">230dp</dimen>-->
-<!--    <dimen name="main_views3_land">250dp</dimen>-->
-
-
-<!--    &lt;!&ndash;  portrait stage 3&ndash;&gt;-->
-<!--    <dimen name="stage3_views">250dp</dimen>-->
-<!--    <dimen name="stage3_views2">240dp</dimen>-->
-<!--    &lt;!&ndash;  land stage 3&ndash;&gt;-->
-<!--    <dimen name="stage3_views_land">250dp</dimen>-->
-<!--    <dimen name="stage3_views2_land">250dp</dimen>-->
+    <!--    ****************************************************************************-->
+    <!--    ****************************************************************************-->
+    <!--    ****************************************************************************-->
 </resources>
