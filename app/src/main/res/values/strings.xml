@@ -99,6 +99,7 @@
     <string name="rejection_list">Rejection List</string>
     <string name="new_supplier">New Supplier</string>
     <string name="find_supplier">Find Supplier</string>
+    <string name="rejected_pieces_on_truck">Rejected Pieces on Truck</string>
 
     <string name="generate_Barcode">Generate Barcode</string>
     <string name="ordered">Ordered</string>
@@ -134,6 +135,10 @@
     <string name="canadian_wood">Canadian Wood</string>
     <string name="swedian_wood">Swedian Wood</string>
     <string name="latvian_wood">Latvian Wood</string>
+
+    <string name="rejected_pieces"># Rejected</string>
+    <string name="back">Back</string>
+    <string name="net">Net Bundles</string>
 
 
 </resources>

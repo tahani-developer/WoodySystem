@@ -31,7 +31,9 @@ import android.support.v4.print.PrintHelper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
+import android.text.Editable;
 import android.text.Html;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -136,12 +138,14 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private Date date;
     private String serialNumber;
     private int index;
-    private SearchView searchViewTh, searchViewW, searchViewL;
+    //    private SearchView searchViewTh, searchViewW, searchViewL;
     private CheckBox checkBoxPrint;
     private List<BundleInfo> bundleInfoForPrint = new ArrayList<>();
     private Button printAll, delete;
     private TableRow tableRowToDelete = null;
-    private String f1 = "", f2 = "", f3 = "";
+    private EditText fromLength, toLength, fromWidth, toWidth, fromThickness, toThickness;
+    private String fromLengthNo = "", toLengthNo = "", fromWidthhNo = "", toWidthNo = "", fromThicknessNo = "", toThicknessNo = "";
+//    private String f1 = "", f2 = "", f3 = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,9 +176,23 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         checkBoxPrint = findViewById(R.id.checkBoxPrint);
         printAll = findViewById(R.id.printAll);
         delete = findViewById(R.id.delete);
-        searchViewTh = (SearchView) findViewById(R.id.mSearchTh);
-        searchViewW = (SearchView) findViewById(R.id.mSearchW);
-        searchViewL = (SearchView) findViewById(R.id.mSearchL);
+        fromLength = findViewById(R.id.inventory_report_fromLength);
+        toLength = findViewById(R.id.inventory_report_toLength);
+        fromWidth = findViewById(R.id.inventory_report_fromWidth);
+        toWidth = findViewById(R.id.inventory_report_toWidth);
+        fromThickness = findViewById(R.id.inventory_report_fromThick);
+        toThickness = findViewById(R.id.inventory_report_toThick);
+
+        fromLength.addTextChangedListener(new watchTextChange(fromLength));
+        toLength.addTextChangedListener(new watchTextChange(toLength));
+        fromWidth.addTextChangedListener(new watchTextChange(fromWidth));
+        toWidth.addTextChangedListener(new watchTextChange(toWidth));
+        fromThickness.addTextChangedListener(new watchTextChange(fromThickness));
+        toThickness.addTextChangedListener(new watchTextChange(toThickness));
+
+//        searchViewTh = (SearchView) findViewById(R.id.mSearchTh);
+//        searchViewW = (SearchView) findViewById(R.id.mSearchW);
+//        searchViewL = (SearchView) findViewById(R.id.mSearchL);
 
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         dateFrom.setText("1/12/2019");
@@ -183,40 +201,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_to_right);
         textView.startAnimation(animation);
 
-        locationList.add("All");
-        locationList.add("Amman");
-        locationList.add("Kalinovka");
-        locationList.add("Rudniya Store");
-        locationList.add("Rudniya Sawmill");
-        locationAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, locationList);
-        locationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        location.setAdapter(locationAdapter);
-
-        areaList.add("All");
-        areaList.add("Zone 1");
-        areaList.add("Zone 2");
-        areaList.add("Zone 3");
-        areaList.add("Zone 4");
-        areaList.add("Zone 5");
-        areaAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, areaList);
-        areaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        area.setAdapter(areaAdapter);
-
-        plList.add("All");
-        plList.add("P_List");
-        plList.add("Not P_List");
-        plAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, plList);
-        plAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        pList.setAdapter(plAdapter);
-
-        gradeList.add("All");
-        gradeList.add("Fresh");
-        gradeList.add("BS");
-        gradeList.add("Reject");
-        gradeList.add("KD");
-        gradeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, gradeList);
-        gradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        grade.setAdapter(gradeAdapter);
+        fillSpinnerAdapter();
 
         woodPresenter.getBundlesData(this);
         deleteAll.setOnClickListener(this);
@@ -331,8 +316,8 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 
             }
         });
-
-        searchViewTh.setOnQueryTextListener(new android.support.v7.widget.SearchView.OnQueryTextListener() {
+//
+       /* searchViewTh.setOnQueryTextListener(new android.support.v7.widget.SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
@@ -378,8 +363,95 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 
                 return false;
             }
-        });
+        });*/
 
+    }
+
+    void fillSpinnerAdapter() {
+        locationList.add("All");
+        locationList.add("Amman");
+        locationList.add("Kalinovka");
+        locationList.add("Rudniya Store");
+        locationList.add("Rudniya Sawmill");
+        locationAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, locationList);
+        locationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        location.setAdapter(locationAdapter);
+
+        areaList.add("All");
+        areaList.add("Zone 1");
+        areaList.add("Zone 2");
+        areaList.add("Zone 3");
+        areaList.add("Zone 4");
+        areaList.add("Zone 5");
+        areaAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, areaList);
+        areaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        area.setAdapter(areaAdapter);
+
+        plList.add("All");
+        plList.add("P_List");
+        plList.add("Not P_List");
+        plAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, plList);
+        plAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        pList.setAdapter(plAdapter);
+
+        gradeList.add("All");
+        gradeList.add("Fresh");
+        gradeList.add("BS");
+        gradeList.add("Reject");
+        gradeList.add("KD");
+        gradeList.add("KD Blue Stain");
+        gradeList.add("Second Sort");
+        gradeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, gradeList);
+        gradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        grade.setAdapter(gradeAdapter);
+    }
+
+    class watchTextChange implements TextWatcher {
+
+        private View view;
+
+        public watchTextChange(View view) {
+            this.view = view;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            switch (view.getId()) {
+                case R.id.inventory_report_fromLength:
+                    fromLengthNo = String.valueOf(s);
+                    filters();
+                    break;
+                case R.id.inventory_report_toLength:
+                    toLengthNo = String.valueOf(s);
+                    filters();
+                    break;
+                case R.id.inventory_report_fromWidth:
+                    fromWidthhNo = String.valueOf(s);
+                    filters();
+                    break;
+                case R.id.inventory_report_toWidth:
+                    toWidthNo = String.valueOf(s);
+                    filters();
+                    break;
+                case R.id.inventory_report_fromThick:
+                    fromThicknessNo = String.valueOf(s);
+                    filters();
+                    break;
+                case R.id.inventory_report_toThick:
+                    toThicknessNo = String.valueOf(s);
+                    filters();
+                    break;
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -575,13 +647,33 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                 if (areaField.equals("All") || areaField.equals(dateFiltered.get(k).getArea())) {
 //                    if (orderedField.equals("All") || orderedField.equals(dateFiltered2)) {
                     if (gradeFeld.equals("All") || gradeFeld.equals(dateFiltered.get(k).getGrade())) {
-                        if (plField.equals("All") || (plField.equals("0") && dateFiltered.get(k).getBackingList().equals("null")) || (plField.equals("1") && !dateFiltered.get(k).getBackingList().equals("null"))) {
 
-                            if ((("" + dateFiltered.get(k).getThickness()).toUpperCase().startsWith(f1) || f1.equals("")) &&
-                                    (("" + dateFiltered.get(k).getWidth()).toUpperCase().startsWith(f2) || f2.equals("")) &&
-                                    (("" + dateFiltered.get(k).getLength()).toUpperCase().startsWith(f3) || f3.equals("")))
+                        if (plField.equals("All") || (plField.equals("0") && dateFiltered.get(k).getBackingList().equals("null"))
+                                || (plField.equals("1") && !dateFiltered.get(k).getBackingList().equals("null"))) {
 
-                                filtered.add(dateFiltered.get(k));
+                            if (fromLengthNo.equals("") || ((dateFiltered.get(k).getLength() > Double.parseDouble(fromLengthNo))
+                                    || dateFiltered.get(k).getLength() == Double.parseDouble(fromLengthNo)))
+
+                                if (toLengthNo.equals("") || ((dateFiltered.get(k).getLength() < Double.parseDouble(toLengthNo))
+                                        || dateFiltered.get(k).getLength() == Double.parseDouble(toLengthNo)))
+
+                                    if (fromWidthhNo.equals("") || ((dateFiltered.get(k).getWidth() > Double.parseDouble(fromWidthhNo))
+                                            || dateFiltered.get(k).getWidth() == Double.parseDouble(fromWidthhNo)))
+
+                                        if (toWidthNo.equals("") || ((dateFiltered.get(k).getWidth() < Double.parseDouble(toWidthNo))
+                                                || dateFiltered.get(k).getWidth() == Double.parseDouble(toWidthNo)))
+
+                                            if (fromThicknessNo.equals("") || ((dateFiltered.get(k).getThickness() > Double.parseDouble(fromThicknessNo))
+                                                    || dateFiltered.get(k).getThickness() == Double.parseDouble(fromThicknessNo)))
+
+                                                if (toThicknessNo.equals("") || ((dateFiltered.get(k).getThickness() < Double.parseDouble(toThicknessNo))
+                                                        || dateFiltered.get(k).getThickness() == Double.parseDouble(toThicknessNo)))
+                                                    filtered.add(dateFiltered.get(k));
+
+//                            if ((("" + dateFiltered.get(k).getThickness()).toUpperCase().startsWith(f1) || f1.equals("")) &&
+//                                    (("" + dateFiltered.get(k).getWidth()).toUpperCase().startsWith(f2) || f2.equals("")) &&
+//                                    (("" + dateFiltered.get(k).getLength()).toUpperCase().startsWith(f3) || f3.equals("")))
+
                         }
                     }
 //                    }
@@ -606,11 +698,11 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
             tableRow = new TableRow(this);
             tableRow = fillTableRows(tableRow
                     , filteredList.get(m).getBundleNo()
-                    , "" + (int)(filteredList.get(m).getLength())
-                    , "" + (int)(filteredList.get(m).getWidth())
-                    , "" + (int)(filteredList.get(m).getThickness())
+                    , "" + (int) (filteredList.get(m).getLength())
+                    , "" + (int) (filteredList.get(m).getWidth())
+                    , "" + (int) (filteredList.get(m).getThickness())
                     , filteredList.get(m).getGrade()
-                    , "" + (int)(filteredList.get(m).getNoOfPieces())
+                    , "" + (int) (filteredList.get(m).getNoOfPieces())
                     , filteredList.get(m).getLocation()
                     , filteredList.get(m).getArea()
                     , m
@@ -687,7 +779,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         Log.e("follow", "filltable " + filteredList.size());
     }
 
-    public void updatedPackingList(){
+    public void updatedPackingList() {
         snackbar = Snackbar.make(containerLayout, Html.fromHtml("<font color=\"#3167F0\">Updated Successfully</font>"), Snackbar.LENGTH_SHORT);
         View snackbarLayout = snackbar.getView();
         TextView textViewSnackbar = (TextView) snackbarLayout.findViewById(android.support.design.R.id.snackbar_text);
@@ -755,7 +847,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                     textView.setText(noOfPieces);
                     break;
                 case 7:
-                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+                    textViewParam = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
                     textViewParam.setMargins(1, 5, 1, 1);
                     textView.setLayoutParams(textViewParam);
                     textView.setText(grade);

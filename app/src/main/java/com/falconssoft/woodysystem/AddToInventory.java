@@ -566,6 +566,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         gradeList.add("BS");
         gradeList.add("Reject");
         gradeList.add("KD");
+        gradeList.add("KD Blue Stain");
+        gradeList.add("Second Sort");
         gradeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, gradeList);
         gradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         gradeSpinner.setAdapter(gradeAdapter);
@@ -610,6 +612,12 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                 break;
             case "KD":
                 gradeString = "KD";
+                break;
+            case "KD Blue Stain":
+                gradeString = "KDBS";
+                break;
+            case "Second Sort":
+                gradeString = "SS";
                 break;
         }
 

@@ -39,6 +39,7 @@
         <activity android:name=".stage_one.AcceptRow" />
         <activity
             android:name=".reports.InventoryReport"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="sensorLandscape" >
 
 

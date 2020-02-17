@@ -31,7 +31,7 @@
                 android:layout_marginRight="@dimen/main_p_margin1_end"
                 android:layout_marginBottom="@dimen/main_p_margin1_bottom"
                 android:background="@drawable/border_background"
-                android:src="@drawable/quality4"
+                android:src="@drawable/mickroscope3"
                 />
 
             <TextView
@@ -72,7 +72,7 @@
                 android:layout_marginRight="@dimen/main_p_margin5_end"
                 android:layout_marginBottom="@dimen/main_p_margin5_bottom"
                 android:background="@drawable/border_background"
-                android:src="@drawable/container3" />
+                android:src="@drawable/container4" />
 
             <TextView
                 android:id="@+id/s1"
