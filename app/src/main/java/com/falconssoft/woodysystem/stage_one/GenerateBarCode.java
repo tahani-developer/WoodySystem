@@ -585,7 +585,7 @@ public class GenerateBarCode extends AppCompatActivity {
 
             //Step 4 Add content
             int ispage = 0;
-            for (int i = 0; i < bundleInfoForPrint.size(); i++) {
+            for (int i = 0; i < bundleInfoForPrint.size(); i+=2) {
                 if (bundleInfoForPrint.get(i).getIsPrinted() != 1) {
                     Bitmap bitmap = writeBarcode(String.valueOf(bundleInfoForPrint.get(i).getBundleNo()), String.valueOf(bundleInfoForPrint.get(i).getLength()), String.valueOf(bundleInfoForPrint.get(i).getWidth()),
                             String.valueOf(bundleInfoForPrint.get(i).getThickness()), String.valueOf(bundleInfoForPrint.get(i).getGrade()), String.valueOf(bundleInfoForPrint.get(i).getNoOfPieces()),"Supplier Name", String.valueOf(bundleInfoForPrint.get(i).getNoOfPieces()));
@@ -593,26 +593,26 @@ public class GenerateBarCode extends AppCompatActivity {
                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
                     Image signature;
                     signature = Image.getInstance(stream.toByteArray());
-                    signature.setAbsolutePosition(0f, 20f);
-                    signature.scalePercent(160f);
+                    signature.setAbsolutePosition(20f, 450f);
+                    signature.scalePercent(120f);
                     signature.setRotationDegrees(90f);
-//            signature.setRotation(0f);
-//            signature.setPaddingTop(10);
+            signature.setRotation(0f);
+            signature.setPaddingTop(10);
                     document.add(signature);
 
-//                    if ((i + 1)< bundleInfos.size()){
-//                        Bitmap bitmap2 = writeBarcode(String.valueOf(bundleInfos.get(i+1).getBundleNo()), String.valueOf(bundleInfos.get(i+1).getLength()), String.valueOf(bundleInfos.get(i+1).getWidth()),
-//                                String.valueOf(bundleInfos.get(i+1).getThickness()), String.valueOf(bundleInfos.get(i+1).getGrade()), String.valueOf(bundleInfos.get(i+1).getNoOfPieces()));
-//                    ByteArrayOutputStream stream2 = new ByteArrayOutputStream();
-//                    bitmap2.compress(Bitmap.CompressFormat.PNG, 100, stream2);
-//                    Image signature2;
-//                    signature2 = Image.getInstance(stream2.toByteArray());
-//                    signature2.setAbsolutePosition(20f, 450f);
-//                    signature2.scalePercent(150f);
-////                    signature2.setRotationDegrees(90f);
-//
-//                    document.add(signature2);
-//                }
+                    if ((i + 1)< bundleInfoForPrint.size()){
+                        Bitmap bitmap2 = writeBarcode(String.valueOf(bundleInfoForPrint.get(i+1).getBundleNo()), String.valueOf(bundleInfoForPrint.get(i+1).getLength()), String.valueOf(bundleInfoForPrint.get(i+1).getWidth()),
+                                String.valueOf(bundleInfoForPrint.get(i+1).getThickness()), String.valueOf(bundleInfoForPrint.get(i+1).getGrade()), String.valueOf(bundleInfoForPrint.get(i+1).getNoOfPieces()),"Supplier Name", String.valueOf(bundleInfoForPrint.get(i+1).getNoOfPieces()));
+                    ByteArrayOutputStream stream2 = new ByteArrayOutputStream();
+                    bitmap2.compress(Bitmap.CompressFormat.PNG, 100, stream2);
+                    Image signature2;
+                    signature2 = Image.getInstance(stream2.toByteArray());
+                    signature2.setAbsolutePosition(20f, 0f);
+                    signature2.scalePercent(120f);
+//                    signature2.setRotationDegrees(90f);
+                        signature2.setPaddingTop(10);
+                    document.add(signature2);
+                }
                     document.newPage();
                     ispage = 1;
                 }
