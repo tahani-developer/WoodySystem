@@ -751,7 +751,6 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                 request.setURI(new URI("http://" + generalSettings.getIpAddress() + "/export.php"));//import 10.0.0.214
 
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-                Log.e("addToInventory/", "" + jsonArrayBundles.toString());
                 nameValuePairs.add(new BasicNameValuePair("BUNDLE_INFO", jsonArrayBundles.toString().trim()));
 
                 request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
