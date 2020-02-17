@@ -3,10 +3,12 @@ package com.falconssoft.woodysystem.stage_one;
 import android.app.Dialog;
 import android.content.Intent;
 import android.opengl.ETC1;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -17,10 +19,22 @@ import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.falconssoft.woodysystem.DatabaseHandler;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.models.SupplierInfo;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,10 +50,17 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     private LinearLayout headerLayout, acceptRowLayout;
     private Button doneAcceptRow, backAcceptRow;
 
+    private DatabaseHandler DHandler;
+    private List<SupplierInfo> suppliers;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_raw);
+
+        DHandler = new DatabaseHandler(AddNewRaw.this);
+        suppliers = new ArrayList<>();
 
         addNewSupplier = findViewById(R.id.addNewRaw_add_supplier);
         searchSupplier = findViewById(R.id.addNewRaw_search_supplier);
@@ -210,6 +231,97 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                 break;
         }
 
+    }
+
+    private class JSONTask extends AsyncTask<String, String, List<SupplierInfo>> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected List<SupplierInfo> doInBackground(String... params) {
+            URLConnection connection = null;
+            BufferedReader reader = null;
+
+            try {
+                URL url = new URL("http://" + DHandler.getSettings().getIpAddress() + "/import.php?FLAG=4");
+
+                URLConnection conn = url.openConnection();
+                conn.setDoOutput(true);
+
+                reader = new BufferedReader(new
+                        InputStreamReader(conn.getInputStream()));
+
+                StringBuilder sb = new StringBuilder();
+                String line = null;
+
+                // Read Server Response
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                String finalJson = sb.toString();
+                Log.e("finalJson*********", finalJson);
+
+                JSONObject parentObject = new JSONObject(finalJson);
+
+                try {
+                    JSONArray parentArrayOrders = parentObject.getJSONArray("SUPPLIERS");
+
+                    for (int i = 0; i < parentArrayOrders.length(); i++) {
+                        JSONObject innerObject = parentArrayOrders.getJSONObject(i);
+
+                        SupplierInfo supplier = new SupplierInfo();
+                        supplier.setSupplierNo(innerObject.getString("SUPPLIER_NO"));
+                        supplier.setSupplierName(innerObject.getString("SUPPLIER_NAME"));
+
+                        suppliers.add(supplier);
+
+                    }
+                } catch (JSONException e) {
+                    Log.e("Import Data2", e.getMessage().toString());
+                }
+
+            } catch (MalformedURLException e) {
+                Log.e("Customer", "********ex1");
+                e.printStackTrace();
+            } catch (IOException e) {
+                Log.e("Customer", e.getMessage().toString());
+                e.printStackTrace();
+
+            } catch (JSONException e) {
+                Log.e("Customer", "********ex3  " + e.toString());
+                e.printStackTrace();
+            } finally {
+                Log.e("Customer", "********finally");
+                if (connection != null) {
+                    Log.e("Customer", "********ex4");
+                    // connection.disconnect();
+                }
+                try {
+                    if (reader != null) {
+                        reader.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return suppliers;
+        }
+
+
+        @Override
+        protected void onPostExecute(final List<SupplierInfo> result) {
+            super.onPostExecute(result);
+
+            if (result != null) {
+                Log.e("result", "*****************" + result.size());
+            } else {
+                Toast.makeText(AddNewRaw.this, "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
 }
