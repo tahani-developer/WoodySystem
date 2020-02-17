@@ -32,13 +32,12 @@
             android:layout_marginTop="180dp"
             android:background="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintHorizontal_bias="0.501"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/woodlogo" />
 
         <TextView
-            style="@style/AppTheme"
             android:id="@+id/ggggg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -49,9 +48,10 @@
             android:layout_marginRight="10dp"
             app:layout_constraintTop_toBottomOf="@+id/login_logo"
             android:gravity="center"
-            android:text="version 16.0"
+            android:text="@string/version"
             android:textColor="@color/white"
             android:textSize="20sp"
+            android:fontFamily="serif"
             tools:layout_editor_absoluteX="99dp"
             tools:layout_editor_absoluteY="506dp" />
 
@@ -70,7 +70,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ggggg"
-            app:layout_constraintVertical_bias="0.089">
+            app:layout_constraintVertical_bias="0.136">
 
             <TextView
                 style="@style/AppTheme"

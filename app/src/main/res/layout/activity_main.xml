@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:gravity="center"
-    tools:context=".MainActivity"
     android:background="@drawable/w10"
     android:orientation="vertical">
 
@@ -18,95 +18,93 @@
         <RelativeLayout
             android:id="@+id/relative"
             android:layout_width="match_parent"
+            android:gravity="center"
             android:layout_height="match_parent">
 
-
             <ImageView
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:layout_width="@dimen/main_views"
+                android:layout_height="@dimen/main_views"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginEnd="110dp"
-                android:layout_marginRight="110dp"
-                android:layout_marginBottom="657dp"
+                android:layout_marginEnd="@dimen/main_p_margin1_end"
+                android:layout_marginRight="@dimen/main_p_margin1_end"
+                android:layout_marginBottom="@dimen/main_p_margin1_bottom"
                 android:background="@drawable/border_background"
-                android:src="@drawable/axereal"
-                android:text="" />
+                android:src="@drawable/mickroscope3"
+                />
 
             <TextView
                 android:id="@+id/s3"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:layout_width="@dimen/main_views2"
+                android:layout_height="@dimen/main_views2"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginEnd="342dp"
-                android:layout_marginRight="342dp"
-                android:layout_marginBottom="138dp"
+                android:layout_marginEnd="@dimen/main_p_margin6_end"
+                android:layout_marginRight="@dimen/main_p_margin6_end"
+                android:layout_marginBottom="@dimen/main_p_margin6_bottom"
                 android:background="@drawable/frame_shape"
-                android:text="@string/stage3"
                 android:fontFamily="serif"
+                android:text="@string/stage3"
                 android:textColor="@color/white"
-                android:textSize="30sp" />
+                android:textSize="20sp" />
 
             <ImageView
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:layout_width="@dimen/main_views"
+                android:layout_height="@dimen/main_views"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginEnd="291dp"
-                android:layout_marginRight="291dp"
-                android:layout_marginBottom="383dp"
+                android:layout_marginEnd="@dimen/main_p_margin4_end"
+                android:layout_marginRight="@dimen/main_p_margin4_end"
+                android:layout_marginBottom="@dimen/main_p_margin4_bottom"
                 android:background="@drawable/border_background"
-                android:src="@drawable/wbundlereal"
-                android:text="" />
+                android:src="@drawable/wbundlereal" />
 
             <ImageView
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:layout_width="@dimen/main_views"
+                android:layout_height="@dimen/main_views"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginEnd="112dp"
-                android:layout_marginRight="112dp"
-                android:layout_marginBottom="163dp"
+                android:layout_marginEnd="@dimen/main_p_margin5_end"
+                android:layout_marginRight="@dimen/main_p_margin5_end"
+                android:layout_marginBottom="@dimen/main_p_margin5_bottom"
                 android:background="@drawable/border_background"
-                android:src="@drawable/woodtruck"
-                android:text="" />
+                android:src="@drawable/container4" />
 
             <TextView
                 android:id="@+id/s1"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:layout_width="@dimen/main_views2"
+                android:layout_height="@dimen/main_views2"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginEnd="331dp"
-                android:layout_marginRight="331dp"
-                android:layout_marginBottom="603dp"
+                android:layout_marginEnd="@dimen/main_p_margin2_end"
+                android:layout_marginRight="@dimen/main_p_margin2_end"
+                android:layout_marginBottom="@dimen/main_p_margin2_bottom"
                 android:background="@drawable/frame_shape"
-                android:text="@string/stage1"
                 android:fontFamily="serif"
+                android:text="@string/stage1"
                 android:textColor="@color/white"
-                android:textSize="30sp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/s2"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:layout_width="@dimen/main_views2"
+                android:layout_height="@dimen/main_views2"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginEnd="69dp"
-                android:layout_marginRight="69dp"
-                android:layout_marginBottom="422dp"
+                android:layout_marginEnd="@dimen/main_p_margin3_end"
+                android:layout_marginRight="@dimen/main_p_margin3_bottom"
+                android:layout_marginBottom="@dimen/main_p_margin3_bottom"
                 android:background="@drawable/frame_shape"
-                android:text="@string/stage2"
                 android:fontFamily="serif"
+                android:text="@string/stage2"
                 android:textColor="@color/white"
-                android:textSize="30sp" />
+                android:textSize="20sp" />
 
 
         </RelativeLayout>

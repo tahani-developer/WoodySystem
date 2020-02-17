@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Деревна система</string>
+    <string name="version">Version 15.0</string>
 
-    <string name="stage1">Этап 1</string>
+    <string name="stage1">Прийняття та контроль якості</string>
     <string name="stage2">Этап 2</string>
-    <string name="stage3">Этап 3</string>
+    <string name="stage3">Інвентаризація та завантаження</string>
 
     <string name="enter_inventory">Внести инвентарь</string>
     <string name="loading_order">Звгрузка заказа</string>

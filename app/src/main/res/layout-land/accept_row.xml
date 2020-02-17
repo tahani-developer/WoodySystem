@@ -167,6 +167,15 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="serif"
+                        android:text="# Rejection"
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="serif"
                         android:text="@string/no_bundle"
                         android:textColor="@color/white"
                         android:textSize="15sp" />

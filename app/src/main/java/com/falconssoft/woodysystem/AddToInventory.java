@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -201,7 +202,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                         @Override
                                         public boolean onLongClick(View v) {
                                             publicTableRow = tableRow;
-                                            showOperationDialog(tableRow);
+                                            showActionDialog(tableRow);
                                             return false;
                                         }
                                     });
@@ -229,22 +230,21 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
     String isContainValueAfterDot(String string) {
         String isConten = "";
         String afterDot = string.substring(string.indexOf(".") + 1, string.length());
-        Log.e("afterDot", "" + afterDot + "      " + string);
+//        Log.e("afterDot", "" + afterDot + "      " + string);
         if (!(Integer.parseInt(afterDot) > 0)) {
             isConten = string.substring(0, string.indexOf("."));
         } else {
             isConten = string;
         }
-        Log.e("afterDotreturn", "" + afterDot + "      " + isConten);
-
+//        Log.e("afterDotreturn", "" + afterDot + "      " + isConten);
         return isConten;
 
     }
 
     boolean checkValidData(String word) {
-        Log.e("checkValidData4", word + ((word.length() == 1)));
-        Log.e("checkValidData4", word + ((word.contains("."))));
-        Log.e("checkValidData4", word + ((word.length() == 1) && (word.equals("."))));
+//        Log.e("checkValidData4", word + ((word.length() == 1)));
+//        Log.e("checkValidData4", word + ((word.contains("."))));
+//        Log.e("checkValidData4", word + ((word.length() == 1) && (word.equals("."))));
         if ((word.length() == 1) && (word.contains(".")))
             return true;
         return false;
@@ -312,7 +312,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 //        bundlesTable.addView(tableRow);
     }
 
-    void showOperationDialog(TableRow tableRow) {
+    void showActionDialog(TableRow tableRow) {
 
         dialog = new Dialog(AddToInventory.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -566,6 +566,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         gradeList.add("BS");
         gradeList.add("Reject");
         gradeList.add("KD");
+        gradeList.add("KD Blue Stain");
+        gradeList.add("Second Sort");
         gradeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, gradeList);
         gradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         gradeSpinner.setAdapter(gradeAdapter);
@@ -610,6 +612,12 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                 break;
             case "KD":
                 gradeString = "KD";
+                break;
+            case "KD Blue Stain":
+                gradeString = "KDBS";
+                break;
+            case "Second Sort":
+                gradeString = "SS";
                 break;
         }
 

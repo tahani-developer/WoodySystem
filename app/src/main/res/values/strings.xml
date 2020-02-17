@@ -1,9 +1,10 @@
 <resources>
     <string name="app_name">Wood System</string>
+    <string name="version">Version 15.0</string>
 
-    <string name="stage1">Stage 1</string>
+    <string name="stage1">Acceptance &amp; Quality Control</string>
     <string name="stage2">Stage 2</string>
-    <string name="stage3">Stage 3</string>
+    <string name="stage3">Inventory &amp; Loading</string>
 
     <string name="enter_inventory">Enter Inventory</string>
     <string name="loading_order">Loading Order</string>
@@ -98,6 +99,7 @@
     <string name="rejection_list">Rejection List</string>
     <string name="new_supplier">New Supplier</string>
     <string name="find_supplier">Find Supplier</string>
+    <string name="rejected_pieces_on_truck">Rejected Pieces on Truck</string>
 
     <string name="generate_Barcode">Generate Barcode</string>
     <string name="ordered">Ordered</string>
@@ -133,6 +135,10 @@
     <string name="canadian_wood">Canadian Wood</string>
     <string name="swedian_wood">Swedian Wood</string>
     <string name="latvian_wood">Latvian Wood</string>
+
+    <string name="rejected_pieces"># Rejected</string>
+    <string name="back">Back</string>
+    <string name="net">Net Bundles</string>
 
 
 </resources>

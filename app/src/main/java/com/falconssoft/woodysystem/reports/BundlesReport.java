@@ -394,7 +394,7 @@ public class BundlesReport extends AppCompatActivity {
                     textView.setText(noOfPieces);
                     break;
                 case 6:
-                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+                    textViewParam = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
                     textViewParam.setMargins(1, 5, 1, 1);
                     textView.setPadding(1, 6, 1, 7);
                     textView.setLayoutParams(textViewParam);
