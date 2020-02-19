@@ -1,5 +1,8 @@
 package com.falconssoft.woodysystem.models;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class NewRowInfo {
 
     private String supplierName;
@@ -141,4 +144,43 @@ public class NewRowInfo {
     public void setNetBundles(String netBundles) {
         this.netBundles = netBundles;
     }
+
+    public JSONObject getJsonData() {
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("SUPLIER", "'" + supplierName + "'");
+            jsonObject.put("TRUCK_NO", "'" + truckNo + "'");
+            jsonObject.put("THICKNESS", "'" + thickness + "'");
+            jsonObject.put("WIDTH", "'" + width + "'");
+            jsonObject.put("LENGTH", "'" + length + "'");
+            jsonObject.put("PIECES", "'" + noOfPieces + "'");
+            jsonObject.put("REJECTED", "'" + noOfRejected + "'");
+            jsonObject.put("NO_BUNDLES", "'" + noOfBundles + "'");
+            jsonObject.put("GRADE", "'" + grade + "'");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
+    }
+
+    public JSONObject getJsonDataMaster() {
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+
+            jsonObject.put("TRUCK_NO", "'" + truckNo + "'");
+            jsonObject.put("DATE_OF_ACCEPTANCE", "'" + date + "'");
+            jsonObject.put("NAME_OF_ACCEPTER", "'" + acceptedPersonName + "'");
+            jsonObject.put("LOCATION_OF_ACCEPTANCE", "'" + locationOfAcceptance + "'");
+            jsonObject.put("TTN_NO", "'" + ttnNo + "'");
+            jsonObject.put("REJECTED", "'" + totalRejectedNo + "'");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
+    }
+
 }

@@ -369,7 +369,7 @@
         <TableRow
             android:id="@+id/inventory_report_linear4"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginTop="5dp"
             android:background="@color/orange"
             app:layout_constraintStart_toStartOf="parent"
@@ -402,15 +402,48 @@
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
-            <TextView
+            <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:fontFamily="serif"
-                android:text="@string/th"
-                android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:fontFamily="serif"
+                    android:text="T"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginEnd="2dp"
+                        android:layout_marginRight="2dp"
+                        android:background="@drawable/asc"
+                        />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="5dp"
+                        android:background="@drawable/des"/>
+                </LinearLayout>
+
+
+            </LinearLayout>
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

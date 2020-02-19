@@ -49,20 +49,6 @@ public class BundleInfo {
         this.picture = pic;
     }
 
-//    public BundleInfo(double thickness, double length, double width, String grade, double noOfPieces, String bundleNo, String location, String area, String barcode, String pic, String hideFlag) {
-//        this.thickness = thickness;
-//        this.length = length;
-//        this.width = width;
-//        this.grade = grade;
-//        this.noOfPieces = noOfPieces;
-//        this.bundleNo = bundleNo;
-//        this.location = location;
-//        this.area = area;
-//        this.barcode = barcode;
-//        this.picture = pic;
-//        this.hideFlag = hideFlag;
-//    }
-
     public BundleInfo(double thickness, double length, double width, String grade, double noOfPieces, String bundleNo, String location, String area, String addingDate, int isPrinted, String description, String serialNo, String userNo, String backingList, int ordered) {
         this.thickness = thickness;
         this.length = length;

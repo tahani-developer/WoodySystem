@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/addNewRow_coordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/w10"
@@ -27,9 +28,7 @@
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_weight="1"
-                android:layout_marginEnd="2dp"
-                android:layout_marginRight="2dp"
-                android:background="@color/orange"
+                android:background="@drawable/frame_shape_3"
                 android:layout_gravity="center"
                 android:fontFamily="serif"
                 android:text="@string/main_info"
@@ -42,7 +41,7 @@
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_weight="1"
-            android:background="@color/orange"
+            android:background="@drawable/frame_shape_2"
             android:text="@string/accept_raw"
             android:fontFamily="serif"
             android:textColor="@color/white"/>
@@ -72,8 +71,8 @@
                     android:id="@+id/addNewRaw_linear_two"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/shape_with_corner"
                     android:orientation="horizontal"
@@ -84,38 +83,36 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:fontFamily="serif"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/supplier_no"
-                        android:fontFamily="serif"
                         android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/addNewRaw_search_supplier"
                         android:layout_width="wrap_content"
                         android:layout_height="45dp"
-                        android:layout_weight="10"
                         android:layout_marginStart="5dp"
                         android:layout_marginLeft="5dp"
                         android:layout_marginEnd="5dp"
                         android:layout_marginRight="5dp"
-                        android:hint="@string/search"
+                        android:layout_weight="10"
                         android:gravity="start|left"
-                        />
+                        android:hint="@string/search" />
 
                     <TextView
                         android:id="@+id/addNewRaw_add_supplier"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_weight="0"
+                        android:background="@drawable/frame_shape"
+                        android:drawableStart="@drawable/ic_person_add_24dp"
+                        android:drawableLeft="@drawable/ic_person_add_24dp"
                         android:paddingStart="5dp"
                         android:paddingLeft="5dp"
                         android:paddingEnd="5dp"
-                        android:paddingRight="5dp"
-                        android:drawableStart="@drawable/ic_person_add_24dp"
-                        android:drawableLeft="@drawable/ic_person_add_24dp"
-                        android:background="@drawable/frame_shape"
-                       />
+                        android:paddingRight="5dp" />
 
                 </LinearLayout>
 
@@ -164,8 +161,8 @@
                     android:id="@+id/addNewRaw_linear_one"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/shape_with_corner"
                     android:orientation="horizontal"
@@ -176,9 +173,9 @@
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textSize="18sp"
+                        android:fontFamily="serif"
                         android:text="@string/thickness"
-                        android:fontFamily="serif"/>
+                        android:textSize="18sp" />
 
                     <EditText
                         android:id="@+id/addNewRaw_thickness"
@@ -187,9 +184,10 @@
                         android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_weight="2"
-                        android:nextFocusDown="@id/addNewRaw_width"
                         android:ems="10"
-                        android:inputType="numberDecimal" />
+                        android:inputType="numberDecimal"
+                        android:nextFocusDown="@id/addNewRaw_width" />
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -239,9 +237,9 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
                     android:layout_weight="1"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
                     android:background="@drawable/shape_with_corner"
                     android:orientation="horizontal"
                     android:padding="5dp">
@@ -250,9 +248,9 @@
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textSize="18sp"
+                        android:fontFamily="serif"
                         android:text="@string/width"
-                        android:fontFamily="serif"/>
+                        android:textSize="18sp" />
 
                     <EditText
                         android:id="@+id/addNewRaw_width"
@@ -261,9 +259,9 @@
                         android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_weight="2"
-                        android:nextFocusDown="@id/addNewRaw_length"
                         android:ems="10"
-                        android:inputType="numberDecimal" />
+                        android:inputType="numberDecimal"
+                        android:nextFocusDown="@id/addNewRaw_length" />
 
                 </LinearLayout>
 
@@ -309,9 +307,9 @@
                     android:id="@+id/addNewRaw_linear_three"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
                     android:layout_weight="1"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
                     android:background="@drawable/shape_with_corner"
                     android:orientation="horizontal"
                     android:padding="5dp">
@@ -321,9 +319,9 @@
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textSize="18sp"
+                        android:fontFamily="serif"
                         android:text="@string/length"
-                        android:fontFamily="serif"/>
+                        android:textSize="18sp" />
 
                     <EditText
                         android:id="@+id/addNewRaw_length"
@@ -446,50 +444,12 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <EditText
-                        android:id="@+id/order_no"
+                        android:id="@+id/addNewRaw_truckNo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
                         android:ems="10"
-                        android:nextFocusDown="@id/container_no"
-                        android:singleLine="true" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/addToInventory_linear_three"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginRight="30dp"
-                    android:background="@drawable/shape_with_corner"
-                    android:orientation="horizontal"
-                    android:padding="5dp"
-                    app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_two">
-
-                    <TextView
-                        android:layout_width="230dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_weight="1"
-                        android:fontFamily="serif"
-                        android:gravity="start"
-                        android:text="@string/date_of_acceptance"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <EditText
-                        android:id="@+id/container_no"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:ems="10"
-                        android:nextFocusDown="@id/date_of_load"
+                        android:nextFocusDown="@id/addNewRaw_acceptor"
                         android:singleLine="true" />
 
                 </LinearLayout>
@@ -522,48 +482,12 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <EditText
-                        android:id="@+id/k"
+                        android:id="@+id/addNewRaw_acceptor"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
                         android:ems="10"
-                        android:inputType="text" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginRight="30dp"
-                    android:background="@drawable/shape_with_corner"
-                    android:orientation="horizontal"
-                    android:padding="5dp"
-                    app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_four"
-                    tools:layout_editor_absoluteX="50dp">
-
-                    <TextView
-                        android:layout_width="230dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_weight="1"
-                        android:fontFamily="serif"
-                        android:gravity="start"
-                        android:text="@string/location_of_acceptance"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <EditText
-                        android:id="@+id/destination"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:ems="10"
+                        android:nextFocusDown="@id/addNewRaw_ttn_no"
                         android:inputType="text" />
 
                 </LinearLayout>
@@ -597,51 +521,13 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <EditText
-                        android:id="@+id/name"
+                        android:id="@+id/addNewRaw_ttn_no"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
                         android:ems="10"
                         android:inputType="text"
-                        android:nextFocusDown="@id/destination"
-                        android:singleLine="true" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginRight="30dp"
-                    android:background="@drawable/shape_with_corner"
-                    android:orientation="horizontal"
-                    android:padding="5dp"
-                    app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_three">
-
-                    <TextView
-                        android:layout_width="230dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_weight="1"
-                        android:fontFamily="serif"
-                        android:gravity="start"
-                        android:text="@string/rejected_pieces_on_truck"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <EditText
-                        android:id="@+id/addNewRaw_acceptRow_sum_rejected"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:ems="10"
-                        android:inputType="text"
-                        android:nextFocusDown="@id/destination"
+                        android:nextFocusDown="@id/addNewRaw_total_bundles"
                         android:singleLine="true" />
 
                 </LinearLayout>
@@ -673,13 +559,126 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <EditText
-                        android:id="@+id/addNewRaw_acceptRow_net"
+                        android:id="@+id/addNewRaw_total_bundles"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
                         android:ems="10"
                         android:inputType="text"
-                        android:nextFocusDown="@id/destination"
+                        android:nextFocusDown="@id/addNewRaw_acceptance_date"
+                        android:singleLine="true" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/addToInventory_linear_three"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginRight="30dp"
+                    android:background="@drawable/shape_with_corner"
+                    android:orientation="horizontal"
+                    android:padding="5dp"
+                    app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_two">
+
+                    <TextView
+                        android:layout_width="230dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:fontFamily="serif"
+                        android:gravity="start"
+                        android:text="@string/date_of_acceptance"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <EditText
+                        android:id="@+id/addNewRaw_acceptance_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:ems="10"
+                        android:nextFocusDown="@id/addNewRaw_acceptance_location"
+                        android:singleLine="true" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginRight="30dp"
+                    android:background="@drawable/shape_with_corner"
+                    android:orientation="horizontal"
+                    android:padding="5dp"
+                    app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_four"
+                    tools:layout_editor_absoluteX="50dp">
+
+                    <TextView
+                        android:layout_width="230dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:fontFamily="serif"
+                        android:gravity="start"
+                        android:text="@string/location_of_acceptance"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <EditText
+                        android:id="@+id/addNewRaw_acceptance_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:ems="10"
+                        android:nextFocusDown="@id/addNewRaw_total_rejected"
+                        android:inputType="text" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginRight="30dp"
+                    android:background="@drawable/shape_with_corner"
+                    android:orientation="horizontal"
+                    android:padding="5dp"
+                    app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_three">
+
+                    <TextView
+                        android:layout_width="230dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:fontFamily="serif"
+                        android:gravity="start"
+                        android:text="@string/rejected_pieces_on_truck"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <EditText
+                        android:id="@+id/addNewRaw_total_rejected"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:ems="10"
+                        android:inputType="text"
                         android:singleLine="true" />
 
                 </LinearLayout>
@@ -739,11 +738,11 @@
 
             </ScrollView>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="5dp"
-                android:layout_marginTop="2dp"
-                android:background="@color/orange" />
+<!--            <View-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="5dp"-->
+<!--                android:layout_marginTop="2dp"-->
+<!--                android:background="@color/orange" />-->
         </LinearLayout>
 
     </LinearLayout>
