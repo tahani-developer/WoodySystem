@@ -558,31 +558,17 @@
 
         </TableRow>
 
-        <ScrollView
-            android:id="@+id/inventory_report_linear5"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginBottom="10dp"
-            app:layout_constraintBottom_toTopOf="@+id/inventory_report_linear6"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/inventory_report_linear4"
-            app:layout_constraintVertical_bias="0.0">
-
-            <TableLayout
-                android:id="@+id/inventory_report_table"
+            <ListView
+                android:id="@+id/list"
                 android:layout_width="match_parent"
                 android:layout_height="280dp"
-                android:layout_marginStart="3dp"
-                android:layout_marginLeft="3dp"
-                android:layout_marginTop="1dp"
-                android:layout_marginEnd="3dp"
-                android:layout_marginRight="3dp">
+                app:layout_constraintBottom_toTopOf="@+id/inventory_report_linear6"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/inventory_report_linear4"
+                app:layout_constraintVertical_bias="0.0"/>
 
-            </TableLayout>
-
-        </ScrollView>
 
         <View
             android:id="@+id/inventory_report_linear6"
