@@ -369,142 +369,192 @@
         <TableRow
             android:id="@+id/inventory_report_linear4"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:background="@color/orange"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/inventory_report_linear3">
 
             <CheckBox
                 android:id="@+id/checkBoxPrint"
+                android:background="@color/orange"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:layout_marginRight="5dp" />
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginEnd="1dp"
+                android:layout_marginRight="1dp" />
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
+                android:layout_height="match_parent"
+                android:background="@color/orange"
                 android:fontFamily="serif"
                 android:text="@string/serial"
                 android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:layout_marginEnd="1dp"
+                android:layout_marginRight="1dp" />
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="3"
+                android:background="@color/orange"
                 android:fontFamily="serif"
                 android:text="@string/bundle_no"
                 android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:layout_marginEnd="1dp"
+                android:layout_marginRight="1dp" />
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:background="@color/orange"
+                android:orientation="horizontal"
+                android:layout_marginEnd="1dp"
+                android:layout_marginRight="1dp">
+
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:fontFamily="serif"
                     android:text="T"
                     android:textColor="@color/white"
                     android:textSize="18sp" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1">
+                <TextView
+                    android:id="@+id/inventory_report_thick_order"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginBottom="2dp"
+                    android:background="@drawable/asc"
+                    />
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginEnd="2dp"
-                        android:layout_marginRight="2dp"
-                        android:background="@drawable/asc"
-                        />
+            </LinearLayout>
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:layout_marginStart="2dp"
-                        android:layout_marginLeft="2dp"
-                        android:layout_marginRight="5dp"
-                        android:background="@drawable/des"/>
-                </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/orange"
+                android:orientation="horizontal"
+                android:layout_marginEnd="1dp"
+                android:layout_marginRight="1dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="serif"
+                    android:text="W"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/inventory_report_width_order"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginBottom="2dp"
+                    android:background="@drawable/asc"
+                    />
 
 
             </LinearLayout>
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.8"
-                android:fontFamily="serif"
-                android:text="@string/w"
-                android:textColor="@color/white"
-                android:textSize="18sp" />
 
-            <TextView
+            <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.8"
-                android:fontFamily="serif"
-                android:text="@string/l"
-                android:textColor="@color/white"
-                android:textSize="18sp" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@color/orange"
+                android:orientation="horizontal"
+                android:layout_marginEnd="1dp"
+                android:layout_marginRight="1dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="serif"
+                    android:text="L"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/inventory_report_length_order"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginBottom="2dp"
+                    android:background="@drawable/asc"
+                    />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/orange"
                 android:fontFamily="serif"
                 android:text="@string/no_pieces"
                 android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:layout_marginEnd="1dp"
+                android:layout_marginRight="1dp" />
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="0.9"
+                android:background="@color/orange"
                 android:fontFamily="serif"
                 android:text="@string/grade"
                 android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:layout_marginEnd="1dp"
+                android:layout_marginRight="1dp"/>
+
             <TextView
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1.2"
+                android:background="@color/orange"
                 android:fontFamily="serif"
                 android:text="@string/loc"
                 android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:layout_marginEnd="1dp"
+                android:layout_marginRight="1dp" />
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@color/orange"
                 android:fontFamily="serif"
                 android:text="@string/area"
                 android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:layout_marginEnd="1dp"
+                android:layout_marginRight="1dp" />
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@color/orange"
                 android:fontFamily="serif"
                 android:text="@string/p_list"
                 android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:layout_marginEnd="1dp"
+                android:layout_marginRight="1dp"/>
 
         </TableRow>
 

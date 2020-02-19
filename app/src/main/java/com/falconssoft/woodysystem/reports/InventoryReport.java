@@ -125,7 +125,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private JSONArray jsonArrayBundles = new JSONArray();
     private WoodPresenter woodPresenter;
     private Animation animation;
-    private TextView textView, noOfBundles, noOfPieces, cubicField, deleteAll, dateFrom, dateTo;
+    private TextView textView, noOfBundles, noOfPieces, cubicField, deleteAll, dateFrom, dateTo, thicknessOrder, widthOrder, lengthOrder;
     private Spinner location, area, ordered, pList, grade;
     private ArrayAdapter<String> locationAdapter;
     private ArrayAdapter<String> areaAdapter;
@@ -144,6 +144,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private Button printAll, delete;
     private TableRow tableRowToDelete = null;
     private EditText fromLength, toLength, fromWidth, toWidth, fromThickness, toThickness;
+    private boolean isThicnessAsc = true, isWidthAsc = true, isLengthAsc = true;
     private String fromLengthNo = "", toLengthNo = "", fromWidthhNo = "", toWidthNo = "", fromThicknessNo = "", toThicknessNo = "";
 //    private String f1 = "", f2 = "", f3 = "";
 
@@ -182,6 +183,9 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         toWidth = findViewById(R.id.inventory_report_toWidth);
         fromThickness = findViewById(R.id.inventory_report_fromThick);
         toThickness = findViewById(R.id.inventory_report_toThick);
+        thicknessOrder = findViewById(R.id.inventory_report_thick_order);
+        widthOrder = findViewById(R.id.inventory_report_width_order);
+        lengthOrder = findViewById(R.id.inventory_report_length_order);
 
         fromLength.addTextChangedListener(new watchTextChange(fromLength));
         toLength.addTextChangedListener(new watchTextChange(toLength));
@@ -189,11 +193,9 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         toWidth.addTextChangedListener(new watchTextChange(toWidth));
         fromThickness.addTextChangedListener(new watchTextChange(fromThickness));
         toThickness.addTextChangedListener(new watchTextChange(toThickness));
-
 //        searchViewTh = (SearchView) findViewById(R.id.mSearchTh);
 //        searchViewW = (SearchView) findViewById(R.id.mSearchW);
 //        searchViewL = (SearchView) findViewById(R.id.mSearchL);
-
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         dateFrom.setText("1/12/2019");
         dateTo.setText(df.format(date));
@@ -207,6 +209,9 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         deleteAll.setOnClickListener(this);
         dateFrom.setOnClickListener(this);
         dateTo.setOnClickListener(this);
+        thicknessOrder.setOnClickListener(this);
+        widthOrder.setOnClickListener(this);
+        lengthOrder.setOnClickListener(this);
         location.setOnItemSelectedListener(this);
         area.setOnItemSelectedListener(this);
 //        ordered.setOnItemSelectedListener(this);
@@ -612,7 +617,6 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         return myFile;
 
     }
-
 
     public void filters() {
         bundleInfoServer.clear();
@@ -1055,6 +1059,33 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     public void onClick(View v) {
         int flag = 0;
         switch (v.getId()) {
+            case R.id.inventory_report_thick_order:
+                if (isThicnessAsc){
+                    isThicnessAsc = false;
+                    thicknessOrder.setBackgroundResource(R.drawable.des);
+                }else {
+                    isThicnessAsc = true;
+                    thicknessOrder.setBackgroundResource(R.drawable.asc);
+                }
+                break;
+            case R.id.inventory_report_width_order:
+                if (isWidthAsc){
+                    isWidthAsc = false;
+                    widthOrder.setBackgroundResource(R.drawable.des);
+                }else {
+                    isWidthAsc = true;
+                    widthOrder.setBackgroundResource(R.drawable.asc);
+                }
+                break;
+            case R.id.inventory_report_length_order:
+                if (isLengthAsc){
+                    isLengthAsc = false;
+                    lengthOrder.setBackgroundResource(R.drawable.des);
+                }else {
+                    isLengthAsc = true;
+                    lengthOrder.setBackgroundResource(R.drawable.asc);
+                }
+                break;
             case R.id.inventory_report_from:
                 flag = 0;
                 new DatePickerDialog(InventoryReport.this, openDatePickerDialog(flag), calendar
@@ -1068,7 +1099,6 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                         calendar.get(Calendar.DAY_OF_MONTH)).show();
                 break;
             case R.id.inventory_report_delete:
-
                 Dialog passwordDialog = new Dialog(this);
                 passwordDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 passwordDialog.setContentView(R.layout.password_dialog);
