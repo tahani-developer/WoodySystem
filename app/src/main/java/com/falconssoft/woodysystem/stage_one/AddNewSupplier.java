@@ -41,11 +41,11 @@ import java.util.List;
 public class AddNewSupplier extends AppCompatActivity {
 
     private DatabaseHandler DHandler;
-    TableLayout tableLayout;
-    EditText supName;
-    TextView add;
+    private TableLayout tableLayout;
+    private EditText supName;
+    private TextView add;
     private List<SupplierInfo> suppliers;
-    JSONArray jsonArray;
+    private JSONArray jsonArray;
 
 
     @Override
@@ -144,7 +144,7 @@ public class AddNewSupplier extends AppCompatActivity {
             URLConnection connection = null;
             BufferedReader reader = null;
 
-            try {
+            try {//          http://10.0.0.214/woody/import.php?FLAG=4
                 URL url = new URL("http://" + DHandler.getSettings().getIpAddress() + "/import.php?FLAG=4");
 
                 URLConnection conn = url.openConnection();

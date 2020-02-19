@@ -2,8 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:id="@+id/supplier_row_linear"
     >
 
     <TextView
@@ -12,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="1dp"
         android:layout_weight="1"
-        android:background="@color/light_orange_3"
+        android:background="@color/light_orange"
         android:hint="@string/supplier_no"
         android:padding="5dp"
         android:textColor="#474444"
@@ -26,7 +27,7 @@
         android:layout_margin="1dp"
         android:layout_marginLeft="2dp"
         android:layout_weight="4"
-        android:background="@color/light_orange_3"
+        android:background="@color/light_orange"
         android:hint="@string/supplier_name"
         android:padding="5dp"
         android:textColor="#474444"

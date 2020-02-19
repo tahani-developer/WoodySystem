@@ -28,6 +28,7 @@
             android:layout_marginTop="@dimen/stage1_p_margin2_top"
             android:background="@drawable/border_background"
             android:gravity="center"
+            android:visibility="gone"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.318"
@@ -61,7 +62,7 @@
             android:layout_marginStart="@dimen/stage1_p_margin_start"
             android:layout_marginLeft="@dimen/stage1_p_margin_start"
             android:layout_marginTop="@dimen/stage1_p_margin_top"
-            android:background="@drawable/frame_shape"
+            android:background="@drawable/border_background"
             android:gravity="center"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
@@ -85,7 +86,7 @@
                 android:gravity="center_horizontal"
                 android:lineSpacingExtra="15dp"
                 android:text="@string/enter_inventory"
-                android:textColor="@color/white"
+                android:textColor="@color/orange"
                 android:textSize="20sp" />
         </LinearLayout>
 

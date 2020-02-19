@@ -86,6 +86,7 @@
                 android:drawablePadding="10dp"
                 android:gravity="start"
                 android:text="@string/username"
+                android:fontFamily="serif"
                 android:textColor="@color/orange"
                 android:textSize="15sp"
                 tools:layout_editor_absoluteX="99dp"
@@ -119,6 +120,7 @@
                 android:drawablePadding="10dp"
                 android:gravity="start"
                 android:text="@string/password"
+                android:fontFamily="serif"
                 android:textColor="@color/orange"
                 android:textSize="15sp" />
 

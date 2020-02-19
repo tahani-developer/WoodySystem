@@ -39,8 +39,8 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
     private RequestQueue requestQueue;
     private DatabaseHandler databaseHandler;
 
-    private StringRequest jsonObjectRequest;
-    private String urlImport;
+//    private StringRequest jsonObjectRequest;
+//    private String urlImport;
 
     private StringRequest usersJsonObjectRequest;
     private String urlUsers;
@@ -51,6 +51,9 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
 
     private StringRequest packingListJsonObjectRequest;
     private String urlPackingList;
+
+    private StringRequest suppliersJsonObjectRequest;
+    private String urlGetSuppliers;
 
     private LoginActivity loginActivity;
     private InventoryReport inventoryReport;//= new InventoryReport();
@@ -71,19 +74,19 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
 
     //---------------------------------------- Get Serial No -----------------------------------------
 
-    void getImportData() {
+    public void getsuppliersInfo() {
         settings = databaseHandler.getSettings();
-        urlImport = "http://" + settings.getIpAddress() + "/import.php?FLAG=1";//http://5.189.130.98:8085/import.php?FLAG=1
+        urlGetSuppliers = "http://" + settings.getIpAddress() + "/import.php?FLAG=1";//http://5.189.130.98:8085/import.php?FLAG=1
 //        Log.e("presenter:ipImport ", "" + SettingsFile.ipAddress);
 //        Log.e("presenter:urlImport ", "" + urlImport);
-        jsonObjectRequest = new StringRequest(Request.Method.GET, urlImport, this, this);
-        requestQueue.add(jsonObjectRequest);
+        suppliersJsonObjectRequest = new StringRequest(Request.Method.GET, urlGetSuppliers, this, this);
+        requestQueue.add(suppliersJsonObjectRequest);
     }
 
     @Override
     public void onErrorResponse(VolleyError error) {
         Log.e("presenter/import/err ", "" + error);
-        setSerialNo("");
+//        setSerialNo("");
 //        SettingsFile.serialNumber = "";
     }
 
@@ -105,7 +108,6 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
 //                    presenter.getImportData();
 //                    break;
 //            }
-            if (response.contains("MAX_SERIAL")) {
                 if (response.indexOf("{") == 3)
                     response = new String(response.getBytes("ISO-8859-1"), "UTF-8");
 //                response = response.substring(response.indexOf("{"));
@@ -115,47 +117,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                 JSONArray object2 = object.getJSONArray("Bundles");
                 Log.e("presenter2: import ", "" + object2);
 
-                for (int i = 0; i < object2.length(); i++) {
-                    String store = object2.getJSONObject(i).getString("LOCATION");
-                    if (store.equals(settings.getStore())) {
-                        int intSerial = (Integer.parseInt(object2.getJSONObject(i).getString("MAX_SERIAL")) + 1);
-//                        SettingsFile.serialNumber = ("" + intSerial);
-                        setSerialNo("" + intSerial);
-                        Log.e("presenter3: import ", "" + object2.getJSONObject(i).getString("MAX_SERIAL"));
-                        break;
-                    } else
-                        setSerialNo("1");
-//                        SettingsFile.serialNumber = "1";
-                }
-//            String store = object2.getString("LOCATION");
-//            SettingsFile.serialNumber = "";
-//            switch (settings.getStore()){
-//                case "Amman":
-//                    int intSerial = (Integer.parseInt(object2.getString("MAX_SERIAL")) + 1);
-//                    SettingsFile.serialNumber = ("" + intSerial);
-//                    break;
-//                case "Kalinovka":
-//                    int intSerial = (Integer.parseInt(object2.getString("MAX_SERIAL")) + 1);
-//                    SettingsFile.serialNumber = ("" + intSerial);
-//                    break;
-//                case "Rudniya Store":
-//                    int intSerial = (Integer.parseInt(object2.getString("MAX_SERIAL")) + 1);
-//                    SettingsFile.serialNumber = ("" + intSerial);
-//                    break;
-//                case "Rudniya Sawmill":
-//                    int intSerial = (Integer.parseInt(object2.getString("MAX_SERIAL")) + 1);
-//                    SettingsFile.serialNumber = ("" + intSerial);
-//                    break;
-//            }
-
-
-//            String stringSerial = object2.getString("MAX_SERIAL");
-//            int intSerial = (Integer.parseInt(object2.getString("MAX_SERIAL")) + 1);
-//            SettingsFile.serialNumber = ("" + intSerial);
-//            Log.e("presenter3: import ", "" + object2.getString("MAX_SERIAL"));
-                Log.e("presenter4: import ", "" + getSerialNo());//SettingsFile.serialNumber
-            } else
-                setSerialNo("1");
+                Log.e("presenter4: import ", "" + response.length());//SettingsFile.serialNumber
 //                SettingsFile.serialNumber = "1";
         } catch (JSONException e) {
             e.printStackTrace();
@@ -165,14 +127,6 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
             e.printStackTrace();
         }
 
-    }
-
-    public String getSerialNo() {
-        return serialNo;
-    }
-
-    public void setSerialNo(String value) {
-        serialNo = value;
     }
 
     //------------------------------------------- Get Users ----------------------------------------
