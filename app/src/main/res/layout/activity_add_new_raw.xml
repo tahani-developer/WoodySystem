@@ -419,7 +419,7 @@
                 <LinearLayout
                     android:id="@+id/addToInventory_linear_two"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="30dp"
                     android:layout_marginLeft="30dp"
                     android:layout_marginEnd="30dp"
@@ -456,7 +456,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="30dp"
                     android:layout_marginLeft="30dp"
                     android:layout_marginTop="5dp"
@@ -495,7 +495,7 @@
                 <LinearLayout
                     android:id="@+id/addToInventory_linear_four"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="30dp"
                     android:layout_marginLeft="30dp"
                     android:layout_marginTop="5dp"
@@ -534,7 +534,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="30dp"
                     android:layout_marginLeft="30dp"
                     android:layout_marginTop="5dp"
@@ -573,7 +573,7 @@
                 <LinearLayout
                     android:id="@+id/addToInventory_linear_three"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="30dp"
                     android:layout_marginLeft="30dp"
                     android:layout_marginTop="5dp"
@@ -610,7 +610,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="30dp"
                     android:layout_marginLeft="30dp"
                     android:layout_marginTop="5dp"
@@ -648,7 +648,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="30dp"
                     android:layout_marginLeft="30dp"
                     android:layout_marginTop="5dp"
