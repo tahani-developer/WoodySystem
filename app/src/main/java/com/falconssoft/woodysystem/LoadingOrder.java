@@ -299,9 +299,7 @@ public class LoadingOrder extends AppCompatActivity {
                         JSONObject innerObject = parentArrayOrders.getJSONObject(i);
 
                         if (innerObject.getInt("ORDERED") == 0
-                                && innerObject.getString("LOCATION").equals(DHandler.getSettings().getStore())
-                                && ((innerObject.getString("BACKING_LIST").equals(""))
-                                || (innerObject.getString("BACKING_LIST").equals("null")))) {
+                                && innerObject.getString("LOCATION").equals(DHandler.getSettings().getStore())) {
 
                                 BundleInfo bundleInfo = new BundleInfo();
                                 bundleInfo.setThickness(innerObject.getDouble("THICKNESS"));

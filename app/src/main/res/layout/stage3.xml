@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,11 +7,11 @@
     android:background="@drawable/w10"
     tools:context=".Stage3">
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:background="@color/alpha_black_dark"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -21,20 +21,21 @@
 
         <LinearLayout
             android:id="@+id/stage3_enter_inventory"
-            android:layout_width="300dp"
-            android:layout_height="200dp"
-            android:layout_marginStart="150dp"
-            android:layout_marginLeft="150dp"
-            android:layout_marginTop="100dp"
+            android:layout_width="@dimen/stage3_views"
+            android:layout_height="@dimen/stage3_views2"
+            android:layout_marginTop="@dimen/stage3_p_margin_top"
             android:background="@drawable/frame_shape"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:layout_width="100dp"
+                android:layout_width="120dp"
                 android:layout_height="100dp"
                 android:layout_marginTop="5dp"
-                android:background="@drawable/cabin"
+                android:background="@drawable/wbundlereal"
                 android:scaleType="fitCenter" />
 
             <TextView
@@ -52,20 +53,21 @@
 
         <LinearLayout
             android:id="@+id/stage3_loading_order"
-            android:layout_width="300dp"
-            android:layout_height="200dp"
-            android:layout_marginStart="150dp"
-            android:layout_marginLeft="150dp"
-            android:layout_marginTop="50dp"
+            android:layout_width="@dimen/stage3_views"
+            android:layout_height="@dimen/stage3_views2"
+            android:layout_marginTop="@dimen/stage3_p_margin2_top"
             android:background="@drawable/border_background"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/stage3_enter_inventory">
 
             <ImageView
-                android:layout_width="120dp"
-                android:layout_height="120dp"
+                android:layout_width="180dp"
+                android:layout_height="110dp"
                 android:layout_marginTop="5dp"
-                android:background="@drawable/woortruck"
+                android:background="@drawable/container3"
                 android:scaleType="fitCenter" />
 
             <TextView
@@ -83,20 +85,21 @@
 
         <LinearLayout
             android:id="@+id/stage3_reports"
-            android:layout_width="300dp"
-            android:layout_height="200dp"
-            android:layout_marginStart="150dp"
-            android:layout_marginLeft="150dp"
-            android:layout_marginTop="50dp"
+            android:layout_width="@dimen/stage3_views"
+            android:layout_height="@dimen/stage3_views2"
+            android:layout_marginTop="@dimen/stage3_p_margin2_top"
             android:background="@drawable/frame_shape"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/stage3_loading_order">
 
             <ImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/report1"
+                android:layout_width="150dp"
+                android:layout_height="130dp"
+                android:layout_marginTop="2dp"
+                android:background="@drawable/real_report"
                 android:scaleType="fitCenter" />
 
             <TextView
@@ -112,7 +115,7 @@
                 android:textSize="25sp" />
         </LinearLayout>
 
-    </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 
 
-</android.support.constraint.ConstraintLayout>
+</FrameLayout>

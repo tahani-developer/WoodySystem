@@ -1,9 +1,10 @@
 <resources>
     <string name="app_name">Wood System</string>
+    <string name="version">Version 15.0</string>
 
-    <string name="stage1">Stage 1</string>
+    <string name="stage1">Acceptance &amp; Quality Control</string>
     <string name="stage2">Stage 2</string>
-    <string name="stage3">Stage 3</string>
+    <string name="stage3">Inventory &amp; Loading</string>
 
     <string name="enter_inventory">Enter Inventory</string>
     <string name="loading_order">Loading Order</string>
@@ -98,6 +99,7 @@
     <string name="rejection_list">Rejection List</string>
     <string name="new_supplier">New Supplier</string>
     <string name="find_supplier">Find Supplier</string>
+    <string name="rejected_pieces_on_truck">Rejected Pieces on Truck</string>
 
     <string name="generate_Barcode">Generate Barcode</string>
     <string name="ordered">Ordered</string>
@@ -107,6 +109,36 @@
     <string name="yes">Yes</string>
     <string name="cancel">Cancel</string>
     <string name="action">Choose Action</string>
-    <string name="show">Show</string>
+    <string name="apply">Apply</string>
+
+    <string name="search_width">Search Width</string>
+    <string name="search_length">Search Length</string>
+    <string name="search_thic">Search Thick</string>
+
+    <string name="fresh">Fresh</string>
+    <string name="bs">BS</string>
+    <string name="reject">Reject</string>
+
+    <string name="zone_1">Zone 1</string>
+    <string name="zone_2">Zone 2</string>
+    <string name="zone_3">Zone 3</string>
+    <string name="zone_4">Zone 4</string>
+    <string name="zone_5">Zone 5</string>
+
+    <string name="ukranian_wood">Ukrainian Wood</string>
+    <string name="bundle_origin">Bundle Origin</string>
+    <string name="finland_wood">Finland Wood</string>
+    <string name="decore_wood">Decore Wood</string>
+    <string name="german_wood">German Wood</string>
+    <string name="romanian_wood">Romanian Wood</string>
+    <string name="russian_wood">Russian Wood</string>
+    <string name="canadian_wood">Canadian Wood</string>
+    <string name="swedian_wood">Swedian Wood</string>
+    <string name="latvian_wood">Latvian Wood</string>
+
+    <string name="rejected_pieces"># Rejected</string>
+    <string name="main_info">Main Info</string>
+    <string name="net">Net Bundles</string>
+
 
 </resources>

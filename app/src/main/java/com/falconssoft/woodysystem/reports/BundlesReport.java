@@ -261,28 +261,17 @@ public class BundlesReport extends AppCompatActivity {
         generalSettings = new Settings();
         generalSettings = databaseHandler.getSettings();
 
-//        TableRow tableRowBasic = new TableRow(this);
-//        tableRowBasic = fillTableRows(tableRowBasic
-//                , "Bundle#"
-//                , "Length"
-//                , "Width"
-//                , "Thick"
-//                , "Grade"
-//                , "#Pieces"
-//                , "Location"
-//                , "Area");
-//        bundlesTable.addView(tableRowBasic);
         TableRow tableRow;
         for (int m = 0; m < bundleInfos.size(); m++) {
             if (bundleInfos.get(m).getIsPrinted() != 1) {
                 tableRow = new TableRow(this);
                 tableRow = fillTableRows(tableRow
                         , bundleInfos.get(m).getBundleNo()
-                        , "" + bundleInfos.get(m).getLength()
-                        , "" + bundleInfos.get(m).getWidth()
-                        , "" + bundleInfos.get(m).getThickness()
+                        , "" + (int) bundleInfos.get(m).getLength()
+                        , "" + (int) bundleInfos.get(m).getWidth()
+                        , "" + (int) bundleInfos.get(m).getThickness()
                         , bundleInfos.get(m).getGrade()
-                        , "" + bundleInfos.get(m).getNoOfPieces()
+                        , "" + (int) bundleInfos.get(m).getNoOfPieces()
                         , bundleInfos.get(m).getLocation()
                         , bundleInfos.get(m).getArea()
                         , R.color.light_orange
@@ -379,8 +368,9 @@ public class BundlesReport extends AppCompatActivity {
                     textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
                     textViewParam.setMargins(1, 5, 1, 1);
                     textView.setPadding(1, 6, 1, 7);
+                    textView.setTextSize(15);
                     textView.setLayoutParams(textViewParam);
-                    textView.setText(length);
+                    textView.setText(thic);
                     break;
                 case 3:
                     textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
@@ -393,23 +383,22 @@ public class BundlesReport extends AppCompatActivity {
                     textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
                     textViewParam.setMargins(1, 5, 1, 1);
                     textView.setPadding(1, 6, 1, 7);
-                    textView.setTextSize(15);
                     textView.setLayoutParams(textViewParam);
-                    textView.setText(thic);
+                    textView.setText(length);
                     break;
                 case 5:
                     textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
                     textViewParam.setMargins(1, 5, 1, 1);
                     textView.setPadding(1, 6, 1, 7);
                     textView.setLayoutParams(textViewParam);
-                    textView.setText(grade);
+                    textView.setText(noOfPieces);
                     break;
                 case 6:
-                    textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+                    textViewParam = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
                     textViewParam.setMargins(1, 5, 1, 1);
                     textView.setPadding(1, 6, 1, 7);
                     textView.setLayoutParams(textViewParam);
-                    textView.setText(noOfPieces);
+                    textView.setText(grade);
                     break;
                 case 7:
                     textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1.5f);
@@ -448,23 +437,6 @@ public class BundlesReport extends AppCompatActivity {
         }
         return tableRow;
     }
-
-//    public void setSlideAnimation() {
-//        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
-//    }
-//
-//    public void onBackPressed() {
-//        super.onBackPressed();
-//        Intent intent = new Intent(BundlesReport.this, ReportsActivity.class);
-//        startActivity(intent);
-//        finish();
-//    }
-//
-//    @Override
-//    public void finish() {
-//        super.finish();
-//        setSlideAnimation();
-//    }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void PrintAll(File file) {
@@ -920,7 +892,8 @@ public class BundlesReport extends AppCompatActivity {
 
     public void onBackPressed() {
         super.onBackPressed();
-        finish();}
+        finish();
+    }
 }
 
 

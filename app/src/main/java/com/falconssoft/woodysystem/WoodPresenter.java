@@ -39,8 +39,8 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
     private RequestQueue requestQueue;
     private DatabaseHandler databaseHandler;
 
-    private StringRequest jsonObjectRequest;
-    private String urlImport;
+//    private StringRequest jsonObjectRequest;
+//    private String urlImport;
 
     private StringRequest usersJsonObjectRequest;
     private String urlUsers;
@@ -51,6 +51,9 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
 
     private StringRequest packingListJsonObjectRequest;
     private String urlPackingList;
+
+    private StringRequest suppliersJsonObjectRequest;
+    private String urlGetSuppliers;
 
     private LoginActivity loginActivity;
     private InventoryReport inventoryReport;//= new InventoryReport();
@@ -71,19 +74,19 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
 
     //---------------------------------------- Get Serial No -----------------------------------------
 
-    void getImportData() {
+    public void getsuppliersInfo() {
         settings = databaseHandler.getSettings();
-        urlImport = "http://" + settings.getIpAddress() + "/import.php?FLAG=1";//http://5.189.130.98:8085/import.php?FLAG=1
+        urlGetSuppliers = "http://" + settings.getIpAddress() + "/import.php?FLAG=1";//http://5.189.130.98:8085/import.php?FLAG=1
 //        Log.e("presenter:ipImport ", "" + SettingsFile.ipAddress);
 //        Log.e("presenter:urlImport ", "" + urlImport);
-        jsonObjectRequest = new StringRequest(Request.Method.GET, urlImport, this, this);
-        requestQueue.add(jsonObjectRequest);
+        suppliersJsonObjectRequest = new StringRequest(Request.Method.GET, urlGetSuppliers, this, this);
+        requestQueue.add(suppliersJsonObjectRequest);
     }
 
     @Override
     public void onErrorResponse(VolleyError error) {
         Log.e("presenter/import/err ", "" + error);
-        setSerialNo("");
+//        setSerialNo("");
 //        SettingsFile.serialNumber = "";
     }
 
@@ -105,7 +108,6 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
 //                    presenter.getImportData();
 //                    break;
 //            }
-            if (response.contains("MAX_SERIAL")) {
                 if (response.indexOf("{") == 3)
                     response = new String(response.getBytes("ISO-8859-1"), "UTF-8");
 //                response = response.substring(response.indexOf("{"));
@@ -115,47 +117,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                 JSONArray object2 = object.getJSONArray("Bundles");
                 Log.e("presenter2: import ", "" + object2);
 
-                for (int i = 0; i < object2.length(); i++) {
-                    String store = object2.getJSONObject(i).getString("LOCATION");
-                    if (store.equals(settings.getStore())) {
-                        int intSerial = (Integer.parseInt(object2.getJSONObject(i).getString("MAX_SERIAL")) + 1);
-//                        SettingsFile.serialNumber = ("" + intSerial);
-                        setSerialNo("" + intSerial);
-                        Log.e("presenter3: import ", "" + object2.getJSONObject(i).getString("MAX_SERIAL"));
-                        break;
-                    } else
-                        setSerialNo("1");
-//                        SettingsFile.serialNumber = "1";
-                }
-//            String store = object2.getString("LOCATION");
-//            SettingsFile.serialNumber = "";
-//            switch (settings.getStore()){
-//                case "Amman":
-//                    int intSerial = (Integer.parseInt(object2.getString("MAX_SERIAL")) + 1);
-//                    SettingsFile.serialNumber = ("" + intSerial);
-//                    break;
-//                case "Kalinovka":
-//                    int intSerial = (Integer.parseInt(object2.getString("MAX_SERIAL")) + 1);
-//                    SettingsFile.serialNumber = ("" + intSerial);
-//                    break;
-//                case "Rudniya Store":
-//                    int intSerial = (Integer.parseInt(object2.getString("MAX_SERIAL")) + 1);
-//                    SettingsFile.serialNumber = ("" + intSerial);
-//                    break;
-//                case "Rudniya Sawmill":
-//                    int intSerial = (Integer.parseInt(object2.getString("MAX_SERIAL")) + 1);
-//                    SettingsFile.serialNumber = ("" + intSerial);
-//                    break;
-//            }
-
-
-//            String stringSerial = object2.getString("MAX_SERIAL");
-//            int intSerial = (Integer.parseInt(object2.getString("MAX_SERIAL")) + 1);
-//            SettingsFile.serialNumber = ("" + intSerial);
-//            Log.e("presenter3: import ", "" + object2.getString("MAX_SERIAL"));
-                Log.e("presenter4: import ", "" + getSerialNo());//SettingsFile.serialNumber
-            } else
-                setSerialNo("1");
+                Log.e("presenter4: import ", "" + response.length());//SettingsFile.serialNumber
 //                SettingsFile.serialNumber = "1";
         } catch (JSONException e) {
             e.printStackTrace();
@@ -165,14 +127,6 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
             e.printStackTrace();
         }
 
-    }
-
-    public String getSerialNo() {
-        return serialNo;
-    }
-
-    public void setSerialNo(String value) {
-        serialNo = value;
     }
 
     //------------------------------------------- Get Users ----------------------------------------
@@ -290,7 +244,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                 JSONObject object = new JSONObject(response);
 //                Log.e("presenter:bun1", "" + object.toString());
                 JSONArray array = object.getJSONArray("BUNDLE_INFO");
-                Log.e("presenter:bun2", "" + array.length());
+//                Log.e("presenter:bun2", "" + array.length());
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject innerObject = array.getJSONObject(i);//ORDERED
 //                    Log.e("presenter:bun3 ", "" + innerObject.toString());
@@ -310,13 +264,13 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                     bundleInfo.setAddingDate(innerObject.getString("BUNDLE_DATE"));
                     bundleInfo.setSerialNo(innerObject.getString("B_SERIAL"));
                     bundleInfo.setBackingList(innerObject.getString("BACKING_LIST"));
-                    Log.e("presenter:bun3 ", "" + bundleInfo.getBackingList());
+//                    Log.e("presenter:bun3 ", "" + bundleInfo.getBackingList());
 
                     bundleInfoServer2.add(bundleInfo);
                     bundleInfoServer.add(bundleInfo);
 //                    }
                 }
-                Log.e("bundleInfoServer", "/size/" + bundleInfoServer.size());
+//                Log.e("bundleInfoServer", "/size/" + bundleInfoServer.size());
                 inventoryReport.filters();
 
 //                inventoryReport.fillTable(bundleInfoServer);
@@ -361,14 +315,14 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                     response = new String(response.getBytes("ISO-8859-1"), "UTF-8");
 //                    response = response.substring(response.indexOf("{"));
 
-                Log.e("presenter/printBarcode", "/res" + response);
+//                Log.e("presenter/printBarcode", "/res" + response);
                 JSONObject object = new JSONObject(response);
 //                Log.e("presenter:bun1", "" + object.toString());
                 JSONArray array = object.getJSONArray("BUNDLE_INFO");
-                Log.e("presenter:bun2", "" + array.length());
+//                Log.e("presenter:bun2", "" + array.length());
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject innerObject = array.getJSONObject(i);//ORDERED
-                    Log.e("presenter:bun3 ", "" + innerObject.toString());
+//                    Log.e("presenter:bun3 ", "" + innerObject.toString());
                     if ( (innerObject.getString("USER_NO").equals(settings.getUserNo()))
                             && (innerObject.getString("LOCATION").equals(settings.getStore()))
                             && (innerObject.getString("IS_PRINTED").equals("0"))) {
@@ -422,7 +376,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
         urlPackingList = "http://" + settings.getIpAddress() + "/export.php?ADD_PACKING_LIST=1&BUNDLE_NO=\"" + bundleNumber + "\""
                 + "&PACKING_LIST=\"" + packingList + "\""
                 + "&LOCATION=\"" + location + "\"";//http://5.189.130.98:8085/import.php?FLAG=3
-        Log.e("presenter/ ", "urlPackingList " + urlPackingList);
+//        Log.e("presenter/ ", "urlPackingList " + urlPackingList);
 
         packingListJsonObjectRequest = new StringRequest(Request.Method.GET, urlPackingList, new UpdatePackingListClass(), new UpdatePackingListClass());
         requestQueue.add(packingListJsonObjectRequest);
@@ -441,10 +395,9 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                 if (response.indexOf("{") == 3)
                     response = new String(response.getBytes("ISO-8859-1"), "UTF-8");
 //                    response = response.substring(response.indexOf("{"));
-
+                inventoryReport.updatedPackingList();
                 getBundlesData(inventoryReport);
-//                inventoryReport.updaterPackingListInRaw();
-                Log.e("presenter/packingList", "/res/" + response);
+//                Log.e("presenter/packingList", "/res/" + response);
 //                JSONObject object = new JSONObject(response);
 //                Log.e("presenter:bun1", "" + object.toString());
 //                JSONArray array = object.getJSONArray("BUNDLE_INFO");

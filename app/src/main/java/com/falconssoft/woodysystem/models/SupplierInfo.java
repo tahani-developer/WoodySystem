@@ -1,5 +1,10 @@
 package com.falconssoft.woodysystem.models;
 
+import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class SupplierInfo {
 
     private String supplierNo;
@@ -28,4 +33,19 @@ public class SupplierInfo {
     public void setSupplierName(String supplierName) {
         this.supplierName = supplierName;
     }
+
+    public JSONObject getJSONObject() {
+        JSONObject obj = new JSONObject();
+
+        try {
+            obj.put("SUPPLIER_NO", "'" + supplierNo + "'");
+            obj.put("SUPPLIER_NAME", "'" +supplierName+ "'");
+
+
+        } catch (JSONException e) {
+            Log.e("Tag" , "JSONException");
+        }
+        return obj;
+    }
+
 }

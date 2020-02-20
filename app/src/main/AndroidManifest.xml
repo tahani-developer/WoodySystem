@@ -35,10 +35,11 @@
         <uses-library android:name="org.apache.http.legacy" android:required="false"/>
         <activity android:name=".stage_one.AddNewSupplier"></activity>
         <activity android:name=".stage_one.StageOne" />
-        <activity android:name=".stage_one.AddNewRaw" />
+        <activity android:name=".stage_one.AddNewRaw" android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".stage_one.AcceptRow" />
         <activity
             android:name=".reports.InventoryReport"
+            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden"
             android:screenOrientation="sensorLandscape" >
 
 

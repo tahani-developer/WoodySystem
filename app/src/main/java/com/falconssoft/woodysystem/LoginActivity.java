@@ -76,13 +76,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 //        generalSettings = new Settings();
         generalSettings = new DatabaseHandler(this).getSettings();
 //        generalSettings = databaseHandler.getSettings();
-//        woodPresenter = new WoodPresenter(this);
-//        woodPresenter.getUsersData(LoginActivity.this);
+
+
         localCompanyName = generalSettings.getCompanyName();
         localIpAddress = generalSettings.getIpAddress();
         localStore = generalSettings.getStore();
 
-        new JSONTask().execute();
+//        new JSONTask().execute();
+        woodPresenter = new WoodPresenter(this);
+        woodPresenter.getUsersData(LoginActivity.this);
 
         Log.e("bool", "" + (!(localIpAddress == null)));
 //        if (!(localIpAddress == null) && (!(localCompanyName == null))) {
@@ -273,7 +275,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     public void onClick(View v) {
                         if (!TextUtils.isEmpty(companyName.getText().toString())) {
                             if (!TextUtils.isEmpty(ipAddress.getText().toString())) {
-                                Log.e("aaaaaaa1", "");
                                 settings.setCompanyName(companyName.getText().toString());
                                 settings.setIpAddress(ipAddress.getText().toString());
                                 databaseHandler.deleteSettings();
@@ -282,7 +283,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 Toast.makeText(LoginActivity.this, "Saved Successfully", Toast.LENGTH_SHORT).show();
 
                                 generalSettings = new DatabaseHandler(LoginActivity.this).getSettings();
-                                new JSONTask().execute();
+                                woodPresenter = new WoodPresenter(LoginActivity.this);
+                                woodPresenter.getUsersData(LoginActivity.this);
+//                                new JSONTask().execute();
                                 settingDialog.dismiss();
                             } else {
                                 ipAddress.setError("Required");
@@ -350,7 +353,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
 
                 String finalJson = sb.toString();
-                Log.e("finalJson*********", finalJson);
+//                Log.e("finalJson*********", finalJson);
 
                 JSONObject parentObject = new JSONObject(finalJson);
 
@@ -366,23 +369,23 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 //                        orders.add(order);
 //                    }
                 } catch (JSONException e) {
-                    Log.e("Import Data2", e.getMessage().toString());
+//                    Log.e("Import Data2", e.getMessage().toString());
                 }
 
             } catch (MalformedURLException e) {
-                Log.e("Customer", "********ex1");
+//                Log.e("Customer", "********ex1");
                 e.printStackTrace();
             } catch (IOException e) {
-                Log.e("Customer", e.getMessage().toString());
+//                Log.e("Customer", e.getMessage().toString());
                 e.printStackTrace();
 
             } catch (JSONException e) {
-                Log.e("Customer", "********ex3  " + e.toString());
+//                Log.e("Customer", "********ex3  " + e.toString());
                 e.printStackTrace();
             } finally {
-                Log.e("Customer", "********finally");
+//                Log.e("Customer", "********finally");
                 if (connection != null) {
-                    Log.e("Customer", "********ex4");
+//                    Log.e("Customer", "********ex4");
                     // connection.disconnect();
                 }
                 try {
@@ -406,7 +409,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 //                fillTable(orders);
 //                storeInDatabase();
             } else {
-                Toast.makeText(LoginActivity.this, "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(LoginActivity.this, "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();
             }
         }
     }

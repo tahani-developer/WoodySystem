@@ -3,9 +3,11 @@ package com.falconssoft.woodysystem.stage_one;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.falconssoft.woodysystem.R;
@@ -15,49 +17,58 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import static com.falconssoft.woodysystem.stage_one.AddNewRaw.supplierName;
+
 public class SuppliersAdapter extends RecyclerView.Adapter<SuppliersViewHolder> {
 
-    private Context context;
-    private List<SupplierInfo> list;
-    private ArrayList<SupplierInfo> arraylist;
+    private AddNewRaw addNewRaw;
+    private List<SupplierInfo> supplierInfoList;
+    private List<SupplierInfo> arraylist;
 
-    public SuppliersAdapter(Context context, List<SupplierInfo> supplierInfoList) {
-        this.context = context;
-        this.list = supplierInfoList;
-        this.arraylist = new ArrayList<SupplierInfo>();
-        this.arraylist.addAll(list);
+    public SuppliersAdapter(AddNewRaw addNewRaw, List<SupplierInfo> supplierInfoList) {
+        this.addNewRaw = addNewRaw;
+        this.supplierInfoList = supplierInfoList;
+        this.arraylist = new ArrayList<>();
+        this.arraylist.addAll(this.supplierInfoList);
+        Log.e("size", "" + supplierInfoList.size());
     }
 
     @NonNull
     @Override
 
     public SuppliersViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(context).inflate(R.layout.suppliers_row, viewGroup);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.suppliers_row, viewGroup, false);
         return new SuppliersViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SuppliersViewHolder suppliersViewHolder, int i) {
-        SuppliersViewHolder viewHolder = new SuppliersViewHolder(null);
-        viewHolder.supplierNo.setText("" + list.get(i).getSupplierNo());
-        viewHolder.supplierName.setText("" + list.get(i).getSupplierName());
+    public void onBindViewHolder(@NonNull SuppliersViewHolder holder, int i) {
+//        SuppliersViewHolder viewHolder = new SuppliersViewHolder(null);
+        holder.supplierNo.setText("" + supplierInfoList.get(i).getSupplierNo());
+        holder.supplierName.setText("" + supplierInfoList.get(i).getSupplierName());
+        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               addNewRaw.getSearchSupplierInfo(supplierInfoList.get(i).getSupplierName(), supplierInfoList.get(i).getSupplierNo());
+            }
+        });
 
     }
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return supplierInfoList.size();
     }
 
     public void filter(String charText) {
         charText = charText.toLowerCase(Locale.getDefault());
-        list.clear();
+        supplierInfoList.clear();
         if (charText.length() == 0) {
-            list.addAll(arraylist);
+            supplierInfoList.addAll(arraylist);
         } else {
             for (SupplierInfo wp : arraylist) {
-                if (wp.getSupplierNo().toLowerCase(Locale.getDefault()).contains(charText)) {
-                    list.add(wp);
+                if (wp.getSupplierName().toLowerCase(Locale.getDefault()).contains(charText)) {
+                    supplierInfoList.add(wp);
                 }
             }
         }
@@ -68,10 +79,11 @@ public class SuppliersAdapter extends RecyclerView.Adapter<SuppliersViewHolder> 
 class SuppliersViewHolder extends RecyclerView.ViewHolder {
 
     TextView supplierNo, supplierName;
+    LinearLayout linearLayout;
 
     public SuppliersViewHolder(@NonNull View itemView) {
         super(itemView);
-
+        linearLayout = itemView.findViewById(R.id.supplier_row_linear);
         supplierNo = itemView.findViewById(R.id.supplier_row_supplier_no);
         supplierName = itemView.findViewById(R.id.supplier_row_supplier_name);
 
