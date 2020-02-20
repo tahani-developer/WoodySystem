@@ -151,6 +151,7 @@ public class BundlesReport extends AppCompatActivity {
                         filtered.get(i).setChecked(false);
                     }
                 }
+                adapter.notifyDataSetChanged();
 //                    for (int i = 0; i < bundlesTable.getChildCount(); i++) {
 //                        TableRow table = (TableRow) bundlesTable.getChildAt(i);
 //                        CheckBox bundleCheck = (CheckBox) table.getChildAt(10);
@@ -850,8 +851,10 @@ public class BundlesReport extends AppCompatActivity {
                     for (int i = 0; i < bundlesNoRows.size(); i++) {
                         filtered.remove(bundlesNoRows.get(i)); ////////////////////////////////////////
                     }
+                    checkBoxPrinter.setChecked(false);
                     bundlesNoRows.clear();
-                    adapter.notifyDataSetChanged();
+                    adapter = new BundelsReportAdapter(BundlesReport.this, filtered);
+                    listView.setAdapter(adapter);
                     Log.e("tag", "****Success");
                 } else {
                     Toast.makeText(BundlesReport.this, "Failed to export data!", Toast.LENGTH_SHORT).show();

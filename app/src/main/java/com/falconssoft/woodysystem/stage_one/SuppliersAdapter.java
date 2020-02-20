@@ -1,6 +1,5 @@
 package com.falconssoft.woodysystem.stage_one;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,8 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import static com.falconssoft.woodysystem.stage_one.AddNewRaw.supplierName;
-
 public class SuppliersAdapter extends RecyclerView.Adapter<SuppliersViewHolder> {
 
     private AddNewRaw addNewRaw;
@@ -30,7 +27,6 @@ public class SuppliersAdapter extends RecyclerView.Adapter<SuppliersViewHolder> 
         this.supplierInfoList = supplierInfoList;
         this.arraylist = new ArrayList<>();
         this.arraylist.addAll(this.supplierInfoList);
-        Log.e("size", "" + supplierInfoList.size());
     }
 
     @NonNull
@@ -43,13 +39,14 @@ public class SuppliersAdapter extends RecyclerView.Adapter<SuppliersViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull SuppliersViewHolder holder, int i) {
-//        SuppliersViewHolder viewHolder = new SuppliersViewHolder(null);
+        Log.e("size2", "" + supplierInfoList.size());
         holder.supplierNo.setText("" + supplierInfoList.get(i).getSupplierNo());
         holder.supplierName.setText("" + supplierInfoList.get(i).getSupplierName());
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               addNewRaw.getSearchSupplierInfo(supplierInfoList.get(i).getSupplierName(), supplierInfoList.get(i).getSupplierNo());
+               addNewRaw.getSearchSupplierInfo(supplierInfoList.get(i).getSupplierName()
+                       , supplierInfoList.get(i).getSupplierNo());
             }
         });
 
@@ -60,19 +57,20 @@ public class SuppliersAdapter extends RecyclerView.Adapter<SuppliersViewHolder> 
         return supplierInfoList.size();
     }
 
-    public void filter(String charText) {
+    public void filter(String charText) { // by Name
         charText = charText.toLowerCase(Locale.getDefault());
         supplierInfoList.clear();
         if (charText.length() == 0) {
             supplierInfoList.addAll(arraylist);
         } else {
-            for (SupplierInfo wp : arraylist) {
-                if (wp.getSupplierName().toLowerCase(Locale.getDefault()).contains(charText)) {
-                    supplierInfoList.add(wp);
+            for (SupplierInfo supplierInfo : arraylist)
+                if (supplierInfo.getSupplierName().toLowerCase(Locale.getDefault()).contains(charText)) {
+                    supplierInfoList.add(supplierInfo);
                 }
-            }
         }
-        notifyDataSetChanged();
+//        new SuppliersAdapter(addNewRaw, supplierInfoList);
+        this.notifyDataSetChanged();
+//        addNewRaw.notifyAdapter(supplierInfoList);
     }
 }
 

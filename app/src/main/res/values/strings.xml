@@ -83,7 +83,7 @@
 
     <string name="new_raw">New Raw</string>
     <string name="supplier_no">Supplier #</string>
-    <string name="supplier_name">Supplier Name</string>
+    <string name="supplier_name">Supplier</string>
     <string name="raw_thickness">Thickness</string>
     <string name="search">Search ...</string>
     <string name="acceptance_info">Acceptance Info</string>
