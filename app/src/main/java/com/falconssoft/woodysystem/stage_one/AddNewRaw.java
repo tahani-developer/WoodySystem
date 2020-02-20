@@ -1,5 +1,6 @@
 package com.falconssoft.woodysystem.stage_one;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -13,12 +14,14 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -30,6 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.falconssoft.woodysystem.DatabaseHandler;
+import com.falconssoft.woodysystem.LoadingOrder2;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.WoodPresenter;
 import com.falconssoft.woodysystem.models.NewRowInfo;
@@ -44,6 +48,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -56,15 +61,20 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.net.URI;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class AddNewRaw extends AppCompatActivity implements View.OnClickListener {
 
+    private boolean mState = false;
+    private final String STATE_VISIBILITY = "state-visibility";
     private Settings generalSettings;
     private WoodPresenter presenter;
-    private TextView addNewSupplier, searchSupplier, addButton, acceptRowButton, mainInfoButton;
-    private EditText thickness, width, length, noOfPieces, noOfBundles, noOfRejected, truckNo, acceptanceDate, acceptor, acceptanceLocation, ttnNo, totalRejected, totalBundles;
+    private TextView addNewSupplier, searchSupplier, addButton, acceptRowButton, mainInfoButton, acceptanceDate;
+    private EditText thickness, width, length, noOfPieces, noOfBundles, noOfRejected, truckNo, acceptor, acceptanceLocation, ttnNo, totalRejected, totalBundles;
     private Spinner gradeSpinner;
     private ArrayList<String> gradeList = new ArrayList<>();
     private ArrayAdapter<String> gradeAdapter;
@@ -74,7 +84,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     public static String supplierName = "";
     private LinearLayout headerLayout, acceptRowLayout;
     private Button doneAcceptRow;
-    private TableLayout tableLayout;
+    private TableLayout tableLayout, headerTableLayout;
     private TableRow tableRow;
     private Dialog searchDialog;
 
@@ -84,6 +94,9 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     private JSONArray jsonArray;
     private RelativeLayout coordinatorLayout;
     private Snackbar snackbar;
+    private SuppliersAdapter adapter;
+    private RecyclerView recyclerView;
+    private Calendar myCalendar;
 
 
     @Override
@@ -93,11 +106,10 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
         databaseHandler = new DatabaseHandler(AddNewRaw.this);
         suppliers = new ArrayList<>();
-
+        myCalendar = Calendar.getInstance();
         generalSettings = new Settings();
         generalSettings = databaseHandler.getSettings();
         presenter = new WoodPresenter(this);
-//        presenter.getsuppliersInfo();
 
         coordinatorLayout = findViewById(R.id.addNewRow_coordinator);
         addNewSupplier = findViewById(R.id.addNewRaw_add_supplier);
@@ -115,6 +127,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         acceptRowLayout = findViewById(R.id.addNewRaw_acceptRow_linear);
         mainInfoButton = findViewById(R.id.addNewRaw_acceptRow_back);
         tableLayout = findViewById(R.id.addNewRaw_table);
+        headerTableLayout = findViewById(R.id.addNewRaw_table_header);
         truckNo = findViewById(R.id.addNewRaw_truckNo);
         acceptanceDate = findViewById(R.id.addNewRaw_acceptance_date);
         acceptor = findViewById(R.id.addNewRaw_acceptor);
@@ -162,6 +175,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         addNewSupplier.setOnClickListener(this);
         searchSupplier.setOnClickListener(this);
         addButton.setOnClickListener(this);
+        acceptanceDate.setOnClickListener(this);
 
     }
 
@@ -180,6 +194,11 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                 break;
             case R.id.addNewRaw_acceptRow_done:
                 doneButtonMethod();
+                break;
+            case R.id.addNewRaw_acceptance_date:
+                new DatePickerDialog(AddNewRaw.this, openDatePickerDialog(0), myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
                 break;
             case R.id.addNewRaw_acceptRaw_button:
                 headerLayout.setVisibility(View.GONE);
@@ -208,9 +227,9 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                 searchDialog.setContentView(R.layout.search_supplier_dialog);
 
                 SearchView searchView = searchDialog.findViewById(R.id.search_supplier_searchView);
-                RecyclerView recyclerView = searchDialog.findViewById(R.id.search_supplier_recyclerView);
+                 recyclerView = searchDialog.findViewById(R.id.search_supplier_recyclerView);
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
-                SuppliersAdapter adapter = new SuppliersAdapter(this, suppliers);
+                 adapter = new SuppliersAdapter(this, suppliers);
                 recyclerView.setAdapter(adapter);
 
                 searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -222,6 +241,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     @Override
                     public boolean onQueryTextChange(String newText) {
                         adapter.filter(newText);
+//                        adapter.notifyDataSetChanged();
                         return false;
                     }
                 });
@@ -257,8 +277,8 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                                     rowInfo.setGrade(gradeText);
 
                                     newRowList.add(rowInfo);
-                                    if (tableLayout.getChildCount() == 0)
-                                        addTableHeader(tableLayout);
+                                    if (headerTableLayout.getChildCount() == 0)
+                                        addTableHeader(headerTableLayout);
                                     tableRow = new TableRow(this);
                                     fillTableRow(tableRow, thicknessLocal, widthLocal, lengthLocal, noOfPiecesLocal, noOfRejectedLocal, noOfBundlesLocal);
                                     tableLayout.addView(tableRow);
@@ -271,6 +291,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                                     noOfBundles.setText("");
                                     gradeSpinner.setSelection(gradeList.indexOf("Fresh"));
                                     gradeText = "Fresh";
+                                    thickness.requestFocus();
 
                                 } else {
                                     noOfBundles.setError("Required!");
@@ -304,6 +325,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         String locationLocal = acceptanceLocation.getText().toString();
         String totalRejectedLocal = totalRejected.getText().toString();
 
+        Log.e("newRowList", " size" + newRowList.size());
         if (newRowList.size() > 0) {
             if (!TextUtils.isEmpty(truckNoLocal)) {
                 if (!TextUtils.isEmpty(acceptorLocal))
@@ -380,10 +402,10 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
             textView.setLayoutParams(textViewParam);
             switch (i) {
                 case 0:
-                    TableRow.LayoutParams param = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.MATCH_PARENT);
+                    TableRow.LayoutParams param = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
 //                    param.setMargins(1, 5, 1, 1);
                     textView.setLayoutParams(param);
-                    textView.setText("Supplier #");
+                    textView.setText("Supplier");
                     break;
                 case 1:
                     textView.setText("Thic");
@@ -395,13 +417,13 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     textView.setText("Length");
                     break;
                 case 4:
-                    textView.setText("# Pieces");
+                    textView.setText("Pieces");
                     break;
                 case 5:
-                    textView.setText("# Rejected");
+                    textView.setText("Rejected");
                     break;
                 case 6:
-                    textView.setText("# Bundles");
+                    textView.setText("Bundles");
                     break;
                 case 7:
                     textView.setText("Grade");
@@ -426,10 +448,10 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
             textView.setLayoutParams(textViewParam);
             switch (i) {
                 case 0:
-                    TableRow.LayoutParams param = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
-                    param.setMargins(1, 5, 1, 1);
-                    textView.setPadding(0, 10, 0, 10);
-                    textView.setLayoutParams(param);
+//                    TableRow.LayoutParams param = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
+//                    param.setMargins(1, 5, 1, 1);
+//                    textView.setPadding(0, 10, 0, 10);
+//                    textView.setLayoutParams(param);
                     textView.setText(supplierName);
                     break;
                 case 1:
@@ -457,6 +479,25 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
             tableRow.addView(textView);
         }
 
+    }
+
+    public DatePickerDialog.OnDateSetListener openDatePickerDialog(final int flag) {
+        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+
+                // TODO Auto-generated method stub
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, month);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                String myFormat = "dd/MM/yyyy";
+                SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+                acceptanceDate.setText(sdf.format(myCalendar.getTime()));
+            }
+
+        };
+        return date;
     }
 
     void chooseSpinnersContent() {
@@ -488,6 +529,42 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                 break;
         }
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+//        linearLayoutView.getVisibility();
+        outState.putBoolean(STATE_VISIBILITY, mState);
+
+        List<TableRow> tableRows = new ArrayList<>();
+        int rowcount = tableLayout.getChildCount();
+        for (int i = 0; i < rowcount; i++) {
+            TableRow row = (TableRow) tableLayout.getChildAt(i);
+            tableRows.add(row);
+        }
+        outState.putSerializable("table", (Serializable) tableRows);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+
+        // Restore state members from saved instance
+        mState = savedInstanceState.getBoolean(STATE_VISIBILITY);
+        thickness.requestFocus();
+//        linearLayoutView.setVisibility(mState ? View.VISIBLE : View.GONE);
+//        presenter.getImportData();
+        List<TableRow> tableRows = (List<TableRow>) savedInstanceState.getSerializable("table");
+        if (tableRows.size()>0)
+            addTableHeader(headerTableLayout);
+
+        for (int i = 0; i < tableRows.size(); i++) {
+            if (tableRows.get(i).getParent() != null) {
+                ((ViewGroup) tableRows.get(i).getParent()).removeView(tableRows.get(i)); // <- fix
+            }
+            tableLayout.addView(tableRows.get(i));
+        }
+        super.onRestoreInstanceState(savedInstanceState);
     }
 
     private class JSONTask extends AsyncTask<String, String, List<SupplierInfo>> {
@@ -575,6 +652,8 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
             if (result != null) {
                 Log.e("result", "*****************" + result.size());
+                adapter.notifyDataSetChanged();
+
             } else {
                 Toast.makeText(AddNewRaw.this, "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();
             }
@@ -638,9 +717,9 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Log.e("tag", s);
+            Log.e("tag of row info", s);
             if (s != null) {
-                if (s.contains("ROW_INFO SUCCESS")) {
+                if (s.contains("RAW_INFO SUCCESS")) {
 
                     snackbar = Snackbar.make(coordinatorLayout, Html.fromHtml("<font color=\"#3167F0\">Added Successfully</font>"), Snackbar.LENGTH_SHORT);//Updated Successfully
                     View snackbarLayout = snackbar.getView();
@@ -655,6 +734,8 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     acceptanceDate.setText("");
                     acceptanceLocation.setText("");
                     totalRejected.setText("");
+                    supplierName = "";
+                    searchSupplier.setText("");
                     tableLayout.removeAllViews();
 
                     acceptRowLayout.setVisibility(View.GONE);
