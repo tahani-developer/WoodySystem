@@ -429,8 +429,9 @@
                 <TextView
                     android:id="@+id/inventory_report_thick_order"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="20dp"
                     android:layout_weight="1"
+                    android:layout_marginTop="5dp"
                     android:layout_marginBottom="2dp"
                     android:background="@drawable/asc"
                     />
@@ -458,8 +459,9 @@
                 <TextView
                     android:id="@+id/inventory_report_width_order"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="20dp"
                     android:layout_weight="1"
+                    android:layout_marginTop="5dp"
                     android:layout_marginBottom="2dp"
                     android:background="@drawable/asc"
                     />
@@ -488,8 +490,9 @@
                 <TextView
                     android:id="@+id/inventory_report_length_order"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="20dp"
                     android:layout_weight="1"
+                    android:layout_marginTop="5dp"
                     android:layout_marginBottom="2dp"
                     android:background="@drawable/asc"
                     />

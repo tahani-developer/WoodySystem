@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/light_orange">
+
+        <TextView
+            android:id="@+id/bundlesReport_row_serial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="serif"
+            android:text="@string/serial"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/bundlesReport_row_bundleNo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:fontFamily="serif"
+            android:text="@string/bundle_no"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/bundlesReport_row_thickness"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="serif"
+            android:text="@string/th"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/bundlesReport_row_width"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.8"
+            android:fontFamily="serif"
+            android:text="@string/w"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/bundlesReport_row_length"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.8"
+            android:fontFamily="serif"
+            android:text="@string/l"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/bundlesReport_row_noOfPieces"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="serif"
+            android:text="@string/no_pieces"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/bundlesReport_row_grade"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.9"
+            android:fontFamily="serif"
+            android:text="@string/grade"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/bundlesReport_row_location"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.2"
+            android:fontFamily="serif"
+            android:text="@string/loc"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/bundlesReport_row_area"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="serif"
+            android:text="@string/area"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/bundlesReport_row_packingList"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="serif"
+            android:text="@string/p_list"
+            android:textSize="18sp" />
+
+        <CheckBox
+            android:id="@+id/checkBoxPrinter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"/>
+
+    </TableRow>
+
+</LinearLayout>
