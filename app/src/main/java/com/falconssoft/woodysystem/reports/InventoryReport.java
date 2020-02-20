@@ -138,7 +138,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private CheckBox checkBoxPrint;
     private List<BundleInfo> bundleInfoForPrint = new ArrayList<>();
     private List<BundleInfo> bundleInfoForPList = new ArrayList<>();
-    private Button printAll, delete, pListAll;
+    private Button printAll, pListAll;
     private TableRow tableRowToDelete = null;
     private EditText fromLength, toLength, fromWidth, toWidth, fromThickness, toThickness;
     private boolean isThicnessAsc = true, isWidthAsc = true, isLengthAsc = true;
@@ -154,48 +154,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inventory_report);
 
-        databaseHandler = new DatabaseHandler(this);
-        woodPresenter = new WoodPresenter(this);
-        generalSettings = new Settings();
-        generalSettings = databaseHandler.getSettings();
-        calendar = Calendar.getInstance();
-        date = Calendar.getInstance().getTime();
-
-        containerLayout = findViewById(R.id.inventory_report_container);
-//        bundlesTable = findViewById(R.id.inventory_report_table);
-        location = findViewById(R.id.inventory_report_location);
-        area = findViewById(R.id.inventory_report_area);
-        pList = findViewById(R.id.inventory_report_pl);
-        grade = findViewById(R.id.inventory_report_grade);
-//        ordered = findViewById(R.id.inventory_report_ordered);
-        textView = findViewById(R.id.inventory_report_tv);
-        dateFrom = findViewById(R.id.inventory_report_from);
-        dateTo = findViewById(R.id.inventory_report_to);
-        noOfBundles = findViewById(R.id.inventory_report_no_bundles);
-        noOfPieces = findViewById(R.id.inventory_report_no_pieces);
-        cubicField = findViewById(R.id.inventory_report_cubic);
-        deleteAll = findViewById(R.id.inventory_report_delete);
-        checkBoxPrint = findViewById(R.id.checkBoxPrint);
-        printAll = findViewById(R.id.printAll);
-        pListAll = findViewById(R.id.p_list_all);
-        delete = findViewById(R.id.delete);
-        fromLength = findViewById(R.id.inventory_report_fromLength);
-        toLength = findViewById(R.id.inventory_report_toLength);
-        fromWidth = findViewById(R.id.inventory_report_fromWidth);
-        toWidth = findViewById(R.id.inventory_report_toWidth);
-        fromThickness = findViewById(R.id.inventory_report_fromThick);
-        toThickness = findViewById(R.id.inventory_report_toThick);
-        listView = findViewById(R.id.list);
-        thicknessOrder = findViewById(R.id.inventory_report_thick_order);
-        widthOrder = findViewById(R.id.inventory_report_width_order);
-        lengthOrder = findViewById(R.id.inventory_report_length_order);
-
-        fromLength.addTextChangedListener(new watchTextChange(fromLength));
-        toLength.addTextChangedListener(new watchTextChange(toLength));
-        fromWidth.addTextChangedListener(new watchTextChange(fromWidth));
-        toWidth.addTextChangedListener(new watchTextChange(toWidth));
-        fromThickness.addTextChangedListener(new watchTextChange(fromThickness));
-        toThickness.addTextChangedListener(new watchTextChange(toThickness));
+        initialize();
 //        searchViewTh = (SearchView) findViewById(R.id.mSearchTh);
 //        searchViewW = (SearchView) findViewById(R.id.mSearchW);
 //        searchViewL = (SearchView) findViewById(R.id.mSearchL);
@@ -381,6 +340,50 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
             }
         });*/
 
+    }
+
+    void initialize() {
+        databaseHandler = new DatabaseHandler(this);
+        woodPresenter = new WoodPresenter(this);
+        generalSettings = new Settings();
+        generalSettings = databaseHandler.getSettings();
+        calendar = Calendar.getInstance();
+        date = Calendar.getInstance().getTime();
+
+        containerLayout = findViewById(R.id.inventory_report_container);
+//        bundlesTable = findViewById(R.id.inventory_report_table);
+        location = findViewById(R.id.inventory_report_location);
+        area = findViewById(R.id.inventory_report_area);
+        pList = findViewById(R.id.inventory_report_pl);
+        grade = findViewById(R.id.inventory_report_grade);
+//        ordered = findViewById(R.id.inventory_report_ordered);
+        textView = findViewById(R.id.inventory_report_tv);
+        dateFrom = findViewById(R.id.inventory_report_from);
+        dateTo = findViewById(R.id.inventory_report_to);
+        noOfBundles = findViewById(R.id.inventory_report_no_bundles);
+        noOfPieces = findViewById(R.id.inventory_report_no_pieces);
+        cubicField = findViewById(R.id.inventory_report_cubic);
+        deleteAll = findViewById(R.id.inventory_report_delete);
+        checkBoxPrint = findViewById(R.id.checkBoxPrint);
+        printAll = findViewById(R.id.printAll);
+        pListAll = findViewById(R.id.p_list_all);
+        fromLength = findViewById(R.id.inventory_report_fromLength);
+        toLength = findViewById(R.id.inventory_report_toLength);
+        fromWidth = findViewById(R.id.inventory_report_fromWidth);
+        toWidth = findViewById(R.id.inventory_report_toWidth);
+        fromThickness = findViewById(R.id.inventory_report_fromThick);
+        toThickness = findViewById(R.id.inventory_report_toThick);
+        listView = findViewById(R.id.list);
+        thicknessOrder = findViewById(R.id.inventory_report_thick_order);
+        widthOrder = findViewById(R.id.inventory_report_width_order);
+        lengthOrder = findViewById(R.id.inventory_report_length_order);
+
+        fromLength.addTextChangedListener(new watchTextChange(fromLength));
+        toLength.addTextChangedListener(new watchTextChange(toLength));
+        fromWidth.addTextChangedListener(new watchTextChange(fromWidth));
+        toWidth.addTextChangedListener(new watchTextChange(toWidth));
+        fromThickness.addTextChangedListener(new watchTextChange(fromThickness));
+        toThickness.addTextChangedListener(new watchTextChange(toThickness));
     }
 
     void fillSpinnerAdapter() {
