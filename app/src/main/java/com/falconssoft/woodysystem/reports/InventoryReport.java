@@ -542,7 +542,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     }
 
 
-    public void filters() {
+    public void filters() { 
         bundleInfoServer.clear();
 //        Log.e("inventoryReport", "/bundleInfoServer2/size/" + bundleInfoServer2.size());
         for (int v = 0; v < bundleInfoServer2.size(); v++) {
