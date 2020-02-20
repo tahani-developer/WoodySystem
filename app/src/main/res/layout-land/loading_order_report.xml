@@ -232,24 +232,16 @@
 
             </TableRow>
 
-            <ScrollView
+            <ListView
+                android:id="@+id/list"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TableLayout
-                    android:id="@+id/orders_table"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="3dp"
-                    android:layout_marginLeft="3dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="3dp"
-                    android:layout_marginRight="3dp">
-
-
-                </TableLayout>
-
-            </ScrollView>
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toTopOf="@+id/inventory_report_linear6"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/inventory_report_linear4"
+                app:layout_constraintVertical_bias="0.0"/>
 
             <View
                 android:layout_width="match_parent"

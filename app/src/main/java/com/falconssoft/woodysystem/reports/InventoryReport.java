@@ -111,7 +111,7 @@ import static android.graphics.Color.WHITE;
 
 public class InventoryReport extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
-//    private TableLayout bundlesTable;
+    //    private TableLayout bundlesTable;
     private Snackbar snackbar;
     private ConstraintLayout containerLayout;
     private DatabaseHandler databaseHandler;
@@ -143,7 +143,8 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     //    private SearchView searchViewTh, searchViewW, searchViewL;
     private CheckBox checkBoxPrint;
     private List<BundleInfo> bundleInfoForPrint = new ArrayList<>();
-    private Button printAll, delete;
+    private List<BundleInfo> bundleInfoForPList = new ArrayList<>();
+    private Button printAll, delete, pListAll;
     private TableRow tableRowToDelete = null;
     private EditText fromLength, toLength, fromWidth, toWidth, fromThickness, toThickness;
     private String fromLengthNo = "", toLengthNo = "", fromWidthhNo = "", toWidthNo = "", fromThicknessNo = "", toThicknessNo = "";
@@ -180,6 +181,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         deleteAll = findViewById(R.id.inventory_report_delete);
         checkBoxPrint = findViewById(R.id.checkBoxPrint);
         printAll = findViewById(R.id.printAll);
+        pListAll = findViewById(R.id.p_list_all);
         delete = findViewById(R.id.delete);
         fromLength = findViewById(R.id.inventory_report_fromLength);
         toLength = findViewById(R.id.inventory_report_toLength);
@@ -259,9 +261,8 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                     for (int i = 0; i < selected.size(); i++) {
                         if (selected.get(i).getChecked()) {
                             bundleInfoForPrint.add(selected.get(i));
-                            }
+                        }
                     }
-
 
 
                     boolean permission = isStoragePermissionGranted();
@@ -282,6 +283,54 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            }
+
+        });
+
+        pListAll.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+            @Override
+            public void onClick(View v) {
+
+                bundleInfoForPList.clear();
+
+                InventoryReportAdapter obj = new InventoryReportAdapter();
+                List<BundleInfo> selected = obj.getSelectedItems();
+                for (int i = 0; i < selected.size(); i++) {
+                    if (selected.get(i).getChecked()) {
+                        bundleInfoForPList.add(selected.get(i));
+                    }
+                }
+
+                Dialog packingListDialog = new Dialog(InventoryReport.this);
+                packingListDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                packingListDialog.setContentView(R.layout.packing_list_dialog);
+                packingListDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                EditText packingList = packingListDialog.findViewById(R.id.packingList_dialog_packing_list);
+                TextView done = packingListDialog.findViewById(R.id.packingList_dialog_done);
+                TextView bundleNo = packingListDialog.findViewById(R.id.packingList_dialog_bundle_no);
+
+                done.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String newPackingList = packingList.getText().toString();
+                        if (packingList.getText().toString().equals(""))
+                            newPackingList = "null";
+
+                        for (int i = 0 ; i< bundleInfoForPList.size() ; i++) {
+
+                            woodPresenter.updatePackingList(InventoryReport.this, bundleInfoForPList.get(i).getBundleNo(), newPackingList, bundleInfoForPList.get(i).getLocation());
+                        }
+                        adapter.notifyDataSetChanged();
+                        packingListDialog.dismiss();
+
+                    }
+                });
+
+                packingListDialog.show();
+
+
             }
 
         });
@@ -1116,7 +1165,8 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                             for (int i = 0; i < selected.size(); i++) {
                                 if (selected.get(i).getChecked()) {
                                     bundleInfoForPrint.add(selected.get(i));
-                                    jsonArrayBundles.put(bundleInfoForPrint.get(bundleInfoForPrint.size() - 1).getJSONObject());}
+                                    jsonArrayBundles.put(bundleInfoForPrint.get(bundleInfoForPrint.size() - 1).getJSONObject());
+                                }
                             }
 
 

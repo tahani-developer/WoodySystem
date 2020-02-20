@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:descendantFocusability="blocksDescendants"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inventory_report_linear3">
+
+        <TextView
+
+            android:id="@+id/order"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:fontFamily="serif"
+            android:background="@color/light_orange"
+            android:layout_marginTop="2dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:text="@string/order_no"
+            android:textColor="@color/gray_dark_one"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/truck"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:fontFamily="serif"
+            android:background="@color/light_orange"
+            android:layout_marginTop="2dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:text="@string/truck_no"
+            android:textColor="@color/gray_dark_one"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/container"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:fontFamily="serif"
+            android:background="@color/light_orange"
+            android:layout_marginTop="2dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:text="@string/container_no"
+            android:textColor="@color/gray_dark_one"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:fontFamily="serif"
+            android:background="@color/light_orange"
+            android:layout_marginTop="2dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:text="@string/date_of_load"
+            android:textColor="@color/gray_dark_one"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/destination"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:fontFamily="serif"
+            android:background="@color/light_orange"
+            android:layout_marginTop="2dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:text="@string/destination"
+            android:textColor="@color/gray_dark_one"
+            android:textSize="15sp"
+             />
+
+        <Button
+            android:id="@+id/bundleNo"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:fontFamily="serif"
+            android:layout_marginTop="2dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:text="Preview"
+            android:background="@color/light_orange"
+            android:textColor="@color/preview"
+            android:textSize="15sp" />
+
+        <ImageView
+            android:id="@+id/pic"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="0.25"
+            android:fontFamily="serif"
+            android:background="@drawable/pic"
+            android:layout_marginTop="2dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:text="@string/p_list"
+            android:textColor="@color/gray_dark_one"
+            android:textSize="15sp" />
+
+    </TableRow>
+
+</LinearLayout>
