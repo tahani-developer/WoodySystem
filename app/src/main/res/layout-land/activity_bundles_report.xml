@@ -170,23 +170,10 @@
 
         </TableRow>
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TableLayout
-                android:id="@+id/addToInventory_table"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="3dp"
-                android:layout_marginLeft="3dp"
-                android:layout_marginTop="1dp"
-                android:layout_marginEnd="3dp"
-                android:layout_marginRight="3dp">
-
-            </TableLayout>
-
-        </ScrollView>
+       <ListView
+           android:id="@+id/reports_bundles_listView"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"/>
 
         <View
             android:layout_width="match_parent"

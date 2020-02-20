@@ -42,12 +42,14 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.falconssoft.woodysystem.DatabaseHandler;
+import com.falconssoft.woodysystem.InventoryReportAdapter;
 import com.falconssoft.woodysystem.PrinterCommands;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.ReportsActivity;
@@ -97,7 +99,7 @@ import static android.graphics.Color.WHITE;
 
 public class BundlesReport extends AppCompatActivity {
 
-    private TableLayout bundlesTable;
+    //    private TableLayout bundlesTable;
     private DatabaseHandler databaseHandler;
     private WoodPresenter presenter;
     private List<BundleInfo> bundleInfoForPrint = new ArrayList<>();
@@ -109,9 +111,12 @@ public class BundlesReport extends AppCompatActivity {
     private String bundleNumber;
     private TableRow hidedTableRow = null;
     private JSONArray jsonArrayBundles = new JSONArray();
-    private List<TableRow> bundlesNoRows;
+    private List<BundleInfo> bundlesNoRows;
 
     private CheckBox checkBoxPrinter;
+    private ListView listView;
+    private BundelsReportAdapter adapter;
+    private List<BundleInfo> filtered = new ArrayList<>();
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -124,10 +129,11 @@ public class BundlesReport extends AppCompatActivity {
         textView = findViewById(R.id.loading_order_report_tv);
         hide = findViewById(R.id.loading_order_report_delete);
         checkBoxPrinter = findViewById(R.id.checkBoxPrinter);
+        listView = findViewById(R.id.reports_bundles_listView);
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_to_right);
         textView.startAnimation(animation);
 
-        bundlesTable = findViewById(R.id.addToInventory_table);
+//        bundlesTable = findViewById(R.id.addToInventory_table);
         databaseHandler = new DatabaseHandler(this);
         presenter.getPrintBarcodeData(this);
 //        fillTable();
@@ -137,22 +143,27 @@ public class BundlesReport extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (checkBoxPrinter.isChecked()) {
-
-                    for (int i = 0; i < bundlesTable.getChildCount(); i++) {
-                        TableRow table = (TableRow) bundlesTable.getChildAt(i);
-                        CheckBox bundleCheck = (CheckBox) table.getChildAt(10);
-                        bundleCheck.setChecked(true);
-
+                    for (int i = 0; i < filtered.size(); i++) {
+                        filtered.get(i).setChecked(true);
                     }
                 } else {
-                    for (int i = 0; i < bundlesTable.getChildCount(); i++) {
-                        TableRow table = (TableRow) bundlesTable.getChildAt(i);
-                        CheckBox bundleCheck = (CheckBox) table.getChildAt(10);
-                        bundleCheck.setChecked(false);
-
+                    for (int i = 0; i < filtered.size(); i++) {
+                        filtered.get(i).setChecked(false);
                     }
                 }
-
+//                    for (int i = 0; i < bundlesTable.getChildCount(); i++) {
+//                        TableRow table = (TableRow) bundlesTable.getChildAt(i);
+//                        CheckBox bundleCheck = (CheckBox) table.getChildAt(10);
+//                        bundleCheck.setChecked(true);
+//
+//                    }
+//                } else {
+//                    for (int i = 0; i < bundlesTable.getChildCount(); i++) {
+//                        TableRow table = (TableRow) bundlesTable.getChildAt(i);
+//                        CheckBox bundleCheck = (CheckBox) table.getChildAt(10);
+//                        bundleCheck.setChecked(false);
+//
+//                    }
             }
         });
 
@@ -164,12 +175,17 @@ public class BundlesReport extends AppCompatActivity {
                 try {
 
                     bundleInfoForPrint.clear();
-                    for (int i = 0; i < bundlesTable.getChildCount(); i++) {
-                        TableRow table = (TableRow) bundlesTable.getChildAt(i);
-                        CheckBox bundleCheck = (CheckBox) table.getChildAt(10);
-                        if (bundleCheck.isChecked()) {
-                            Log.e("bundelCheak", "" + i + "  " + bundleInfos.get(Integer.parseInt(bundleCheck.getTag().toString())).getBundleNo());
-                            bundleInfoForPrint.add(bundleInfos.get(Integer.parseInt(bundleCheck.getTag().toString())));
+//                    for (int i = 0; i < bundlesTable.getChildCount(); i++) {
+//                        TableRow table = (TableRow) bundlesTable.getChildAt(i);
+//                        CheckBox bundleCheck = (CheckBox) table.getChildAt(10);
+//                        if (bundleCheck.isChecked()) {
+//                            Log.e("bundelCheak", "" + i + "  " + bundleInfos.get(Integer.parseInt(bundleCheck.getTag().toString())).getBundleNo());
+//                            bundleInfoForPrint.add(bundleInfos.get(Integer.parseInt(bundleCheck.getTag().toString())));
+//                        }
+//                    }
+                    for (int i = 0; i < filtered.size(); i++) {
+                        if (filtered.get(i).getChecked()) {
+                            bundleInfoForPrint.add(filtered.get(i));
                         }
                     }
                     boolean permission = isStoragePermissionGranted();
@@ -204,39 +220,42 @@ public class BundlesReport extends AppCompatActivity {
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() { // Html.fromHtml("<font color='#FF7F27'>Yes</font>")
                             public void onClick(DialogInterface dialog, int whichButton) {
-
                                 jsonArrayBundles = new JSONArray();
                                 bundlesNoRows = new ArrayList<>();
-                                for (int i = 0; i < bundlesTable.getChildCount(); i++) {
-                                    TableRow table = (TableRow) bundlesTable.getChildAt(i);
-                                    CheckBox bundleCheck = (CheckBox) table.getChildAt(10);
-                                    TextView bundleNo = (TextView) table.getChildAt(1);
-                                    if (bundleCheck.isChecked()) {
-                                        bundlesNoRows.add(table);
-                                        Log.e("bundelCheak", "" + i + "  " + bundleInfos.get(Integer.parseInt(bundleCheck.getTag().toString())).getBundleNo());
-//                                        databaseHandler.updateAllPrinting(bundleNo.getText().toString(), 1);
-
+                                for (int i = 0; i < filtered.size(); i++) {
+                                    if (filtered.get(i).getChecked()) {
+                                        bundlesNoRows.add(filtered.get(i));///////////////////////////////////////
+//                                        Log.e("bundelCheak", "" + i + "  " + bundleInfos.get(Integer.parseInt(bundleCheck.getTag().toString())).getBundleNo());
                                         BundleInfo bundleInfo = new BundleInfo();
-                                        bundleInfo.setBundleNo(bundleNo.getText().toString());
+                                        bundleInfo.setBundleNo(filtered.get(i).getBundleNo());
                                         jsonArrayBundles.put(bundleInfo.getJSONObject());
                                     }
                                 }
 
                                 new JSONTask3().execute();
-
-//                                for (int i = 0; i < bundleInfoForPrint.size(); i++) {
-//                                    databaseHandler.updateAllPrinting(bundleInfoForPrint.get(i).getBundleNo(), 1);
-//
-//                                }
-//                                bundleInfos = databaseHandler.getAllBundleInfo("0");
-//                                bundlesTable.removeAllViews();
                                 bundleInfoForPrint.clear();
                                 presenter.getBundleReportList();
-//                                fillTable();
+//                                jsonArrayBundles = new JSONArray();
+//                                bundlesNoRows = new ArrayList<>();
+//                                for (int i = 0; i < bundlesTable.getChildCount(); i++) {
+//                                    TableRow table = (TableRow) bundlesTable.getChildAt(i);
+//                                    CheckBox bundleCheck = (CheckBox) table.getChildAt(10);
+//                                    TextView bundleNo = (TextView) table.getChildAt(1);
+//                                    if (bundleCheck.isChecked()) {
+//                                        bundlesNoRows.add(table);
+//                                        Log.e("bundelCheak", "" + i + "  " + bundleInfos.get(Integer.parseInt(bundleCheck.getTag().toString())).getBundleNo());
+//                                        BundleInfo bundleInfo = new BundleInfo();
+//                                        bundleInfo.setBundleNo(bundleNo.getText().toString());
+//                                        jsonArrayBundles.put(bundleInfo.getJSONObject());
+//                                    }
+//                                }
+//
+//                                new JSONTask3().execute();
+//                                bundleInfoForPrint.clear();
+//                                presenter.getBundleReportList();
                             }
                         })
                         .setNegativeButton("Cancel", null).show();
-
             }
         });
 
@@ -264,78 +283,31 @@ public class BundlesReport extends AppCompatActivity {
         TableRow tableRow;
         for (int m = 0; m < bundleInfos.size(); m++) {
             if (bundleInfos.get(m).getIsPrinted() != 1) {
-                tableRow = new TableRow(this);
-                tableRow = fillTableRows(tableRow
-                        , bundleInfos.get(m).getBundleNo()
-                        , "" + (int) bundleInfos.get(m).getLength()
-                        , "" + (int) bundleInfos.get(m).getWidth()
-                        , "" + (int) bundleInfos.get(m).getThickness()
-                        , bundleInfos.get(m).getGrade()
-                        , "" + (int) bundleInfos.get(m).getNoOfPieces()
-                        , bundleInfos.get(m).getLocation()
-                        , bundleInfos.get(m).getArea()
-                        , R.color.light_orange
-                        , m
-                        , bundleInfos.get(m).getSerialNo()
-                        , bundleInfos.get(m).getBackingList()
-                );
-                bundlesTable.addView(tableRow);
-
-//                TableRow finalTableRow = tableRow;
-//                tableRow.getVirtualChildAt(8).setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        PrintHelper photoPrinter = new PrintHelper(BundlesReport.this);
-//                        photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
-//                        TextView bundleNo = (TextView) finalTableRow.getChildAt(0);
-//                        TextView length = (TextView) finalTableRow.getChildAt(1);
-//                        TextView width = (TextView) finalTableRow.getChildAt(2);
-//                        TextView thic = (TextView) finalTableRow.getChildAt(3);
-//                        TextView grade = (TextView) finalTableRow.getChildAt(4);
-//                        TextView pcs = (TextView) finalTableRow.getChildAt(5);
-//                        Bitmap bitmap = writeBarcode(bundleNo.getText().toString(), length.getText().toString(), width.getText().toString(),
-//                                thic.getText().toString(), grade.getText().toString(), pcs.getText().toString());
-//                        databaseHandler.updateCheckPrinting(bundleNo.getText().toString(), 1);
-//
-//                        photoPrinter.printBitmap("invoice.jpg", bitmap);
-//                        Toast.makeText(BundlesReport.this, "tested+" + bundleNo.getText().toString(), Toast.LENGTH_SHORT).show();
-//                        bundleNumber = bundleNo.getText().toString();
-//                        new JSONTask2().execute();
-//
-//                        photoPrinter.printBitmap("invoice.jpg", bitmap);
-//                        Toast.makeText(BundlesReport.this, "tested+" + bundleNo.getText().toString(), Toast.LENGTH_SHORT).show();
-//
-//                    }
-//                });
-//
-//                TableRow clickTableRow = tableRow;
-//                tableRow.setOnLongClickListener(new View.OnLongClickListener() {
-//                    @Override
-//                    public boolean onLongClick(View v) {
-////                                                TextView textView = ((TextView) tableRow.getChildAt(0));
-////                                                tableRow.setBackgroundResource(R.color.light_orange_2);
-//                        String bundleNo = ((TextView) clickTableRow.getChildAt(1)).getText().toString();
-//                        Log.e("b", bundleNo);
-//                        AlertDialog.Builder builder = new AlertDialog.Builder(BundlesReport.this);
-//                        builder.setMessage("Are you want hide bundle number: " + bundleNo + " ?");
-//                        builder.setTitle("Hide");
-//                        builder.setIcon(R.drawable.ic_warning_black_24dp);
-//                        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-////                                databaseHandler.updateBundlesFlag(bundleNo);// 1 mean hide
-//                                bundleNumber = bundleNo;
-//                                hidedTableRow = clickTableRow;
-//                                new JSONTask2().execute();
-//
-//                            }
-//                        });
-//                        builder.show();
-//                        return false;
-//                    }
-//                });
+                filtered.add(bundleInfos.get(m));
             }
+//            if (bundleInfos.get(m).getIsPrinted() != 1) {
+//                tableRow = new TableRow(this);
+//                tableRow = fillTableRows(tableRow
+//                        , bundleInfos.get(m).getBundleNo()
+//                        , "" + (int) bundleInfos.get(m).getLength()
+//                        , "" + (int) bundleInfos.get(m).getWidth()
+//                        , "" + (int) bundleInfos.get(m).getThickness()
+//                        , bundleInfos.get(m).getGrade()
+//                        , "" + (int) bundleInfos.get(m).getNoOfPieces()
+//                        , bundleInfos.get(m).getLocation()
+//                        , bundleInfos.get(m).getArea()
+//                        , R.color.light_orange
+//                        , m
+//                        , bundleInfos.get(m).getSerialNo()
+//                        , bundleInfos.get(m).getBackingList()
+//                );
+//                bundlesTable.addView(tableRow);
+//
+//            }
         }
+
+        adapter = new BundelsReportAdapter(BundlesReport.this, filtered);
+        listView.setAdapter(adapter);
     }
 
     TableRow fillTableRows(TableRow tableRow, String bundlNo, String length, String width, String thic, String grade, String noOfPieces, String location, String area, int backgroundColor, int indexInList, String serialNo, String backingList) {
@@ -808,7 +780,7 @@ public class BundlesReport extends AppCompatActivity {
             Log.e("BundleReport", "json 2 " + s);
             if (s != null) {
                 if (s.contains("PRINT BUNDLE SUCCESS")) {
-                    bundlesTable.removeView(hidedTableRow);
+//                    bundlesTable.removeView(hidedTableRow);
                     Log.e("BundleReport", "****Success");
                 } else {
                     Toast.makeText(BundlesReport.this, "Failed to export data!", Toast.LENGTH_SHORT).show();
@@ -821,7 +793,7 @@ public class BundlesReport extends AppCompatActivity {
         }
     }
 
-    private class JSONTask3 extends AsyncTask<String, String, String> {
+    private class JSONTask3 extends AsyncTask<String, String, String> { // used to hide flag and remove bundle from the list
 
         @Override
         protected void onPreExecute() {
@@ -876,8 +848,10 @@ public class BundlesReport extends AppCompatActivity {
             if (s != null) {
                 if (s.contains("PRINT BUNDLES SUCCESS")) {
                     for (int i = 0; i < bundlesNoRows.size(); i++) {
-                        bundlesTable.removeView(bundlesNoRows.get(i));
+                        filtered.remove(bundlesNoRows.get(i)); ////////////////////////////////////////
                     }
+                    bundlesNoRows.clear();
+                    adapter.notifyDataSetChanged();
                     Log.e("tag", "****Success");
                 } else {
                     Toast.makeText(BundlesReport.this, "Failed to export data!", Toast.LENGTH_SHORT).show();
