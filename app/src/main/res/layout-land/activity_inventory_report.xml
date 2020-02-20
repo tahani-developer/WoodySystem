@@ -587,7 +587,7 @@
           >
 
             <LinearLayout
-                android:layout_width="250dp"
+                android:layout_width="210dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:layout_marginEnd="7dp"
@@ -655,7 +655,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="250dp"
+                android:layout_width="210dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:layout_marginEnd="7dp"
@@ -711,9 +711,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:layout_marginTop="1dp"
+                android:layout_marginEnd="7dp"
+                android:layout_marginRight="7dp"
                 android:background="@drawable/frame_shape"
                 android:fontFamily="serif"
                 android:text="@string/print"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/p_list_all"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginTop="1dp"
+                android:background="@drawable/frame_shape"
+                android:fontFamily="serif"
+                android:text="@string/p_list"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="18sp" />

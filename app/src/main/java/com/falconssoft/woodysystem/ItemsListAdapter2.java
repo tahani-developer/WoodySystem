@@ -98,13 +98,13 @@ public class ItemsListAdapter2 extends BaseAdapter {
         holder.location.setText("" + itemsList.get(i).getLocation());
         holder.area.setText("" + itemsList.get(i).getArea());
 
-//        if (itemsList.get(i).getPicture() == null) {
-//            holder.image.setImageDrawable(context.getDrawable(R.drawable.pic));
-//        }
-//        else {
-//            holder.image.setImageBitmap(StringToBitMap(itemsList.get(i).getPicture()));
+        if (itemsList.get(i).getPicture() == null) {
+            holder.image.setImageDrawable(context.getDrawable(R.drawable.pic));
+        }
+        else {
+            holder.image.setImageBitmap(StringToBitMap(itemsList.get(i).getPicture()));
 
-//        }
+        }
 //        holder.image.setOnClickListener(new View.OnClickListener() {
 //            @RequiresApi(api = Build.VERSION_CODES.M)
 //            @Override
