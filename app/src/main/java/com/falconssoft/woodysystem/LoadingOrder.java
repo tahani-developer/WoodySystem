@@ -100,6 +100,8 @@ public class LoadingOrder extends AppCompatActivity {
                 if (listContainsItems()) {
                     Intent intent = new Intent(LoadingOrder.this, LoadingOrder2.class);
                     startActivity(intent);
+                    finish();
+
 //                    setSlideAnimation();
                 } else {
                     Toast.makeText(LoadingOrder.this, "No item selected !", Toast.LENGTH_LONG).show();
@@ -252,10 +254,10 @@ public class LoadingOrder extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        finish();
+//        super.onBackPressed();
 //        Intent intent = new Intent(LoadingOrder.this, Stage3.class);
 //        startActivity(intent);
+        finish();
     }
 
     private class JSONTask extends AsyncTask<String, String, List<BundleInfo>> {

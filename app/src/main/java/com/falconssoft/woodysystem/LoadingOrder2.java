@@ -495,7 +495,7 @@ public class LoadingOrder2 extends AppCompatActivity {
     }
 
     public void onBackPressed() {
-        super.onBackPressed();
+//        super.onBackPressed();
         finish();
 //        Intent intent = new Intent(LoadingOrder2.this, LoadingOrder.class);
 //        startActivity(intent);

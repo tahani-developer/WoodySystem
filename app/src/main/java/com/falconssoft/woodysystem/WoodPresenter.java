@@ -248,7 +248,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject innerObject = array.getJSONObject(i);//ORDERED
 //                    Log.e("presenter:bun3 ", "" + innerObject.toString());
-//                    if (innerObject.getInt("ORDERED") == 0) {
+                    if (innerObject.getInt("ORDERED") == 0) {
                     BundleInfo bundleInfo = new BundleInfo();
                     bundleInfo.setThickness(innerObject.getDouble("THICKNESS"));
                     bundleInfo.setWidth(innerObject.getDouble("WIDTH"));
@@ -268,7 +268,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
 
                     bundleInfoServer2.add(bundleInfo);
                     bundleInfoServer.add(bundleInfo);
-//                    }
+                    }
                 }
 //                Log.e("bundleInfoServer", "/size/" + bundleInfoServer.size());
                 inventoryReport.filters();

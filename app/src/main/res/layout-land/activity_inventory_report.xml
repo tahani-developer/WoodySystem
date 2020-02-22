@@ -331,7 +331,6 @@
                 android:layout_weight="1.2"
                 android:background="@drawable/shape_with_corner"
                 android:orientation="horizontal"
-                android:paddingTop="10dp"
                 android:paddingEnd="5dp"
                 android:paddingRight="5dp">
 
@@ -339,15 +338,41 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="serif"
+                    android:paddingTop="10dp"
                     android:paddingStart="10dp"
                     android:paddingLeft="10dp"
-                    android:text="Planed to be"
+                    android:text="@string/p_list"
                     android:textSize="18sp" />
 
                 <Spinner
                     android:id="@+id/inventory_report_pl"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:visibility="visible"
+                   />
+
+                <EditText
+                    android:id="@+id/inventory_report_search_pList_box"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="serif"
+                    android:hint="@string/search"
+                    android:visibility="gone"
+                    android:minWidth="150dp"
+                    android:paddingStart="10dp"
+                    android:paddingLeft="10dp"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/inventory_report_search_pList_tool"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="serif"
+                    android:paddingStart="10dp"
+                    android:paddingLeft="10dp"
+                    android:drawableLeft="@drawable/ic_search_24dp"
+                    android:textSize="18sp" />
 
             </LinearLayout>
 
@@ -559,7 +584,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/inventory_report_linear4"
                 app:layout_constraintVertical_bias="0.0"/>
 
-
         <View
             android:id="@+id/inventory_report_linear6"
             android:layout_width="match_parent"
@@ -572,6 +596,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
 />
+
         <LinearLayout
             android:id="@+id/inventory_report_linear7"
             android:layout_width="match_parent"
