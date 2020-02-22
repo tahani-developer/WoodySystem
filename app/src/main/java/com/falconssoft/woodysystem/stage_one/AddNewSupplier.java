@@ -67,10 +67,12 @@ public class AddNewSupplier extends AppCompatActivity {
             public void onClick(View v) {
                 if (!supName.getText().toString().equals("")) {
 
+                    jsonArray = new JSONArray();
                     SupplierInfo supplierInfo = new SupplierInfo();
                     supplierInfo.setSupplierNo("" + (suppliers.size() + 1));
                     supplierInfo.setSupplierName(supName.getText().toString());
 
+                    suppliers.add(supplierInfo);
                     jsonArray.put(supplierInfo.getJSONObject());
                     new JSONTask2().execute();
                 }
@@ -119,7 +121,7 @@ public class AddNewSupplier extends AppCompatActivity {
             textView.setLayoutParams(textViewParam);
             switch (i) {
                 case 0:
-                    textView.setText("" + (suppliers.size() + 1));
+                    textView.setText("" + (suppliers.size()));
                     break;
                 case 1:
                     textView.setText(supName.getText().toString());
@@ -278,6 +280,8 @@ public class AddNewSupplier extends AppCompatActivity {
             if (s != null) {
                 if (s.contains("SUPPLIERS SUCCESS")) {
                     addSupp();
+
+                    supName.setText("");
                     Log.e("tag", "****Success");
                 } else {
                     Log.e("tag", "****Failed to export data");
