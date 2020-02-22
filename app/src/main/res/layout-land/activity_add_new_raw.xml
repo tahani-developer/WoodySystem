@@ -422,8 +422,8 @@
                         android:fontFamily="serif"
                         android:gravity="start"
                         android:text="@string/truck_no"
-                        android:theme="@style/AppTheme"
-                       />
+                        android:textSize="18sp"
+                        android:theme="@style/AppTheme" />
 
                     <EditText
                         android:id="@+id/addNewRaw_truckNo"
@@ -456,7 +456,7 @@
                         android:fontFamily="serif"
                         android:gravity="start"
                         android:text="@string/date_of_acceptance"
-                       />
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/addNewRaw_acceptance_date"
@@ -494,7 +494,7 @@
                         android:fontFamily="serif"
                         android:gravity="start"
                         android:text="@string/name_of_person_to_accept"
-                        />
+                        android:textSize="18sp" />
 
                     <EditText
                         android:id="@+id/addNewRaw_acceptor"
@@ -528,7 +528,7 @@
                         android:fontFamily="serif"
                         android:gravity="start"
                         android:text="@string/location_of_acceptance"
-                        />
+                        android:textSize="18sp" />
 
                     <EditText
                         android:id="@+id/addNewRaw_acceptance_location"
@@ -567,7 +567,7 @@
                         android:fontFamily="serif"
                         android:gravity="start"
                         android:text="@string/ttn_no"
-                       />
+                        android:textSize="18sp" />
 
                     <EditText
                         android:id="@+id/addNewRaw_ttn_no"
@@ -601,7 +601,7 @@
                         android:fontFamily="serif"
                         android:gravity="start"
                         android:text="@string/rejected_pieces_on_truck"
-                        />
+                        android:textSize="18sp" />
 
                     <EditText
                         android:id="@+id/addNewRaw_total_rejected"
@@ -638,7 +638,7 @@
                         android:fontFamily="serif"
                         android:gravity="start"
                         android:text="@string/net"
-                        />
+                        android:textSize="18sp" />
 
                     <EditText
                         android:id="@+id/addNewRaw_total_bundles"
