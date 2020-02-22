@@ -121,7 +121,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private JSONArray jsonArrayBundles = new JSONArray();
     private WoodPresenter woodPresenter;
     private Animation animation;
-    private TextView textView, noOfBundles, noOfPieces, cubicField, deleteAll, dateFrom, dateTo, thicknessOrder, widthOrder, lengthOrder;
+    private TextView textView, noOfBundles, noOfPieces, cubicField, deleteAll, dateFrom, dateTo, thicknessOrder, widthOrder, lengthOrder, searchPListTool;
     private Spinner location, area, ordered, pList, grade;
     private ArrayAdapter<String> locationAdapter;
     private ArrayAdapter<String> areaAdapter;
@@ -140,9 +140,9 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private List<BundleInfo> bundleInfoForPList = new ArrayList<>();
     private Button printAll, pListAll;
     private TableRow tableRowToDelete = null;
-    private EditText fromLength, toLength, fromWidth, toWidth, fromThickness, toThickness;
+    private EditText fromLength, toLength, fromWidth, toWidth, fromThickness, toThickness, searchPListTextView;
     private boolean isThicnessAsc = true, isWidthAsc = true, isLengthAsc = true;
-    private String fromLengthNo = "", toLengthNo = "", fromWidthhNo = "", toWidthNo = "", fromThicknessNo = "", toThicknessNo = "";
+    private String fromLengthNo = "", toLengthNo = "", fromWidthhNo = "", toWidthNo = "", fromThicknessNo = "", toThicknessNo = "", searchPackingList = "";
 //    private String f1 = "", f2 = "", f3 = "";
 
     private ListView listView;
@@ -377,7 +377,12 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         thicknessOrder = findViewById(R.id.inventory_report_thick_order);
         widthOrder = findViewById(R.id.inventory_report_width_order);
         lengthOrder = findViewById(R.id.inventory_report_length_order);
+        searchPListTextView = findViewById(R.id.inventory_report_search_pList_box);
+        searchPListTool = findViewById(R.id.inventory_report_search_pList_tool);
+        searchPListTextView.setVisibility(View.GONE);
 
+        searchPListTool.setOnClickListener(this);
+        searchPListTextView.addTextChangedListener(new watchTextChange(searchPListTextView));
         fromLength.addTextChangedListener(new watchTextChange(fromLength));
         toLength.addTextChangedListener(new watchTextChange(toLength));
         fromWidth.addTextChangedListener(new watchTextChange(fromWidth));
@@ -440,6 +445,10 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             switch (view.getId()) {
+                case R.id.inventory_report_search_pList_box:
+                    searchPackingList = String.valueOf(s);
+                    filters();
+                    break;
                 case R.id.inventory_report_fromLength:
                     fromLengthNo = String.valueOf(s);
                     filters();
@@ -688,7 +697,9 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                                                     || dateFiltered.get(k).getThickness() == Double.parseDouble(fromThicknessNo)))
 
                                                 if (toThicknessNo.equals("") || ((dateFiltered.get(k).getThickness() < Double.parseDouble(toThicknessNo))
-                                                        || dateFiltered.get(k).getThickness() == Double.parseDouble(toThicknessNo))) {
+                                                        || dateFiltered.get(k).getThickness() == Double.parseDouble(toThicknessNo)))
+
+                                                    if (searchPackingList.equals("") || ((dateFiltered.get(k).getBackingList().contains(searchPackingList)))) {
                                                     filtered.add(dateFiltered.get(k));
 
                                                     sumOfBundles = filtered.size();
@@ -939,6 +950,15 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     public void onClick(View v) {
         int flag = 0;
         switch (v.getId()) {
+            case R.id.inventory_report_search_pList_tool:
+                if (searchPListTextView.getVisibility() == View.VISIBLE){
+                    searchPListTextView.setVisibility(View.GONE);
+                    pList.setVisibility(View.VISIBLE);
+                }else {
+                    searchPListTextView.setVisibility(View.VISIBLE);
+                    pList.setVisibility(View.GONE);
+                }
+                break;
             case R.id.inventory_report_thick_order:
                 sortFlag = 0;
                 if (isThicnessAsc) {
