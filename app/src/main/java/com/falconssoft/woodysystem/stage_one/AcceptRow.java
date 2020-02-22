@@ -6,7 +6,7 @@ import android.widget.TextView;
 
 import com.falconssoft.woodysystem.R;
 
-public class AcceptRow extends AppCompatActivity {
+public class AcceptRow extends AppCompatActivity {   
 
 
     @Override
