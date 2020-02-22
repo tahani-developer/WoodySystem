@@ -737,6 +737,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     supplierName = "";
                     searchSupplier.setText("");
                     tableLayout.removeAllViews();
+                    newRowList.clear();
 
                     acceptRowLayout.setVisibility(View.GONE);
                     headerLayout.setVisibility(View.VISIBLE);

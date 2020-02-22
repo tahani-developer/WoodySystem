@@ -93,17 +93,19 @@
     <string name="generate_barcode">Створення штрих-коду</string>
 
     <string name="accept_raw">Прийняти рядок</string>
-    <string name="name_of_supplier">Name Of Supplier</string>
+    <string name="name_of_supplier">Постачальник</string>
     <string name="truck_no">Грузовик номер/№</string>
-    <string name="date_of_acceptance">Date Of Acceptance</string>
-    <string name="name_of_person_to_accept">Name Of Person To Accept</string>
-    <string name="location_of_acceptance">Location Of Acceptance</string>
+    <string name="date_of_acceptance">Дата прийняття</string>
+    <string name="name_of_person_to_accept">приймача</string>
+    <string name="location_of_acceptance">Місце прийняття</string>
     <string name="ttn_no">TTN Number</string>
-    <string name="rejection_list">Rejection List</string>
+    <string name="rejection_list">Список відхилень</string>
     <string name="new_supplier">Новий постачальник</string>
     <string name="find_supplier">Знайти постачальника</string>
-    <string name="generate_Barcode">Generate Barcode</string>
-    <string name="ordered">Ordered</string>
+    <string name="rejected_pieces_on_truck">Відхилені шматки</string>
+
+    <string name="generate_Barcode">Створення штрих-коду</string>
+    <string name="ordered">Упорядковано</string>
 
     <string name="edit">Редагувати</string>
     <string name="q1">Ви хочете видалити номер пакета: </string>
@@ -118,7 +120,7 @@
 
     <string name="fresh">Свежый</string>
     <string name="bs">BS</string>
-    <string name="reject">Reject</string>
+    <string name="reject">Відхилити</string>
 
     <string name="zone_1">Зона 1</string>
     <string name="zone_2">Зона 2</string>
@@ -136,4 +138,8 @@
     <string name="canadian_wood">Канадская древисина</string>
     <string name="swedian_wood">Швецкая древисина</string>
     <string name="latvian_wood">Латвийская древисина</string>
+
+    <string name="rejected_pieces"># Відхилено</string>
+    <string name="main_info">Основна інформація</string>
+    <string name="net">Чисті пачки</string>
 </resources>
