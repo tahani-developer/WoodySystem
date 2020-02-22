@@ -653,7 +653,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
             if (result != null) {
                 Log.e("result", "*****************" + result.size());
                 adapter.notifyDataSetChanged();
-
+ 
             } else {
                 Toast.makeText(AddNewRaw.this, "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();
             }
