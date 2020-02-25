@@ -54,11 +54,11 @@
 
 <!--    &lt;!&ndash;    ****************************************************************************&ndash;&gt;-->
 <!--    &lt;!&ndash;  portrait stage 1&ndash;&gt;-->
-<!--    <dimen name="stage1_p_margin_top">144dp</dimen>-->
+<!--    <dimen name="stage1_p_margin_top">330dp</dimen>-->
 <!--    <dimen name="stage1_p_margin2_top">30dp</dimen>-->
 <!--    <dimen name="stage1_p_margin_start">120dp</dimen>-->
 <!--    &lt;!&ndash;  land stage 1&ndash;&gt;-->
-<!--    <dimen name="stage1_margin1_start">100dp</dimen>-->
+<!--    <dimen name="stage1_margin1_start">270dp</dimen>-->
 <!--    <dimen name="stage1_margin2_start">20dp</dimen>-->
 <!--    <dimen name="stage1_margin_top">190dp</dimen>-->
 <!--    <dimen name="stage1_margin_end">50dp</dimen>-->

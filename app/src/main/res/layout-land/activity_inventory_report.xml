@@ -586,13 +586,13 @@
         <ListView
             android:id="@+id/list"
             android:layout_width="match_parent"
-            android:layout_height="280dp"
+            android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@+id/inventory_report_linear6"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/inventory_report_linear4"
-            app:layout_constraintVertical_bias="0.0"/>
+            app:layout_constraintVertical_bias="0.0" />
 
         <View
             android:id="@+id/inventory_report_linear6"
