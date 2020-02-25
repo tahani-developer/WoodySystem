@@ -673,6 +673,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 //        Log.e("follow", fromDate + " to " + toDate + " size1 " + bundleInfoServer.size() + " size2 " + dateFiltered.size());
 
         for (int k = 0; k < dateFiltered.size(); k++) {
+            Log.e("datefiltered", "" + dateFiltered.get(k).getBackingList());
             String dateFiltered2 = String.valueOf(dateFiltered.get(k).getOrdered());
             if (loc.equals("All") || loc.equals(dateFiltered.get(k).getLocation())) {
                 if (areaField.equals("All") || areaField.equals(dateFiltered.get(k).getArea())) {
