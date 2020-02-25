@@ -245,10 +245,10 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                 JSONObject object = new JSONObject(response);
 //                Log.e("presenter:bun1", "" + object.toString());
                 JSONArray array = object.getJSONArray("BUNDLE_INFO");
-//                Log.e("presenter:bun2", "" + array.length());
+                Log.e("presenter:bun2", "" + array.length());
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject innerObject = array.getJSONObject(i);//ORDERED
-//                    Log.e("presenter:bun3 ", "" + innerObject.toString());
+                    Log.e("presenter:bun3 ", "" + innerObject.toString());
                     if (innerObject.getInt("ORDERED") == 0) {
                     BundleInfo bundleInfo = new BundleInfo();
                     bundleInfo.setThickness(innerObject.getDouble("THICKNESS"));
@@ -265,7 +265,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                     bundleInfo.setAddingDate(innerObject.getString("BUNDLE_DATE"));
                     bundleInfo.setSerialNo(innerObject.getString("B_SERIAL"));
                     bundleInfo.setBackingList(innerObject.getString("BACKING_LIST"));
-//                    Log.e("presenter:bun3 ", "" + bundleInfo.getBackingList());
+                    Log.e("presenter:bun3 ", "" + bundleInfo.getBackingList());
 
                     bundleInfoServer2.add(bundleInfo);
                     bundleInfoServer.add(bundleInfo);
