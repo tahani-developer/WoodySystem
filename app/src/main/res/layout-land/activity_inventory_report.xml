@@ -220,10 +220,88 @@
                 android:gravity="center">
 
                 <EditText
+                    android:id="@+id/inventory_report_fromThick"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:hint="@string/from"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/frame_shape"
+                    android:fontFamily="serif"
+                    android:text="Th"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/inventory_report_toThick"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:hint="@string/to"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginEnd="7dp"
+                android:layout_marginRight="7dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_with_corner"
+                android:gravity="center">
+
+                <EditText
+                    android:id="@+id/inventory_report_fromWidth"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:hint="@string/from"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/frame_shape"
+                    android:fontFamily="serif"
+                    android:text="W"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/inventory_report_toWidth"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:hint="@string/to"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginEnd="7dp"
+                android:layout_marginRight="7dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_with_corner"
+                android:gravity="center">
+
+                <EditText
                     android:id="@+id/inventory_report_fromLength"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:inputType="numberDecimal"
                     android:gravity="center"
                     android:hint="@string/from"/>
 
@@ -243,82 +321,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
+                    android:inputType="numberDecimal"
                     android:hint="@string/to"/>
 
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="45dp"
-                android:layout_marginEnd="7dp"
-                android:layout_marginRight="7dp"
-                android:layout_weight="1"
-                android:background="@drawable/shape_with_corner"
-                android:gravity="center">
-
-                <EditText
-                    android:id="@+id/inventory_report_fromWidth"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:hint="@string/from"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.5"
-                    android:background="@drawable/frame_shape"
-                    android:fontFamily="serif"
-                    android:text="W"
-                    android:textColor="@color/white"
-                    android:textSize="18sp" />
-
-                <EditText
-                    android:id="@+id/inventory_report_toWidth"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:hint="@string/to"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="45dp"
-                android:layout_marginEnd="7dp"
-                android:layout_marginRight="7dp"
-                android:layout_weight="1"
-                android:background="@drawable/shape_with_corner"
-                android:gravity="center">
-
-                <EditText
-                    android:id="@+id/inventory_report_fromThick"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:hint="@string/from"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.5"
-                    android:background="@drawable/frame_shape"
-                    android:fontFamily="serif"
-                    android:text="Th"
-                    android:textColor="@color/white"
-                    android:textSize="18sp" />
-
-                <EditText
-                    android:id="@+id/inventory_report_toThick"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:hint="@string/to"/>
             </LinearLayout>
 
             <LinearLayout
@@ -348,6 +354,7 @@
                     android:id="@+id/inventory_report_pl"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:paddingTop="10dp"
                     android:visibility="visible"
                    />
@@ -356,6 +363,7 @@
                     android:id="@+id/inventory_report_search_pList_box"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:fontFamily="serif"
                     android:hint="@string/search"
                     android:visibility="gone"
@@ -371,6 +379,8 @@
                     android:fontFamily="serif"
                     android:paddingStart="10dp"
                     android:paddingLeft="10dp"
+                    android:paddingEnd="10dp"
+                    android:paddingRight="10dp"
                     android:drawableLeft="@drawable/ic_search_24dp"
                     android:textSize="18sp" />
 
@@ -573,16 +583,16 @@
 
         </TableRow>
 
-            <ListView
-                android:id="@+id/list"
-                android:layout_width="match_parent"
-                android:layout_height="280dp"
-                app:layout_constraintBottom_toTopOf="@+id/inventory_report_linear6"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/inventory_report_linear4"
-                app:layout_constraintVertical_bias="0.0"/>
+        <ListView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="280dp"
+            app:layout_constraintBottom_toTopOf="@+id/inventory_report_linear6"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/inventory_report_linear4"
+            app:layout_constraintVertical_bias="0.0"/>
 
         <View
             android:id="@+id/inventory_report_linear6"

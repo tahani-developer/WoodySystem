@@ -13,9 +13,15 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
+    <supports-screens
+    android:largeScreens="true"
+    android:xlargeScreens="true"
+    android:anyDensity="true"
+    android:requiresSmallestWidthDp="480"
+   />
 
+    <uses-sdk android:minSdkVersion="15" android:targetSdkVersion="28"/>
     <uses-permission
         android:name="android.permission.CONNECTIVITY_INTERNAL"
         tools:ignore="ProtectedPermissions" />
@@ -28,9 +34,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
-
         tools:ignore="GoogleAppIndexingWarning">
-
 
 
         <uses-library android:name="org.apache.http.legacy" android:required="false"/>
