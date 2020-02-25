@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class SuppliersAdapter extends RecyclerView.Adapter<SuppliersViewHolder> {
+public class SuppliersAdapter extends RecyclerView.Adapter<SuppliersAdapter.SuppliersViewHolder> {
 
     private AddNewRaw addNewRaw;
     private List<SupplierInfo> supplierInfoList;
@@ -45,8 +45,8 @@ public class SuppliersAdapter extends RecyclerView.Adapter<SuppliersViewHolder> 
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               addNewRaw.getSearchSupplierInfo(supplierInfoList.get(i).getSupplierName()
-                       , supplierInfoList.get(i).getSupplierNo());
+                addNewRaw.getSearchSupplierInfo(supplierInfoList.get(i).getSupplierName()
+                        , supplierInfoList.get(i).getSupplierNo());
             }
         });
 
@@ -72,18 +72,19 @@ public class SuppliersAdapter extends RecyclerView.Adapter<SuppliersViewHolder> 
         this.notifyDataSetChanged();
 //        addNewRaw.notifyAdapter(supplierInfoList);
     }
-}
 
-class SuppliersViewHolder extends RecyclerView.ViewHolder {
 
-    TextView supplierNo, supplierName;
-    LinearLayout linearLayout;
+    class SuppliersViewHolder extends RecyclerView.ViewHolder {
 
-    public SuppliersViewHolder(@NonNull View itemView) {
-        super(itemView);
-        linearLayout = itemView.findViewById(R.id.supplier_row_linear);
-        supplierNo = itemView.findViewById(R.id.supplier_row_supplier_no);
-        supplierName = itemView.findViewById(R.id.supplier_row_supplier_name);
+        TextView supplierNo, supplierName;
+        LinearLayout linearLayout;
 
+        public SuppliersViewHolder(@NonNull View itemView) {
+            super(itemView);
+            linearLayout = itemView.findViewById(R.id.supplier_row_linear);
+            supplierNo = itemView.findViewById(R.id.supplier_row_supplier_no);
+            supplierName = itemView.findViewById(R.id.supplier_row_supplier_name);
+
+        }
     }
 }

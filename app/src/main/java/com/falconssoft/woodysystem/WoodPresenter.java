@@ -2,6 +2,7 @@ package com.falconssoft.woodysystem;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
@@ -387,6 +388,8 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
         @Override
         public void onErrorResponse(VolleyError error) {
             Log.e("presenter/packingList", "/err/" + error);
+            if (error.toString().contains("com.android.volley.TimeoutError"))
+                Toast.makeText(context, "Please check internet connection!", Toast.LENGTH_SHORT).show();
         }
 
         @Override
