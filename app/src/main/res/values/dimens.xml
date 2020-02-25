@@ -63,6 +63,15 @@
 <!--    <dimen name="stage1_margin_top">190dp</dimen>-->
 <!--    <dimen name="stage1_margin_end">50dp</dimen>-->
 
+<!--    &lt;!&ndash;    ****************************************************************************&ndash;&gt;-->
+<!--    &lt;!&ndash;  portrait loading Order 2&ndash;&gt;-->
+<!--    <dimen name="loadingOrder2_p_margin_top">50dp</dimen>-->
+<!--    <dimen name="loadingOrder2_p_padding_bottom">30dp</dimen>-->
+<!--    <dimen name="loadingOrder2_text_size">35sp</dimen>-->
+
+<!--    &lt;!&ndash;  land loading Order 2&ndash;&gt;-->
+<!--    <dimen name="loadingOrder2_margin_start">150dp</dimen>-->
+<!--    <dimen name="loadingOrder2_margin_top">50dp</dimen>-->
 
     <!--    ****************************************************************************-->
     <!--    ****************************************************************************-->
@@ -131,6 +140,15 @@
     <dimen name="stage1_margin_top">150dp</dimen>
     <dimen name="stage1_margin_end">50dp</dimen>
 
+        ****************************************************************************
+<!--      portrait loading Order 2-->
+    <dimen name="loadingOrder2_p_margin_top">0dp</dimen>
+    <dimen name="loadingOrder2_p_padding_bottom">0dp</dimen>
+    <dimen name="loadingOrder2_text_size">25sp</dimen>
+
+    <!--  land loading Order 2-->
+    <dimen name="loadingOrder2_margin_start">0dp</dimen>
+    <dimen name="loadingOrder2_margin_top">0dp</dimen>
 
     <!--    ****************************************************************************-->
     <!--    ****************************************************************************-->

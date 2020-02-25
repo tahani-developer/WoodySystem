@@ -13,17 +13,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:background="@color/alpha_black">
+        android:background="@color/alpha_black_dark">
 
     <ListView
         android:id="@+id/verticalListView"
         android:layout_width="310dp"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/loadingOrder2_margin_start"
+        android:layout_marginLeft="@dimen/loadingOrder2_margin_start"
+        />
 
     <LinearLayout
         android:layout_width="480dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/loadingOrder2_margin_top">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -47,7 +51,7 @@
                 android:text="@string/loading_order"
                 android:textColor="@color/orange"
                 android:fontFamily="serif"
-                android:textSize="25sp"
+                android:textSize="@dimen/loadingOrder2_text_size"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
