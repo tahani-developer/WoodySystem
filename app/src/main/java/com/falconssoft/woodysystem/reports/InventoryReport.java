@@ -444,31 +444,31 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             switch (view.getId()) {
                 case R.id.inventory_report_search_pList_box:
-                    searchPackingList = String.valueOf(s);
+                    searchPackingList = String.valueOf(s);//formatDecimalValue(String.valueOf(s));
                     filters();
                     break;
                 case R.id.inventory_report_fromLength:
-                    fromLengthNo = String.valueOf(s);
+                    fromLengthNo = String.valueOf(s);//formatDecimalValue(String.valueOf(s));
                     filters();
                     break;
                 case R.id.inventory_report_toLength:
-                    toLengthNo = String.valueOf(s);
+                    toLengthNo = String.valueOf(s);//formatDecimalValue(String.valueOf(s));
                     filters();
                     break;
                 case R.id.inventory_report_fromWidth:
-                    fromWidthNo = String.valueOf(s);
+                    fromWidthNo = String.valueOf(s);//formatDecimalValue(String.valueOf(s));
                     filters();
                     break;
                 case R.id.inventory_report_toWidth:
-                    toWidthNo = String.valueOf(s);
+                    toWidthNo = String.valueOf(s);//formatDecimalValue(String.valueOf(s));
                     filters();
                     break;
                 case R.id.inventory_report_fromThick:
-                    fromThicknessNo = String.valueOf(s);
+                    fromThicknessNo = String.valueOf(s);//formatDecimalValue(String.valueOf(s));
                     filters();
                     break;
                 case R.id.inventory_report_toThick:
-                    toThicknessNo = String.valueOf(s);
+                    toThicknessNo = String.valueOf(s);//formatDecimalValue(String.valueOf(s));
                     filters();
                     break;
             }
@@ -478,6 +478,20 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         public void afterTextChanged(Editable s) {
 
         }
+    }
+
+    String formatDecimalValue(String value) {
+        String charOne = String.valueOf(value.charAt(0));
+//        String charEnd = String.valueOf(value.charAt(value.length() - 1));
+
+        if (charOne.equals("."))
+            return ("0" + value);
+//        else if (charEnd.equals(".")) {
+//            value = value.substring(0, value.length() - 1);
+////            Log.e("checkValidData3", "" +value);
+//            return (value);
+//        }
+        return value;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
