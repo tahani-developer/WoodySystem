@@ -26,7 +26,7 @@
             android:layout_marginStart="@dimen/stage1_margin1_start"
             android:layout_marginLeft="@dimen/stage1_margin1_start"
             android:layout_marginTop="@dimen/stage1_margin_top"
-            android:background="@drawable/border_background"
+            android:background="@drawable/frame_shape"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -45,7 +45,7 @@
                 android:fontFamily="serif"
                 android:gravity="center_horizontal"
                 android:text="@string/enter_inventory"
-                android:textColor="@color/orange"
+                android:textColor="@color/white"
                 android:textSize="20sp" />
         </LinearLayout>
 
@@ -86,10 +86,8 @@
             android:layout_height="@dimen/stage3_views2_land"
             android:layout_marginStart="@dimen/stage1_margin2_start"
             android:layout_marginLeft="@dimen/stage1_margin2_start"
-            android:layout_marginEnd="@dimen/stage1_margin_end"
-            android:layout_marginRight="@dimen/stage1_margin_end"
             android:layout_marginTop="@dimen/stage1_margin_top"
-            android:background="@drawable/frame_shape"
+            android:background="@drawable/border_background"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -107,6 +105,38 @@
                 android:layout_margin="10dp"
                 android:gravity="center_horizontal"
                 android:text="@string/generate_barcode"
+                android:fontFamily="serif"
+                android:textColor="@color/orange"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/stage1_reports"
+            android:layout_width="@dimen/stage3_views_land"
+            android:layout_height="@dimen/stage3_views2_land"
+            android:layout_marginStart="@dimen/stage1_margin2_start"
+            android:layout_marginLeft="@dimen/stage1_margin2_start"
+            android:layout_marginEnd="@dimen/stage1_margin_end"
+            android:layout_marginRight="@dimen/stage1_margin_end"
+            android:layout_marginTop="@dimen/stage1_margin_top"
+            android:background="@drawable/frame_shape"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="130dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/real_report"
+                android:scaleType="fitCenter" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="10dp"
+                android:gravity="center_horizontal"
+                android:text="@string/reports"
                 android:fontFamily="serif"
                 android:textColor="@color/white"
                 android:textSize="20sp" />

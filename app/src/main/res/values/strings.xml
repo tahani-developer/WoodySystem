@@ -99,7 +99,7 @@
     <string name="rejection_list">Rejection List</string>
     <string name="new_supplier">New Supplier</string>
     <string name="find_supplier">Find Supplier</string>
-    <string name="rejected_pieces_on_truck">Rejected Pieces on Truck</string>
+    <string name="rejected_pieces_on_truck">Rejected Pieces</string>
 
     <string name="generate_Barcode">Generate Barcode</string>
     <string name="ordered">Ordered</string>

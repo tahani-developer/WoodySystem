@@ -62,7 +62,7 @@
             android:layout_marginStart="@dimen/stage1_p_margin_start"
             android:layout_marginLeft="@dimen/stage1_p_margin_start"
             android:layout_marginTop="@dimen/stage1_p_margin_top"
-            android:background="@drawable/border_background"
+            android:background="@drawable/frame_shape"
             android:gravity="center"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
@@ -86,7 +86,7 @@
                 android:gravity="center_horizontal"
                 android:lineSpacingExtra="15dp"
                 android:text="@string/enter_inventory"
-                android:textColor="@color/orange"
+                android:textColor="@color/white"
                 android:textSize="20sp" />
         </LinearLayout>
 
@@ -97,7 +97,7 @@
             android:layout_marginStart="@dimen/stage1_p_margin_start"
             android:layout_marginLeft="@dimen/stage1_p_margin_start"
             android:layout_marginTop="@dimen/stage1_p_margin2_top"
-            android:background="@drawable/frame_shape"
+            android:background="@drawable/border_background"
             android:gravity="center"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
@@ -120,6 +120,40 @@
                 android:fontFamily="serif"
                 android:gravity="center_horizontal"
                 android:text="@string/generate_barcode"
+                android:textColor="@color/orange"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/stage1_reports"
+            android:layout_width="@dimen/stage3_views"
+            android:layout_height="@dimen/stage3_views2"
+            android:layout_marginStart="@dimen/stage1_p_margin_start"
+            android:layout_marginLeft="@dimen/stage1_p_margin_start"
+            android:layout_marginTop="@dimen/stage1_p_margin2_top"
+            android:background="@drawable/frame_shape"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.318"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/stage1_generate_barcode">
+
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/real_report"
+                android:scaleType="fitCenter" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="10dp"
+                android:fontFamily="serif"
+                android:gravity="center_horizontal"
+                android:text="@string/reports"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
         </LinearLayout>
