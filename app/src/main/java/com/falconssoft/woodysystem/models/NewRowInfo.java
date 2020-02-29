@@ -25,6 +25,18 @@ public class NewRowInfo {
     public NewRowInfo() {
     }
 
+    public NewRowInfo(String supplierName, double thickness, double width, double length, double noOfPieces, double noOfRejected, double noOfBundles, String grade, String truckNo) {
+        this.supplierName = supplierName;
+        this.thickness = thickness;
+        this.width = width;
+        this.length = length;
+        this.noOfPieces = noOfPieces;
+        this.noOfRejected = noOfRejected;
+        this.noOfBundles = noOfBundles;
+        this.grade = grade;
+        this.truckNo = truckNo;
+    }
+
     public String getSupplierName() {
         return supplierName;
     }

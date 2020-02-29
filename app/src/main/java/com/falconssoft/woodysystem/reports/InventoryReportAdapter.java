@@ -1,4 +1,4 @@
-package com.falconssoft.woodysystem;
+package com.falconssoft.woodysystem.reports;
 
 import android.content.Context;
 import android.util.Log;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InventoryReportAdapter extends BaseAdapter {
- 
+
     private Context context;
 //    private List<BundleInfo> mOriginalValues;
     private static List<BundleInfo> itemsList;
