@@ -15,7 +15,7 @@ import com.falconssoft.woodysystem.ReportsActivity;
 
 public class StageOne extends AppCompatActivity implements View.OnClickListener {
 
-    private LinearLayout addRaw, acceptInfo, generateBarcode;
+    private LinearLayout addRaw, acceptInfo, generateBarcode, reports;
     private Animation animation;
 
     @Override
@@ -25,17 +25,24 @@ public class StageOne extends AppCompatActivity implements View.OnClickListener 
         addRaw = findViewById(R.id.stage1_new_raw);
         acceptInfo = findViewById(R.id.stage1_accept_info);
         generateBarcode = findViewById(R.id.stage1_generate_barcode);
+        reports = findViewById(R.id.stage1_reports);
 
         addRaw.setOnClickListener(this);
         acceptInfo.setOnClickListener(this);
         generateBarcode.setOnClickListener(this);
+        reports.setOnClickListener(this);
 
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
         addRaw.setAnimation(animation);
+
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
         acceptInfo.setAnimation(animation);
+
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
         generateBarcode.setAnimation(animation);
+
+        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
+        reports.setAnimation(animation);
 
     }
 
