@@ -35,7 +35,6 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
 
-
         <uses-library android:name="org.apache.http.legacy" android:required="false"/>
         <activity android:name=".stage_one.AddNewSupplier"></activity>
         <activity android:name=".stage_one.StageOne" />
@@ -44,51 +43,49 @@
         <activity
             android:name=".reports.InventoryReport"
             android:windowSoftInputMode="adjustNothing|stateAlwaysHidden"
-            android:screenOrientation="sensorLandscape" >
-
-
-        </activity>
+            android:screenOrientation="sensorLandscape" />
 
         <activity
             android:name=".reports.AcceptanceReport"
             android:windowSoftInputMode="adjustNothing|stateAlwaysHidden"
-            android:screenOrientation="sensorLandscape" >
+            android:screenOrientation="sensorLandscape" />
+
+        <activity
+            android:name=".reports.BundlesReport"
+            android:screenOrientation="sensorLandscape" />
+
+        <activity android:name=".ReportsActivity" />
+
+        <activity
+            android:name=".LoginActivity"
+            android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-        <activity
-            android:name=".reports.BundlesReport"
-            android:screenOrientation="sensorLandscape" />
-        <activity android:name=".ReportsActivity" />
-        <activity
-            android:name=".LoginActivity"
-            android:windowSoftInputMode="stateAlwaysHidden">
 
-        </activity>
         <activity
             android:name=".AddToInventory"
-            android:windowSoftInputMode="stateAlwaysHidden" >
-
-        </activity>
+            android:windowSoftInputMode="stateAlwaysHidden"/>
 
         <activity
             android:name=".stage_one.GenerateBarCode"
             android:screenOrientation="sensorLandscape" />
+
         <activity
             android:name=".Stage3"
-            android:windowSoftInputMode="stateAlwaysHidden" >
+            android:windowSoftInputMode="stateAlwaysHidden"/>
 
-        </activity>
         <activity
             android:name=".LoadingOrder"
-            android:windowSoftInputMode="stateAlwaysHidden" />
+            android:windowSoftInputMode="stateAlwaysHidden"/>
+
         <activity
             android:name=".LoadingOrder2"
-            android:windowSoftInputMode="stateAlwaysHidden" />
+            android:windowSoftInputMode="stateAlwaysHidden"/>
+
         <activity
             android:name=".reports.LoadingOrderReport"
             android:screenOrientation="sensorLandscape"

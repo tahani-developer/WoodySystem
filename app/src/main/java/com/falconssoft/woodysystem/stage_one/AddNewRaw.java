@@ -260,12 +260,27 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         String noOfBundlesLocal = noOfBundles.getText().toString();
 
         if (!TextUtils.isEmpty(supplierName)) {
-            if (!TextUtils.isEmpty(thicknessLocal))
-                if (!TextUtils.isEmpty(widthLocal))
-                    if (!TextUtils.isEmpty(lengthLocal))
-                        if (!TextUtils.isEmpty(noOfPiecesLocal))
-                            if (!TextUtils.isEmpty(noOfRejectedLocal))
-                                if (!TextUtils.isEmpty(noOfBundlesLocal)) {
+            if (!TextUtils.isEmpty(thicknessLocal) && (!checkValidData(thicknessLocal)))
+                if (!TextUtils.isEmpty(widthLocal)&& (!checkValidData(widthLocal)))
+                    if (!TextUtils.isEmpty(lengthLocal)&& (!checkValidData(lengthLocal)))
+                        if (!TextUtils.isEmpty(noOfPiecesLocal)&& (!checkValidData(noOfPiecesLocal)))
+                            if (!TextUtils.isEmpty(noOfRejectedLocal)&& (!checkValidData(noOfRejectedLocal)))
+                                if (!TextUtils.isEmpty(noOfBundlesLocal)&& (!checkValidData(noOfBundlesLocal))) {
+
+                                    thicknessLocal = formatDecimalValue(thicknessLocal);
+                                    widthLocal = formatDecimalValue(widthLocal);
+                                    lengthLocal = formatDecimalValue(lengthLocal);
+                                    noOfPiecesLocal = formatDecimalValue(noOfPiecesLocal);
+                                    noOfRejectedLocal = formatDecimalValue(noOfRejectedLocal);
+                                    noOfBundlesLocal = formatDecimalValue(noOfBundlesLocal);
+
+                                    thicknessLocal = isContainValueAfterDot(thicknessLocal);
+                                    widthLocal = isContainValueAfterDot(widthLocal);
+                                    lengthLocal = isContainValueAfterDot(lengthLocal);
+                                    noOfPiecesLocal = isContainValueAfterDot(noOfPiecesLocal);
+                                    noOfRejectedLocal = isContainValueAfterDot(noOfRejectedLocal);
+                                    noOfBundlesLocal = isContainValueAfterDot(noOfBundlesLocal);
+
                                     NewRowInfo rowInfo = new NewRowInfo();
                                     rowInfo.setSupplierName(supplierName);
                                     rowInfo.setThickness(Double.parseDouble(thicknessLocal));
@@ -381,6 +396,45 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         } else {
             Toast.makeText(this, "Please add rows firs!", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    boolean checkValidData(String word) {
+//        Log.e("checkValidData4", word + ((word.length() == 1)));
+//        Log.e("checkValidData4", word + ((word.contains("."))));
+//        Log.e("checkValidData4", word + ((word.length() == 1) && (word.equals("."))));
+        if ((word.length() == 1) && (word.contains(".")))
+            return true;
+        return false;
+    }
+
+    String formatDecimalValue(String value) {
+        String charOne = String.valueOf(value.charAt(0));
+        String charEnd = String.valueOf(value.charAt(value.length() - 1));
+
+        if (charOne.equals("."))
+            return ("0" + value);
+        else if (charEnd.equals(".")) {
+            value = value.substring(0, value.length() - 1);
+//            Log.e("checkValidData3", "" +value);
+            return (value);
+        }
+        Log.e("value", value);
+        return value;
+    }
+
+    String isContainValueAfterDot(String string) {
+        String isConten = "";
+        String afterDot = string.substring(string.indexOf(".") + 1, string.length());
+//        Log.e("afterDot", "" + afterDot + "      " + string);
+        if (!(Integer.parseInt(afterDot) > 0)) {
+            isConten = string.substring(0, string.indexOf("."));
+        } else {
+            isConten = string;
+        }
+        Log.e("value2", isConten);
+//        Log.e("afterDotreturn", "" + afterDot + "      " + isConten);
+        return isConten;
+
     }
 
     public void getSearchSupplierInfo(String supplierNameLocal, String supplierNoLocal) {
@@ -717,7 +771,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Log.e("tag of row info", s);
+//            Log.e("tag of row info", s);
             if (s != null) {
                 if (s.contains("RAW_INFO SUCCESS")) {
 
@@ -752,7 +806,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 //                presenter.setSerialNo("");
 //                SettingsFile.serialNumber = "";
                 Log.e("tag", "****Failed to export data Please check internet connection");
-//                Toast.makeText(AddToInventory.this, "Failed to export data Please check internet connection", Toast.LENGTH_LONG).show();
+                Toast.makeText(AddNewRaw.this, "Failed to export data Please check internet connection", Toast.LENGTH_LONG).show();
             }
         }
     }

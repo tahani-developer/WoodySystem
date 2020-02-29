@@ -12,6 +12,7 @@ import com.falconssoft.woodysystem.AddToInventory;
 import com.falconssoft.woodysystem.LoadingOrder;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.ReportsActivity;
+import com.falconssoft.woodysystem.reports.AcceptanceReport;
 
 public class StageOne extends AppCompatActivity implements View.OnClickListener {
 
@@ -61,6 +62,10 @@ public class StageOne extends AppCompatActivity implements View.OnClickListener 
             case R.id.stage1_generate_barcode:
                 Intent intent3 = new Intent(this, GenerateBarCode.class);
                 startActivity(intent3);
+                break;
+            case R.id.stage1_reports:
+                Intent intent4 = new Intent(this, AcceptanceReport.class);
+                startActivity(intent4);
                 break;
         }
     }
