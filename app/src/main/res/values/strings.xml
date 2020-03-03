@@ -117,7 +117,7 @@
 
     <string name="fresh">Fresh</string>
     <string name="bs">BS</string>
-    <string name="reject">Reject</string>
+    <string name="reject">Rejected</string>
 
     <string name="zone_1">Zone 1</string>
     <string name="zone_2">Zone 2</string>
@@ -140,5 +140,9 @@
     <string name="main_info">Main Info</string>
     <string name="net">Net Bundles</string>
 
+    <string name="acceptance_report">Acceptance Report</string>
+    <string name="truck">Truck</string>
+    <string name="acceptor">Acceptor</string>
+    <string name="ttn">TTN</string>
 
 </resources>

@@ -199,7 +199,7 @@ public class AcceptanceReport extends AppCompatActivity {
             BufferedReader reader = null;
 
             try {
-
+//                http://10.0.0.214/woody/import.php?FLAG=5
                 URL url = new URL("http://" + generalSettings.getIpAddress() + "/import.php?FLAG=5");
 
                 URLConnection conn = url.openConnection();
