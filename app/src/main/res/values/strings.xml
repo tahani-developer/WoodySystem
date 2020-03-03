@@ -144,5 +144,6 @@
     <string name="truck">Truck</string>
     <string name="acceptor">Acceptor</string>
     <string name="ttn">TTN</string>
+    <string name="acceptance_loc">A.Location</string>
 
 </resources>

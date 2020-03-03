@@ -285,8 +285,8 @@
                     android:fontFamily="serif"
                     android:paddingStart="10dp"
                     android:paddingLeft="10dp"
-                    android:text="@string/loc"
-                    android:textSize="18sp" />
+                    android:text="@string/acceptance_loc"
+                    android:textSize="15sp" />
 
                 <EditText
                     android:id="@+id/acceptanceInfo_report_location"
@@ -440,8 +440,6 @@
                 android:id="@+id/checkBoxPrint"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
-                android:layout_marginLeft="5dp"
                 android:layout_marginEnd="1dp"
                 android:layout_marginRight="1dp"
                 android:background="@color/orange" />
@@ -449,6 +447,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:layout_marginEnd="1dp"
                 android:layout_marginRight="1dp"
                 android:background="@color/orange"
@@ -585,6 +584,7 @@
                 android:layout_marginRight="1dp"/>
 
             <TextView
+                android:visibility="gone"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1.2"
@@ -622,7 +622,7 @@
         </TableRow>
 
         <ListView
-            android:id="@+id/list"
+            android:id="@+id/acceptanceInfo_list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@+id/acceptanceInfo_report_linear6"
