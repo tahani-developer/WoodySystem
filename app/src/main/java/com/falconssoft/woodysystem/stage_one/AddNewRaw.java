@@ -116,7 +116,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE};
-
+    private List<SupplierInfo> arraylist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,6 +129,8 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         generalSettings = new Settings();
         generalSettings = databaseHandler.getSettings();
         presenter = new WoodPresenter(this);
+        this.arraylist = new ArrayList<>();
+//        this.arraylist.addAll(this.supplierInfoList);
 
         coordinatorLayout = findViewById(R.id.addNewRow_coordinator);
         addNewSupplier = findViewById(R.id.addNewRaw_add_supplier);
@@ -288,7 +290,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
                     @Override
                     public boolean onQueryTextChange(String newText) {
-                        adapter.filter(newText);
+                        filter(newText);
 //                        adapter.notifyDataSetChanged();
                         return false;
                     }
@@ -337,6 +339,22 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                 break;
         }
 
+    }
+
+    public void filter(String charText) { // by Name
+        charText = charText.toLowerCase(Locale.getDefault());
+        arraylist.clear();
+        if (charText.length() == 0) {
+            arraylist.addAll(suppliers);
+        } else {
+            for (SupplierInfo supplierInfo : suppliers) {//for (SupplierInfo supplierInfo : arraylist){
+                if (supplierInfo.getSupplierName().toLowerCase(Locale.getDefault()).contains(charText)) {
+                    arraylist.add(supplierInfo);
+                }
+            }
+        }
+        adapter = new SuppliersAdapter(this, arraylist);
+        recyclerView.setAdapter(adapter);
     }
 
     void addButtonMethod() {
@@ -524,7 +542,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
             if (!isEditImage) {
                 imageNo++;
                 check = imageNo;
-            }else {
+            } else {
                 check = editImageNo;
             }
 
@@ -943,6 +961,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                         supplier.setSupplierName(innerObject.getString("SUPPLIER_NAME"));
 
                         suppliers.add(supplier);
+                        arraylist.add(supplier);
 
                     }
                 } catch (JSONException e) {

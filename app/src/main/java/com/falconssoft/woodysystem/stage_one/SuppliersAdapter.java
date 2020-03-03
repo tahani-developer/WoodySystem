@@ -20,13 +20,10 @@ public class SuppliersAdapter extends RecyclerView.Adapter<SuppliersAdapter.Supp
 
     private AddNewRaw addNewRaw;
     private List<SupplierInfo> supplierInfoList;
-    private List<SupplierInfo> arraylist;
 
     public SuppliersAdapter(AddNewRaw addNewRaw, List<SupplierInfo> supplierInfoList) {
         this.addNewRaw = addNewRaw;
         this.supplierInfoList = supplierInfoList;
-        this.arraylist = new ArrayList<>();
-        this.arraylist.addAll(this.supplierInfoList);
     }
 
     @NonNull
@@ -56,23 +53,6 @@ public class SuppliersAdapter extends RecyclerView.Adapter<SuppliersAdapter.Supp
     public int getItemCount() {
         return supplierInfoList.size();
     }
-
-    public void filter(String charText) { // by Name
-        charText = charText.toLowerCase(Locale.getDefault());
-        supplierInfoList.clear();
-        if (charText.length() == 0) {
-            supplierInfoList.addAll(arraylist);
-        } else {
-            for (SupplierInfo supplierInfo : arraylist)
-                if (supplierInfo.getSupplierName().toLowerCase(Locale.getDefault()).contains(charText)) {
-                    supplierInfoList.add(supplierInfo);
-                }
-        }
-//        new SuppliersAdapter(addNewRaw, supplierInfoList);
-        this.notifyDataSetChanged();
-//        addNewRaw.notifyAdapter(supplierInfoList);
-    }
-
 
     class SuppliersViewHolder extends RecyclerView.ViewHolder {
 
