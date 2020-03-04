@@ -74,7 +74,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
     private final String STATE_VISIBILITY = "state-visibility";
     private Settings generalSettings;
     private TableRow publicTableRow = null, tableRow1;
-    private String locationString = null, gradeString = null, detailString = null, generateDate, bundleNumber, oldBundleNoString, newBundleNoString, bundleNoString, packingListText = "null";
+    private String locationString = null, gradeString = null, detailString = null, generateDate,
+            bundleNumber, oldBundleNoString, newBundleNoString, bundleNoString, packingListText = "null";
     private Date date;
     private SimpleDateFormat simpleDateFormat;
     private Dialog dialog;
