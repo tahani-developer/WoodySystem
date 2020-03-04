@@ -49,6 +49,7 @@ public class LoadingOrder extends AppCompatActivity {
     private String f1 = "", f2 = "", f3 = "", barcodeValue = "";
     private ItemsListAdapter adapter;
     private Activity activity;
+    String loc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +64,7 @@ public class LoadingOrder extends AppCompatActivity {
         barcode = (Button) findViewById(R.id.barcode);
         deleteBarcode = (ImageButton) findViewById(R.id.deletebaarcode);
         DHandler = new DatabaseHandler(LoadingOrder.this);
+        loc = DHandler.getSettings().getStore();
 //        bundles = DHandler.getBundleInfo();
 
         bundles = new ArrayList<>();
@@ -301,7 +303,7 @@ public class LoadingOrder extends AppCompatActivity {
                         JSONObject innerObject = parentArrayOrders.getJSONObject(i);
 
                         if (innerObject.getInt("ORDERED") == 0
-                                && innerObject.getString("LOCATION").equals(DHandler.getSettings().getStore())) {
+                                && innerObject.getString("LOCATION").equals(loc)) {
 
                                 BundleInfo bundleInfo = new BundleInfo();
                                 bundleInfo.setThickness(innerObject.getDouble("THICKNESS"));
