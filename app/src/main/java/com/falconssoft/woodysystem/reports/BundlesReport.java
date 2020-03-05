@@ -2,18 +2,14 @@ package com.falconssoft.woodysystem.reports;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.CancellationSignal;
@@ -23,14 +19,10 @@ import android.print.PageRange;
 import android.print.PrintAttributes;
 import android.print.PrintDocumentAdapter;
 import android.print.PrintDocumentInfo;
-import android.print.PrintJob;
-import android.print.PrintJobInfo;
 import android.print.PrintManager;
-import android.print.PrinterInfo;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.print.PrintHelper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -43,16 +35,12 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.falconssoft.woodysystem.DatabaseHandler;
-import com.falconssoft.woodysystem.InventoryReportAdapter;
-import com.falconssoft.woodysystem.PrinterCommands;
 import com.falconssoft.woodysystem.R;
-import com.falconssoft.woodysystem.ReportsActivity;
 import com.falconssoft.woodysystem.WoodPresenter;
 import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.Settings;
@@ -88,7 +76,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -168,6 +155,7 @@ public class BundlesReport extends AppCompatActivity {
                         filtered.get(i).setChecked(false);
                     }
                 }
+                adapter.notifyDataSetChanged();
 //                    for (int i = 0; i < bundlesTable.getChildCount(); i++) {
 //                        TableRow table = (TableRow) bundlesTable.getChildAt(i);
 //                        CheckBox bundleCheck = (CheckBox) table.getChildAt(10);
@@ -867,8 +855,10 @@ public class BundlesReport extends AppCompatActivity {
                     for (int i = 0; i < bundlesNoRows.size(); i++) {
                         filtered.remove(bundlesNoRows.get(i)); ////////////////////////////////////////
                     }
+                    checkBoxPrinter.setChecked(false);
                     bundlesNoRows.clear();
-                    adapter.notifyDataSetChanged();
+                    adapter = new BundelsReportAdapter(BundlesReport.this, filtered);
+                    listView.setAdapter(adapter);
                     Log.e("tag", "****Success");
                 } else {
                     Toast.makeText(BundlesReport.this, "Failed to export data!", Toast.LENGTH_SHORT).show();

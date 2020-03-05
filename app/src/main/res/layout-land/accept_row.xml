@@ -92,8 +92,8 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginLeft="5dp"
                 android:background="@drawable/frame_shape"
-                android:drawableStart="@drawable/ic_search_24dp"
-                android:drawableLeft="@drawable/ic_search_24dp"
+                android:drawableStart="@drawable/ic_search_white_24dp"
+                android:drawableLeft="@drawable/ic_search_white_24dp"
                 android:paddingStart="25dp"
                 android:paddingLeft="25dp"
 

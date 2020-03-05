@@ -10,7 +10,7 @@
     <TextView
         android:id="@+id/supplier_row_supplier_no"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_margin="1dp"
         android:layout_weight="1"
         android:background="@color/light_orange"
@@ -23,7 +23,7 @@
     <TextView
         android:id="@+id/supplier_row_supplier_name"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_margin="1dp"
         android:layout_marginLeft="2dp"
         android:layout_weight="4"

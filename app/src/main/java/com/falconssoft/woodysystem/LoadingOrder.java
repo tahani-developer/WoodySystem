@@ -49,6 +49,7 @@ public class LoadingOrder extends AppCompatActivity {
     private String f1 = "", f2 = "", f3 = "", barcodeValue = "";
     private ItemsListAdapter adapter;
     private Activity activity;
+    String loc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +64,7 @@ public class LoadingOrder extends AppCompatActivity {
         barcode = (Button) findViewById(R.id.barcode);
         deleteBarcode = (ImageButton) findViewById(R.id.deletebaarcode);
         DHandler = new DatabaseHandler(LoadingOrder.this);
+        loc = DHandler.getSettings().getStore();
 //        bundles = DHandler.getBundleInfo();
 
         bundles = new ArrayList<>();
@@ -100,6 +102,8 @@ public class LoadingOrder extends AppCompatActivity {
                 if (listContainsItems()) {
                     Intent intent = new Intent(LoadingOrder.this, LoadingOrder2.class);
                     startActivity(intent);
+                    finish();
+
 //                    setSlideAnimation();
                 } else {
                     Toast.makeText(LoadingOrder.this, "No item selected !", Toast.LENGTH_LONG).show();
@@ -252,10 +256,10 @@ public class LoadingOrder extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        finish();
+//        super.onBackPressed();
 //        Intent intent = new Intent(LoadingOrder.this, Stage3.class);
 //        startActivity(intent);
+        finish();
     }
 
     private class JSONTask extends AsyncTask<String, String, List<BundleInfo>> {
@@ -299,7 +303,7 @@ public class LoadingOrder extends AppCompatActivity {
                         JSONObject innerObject = parentArrayOrders.getJSONObject(i);
 
                         if (innerObject.getInt("ORDERED") == 0
-                                && innerObject.getString("LOCATION").equals(DHandler.getSettings().getStore())) {
+                                && innerObject.getString("LOCATION").equals(loc)) {
 
                                 BundleInfo bundleInfo = new BundleInfo();
                                 bundleInfo.setThickness(innerObject.getDouble("THICKNESS"));

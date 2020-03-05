@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:descendantFocusability="blocksDescendants"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inventory_report_linear3">
+
+        <TextView
+
+            android:id="@+id/truck_no"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:fontFamily="serif"
+            android:background="@color/light_orange"
+            android:layout_marginTop="2dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:text="@string/truck_no"
+            android:textColor="@color/gray_dark_one"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/name_of_person_to_accept"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:fontFamily="serif"
+            android:background="@color/light_orange"
+            android:layout_marginTop="2dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:text="@string/name_of_person_to_accept"
+            android:textColor="@color/gray_dark_one"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/ttn_no"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:fontFamily="serif"
+            android:background="@color/light_orange"
+            android:layout_marginTop="2dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:text="@string/ttn_no"
+            android:textColor="@color/gray_dark_one"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/date_of_acceptance"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:fontFamily="serif"
+            android:background="@color/light_orange"
+            android:layout_marginTop="2dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:text="@string/date_of_acceptance"
+            android:textColor="@color/gray_dark_one"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/location_of_acceptance"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:fontFamily="serif"
+            android:background="@color/light_orange"
+            android:layout_marginTop="2dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:text="@string/location_of_acceptance"
+            android:textColor="@color/gray_dark_one"
+            android:textSize="15sp"
+             />
+
+        <TextView
+            android:id="@+id/rejected_pieces"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:fontFamily="serif"
+            android:background="@color/light_orange"
+            android:layout_marginTop="2dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:text="@string/rejected_pieces"
+            android:textColor="@color/gray_dark_one"
+            android:textSize="15sp"
+            />
+
+        <TextView
+            android:id="@+id/net"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:fontFamily="serif"
+            android:background="@color/light_orange"
+            android:layout_marginTop="2dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:text="@string/net"
+            android:textColor="@color/gray_dark_one"
+            android:textSize="15sp"
+            />
+
+        <Button
+            android:id="@+id/preview"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:fontFamily="serif"
+            android:layout_marginTop="2dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:text="Preview"
+            android:background="@color/light_orange"
+            android:textColor="@color/preview"
+            android:textSize="15sp" />
+
+
+    </TableRow>
+
+</LinearLayout>

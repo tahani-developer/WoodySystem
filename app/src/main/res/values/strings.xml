@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Wood System</string>
-    <string name="version">Version 15.0</string>
+    <string name="version">Version 19.0</string>
 
     <string name="stage1">Acceptance &amp; Quality Control</string>
     <string name="stage2">Stage 2</string>
@@ -45,7 +45,7 @@
     <string name="thickness">Thick</string>
     <string name="width">Width</string>
     <string name="length">Length</string>
-    <string name="no_of_pieces"># Pieces</string>
+    <string name="no_of_pieces">Pieces</string>
     <string name="bundle_no">Bundle #</string>
     <string name="cubic">Cubic</string>
 
@@ -83,7 +83,7 @@
 
     <string name="new_raw">New Raw</string>
     <string name="supplier_no">Supplier #</string>
-    <string name="supplier_name">Supplier Name</string>
+    <string name="supplier_name">Supplier</string>
     <string name="raw_thickness">Thickness</string>
     <string name="search">Search ...</string>
     <string name="acceptance_info">Acceptance Info</string>
@@ -92,14 +92,14 @@
     <string name="accept_raw">Accept Row</string>
     <string name="name_of_supplier">Name Of Supplier</string>
     <string name="truck_no">Truck Number</string>
-    <string name="date_of_acceptance">Date Of Acceptance</string>
-    <string name="name_of_person_to_accept">Name Of Person To Accept</string>
-    <string name="location_of_acceptance">Location Of Acceptance</string>
+    <string name="date_of_acceptance">Acceptance Date</string>
+    <string name="name_of_person_to_accept">Acceptor Name</string>
+    <string name="location_of_acceptance">Acceptance Location</string>
     <string name="ttn_no">TTN Number</string>
     <string name="rejection_list">Rejection List</string>
     <string name="new_supplier">New Supplier</string>
     <string name="find_supplier">Find Supplier</string>
-    <string name="rejected_pieces_on_truck">Rejected Pieces on Truck</string>
+    <string name="rejected_pieces_on_truck">Rejected Pieces</string>
 
     <string name="generate_Barcode">Generate Barcode</string>
     <string name="ordered">Ordered</string>
@@ -117,7 +117,7 @@
 
     <string name="fresh">Fresh</string>
     <string name="bs">BS</string>
-    <string name="reject">Reject</string>
+    <string name="reject">Rejected</string>
 
     <string name="zone_1">Zone 1</string>
     <string name="zone_2">Zone 2</string>
@@ -140,5 +140,10 @@
     <string name="main_info">Main Info</string>
     <string name="net">Net Bundles</string>
 
+    <string name="acceptance_report">Acceptance Report</string>
+    <string name="truck">Truck</string>
+    <string name="acceptor">Acceptor</string>
+    <string name="ttn">TTN</string>
+    <string name="acceptance_loc">A.Location</string>
 
 </resources>

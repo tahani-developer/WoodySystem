@@ -4,6 +4,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -41,7 +43,9 @@ import java.util.List;
 public class AddNewSupplier extends AppCompatActivity {
 
     private DatabaseHandler DHandler;
-    private TableLayout tableLayout;
+    private RecyclerView recyclerView;
+    private AddSupplierAdapter adapter;
+//    private TableLayout tableLayout;
     private EditText supName;
     private TextView add;
     private List<SupplierInfo> suppliers;
@@ -54,23 +58,30 @@ public class AddNewSupplier extends AppCompatActivity {
         setContentView(R.layout.activity_add_new_supplier);
 
         jsonArray = new JSONArray();
-        supName = findViewById(R.id.editText);
-        add = findViewById(R.id.textView15);
-        tableLayout = findViewById(R.id.addNewRaw_table);
         DHandler = new DatabaseHandler(AddNewSupplier.this);
         suppliers = new ArrayList<>();
+        supName = findViewById(R.id.editText);
+        add = findViewById(R.id.textView15);
+        recyclerView = findViewById(R.id.addSupplier_recyclerView);
+//        tableLayout = findViewById(R.id.addNewRaw_table);
 
         new JSONTask().execute();
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new AddSupplierAdapter(suppliers);
+        recyclerView.setAdapter(adapter);
 
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!supName.getText().toString().equals("")) {
 
+                    jsonArray = new JSONArray();
                     SupplierInfo supplierInfo = new SupplierInfo();
                     supplierInfo.setSupplierNo("" + (suppliers.size() + 1));
                     supplierInfo.setSupplierName(supName.getText().toString());
 
+                    suppliers.add(supplierInfo);
                     jsonArray.put(supplierInfo.getJSONObject());
                     new JSONTask2().execute();
                 }
@@ -79,58 +90,57 @@ public class AddNewSupplier extends AppCompatActivity {
 
     }
 
-    void fillTable() {
+//    void fillTable() {
+//
+//        tableLayout.removeAllViews();
+//        for (int k = 0; k < suppliers.size(); k++) {
+//            TableRow tableRow = new TableRow(this);
+//            for (int i = 0; i < 2; i++) {
+//                TextView textView = new TextView(this);
+//                textView.setBackgroundResource(R.color.light_orange);
+//                TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f);
+//                textViewParam.setMargins(1, 1, 0, 0);
+//                textView.setTextSize(15);
+//                textView.setTextColor(ContextCompat.getColor(this, R.color.black));
+//                textView.setLayoutParams(textViewParam);
+//                switch (i) {
+//                    case 0:
+//                        textView.setText(suppliers.get(k).getSupplierNo());
+//                        break;
+//                    case 1:
+//                        textView.setText(suppliers.get(k).getSupplierName());
+//                        break;
+//                }
+//                tableRow.addView(textView);
+//            }
+//            tableLayout.addView(tableRow);
+//        }
+//    }
 
-        tableLayout.removeAllViews();
-        for (int k = 0; k < suppliers.size(); k++) {
-            TableRow tableRow = new TableRow(this);
-            for (int i = 0; i < 2; i++) {
-                TextView textView = new TextView(this);
-                textView.setBackgroundResource(R.color.light_orange);
-                TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f);
-                textViewParam.setMargins(1, 1, 0, 0);
-                textView.setTextSize(15);
-                textView.setTextColor(ContextCompat.getColor(this, R.color.black));
-                textView.setLayoutParams(textViewParam);
-                switch (i) {
-                    case 0:
-                        textView.setText(suppliers.get(k).getSupplierNo());
-                        break;
-                    case 1:
-                        textView.setText(suppliers.get(k).getSupplierName());
-                        break;
-                }
-                tableRow.addView(textView);
-            }
-            tableLayout.addView(tableRow);
-        }
-    }
-
-    void addSupp() {
-
-        TableRow tableRow = new TableRow(this);
-        for (int i = 0; i < 2; i++) {
-            TextView textView = new TextView(this);
-            textView.setBackgroundResource(R.color.light_orange);
-            TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f);
-            textViewParam.setMargins(1, 1, 0, 0);
-            textView.setTextSize(15);
-            textView.setTextColor(ContextCompat.getColor(this, R.color.black));
-            textView.setLayoutParams(textViewParam);
-            switch (i) {
-                case 0:
-                    textView.setText("" + (suppliers.size() + 1));
-                    break;
-                case 1:
-                    textView.setText(supName.getText().toString());
-                    break;
-            }
-            tableRow.addView(textView);
-        }
-        tableLayout.addView(tableRow);
-
-    }
-
+//    void addSupp() {
+//
+//        TableRow tableRow = new TableRow(this);
+//        for (int i = 0; i < 2; i++) {
+//            TextView textView = new TextView(this);
+//            textView.setBackgroundResource(R.color.light_orange);
+//            TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f);
+//            textViewParam.setMargins(1, 1, 0, 0);
+//            textView.setTextSize(15);
+//            textView.setTextColor(ContextCompat.getColor(this, R.color.black));
+//            textView.setLayoutParams(textViewParam);
+//            switch (i) {
+//                case 0:
+//                    textView.setText("" + (suppliers.size()));
+//                    break;
+//                case 1:
+//                    textView.setText(supName.getText().toString());
+//                    break;
+//            }
+//            tableRow.addView(textView);
+//        }
+//        tableLayout.addView(tableRow);
+//
+//    }
 
     private class JSONTask extends AsyncTask<String, String, List<SupplierInfo>> {
 
@@ -217,7 +227,8 @@ public class AddNewSupplier extends AppCompatActivity {
 
             if (result != null) {
                 Log.e("result", "*****************" + result.size());
-                fillTable();
+//                fillTable();
+                adapter.notifyDataSetChanged();
             } else {
                 Toast.makeText(AddNewSupplier.this, "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();
             }
@@ -277,7 +288,10 @@ public class AddNewSupplier extends AppCompatActivity {
 
             if (s != null) {
                 if (s.contains("SUPPLIERS SUCCESS")) {
-                    addSupp();
+                    adapter.notifyDataSetChanged();
+//                    addSupp();
+
+                    supName.setText("");
                     Log.e("tag", "****Success");
                 } else {
                     Log.e("tag", "****Failed to export data");

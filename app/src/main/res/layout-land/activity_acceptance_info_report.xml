@@ -6,8 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/wooddecor"
-    android:id="@+id/inventory_report_container"
-    tools:context=".reports.InventoryReport"
+    tools:context=".reports.AcceptanceInfoReport"
     tools:ignore="MissingDefaultResource">
 
     <android.support.constraint.ConstraintLayout
@@ -15,20 +14,20 @@
         android:layout_height="match_parent"
         android:background="@color/alpha_black_dark"
         android:orientation="vertical"
-       >
+        >
 
         <LinearLayout
-            android:id="@+id/inventory_report_linear1"
+            android:id="@+id/acceptanceInfo_report_linear1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-
             <TextView
-                android:id="@+id/inventory_report_tv"
+                android:id="@+id/acceptanceInfo_report_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
@@ -36,57 +35,30 @@
                 android:layout_weight="7"
                 android:fontFamily="serif"
                 android:gravity="center"
-                android:text="@string/inventory_report"
+                android:text="@string/acceptance_report"
                 android:textColor="@color/orange"
                 android:textSize="30sp" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/inventory_report_linear2"
+            android:id="@+id/acceptanceInfo_report_linear22"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_margin="5dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/inventory_report_linear1"
+            app:layout_constraintTop_toBottomOf="@+id/acceptanceInfo_report_linear1"
             >
 
             <LinearLayout
-                android:id="@+id/inventory_report_linear_one"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_margin="7dp"
                 android:layout_weight="1"
-                android:background="@drawable/shape_with_corner"
-                android:orientation="horizontal"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="serif"
-                    android:paddingLeft="5dp"
-                    android:text="@string/loc"
-                    android:textSize="18sp" />
-
-                <Spinner
-                    android:id="@+id/inventory_report_location"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/inventory_report_linear_two"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
                 android:layout_marginEnd="7dp"
                 android:layout_marginRight="7dp"
-                android:layout_weight="1"
                 android:background="@drawable/shape_with_corner"
                 android:orientation="horizontal"
                 android:paddingTop="10dp"
@@ -97,18 +69,19 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="serif"
                     android:paddingLeft="5dp"
-                    android:text="@string/area"
+                    android:text="@string/supplier_name"
                     android:textSize="18sp" />
 
                 <Spinner
-                    android:id="@+id/inventory_report_area"
+                    android:id="@+id/acceptanceInfo_report_supplier"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
             </LinearLayout>
 
+
+
             <LinearLayout
-                android:id="@+id/inventory_report_linear_grade"
                 android:layout_width="0dp"
                 android:layout_height="45dp"
                 android:layout_gravity="center"
@@ -131,22 +104,21 @@
                     android:textSize="18sp" />
 
                 <Spinner
-                    android:id="@+id/inventory_report_grade"
+                    android:id="@+id/acceptanceInfo_report_grade"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/inventory_report_linear_three"
                 android:layout_width="0dp"
                 android:layout_height="45dp"
                 android:layout_gravity="center"
-                android:layout_marginEnd="7dp"
-                android:layout_marginRight="7dp"
                 android:layout_weight="1"
                 android:background="@drawable/shape_with_corner"
                 android:orientation="horizontal"
+                android:layout_marginEnd="7dp"
+                android:layout_marginRight="7dp"
                 android:paddingTop="10dp"
                 android:paddingEnd="5dp"
                 android:paddingRight="5dp">
@@ -161,7 +133,7 @@
                     android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/inventory_report_from"
+                    android:id="@+id/acceptanceInfo_report_from_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
 
@@ -170,12 +142,9 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/inventory_report_linear_four"
                 android:layout_width="0dp"
                 android:layout_height="45dp"
                 android:layout_gravity="center"
-                android:layout_marginEnd="7dp"
-                android:layout_marginRight="7dp"
                 android:layout_weight="1"
                 android:background="@drawable/shape_with_corner"
                 android:orientation="horizontal"
@@ -193,35 +162,165 @@
                     android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/inventory_report_to"
+                    android:id="@+id/acceptanceInfo_report_to_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
             </LinearLayout>
 
         </LinearLayout>
-
+        
         <LinearLayout
-            android:id="@+id/inventory_report_linear3"
+            android:id="@+id/acceptanceInfo_report_linear2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
+            android:orientation="horizontal"
+            android:layout_margin="5dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/acceptanceInfo_report_linear22"
+            >
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="7dp"
+                android:layout_marginRight="7dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_with_corner"
+                android:orientation="horizontal"
+               >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="serif"
+                    android:paddingLeft="5dp"
+                    android:text="@string/truck"
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/acceptanceInfo_report_truckNo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="5dp"
+                    android:paddingRight="5dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/acceptanceInfo_report_linear_two"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="7dp"
+                android:layout_marginRight="7dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_with_corner"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="serif"
+                    android:paddingLeft="5dp"
+                    android:text="@string/acceptor"
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/acceptanceInfo_report_acceptor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="5dp"
+                    android:paddingRight="5dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/acceptanceInfo_report_linear_grade"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_gravity="center"
+                android:layout_marginEnd="7dp"
+                android:layout_marginRight="7dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_with_corner"
+                android:orientation="horizontal"
+                android:paddingEnd="5dp"
+                android:paddingRight="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="serif"
+                    android:paddingStart="10dp"
+                    android:paddingLeft="10dp"
+                    android:text="@string/ttn"
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/acceptanceInfo_report_ttn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/acceptanceInfo_report_linear_one"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_gravity="center"
+                android:layout_marginEnd="7dp"
+                android:layout_marginRight="7dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_with_corner"
+                android:orientation="horizontal"
+                android:paddingEnd="5dp"
+                android:paddingRight="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="serif"
+                    android:paddingStart="10dp"
+                    android:paddingLeft="10dp"
+                    android:text="@string/acceptance_loc"
+                    android:textSize="15sp" />
+
+                <EditText
+                    android:id="@+id/acceptanceInfo_report_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/acceptanceInfo_report_linear3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:gravity="center"
             android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/inventory_report_linear2">
+            app:layout_constraintTop_toBottomOf="@+id/acceptanceInfo_report_linear2">
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="45dp"
-                android:layout_marginHorizontal="7dp"
                 android:layout_weight="1"
+                android:layout_marginEnd="7dp"
+                android:layout_marginRight="7dp"
                 android:background="@drawable/shape_with_corner"
                 android:gravity="center">
 
                 <EditText
-                    android:id="@+id/inventory_report_fromThick"
+                    android:id="@+id/acceptanceInfo_report_fromThick"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -240,7 +339,7 @@
                     android:textSize="18sp" />
 
                 <EditText
-                    android:id="@+id/inventory_report_toThick"
+                    android:id="@+id/acceptanceInfo_report_toThick"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -259,7 +358,7 @@
                 android:gravity="center">
 
                 <EditText
-                    android:id="@+id/inventory_report_fromWidth"
+                    android:id="@+id/acceptanceInfo_report_fromWidth"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -278,7 +377,7 @@
                     android:textSize="18sp" />
 
                 <EditText
-                    android:id="@+id/inventory_report_toWidth"
+                    android:id="@+id/acceptanceInfo_report_toWidth"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -291,14 +390,12 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="45dp"
-                android:layout_marginEnd="7dp"
-                android:layout_marginRight="7dp"
                 android:layout_weight="1"
                 android:background="@drawable/shape_with_corner"
                 android:gravity="center">
 
                 <EditText
-                    android:id="@+id/inventory_report_fromLength"
+                    android:id="@+id/acceptanceInfo_report_fromLength"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -317,7 +414,7 @@
                     android:textSize="18sp" />
 
                 <EditText
-                    android:id="@+id/inventory_report_toLength"
+                    android:id="@+id/acceptanceInfo_report_toLength"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -328,101 +425,41 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/inventory_report_linear_pl"
-                android:layout_width="0dp"
-                android:layout_height="45dp"
-                android:layout_gravity="center"
-                android:layout_marginEnd="7dp"
-                android:layout_marginRight="7dp"
-                android:layout_weight="1.2"
-                android:background="@drawable/shape_with_corner"
-                android:orientation="horizontal"
-                android:paddingEnd="5dp"
-                android:paddingRight="5dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="serif"
-                    android:paddingTop="10dp"
-                    android:paddingStart="10dp"
-                    android:paddingLeft="10dp"
-                    android:text="@string/p_list"
-                    android:textSize="18sp" />
-
-                <Spinner
-                    android:id="@+id/inventory_report_pl"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingTop="10dp"
-                    android:visibility="visible"
-                   />
-
-                <EditText
-                    android:id="@+id/inventory_report_search_pList_box"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="serif"
-                    android:hint="@string/search"
-                    android:visibility="gone"
-                    android:minWidth="150dp"
-                    android:paddingStart="10dp"
-                    android:paddingLeft="10dp"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/inventory_report_search_pList_tool"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="serif"
-                    android:paddingStart="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingEnd="10dp"
-                    android:paddingRight="10dp"
-                    android:drawableLeft="@drawable/ic_search_24dp"
-                    android:textSize="18sp" />
-
-            </LinearLayout>
-
         </LinearLayout>
 
         <TableRow
-            android:id="@+id/inventory_report_linear4"
+            android:id="@+id/acceptanceInfo_report_linear4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/inventory_report_linear3">
+            app:layout_constraintTop_toBottomOf="@+id/acceptanceInfo_report_linear3">
 
             <CheckBox
                 android:id="@+id/checkBoxPrint"
-                android:background="@color/orange"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginLeft="5dp"
+                android:layout_height="match_parent"
                 android:layout_marginEnd="1dp"
-                android:layout_marginRight="1dp" />
+                android:layout_marginRight="1dp"
+                android:background="@color/orange" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginEnd="1dp"
+                android:layout_marginRight="1dp"
                 android:background="@color/orange"
                 android:fontFamily="serif"
-                android:text="@string/serial"
+                android:text="@string/supplier_name"
                 android:textColor="@color/white"
-                android:textSize="18sp"
-                android:layout_marginEnd="1dp"
-                android:layout_marginRight="1dp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="3"
+                android:layout_weight="1"
                 android:background="@color/orange"
                 android:fontFamily="serif"
                 android:text="@string/bundle_no"
@@ -450,7 +487,7 @@
                     android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/inventory_report_thick_order"
+                    android:id="@+id/acceptanceInfo_report_thick_order"
                     android:layout_width="0dp"
                     android:layout_height="20dp"
                     android:layout_weight="1"
@@ -480,7 +517,7 @@
                     android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/inventory_report_width_order"
+                    android:id="@+id/acceptanceInfo_report_width_order"
                     android:layout_width="0dp"
                     android:layout_height="20dp"
                     android:layout_weight="1"
@@ -511,7 +548,7 @@
                     android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/inventory_report_length_order"
+                    android:id="@+id/acceptanceInfo_report_length_order"
                     android:layout_width="0dp"
                     android:layout_height="20dp"
                     android:layout_weight="1"
@@ -547,6 +584,7 @@
                 android:layout_marginRight="1dp"/>
 
             <TextView
+                android:visibility="gone"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1.2"
@@ -557,59 +595,58 @@
                 android:textSize="18sp"
                 android:layout_marginEnd="1dp"
                 android:layout_marginRight="1dp" />
-
+           
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@color/orange"
                 android:fontFamily="serif"
-                android:text="@string/area"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:layout_marginEnd="1dp"
-                android:layout_marginRight="1dp" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@color/orange"
-                android:fontFamily="serif"
-                android:text="@string/p_list"
+                android:text="@string/reject"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:layout_marginEnd="1dp"
                 android:layout_marginRight="1dp"/>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:background="@color/orange"
+                android:drawableStart="@drawable/ic_image"
+                android:layout_marginEnd="1dp"
+                android:padding="10dp"
+                android:layout_marginRight="1dp"
+                android:drawableLeft="@drawable/ic_image" />
+
         </TableRow>
 
         <ListView
-            android:id="@+id/list"
+            android:id="@+id/acceptanceInfo_list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/inventory_report_linear6"
+            app:layout_constraintBottom_toTopOf="@+id/acceptanceInfo_report_linear6"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/inventory_report_linear4"
+            app:layout_constraintTop_toBottomOf="@+id/acceptanceInfo_report_linear4"
             app:layout_constraintVertical_bias="0.0" />
 
         <View
-            android:id="@+id/inventory_report_linear6"
+            android:id="@+id/acceptanceInfo_report_linear6"
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_marginTop="1dp"
             android:layout_marginBottom="5dp"
             android:background="@color/white"
-            app:layout_constraintBottom_toTopOf="@+id/inventory_report_linear7"
+            app:layout_constraintBottom_toTopOf="@+id/acceptanceInfo_report_linear7"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-/>
+            />
 
         <LinearLayout
-            android:id="@+id/inventory_report_linear7"
+            android:id="@+id/acceptanceInfo_report_linear7"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -620,7 +657,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-          >
+            >
 
             <LinearLayout
                 android:layout_width="210dp"
@@ -647,7 +684,7 @@
                     android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/inventory_report_no_bundles"
+                    android:id="@+id/acceptanceInfo_report_no_bundles"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
@@ -681,7 +718,7 @@
                     android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/inventory_report_no_pieces"
+                    android:id="@+id/acceptanceInfo_report_no_pieces"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
@@ -715,7 +752,7 @@
                     android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/inventory_report_cubic"
+                    android:id="@+id/acceptanceInfo_report_cubic"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
@@ -725,9 +762,10 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/inventory_report_delete"
+                android:id="@+id/acceptanceInfo_report_delete"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
+                android:visibility="gone"
                 android:layout_marginTop="1dp"
                 android:layout_marginEnd="7dp"
                 android:layout_marginRight="7dp"
@@ -746,6 +784,7 @@
                 android:id="@+id/printAll"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
+                android:visibility="gone"
                 android:layout_marginTop="1dp"
                 android:layout_marginEnd="7dp"
                 android:layout_marginRight="7dp"
@@ -763,6 +802,7 @@
                 android:layout_marginTop="1dp"
                 android:background="@drawable/frame_shape"
                 android:fontFamily="serif"
+                android:visibility="gone"
                 android:text="@string/p_list"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
@@ -771,5 +811,4 @@
         </LinearLayout>
 
     </android.support.constraint.ConstraintLayout>
-
 </android.support.constraint.ConstraintLayout>

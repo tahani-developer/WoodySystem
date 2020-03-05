@@ -1,17 +1,12 @@
 package com.falconssoft.woodysystem.reports;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.TextInputEditText;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
@@ -27,9 +22,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,7 +51,6 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
@@ -73,15 +66,16 @@ import java.util.Locale;
 public class LoadingOrderReport extends AppCompatActivity {
 
     private TextView textView;
-    private TableLayout ordersTable;
-    private LinearLayout linearLayout;
+    private static LinearLayout linearLayout;
     private EditText from, to;
     private Button arrow;
-    private HorizontalListView listView;
-    private List<Orders> orders, bundles;
-    private List<Pictures> pictures;
+    private static HorizontalListView listView;
+    private static List<Orders> orders, bundles;
+    private static List<Pictures> pictures;
     private Animation animation;
-    ItemsListAdapter2 adapter;
+    static ItemsListAdapter2 adapter;
+    static LoadingOrderReportAdapter adapter2;
+    private ListView list;
     private Calendar myCalendar;
     Spinner location;
     private ArrayAdapter<String> locationAdapter;
@@ -91,6 +85,7 @@ public class LoadingOrderReport extends AppCompatActivity {
     private JSONArray bundleNo = new JSONArray();
     private DatabaseHandler MHandler;
     List<BundleInfo> bundleInfos;
+    static Dialog dialog;
 
     String myFormat ;
     SimpleDateFormat sdf;
@@ -103,12 +98,13 @@ public class LoadingOrderReport extends AppCompatActivity {
 
         MHandler = new DatabaseHandler(LoadingOrderReport.this);
         generalSettings = new DatabaseHandler(this).getSettings();
+        dialog = new Dialog(LoadingOrderReport.this);
         orders = new ArrayList<>();
         bundles = new ArrayList<>();
         pictures = new ArrayList<>();
 
+        list = findViewById(R.id.list);
         textView = findViewById(R.id.loading_order_report);
-        ordersTable = findViewById(R.id.orders_table);
         listView = findViewById(R.id.listview);
         linearLayout = findViewById(R.id.linearLayout);
         arrow = findViewById(R.id.arrow);
@@ -134,6 +130,9 @@ public class LoadingOrderReport extends AppCompatActivity {
 
         adapter = new ItemsListAdapter2(LoadingOrderReport.this, new ArrayList<>());
         listView.setAdapter(adapter);
+
+        adapter2 = new LoadingOrderReportAdapter(LoadingOrderReport.this, new ArrayList<>(), new ArrayList<>());
+        list.setAdapter(adapter2);
 
 
         arrow.setOnClickListener(new View.OnClickListener() {
@@ -182,7 +181,7 @@ public class LoadingOrderReport extends AppCompatActivity {
             }
         });
 
-        fillTable(orders);
+//        fillTable(orders);
 
     }
 
@@ -350,7 +349,10 @@ public class LoadingOrderReport extends AppCompatActivity {
 
             if (result != null) {
                 Log.e("result", "*****************" + orders.size());
-                fillTable(orders);
+                adapter2 = new LoadingOrderReportAdapter(LoadingOrderReport.this, orders, bundles);
+                list.setAdapter(adapter2);
+
+                //fillTable(orders);
 //                storeInDatabase();
             } else {
                 Toast.makeText(LoadingOrderReport.this, "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();
@@ -358,194 +360,252 @@ public class LoadingOrderReport extends AppCompatActivity {
         }
     }
 
-    void fillTable(List<Orders> orders) {
+    public void previewLinear(int index , Context Context){
 
-        for (int k = 0; k < orders.size(); k++) {
-            final int index = k;
-            TableRow tableRow = new TableRow(this);
-            for (int i = 0; i < 7; i++) {
-                TextView textView = new TextView(this);
-                textView.setBackgroundResource(R.color.light_orange);
-                TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(0, 40, 1f);
-                textViewParam.setMargins(0, 2, 2, 0);
-                textView.setTextSize(15);
-                textView.setTextColor(ContextCompat.getColor(this, R.color.gray_dark_one));
-                textView.setLayoutParams(textViewParam);
-                switch (i) {
-                    case 0:
-                        textView.setText(orders.get(k).getOrderNo());
-                        break;
-                    case 1:
-                        textView.setText(orders.get(k).getPlacingNo());
-                        break;
-                    case 2:
-                        textView.setText(orders.get(k).getContainerNo());
-                        break;
-                    case 3:
-                        textView.setText(orders.get(k).getDateOfLoad());
-                        break;
-                    case 4:
-                        textView.setText(orders.get(k).getDestination());
-                        break;
-                    case 5:
-                        textView.setText("Preview");
-                        textView.setTextColor(ContextCompat.getColor(this, R.color.preview));
-                        textView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
+        bundleInfos = new ArrayList<>();
 
-                                bundleInfos = new ArrayList<>();
-
-                                for (int i = 0; i < bundles.size(); i++) {
+        for (int i = 0; i < bundles.size(); i++) {
 //                                    Log.e("ooo  " , ""+ orders.get(index).getOrderNo() + "  " + bundles.get(i).getBundleNo());
-                                    if (orders.get(index).getOrderNo().equals(bundles.get(i).getOrderNo()) &&
-                                            orders.get(index).getPlacingNo().equals(bundles.get(i).getPlacingNo()) &&
-                                            orders.get(index).getContainerNo().equals(bundles.get(i).getContainerNo()) &&
-                                            orders.get(index).getDateOfLoad().equals(bundles.get(i).getDateOfLoad())) {
+            if (orders.get(index).getOrderNo().equals(bundles.get(i).getOrderNo()) &&
+                    orders.get(index).getPlacingNo().equals(bundles.get(i).getPlacingNo()) &&
+                    orders.get(index).getContainerNo().equals(bundles.get(i).getContainerNo()) &&
+                    orders.get(index).getDateOfLoad().equals(bundles.get(i).getDateOfLoad())) {
 
-                                        bundleInfos.add(new BundleInfo(
-                                                bundles.get(i).getThickness(),
-                                                bundles.get(i).getWidth(),
-                                                bundles.get(i).getLength(),
-                                                bundles.get(i).getGrade(),
-                                                bundles.get(i).getNoOfPieces(),
-                                                bundles.get(i).getBundleNo(),
-                                                bundles.get(i).getLocation(),
-                                                bundles.get(i).getArea(),
-                                                "",
-                                                bundles.get(i).getPicture()));
-                                    }
-                                }
-
-                                Log.e("ooo  ", "" + bundleInfos.size());
-                                adapter = new ItemsListAdapter2(LoadingOrderReport.this, bundleInfos);
-                                listView.setAdapter(adapter);
-                                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                        openLargePicDialog(StringToBitMap(bundleInfos.get(position).getPicture()));
-                                    }
-                                });
-
-                                try {
-                                    Thread.sleep(300);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-
-                                slideUp(linearLayout);
-
-                            }
-                        });
-                        break;
-
-                    case 6:
-                        TableRow.LayoutParams param = new TableRow.LayoutParams(0, 40, 0.25f);
-                        textViewParam.setMargins(0, 2, 2, 0);
-                        textView.setLayoutParams(param);
-
-                        textView.setBackgroundDrawable(getResources().getDrawable(R.drawable.pic));
-
-                        textView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-
-                                Pictures pics = new Pictures();
-                                for (int i = 0; i < pictures.size(); i++) {
-                                    if (pictures.get(i).getOrderNo().equals(orders.get(index).getOrderNo())) {
-                                        pics = pictures.get(i);
-                                        break;
-                                    }
-                                }
-                                openPicDialog(pics);
-                            }
-                        });
-                        break;
-
-
-                }
-                tableRow.addView(textView);
-
-                tableRow.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-
-                        Dialog passwordDialog = new Dialog(LoadingOrderReport.this);
-                        passwordDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        passwordDialog.setContentView(R.layout.password_dialog);
-                        passwordDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-                        TextInputEditText password = passwordDialog.findViewById(R.id.password_dialog_password);
-                        TextView done = passwordDialog.findViewById(R.id.password_dialog_done);
-
-                        done.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                if (password.getText().toString().equals("301190")) {
-                                    orderNo = orders.get(index).getOrderNo();
-
-                                    bundleInfos = new ArrayList<>();
-
-                                    for (int i = 0; i < bundles.size(); i++) {
-                                        if (orders.get(index).getOrderNo().equals(bundles.get(i).getOrderNo()) &&
-                                                orders.get(index).getPlacingNo().equals(bundles.get(i).getPlacingNo()) &&
-                                                orders.get(index).getContainerNo().equals(bundles.get(i).getContainerNo()) &&
-                                                orders.get(index).getDateOfLoad().equals(bundles.get(i).getDateOfLoad())) {
-
-                                            bundleInfos.add(new BundleInfo(
-                                                    bundles.get(i).getThickness(),
-                                                    bundles.get(i).getWidth(),
-                                                    bundles.get(i).getLength(),
-                                                    bundles.get(i).getGrade(),
-                                                    bundles.get(i).getNoOfPieces(),
-                                                    bundles.get(i).getBundleNo(),
-                                                    bundles.get(i).getLocation(),
-                                                    bundles.get(i).getArea(),
-                                                    "",
-                                                    ""));
-                                        }
-                                    }
-                                    for (int i = 0; i < bundleInfos.size(); i++) {
-                                        bundleNo.put(bundleInfos.get(i).getJSONObject());
-                                    }
-                                    new JSONTask2().execute();
-                                    ordersTable.removeView(tableRow);
-                                    passwordDialog.dismiss();
-                                } else {
-                                    Toast.makeText(LoadingOrderReport.this, "Not Authorized!", Toast.LENGTH_SHORT).show();
-                                    password.setText("");
-                                }
-                            }
-                        });
-
-                        passwordDialog.show();
-//                        AlertDialog.Builder builder = new AlertDialog.Builder(LoadingOrderReport.this);
-//                        builder.setMessage("Are you want delete this order ?");
-//                        builder.setTitle("Delete");
-//                        builder.setIcon(R.drawable.ic_warning_black_24dp);
-//                        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//
-//                                orderNo = orders.get(index).getOrderNo();
-//                                new JSONTask2().execute();
-//                                ordersTable.removeView(tableRow);
-//                            }
-//                        });
-//                        builder.show();
-
-
-                        return false;
-                    }
-                });
+                bundleInfos.add(new BundleInfo(
+                        bundles.get(i).getThickness(),
+                        bundles.get(i).getWidth(),
+                        bundles.get(i).getLength(),
+                        bundles.get(i).getGrade(),
+                        bundles.get(i).getNoOfPieces(),
+                        bundles.get(i).getBundleNo(),
+                        bundles.get(i).getLocation(),
+                        bundles.get(i).getArea(),
+                        "",
+                        bundles.get(i).getPicture()));
             }
-            ordersTable.addView(tableRow);
         }
+
+        Log.e("ooo  ", "" + bundleInfos.size());
+        adapter = new ItemsListAdapter2(Context, bundleInfos);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                openLargePicDialog(StringToBitMap(bundleInfos.get(position).getPicture()) , Context);
+            }
+        });
+
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        slideUp(linearLayout);
 
     }
 
-    public void openLargePicDialog(Bitmap picts) {
-        Dialog dialog = new Dialog(LoadingOrderReport.this);
+    public void previewPics(int index , Context context){
+        Pictures pics = new Pictures();
+        for (int i = 0; i < pictures.size(); i++) {
+            if (pictures.get(i).getOrderNo().equals(orders.get(index).getOrderNo())) {
+                pics = pictures.get(i);
+                break;
+            }
+        }
+        openPicDialog(pics , context);
+    }
+
+
+
+//    void fillTable(List<Orders> orders) {
+//
+//        for (int k = 0; k < orders.size(); k++) {
+//            final int index = k;
+//            TableRow tableRow = new TableRow(this);
+//            for (int i = 0; i < 7; i++) {
+//                TextView textView = new TextView(this);
+//                textView.setBackgroundResource(R.color.light_orange);
+//                TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(0, 40, 1f);
+//                textViewParam.setMargins(0, 2, 2, 0);
+//                textView.setTextSize(15);
+//                textView.setTextColor(ContextCompat.getColor(this, R.color.gray_dark_one));
+//                textView.setLayoutParams(textViewParam);
+//                switch (i) {
+//                    case 0:
+//                        textView.setText(orders.get(k).getOrderNo());
+//                        break;
+//                    case 1:
+//                        textView.setText(orders.get(k).getPlacingNo());
+//                        break;
+//                    case 2:
+//                        textView.setText(orders.get(k).getContainerNo());
+//                        break;
+//                    case 3:
+//                        textView.setText(orders.get(k).getDateOfLoad());
+//                        break;
+//                    case 4:
+//                        textView.setText(orders.get(k).getDestination());
+//                        break;
+//                    case 5:
+//                        textView.setText("Preview");
+//                        textView.setTextColor(ContextCompat.getColor(this, R.color.preview));
+//                        textView.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//
+//                                bundleInfos = new ArrayList<>();
+//
+//                                for (int i = 0; i < bundles.size(); i++) {
+////                                    Log.e("ooo  " , ""+ orders.get(index).getOrderNo() + "  " + bundles.get(i).getBundleNo());
+//                                    if (orders.get(index).getOrderNo().equals(bundles.get(i).getOrderNo()) &&
+//                                            orders.get(index).getPlacingNo().equals(bundles.get(i).getPlacingNo()) &&
+//                                            orders.get(index).getContainerNo().equals(bundles.get(i).getContainerNo()) &&
+//                                            orders.get(index).getDateOfLoad().equals(bundles.get(i).getDateOfLoad())) {
+//
+//                                        bundleInfos.add(new BundleInfo(
+//                                                bundles.get(i).getThickness(),
+//                                                bundles.get(i).getWidth(),
+//                                                bundles.get(i).getLength(),
+//                                                bundles.get(i).getGrade(),
+//                                                bundles.get(i).getNoOfPieces(),
+//                                                bundles.get(i).getBundleNo(),
+//                                                bundles.get(i).getLocation(),
+//                                                bundles.get(i).getArea(),
+//                                                "",
+//                                                bundles.get(i).getPicture()));
+//                                    }
+//                                }
+//
+//                                Log.e("ooo  ", "" + bundleInfos.size());
+//                                adapter = new ItemsListAdapter2(LoadingOrderReport.this, bundleInfos);
+//                                listView.setAdapter(adapter);
+//                                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                                    @Override
+//                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                                        openLargePicDialog(StringToBitMap(bundleInfos.get(position).getPicture()));
+//                                    }
+//                                });
+//
+//                                try {
+//                                    Thread.sleep(300);
+//                                } catch (InterruptedException e) {
+//                                    e.printStackTrace();
+//                                }
+//
+//                                slideUp(linearLayout);
+//
+//                            }
+//                        });
+//                        break;
+//
+//                    case 6:
+//                        TableRow.LayoutParams param = new TableRow.LayoutParams(0, 40, 0.25f);
+//                        textViewParam.setMargins(0, 2, 2, 0);
+//                        textView.setLayoutParams(param);
+//
+//                        textView.setBackgroundDrawable(getResources().getDrawable(R.drawable.pic));
+//
+//                        textView.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//
+//                                Pictures pics = new Pictures();
+//                                for (int i = 0; i < pictures.size(); i++) {
+//                                    if (pictures.get(i).getOrderNo().equals(orders.get(index).getOrderNo())) {
+//                                        pics = pictures.get(i);
+//                                        break;
+//                                    }
+//                                }
+////                                openPicDialog(pics);
+//                            }
+//                        });
+//                        break;
+//
+//
+//                }
+//                tableRow.addView(textView);
+//
+//                tableRow.setOnLongClickListener(new View.OnLongClickListener() {
+//                    @Override
+//                    public boolean onLongClick(View v) {
+//
+//                        Dialog passwordDialog = new Dialog(LoadingOrderReport.this);
+//                        passwordDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//                        passwordDialog.setContentView(R.layout.password_dialog);
+//                        passwordDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//
+//                        TextInputEditText password = passwordDialog.findViewById(R.id.password_dialog_password);
+//                        TextView done = passwordDialog.findViewById(R.id.password_dialog_done);
+//
+//                        done.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                if (password.getText().toString().equals("301190")) {
+//                                    orderNo = orders.get(index).getOrderNo();
+//
+//                                    bundleInfos = new ArrayList<>();
+//
+//                                    for (int i = 0; i < bundles.size(); i++) {
+//                                        if (orders.get(index).getOrderNo().equals(bundles.get(i).getOrderNo()) &&
+//                                                orders.get(index).getPlacingNo().equals(bundles.get(i).getPlacingNo()) &&
+//                                                orders.get(index).getContainerNo().equals(bundles.get(i).getContainerNo()) &&
+//                                                orders.get(index).getDateOfLoad().equals(bundles.get(i).getDateOfLoad())) {
+//
+//                                            bundleInfos.add(new BundleInfo(
+//                                                    bundles.get(i).getThickness(),
+//                                                    bundles.get(i).getWidth(),
+//                                                    bundles.get(i).getLength(),
+//                                                    bundles.get(i).getGrade(),
+//                                                    bundles.get(i).getNoOfPieces(),
+//                                                    bundles.get(i).getBundleNo(),
+//                                                    bundles.get(i).getLocation(),
+//                                                    bundles.get(i).getArea(),
+//                                                    "",
+//                                                    ""));
+//                                        }
+//                                    }
+//                                    for (int i = 0; i < bundleInfos.size(); i++) {
+//                                        bundleNo.put(bundleInfos.get(i).getJSONObject());
+//                                    }
+//                                    new JSONTask2().execute();
+////                                    ordersTable.removeView(tableRow);
+//                                    passwordDialog.dismiss();
+//                                } else {
+//                                    Toast.makeText(LoadingOrderReport.this, "Not Authorized!", Toast.LENGTH_SHORT).show();
+//                                    password.setText("");
+//                                }
+//                            }
+//                        });
+//
+//                        passwordDialog.show();
+////                        AlertDialog.Builder builder = new AlertDialog.Builder(LoadingOrderReport.this);
+////                        builder.setMessage("Are you want delete this order ?");
+////                        builder.setTitle("Delete");
+////                        builder.setIcon(R.drawable.ic_warning_black_24dp);
+////                        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+////                            @Override
+////                            public void onClick(DialogInterface dialog, int which) {
+////
+////                                orderNo = orders.get(index).getOrderNo();
+////                                new JSONTask2().execute();
+////                                ordersTable.removeView(tableRow);
+////                            }
+////                        });
+////                        builder.show();
+//
+//
+//                        return false;
+//                    }
+//                });
+//            }
+////            ordersTable.addView(tableRow);
+//        }
+//
+//    }
+
+    public void openLargePicDialog(Bitmap picts , Context context) {
+        Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.pic_dialog2);
@@ -558,8 +618,7 @@ public class LoadingOrderReport extends AppCompatActivity {
 
     }
 
-    public void openPicDialog(Pictures picts) {
-        Dialog dialog = new Dialog(LoadingOrderReport.this);
+    public void openPicDialog(Pictures picts , Context context) {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.pic_dialog);
@@ -578,7 +637,7 @@ public class LoadingOrderReport extends AppCompatActivity {
         pics.add(StringToBitMap(picts.getPic7()));
         pics.add(StringToBitMap(picts.getPic8()));
 
-        PicturesAdapter adapter = new PicturesAdapter(LoadingOrderReport.this, pics);
+        PicturesAdapter adapter = new PicturesAdapter(context, pics);
         listView.setAdapter(adapter);
 
         dialog.show();
@@ -740,8 +799,10 @@ public class LoadingOrderReport extends AppCompatActivity {
                 }
             }
 
-            ordersTable.removeAllViews();
-            fillTable(filtered);
+            adapter2 = new LoadingOrderReportAdapter(LoadingOrderReport.this, filtered, bundles);
+            list.setAdapter(adapter2);
+//            ordersTable.removeAllViews();
+//            fillTable(filtered);
 
         } catch (ParseException e) {
             e.printStackTrace();

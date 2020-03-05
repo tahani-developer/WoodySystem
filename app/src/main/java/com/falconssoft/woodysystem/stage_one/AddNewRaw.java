@@ -1,9 +1,19 @@
 package com.falconssoft.woodysystem.stage_one;
 
+import android.Manifest;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -11,15 +21,19 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
@@ -42,8 +56,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -56,15 +73,22 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.net.URI;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 public class AddNewRaw extends AppCompatActivity implements View.OnClickListener {
 
+    private boolean mState = false, isEditImage = false;
+    private final String STATE_VISIBILITY = "state-visibility";
     private Settings generalSettings;
     private WoodPresenter presenter;
-    private TextView addNewSupplier, searchSupplier, addButton, acceptRowButton, mainInfoButton;
-    private EditText thickness, width, length, noOfPieces, noOfBundles, noOfRejected, truckNo, acceptanceDate, acceptor, acceptanceLocation, ttnNo, totalRejected, totalBundles;
+    private ImageView image1, image2, image3, image4, image5, image6, image7, image8;
+    private TextView addNewSupplier, searchSupplier, addButton, acceptRowButton, mainInfoButton, acceptanceDate, addPicture;
+    private EditText thickness, width, length, noOfPieces, noOfBundles, noOfRejected, truckNo, acceptor, acceptanceLocation, ttnNo, totalRejected, totalBundles;
     private Spinner gradeSpinner;
     private ArrayList<String> gradeList = new ArrayList<>();
     private ArrayAdapter<String> gradeAdapter;
@@ -74,7 +98,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     public static String supplierName = "";
     private LinearLayout headerLayout, acceptRowLayout;
     private Button doneAcceptRow;
-    private TableLayout tableLayout;
+    private TableLayout tableLayout, headerTableLayout;
     private TableRow tableRow;
     private Dialog searchDialog;
 
@@ -84,7 +108,15 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     private JSONArray jsonArray;
     private RelativeLayout coordinatorLayout;
     private Snackbar snackbar;
-
+    private SuppliersAdapter adapter;
+    private RecyclerView recyclerView;
+    private Calendar myCalendar;
+    private int imageNo = 0, editImageNo = 0;
+    private List<String> imagesList = new ArrayList<>();
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    private List<SupplierInfo> arraylist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,11 +125,12 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
         databaseHandler = new DatabaseHandler(AddNewRaw.this);
         suppliers = new ArrayList<>();
-
+        myCalendar = Calendar.getInstance();
         generalSettings = new Settings();
         generalSettings = databaseHandler.getSettings();
         presenter = new WoodPresenter(this);
-//        presenter.getsuppliersInfo();
+        this.arraylist = new ArrayList<>();
+//        this.arraylist.addAll(this.supplierInfoList);
 
         coordinatorLayout = findViewById(R.id.addNewRow_coordinator);
         addNewSupplier = findViewById(R.id.addNewRaw_add_supplier);
@@ -115,6 +148,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         acceptRowLayout = findViewById(R.id.addNewRaw_acceptRow_linear);
         mainInfoButton = findViewById(R.id.addNewRaw_acceptRow_back);
         tableLayout = findViewById(R.id.addNewRaw_table);
+        headerTableLayout = findViewById(R.id.addNewRaw_table_header);
         truckNo = findViewById(R.id.addNewRaw_truckNo);
         acceptanceDate = findViewById(R.id.addNewRaw_acceptance_date);
         acceptor = findViewById(R.id.addNewRaw_acceptor);
@@ -123,10 +157,27 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         totalRejected = findViewById(R.id.addNewRaw_total_rejected);
         totalBundles = findViewById(R.id.addNewRaw_total_bundles);
         doneAcceptRow = findViewById(R.id.addNewRaw_acceptRow_done);
+        addPicture = findViewById(R.id.addNewRaw_add_photo);
+        image1 = findViewById(R.id.addNewRaw_image1);
+        image2 = findViewById(R.id.addNewRaw_image2);
+        image3 = findViewById(R.id.addNewRaw_image3);
+        image4 = findViewById(R.id.addNewRaw_image4);
+        image5 = findViewById(R.id.addNewRaw_image5);
+        image6 = findViewById(R.id.addNewRaw_image6);
+        image7 = findViewById(R.id.addNewRaw_image7);
+        image8 = findViewById(R.id.addNewRaw_image8);
 
         thickness.requestFocus();
         headerLayout.setVisibility(View.VISIBLE);
         acceptRowLayout.setVisibility(View.GONE);
+        image1.setVisibility(View.INVISIBLE);
+        image2.setVisibility(View.INVISIBLE);
+        image3.setVisibility(View.INVISIBLE);
+        image4.setVisibility(View.INVISIBLE);
+        image5.setVisibility(View.INVISIBLE);
+        image6.setVisibility(View.INVISIBLE);
+        image7.setVisibility(View.INVISIBLE);
+        image8.setVisibility(View.INVISIBLE);
 
         gradeList.clear();
         gradeList.add("Fresh");
@@ -156,15 +207,26 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
             }
         });
 
+        addPicture.setOnClickListener(this);
         mainInfoButton.setOnClickListener(this);
         doneAcceptRow.setOnClickListener(this);
         acceptRowButton.setOnClickListener(this);
         addNewSupplier.setOnClickListener(this);
         searchSupplier.setOnClickListener(this);
         addButton.setOnClickListener(this);
+        acceptanceDate.setOnClickListener(this);
+        image1.setOnClickListener(this);
+        image2.setOnClickListener(this);
+        image3.setOnClickListener(this);
+        image4.setOnClickListener(this);
+        image5.setOnClickListener(this);
+        image6.setOnClickListener(this);
+        image7.setOnClickListener(this);
+        image8.setOnClickListener(this);
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -181,6 +243,11 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
             case R.id.addNewRaw_acceptRow_done:
                 doneButtonMethod();
                 break;
+            case R.id.addNewRaw_acceptance_date:
+                new DatePickerDialog(AddNewRaw.this, openDatePickerDialog(0), myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                break;
             case R.id.addNewRaw_acceptRaw_button:
                 headerLayout.setVisibility(View.GONE);
                 acceptRowButton.setBackgroundResource(R.drawable.frame_shape_3);
@@ -193,7 +260,9 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                 break;
             case R.id.addNewRaw_add_button:
                 addButtonMethod();
-
+                break;
+            case R.id.addNewRaw_add_photo:
+                openCamera();
                 break;
             case R.id.addNewRaw_add_supplier:
                 Intent intent = new Intent(AddNewRaw.this, AddNewSupplier.class);
@@ -208,9 +277,9 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                 searchDialog.setContentView(R.layout.search_supplier_dialog);
 
                 SearchView searchView = searchDialog.findViewById(R.id.search_supplier_searchView);
-                RecyclerView recyclerView = searchDialog.findViewById(R.id.search_supplier_recyclerView);
+                recyclerView = searchDialog.findViewById(R.id.search_supplier_recyclerView);
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
-                SuppliersAdapter adapter = new SuppliersAdapter(this, suppliers);
+                adapter = new SuppliersAdapter(this, suppliers);
                 recyclerView.setAdapter(adapter);
 
                 searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -221,14 +290,71 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
                     @Override
                     public boolean onQueryTextChange(String newText) {
-                        adapter.filter(newText);
+                        filter(newText);
+//                        adapter.notifyDataSetChanged();
                         return false;
                     }
                 });
                 searchDialog.show();
                 break;
+            case R.id.addNewRaw_image1:
+                isEditImage = true;
+                editImageNo = 1;
+                openCamera();
+                break;
+            case R.id.addNewRaw_image2:
+                isEditImage = true;
+                editImageNo = 2;
+                openCamera();
+                break;
+            case R.id.addNewRaw_image3:
+                isEditImage = true;
+                editImageNo = 3;
+                openCamera();
+                break;
+            case R.id.addNewRaw_image4:
+                isEditImage = true;
+                editImageNo = 4;
+                openCamera();
+                break;
+            case R.id.addNewRaw_image5:
+                isEditImage = true;
+                editImageNo = 5;
+                openCamera();
+                break;
+            case R.id.addNewRaw_image6:
+                isEditImage = true;
+                editImageNo = 6;
+                openCamera();
+                break;
+            case R.id.addNewRaw_image7:
+                isEditImage = true;
+                editImageNo = 7;
+                openCamera();
+                break;
+            case R.id.addNewRaw_image8:
+                isEditImage = true;
+                editImageNo = 8;
+                openCamera();
+                break;
         }
 
+    }
+
+    public void filter(String charText) { // by Name
+        charText = charText.toLowerCase(Locale.getDefault());
+        arraylist.clear();
+        if (charText.length() == 0) {
+            arraylist.addAll(suppliers);
+        } else {
+            for (SupplierInfo supplierInfo : suppliers) {//for (SupplierInfo supplierInfo : arraylist){
+                if (supplierInfo.getSupplierName().toLowerCase(Locale.getDefault()).contains(charText)) {
+                    arraylist.add(supplierInfo);
+                }
+            }
+        }
+        adapter = new SuppliersAdapter(this, arraylist);
+        recyclerView.setAdapter(adapter);
     }
 
     void addButtonMethod() {
@@ -240,12 +366,27 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         String noOfBundlesLocal = noOfBundles.getText().toString();
 
         if (!TextUtils.isEmpty(supplierName)) {
-            if (!TextUtils.isEmpty(thicknessLocal))
-                if (!TextUtils.isEmpty(widthLocal))
-                    if (!TextUtils.isEmpty(lengthLocal))
-                        if (!TextUtils.isEmpty(noOfPiecesLocal))
-                            if (!TextUtils.isEmpty(noOfRejectedLocal))
-                                if (!TextUtils.isEmpty(noOfBundlesLocal)) {
+            if (!TextUtils.isEmpty(thicknessLocal) && (!checkValidData(thicknessLocal)))
+                if (!TextUtils.isEmpty(widthLocal) && (!checkValidData(widthLocal)))
+                    if (!TextUtils.isEmpty(lengthLocal) && (!checkValidData(lengthLocal)))
+                        if (!TextUtils.isEmpty(noOfPiecesLocal) && (!checkValidData(noOfPiecesLocal)))
+                            if (!TextUtils.isEmpty(noOfRejectedLocal) && (!checkValidData(noOfRejectedLocal)))
+                                if (!TextUtils.isEmpty(noOfBundlesLocal) && (!checkValidData(noOfBundlesLocal))) {
+
+                                    thicknessLocal = formatDecimalValue(thicknessLocal);
+                                    widthLocal = formatDecimalValue(widthLocal);
+                                    lengthLocal = formatDecimalValue(lengthLocal);
+                                    noOfPiecesLocal = formatDecimalValue(noOfPiecesLocal);
+                                    noOfRejectedLocal = formatDecimalValue(noOfRejectedLocal);
+                                    noOfBundlesLocal = formatDecimalValue(noOfBundlesLocal);
+
+                                    thicknessLocal = isContainValueAfterDot(thicknessLocal);
+                                    widthLocal = isContainValueAfterDot(widthLocal);
+                                    lengthLocal = isContainValueAfterDot(lengthLocal);
+                                    noOfPiecesLocal = isContainValueAfterDot(noOfPiecesLocal);
+                                    noOfRejectedLocal = isContainValueAfterDot(noOfRejectedLocal);
+                                    noOfBundlesLocal = isContainValueAfterDot(noOfBundlesLocal);
+
                                     NewRowInfo rowInfo = new NewRowInfo();
                                     rowInfo.setSupplierName(supplierName);
                                     rowInfo.setThickness(Double.parseDouble(thicknessLocal));
@@ -257,8 +398,8 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                                     rowInfo.setGrade(gradeText);
 
                                     newRowList.add(rowInfo);
-                                    if (tableLayout.getChildCount() == 0)
-                                        addTableHeader(tableLayout);
+                                    if (headerTableLayout.getChildCount() == 0)
+                                        addTableHeader(headerTableLayout);
                                     tableRow = new TableRow(this);
                                     fillTableRow(tableRow, thicknessLocal, widthLocal, lengthLocal, noOfPiecesLocal, noOfRejectedLocal, noOfBundlesLocal);
                                     tableLayout.addView(tableRow);
@@ -271,6 +412,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                                     noOfBundles.setText("");
                                     gradeSpinner.setSelection(gradeList.indexOf("Fresh"));
                                     gradeText = "Fresh";
+                                    thickness.requestFocus();
 
                                 } else {
                                     noOfBundles.setError("Required!");
@@ -304,6 +446,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         String locationLocal = acceptanceLocation.getText().toString();
         String totalRejectedLocal = totalRejected.getText().toString();
 
+        Log.e("newRowList", " size" + newRowList.size());
         if (newRowList.size() > 0) {
             if (!TextUtils.isEmpty(truckNoLocal)) {
                 if (!TextUtils.isEmpty(acceptorLocal))
@@ -361,9 +504,184 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void openCamera() {
+        if (imageNo < 8) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
+            } else {
+                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, 1888);
+//            imageNo = i;
+            }
+        } else {
+            showSnackbar("Reached maximum size of images!", false);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        int permission = ActivityCompat.checkSelfPermission(AddNewRaw.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(
+                    AddNewRaw.this,
+                    PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE
+            );
+        }
+
+        if (requestCode == 1888 && resultCode == RESULT_OK) {
+            Bundle intent = data.getExtras();
+            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+            bitmap = getResizedBitmap(bitmap, 100, 100);
+            File pictureFile;
+
+            int check;
+            if (!isEditImage) {
+                imageNo++;
+                check = imageNo;
+            } else {
+                check = editImageNo;
+            }
+
+            Log.e("checkvalue", "" + check);
+            if (intent != null) {
+                switch (check) {
+                    case 1:
+                        image1.setVisibility(View.VISIBLE);
+                        image1.setImageBitmap(bitmap);
+                        imagesList.add(0, bitMapToString(bitmap));
+                        break;
+                    case 2:
+                        image2.setVisibility(View.VISIBLE);
+                        image2.setImageBitmap(bitmap);
+                        imagesList.add(1, bitMapToString(bitmap));
+                        break;
+                    case 3:
+                        image3.setVisibility(View.VISIBLE);
+                        image3.setImageBitmap(bitmap);
+                        imagesList.add(2, bitMapToString(bitmap));
+                        break;
+                    case 4:
+                        image4.setVisibility(View.VISIBLE);
+                        image4.setImageBitmap(bitmap);
+                        imagesList.add(3, bitMapToString(bitmap));
+                        break;
+                    case 5:
+                        image5.setVisibility(View.VISIBLE);
+                        image5.setImageBitmap(bitmap);
+                        imagesList.add(4, bitMapToString(bitmap));
+                        break;
+                    case 6:
+                        image6.setVisibility(View.VISIBLE);
+                        image6.setImageBitmap(bitmap);
+                        imagesList.add(5, bitMapToString(bitmap));
+                        break;
+                    case 7:
+                        image7.setVisibility(View.VISIBLE);
+                        image7.setImageBitmap(bitmap);
+                        imagesList.add(6, bitMapToString(bitmap));
+                        break;
+                    case 8:
+                        image8.setVisibility(View.VISIBLE);
+                        image8.setImageBitmap(bitmap);
+                        imagesList.add(7, bitMapToString(bitmap));
+                        break;
+
+                }
+            }
+
+            isEditImage = false;
+        }
+    }
+
+    public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
+        if (bm != null) {
+            int width = bm.getWidth();
+            int height = bm.getHeight();
+            float scaleWidth = ((float) newWidth) / width;
+            float scaleHeight = ((float) newHeight) / height;
+            // CREATE A MATRIX FOR THE MANIPULATION
+            Matrix matrix = new Matrix();
+            // RESIZE THE BIT MAP
+            matrix.postScale(scaleWidth, scaleHeight);
+
+            // "RECREATE" THE NEW BITMAP
+            Bitmap resizedBitmap = Bitmap.createBitmap(
+                    bm, 0, 0, width, height, matrix, false);
+            return resizedBitmap;
+        }
+        return null;
+    }
+
+    public String bitMapToString(Bitmap bitmap) {
+        if (bitmap != null) {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+            byte[] arr = baos.toByteArray();
+            String result = Base64.encodeToString(arr, Base64.DEFAULT);
+            return result;
+        }
+
+        return "";
+    }
+
+    public Bitmap stringToBitMap(String image) {
+        try {
+            byte[] encodeByte = Base64.decode(image, Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        } catch (Exception e) {
+            e.getMessage();
+            return null;
+        }
+    }
+
+    boolean checkValidData(String word) {
+//        Log.e("checkValidData4", word + ((word.length() == 1)));
+//        Log.e("checkValidData4", word + ((word.contains("."))));
+//        Log.e("checkValidData4", word + ((word.length() == 1) && (word.equals("."))));
+        if ((word.length() == 1) && (word.contains(".")))
+            return true;
+        return false;
+    }
+
+    String formatDecimalValue(String value) {
+        String charOne = String.valueOf(value.charAt(0));
+        String charEnd = String.valueOf(value.charAt(value.length() - 1));
+
+        if (charOne.equals("."))
+            return ("0" + value);
+        else if (charEnd.equals(".")) {
+            value = value.substring(0, value.length() - 1);
+//            Log.e("checkValidData3", "" +value);
+            return (value);
+        }
+        Log.e("value", value);
+        return value;
+    }
+
+    String isContainValueAfterDot(String string) {
+        String isConten = "";
+        String afterDot = string.substring(string.indexOf(".") + 1, string.length());
+//        Log.e("afterDot", "" + afterDot + "      " + string);
+        if (!(Integer.parseInt(afterDot) > 0)) {
+            isConten = string.substring(0, string.indexOf("."));
+        } else {
+            isConten = string;
+        }
+        Log.e("value2", isConten);
+//        Log.e("afterDotreturn", "" + afterDot + "      " + isConten);
+        return isConten;
+
+    }
+
     public void getSearchSupplierInfo(String supplierNameLocal, String supplierNoLocal) {
         supplierName = supplierNameLocal;
         searchSupplier.setText(supplierName);
+        searchSupplier.setError(null);
         searchDialog.dismiss();
 
     }
@@ -380,10 +698,10 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
             textView.setLayoutParams(textViewParam);
             switch (i) {
                 case 0:
-                    TableRow.LayoutParams param = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.MATCH_PARENT);
+                    TableRow.LayoutParams param = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
 //                    param.setMargins(1, 5, 1, 1);
                     textView.setLayoutParams(param);
-                    textView.setText("Supplier #");
+                    textView.setText("Supplier");
                     break;
                 case 1:
                     textView.setText("Thic");
@@ -395,13 +713,13 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     textView.setText("Length");
                     break;
                 case 4:
-                    textView.setText("# Pieces");
+                    textView.setText("Pieces");
                     break;
                 case 5:
-                    textView.setText("# Rejected");
+                    textView.setText("Rejected");
                     break;
                 case 6:
-                    textView.setText("# Bundles");
+                    textView.setText("Bundles");
                     break;
                 case 7:
                     textView.setText("Grade");
@@ -426,10 +744,10 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
             textView.setLayoutParams(textViewParam);
             switch (i) {
                 case 0:
-                    TableRow.LayoutParams param = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
-                    param.setMargins(1, 5, 1, 1);
-                    textView.setPadding(0, 10, 0, 10);
-                    textView.setLayoutParams(param);
+//                    TableRow.LayoutParams param = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
+//                    param.setMargins(1, 5, 1, 1);
+//                    textView.setPadding(0, 10, 0, 10);
+//                    textView.setLayoutParams(param);
                     textView.setText(supplierName);
                     break;
                 case 1:
@@ -457,6 +775,25 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
             tableRow.addView(textView);
         }
 
+    }
+
+    public DatePickerDialog.OnDateSetListener openDatePickerDialog(final int flag) {
+        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+
+                // TODO Auto-generated method stub
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, month);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                String myFormat = "dd/MM/yyyy";
+                SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+                acceptanceDate.setText(sdf.format(myCalendar.getTime()));
+            }
+
+        };
+        return date;
     }
 
     void chooseSpinnersContent() {
@@ -488,6 +825,95 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                 break;
         }
 
+    }
+
+    void showSnackbar(String text, boolean showImage) {
+        snackbar = Snackbar.make(coordinatorLayout, Html.fromHtml("<font color=\"#3167F0\">" + text + "</font>"), Snackbar.LENGTH_SHORT);//Updated Successfully
+        View snackbarLayout = snackbar.getView();
+        TextView textViewSnackbar = (TextView) snackbarLayout.findViewById(android.support.design.R.id.snackbar_text);
+        if (showImage)
+            textViewSnackbar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check_24dp, 0, 0, 0);
+        snackbar.show();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+//        linearLayoutView.getVisibility();
+        outState.putBoolean(STATE_VISIBILITY, mState);
+
+        List<TableRow> tableRows = new ArrayList<>();
+        int rowcount = tableLayout.getChildCount();
+        for (int i = 0; i < rowcount; i++) {
+            TableRow row = (TableRow) tableLayout.getChildAt(i);
+            tableRows.add(row);
+        }
+        outState.putSerializable("table", (Serializable) tableRows);
+        outState.putSerializable("list", (Serializable) imagesList);
+//        Log.e("size b", "" + imagesList.size());
+
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+
+        // Restore state members from saved instance
+        mState = savedInstanceState.getBoolean(STATE_VISIBILITY);
+        thickness.requestFocus();
+//        linearLayoutView.setVisibility(mState ? View.VISIBLE : View.GONE);
+//        presenter.getImportData();
+        List<TableRow> tableRows = (List<TableRow>) savedInstanceState.getSerializable("table");
+        imagesList.clear();
+        imagesList.addAll((Collection<? extends String>) savedInstanceState.getSerializable("list"));
+//        Log.e("size a", "" +savedInstanceState.getSerializable("list"));
+//        Log.e("size aa", "" +imagesList.size());
+
+        if (tableRows.size() > 0)
+            addTableHeader(headerTableLayout);
+
+        for (int i = 0; i < tableRows.size(); i++) {
+            if (tableRows.get(i).getParent() != null) {
+                ((ViewGroup) tableRows.get(i).getParent()).removeView(tableRows.get(i)); // <- fix
+            }
+            tableLayout.addView(tableRows.get(i));
+        }
+
+        for (int i = 0; i < imagesList.size(); i++)
+            switch (i) {
+                case 0:
+                    image1.setVisibility(View.VISIBLE);
+                    image1.setImageBitmap(stringToBitMap(imagesList.get(i)));
+                    break;
+                case 1:
+                    image2.setVisibility(View.VISIBLE);
+                    image2.setImageBitmap(stringToBitMap(imagesList.get(i)));
+                    break;
+                case 2:
+                    image3.setVisibility(View.VISIBLE);
+                    image3.setImageBitmap(stringToBitMap(imagesList.get(i)));
+                    break;
+                case 3:
+                    image4.setVisibility(View.VISIBLE);
+                    image4.setImageBitmap(stringToBitMap(imagesList.get(i)));
+                    break;
+                case 4:
+                    image5.setVisibility(View.VISIBLE);
+                    image5.setImageBitmap(stringToBitMap(imagesList.get(i)));
+                    break;
+                case 5:
+                    image6.setVisibility(View.VISIBLE);
+                    image6.setImageBitmap(stringToBitMap(imagesList.get(i)));
+                    break;
+                case 6:
+                    image7.setVisibility(View.VISIBLE);
+                    image7.setImageBitmap(stringToBitMap(imagesList.get(i)));
+                    break;
+                case 7:
+                    image8.setVisibility(View.VISIBLE);
+                    image8.setImageBitmap(stringToBitMap(imagesList.get(i)));
+                    break;
+            }
+        super.onRestoreInstanceState(savedInstanceState);
     }
 
     private class JSONTask extends AsyncTask<String, String, List<SupplierInfo>> {
@@ -535,6 +961,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                         supplier.setSupplierName(innerObject.getString("SUPPLIER_NAME"));
 
                         suppliers.add(supplier);
+                        arraylist.add(supplier);
 
                     }
                 } catch (JSONException e) {
@@ -575,6 +1002,8 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
             if (result != null) {
                 Log.e("result", "*****************" + result.size());
+                adapter.notifyDataSetChanged();
+
             } else {
                 Toast.makeText(AddNewRaw.this, "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();
             }
@@ -638,15 +1067,11 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Log.e("tag", s);
+//            Log.e("tag of row info", s);
             if (s != null) {
-                if (s.contains("ROW_INFO SUCCESS")) {
+                if (s.contains("RAW_INFO SUCCESS")) {
 
-                    snackbar = Snackbar.make(coordinatorLayout, Html.fromHtml("<font color=\"#3167F0\">Added Successfully</font>"), Snackbar.LENGTH_SHORT);//Updated Successfully
-                    View snackbarLayout = snackbar.getView();
-                    TextView textViewSnackbar = (TextView) snackbarLayout.findViewById(android.support.design.R.id.snackbar_text);
-                    textViewSnackbar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check_24dp, 0, 0, 0);
-                    snackbar.show();
+                    showSnackbar("Added Successfully", true);
 
                     truckNo.setText("");
                     acceptor.setText("");
@@ -655,7 +1080,10 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     acceptanceDate.setText("");
                     acceptanceLocation.setText("");
                     totalRejected.setText("");
+                    supplierName = "";
+                    searchSupplier.setText("");
                     tableLayout.removeAllViews();
+                    newRowList.clear();
 
                     acceptRowLayout.setVisibility(View.GONE);
                     headerLayout.setVisibility(View.VISIBLE);
@@ -670,7 +1098,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 //                presenter.setSerialNo("");
 //                SettingsFile.serialNumber = "";
                 Log.e("tag", "****Failed to export data Please check internet connection");
-//                Toast.makeText(AddToInventory.this, "Failed to export data Please check internet connection", Toast.LENGTH_LONG).show();
+                Toast.makeText(AddNewRaw.this, "Failed to export data Please check internet connection", Toast.LENGTH_LONG).show();
             }
         }
     }
