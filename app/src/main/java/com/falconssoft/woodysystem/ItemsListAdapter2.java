@@ -95,7 +95,7 @@ public class ItemsListAdapter2 extends BaseAdapter {
         holder.area.setText("" + itemsList.get(i).getArea());
 
         if (itemsList.get(i).getPicture() == null) {
-            holder.image.setImageDrawable(context.getDrawable(R.drawable.pic));
+            holder.image.setImageDrawable(viewGroup.getContext().getDrawable(R.drawable.pic));
         }
         else {
             holder.image.setImageBitmap(StringToBitMap(itemsList.get(i).getPicture()));

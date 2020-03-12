@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -19,6 +20,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
@@ -74,6 +77,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 
+import static com.falconssoft.woodysystem.LoadingOrder.searchBar;
 import static com.falconssoft.woodysystem.SettingsFile.emailContent;
 import static com.falconssoft.woodysystem.SettingsFile.emailTitle;
 import static com.falconssoft.woodysystem.SettingsFile.recipientName;
@@ -325,10 +329,15 @@ public class LoadingOrder2 extends AppCompatActivity {
 
                 new JSONTask().execute();
 
+                new Handler(Looper.getMainLooper()).post(new Runnable(){
+                    @Override
+                    public void run() {
+                        searchBar.setText("2");
+                    }
+                });
 
-                Intent intent = new Intent(LoadingOrder2.this, LoadingOrder.class);
-                startActivity(intent);
                 finish();
+
                 progressDialog.dismiss();
 
             }
@@ -599,7 +608,7 @@ public class LoadingOrder2 extends AppCompatActivity {
 
             if (s != null) {
                 if (s.contains("BUNDLE_ORDER SUCCESS")) {
-
+pics.clear();
                     Log.e("tag", "****Success");
                 } else {
                     Log.e("tag", "****Failed to export data");
