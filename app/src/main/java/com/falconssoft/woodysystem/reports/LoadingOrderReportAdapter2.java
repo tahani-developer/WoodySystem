@@ -1,34 +1,26 @@
-package com.falconssoft.woodysystem;
+package com.falconssoft.woodysystem.reports;
 
-import android.Manifest;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.falconssoft.woodysystem.ItemsListAdapter2;
+import com.falconssoft.woodysystem.LoadingOrder2;
+import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.models.BundleInfo;
-import com.falconssoft.woodysystem.models.Pictures;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemsListAdapter2 extends BaseAdapter {
+public class LoadingOrderReportAdapter2 extends BaseAdapter {
 
     private Context context;
     private LoadingOrder2 loadingOrder2;
@@ -36,7 +28,7 @@ public class ItemsListAdapter2 extends BaseAdapter {
     private static List<BundleInfo> itemsList;
     private static List<BundleInfo> selectedBundles;
 
-    public ItemsListAdapter2(Context context, List<BundleInfo> itemsList) {
+    public LoadingOrderReportAdapter2(Context context, List<BundleInfo> itemsList) {
         this.context = context;
         this.mOriginalValues = itemsList;
         this.itemsList = itemsList;
@@ -72,8 +64,8 @@ public class ItemsListAdapter2 extends BaseAdapter {
     @Override
     public View getView(final int i, View view, ViewGroup viewGroup) {
 
-        final ViewHolder holder = new ViewHolder();
-        view = View.inflate(context, R.layout.item_row2, null);
+        final LoadingOrderReportAdapter2.ViewHolder holder = new LoadingOrderReportAdapter2.ViewHolder();
+        view = View.inflate(context, R.layout.loading_order_report_slot, null);//item_row2
 
         holder.th = (TextView) view.findViewById(R.id.th);
         holder.w = (TextView) view.findViewById(R.id.w);

@@ -27,7 +27,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_gravity="center"
-            android:layout_marginTop="19dp"
+            android:layout_marginTop="15dp"
             android:layout_marginBottom="20dp"
             android:fontFamily="serif"
             android:gravity="center"
@@ -46,7 +46,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginHorizontal="5dp"
+                android:layout_marginStart="7dp"
+                android:layout_marginLeft="7dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginRight="2dp"
                 android:paddingStart="10dp"
                 android:paddingLeft="10dp"
                 android:background="@drawable/shape_with_corner"
@@ -77,7 +80,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginHorizontal="5dp"
+                android:layout_marginHorizontal="2dp"
                 android:layout_gravity="center"
                 android:background="@drawable/shape_with_corner"
                 android:orientation="horizontal"
@@ -102,7 +105,7 @@
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:focusable="false"
-                    android:textSize="17sp"
+                    android:textSize="15sp"
                     />
 
             </LinearLayout>
@@ -111,7 +114,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginHorizontal="5dp"
+                android:layout_marginHorizontal="2dp"
                 android:layout_gravity="center"
                 android:background="@drawable/shape_with_corner"
                 android:orientation="horizontal"
@@ -137,10 +140,49 @@
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:focusable="false"
-                    android:textSize="17sp"
+                    android:textSize="15sp"
                     />
 
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="2dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginEnd="7dp"
+                android:layout_marginRight="7dp"
+                android:layout_weight="1.2"
+                android:background="@drawable/shape_with_corner"
+                android:orientation="horizontal"
+                android:paddingEnd="5dp"
+                android:paddingRight="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="serif"
+                    android:paddingTop="10dp"
+                    android:paddingStart="10dp"
+                    android:paddingLeft="10dp"
+                    android:text="@string/bundle_no"
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/loadingOrder_report_search_bundleNo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="serif"
+                    android:paddingStart="10dp"
+                    android:paddingLeft="10dp"
+                    android:paddingEnd="10dp"
+                    android:paddingRight="10dp"
+                    android:drawableLeft="@drawable/ic_search_24dp"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
 
         </LinearLayout>
 
@@ -253,7 +295,7 @@
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="290dp"
+            android:layout_height="300dp"
             android:layout_alignParentBottom="true"
             android:orientation="vertical"
             android:visibility="gone">
@@ -261,16 +303,115 @@
             <Button
                 android:id="@+id/arrow"
                 android:layout_width="180dp"
-                android:layout_height="15dp"
+                android:layout_height="25dp"
                 android:layout_gravity="center_horizontal"
                 android:background="@drawable/arrow" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/jjj"
+                android:orientation="vertical">
 
-            <com.falconssoft.woodysystem.HorizontalListView
-                android:id="@+id/listview"
-                android:layout_width="fill_parent"
-                android:layout_height="280dp"
-                android:background="@drawable/jjj" />
+                <LinearLayout
+                    android:paddingVertical="10dp"
+                    android:paddingHorizontal="10dp"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:text="@string/bundle_no"
+                        android:textSize="15sp"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/orange"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5"/>
+
+                    <TextView
+                        android:text="@string/thickness"
+                        android:textSize="15sp"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/orange"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:text="@string/width"
+                        android:textSize="15sp"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/orange"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:text="@string/length"
+                        android:textSize="15sp"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/orange"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:text="@string/grade"
+                        android:textSize="15sp"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/orange"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:text="@string/no_of_pieces"
+                        android:textSize="15sp"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/orange"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:text="@string/loc"
+                        android:textSize="15sp"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/orange"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:text="@string/area"
+                        android:textSize="15sp"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/orange"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignBottom="@+id/linear"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginEnd="1dp"
+                        android:layout_marginRight="1dp"
+                        android:background="@drawable/frame_shape"
+                        android:padding="4dp"
+                        app:srcCompat="@drawable/pic" />
+                </LinearLayout>
+
+                <ListView
+                    android:id="@+id/listview"
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    />
+            </LinearLayout>
+
 
         </LinearLayout>
 
