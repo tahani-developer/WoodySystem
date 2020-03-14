@@ -1,22 +1,21 @@
 package com.falconssoft.woodysystem;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.TextView;
 
+import com.falconssoft.woodysystem.LoadingOrder;
+import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.models.BundleInfo;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemsListAdapter extends BaseAdapter {
+public class ItemsListAdapter5 extends BaseAdapter {
 
     private Context context;
     private List<BundleInfo> mOriginalValues;
@@ -24,14 +23,14 @@ public class ItemsListAdapter extends BaseAdapter {
     private static List<BundleInfo> selectedBundles ;
     static LoadingOrder obj = new LoadingOrder();
 
-    public ItemsListAdapter(Context context, List<BundleInfo> itemsList) {
+    public ItemsListAdapter5(Context context, List<BundleInfo> itemsList) {
         this.context = context;
         this.mOriginalValues = itemsList;
         this.itemsList = itemsList;
         selectedBundles = new ArrayList<>();
     }
 
-    public ItemsListAdapter() {
+    public ItemsListAdapter5() {
 
     }
 
@@ -55,7 +54,6 @@ public class ItemsListAdapter extends BaseAdapter {
     }
 
     private class ViewHolder {
-        CheckBox checkBox;
         TextView th, w, l, grade, pcs, bundle, location, area;
     }
 
@@ -63,9 +61,8 @@ public class ItemsListAdapter extends BaseAdapter {
     public View getView(final int i, View view, ViewGroup viewGroup) {
 
         final ViewHolder holder = new ViewHolder();
-        view = View.inflate(context, R.layout.item_row, null);
+        view = View.inflate(context, R.layout.item_row5, null);
 
-        holder.checkBox = (CheckBox) view.findViewById(R.id.checkbox);
         holder.th = (TextView) view.findViewById(R.id.th);
         holder.w = (TextView) view.findViewById(R.id.w);
         holder.l = (TextView) view.findViewById(R.id.l);
@@ -84,37 +81,7 @@ public class ItemsListAdapter extends BaseAdapter {
         holder.location.setText("" + itemsList.get(i).getLocation());
         holder.area.setText("" + itemsList.get(i).getArea());
 
-        if (itemsList.get(i).getChecked())
-            holder.checkBox.setChecked(true);
-
-        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked)
-                    itemsList.get(i).setChecked(true);
-                else
-                    itemsList.get(i).setChecked(false);
-
-                obj.notifyAdapter(itemsList.get(i) , context);
-            }
-        });
-
         return view;
     }
-
-    public List<BundleInfo> getSelectedItems() {
-
-        selectedBundles.clear();
-        for(int i = 0 ; i< itemsList.size() ; i++)
-            if(itemsList.get(i).getChecked())
-                selectedBundles.add(itemsList.get(i));
-
-        return selectedBundles;
-    }
-
-    public List<BundleInfo> getItems() {
-        return itemsList;
-    }
-
 
 }

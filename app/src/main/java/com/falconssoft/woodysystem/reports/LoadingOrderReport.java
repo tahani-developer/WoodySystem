@@ -5,8 +5,11 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
@@ -352,6 +355,16 @@ public class LoadingOrderReport extends AppCompatActivity {
                 adapter2 = new LoadingOrderReportAdapter(LoadingOrderReport.this, orders, bundles);
                 list.setAdapter(adapter2);
 
+                list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                    @Override
+                    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                        orders.remove(position);
+                        deleteOrder(orders ,position);
+                        return false;
+                    }
+                });
+
                 //fillTable(orders);
 //                storeInDatabase();
             } else {
@@ -604,6 +617,59 @@ public class LoadingOrderReport extends AppCompatActivity {
 //
 //    }
 
+    public void deleteOrder(List<Orders> orders , int index){
+        Dialog passwordDialog = new Dialog(LoadingOrderReport.this);
+        passwordDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        passwordDialog.setContentView(R.layout.password_dialog);
+        passwordDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        TextInputEditText password = passwordDialog.findViewById(R.id.password_dialog_password);
+        TextView done = passwordDialog.findViewById(R.id.password_dialog_done);
+
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (password.getText().toString().equals("301190")) {
+
+                    orderNo = orders.get(index).getOrderNo();
+
+                    bundleInfos = new ArrayList<>();
+
+                    for (int i = 0; i < bundles.size(); i++) {
+                        if (orders.get(index).getOrderNo().equals(bundles.get(i).getOrderNo()) &&
+                                orders.get(index).getPlacingNo().equals(bundles.get(i).getPlacingNo()) &&
+                                orders.get(index).getContainerNo().equals(bundles.get(i).getContainerNo()) &&
+                                orders.get(index).getDateOfLoad().equals(bundles.get(i).getDateOfLoad())) {
+
+                            bundleInfos.add(new BundleInfo(
+                                    bundles.get(i).getThickness(),
+                                    bundles.get(i).getWidth(),
+                                    bundles.get(i).getLength(),
+                                    bundles.get(i).getGrade(),
+                                    bundles.get(i).getNoOfPieces(),
+                                    bundles.get(i).getBundleNo(),
+                                    bundles.get(i).getLocation(),
+                                    bundles.get(i).getArea(),
+                                    "",
+                                    ""));
+                        }
+                    }
+                    for (int i = 0; i < bundleInfos.size(); i++) {
+                        bundleNo.put(bundleInfos.get(i).getJSONObject());
+                    }
+                    new JSONTask2().execute();
+//                                    ordersTable.removeView(tableRow);
+                    passwordDialog.dismiss();
+                } else {
+                    Toast.makeText(LoadingOrderReport.this, "Not Authorized!", Toast.LENGTH_SHORT).show();
+                    password.setText("");
+                }
+            }
+        });
+
+        passwordDialog.show();
+    }
+
     public void openLargePicDialog(Bitmap picts , Context context) {
         Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -735,6 +801,7 @@ public class LoadingOrderReport extends AppCompatActivity {
             if (s != null) {
                 if (s.contains("DELETE ORDER SUCCESS")) {
                     MHandler.deleteOrder(orderNo);
+                    adapter2.notifyDataSetChanged();
                 } else {
                     Toast.makeText(LoadingOrderReport.this, "Failed to export data!", Toast.LENGTH_SHORT).show();
                 }
@@ -801,6 +868,17 @@ public class LoadingOrderReport extends AppCompatActivity {
 
             adapter2 = new LoadingOrderReportAdapter(LoadingOrderReport.this, filtered, bundles);
             list.setAdapter(adapter2);
+
+            list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    filtered.remove(position);
+                    deleteOrder(filtered, position);
+
+                    return false;
+                }
+            });
 //            ordersTable.removeAllViews();
 //            fillTable(filtered);
 

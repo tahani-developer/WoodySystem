@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Wood System</string>
-    <string name="version">Version 19.0</string>
+    <string name="version">Version 20.0</string>
 
     <string name="stage1">Acceptance &amp; Quality Control</string>
     <string name="stage2">Stage 2</string>
@@ -55,6 +55,7 @@
     <string name="search_by_barcode">"Search by barcode</string>
     <string name="login">Login</string>
     <string name="add">Add</string>
+    <string name="add_bundle">Add Bundle</string>
     <string name="done">Done</string>
     <string name="save">Save</string>
     <string name="generate_bundle_no">Generate Bundle #</string>

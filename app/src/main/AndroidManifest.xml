@@ -4,6 +4,7 @@
     package="com.falconssoft.woodysystem">
 
     <uses-feature android:name="android.hardware.camera" />
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -15,11 +16,10 @@
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
 
     <supports-screens
-    android:largeScreens="true"
-    android:xlargeScreens="true"
-    android:anyDensity="true"
-    android:requiresSmallestWidthDp="480"
-   />
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:requiresSmallestWidthDp="480"
+        android:xlargeScreens="true" />
 
     <uses-permission
         android:name="android.permission.CONNECTIVITY_INTERNAL"
@@ -77,10 +77,13 @@
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".LoadingOrder"
-            android:windowSoftInputMode="stateAlwaysHidden" />
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" >
+
+        </activity>
         <activity
             android:name=".LoadingOrder2"
-            android:windowSoftInputMode="stateAlwaysHidden" />
+            android:windowSoftInputMode="stateAlwaysHidden">
+        </activity>
         <activity
             android:name=".reports.LoadingOrderReport"
             android:screenOrientation="sensorLandscape"
@@ -98,9 +101,11 @@
         android:largeScreens="true"
         android:requiresSmallestWidthDp="480"
         android:xlargeScreens="true" />
+
     <uses-feature android:name="android.hardware.camera" />
 
     <uses-feature android:name="android.hardware.camera.autofocus" />
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />

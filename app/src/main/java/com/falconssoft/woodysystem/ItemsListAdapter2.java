@@ -105,24 +105,6 @@ public class ItemsListAdapter2 extends BaseAdapter {
             holder.image.setImageBitmap(StringToBitMap(itemsList.get(i).getPicture()));
 
         }
-//        holder.image.setOnClickListener(new View.OnClickListener() {
-//            @RequiresApi(api = Build.VERSION_CODES.M)
-//            @Override
-//            public void onClick(View view) {
-//
-//                LoadingOrder2 obj = new LoadingOrder2();
-//                obj.openCamera(i);
-//
-//            }
-//        });
-
-//        holder.image.setOnClickListener(new View.OnClickListener() {
-//            @RequiresApi(api = Build.VERSION_CODES.M)
-//            @Override
-//            public void onClick(View v) {
-//                loadingOrder2.imageClickListener(i);
-//            }
-//        });
         return view;
     }
 

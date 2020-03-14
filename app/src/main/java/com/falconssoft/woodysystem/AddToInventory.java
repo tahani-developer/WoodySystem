@@ -1,6 +1,7 @@
 package com.falconssoft.woodysystem;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -81,12 +82,15 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
     private Dialog dialog;
     private String takeThick, takeWidth, takeLength, takeNoOfPieces; // used in choose action dialog
     private RelativeLayout coordinatorLayout;
+    String flag = "0";
 //    private List<TableRow> tableRowList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_to_inventory);
+
+        flag = getIntent().getStringExtra("flag");
 
         databaseHandler = new DatabaseHandler(this);
 //        presenter = new WoodPresenter(this);
@@ -1054,6 +1058,10 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         super.onBackPressed();
 //        Intent intent = new Intent(AddToInventory.this , Stage3.class);
 //        startActivity(intent);
+        if (flag.equals("1")) {
+            LoadingOrder.bundles.addAll(bundleInfoList);
+            LoadingOrder.adapter.notifyDataSetChanged();
+        }
         finish();
     }
 }
