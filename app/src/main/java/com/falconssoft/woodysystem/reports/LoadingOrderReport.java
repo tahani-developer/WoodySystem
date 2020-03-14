@@ -2,6 +2,7 @@ package com.falconssoft.woodysystem.reports;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,8 +10,12 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -27,6 +32,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,34 +70,39 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
 public class LoadingOrderReport extends AppCompatActivity {
 
+    private ProgressDialog progressDialog;
     private TextView textView;
-    private static LinearLayout linearLayout;
-    private EditText from, to;
+    private static LinearLayout linearLayout, headerLinear;
+    private EditText from, to, searchBundleNo;
     private Button arrow;
-    private static HorizontalListView listView;
+//    private static HorizontalListView listView;
+    private static ListView listView;
     private static List<Orders> orders, bundles;
     private static List<Pictures> pictures;
     private Animation animation;
-    static ItemsListAdapter2 adapter;
+    //    static ItemsListAdapter2 adapter;
+    static LoadingOrderReportAdapter2 adapter;
     static LoadingOrderReportAdapter adapter2;
     private ListView list;
     private Calendar myCalendar;
     Spinner location;
     private ArrayAdapter<String> locationAdapter;
-    private String loc = "";
+    private String loc = "", searchBundleNoString = "";
     private Settings generalSettings;
     private String orderNo;
     private JSONArray bundleNo = new JSONArray();
     private DatabaseHandler MHandler;
     List<BundleInfo> bundleInfos;
+    //    List<String> bundleNoString;
     static Dialog dialog;
 
-    String myFormat ;
+    String myFormat;
     SimpleDateFormat sdf;
 
 
@@ -99,12 +111,14 @@ public class LoadingOrderReport extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.loading_order_report);
 
+        progressDialog = new ProgressDialog(this,R.style.MyAlertDialogStyle);
+        progressDialog.setMessage("Please Waiting...");
         MHandler = new DatabaseHandler(LoadingOrderReport.this);
         generalSettings = new DatabaseHandler(this).getSettings();
-        dialog = new Dialog(LoadingOrderReport.this);
         orders = new ArrayList<>();
         bundles = new ArrayList<>();
         pictures = new ArrayList<>();
+//        bundleNoString= new ArrayList<>();
 
         list = findViewById(R.id.list);
         textView = findViewById(R.id.loading_order_report);
@@ -114,6 +128,8 @@ public class LoadingOrderReport extends AppCompatActivity {
         location = (Spinner) findViewById(R.id.Loding_Order_Location);
         from = (EditText) findViewById(R.id.Loding_Order_from);
         to = (EditText) findViewById(R.id.Loding_Order_to);
+        searchBundleNo = findViewById(R.id.loadingOrder_report_search_bundleNo);
+        searchBundleNo.addTextChangedListener(new watchTextChange(searchBundleNo));
 
         myFormat = "dd/MM/yyyy";
         sdf = new SimpleDateFormat(myFormat, Locale.US);
@@ -131,7 +147,8 @@ public class LoadingOrderReport extends AppCompatActivity {
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_to_right);
         textView.startAnimation(animation);
 
-        adapter = new ItemsListAdapter2(LoadingOrderReport.this, new ArrayList<>());
+//        adapter = new ItemsListAdapter2(LoadingOrderReport.this, new ArrayList<>());
+        adapter = new LoadingOrderReportAdapter2(LoadingOrderReport.this, new ArrayList<>());
         listView.setAdapter(adapter);
 
         adapter2 = new LoadingOrderReportAdapter(LoadingOrderReport.this, new ArrayList<>(), new ArrayList<>());
@@ -188,11 +205,43 @@ public class LoadingOrderReport extends AppCompatActivity {
 
     }
 
+    class watchTextChange implements TextWatcher {
+
+        private View view;
+
+        public watchTextChange(View view) {
+            this.view = view;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            switch (view.getId()) {
+                case R.id.loadingOrder_report_search_bundleNo:
+                    if (linearLayout.getVisibility() == View.VISIBLE)
+                        slideDown(linearLayout);
+
+                    searchBundleNoString = String.valueOf(s);//formatDecimalValue(String.valueOf(s));
+                    filters();
+                    break;
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    }
+
     private class JSONTask extends AsyncTask<String, String, List<Orders>> {
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            showDialog();
 
         }
 
@@ -202,7 +251,7 @@ public class LoadingOrderReport extends AppCompatActivity {
             BufferedReader reader = null;
 
             try {
-
+//                http://10.0.0.214/woody/import.php?FLAG=2
                 URL url = new URL("http://" + generalSettings.getIpAddress() + "/import.php?FLAG=2");
 
                 URLConnection conn = url.openConnection();
@@ -247,6 +296,7 @@ public class LoadingOrderReport extends AppCompatActivity {
                 try {
                     JSONArray parentArrayOrders = parentObject.getJSONArray("BUNDLE_ORDER");
                     bundles.clear();
+
                     for (int i = 0; i < parentArrayOrders.length(); i++) {
                         JSONObject finalObject = parentArrayOrders.getJSONObject(i);
 
@@ -354,6 +404,7 @@ public class LoadingOrderReport extends AppCompatActivity {
                 Log.e("result", "*****************" + orders.size());
                 adapter2 = new LoadingOrderReportAdapter(LoadingOrderReport.this, orders, bundles);
                 list.setAdapter(adapter2);
+                dismissDialog();
 
                 list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                     @Override
@@ -373,16 +424,23 @@ public class LoadingOrderReport extends AppCompatActivity {
         }
     }
 
-    public void previewLinear(int index , Context Context){
+    public void previewLinear(int index, Context Context, List<Orders> ordersList) {
+
+        Log.d("ooo  ", "orders " + orders.get(index).getOrderNo() + "  " + orders.get(index).getPlacingNo()
+                + "  " + orders.get(index).getContainerNo() + "  " + orders.get(index).getDateOfLoad());
 
         bundleInfos = new ArrayList<>();
-
         for (int i = 0; i < bundles.size(); i++) {
-//                                    Log.e("ooo  " , ""+ orders.get(index).getOrderNo() + "  " + bundles.get(i).getBundleNo());
-            if (orders.get(index).getOrderNo().equals(bundles.get(i).getOrderNo()) &&
-                    orders.get(index).getPlacingNo().equals(bundles.get(i).getPlacingNo()) &&
-                    orders.get(index).getContainerNo().equals(bundles.get(i).getContainerNo()) &&
-                    orders.get(index).getDateOfLoad().equals(bundles.get(i).getDateOfLoad())) {
+            Log.d("ooo  ", "bundles " + i + " :   " + bundles.get(i).getOrderNo() + "  " + bundles.get(i).getPlacingNo()
+                    + "  " + bundles.get(i).getContainerNo() + "  " + bundles.get(i).getDateOfLoad());
+//            if (orders.get(index).getOrderNo().equals(bundles.get(i).getOrderNo()) &&
+//                    orders.get(index).getPlacingNo().equals(bundles.get(i).getPlacingNo()) &&
+//                    orders.get(index).getContainerNo().equals(bundles.get(i).getContainerNo()) &&
+//                    orders.get(index).getDateOfLoad().equals(bundles.get(i).getDateOfLoad())) {
+            if (ordersList.get(index).getOrderNo().equals(bundles.get(i).getOrderNo()) &&
+                    ordersList.get(index).getPlacingNo().equals(bundles.get(i).getPlacingNo()) &&
+                    ordersList.get(index).getContainerNo().equals(bundles.get(i).getContainerNo()) &&
+                    ordersList.get(index).getDateOfLoad().equals(bundles.get(i).getDateOfLoad())) {
 
                 bundleInfos.add(new BundleInfo(
                         bundles.get(i).getThickness(),
@@ -399,12 +457,13 @@ public class LoadingOrderReport extends AppCompatActivity {
         }
 
         Log.e("ooo  ", "" + bundleInfos.size());
-        adapter = new ItemsListAdapter2(Context, bundleInfos);
+//        adapter = new ItemsListAdapter2(Context, bundleInfos);
+        adapter = new LoadingOrderReportAdapter2(Context, bundleInfos);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                openLargePicDialog(StringToBitMap(bundleInfos.get(position).getPicture()) , Context);
+                openLargePicDialog(StringToBitMap(bundleInfos.get(position).getPicture()), Context);
             }
         });
 
@@ -418,7 +477,7 @@ public class LoadingOrderReport extends AppCompatActivity {
 
     }
 
-    public void previewPics(int index , Context context){
+    public void previewPics(int index, Context context) {
         Pictures pics = new Pictures();
         for (int i = 0; i < pictures.size(); i++) {
             if (pictures.get(i).getOrderNo().equals(orders.get(index).getOrderNo())) {
@@ -426,10 +485,8 @@ public class LoadingOrderReport extends AppCompatActivity {
                 break;
             }
         }
-        openPicDialog(pics , context);
+        openPicDialog(pics, context);
     }
-
-
 
 //    void fillTable(List<Orders> orders) {
 //
@@ -684,7 +741,8 @@ public class LoadingOrderReport extends AppCompatActivity {
 
     }
 
-    public void openPicDialog(Pictures picts , Context context) {
+    public void openPicDialog(Pictures picts, Context context) {
+        dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.pic_dialog);
@@ -721,7 +779,6 @@ public class LoadingOrderReport extends AppCompatActivity {
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
 
-
                 if (flag == 0)
                     from.setText(sdf.format(myCalendar.getTime()));
                 else
@@ -745,6 +802,14 @@ public class LoadingOrderReport extends AppCompatActivity {
             e.getMessage();
             return null;
         }
+    }
+
+    public void showDialog(){
+        progressDialog.show();
+    }
+
+    public void dismissDialog(){
+        progressDialog.dismiss();
     }
 
     private class JSONTask2 extends AsyncTask<String, String, String> {
@@ -823,6 +888,10 @@ public class LoadingOrderReport extends AppCompatActivity {
         animate.setStartTime(100);
         animate.setFillAfter(true);
         view.startAnimation(animate);
+
+//        headerLinear = new LinearLayout(this);
+//        addListeHeader(headerLinear);
+//        listView.addView(headerLinear);
     }
 
     public void slideDown(View view) {
@@ -851,21 +920,66 @@ public class LoadingOrderReport extends AppCompatActivity {
 
         String fromDate = from.getText().toString().trim();
         String toDate = to.getText().toString();
-
+        List<Orders> filtered = new ArrayList<>();
         try {
-            List<Orders> filtered = new ArrayList<>();
-            for (int k = 0; k < orders.size(); k++) {
-                if (fromDate.equals("") || toDate.equals("")) {
-                    if (loc.equals("") || loc.equals(orders.get(k).getLocation()))
-                        filtered.add(orders.get(k));
-                } else {
-                    if ((formatDate(orders.get(k).getDateOfLoad()).after(formatDate(fromDate)) || formatDate(orders.get(k).getDateOfLoad()).equals(formatDate(fromDate))) &&
-                            (formatDate(orders.get(k).getDateOfLoad()).before(formatDate(toDate)) || formatDate(orders.get(k).getDateOfLoad()).equals(formatDate(toDate))) &&
-                            (loc.equals("") || loc.equals(orders.get(k).getLocation())))
-                        filtered.add(orders.get(k));
+
+            filtered.clear();
+
+            String localDate = "", localContainer = "", localPlacingNo = "", localOrderNo = "";
+            for (int m = 0; m < bundles.size(); m++) {
+//                    Log.e("compare333",bundles.get(m).getBundleNo().toLowerCase());
+//                    Log.e("compare334","" + bundles.get(m).getBundleNo().toLowerCase().contains(searchBundleNoString));
+                if (bundles.get(m).getBundleNo().toLowerCase().contains(searchBundleNoString) || searchBundleNoString.equals("")) {
+                    localDate = bundles.get(m).getDateOfLoad();
+                    localContainer = bundles.get(m).getContainerNo();
+                    localPlacingNo = bundles.get(m).getPlacingNo();
+                    localOrderNo = bundles.get(m).getOrderNo();
+                    for (int k = 0; k < orders.size(); k++) {
+//                if (fromDate.equals("") || toDate.equals("")) {
+//                    if (loc.equals("") || loc.equals(orders.get(k).getLocation()))
+//                        filtered.add(orders.get(k));
+//                } else {
+                        if ((formatDate(orders.get(k).getDateOfLoad()).after(formatDate(fromDate))
+                                || formatDate(orders.get(k).getDateOfLoad()).equals(formatDate(fromDate)) || fromDate.equals("")) &&
+                                (formatDate(orders.get(k).getDateOfLoad()).before(formatDate(toDate))
+                                        || formatDate(orders.get(k).getDateOfLoad()).equals(formatDate(toDate)) || toDate.equals("")) &&
+                                (loc.equals("") || loc.equals(orders.get(k).getLocation())))
+                            if ((orders.get(k).getContainerNo().equals(localContainer) || localContainer.equals(""))
+                                    && (orders.get(k).getPlacingNo().equals(localPlacingNo) || localPlacingNo.equals(""))
+                                    && (orders.get(k).getOrderNo().equals(localOrderNo) || localOrderNo.equals(""))
+                                    && (orders.get(k).getDateOfLoad().equals(localDate) || localDate.equals(""))) {
+                                filtered.add(orders.get(k));
+                                break;
+                            }
+//            }
+//                }
+                    }
+
                 }
             }
-
+//            for (int k = 0; k < orders.size(); k++) {
+////                if (fromDate.equals("") || toDate.equals("")) {
+////                    if (loc.equals("") || loc.equals(orders.get(k).getLocation()))
+////                        filtered.add(orders.get(k));
+////                } else {
+//                if ((formatDate(orders.get(k).getDateOfLoad()).after(formatDate(fromDate))
+//                        || formatDate(orders.get(k).getDateOfLoad()).equals(formatDate(fromDate)) || fromDate.equals("")) &&
+//                        (formatDate(orders.get(k).getDateOfLoad()).before(formatDate(toDate))
+//                                || formatDate(orders.get(k).getDateOfLoad()).equals(formatDate(toDate)) || toDate.equals("")) &&
+//                        (loc.equals("") || loc.equals(orders.get(k).getLocation())))
+//                    if ((orders.get(k).getContainerNo().equals(localContainer) || localContainer.equals(""))
+//                            && (orders.get(k).getPlacingNo().equals(localPlacingNo) || localPlacingNo.equals(""))
+//                            && (orders.get(k).getOrderNo().equals(localOrderNo) || localOrderNo.equals("")))
+//                        filtered.add(orders.get(k));
+//
+////            }
+////                }
+//            }
+            Log.e("set 1", "" + filtered.size());
+            HashSet<Orders> listToSet = new HashSet<Orders>(filtered);
+            filtered.clear();
+            filtered.addAll(listToSet);
+            Log.e("set", "" + filtered.size());
             adapter2 = new LoadingOrderReportAdapter(LoadingOrderReport.this, filtered, bundles);
             list.setAdapter(adapter2);
 
@@ -882,14 +996,17 @@ public class LoadingOrderReport extends AppCompatActivity {
 //            ordersTable.removeAllViews();
 //            fillTable(filtered);
 
-        } catch (ParseException e) {
+        } catch (
+                ParseException e) {
             e.printStackTrace();
         }
+
     }
 
     public void onBackPressed() {
         super.onBackPressed();
-        finish();}
+        finish();
+    }
 }
 
 

@@ -24,7 +24,7 @@ import java.util.List;
 public class LoadingOrderReportAdapter extends BaseAdapter {
 
     private Context context;
-//    private List<BundleInfo> mOriginalValues;
+    //    private List<BundleInfo> mOriginalValues;
     private static List<Orders> itemsList;
     private static List<Orders> bundles;
 //    private static List<BundleInfo> selectedBundles ;
@@ -62,7 +62,7 @@ public class LoadingOrderReportAdapter extends BaseAdapter {
 
     private class ViewHolder {
         ImageView pic;
-        Button bundleNo ;
+        Button bundleNo;
         TextView orderNo, truckNo, containerNo, date, destination;
     }
 
@@ -84,7 +84,7 @@ public class LoadingOrderReportAdapter extends BaseAdapter {
         holder.truckNo.setText(itemsList.get(i).getPlacingNo());
         holder.containerNo.setText(itemsList.get(i).getContainerNo());
         holder.date.setText(itemsList.get(i).getDateOfLoad());
-        holder.destination.setText( itemsList.get(i).getDestination());
+        holder.destination.setText(itemsList.get(i).getDestination());
 
         LoadingOrderReport obj = new LoadingOrderReport();
 
@@ -115,8 +115,7 @@ public class LoadingOrderReportAdapter extends BaseAdapter {
 //                                bundles.get(k).getPicture()));
 //                    }
 //                }
-
-                obj.previewLinear(i , context);
+                obj.previewLinear(i, context, itemsList);
 
             }
         });
@@ -125,7 +124,7 @@ public class LoadingOrderReportAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
 
-                obj.previewPics(i , context);
+                obj.previewPics(i, context);
             }
         });
 

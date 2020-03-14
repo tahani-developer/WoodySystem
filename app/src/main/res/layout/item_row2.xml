@@ -127,7 +127,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
-                        android:layout_marginTop="10dp"
                         android:layout_weight="1"
                         android:gravity="left"
                         android:text="@string/grade"
@@ -139,7 +138,7 @@
                         android:layout_height="0dp"
                         android:layout_weight="1"
                         android:gravity="left"
-                        android:text="@string/num_pcs"
+                        android:text="@string/no_of_pieces"
                         android:textColor="#000000"
                         android:textSize="18sp" />
 
@@ -173,6 +172,7 @@
                         android:layout_height="0dp"
                         android:layout_weight="1"
                         android:gravity="left"
+                        android:visibility="gone"
                         android:text="@string/bundle_num"
                         android:textColor="#000000"
                         android:textSize="18sp" />
@@ -190,7 +190,6 @@
                         android:id="@+id/grade"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_marginTop="10dp"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="0"

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
@@ -13,6 +14,8 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.falconssoft.woodysystem.models.BundleInfo;
@@ -45,7 +48,9 @@ public class LoadingOrder extends AppCompatActivity {
     private String f1 = "", f2 = "", f3 = "", barcodeValue = "";
     public static ItemsListAdapter adapter;
     private Activity activity;
+    public  static  TextView searchBar;
     String loc;
+    int no = 0;
 
     static ListView listView2;
     static HorizontalListView listView;
@@ -72,6 +77,7 @@ public class LoadingOrder extends AppCompatActivity {
         DHandler = new DatabaseHandler(LoadingOrder.this);
         loc = DHandler.getSettings().getStore();
 //        bundles = DHandler.getBundleInfo();
+        searchBar=findViewById(R.id.searchBar);
 
         bundles = new ArrayList<>();
         selectedBundle = new ArrayList<>();
@@ -110,9 +116,12 @@ public class LoadingOrder extends AppCompatActivity {
                 if (listContainsItems()) {
                     Intent intent = new Intent(LoadingOrder.this, LoadingOrder2.class);
                     startActivity(intent);
-                    finish();
+//                    finish();
 
 //                    setSlideAnimation();
+
+
+
                 } else {
                     Toast.makeText(LoadingOrder.this, "No item selected !", Toast.LENGTH_LONG).show();
                 }
@@ -154,6 +163,30 @@ public class LoadingOrder extends AppCompatActivity {
                 items.setAdapter(adapter);
 
                 return false;
+            }
+        });
+        searchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(searchBar.getText().toString().equals("1")) {
+                    searchByBundleNo(barcodeValue);
+                }else if (searchBar.getText().toString().equals("2")){
+                    Intent i = new Intent(LoadingOrder.this, LoadingOrder.class);
+                    finish();
+                    overridePendingTransition(0, 0);
+                    startActivity(i);
+                    overridePendingTransition(0, 0);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
 
@@ -225,15 +258,32 @@ public class LoadingOrder extends AppCompatActivity {
 
         Log.e("searchByBundleNo ", "" + barcodeValue + "\n" + "th =" + Bundul);
 
-        int no = 0;
+       no = 0;
 
         if (!barcodeValue.equals("cancelled")) {
             for (int k = 0; k < bundles.size(); k++) {
                 if ((bundles.get(k).getBundleNo()).equals(Bundul)) {
                     no = k;
-                    items.setSelection(no);
-                    items.requestFocusFromTouch();
-                    items.setSelection(no);
+//                    try {
+//                        Log.e("searchByBundleNo_13 ", "" + barcodeValue + "\n" + "th =" + no );
+//                        Thread.sleep(120);
+////                        items.setSelection(no);
+//                        items.requestFocusFromTouch();
+//                        items.setSelection(no);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+
+
+                    items.clearFocus();
+                    items.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            items.setSelection(no);
+                        items.requestFocusFromTouch();
+                        items.setSelection(no);
+                        }
+                    });
 
                     break;
                 }
@@ -255,6 +305,7 @@ public class LoadingOrder extends AppCompatActivity {
                 Log.d("MainActivity", "cancelled scan");
                 Toast.makeText(this, "cancelled", Toast.LENGTH_SHORT).show();
                 barcodeValue = "cancelled";
+                searchBar.setText("0");
             } else {
                 Log.d("MainActivity", "Scanned");
                 Toast.makeText(this, "Scanned -> " + Result.getContents(), Toast.LENGTH_SHORT).show();
@@ -265,7 +316,8 @@ public class LoadingOrder extends AppCompatActivity {
 //Log.e("barcode_value ",""+barcodeValue+"\n"+"th ="+arrayString[0]+"\n"+"w ="+arrayString[1]+"\n"+"l ="
 //        +arrayString[2]+"\n"+"grad ="+arrayString[3]);
 //                searchByBundleNo(barcodeValue);
-                searchByBundleNo(barcodeValue);
+                searchBar.setText("1");
+//                searchByBundleNo(barcodeValue);
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
@@ -278,6 +330,11 @@ public class LoadingOrder extends AppCompatActivity {
 //        Intent intent = new Intent(LoadingOrder.this, Stage3.class);
 //        startActivity(intent);
         finish();
+    }
+
+    public  void Refresh(Activity activity){
+//        Intent reOpen = new Intent (LoadingOrder, LoadingOrder.class);
+//        startActivity(reOpen);
     }
 
     private class JSONTask extends AsyncTask<String, String, List<BundleInfo>> {
