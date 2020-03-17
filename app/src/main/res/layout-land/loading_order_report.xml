@@ -295,10 +295,10 @@
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="350dp"
             android:layout_alignParentBottom="true"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <Button
                 android:id="@+id/arrow"
@@ -314,7 +314,7 @@
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:paddingVertical="10dp"
+                    android:paddingVertical="5dp"
                     android:paddingHorizontal="10dp"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
@@ -323,7 +323,7 @@
                     <TextView
                         android:text="@string/bundle_no"
                         android:textSize="15sp"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="5dp"
                         android:textColor="@color/orange"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -332,7 +332,7 @@
                     <TextView
                         android:text="@string/thickness"
                         android:textSize="15sp"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="5dp"
                         android:textColor="@color/orange"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -341,7 +341,7 @@
                     <TextView
                         android:text="@string/width"
                         android:textSize="15sp"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="5dp"
                         android:textColor="@color/orange"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -350,7 +350,7 @@
                     <TextView
                         android:text="@string/length"
                         android:textSize="15sp"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="5dp"
                         android:textColor="@color/orange"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -359,7 +359,7 @@
                     <TextView
                         android:text="@string/grade"
                         android:textSize="15sp"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="5dp"
                         android:textColor="@color/orange"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -368,7 +368,7 @@
                     <TextView
                         android:text="@string/no_of_pieces"
                         android:textSize="15sp"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="5dp"
                         android:textColor="@color/orange"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -377,7 +377,7 @@
                     <TextView
                         android:text="@string/loc"
                         android:textSize="15sp"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="5dp"
                         android:textColor="@color/orange"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -386,15 +386,15 @@
                     <TextView
                         android:text="@string/area"
                         android:textSize="15sp"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="5dp"
                         android:textColor="@color/orange"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"/>
 
                     <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_alignBottom="@+id/linear"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
