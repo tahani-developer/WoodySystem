@@ -6,6 +6,8 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
 public class BundleInfo {
 
     private double thickness;
@@ -31,7 +33,7 @@ public class BundleInfo {
     private String serialNo;
     private String userNo;
     private String backingList;
-
+    List<String> bundleNoString;
 
     public BundleInfo() {
     }

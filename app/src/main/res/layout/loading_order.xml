@@ -1,187 +1,218 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/w10"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/w10">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/alpha_black"
-       >
+        android:background="@color/alpha_black">
 
-    <LinearLayout
-        android:id="@+id/loading_order_linear1"
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginHorizontal="10dp"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-        <TextView
-            android:id="@+id/searchBar"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:id="@+id/loading_order_linear1"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/searchBar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/barcode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/frame_shape"
+                android:drawableStart="@drawable/ic_search_white_24dp"
+                android:drawableLeft="@drawable/ic_search_white_24dp"
+                android:drawablePadding="-100dp"
+                android:fontFamily="serif"
+                android:paddingStart="140dp"
+                android:paddingLeft="140dp"
+                android:text="@string/search_by_barcode"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+            <ImageButton
+                android:id="@+id/deletebaarcode"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="8"
+                android:background="@drawable/frame_shape"
+                app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/loading_order_linear2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/loading_order_linear1">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="1dp"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:text="@string/search_thic"
+                android:textColor="@color/black"
+                android:textSize="17sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="1dp"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:text="@string/search_width"
+                android:textColor="@color/black"
+                android:textSize="17sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="1dp"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:text="@string/search_length"
+                android:textColor="@color/black"
+                android:textSize="17sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/loading_order_linear3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/loading_order_linear2">
+
+            <android.support.v7.widget.SearchView
+                android:id="@+id/mSearchTh"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_marginHorizontal="1dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_with_corner"
+                android:padding="5dp"
+                app:defaultQueryHint="Srch Th.." />
+
+            <android.support.v7.widget.SearchView
+                android:id="@+id/mSearchW"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_with_corner"
+                android:padding="5dp"
+                app:defaultQueryHint="Srch W.." />
+
+            <android.support.v7.widget.SearchView
+                android:id="@+id/mSearchL"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_marginHorizontal="1dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_with_corner"
+                android:padding="5dp"
+                app:defaultQueryHint="Srch L.." />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:text="0"
-            tools:visibility="gone" />
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@+id/li"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/loading_order_linear3"
+            app:layout_constraintVertical_bias="0.0">
 
-        <Button
-            android:id="@+id/barcode"
+            <ListView
+                android:id="@+id/verticalListView"
+                android:layout_width="300dp"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
+
+            <com.falconssoft.woodysystem.HorizontalListView
+                android:id="@+id/listview"
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <GridView
+                android:id="@+id/items"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="5dp"
+                android:numColumns="1" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/li"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
-            android:textAllCaps="false"
-            android:textSize="20sp"
-            android:background="@drawable/frame_shape"
-            android:drawableStart="@drawable/ic_search_white_24dp"
-            android:drawableLeft="@drawable/ic_search_white_24dp"
-            android:paddingStart="140dp"
-            android:paddingLeft="140dp"
-            android:drawablePadding="-100dp"
-            android:text="@string/search_by_barcode"
-            android:fontFamily="serif"
-            android:textColor="@color/white" />
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent">
 
-        <ImageButton
-            android:id="@+id/deletebaarcode"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="7"
-            android:background="@drawable/frame_shape"
-            app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+            <Button
+                android:id="@+id/add"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="5dp"
+                android:background="@drawable/frame_shape"
+                android:fontFamily="serif"
+                android:text="@string/add_bundle"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="25sp" />
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/done"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="5dp"
+                android:background="@drawable/frame_shape"
+                android:fontFamily="serif"
+                android:text="@string/done"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="25sp" />
+        </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/loading_order_linear2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loading_order_linear1"
-        >
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/search_thic"
-            android:textColor="@color/black"
-            android:layout_marginHorizontal="1dp"
-            android:fontFamily="serif"
-            android:textSize="17sp"
-            />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/search_width"
-            android:textColor="@color/black"
-            android:layout_marginHorizontal="1dp"
-            android:fontFamily="serif"
-            android:textSize="17sp"
-            />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/search_length"
-            android:textColor="@color/black"
-            android:layout_marginHorizontal="1dp"
-            android:fontFamily="serif"
-            android:textSize="17sp"
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/loading_order_linear3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginBottom="10dp"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loading_order_linear2"
-        >
-
-        <android.support.v7.widget.SearchView
-            android:id="@+id/mSearchTh"
-            android:layout_width="0dp"
-            android:layout_height="35dp"
-            android:layout_weight="1"
-            android:padding="5dp"
-            android:layout_marginHorizontal="1dp"
-            android:background="@drawable/shape_with_corner"
-            app:defaultQueryHint="Srch Th.."
-            />
-
-        <android.support.v7.widget.SearchView
-            android:id="@+id/mSearchW"
-            android:layout_width="0dp"
-            android:layout_height="35dp"
-            android:layout_weight="1"
-            android:padding="5dp"
-            android:layout_marginHorizontal="5dp"
-            android:background="@drawable/shape_with_corner"
-            app:defaultQueryHint="Srch W.."
-            />
-
-        <android.support.v7.widget.SearchView
-            android:id="@+id/mSearchL"
-            android:layout_width="0dp"
-            android:layout_height="35dp"
-            android:layout_weight="1"
-            android:padding="5dp"
-            android:layout_marginHorizontal="1dp"
-            android:background="@drawable/shape_with_corner"
-            app:defaultQueryHint="Srch L.."
-            />
-
-    </LinearLayout>
-
-    <GridView
-        android:id="@+id/items"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:numColumns="2"
-        android:layout_marginBottom="80dp"
-        android:layout_marginTop="110dp"
-        app:layout_constraintBottom_toTopOf="@+id/done"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loading_order_linear3"
-        app:layout_constraintVertical_bias="0.087"
-        />
-
-    <Button
-        android:id="@+id/done"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/frame_shape"
-        android:text="@string/done"
-        android:fontFamily="serif"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="25sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.484"
-        app:layout_constraintStart_toStartOf="parent"
-        />
     </android.support.constraint.ConstraintLayout>
 </RelativeLayout>

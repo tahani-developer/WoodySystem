@@ -22,6 +22,7 @@ public class ItemsListAdapter extends BaseAdapter {
     private List<BundleInfo> mOriginalValues;
     private static List<BundleInfo> itemsList;
     private static List<BundleInfo> selectedBundles ;
+    static LoadingOrder obj = new LoadingOrder();
 
     public ItemsListAdapter(Context context, List<BundleInfo> itemsList) {
         this.context = context;
@@ -93,6 +94,8 @@ public class ItemsListAdapter extends BaseAdapter {
                     itemsList.get(i).setChecked(true);
                 else
                     itemsList.get(i).setChecked(false);
+
+                obj.notifyAdapter(itemsList.get(i) , context);
             }
         });
 
@@ -108,5 +111,10 @@ public class ItemsListAdapter extends BaseAdapter {
 
         return selectedBundles;
     }
+
+    public List<BundleInfo> getItems() {
+        return itemsList;
+    }
+
 
 }

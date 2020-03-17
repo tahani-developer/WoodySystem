@@ -69,6 +69,7 @@ public class Stage3 extends AppCompatActivity implements View.OnClickListener {
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
                 Intent intent = new Intent(this, AddToInventory.class);
+                intent.putExtra("flag" , "0");
                 startActivity(intent);
                 break;
             case R.id.stage3_loading_order:

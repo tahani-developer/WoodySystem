@@ -36,6 +36,7 @@
             android:textSize="30sp" />
 
         <LinearLayout
+            android:id="@+id/acceptanceInfo_report_linear22"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="60dp"
@@ -145,11 +146,111 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/acceptanceInfo_report_linear2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/acceptanceInfo_report_linear22"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="98dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/acceptanceInfo_report_linear22">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="5dp"
+                android:paddingStart="10dp"
+                android:paddingLeft="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_with_corner"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="serif"
+                    android:paddingLeft="5dp"
+                    android:text="@string/truck"
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/acceptanceInfo_report_truckNo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="5dp"
+                    android:paddingRight="5dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/acceptanceInfo_report_linear_two"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="5dp"
+                android:paddingStart="10dp"
+                android:paddingLeft="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_with_corner"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="serif"
+                    android:paddingLeft="5dp"
+                    android:text="@string/acceptor"
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/acceptanceInfo_report_acceptor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="5dp"
+                    android:paddingRight="5dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/acceptanceInfo_report_linear_grade"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="5dp"
+                android:paddingStart="10dp"
+                android:paddingLeft="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_with_corner"
+                android:orientation="horizontal">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="serif"
+                    android:paddingStart="10dp"
+                    android:paddingLeft="10dp"
+                    android:text="@string/ttn"
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/acceptanceInfo_report_ttn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="5dp"
             android:layout_marginLeft="5dp"
-            android:layout_marginTop="110dp"
+            android:layout_marginTop="165dp"
             android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
             android:layout_marginBottom="5dp"
@@ -158,7 +259,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+            app:layout_constraintTop_toBottomOf="@+id/acceptanceInfo_report_linear2"
             app:layout_constraintVertical_bias="0.0">
 
             <TableRow
