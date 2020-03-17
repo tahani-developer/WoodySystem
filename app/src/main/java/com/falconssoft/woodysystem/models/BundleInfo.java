@@ -252,7 +252,7 @@ public class BundleInfo {
             Log.e("Tag", "JSONException");
         }
         return obj;
-    }
+    } 
 
 
 }
