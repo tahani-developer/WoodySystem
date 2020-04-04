@@ -506,53 +506,47 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:layout_marginHorizontal="10dp">
                 <LinearLayout
                     android:id="@+id/addToInventory_linear_two"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginRight="30dp"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
                     android:background="@drawable/shape_with_corner"
                     android:orientation="horizontal"
                     android:padding="5dp"
                     app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_one">
 
                     <TextView
-                        android:layout_width="230dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:fontFamily="serif"
-                        android:gravity="start"
+                        android:gravity="center_horizontal|center_vertical"
                         android:text="@string/truck_no"
-                        android:textSize="18sp"
-                        android:theme="@style/AppTheme"
-                        />
+                        android:textSize="15sp"
+                        android:theme="@style/AppTheme" />
 
                     <EditText
                         android:id="@+id/addNewRaw_truckNo"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:ems="10"
                         android:nextFocusDown="@id/addNewRaw_acceptor"
-                        android:singleLine="true" />
+                        android:singleLine="true"
+                        android:textSize="18sp" />
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginRight="30dp"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:background="@drawable/shape_with_corner"
                     android:orientation="horizontal"
                     android:padding="5dp"
@@ -560,39 +554,44 @@
                     tools:layout_editor_absoluteX="50dp">
 
                     <TextView
-                        android:layout_width="230dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:fontFamily="serif"
-                        android:gravity="start"
+                        android:gravity="center_horizontal|center_vertical"
                         android:text="@string/name_of_person_to_accept"
-                        android:textSize="18sp"
+                        android:textSize="15sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <EditText
                         android:id="@+id/addNewRaw_acceptor"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:ems="10"
+                        android:inputType="text"
                         android:nextFocusDown="@id/addNewRaw_ttn_no"
-                        android:inputType="text" />
+                        android:textSize="18sp" />
 
                 </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:layout_marginHorizontal="10dp">
 
                 <LinearLayout
                     android:id="@+id/addToInventory_linear_four"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginRight="30dp"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
                     android:background="@drawable/shape_with_corner"
                     android:orientation="horizontal"
                     android:padding="5dp"
@@ -600,118 +599,114 @@
 
                     <TextView
                         android:id="@+id/textView4"
-                        android:layout_width="230dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:fontFamily="serif"
-                        android:gravity="start"
+                        android:gravity="center_horizontal|center_vertical"
                         android:text="@string/ttn_no"
-                        android:textSize="18sp"
+                        android:textSize="15sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <EditText
                         android:id="@+id/addNewRaw_ttn_no"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:ems="10"
                         android:inputType="text"
                         android:nextFocusDown="@id/addNewRaw_total_bundles"
-                        android:singleLine="true" />
+                        android:singleLine="true"
+                        android:textSize="18sp" />
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginRight="30dp"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:background="@drawable/shape_with_corner"
                     android:orientation="horizontal"
                     android:padding="5dp"
                     app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_three">
 
                     <TextView
-                        android:layout_width="230dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:fontFamily="serif"
-                        android:gravity="start"
+                        android:gravity="center_horizontal|center_vertical"
                         android:text="@string/net"
-                        android:textSize="18sp"
+                        android:textSize="15sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <EditText
                         android:id="@+id/addNewRaw_total_bundles"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:ems="10"
                         android:inputType="text"
                         android:nextFocusDown="@id/addNewRaw_acceptance_location"
-                        android:singleLine="true" />
+                        android:singleLine="true"
+                        android:textSize="18sp" />
 
                 </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:layout_marginHorizontal="10dp">
 
                 <LinearLayout
                     android:id="@+id/addToInventory_linear_three"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginRight="30dp"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
                     android:background="@drawable/shape_with_corner"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal"
                     app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_two">
 
                     <TextView
-                        android:layout_width="230dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="15dp"
                         android:layout_weight="1"
                         android:fontFamily="serif"
-                        android:gravity="start"
+                        android:gravity="center_horizontal|center_vertical"
                         android:text="@string/date_of_acceptance"
-                        android:textSize="18sp"
+                        android:textSize="15sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/addNewRaw_acceptance_date"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:ems="10"
                         android:nextFocusDown="@id/addNewRaw_acceptance_location"
-                        android:singleLine="true" />
+                        android:singleLine="true"
+                        android:textSize="18sp" />
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginRight="30dp"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:background="@drawable/shape_with_corner"
                     android:orientation="horizontal"
                     android:padding="5dp"
@@ -719,90 +714,92 @@
                     tools:layout_editor_absoluteX="50dp">
 
                     <TextView
-                        android:layout_width="230dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:fontFamily="serif"
-                        android:gravity="start"
+                        android:gravity="center_horizontal|center_vertical"
                         android:text="@string/location_of_acceptance"
-                        android:textSize="18sp"
+                        android:textSize="15sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <EditText
                         android:id="@+id/addNewRaw_acceptance_location"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:ems="10"
+                        android:inputType="text"
                         android:nextFocusDown="@id/addNewRaw_total_rejected"
-                        android:inputType="text" />
+                        android:textSize="18sp" />
 
                 </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:layout_marginHorizontal="10dp">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginRight="30dp"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
                     android:background="@drawable/shape_with_corner"
                     android:orientation="horizontal"
                     android:padding="5dp"
                     app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_three">
 
                     <TextView
-                        android:layout_width="230dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:fontFamily="serif"
-                        android:gravity="start"
+                        android:gravity="center_horizontal|center_vertical"
                         android:text="@string/rejected_pieces_on_truck"
-                        android:textSize="18sp"
+                        android:textSize="15sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <EditText
                         android:id="@+id/addNewRaw_total_rejected"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:ems="10"
                         android:inputType="text"
-                        android:singleLine="true" />
+                        android:singleLine="true"
+                        android:textSize="18sp" />
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="horizontal">
 
                     <Button
                         android:id="@+id/addNewRaw_acceptRow_done"
-                        android:layout_width="wrap_content"
-                        android:layout_height="50dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:background="@drawable/frame_shape"
                         android:fontFamily="serif"
-                        android:layout_marginRight="10dp"
                         android:text="@string/done"
                         android:textAllCaps="false"
                         android:textColor="@color/white"
                         android:textSize="20sp" />
 
-
-                </LinearLayout>
+            </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>

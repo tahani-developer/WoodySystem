@@ -92,11 +92,11 @@
 
     <string name="accept_raw">Accept Row</string>
     <string name="name_of_supplier">Name Of Supplier</string>
-    <string name="truck_no">Truck Number</string>
+    <string name="truck_no">Truck No</string>
     <string name="date_of_acceptance">Acceptance Date</string>
     <string name="name_of_person_to_accept">Acceptor Name</string>
-    <string name="location_of_acceptance">Acceptance Location</string>
-    <string name="ttn_no">TTN Number</string>
+    <string name="location_of_acceptance">Acceptance Loc</string>
+    <string name="ttn_no">TTN NO</string>
     <string name="rejection_list">Rejection List</string>
     <string name="new_supplier">New Supplier</string>
     <string name="find_supplier">Find Supplier</string>

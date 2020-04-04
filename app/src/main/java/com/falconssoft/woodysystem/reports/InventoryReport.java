@@ -671,7 +671,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 //        Log.e("follow", fromDate + " to " + toDate + " size1 " + bundleInfoServer.size() + " loc: " + loc + "   area: " + areaField + "  ordered: " + orderedField);
 
         for (int m = 0; m < bundleInfoServer.size(); m++) {
-            JSONObject jsonObject = bundleInfoServer.get(m).getJSONObject();
+//            JSONObject jsonObject = bundleInfoServer.get(m).getJSONObject();
             if ((formatDate(bundleInfoServer.get(m).getAddingDate()).after(formatDate(fromDate))
                     || formatDate(bundleInfoServer.get(m).getAddingDate()).equals(formatDate(fromDate)))
                     && (formatDate(bundleInfoServer.get(m).getAddingDate()).before(formatDate(toDate))

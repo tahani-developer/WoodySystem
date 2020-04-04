@@ -1,9 +1,11 @@
 package com.falconssoft.woodysystem.reports;
 
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ListView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.falconssoft.woodysystem.R;
@@ -14,10 +16,16 @@ import java.util.List;
 
 public class AcceptanceInfoReportAdapter extends BaseAdapter {
 
-    private List<NewRowInfo> list =  new ArrayList<>();
+    private static List<NewRowInfo> list = new ArrayList<>();
+    private static List<NewRowInfo> selectedItems = new ArrayList<>();
+    private AcceptanceInfoReport infoReport;
 
-    public AcceptanceInfoReportAdapter(List<NewRowInfo> list) {
+    public AcceptanceInfoReportAdapter(AcceptanceInfoReport infoReport, List<NewRowInfo> list) {
         this.list = list;
+        this.infoReport = infoReport;
+    }
+
+    public AcceptanceInfoReportAdapter() {
     }
 
     @Override
@@ -51,23 +59,51 @@ public class AcceptanceInfoReportAdapter extends BaseAdapter {
         viewHolder.thickness = convertView.findViewById(R.id.acceptanceInfo_raw_thick);
         viewHolder.width = convertView.findViewById(R.id.acceptanceInfo_raw_width);
         viewHolder.pic = convertView.findViewById(R.id.acceptanceInfo_raw_pic);
+        viewHolder.checkBox = convertView.findViewById(R.id.acceptanceInfo_raw_checkBox);
 
-        viewHolder.bundleNo.setText("" + list.get(position).getNoOfBundles());
+        viewHolder.bundleNo.setText("" + (int) list.get(position).getNoOfBundles());
         viewHolder.grade.setText("" + list.get(position).getGrade());
-        viewHolder.length.setText("" + list.get(position).getLength());
+        viewHolder.length.setText("" + (int) list.get(position).getLength());
 //        viewHolder.location.setText("" + list.get(position).getLocationOfAcceptance());
-        viewHolder.noOfPieces.setText("" + list.get(position).getNoOfPieces());
-        viewHolder.rejectedPieces.setText("" + list.get(position).getNoOfRejected());
+        viewHolder.noOfPieces.setText("" + (int) list.get(position).getNoOfPieces());
+        viewHolder.rejectedPieces.setText("" + (int) list.get(position).getNoOfRejected());
         viewHolder.supplier.setText("" + list.get(position).getSupplierName());
-        viewHolder.thickness.setText("" + list.get(position).getThickness());
-        viewHolder.width.setText("" + list.get(position).getWidth());
+        viewHolder.thickness.setText("" + (int) list.get(position).getThickness());
+        viewHolder.width.setText("" + (int) list.get(position).getWidth());
+
+        if (list.get(position).getChecked())
+            viewHolder.checkBox.setChecked(true);
+
+        viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked)
+                    list.get(position).setChecked(true);
+                else {
+                    list.get(position).setChecked(false);
+                    infoReport.changeCheckBoxState();
+                }
+
+            }
+        });
 
         return convertView;
     }
 
-    class AcceptanceInfoViewHolder{
+    public List<NewRowInfo> getSelectedItems() {
+
+        selectedItems.clear();
+        for (int i = 0; i < list.size(); i++)
+            if (list.get(i).getChecked())
+                selectedItems.add(list.get(i));
+        Log.e("selected", "" + selectedItems.size());
+        return selectedItems;
+    }
+
+    class AcceptanceInfoViewHolder {
 
         TextView supplier, bundleNo, thickness, width, length, noOfPieces, grade, location, rejectedPieces, pic;
+        CheckBox checkBox;
 
     }
 }
