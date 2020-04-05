@@ -117,6 +117,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     private static String[] PERMISSIONS_STORAGE = {Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE};
     private List<SupplierInfo> arraylist;
+    private static boolean isCamera = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -451,11 +452,13 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
             if (!TextUtils.isEmpty(truckNoLocal)) {
                 if (!TextUtils.isEmpty(acceptorLocal))
                     if (!TextUtils.isEmpty(ttnNoLocal))
-                        if (!TextUtils.isEmpty(totalBundelsLocal))
+                        if (!TextUtils.isEmpty(totalBundelsLocal) && (!checkValidData(totalBundelsLocal)))
                             if (!TextUtils.isEmpty(acceptanceDateLocal))
                                 if (!TextUtils.isEmpty(locationLocal))
-                                    if (!TextUtils.isEmpty(totalRejectedLocal)) {
+                                    if (!TextUtils.isEmpty(totalRejectedLocal) && (!checkValidData(totalRejectedLocal))) {
 
+                                        totalBundelsLocal = formatDecimalValue(totalBundelsLocal);
+                                        totalRejectedLocal = formatDecimalValue(totalRejectedLocal);
                                         jsonArray = new JSONArray();
 
                                         for (int i = 0; i < newRowList.size(); i++) {
@@ -514,6 +517,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                 startActivityForResult(cameraIntent, 1888);
 //            imageNo = i;
             }
+            isCamera = true;
         } else {
             showSnackbar("Reached maximum size of images!", false);
         }
@@ -595,6 +599,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
             isEditImage = false;
         }
+        isCamera = false;
     }
 
     public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
@@ -841,13 +846,15 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 //        linearLayoutView.getVisibility();
         outState.putBoolean(STATE_VISIBILITY, mState);
 
-        List<TableRow> tableRows = new ArrayList<>();
-        int rowcount = tableLayout.getChildCount();
-        for (int i = 0; i < rowcount; i++) {
-            TableRow row = (TableRow) tableLayout.getChildAt(i);
-            tableRows.add(row);
+        if (!isCamera) {
+            List<TableRow> tableRows = new ArrayList<>();
+            int rowcount = tableLayout.getChildCount();
+            for (int i = 0; i < rowcount; i++) {
+                TableRow row = (TableRow) tableLayout.getChildAt(i);
+                tableRows.add(row);
+            }
+            outState.putSerializable("table", (Serializable) tableRows);
         }
-        outState.putSerializable("table", (Serializable) tableRows);
         outState.putSerializable("list", (Serializable) imagesList);
 //        Log.e("size b", "" + imagesList.size());
 
@@ -862,22 +869,25 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         thickness.requestFocus();
 //        linearLayoutView.setVisibility(mState ? View.VISIBLE : View.GONE);
 //        presenter.getImportData();
-        List<TableRow> tableRows = (List<TableRow>) savedInstanceState.getSerializable("table");
         imagesList.clear();
         imagesList.addAll((Collection<? extends String>) savedInstanceState.getSerializable("list"));
 //        Log.e("size a", "" +savedInstanceState.getSerializable("list"));
 //        Log.e("size aa", "" +imagesList.size());
+        if (!isCamera) {
+            List<TableRow> tableRows = (List<TableRow>) savedInstanceState.getSerializable("table");
 
-        if (tableRows.size() > 0)
-            addTableHeader(headerTableLayout);
+            if (tableRows.size() > 0)
+                addTableHeader(headerTableLayout);
 
-        for (int i = 0; i < tableRows.size(); i++) {
-            if (tableRows.get(i).getParent() != null) {
-                ((ViewGroup) tableRows.get(i).getParent()).removeView(tableRows.get(i)); // <- fix
+            for (int i = 0; i < tableRows.size(); i++) {
+                if (tableRows.get(i).getParent() != null) {
+                    ((ViewGroup) tableRows.get(i).getParent()).removeView(tableRows.get(i)); // <- fix
+                }
+                tableLayout.addView(tableRows.get(i));
             }
-            tableLayout.addView(tableRows.get(i));
         }
-
+        isEditImage = false;
+        imageNo = imagesList.size();
         for (int i = 0; i < imagesList.size(); i++)
             switch (i) {
                 case 0:
@@ -913,6 +923,8 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     image8.setImageBitmap(stringToBitMap(imagesList.get(i)));
                     break;
             }
+
+
         super.onRestoreInstanceState(savedInstanceState);
     }
 
