@@ -215,7 +215,7 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
                                         }
                                     }
                                 }
-//                                Log.e("count", "" + jsonArray.length());
+                                Log.e("count selected", "" + jsonArray.length());
                                 new JSONTask4().execute();
                                 passwordDialog.dismiss();
                             } else {

@@ -1099,6 +1099,9 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
                     acceptRowLayout.setVisibility(View.GONE);
                     headerLayout.setVisibility(View.VISIBLE);
+
+                    acceptRowButton.setBackgroundResource(R.drawable.frame_shape_2);
+                    mainInfoButton.setBackgroundResource(R.drawable.frame_shape_3);
                     Log.e("tag", "****Success");
                 } else {
 //                    presenter.setSerialNo("");
