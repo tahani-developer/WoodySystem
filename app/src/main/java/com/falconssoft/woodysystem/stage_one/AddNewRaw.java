@@ -5,18 +5,19 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -49,7 +50,14 @@ import com.falconssoft.woodysystem.WoodPresenter;
 import com.falconssoft.woodysystem.models.NewRowInfo;
 import com.falconssoft.woodysystem.models.Settings;
 import com.falconssoft.woodysystem.models.SupplierInfo;
+import com.falconssoft.woodysystem.reports.AcceptanceInfoReport;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -62,23 +70,19 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-
-import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+
+import static com.falconssoft.woodysystem.reports.AcceptanceInfoReport.EDIT_FLAG;
+import static com.falconssoft.woodysystem.reports.AcceptanceInfoReport.EDIT_LIST;
+import static com.falconssoft.woodysystem.stage_one.AddNewSupplier.BACK_FLAG;
 
 public class AddNewRaw extends AppCompatActivity implements View.OnClickListener {
 
@@ -87,8 +91,8 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     private Settings generalSettings;
     private WoodPresenter presenter;
     private ImageView image1, image2, image3, image4, image5, image6, image7, image8;
-    private TextView addNewSupplier, searchSupplier, addButton, acceptRowButton, mainInfoButton, acceptanceDate, addPicture;
-    private EditText thickness, width, length, noOfPieces, noOfBundles, noOfRejected, truckNo, acceptor, acceptanceLocation, ttnNo, totalRejected, totalBundles;
+    private TextView addNewSupplier, searchSupplier, addButton, acceptRowButton, mainInfoButton, acceptanceDate, addPicture, totalRejected, totalBundles;
+    private EditText thickness, width, length, noOfPieces, noOfBundles, noOfRejected, truckNo, acceptor, acceptanceLocation, ttnNo;
     private Spinner gradeSpinner;
     private ArrayList<String> gradeList = new ArrayList<>();
     private ArrayAdapter<String> gradeAdapter;
@@ -118,6 +122,8 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
             Manifest.permission.WRITE_EXTERNAL_STORAGE};
     private List<SupplierInfo> arraylist;
     private static boolean isCamera = false;
+    private int edieFlag = 0;
+    private int netBundlesString = 0, netRejectedString = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -225,6 +231,35 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         image7.setOnClickListener(this);
         image8.setOnClickListener(this);
 
+        checkIfEditItem();
+
+    }
+
+    void checkIfEditItem() {
+        edieFlag = getIntent().getIntExtra(EDIT_FLAG, 0);
+        if (edieFlag == 10) {
+            Bundle bundle = getIntent().getExtras();
+            NewRowInfo rowInfo = (NewRowInfo) bundle.getSerializable(EDIT_LIST);
+
+            thickness.setText("" + (int) rowInfo.getThickness());
+            width.setText("" + (int) rowInfo.getWidth());
+            length.setText("" + (int) rowInfo.getLength());
+            noOfPieces.setText("" + (int) rowInfo.getNoOfPieces());
+            noOfRejected.setText("" + (int) rowInfo.getNoOfRejected());
+            noOfBundles.setText("" + (int) rowInfo.getNoOfBundles());
+            int position = gradeAdapter.getPosition(rowInfo.getGrade());
+            gradeSpinner.setSelection(position);
+            searchSupplier.setText(rowInfo.getSupplierName());
+            supplierName = searchSupplier.getText().toString();
+            truckNo.setText(rowInfo.getTruckNo());
+            acceptor.setText(rowInfo.getAcceptedPersonName());
+            ttnNo.setText(rowInfo.getTtnNo());
+            totalBundles.setText(rowInfo.getNetBundles());
+            acceptanceLocation.setText(rowInfo.getLocationOfAcceptance());
+            acceptanceDate.setText(rowInfo.getDate());
+            totalRejected.setText(rowInfo.getTotalRejectedNo());
+
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -258,6 +293,9 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                 acceptRowLayout.setVisibility(View.VISIBLE);
                 acceptRowLayout.startAnimation(animation);
                 truckNo.requestFocus();
+
+                totalRejected.setText("" + netRejectedString);
+                totalBundles.setText("" + netBundlesString);
                 break;
             case R.id.addNewRaw_add_button:
                 addButtonMethod();
@@ -271,13 +309,17 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                 break;
             case R.id.addNewRaw_search_supplier:
                 suppliers.clear();
+                isCamera = false;
                 new JSONTask().execute();
 
                 searchDialog = new Dialog(this);
                 searchDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 searchDialog.setContentView(R.layout.search_supplier_dialog);
+                searchDialog.setCancelable(false);
 
                 SearchView searchView = searchDialog.findViewById(R.id.search_supplier_searchView);
+                TextView close = searchDialog.findViewById(R.id.search_supplier_close);
+
                 recyclerView = searchDialog.findViewById(R.id.search_supplier_recyclerView);
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
                 adapter = new SuppliersAdapter(this, suppliers);
@@ -294,6 +336,14 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                         filter(newText);
 //                        adapter.notifyDataSetChanged();
                         return false;
+                    }
+                });
+
+                close.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        searchDialog.dismiss();
+                        isCamera = false;
                     }
                 });
                 searchDialog.show();
@@ -388,6 +438,9 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                                     noOfRejectedLocal = isContainValueAfterDot(noOfRejectedLocal);
                                     noOfBundlesLocal = isContainValueAfterDot(noOfBundlesLocal);
 
+                                    netBundlesString += Integer.parseInt(noOfBundlesLocal);
+                                    netRejectedString += Integer.parseInt(noOfRejectedLocal);
+
                                     NewRowInfo rowInfo = new NewRowInfo();
                                     rowInfo.setSupplierName(supplierName);
                                     rowInfo.setThickness(Double.parseDouble(thicknessLocal));
@@ -398,12 +451,20 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                                     rowInfo.setNoOfBundles(Double.parseDouble(noOfBundlesLocal));
                                     rowInfo.setGrade(gradeText);
 
-                                    newRowList.add(rowInfo);
                                     if (headerTableLayout.getChildCount() == 0)
                                         addTableHeader(headerTableLayout);
+
                                     tableRow = new TableRow(this);
-                                    fillTableRow(tableRow, thicknessLocal, widthLocal, lengthLocal, noOfPiecesLocal, noOfRejectedLocal, noOfBundlesLocal);
-                                    tableLayout.addView(tableRow);
+                                    if (edieFlag == 10 && tableLayout.getChildCount() == 1) {
+                                        tableLayout.removeAllViews();
+                                        newRowList.clear();
+                                        fillTableRow(tableRow, thicknessLocal, widthLocal, lengthLocal, noOfPiecesLocal, noOfRejectedLocal, noOfBundlesLocal);
+                                        tableLayout.addView(tableRow);
+                                    } else {
+                                        fillTableRow(tableRow, thicknessLocal, widthLocal, lengthLocal, noOfPiecesLocal, noOfRejectedLocal, noOfBundlesLocal);
+                                        tableLayout.addView(tableRow);
+                                    }
+                                    newRowList.add(rowInfo);
 
                                     thickness.setText("");
                                     width.setText("");
@@ -442,57 +503,66 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         String truckNoLocal = truckNo.getText().toString();
         String acceptorLocal = acceptor.getText().toString();
         String ttnNoLocal = ttnNo.getText().toString();
-        String totalBundelsLocal = totalBundles.getText().toString();
+//        String totalBundelsLocal = totalBundles.getText().toString();
         String acceptanceDateLocal = acceptanceDate.getText().toString();
         String locationLocal = acceptanceLocation.getText().toString();
-        String totalRejectedLocal = totalRejected.getText().toString();
+//        String totalRejectedLocal = totalRejected.getText().toString();
 
         Log.e("newRowList", " size" + newRowList.size());
+
+        //                        if (!TextUtils.isEmpty(totalBundelsLocal) && (!checkValidData(totalBundelsLocal)))
+//        if (!TextUtils.isEmpty(totalRejectedLocal) && (!checkValidData(totalRejectedLocal)))
         if (newRowList.size() > 0) {
             if (!TextUtils.isEmpty(truckNoLocal)) {
                 if (!TextUtils.isEmpty(acceptorLocal))
                     if (!TextUtils.isEmpty(ttnNoLocal))
-                        if (!TextUtils.isEmpty(totalBundelsLocal) && (!checkValidData(totalBundelsLocal)))
-                            if (!TextUtils.isEmpty(acceptanceDateLocal))
-                                if (!TextUtils.isEmpty(locationLocal))
-                                    if (!TextUtils.isEmpty(totalRejectedLocal) && (!checkValidData(totalRejectedLocal))) {
+                        if (!TextUtils.isEmpty(acceptanceDateLocal))
+                            if (!TextUtils.isEmpty(locationLocal)) {
 
-                                        totalBundelsLocal = formatDecimalValue(totalBundelsLocal);
-                                        totalRejectedLocal = formatDecimalValue(totalRejectedLocal);
-                                        jsonArray = new JSONArray();
+//                                totalBundelsLocal = formatDecimalValue(totalBundelsLocal);
+//                                totalRejectedLocal = formatDecimalValue(totalRejectedLocal);
+                                jsonArray = new JSONArray();
 
-                                        for (int i = 0; i < newRowList.size(); i++) {
-                                            newRowList.get(i).setTruckNo(truckNoLocal);
-                                            newRowList.get(i).setAcceptedPersonName(acceptorLocal);
-                                            newRowList.get(i).setTtnNo(ttnNoLocal);
-                                            newRowList.get(i).setNetBundles(totalBundelsLocal);
-                                            newRowList.get(i).setDate(acceptanceDateLocal);
-                                            newRowList.get(i).setLocationOfAcceptance(locationLocal);
-                                            newRowList.get(i).setTotalRejectedNo(totalRejectedLocal);
+                                for (int i = 0; i < newRowList.size(); i++) {
+                                    newRowList.get(i).setTruckNo(truckNoLocal);
+                                    newRowList.get(i).setAcceptedPersonName(acceptorLocal);
+                                    newRowList.get(i).setTtnNo(ttnNoLocal);
+//                                    newRowList.get(i).setNetBundles(totalBundelsLocal);
+                                    newRowList.get(i).setDate(acceptanceDateLocal);
+                                    newRowList.get(i).setLocationOfAcceptance(locationLocal);
+//                                    newRowList.get(i).setTotalRejectedNo(totalRejectedLocal);
 
-                                            JSONObject object = newRowList.get(i).getJsonData();
-                                            jsonArray.put(object);
+                                    JSONObject object = newRowList.get(i).getJsonData();
+                                    jsonArray.put(object);
 
-                                        }
-
-                                        masterData = new JSONObject();
-                                        Log.e("data", "" + newRowList.get(0).getTruckNo());
-
-                                        masterData = newRowList.get(0).getJsonDataMaster();
-                                        new JSONTask1().execute();
-
-                                    } else {
-                                        totalRejected.setError("Required!");
-                                    }
-                                else {
-                                    acceptanceLocation.setError("Required!");
                                 }
+
+                                masterData = new JSONObject();
+                                Log.e("data", "" + newRowList.get(0).getTruckNo());
+
+                                masterData = newRowList.get(0).getJsonDataMaster();
+                                if (edieFlag == 10) {
+                                    Log.e("edit", "" + edieFlag);
+
+                                    new JSONTask2().execute();// update
+                                } else {
+                                    Log.e("edit", "" + edieFlag);
+
+                                    new JSONTask1().execute();// save
+                                }
+
+                            }// else {
+//                                totalRejected.setError("Required!");
+//                            }
                             else {
-                                acceptanceDate.setError("Required!");
+                                acceptanceLocation.setError("Required!");
                             }
                         else {
-                            totalBundles.setError("Required!");
+                            acceptanceDate.setError("Required!");
                         }
+//                else {
+//                    totalBundles.setError("Required!");
+//                }
                     else {
                         ttnNo.setError("Required!");
                     }
@@ -517,7 +587,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                 startActivityForResult(cameraIntent, 1888);
 //            imageNo = i;
             }
-            isCamera = true;
+            isCamera = false;
         } else {
             showSnackbar("Reached maximum size of images!", false);
         }
@@ -599,7 +669,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
             isEditImage = false;
         }
-        isCamera = false;
+        isCamera = true;
     }
 
     public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
@@ -801,34 +871,14 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         return date;
     }
 
-    void chooseSpinnersContent() {
-        String gradeString;
-        switch (gradeText) {
-            case "Fresh":
-                gradeString = "FR";
-                break;
-            case "Blue Stain":
-                gradeString = "BS";
-                break;
-            case "Reject":
-                gradeString = "RJ";
-                break;
-            case "KD":
-                gradeString = "KD";
-                break;
-            case "KD Blue Stain":
-                gradeString = "KDBS";
-                break;
-            case "Second Sort":
-                gradeString = "SS";
-                break;
-            case "AST":
-                gradeString = "AST";
-                break;
-            case "AST Blue Stain":
-                gradeString = "ASTBS";
-                break;
-        }
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        Log.d("tag", "config changed");
+        super.onConfigurationChanged(newConfig);
+
+        int orientation = newConfig.orientation;
+        if (orientation == Configuration.ORIENTATION_PORTRAIT || orientation == Configuration.ORIENTATION_LANDSCAPE)
+            isCamera = true;
 
     }
 
@@ -846,7 +896,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 //        linearLayoutView.getVisibility();
         outState.putBoolean(STATE_VISIBILITY, mState);
 
-        if (!isCamera) {
+        if (isCamera) {
             List<TableRow> tableRows = new ArrayList<>();
             int rowcount = tableLayout.getChildCount();
             for (int i = 0; i < rowcount; i++) {
@@ -873,7 +923,8 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         imagesList.addAll((Collection<? extends String>) savedInstanceState.getSerializable("list"));
 //        Log.e("size a", "" +savedInstanceState.getSerializable("list"));
 //        Log.e("size aa", "" +imagesList.size());
-        if (!isCamera) {
+        if (isCamera) {
+            isCamera = false;
             List<TableRow> tableRows = (List<TableRow>) savedInstanceState.getSerializable("table");
 
             if (tableRows.size() > 0)
@@ -928,6 +979,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         super.onRestoreInstanceState(savedInstanceState);
     }
 
+    // *************************************** GET SUPPLIERS ***************************************
     private class JSONTask extends AsyncTask<String, String, List<SupplierInfo>> {
 
         @Override
@@ -1022,6 +1074,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         }
     }
 
+    // *************************************** SAVE ***************************************
     private class JSONTask1 extends AsyncTask<String, String, String> {
 
         @Override
@@ -1040,14 +1093,16 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                 request.setURI(new URI("http://" + generalSettings.getIpAddress() + "/export.php"));//import 10.0.0.214
 
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-//                Log.e("addToInventory/", "" + jsonArrayBundles.toString());
+//                JSONObject object = jsonArray.getJSONObject(0);
+//                String h = "" + object.getDouble("REJECTED");
+//                Log.e("update/", "" + h);
                 nameValuePairs.add(new BasicNameValuePair("RAW_INFO", "1"));// list
 //                for (int i=0 ;i< newRowList.size();i++) {
 //                    nameValuePairs.add(new BasicNameValuePair("ROW_INFO_DETAILS", newRowList.get(i).toString()));
 //                }
                 nameValuePairs.add(new BasicNameValuePair("RAW_INFO_DETAILS", jsonArray.toString().trim()));// list
                 nameValuePairs.add(new BasicNameValuePair("RAW_INFO_MASTER", masterData.toString().trim())); // json object
-                Log.e("addNewRow/", "" + masterData.toString().trim());
+                Log.e("addNewRow/", "save " + masterData.toString().trim());
 
                 request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
@@ -1066,7 +1121,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                 in.close();
 
                 JsonResponse = sb.toString();
-                Log.e("tag", "" + JsonResponse);
+                Log.e("tag", "save " + JsonResponse);
 
                 return JsonResponse;
 
@@ -1079,7 +1134,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-//            Log.e("tag of row info", s);
+            Log.e("tag of row info", "" + s);
             if (s != null) {
                 if (s.contains("RAW_INFO SUCCESS")) {
 
@@ -1102,7 +1157,98 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
                     acceptRowButton.setBackgroundResource(R.drawable.frame_shape_2);
                     mainInfoButton.setBackgroundResource(R.drawable.frame_shape_3);
-                    Log.e("tag", "****Success");
+                    Log.e("tag", "save Success");
+                } else {
+                    Log.e("tag", "****Failed to export data");
+                }
+            } else {
+                Log.e("tag", "****Failed to export data Please check internet connection");
+                Toast.makeText(AddNewRaw.this, "Failed to export data Please check internet connection", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    // *************************************** UPDATE ***************************************
+    private class JSONTask2 extends AsyncTask<String, String, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+//https://5.189.130.98/WOODY/export.php
+
+                String JsonResponse = null;
+                HttpClient client = new DefaultHttpClient();
+                HttpPost request = new HttpPost();
+                request.setURI(new URI("http://" + generalSettings.getIpAddress() + "/export.php"));//import 10.0.0.214
+
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+//                Log.e("addToInventory/", "" + jsonArrayBundles.toString());
+                nameValuePairs.add(new BasicNameValuePair("UPDATE_RAW_INFO", "1"));// list
+//                for (int i=0 ;i< newRowList.size();i++) {
+//                    nameValuePairs.add(new BasicNameValuePair("ROW_INFO_DETAILS", newRowList.get(i).toString()));
+//                }
+                nameValuePairs.add(new BasicNameValuePair("RAW_INFO_DETAILS", jsonArray.toString().trim()));// list
+                nameValuePairs.add(new BasicNameValuePair("RAW_INFO_MASTER", masterData.toString().trim())); // json object
+                Log.e("addNewRow/", "update" + masterData.toString().trim());
+
+                request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                HttpResponse response = client.execute(request);
+
+                BufferedReader in = new BufferedReader(new
+                        InputStreamReader(response.getEntity().getContent()));
+
+                StringBuffer sb = new StringBuffer("");
+                String line = "";
+
+                while ((line = in.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                in.close();
+
+                JsonResponse = sb.toString();
+                Log.e("tag/", "update" + JsonResponse);
+
+                return JsonResponse;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            Log.e("tag of update row info", s);
+            if (s != null) {
+                if (s.contains("UPDATE RAWS SUCCESS")) {
+
+                    showSnackbar("Updated Successfully", true);
+
+                    truckNo.setText("");
+                    acceptor.setText("");
+                    ttnNo.setText("");
+                    totalBundles.setText("");
+                    acceptanceDate.setText("");
+                    acceptanceLocation.setText("");
+                    totalRejected.setText("");
+                    supplierName = "";
+                    searchSupplier.setText("");
+                    tableLayout.removeAllViews();
+                    newRowList.clear();
+
+                    Intent it = new Intent(AddNewRaw.this, AcceptanceInfoReport.class);
+                    it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(it);
+                    finish();
+                    Log.e("tag", "update Success");
                 } else {
 //                    presenter.setSerialNo("");
 //                    SettingsFile.serialNumber = "";
@@ -1117,6 +1263,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
             }
         }
     }
+
 }
 
 

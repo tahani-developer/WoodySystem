@@ -1,5 +1,6 @@
 package com.falconssoft.woodysystem.stage_one;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -45,6 +46,7 @@ public class AddNewSupplier extends AppCompatActivity {
     private DatabaseHandler DHandler;
     private RecyclerView recyclerView;
     private AddSupplierAdapter adapter;
+    public static final String BACK_FLAG="BACK_FLAG";
 //    private TableLayout tableLayout;
     private EditText supName;
     private TextView add;
@@ -90,57 +92,13 @@ public class AddNewSupplier extends AppCompatActivity {
 
     }
 
-//    void fillTable() {
-//
-//        tableLayout.removeAllViews();
-//        for (int k = 0; k < suppliers.size(); k++) {
-//            TableRow tableRow = new TableRow(this);
-//            for (int i = 0; i < 2; i++) {
-//                TextView textView = new TextView(this);
-//                textView.setBackgroundResource(R.color.light_orange);
-//                TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f);
-//                textViewParam.setMargins(1, 1, 0, 0);
-//                textView.setTextSize(15);
-//                textView.setTextColor(ContextCompat.getColor(this, R.color.black));
-//                textView.setLayoutParams(textViewParam);
-//                switch (i) {
-//                    case 0:
-//                        textView.setText(suppliers.get(k).getSupplierNo());
-//                        break;
-//                    case 1:
-//                        textView.setText(suppliers.get(k).getSupplierName());
-//                        break;
-//                }
-//                tableRow.addView(textView);
-//            }
-//            tableLayout.addView(tableRow);
-//        }
-//    }
-
-//    void addSupp() {
-//
-//        TableRow tableRow = new TableRow(this);
-//        for (int i = 0; i < 2; i++) {
-//            TextView textView = new TextView(this);
-//            textView.setBackgroundResource(R.color.light_orange);
-//            TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f);
-//            textViewParam.setMargins(1, 1, 0, 0);
-//            textView.setTextSize(15);
-//            textView.setTextColor(ContextCompat.getColor(this, R.color.black));
-//            textView.setLayoutParams(textViewParam);
-//            switch (i) {
-//                case 0:
-//                    textView.setText("" + (suppliers.size()));
-//                    break;
-//                case 1:
-//                    textView.setText(supName.getText().toString());
-//                    break;
-//            }
-//            tableRow.addView(textView);
-//        }
-//        tableLayout.addView(tableRow);
-//
-//    }
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+        Intent intent = new Intent(AddNewSupplier.this, AddNewRaw.class);
+        startActivity(intent);
+        finish();
+    }
 
     private class JSONTask extends AsyncTask<String, String, List<SupplierInfo>> {
 

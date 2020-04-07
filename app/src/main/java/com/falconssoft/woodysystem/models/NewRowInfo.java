@@ -3,7 +3,9 @@ package com.falconssoft.woodysystem.models;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class NewRowInfo {
+import java.io.Serializable;
+
+public class NewRowInfo implements Serializable {
 
     private String supplierName;
     private double thickness;

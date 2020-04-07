@@ -2,6 +2,7 @@ package com.falconssoft.woodysystem.reports;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
@@ -33,6 +34,7 @@ import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.NewRowInfo;
 import com.falconssoft.woodysystem.models.Settings;
+import com.falconssoft.woodysystem.stage_one.AddNewRaw;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -48,6 +50,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
@@ -87,8 +90,8 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
     private Snackbar snackbar;
     private ConstraintLayout containerLayout;
     private List<NewRowInfo> selected;
-    //    private List<SupplierInfo> suppliersName;
-//    private Map<String, List<NewRowInfo>> map;
+    public static final String EDIT_LIST = "EDIT_LIST";
+    public static final String EDIT_FLAG = "EDIT_FLAG";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -240,7 +243,7 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
 
     }
 
-    private void getAllRaws() {
+    public void getAllRaws() {
         new JSONTask().execute();
     }
 
@@ -364,6 +367,16 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
         noOfPieces.setText("" + String.format("%.3f", sumOfPieces));
         cubic.setText("" + String.format("%.3f", (sumOfCubic / 1000000000)));
 //        fillTable(filtered);
+
+    }
+
+    public void goToEditPage(NewRowInfo newRowInfo){
+        Intent intent = new Intent(AcceptanceInfoReport.this, AddNewRaw.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(EDIT_LIST, newRowInfo);
+        intent.putExtras(bundle);
+        intent.putExtra(EDIT_FLAG, 10);
+        startActivity(intent);
 
     }
 
@@ -519,7 +532,6 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
         snackbar.show();
     }
 
-
     public DatePickerDialog.OnDateSetListener openDatePickerDialog(final int flag) {
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -552,6 +564,7 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
         list.addAll(set);
     }
 
+    // **************************** GET DATA  ****************************
     private class JSONTask extends AsyncTask<String, String, List<NewRowInfo>> {
 
         @Override
@@ -567,7 +580,7 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
             BufferedReader reader = null;
 
             try {
-//                http://10.0.0.214/woody/import.php?FLAG=5
+//                http://10.0.0.214/woody/import.php?FLAG=5//   http://5.189.130.98:8085/import.php?FLAG=5
                 URL url = new URL("http://" + generalSettings.getIpAddress() + "/import.php?FLAG=5");
 
                 URLConnection conn = url.openConnection();
@@ -646,10 +659,10 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
                         newRowInfo.setThickness(finalObject.getDouble("THICKNESS"));
                         newRowInfo.setWidth(finalObject.getDouble("WIDTH"));
                         newRowInfo.setLength(finalObject.getDouble("LENGTH"));
-//                        newRowInfo.setNoOfRejected(finalObject.getInt("REJECTED"));
+                        newRowInfo.setNoOfRejected(Double.parseDouble(finalObject.getString("REJ")));
                         newRowInfo.setNoOfBundles(finalObject.getDouble("NO_BUNDLES"));
                         newRowInfo.setGrade(finalObject.getString("GRADE"));
-                        newRowInfo.setNoOfPieces(finalObject.getInt("PIECES"));
+                        newRowInfo.setNoOfPieces(finalObject.getDouble("PIECES"));
                         newRowInfo.setDate(finalObject.getString("DATE_OF_ACCEPTANCE"));
                         newRowInfo.setAcceptedPersonName(finalObject.getString("NAME_OF_ACCEPTER"));
                         newRowInfo.setLocationOfAcceptance(finalObject.getString("LOCATION_OF_ACCEPTANCE"));
@@ -657,25 +670,6 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
 
                         noOfPiecesSum += newRowInfo.getNoOfPieces();
                         cubicSum += (newRowInfo.getLength() * newRowInfo.getWidth() * newRowInfo.getThickness() * newRowInfo.getNoOfPieces());
-
-//                        if (!map.containsKey(truckNoLocal)) {
-//                            List<NewRowInfo> list = new ArrayList<>();
-//                            list.add(newRowInfo);
-//                            map.put(truckNoLocal, list);
-//                        } else {
-//                            List<NewRowInfo> newList = map.get(truckNoLocal);
-//                            newList.add(newRowInfo);
-//                            map.replace(truckNoLocal, newList);
-//                        }
-
-//                        String pic = finalObject.getString("PART1") + finalObject.getString("PART2") +
-//                                finalObject.getString("PART3") + finalObject.getString("PART4") +
-//                                finalObject.getString("PART5") + finalObject.getString("PART6") +
-//                                finalObject.getString("PART7") + finalObject.getString("PART8");
-//
-//                        pic = pic.replaceAll("null", "");
-//
-//                        newRowInfo.setPicture(pic);
 
                         details.add(newRowInfo);
                     }
@@ -731,6 +725,7 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
         }
     }
 
+    // **************************** GET SUPPLIERS  ****************************
     private class JSONTask1 extends AsyncTask<String, String, List<String>> {
 
         @Override
@@ -824,136 +819,72 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
         }
     }
 
-    class JSONTask2 extends AsyncTask<String, String, String> {// DELETE
+//    class JSONTask3 extends AsyncTask<String, String, String> {// EDIT
+//
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//        }
+//
+//        @Override
+//        protected String doInBackground(String... params) {
+//            try {
+//                String JsonResponse = null;
+//                HttpClient client = new DefaultHttpClient();
+//                HttpPost request = new HttpPost();
+//                request.setURI(new URI("http://" + generalSettings.getIpAddress() + "/export.php"));//import 10.0.0.214
+//
+//                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+//                nameValuePairs.add(new BasicNameValuePair("TRUCK_NO", "1"));
+////                nameValuePairs.add(new BasicNameValuePair("OBJECT_INFO_MASTER", bundleNumber));
+//
+//                request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+//
+//                HttpResponse response = client.execute(request);
+//
+//                BufferedReader in = new BufferedReader(new
+//                        InputStreamReader(response.getEntity().getContent()));
+//
+//                StringBuffer sb = new StringBuffer("");
+//                String line = "";
+//
+//                while ((line = in.readLine()) != null) {
+//                    sb.append(line);
+//                }
+//
+//                in.close();
+//
+//                JsonResponse = sb.toString();
+//                Log.e("tag", "" + JsonResponse);
+//
+//                return JsonResponse;
+//
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                return null;
+//            }
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String s) {
+//            super.onPostExecute(s);
+//            Log.e("BundleReport", "json 2 " + s);
+//            if (s != null) {
+//                if (s.contains("PRINT BUNDLE SUCCESS")) {
+////                    bundlesTable.removeView(hidedTableRow);
+//                    Log.e("BundleReport", "****Success");
+//                } else {
+//                    Toast.makeText(AcceptanceInfoReport.this, "Failed to export data!", Toast.LENGTH_SHORT).show();
+////                    Log.e("inventoryReport", "****Failed to export data");
+//                }
+//            } else {
+//                Toast.makeText(AcceptanceInfoReport.this, "No internet connection!", Toast.LENGTH_SHORT).show();
+////                Log.e("inventoryReport", "****Failed to export data Please check internet connection");
+//            }
+//        }
+//    }
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            try {
-                String JsonResponse = null;
-                HttpClient client = new DefaultHttpClient();
-                HttpPost request = new HttpPost();
-                request.setURI(new URI("http://" + generalSettings.getIpAddress() + "/export.php"));//import 10.0.0.214
-
-                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-                nameValuePairs.add(new BasicNameValuePair("DELETE_RAW", "1"));
-                nameValuePairs.add(new BasicNameValuePair("TRUCK_NO", "1"));
-
-                request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-
-                HttpResponse response = client.execute(request);
-
-                BufferedReader in = new BufferedReader(new
-                        InputStreamReader(response.getEntity().getContent()));
-
-                StringBuffer sb = new StringBuffer("");
-                String line = "";
-
-                while ((line = in.readLine()) != null) {
-                    sb.append(line);
-                }
-
-                in.close();
-
-                JsonResponse = sb.toString();
-                Log.e("tag", "" + JsonResponse);
-
-                return JsonResponse;
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            Log.e("BundleReport", "json 2 " + s);
-            if (s != null) {
-                if (s.contains("PRINT BUNDLE SUCCESS")) {
-//                    bundlesTable.removeView(hidedTableRow);
-                    Log.e("BundleReport", "****Success");
-                } else {
-                    Toast.makeText(AcceptanceInfoReport.this, "Failed to export data!", Toast.LENGTH_SHORT).show();
-//                    Log.e("inventoryReport", "****Failed to export data");
-                }
-            } else {
-                Toast.makeText(AcceptanceInfoReport.this, "No internet connection!", Toast.LENGTH_SHORT).show();
-//                Log.e("inventoryReport", "****Failed to export data Please check internet connection");
-            }
-        }
-    }
-
-    class JSONTask3 extends AsyncTask<String, String, String> {// EDIT
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            try {
-                String JsonResponse = null;
-                HttpClient client = new DefaultHttpClient();
-                HttpPost request = new HttpPost();
-                request.setURI(new URI("http://" + generalSettings.getIpAddress() + "/export.php"));//import 10.0.0.214
-
-                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-                nameValuePairs.add(new BasicNameValuePair("TRUCK_NO", "1"));
-//                nameValuePairs.add(new BasicNameValuePair("OBJECT_INFO_MASTER", bundleNumber));
-
-                request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-
-                HttpResponse response = client.execute(request);
-
-                BufferedReader in = new BufferedReader(new
-                        InputStreamReader(response.getEntity().getContent()));
-
-                StringBuffer sb = new StringBuffer("");
-                String line = "";
-
-                while ((line = in.readLine()) != null) {
-                    sb.append(line);
-                }
-
-                in.close();
-
-                JsonResponse = sb.toString();
-                Log.e("tag", "" + JsonResponse);
-
-                return JsonResponse;
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            Log.e("BundleReport", "json 2 " + s);
-            if (s != null) {
-                if (s.contains("PRINT BUNDLE SUCCESS")) {
-//                    bundlesTable.removeView(hidedTableRow);
-                    Log.e("BundleReport", "****Success");
-                } else {
-                    Toast.makeText(AcceptanceInfoReport.this, "Failed to export data!", Toast.LENGTH_SHORT).show();
-//                    Log.e("inventoryReport", "****Failed to export data");
-                }
-            } else {
-                Toast.makeText(AcceptanceInfoReport.this, "No internet connection!", Toast.LENGTH_SHORT).show();
-//                Log.e("inventoryReport", "****Failed to export data Please check internet connection");
-            }
-        }
-    }
-
+    // **************************** DELETE  ****************************
     private class JSONTask4 extends AsyncTask<String, String, String> {
 
         @Override
@@ -973,7 +904,7 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
 
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
                 nameValuePairs.add(new BasicNameValuePair("DELETE_ALL_RAWS", "1"));
-                nameValuePairs.add(new BasicNameValuePair("RAW_INFO_DELETE", jsonArray.toString().trim()));
+                nameValuePairs.add(new BasicNameValuePair("RAW_INFO_TO_DELETE", jsonArray.toString().trim()));
 
                 request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 

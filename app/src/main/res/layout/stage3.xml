@@ -48,7 +48,7 @@
                 android:lineSpacingExtra="15dp"
                 android:text="@string/enter_inventory"
                 android:textColor="@color/white"
-                android:textSize="25sp" />
+                android:textSize="20sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -80,7 +80,7 @@
                 android:lineSpacingExtra="15dp"
                 android:text="@string/loading_order"
                 android:textColor="@color/orange"
-                android:textSize="25sp" />
+                android:textSize="20sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -112,7 +112,7 @@
                 android:lineSpacingExtra="15dp"
                 android:text="@string/reports"
                 android:textColor="@color/white"
-                android:textSize="25sp" />
+                android:textSize="20sp" />
         </LinearLayout>
 
     </android.support.constraint.ConstraintLayout>

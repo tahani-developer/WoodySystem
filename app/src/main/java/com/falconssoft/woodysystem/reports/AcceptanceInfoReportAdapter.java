@@ -1,5 +1,6 @@
 package com.falconssoft.woodysystem.reports;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,6 +61,7 @@ public class AcceptanceInfoReportAdapter extends BaseAdapter {
         viewHolder.width = convertView.findViewById(R.id.acceptanceInfo_raw_width);
         viewHolder.pic = convertView.findViewById(R.id.acceptanceInfo_raw_pic);
         viewHolder.checkBox = convertView.findViewById(R.id.acceptanceInfo_raw_checkBox);
+        viewHolder.edit = convertView.findViewById(R.id.acceptanceInfo_raw_edit);
 
         viewHolder.bundleNo.setText("" + (int) list.get(position).getNoOfBundles());
         viewHolder.grade.setText("" + list.get(position).getGrade());
@@ -87,6 +89,13 @@ public class AcceptanceInfoReportAdapter extends BaseAdapter {
             }
         });
 
+        viewHolder.edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                infoReport.goToEditPage(list.get(position));
+            }
+        });
+
         return convertView;
     }
 
@@ -102,7 +111,7 @@ public class AcceptanceInfoReportAdapter extends BaseAdapter {
 
     class AcceptanceInfoViewHolder {
 
-        TextView supplier, bundleNo, thickness, width, length, noOfPieces, grade, location, rejectedPieces, pic;
+        TextView supplier, bundleNo, thickness, width, length, noOfPieces, grade, location, rejectedPieces, pic, edit;
         CheckBox checkBox;
 
     }
