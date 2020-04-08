@@ -2,6 +2,7 @@ package com.falconssoft.woodysystem.reports;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -67,6 +68,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import static com.falconssoft.woodysystem.stage_one.AddNewRaw.truckNoBeforeUpdate;
+
 public class AcceptanceInfoReport extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private Settings generalSettings;
@@ -91,12 +94,17 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
     private ConstraintLayout containerLayout;
     private List<NewRowInfo> selected;
     public static final String EDIT_LIST = "EDIT_LIST";
+    public static final String EDIT_RAW = "EDIT_RAW";
     public static final String EDIT_FLAG = "EDIT_FLAG";
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_acceptance_info_report);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Please Waiting...");
 
         databaseHandler = new DatabaseHandler(this);
         generalSettings = databaseHandler.getSettings();
@@ -143,7 +151,7 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
         toDate.setText(dateFormat.format(date));
 
         adapter = new AcceptanceInfoReportAdapter(AcceptanceInfoReport.this, details);
-        getAllRaws();
+        new JSONTask().execute();
         new JSONTask1().execute();
 
         fromDate.setOnClickListener(new View.OnClickListener() {
@@ -212,6 +220,7 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
                                 } else {
                                     for (int i = 0; i < selected.size(); i++) {
                                         if (selected.get(i).getChecked()) {
+                                            Log.e("selected array", "" + selected.get(i).getThickness());
                                             jsonArray.put(selected.get(i).getJsonData());
 //                                    bundleInfoForPrint.add(selected.get(i));
 //                                    jsonArrayBundles.put(bundleInfoForPrint.get(bundleInfoForPrint.size() - 1).getJSONObject());
@@ -241,10 +250,6 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
         fromThickness.addTextChangedListener(new watchTextChange(fromThickness));
         toThickness.addTextChangedListener(new watchTextChange(toThickness));
 
-    }
-
-    public void getAllRaws() {
-        new JSONTask().execute();
     }
 
     public void filters() {
@@ -370,12 +375,29 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
 
     }
 
-    public void goToEditPage(NewRowInfo newRowInfo){
+    public void goToEditPage(NewRowInfo newRowInfo) {
+        List<NewRowInfo> list = new ArrayList<>();
+        for (int i = 0; i < details.size(); i++)
+            if (truckNoBeforeUpdate.equals(details.get(i).getTruckNo()))
+                if (!(details.get(i).getThickness() == newRowInfo.getThickness()
+                        && details.get(i).getLength() == newRowInfo.getLength()
+                        && details.get(i).getWidth() == newRowInfo.getWidth()
+                        && details.get(i).getNoOfPieces() == newRowInfo.getNoOfPieces()
+                        && details.get(i).getGrade() == newRowInfo.getGrade()
+                        && details.get(i).getNoOfRejected() == newRowInfo.getNoOfRejected()
+                        && details.get(i).getNoOfBundles() == newRowInfo.getNoOfBundles()
+                        && details.get(i).getSupplierName() == newRowInfo.getSupplierName())
+                )
+                    list.add(details.get(i));
+
         Intent intent = new Intent(AcceptanceInfoReport.this, AddNewRaw.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable(EDIT_LIST, newRowInfo);
+        bundle.putSerializable(EDIT_RAW, newRowInfo);
+//        bundle.putParcelable(EDIT_LIST, list);
         intent.putExtras(bundle);
         intent.putExtra(EDIT_FLAG, 10);
+        intent.putExtra(EDIT_LIST, (Serializable) list);
+        Log.e("seria size", "" + list.size());
         startActivity(intent);
 
     }
@@ -570,7 +592,9 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
+            details.clear();
+            adapter = new AcceptanceInfoReportAdapter(AcceptanceInfoReport.this, details);
+            listView.setAdapter(adapter);
         }
 
         @RequiresApi(api = Build.VERSION_CODES.N)
@@ -709,9 +733,9 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
         @Override
         protected void onPostExecute(final List<NewRowInfo> result) {
             super.onPostExecute(result);
-
+            progressDialog.dismiss();
             if (result != null) {
-                Log.e("result", "JSONTask*****************" + details.size());
+                Log.e("infoReport", "/GET/" + details.size());
                 adapter = new AcceptanceInfoReportAdapter(AcceptanceInfoReport.this, details);
                 listView.setAdapter(adapter);
 
@@ -809,7 +833,7 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
             super.onPostExecute(result);
 
             if (result != null) {
-                Log.e("result", "JSONTask1*****************" + result.size());
+                Log.e("infoReport", "/GET SUPPLIERS/" + result.size());
                 fillSpinnerAdapter();
                 adapter.notifyDataSetChanged();
 
@@ -937,7 +961,7 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Log.e("inventory report", "json 3 " + s);
+            Log.e("infoReport", "/DELETE/" + s);
             if (s != null) {
                 if (s.contains("DELETE ALL RAWS SUCCESS")) {
                     showSnackBar("Deleted Successfully");
@@ -949,7 +973,8 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
                     }
                     selected.clear();
 
-                    getAllRaws();
+                    progressDialog.show();
+                    new JSONTask().execute();
                 } else {
                     Toast.makeText(AcceptanceInfoReport.this, "Failed to export data!", Toast.LENGTH_SHORT).show();
                 }

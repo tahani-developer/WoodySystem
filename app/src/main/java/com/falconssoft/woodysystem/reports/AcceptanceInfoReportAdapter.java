@@ -15,6 +15,8 @@ import com.falconssoft.woodysystem.models.NewRowInfo;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.falconssoft.woodysystem.stage_one.AddNewRaw.truckNoBeforeUpdate;
+
 public class AcceptanceInfoReportAdapter extends BaseAdapter {
 
     private static List<NewRowInfo> list = new ArrayList<>();
@@ -92,6 +94,7 @@ public class AcceptanceInfoReportAdapter extends BaseAdapter {
         viewHolder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                truckNoBeforeUpdate = list.get(position).getTruckNo();
                 infoReport.goToEditPage(list.get(position));
             }
         });
