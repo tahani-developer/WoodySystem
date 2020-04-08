@@ -1,6 +1,8 @@
 package com.falconssoft.woodysystem;
 
 import android.content.Context;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,12 +11,16 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.falconssoft.woodysystem.models.BundleInfo;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.falconssoft.woodysystem.LoadingOrder.bundles;
+import static com.falconssoft.woodysystem.LoadingOrder.filteredList;
 
 public class ItemsListAdapter extends BaseAdapter {
 
@@ -57,8 +63,10 @@ public class ItemsListAdapter extends BaseAdapter {
     private class ViewHolder {
         CheckBox checkBox;
         TextView th, w, l, grade, pcs, bundle, location, area;
+        LinearLayout linearLayout;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public View getView(final int i, View view, ViewGroup viewGroup) {
 
@@ -83,17 +91,30 @@ public class ItemsListAdapter extends BaseAdapter {
         holder.bundle.setText("" + itemsList.get(i).getBundleNo());
         holder.location.setText("" + itemsList.get(i).getLocation());
         holder.area.setText("" + itemsList.get(i).getArea());
-
+        holder.linearLayout= view.findViewById(R.id.linear);
         if (itemsList.get(i).getChecked())
             holder.checkBox.setChecked(true);
+
+
+        if(itemsList.get(i).getFoucoseColor().equals("1")){
+            holder.linearLayout.setBackgroundColor(context.getResources().getColor(R.color.alpha_black));
+        }else  if(itemsList.get(i).getFoucoseColor().equals("0")){
+            holder.linearLayout.setBackground(context.getResources().getDrawable(R.drawable.border_background));
+
+        }
 
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked)
+                if (isChecked) {
                     itemsList.get(i).setChecked(true);
-                else
+                    holder.linearLayout.setBackground(context.getResources().getDrawable(R.drawable.border_background));
+                }
+                else {
                     itemsList.get(i).setChecked(false);
+                    holder.linearLayout.setBackground(context.getResources().getDrawable(R.drawable.border_background));
+                }
+                bundles.get(i).setFoucoseColor("0");
 
                 obj.notifyAdapter(itemsList.get(i) , context);
             }

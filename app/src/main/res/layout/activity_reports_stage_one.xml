@@ -24,7 +24,7 @@
             android:drawableTop="@drawable/reports"
             android:fontFamily="serif"
             android:paddingTop="10dp"
-            android:text="report 1"
+            android:text="@string/acceptance_report"
             android:textColor="@color/white"
             android:textSize="22sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -34,6 +34,7 @@
 
         <TextView
             android:id="@+id/reportTwo"
+            android:visibility="gone"
             android:layout_width="0dp"
             android:layout_height="200dp"
             android:layout_marginTop="@dimen/reports_p_margin2_top"

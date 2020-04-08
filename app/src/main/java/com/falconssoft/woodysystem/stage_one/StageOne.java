@@ -65,7 +65,7 @@ public class StageOne extends AppCompatActivity implements View.OnClickListener 
                 startActivity(intent3);
                 break;
             case R.id.stage1_reports:
-                Intent intent4 = new Intent(this, ReportsStageOne.class);
+                Intent intent4 = new Intent(this, AcceptanceInfoReport.class);//ReportsStageOne
                 startActivity(intent4);
                 break;
         }

@@ -22,7 +22,7 @@
             android:drawableTop="@drawable/reports"
             android:fontFamily="serif"
             android:paddingTop="10dp"
-            android:text="report 1"
+            android:text="@string/acceptance_report"
             android:textColor="@color/white"
             android:textSize="22sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -30,6 +30,7 @@
 
         <TextView
             android:id="@+id/reportTwo"
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="200dp"
             android:layout_marginTop="180dp"

@@ -3,6 +3,7 @@ package com.falconssoft.woodysystem;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -235,8 +236,10 @@ public class LoadingOrder extends AppCompatActivity {
             if (
                     (("" + list.get(k).getThickness()).toUpperCase().startsWith(s1) || s1.equals("")) &&
                             (("" + list.get(k).getWidth()).toUpperCase().startsWith(s2) || s2.equals("")) &&
-                            (("" + list.get(k).getLength()).toUpperCase().startsWith(s3) || s3.equals("")))
+                            (("" + list.get(k).getLength()).toUpperCase().startsWith(s3) || s3.equals(""))) {
+                list.get(k).setFoucoseColor("0");
                 tempList.add(list.get(k));
+            }
         }
 
         return tempList;
@@ -281,9 +284,15 @@ public class LoadingOrder extends AppCompatActivity {
                     items.post(new Runnable() {
                         @Override
                         public void run() {
+                            bundles.get(no).setFoucoseColor("1");
+                            items.setAdapter(adapter);
                             items.setSelection(no);
-                        items.requestFocusFromTouch();
-                        items.setSelection(no);
+                            items.requestFocusFromTouch();
+                            items.setSelection(no);
+
+
+
+
                         }
                     });
 
@@ -396,6 +405,7 @@ public class LoadingOrder extends AppCompatActivity {
                             bundleInfo.setAddingDate(innerObject.getString("BUNDLE_DATE"));
                             bundleInfo.setBackingList(innerObject.getString("BACKING_LIST"));
                             bundleInfo.setChecked(false);
+                            bundleInfo.setFoucoseColor("0");
 
                             bundles.add(bundleInfo);
                         }
@@ -498,6 +508,7 @@ public class LoadingOrder extends AppCompatActivity {
         adapter2 = new ItemsListAdapter5(context, selectedBundle);
         listView2.setAdapter(adapter2);
         listView.setAdapter(adapter2);
+
 
     }
 
