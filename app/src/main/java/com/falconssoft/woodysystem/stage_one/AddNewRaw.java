@@ -753,17 +753,22 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     }
 
     String isContainValueAfterDot(String string) {
-        String isConten = "";
-        String afterDot = string.substring(string.indexOf(".") + 1, string.length());
-//        Log.e("afterDot", "" + afterDot + "      " + string);
-        if (!(Integer.parseInt(afterDot) > 0)) {
-            isConten = string.substring(0, string.indexOf("."));
-        } else {
-            isConten = string;
-        }
+        if (string.contains(".")) {
+            String isConten = "";
+            String afterDot = string.substring(string.indexOf(".") + 1, string.length());
+            Log.e("afterDot1", "" + afterDot + "      " + string);
+            if (!(Integer.parseInt(afterDot) > 0)) {
+                Log.e("afterDot2", "" + string.substring(0, string.indexOf(".")));
+                isConten = string.substring(0, string.indexOf("."));
+
+            } else {
+                isConten = string;
+            }
 //        Log.e("value2", isConten);
 //        Log.e("afterDotreturn", "" + afterDot + "      " + isConten);
-        return isConten;
+            return isConten;
+        } else
+            return string;
 
     }
 
