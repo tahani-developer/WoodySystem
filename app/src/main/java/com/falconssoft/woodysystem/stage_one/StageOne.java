@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.falconssoft.woodysystem.AddToInventory;
 import com.falconssoft.woodysystem.LoadingOrder;
+import com.falconssoft.woodysystem.MainActivity;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.ReportsActivity;
 import com.falconssoft.woodysystem.reports.AcceptanceInfoReport;
@@ -27,11 +28,15 @@ public class StageOne extends AppCompatActivity implements View.OnClickListener 
 
     private LinearLayout addRaw, acceptInfo, generateBarcode, reports;
     private Animation animation;
+    private Dialog passwordDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stage_one);
+
+        passwordDialog = new Dialog(this);
+
         addRaw = findViewById(R.id.stage1_new_raw);
         acceptInfo = findViewById(R.id.stage1_accept_info);
         generateBarcode = findViewById(R.id.stage1_generate_barcode);
@@ -58,8 +63,8 @@ public class StageOne extends AppCompatActivity implements View.OnClickListener 
 
     }
 
-    void showPasswordDialog(){
-        Dialog passwordDialog = new Dialog(this);
+    void showPasswordDialog() {
+//        passwordDialog = new Dialog(this);
         passwordDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         passwordDialog.setContentView(R.layout.password_dialog);
         passwordDialog.setCancelable(false);
@@ -67,6 +72,10 @@ public class StageOne extends AppCompatActivity implements View.OnClickListener 
 
         TextInputEditText password = passwordDialog.findViewById(R.id.password_dialog_password);
         TextView done = passwordDialog.findViewById(R.id.password_dialog_done);
+        TextView cancel = passwordDialog.findViewById(R.id.password_dialog_cancel);
+        cancel.setVisibility(View.VISIBLE);
+
+        done.setText(getResources().getString(R.string.done));
 
         done.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,7 +85,16 @@ public class StageOne extends AppCompatActivity implements View.OnClickListener 
                 else
                     Toast.makeText(StageOne.this, "Password is not correct!", Toast.LENGTH_SHORT).show();
 
-                }
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(StageOne.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
         });
         passwordDialog.show();
     }
@@ -103,4 +121,6 @@ public class StageOne extends AppCompatActivity implements View.OnClickListener 
                 break;
         }
     }
+
+
 }
