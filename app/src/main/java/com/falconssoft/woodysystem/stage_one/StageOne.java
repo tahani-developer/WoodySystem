@@ -1,12 +1,19 @@
 package com.falconssoft.woodysystem.stage_one;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.falconssoft.woodysystem.AddToInventory;
 import com.falconssoft.woodysystem.LoadingOrder;
@@ -14,6 +21,7 @@ import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.ReportsActivity;
 import com.falconssoft.woodysystem.reports.AcceptanceInfoReport;
 import com.falconssoft.woodysystem.reports.AcceptanceReport;
+import com.falconssoft.woodysystem.reports.LoadingOrderReport;
 
 public class StageOne extends AppCompatActivity implements View.OnClickListener {
 
@@ -46,6 +54,31 @@ public class StageOne extends AppCompatActivity implements View.OnClickListener 
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
         reports.setAnimation(animation);
 
+        showPasswordDialog();
+
+    }
+
+    void showPasswordDialog(){
+        Dialog passwordDialog = new Dialog(this);
+        passwordDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        passwordDialog.setContentView(R.layout.password_dialog);
+        passwordDialog.setCancelable(false);
+        passwordDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        TextInputEditText password = passwordDialog.findViewById(R.id.password_dialog_password);
+        TextView done = passwordDialog.findViewById(R.id.password_dialog_done);
+
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (password.getText().toString().equals("301190"))
+                    passwordDialog.dismiss();
+                else
+                    Toast.makeText(StageOne.this, "Password is not correct!", Toast.LENGTH_SHORT).show();
+
+                }
+        });
+        passwordDialog.show();
     }
 
     @Override
