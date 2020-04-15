@@ -101,6 +101,7 @@ public class LoadingOrderReport extends AppCompatActivity {
     List<BundleInfo> bundleInfos;
     //    List<String> bundleNoString;
     static Dialog dialog;
+    private int delteIndex = -1;
 
     String myFormat;
     SimpleDateFormat sdf;
@@ -402,19 +403,20 @@ public class LoadingOrderReport extends AppCompatActivity {
 
             if (result != null) {
                 Log.e("result", "*****************" + orders.size());
-                adapter2 = new LoadingOrderReportAdapter(LoadingOrderReport.this, orders, bundles);
-                list.setAdapter(adapter2);
+                filters();
+//                adapter2 = new LoadingOrderReportAdapter(LoadingOrderReport.this, orders, bundles);
+//                list.setAdapter(adapter2);
                 dismissDialog();
 
-                list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                    @Override
-                    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
-                        orders.remove(position);
-                        deleteOrder(orders ,position);
-                        return false;
-                    }
-                });
+//                list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+//                    @Override
+//                    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+//
+////                        orders.remove(position);
+//                        deleteOrder(orders ,position);
+//                        return false;
+//                    }
+//                });
 
                 //fillTable(orders);
 //                storeInDatabase();
@@ -688,7 +690,9 @@ public class LoadingOrderReport extends AppCompatActivity {
             public void onClick(View v) {
                 if (password.getText().toString().equals("301190")) {
 
+                    delteIndex = index;
                     orderNo = orders.get(index).getOrderNo();
+                    Log.e("raw", "orderno " + orderNo);
 
                     bundleInfos = new ArrayList<>();
 
@@ -709,12 +713,21 @@ public class LoadingOrderReport extends AppCompatActivity {
                                     bundles.get(i).getArea(),
                                     "",
                                     ""));
+                            Log.e("raw", "" + bundles.get(i).getThickness()
+                                            + bundles.get(i).getWidth()+
+                                    bundles.get(i).getLength()+
+                                    bundles.get(i).getGrade()+
+                                    bundles.get(i).getNoOfPieces()+
+                                    bundles.get(i).getBundleNo()+
+                                    bundles.get(i).getLocation()+
+                                    bundles.get(i).getArea());
+
                         }
                     }
                     for (int i = 0; i < bundleInfos.size(); i++) {
                         bundleNo.put(bundleInfos.get(i).getJSONObject());
                     }
-                    new JSONTask2().execute();
+//                    new JSONTask2().execute();
 //                                    ordersTable.removeView(tableRow);
                     passwordDialog.dismiss();
                 } else {
@@ -817,6 +830,7 @@ public class LoadingOrderReport extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            Log.e("raw2", "orderNo " + orderNo +" bundleNo " + bundleNo.length());
 
         }
 
@@ -866,7 +880,13 @@ public class LoadingOrderReport extends AppCompatActivity {
             if (s != null) {
                 if (s.contains("DELETE ORDER SUCCESS")) {
                     MHandler.deleteOrder(orderNo);
-                    adapter2.notifyDataSetChanged();
+                    for (int m = 0; m<orders.size(); m++)
+                        if (orders.get(m).getOrderNo().equals(orderNo)){
+                            Log.e("raw","deleted"+ orders.get(m).getOrderNo());
+                            orders.remove(orderNo);
+                    }
+                    filters();
+//                    adapter2.notifyDataSetChanged();
                 } else {
                     Toast.makeText(LoadingOrderReport.this, "Failed to export data!", Toast.LENGTH_SHORT).show();
                 }
@@ -987,7 +1007,8 @@ public class LoadingOrderReport extends AppCompatActivity {
                 @Override
                 public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
-                    filtered.remove(position);
+//                    filtered.remove(position);
+                    Log.e("raw" , "position" + position);
                     deleteOrder(filtered, position);
 
                     return false;

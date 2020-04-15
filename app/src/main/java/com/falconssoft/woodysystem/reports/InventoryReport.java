@@ -95,9 +95,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.WHITE;
@@ -120,13 +123,14 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private WoodPresenter woodPresenter;
     private Animation animation;
     private TextView textView, noOfBundles, noOfPieces, cubicField, deleteAll, dateFrom, dateTo, thicknessOrder, widthOrder, lengthOrder, searchPListTool;
-    private Spinner location, area, ordered, pList, grade;
+    private Spinner location, area, ordered, pList, grade, thicknessSpinner;
     private ArrayAdapter<String> locationAdapter;
     private ArrayAdapter<String> areaAdapter;
     private ArrayAdapter<String> orderedAdapter;
     private ArrayAdapter<String> gradeAdapter;
     private ArrayAdapter<String> plAdapter;
-    private String loc = "All", areaField = "All", orderedField = "All", plField = "All", gradeFeld = "All";
+    private ArrayAdapter<String> thicknessAdapter;
+    private String loc = "All", areaField = "All", orderedField = "All", plField = "All", gradeFeld = "All", thicknessField = "All";
     private Settings generalSettings;
     private Calendar calendar;
     private Date date;
@@ -138,10 +142,9 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private List<BundleInfo> bundleInfoForPList = new ArrayList<>();
     private Button printAll, pListAll;
     private TableRow tableRowToDelete = null;
-    private EditText fromLength, toLength, fromWidth, toWidth, fromThickness, toThickness, searchPListTextView;
+    private EditText fromLength, toLength, fromWidth, toWidth, searchPListTextView;//, fromThickness, toThickness
     private boolean isThicknessAsc = true, isWidthAsc = true, isLengthAsc = true;
-    private String fromLengthNo = "", toLengthNo = "", fromWidthNo = "", toWidthNo = "", fromThicknessNo = "", toThicknessNo = "", searchPackingList = "";
-//    private String f1 = "", f2 = "", f3 = "";
+    private String fromLengthNo = "", toLengthNo = "", fromWidthNo = "", toWidthNo = "", searchPackingList = "";//, fromThicknessNo = "", toThicknessNo = ""
 
     private ListView listView;
     private InventoryReportAdapter adapter;
@@ -163,7 +166,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_to_right);
         textView.startAnimation(animation);
 
-        fillSpinnerAdapter();
+//        fillSpinnerAdapter();
 
         woodPresenter.getBundlesData(this);
         deleteAll.setOnClickListener(this);
@@ -174,6 +177,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         lengthOrder.setOnClickListener(this);
         location.setOnItemSelectedListener(this);
         area.setOnItemSelectedListener(this);
+        thicknessSpinner.setOnItemSelectedListener(this);
 //        ordered.setOnItemSelectedListener(this);
         pList.setOnItemSelectedListener(this);
         grade.setOnItemSelectedListener(this);
@@ -346,6 +350,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         calendar = Calendar.getInstance();
         date = Calendar.getInstance().getTime();
 
+        thicknessSpinner = findViewById(R.id.inventory_report_thick_spinner);
         containerLayout = findViewById(R.id.inventory_report_container);
 //        bundlesTable = findViewById(R.id.inventory_report_table);
         location = findViewById(R.id.inventory_report_location);
@@ -367,8 +372,8 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         toLength = findViewById(R.id.inventory_report_toLength);
         fromWidth = findViewById(R.id.inventory_report_fromWidth);
         toWidth = findViewById(R.id.inventory_report_toWidth);
-        fromThickness = findViewById(R.id.inventory_report_fromThick);
-        toThickness = findViewById(R.id.inventory_report_toThick);
+//        fromThickness = findViewById(R.id.inventory_report_fromThick);
+//        toThickness = findViewById(R.id.inventory_report_toThick);
         listView = findViewById(R.id.list);
         thicknessOrder = findViewById(R.id.inventory_report_thick_order);
         widthOrder = findViewById(R.id.inventory_report_width_order);
@@ -383,11 +388,25 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         toLength.addTextChangedListener(new watchTextChange(toLength));
         fromWidth.addTextChangedListener(new watchTextChange(fromWidth));
         toWidth.addTextChangedListener(new watchTextChange(toWidth));
-        fromThickness.addTextChangedListener(new watchTextChange(fromThickness));
-        toThickness.addTextChangedListener(new watchTextChange(toThickness));
+//        fromThickness.addTextChangedListener(new watchTextChange(fromThickness));
+//        toThickness.addTextChangedListener(new watchTextChange(toThickness));
     }
 
-    void fillSpinnerAdapter() {
+    void showLog(String method, String key, String value) {
+        Log.e("inventory report", method + "/" + key + "/" + value);
+    }
+
+    public void fillSpinnerAdapter(List<String> thicknessList) {
+
+        showLog("fillSpinnerAdapter", "thickness size", "" + thicknessList.size());
+        removeDuplicate(thicknessList);
+        showLog("fillSpinnerAdapter", "thickness size", "" + thicknessList.size());
+
+        thicknessList.add(0, "All");
+        thicknessAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, thicknessList);
+        thicknessAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        thicknessSpinner.setAdapter(thicknessAdapter);
+
         locationList.add("All");
         locationList.add("Amman");
         locationList.add("Kalinovka");
@@ -426,6 +445,12 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         grade.setAdapter(gradeAdapter);
     }
 
+    void removeDuplicate(List<String> list) {
+        Set<String> set = new HashSet<>(list);
+        list.clear();
+        list.addAll(set);
+    }
+
     class watchTextChange implements TextWatcher {
 
         private View view;
@@ -461,14 +486,14 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                     toWidthNo = String.valueOf(s);//formatDecimalValue(String.valueOf(s));
                     filters();
                     break;
-                case R.id.inventory_report_fromThick:
-                    fromThicknessNo = String.valueOf(s);//formatDecimalValue(String.valueOf(s));
-                    filters();
-                    break;
-                case R.id.inventory_report_toThick:
-                    toThicknessNo = String.valueOf(s);//formatDecimalValue(String.valueOf(s));
-                    filters();
-                    break;
+//                case R.id.inventory_report_fromThick:
+//                    fromThicknessNo = String.valueOf(s);//formatDecimalValue(String.valueOf(s));
+//                    filters();
+//                    break;
+//                case R.id.inventory_report_toThick:
+//                    toThicknessNo = String.valueOf(s);//formatDecimalValue(String.valueOf(s));
+//                    filters();
+//                    break;
             }
         }
 
@@ -683,7 +708,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 //        Log.e("follow", fromDate + " to " + toDate + " size1 " + bundleInfoServer.size() + " size2 " + dateFiltered.size());
 
         for (int k = 0; k < dateFiltered.size(); k++) {
-            Log.e("datefiltered", "" + dateFiltered.get(k).getBackingList());
+//            Log.e("datefiltered", "" + dateFiltered.get(k).getBackingList());
             String dateFiltered2 = String.valueOf(dateFiltered.get(k).getOrdered());
             if (loc.equals("All") || loc.equals(dateFiltered.get(k).getLocation())) {
                 if (areaField.equals("All") || areaField.equals(dateFiltered.get(k).getArea())) {
@@ -704,20 +729,22 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                                         if (toWidthNo.equals("") || ((dateFiltered.get(k).getWidth() < Double.parseDouble(toWidthNo))
                                                 || dateFiltered.get(k).getWidth() == Double.parseDouble(toWidthNo)))
 
-                                            if (fromThicknessNo.equals("") || ((dateFiltered.get(k).getThickness() > Double.parseDouble(fromThicknessNo))
-                                                    || dateFiltered.get(k).getThickness() == Double.parseDouble(fromThicknessNo)))
+                                            if (thicknessField.equals("All") || thicknessField.equals(String.valueOf(dateFiltered.get(k).getThickness()))) {
+//                                            if (fromThicknessNo.equals("") || ((dateFiltered.get(k).getThickness() > Double.parseDouble(fromThicknessNo))
+//                                                    || dateFiltered.get(k).getThickness() == Double.parseDouble(fromThicknessNo)))
+//
+//                                                if (toThicknessNo.equals("") || ((dateFiltered.get(k).getThickness() < Double.parseDouble(toThicknessNo))
+//                                                        || dateFiltered.get(k).getThickness() == Double.parseDouble(toThicknessNo)))
 
-                                                if (toThicknessNo.equals("") || ((dateFiltered.get(k).getThickness() < Double.parseDouble(toThicknessNo))
-                                                        || dateFiltered.get(k).getThickness() == Double.parseDouble(toThicknessNo)))
+                                                if (searchPackingList.equals("") || ((dateFiltered.get(k).getBackingList().contains(searchPackingList)))) {
+                                                    filtered.add(dateFiltered.get(k));
 
-                                                    if (searchPackingList.equals("") || ((dateFiltered.get(k).getBackingList().contains(searchPackingList)))) {
-                                                        filtered.add(dateFiltered.get(k));
+                                                    sumOfBundles = filtered.size();
+                                                    sumOfPieces += dateFiltered.get(k).getNoOfPieces();
+                                                    sumOfCubic += (dateFiltered.get(k).getLength() * dateFiltered.get(k).getWidth() * dateFiltered.get(k).getThickness() * dateFiltered.get(k).getNoOfPieces());
 
-                                                        sumOfBundles = filtered.size();
-                                                        sumOfPieces += dateFiltered.get(k).getNoOfPieces();
-                                                        sumOfCubic += (dateFiltered.get(k).getLength() * dateFiltered.get(k).getWidth() * dateFiltered.get(k).getThickness() * dateFiltered.get(k).getNoOfPieces());
-
-                                                    }
+                                                }
+                                            }
                         }
                     }
                 }
@@ -948,6 +975,10 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                 break;
             case R.id.inventory_report_grade:
                 gradeFeld = parent.getSelectedItem().toString();
+                filters();
+                break;
+            case R.id.inventory_report_thick_spinner:
+                thicknessField = parent.getSelectedItem().toString();
                 filters();
                 break;
         }
@@ -1216,6 +1247,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 
     }
 
+    // ************************************ DELETE ************************************
     private class JSONTask3 extends AsyncTask<String, String, String> {
 
         @Override

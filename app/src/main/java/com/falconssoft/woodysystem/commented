@@ -8,7 +8,49 @@ Yahoo- Host: smtp.mail.yahoo.com , Port: 465
 
 
 ************************************************
+  for (int k = 0; k < dateFiltered.size(); k++) {
+//            Log.e("datefiltered", "" + dateFiltered.get(k).getBackingList());
+            String dateFiltered2 = String.valueOf(dateFiltered.get(k).getOrdered());
+            if (loc.equals("All") || loc.equals(dateFiltered.get(k).getLocation())) {
+                if (areaField.equals("All") || areaField.equals(dateFiltered.get(k).getArea())) {
+                    if (gradeFeld.equals("All") || gradeFeld.equals(dateFiltered.get(k).getGrade())) {
 
+                        if (plField.equals("All") || (plField.equals("0") && dateFiltered.get(k).getBackingList().equals("null"))
+                                || (plField.equals("1") && !dateFiltered.get(k).getBackingList().equals("null"))) {
+
+                            if (fromLengthNo.equals("") || ((dateFiltered.get(k).getLength() > Double.parseDouble(fromLengthNo))
+                                    || dateFiltered.get(k).getLength() == Double.parseDouble(fromLengthNo)))
+
+                                if (toLengthNo.equals("") || ((dateFiltered.get(k).getLength() < Double.parseDouble(toLengthNo))
+                                        || dateFiltered.get(k).getLength() == Double.parseDouble(toLengthNo)))
+
+                                    if (fromWidthNo.equals("") || ((dateFiltered.get(k).getWidth() > Double.parseDouble(fromWidthNo))
+                                            || dateFiltered.get(k).getWidth() == Double.parseDouble(fromWidthNo)))
+
+                                        if (toWidthNo.equals("") || ((dateFiltered.get(k).getWidth() < Double.parseDouble(toWidthNo))
+                                                || dateFiltered.get(k).getWidth() == Double.parseDouble(toWidthNo)))
+
+                                            if (thicknessField.equals("All") || thicknessField.equals(String.valueOf(dateFiltered.get(k).getThickness()))) {
+//                                            if (fromThicknessNo.equals("") || ((dateFiltered.get(k).getThickness() > Double.parseDouble(fromThicknessNo))
+//                                                    || dateFiltered.get(k).getThickness() == Double.parseDouble(fromThicknessNo)))
+//
+//                                                if (toThicknessNo.equals("") || ((dateFiltered.get(k).getThickness() < Double.parseDouble(toThicknessNo))
+//                                                        || dateFiltered.get(k).getThickness() == Double.parseDouble(toThicknessNo)))
+
+                                                if (searchPackingList.equals("") || ((dateFiltered.get(k).getBackingList().contains(searchPackingList)))) {
+                                                    filtered.add(dateFiltered.get(k));
+
+                                                    sumOfBundles = filtered.size();
+                                                    sumOfPieces += dateFiltered.get(k).getNoOfPieces();
+                                                    sumOfCubic += (dateFiltered.get(k).getLength() * dateFiltered.get(k).getWidth() * dateFiltered.get(k).getThickness() * dateFiltered.get(k).getNoOfPieces());
+
+                                                }
+                                            }
+                        }
+                    }
+                }
+            }
+        }
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////

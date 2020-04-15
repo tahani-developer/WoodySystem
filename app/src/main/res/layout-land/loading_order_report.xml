@@ -298,7 +298,7 @@
             android:layout_height="350dp"
             android:layout_alignParentBottom="true"
             android:orientation="vertical"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <Button
                 android:id="@+id/arrow"
