@@ -3,6 +3,7 @@ package com.falconssoft.woodysystem.reports;
 import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -29,6 +30,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Html;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -107,6 +109,7 @@ import static android.graphics.Color.WHITE;
 
 public class InventoryReport extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
+    private ProgressDialog progressDialog;
     private Snackbar snackbar;
     private ConstraintLayout containerLayout;
     private DatabaseHandler databaseHandler;
@@ -122,7 +125,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private JSONArray jsonArrayBundles = new JSONArray();
     private WoodPresenter woodPresenter;
     private Animation animation;
-    private TextView textView, noOfBundles, noOfPieces, cubicField, deleteAll, dateFrom, dateTo, thicknessOrder, widthOrder, lengthOrder, searchPListTool;
+    private TextView textView, noOfBundles, noOfPieces, cubicField, deleteAll, dateFrom, dateTo, thicknessOrder, widthOrder, lengthOrder, searchPListTool, searchSerialTool;
     private Spinner location, area, ordered, pList, grade, thicknessSpinner;
     private ArrayAdapter<String> locationAdapter;
     private ArrayAdapter<String> areaAdapter;
@@ -130,7 +133,8 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private ArrayAdapter<String> gradeAdapter;
     private ArrayAdapter<String> plAdapter;
     private ArrayAdapter<String> thicknessAdapter;
-    private String loc = "All", areaField = "All", orderedField = "All", plField = "All", gradeFeld = "All", thicknessField = "All";
+    private String loc = "All", areaField = "All", orderedField = "All", plField = "All", gradeFeld = "All", thicknessField = "All", serialString = "All";
+
     private Settings generalSettings;
     private Calendar calendar;
     private Date date;
@@ -142,7 +146,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private List<BundleInfo> bundleInfoForPList = new ArrayList<>();
     private Button printAll, pListAll;
     private TableRow tableRowToDelete = null;
-    private EditText fromLength, toLength, fromWidth, toWidth, searchPListTextView;//, fromThickness, toThickness
+    private EditText fromLength, toLength, fromWidth, toWidth, searchPListTextView, searchSerial;//, fromThickness, toThickness
     private boolean isThicknessAsc = true, isWidthAsc = true, isLengthAsc = true;
     private String fromLengthNo = "", toLengthNo = "", fromWidthNo = "", toWidthNo = "", searchPackingList = "";//, fromThicknessNo = "", toThicknessNo = ""
 
@@ -349,6 +353,8 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         generalSettings = databaseHandler.getSettings();
         calendar = Calendar.getInstance();
         date = Calendar.getInstance().getTime();
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Please Waiting...");
 
         thicknessSpinner = findViewById(R.id.inventory_report_thick_spinner);
         containerLayout = findViewById(R.id.inventory_report_container);
@@ -381,7 +387,10 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         searchPListTextView = findViewById(R.id.inventory_report_search_pList_box);
         searchPListTool = findViewById(R.id.inventory_report_search_pList_tool);
         searchPListTextView.setVisibility(View.GONE);
+        searchSerial = findViewById(R.id.inventory_report_search_serial);
+        searchSerialTool = findViewById(R.id.inventory_report_search_serial_tool);
 
+        searchSerialTool.setOnClickListener(this);
         searchPListTool.setOnClickListener(this);
         searchPListTextView.addTextChangedListener(new watchTextChange(searchPListTextView));
         fromLength.addTextChangedListener(new watchTextChange(fromLength));
@@ -403,8 +412,8 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         showLog("fillSpinnerAdapter", "thickness size", "" + thicknessList.size());
 
         thicknessList.add(0, "All");
-        thicknessAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, thicknessList);
-        thicknessAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        thicknessAdapter = new ArrayAdapter<>(this, R.layout.spinner_layout, thicknessList);
+        thicknessAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
         thicknessSpinner.setAdapter(thicknessAdapter);
 
         locationList.add("All");
@@ -412,8 +421,8 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         locationList.add("Kalinovka");
         locationList.add("Rudniya Store");
         locationList.add("Rudniya Sawmill");
-        locationAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, locationList);
-        locationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        locationAdapter = new ArrayAdapter<>(this, R.layout.spinner_layout, locationList);
+        locationAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
         location.setAdapter(locationAdapter);
 
         areaList.add("All");
@@ -422,15 +431,15 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         areaList.add("Zone 3");
         areaList.add("Zone 4");
         areaList.add("Zone 5");
-        areaAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, areaList);
-        areaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        areaAdapter = new ArrayAdapter<>(this, R.layout.spinner_layout, areaList);
+        areaAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
         area.setAdapter(areaAdapter);
 
         plList.add("All");
         plList.add("P_List");
         plList.add("Not P_List");
-        plAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, plList);
-        plAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        plAdapter = new ArrayAdapter<>(this, R.layout.spinner_layout, plList);
+        plAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);//android.R.layout.simple_spinner_dropdown_item);
         pList.setAdapter(plAdapter);
 
         gradeList.add("All");
@@ -440,8 +449,8 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         gradeList.add("KD");
         gradeList.add("KD Blue Stain");
         gradeList.add("Second Sort");
-        gradeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, gradeList);
-        gradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        gradeAdapter = new ArrayAdapter<String>(this, R.layout.spinner_layout, gradeList);
+        gradeAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
         grade.setAdapter(gradeAdapter);
     }
 
@@ -710,45 +719,45 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         for (int k = 0; k < dateFiltered.size(); k++) {
 //            Log.e("datefiltered", "" + dateFiltered.get(k).getBackingList());
             String dateFiltered2 = String.valueOf(dateFiltered.get(k).getOrdered());
-            if (loc.equals("All") || loc.equals(dateFiltered.get(k).getLocation())) {
-                if (areaField.equals("All") || areaField.equals(dateFiltered.get(k).getArea())) {
-                    if (gradeFeld.equals("All") || gradeFeld.equals(dateFiltered.get(k).getGrade())) {
+            if (serialString.equals("All") || serialString.equals(String.valueOf(dateFiltered.get(k).getSerialNo())))
+                if (loc.equals("All") || loc.equals(dateFiltered.get(k).getLocation())) {
+                    if (areaField.equals("All") || areaField.equals(dateFiltered.get(k).getArea())) {
+                        if (gradeFeld.equals("All") || gradeFeld.equals(dateFiltered.get(k).getGrade())) {
 
-                        if (plField.equals("All") || (plField.equals("0") && dateFiltered.get(k).getBackingList().equals("null"))
-                                || (plField.equals("1") && !dateFiltered.get(k).getBackingList().equals("null"))) {
+                            if (plField.equals("All") || (plField.equals("0") && dateFiltered.get(k).getBackingList().equals("null"))
+                                    || (plField.equals("1") && !dateFiltered.get(k).getBackingList().equals("null"))) {
 
-                            if (fromLengthNo.equals("") || ((dateFiltered.get(k).getLength() > Double.parseDouble(fromLengthNo))
-                                    || dateFiltered.get(k).getLength() == Double.parseDouble(fromLengthNo)))
+                                if (fromLengthNo.equals("") || ((dateFiltered.get(k).getLength() > Double.parseDouble(fromLengthNo))
+                                        || dateFiltered.get(k).getLength() == Double.parseDouble(fromLengthNo)))
 
-                                if (toLengthNo.equals("") || ((dateFiltered.get(k).getLength() < Double.parseDouble(toLengthNo))
-                                        || dateFiltered.get(k).getLength() == Double.parseDouble(toLengthNo)))
+                                    if (toLengthNo.equals("") || ((dateFiltered.get(k).getLength() < Double.parseDouble(toLengthNo))
+                                            || dateFiltered.get(k).getLength() == Double.parseDouble(toLengthNo)))
 
-                                    if (fromWidthNo.equals("") || ((dateFiltered.get(k).getWidth() > Double.parseDouble(fromWidthNo))
-                                            || dateFiltered.get(k).getWidth() == Double.parseDouble(fromWidthNo)))
+                                        if (fromWidthNo.equals("") || ((dateFiltered.get(k).getWidth() > Double.parseDouble(fromWidthNo))
+                                                || dateFiltered.get(k).getWidth() == Double.parseDouble(fromWidthNo)))
 
-                                        if (toWidthNo.equals("") || ((dateFiltered.get(k).getWidth() < Double.parseDouble(toWidthNo))
-                                                || dateFiltered.get(k).getWidth() == Double.parseDouble(toWidthNo)))
+                                            if (toWidthNo.equals("") || ((dateFiltered.get(k).getWidth() < Double.parseDouble(toWidthNo))
+                                                    || dateFiltered.get(k).getWidth() == Double.parseDouble(toWidthNo)))
 
-                                            if (thicknessField.equals("All") || thicknessField.equals(String.valueOf(dateFiltered.get(k).getThickness()))) {
+                                                if (thicknessField.equals("All") || thicknessField.equals(String.valueOf(dateFiltered.get(k).getThickness()))) {
 //                                            if (fromThicknessNo.equals("") || ((dateFiltered.get(k).getThickness() > Double.parseDouble(fromThicknessNo))
 //                                                    || dateFiltered.get(k).getThickness() == Double.parseDouble(fromThicknessNo)))
 //
 //                                                if (toThicknessNo.equals("") || ((dateFiltered.get(k).getThickness() < Double.parseDouble(toThicknessNo))
 //                                                        || dateFiltered.get(k).getThickness() == Double.parseDouble(toThicknessNo)))
+                                                    if (searchPackingList.equals("") || ((dateFiltered.get(k).getBackingList().contains(searchPackingList)))) {
+                                                        filtered.add(dateFiltered.get(k));
 
-                                                if (searchPackingList.equals("") || ((dateFiltered.get(k).getBackingList().contains(searchPackingList)))) {
-                                                    filtered.add(dateFiltered.get(k));
+                                                        sumOfBundles = filtered.size();
+                                                        sumOfPieces += dateFiltered.get(k).getNoOfPieces();
+                                                        sumOfCubic += (dateFiltered.get(k).getLength() * dateFiltered.get(k).getWidth() * dateFiltered.get(k).getThickness() * dateFiltered.get(k).getNoOfPieces());
 
-                                                    sumOfBundles = filtered.size();
-                                                    sumOfPieces += dateFiltered.get(k).getNoOfPieces();
-                                                    sumOfCubic += (dateFiltered.get(k).getLength() * dateFiltered.get(k).getWidth() * dateFiltered.get(k).getThickness() * dateFiltered.get(k).getNoOfPieces());
-
+                                                    }
                                                 }
-                                            }
+                            }
                         }
                     }
                 }
-            }
         }
         Log.e("follow/", "size3/filtered/" + filtered.size());
 
@@ -1089,6 +1098,15 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                 });
                 passwordDialog.show();
                 break;
+            case R.id.inventory_report_search_serial_tool:
+                if (!TextUtils.isEmpty(searchSerial.getText().toString()))
+                    serialString = searchSerial.getText().toString();
+                else
+                    serialString = "All";
+
+                filters();
+
+                break;
         }
 
     }
@@ -1245,6 +1263,14 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
             return returnVal;
         }
 
+    }
+
+    public void showProgressDialog(){
+        progressDialog.show();
+    }
+
+    public void hideProgressDialog(){
+        progressDialog.dismiss();
     }
 
     // ************************************ DELETE ************************************
