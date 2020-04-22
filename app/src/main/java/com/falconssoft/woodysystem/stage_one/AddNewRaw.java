@@ -201,7 +201,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         gradeList.add("Second Sort");
         gradeList.add("Reject");
         gradeAdapter = new ArrayAdapter<String>(this, R.layout.spinner_layout, gradeList);
-        gradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        gradeAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
         gradeSpinner.setAdapter(gradeAdapter);
         gradeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

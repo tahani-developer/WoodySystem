@@ -430,32 +430,32 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
         gradeList.add("KD Blue Stain");
         gradeList.add("Second Sort");
         gradeAdapter = new ArrayAdapter<String>(this, R.layout.spinner_layout, gradeList);
-        gradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        gradeAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
         gradeSpinner.setAdapter(gradeAdapter);
         gradeSpinner.setOnItemSelectedListener(this);
 
         suppliersAdapter = new ArrayAdapter<String>(this, R.layout.spinner_layout, suppliersList);// android.R.layout.simple_spinner_item
-        suppliersAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        suppliersAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
         suppliersSpinner.setAdapter(suppliersAdapter);
         suppliersSpinner.setOnItemSelectedListener(this);
 
         truckAdapter = new ArrayAdapter<String>(this, R.layout.spinner_layout, truckList);
-        truckAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        truckAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
         truckSpinner.setAdapter(truckAdapter);
         truckSpinner.setOnItemSelectedListener(this);
 
         acceptorAdapter = new ArrayAdapter<String>(this, R.layout.spinner_layout, acceptorList);
-        acceptorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        acceptorAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
         acceptorSpinner.setAdapter(acceptorAdapter);
         acceptorSpinner.setOnItemSelectedListener(this);
 
         ttnAdapter = new ArrayAdapter<String>(this, R.layout.spinner_layout, ttnList);
-        ttnAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ttnAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
         ttnSpinner.setAdapter(ttnAdapter);
         ttnSpinner.setOnItemSelectedListener(this);
 
         accLocationAdapter = new ArrayAdapter<String>(this, R.layout.spinner_layout, accLocationList);
-        accLocationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        accLocationAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
         accLocationSpinner.setAdapter(accLocationAdapter);
         accLocationSpinner.setOnItemSelectedListener(this);
 

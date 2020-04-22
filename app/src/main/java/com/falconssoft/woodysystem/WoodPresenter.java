@@ -218,6 +218,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
     public void getBundlesData(InventoryReport inventoryReport) {
         settings = databaseHandler.getSettings();
         this.inventoryReport = inventoryReport;
+        inventoryReport.showProgressDialog();
 
         urlBundles = "http://" + settings.getIpAddress() + "/import.php?FLAG=3";//http://5.189.130.98:8085/import.php?FLAG=3
 //        Log.e("presenter/urlUsers ", "" + urlUsers);
@@ -231,6 +232,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
         @Override
         public void onErrorResponse(VolleyError error) {
             Log.e("presenter/bundle/err ", "" + error);
+            inventoryReport.hideProgressDialog();
         }
 
         @Override
@@ -289,6 +291,8 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
+
+            inventoryReport.hideProgressDialog();
         }
     }
 

@@ -47,6 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_marginHorizontal="5dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/inventory_report_linear1"
@@ -57,12 +58,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_margin="7dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/shape_with_corner"
                 android:orientation="horizontal"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp">
+                android:paddingVertical="10dp"
+                >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -84,13 +86,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginEnd="7dp"
-                android:layout_marginRight="7dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/shape_with_corner"
                 android:orientation="horizontal"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp">
+                android:paddingVertical="10dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -110,14 +111,14 @@
             <LinearLayout
                 android:id="@+id/inventory_report_linear_grade"
                 android:layout_width="0dp"
-                android:layout_height="45dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginEnd="7dp"
-                android:layout_marginRight="7dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/shape_with_corner"
                 android:orientation="horizontal"
-                android:paddingTop="10dp"
+                android:paddingVertical="10dp"
                 android:paddingEnd="5dp"
                 android:paddingRight="5dp">
 
@@ -142,12 +143,12 @@
                 android:layout_width="0dp"
                 android:layout_height="45dp"
                 android:layout_gravity="center"
-                android:layout_marginEnd="7dp"
-                android:layout_marginRight="7dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/shape_with_corner"
                 android:orientation="horizontal"
-                android:paddingTop="10dp"
+                android:paddingVertical="10dp"
                 android:paddingEnd="5dp"
                 android:paddingRight="5dp">
 
@@ -174,12 +175,12 @@
                 android:layout_width="0dp"
                 android:layout_height="45dp"
                 android:layout_gravity="center"
-                android:layout_marginEnd="7dp"
-                android:layout_marginRight="7dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/shape_with_corner"
                 android:orientation="horizontal"
-                android:paddingTop="10dp"
+                android:paddingVertical="10dp"
                 android:paddingEnd="5dp"
                 android:paddingRight="5dp">
 
@@ -206,7 +207,8 @@
             android:id="@+id/inventory_report_linear3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
+            android:layout_marginVertical="5dp"
+            android:layout_marginHorizontal="5dp"
             android:gravity="center"
             android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="parent"
@@ -215,14 +217,56 @@
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="45dp"
                 android:layout_gravity="center"
-                android:layout_margin="7dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/shape_with_corner"
                 android:orientation="horizontal"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp">
+                android:paddingEnd="5dp"
+                android:paddingRight="5dp">
+
+                <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:fontFamily="serif"
+                android:paddingLeft="10dp"
+                android:text="@string/serial"
+                android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/inventory_report_search_serial"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="serif"
+                    android:paddingTop="10dp"
+                    android:paddingStart="10dp"
+                    android:paddingLeft="10dp"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/inventory_report_search_serial_tool"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="3dp"
+                    android:drawableStart="@drawable/ic_search_24dp"
+                    android:drawableLeft="@drawable/ic_search_24dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_with_corner"
+                android:orientation="horizontal"
+                android:visibility="visible"
+                android:paddingVertical="10dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -242,7 +286,8 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="45dp"
-                android:layout_marginHorizontal="7dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
                 android:layout_weight="1"
                 android:visibility="gone"
                 android:background="@drawable/shape_with_corner"
@@ -280,8 +325,8 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="45dp"
-                android:layout_marginEnd="7dp"
-                android:layout_marginRight="7dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/shape_with_corner"
                 android:gravity="center">
@@ -293,6 +338,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:inputType="number"
+                    android:textSize="15sp"
                     android:hint="@string/from"/>
 
                 <TextView
@@ -312,6 +358,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:inputType="number"
+                    android:textSize="15sp"
                     android:hint="@string/to"/>
 
             </LinearLayout>
@@ -319,8 +366,8 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="45dp"
-                android:layout_marginEnd="7dp"
-                android:layout_marginRight="7dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/shape_with_corner"
                 android:gravity="center">
@@ -332,6 +379,7 @@
                     android:layout_weight="1"
                     android:inputType="number"
                     android:gravity="center"
+                    android:textSize="15sp"
                     android:hint="@string/from"/>
 
                 <TextView
@@ -351,6 +399,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:inputType="number"
+                    android:textSize="15sp"
                     android:hint="@string/to"/>
 
 
@@ -361,8 +410,8 @@
                 android:layout_width="0dp"
                 android:layout_height="45dp"
                 android:layout_gravity="center"
-                android:layout_marginEnd="7dp"
-                android:layout_marginRight="7dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
                 android:layout_weight="1.2"
                 android:background="@drawable/shape_with_corner"
                 android:orientation="horizontal"
