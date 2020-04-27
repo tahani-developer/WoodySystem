@@ -56,7 +56,7 @@
             android:layout_marginStart="@dimen/stage1_margin2_start"
             android:layout_marginLeft="@dimen/stage1_margin2_start"
             android:layout_marginTop="@dimen/stage1_margin_top"
-            android:visibility="gone"
+            android:visibility="visible"
             android:background="@drawable/border_background"
             android:gravity="center"
             android:orientation="vertical">
@@ -65,7 +65,7 @@
                 android:layout_width="110dp"
                 android:layout_height="110dp"
                 android:layout_marginTop="3dp"
-                android:background="@drawable/acceptance_info"
+                android:background="@drawable/real_report2"
                 android:scaleType="fitCenter" />
 
             <TextView
@@ -75,7 +75,7 @@
                 android:layout_margin="10dp"
                 android:fontFamily="serif"
                 android:gravity="center_horizontal"
-                android:text="@string/acceptance_info"
+                android:text="Report 1"
                 android:textColor="@color/orange"
                 android:textSize="20sp" />
         </LinearLayout>
@@ -138,7 +138,7 @@
                 android:layout_margin="10dp"
                 android:fontFamily="serif"
                 android:gravity="center_horizontal"
-                android:text="@string/report"
+                android:text="Report 2"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
         </LinearLayout>

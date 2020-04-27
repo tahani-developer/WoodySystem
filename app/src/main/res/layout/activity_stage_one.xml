@@ -28,7 +28,7 @@
             android:layout_marginTop="@dimen/stage1_p_margin2_top"
             android:background="@drawable/border_background"
             android:gravity="center"
-            android:visibility="gone"
+            android:visibility="visible"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.318"
@@ -38,9 +38,9 @@
 
             <ImageView
                 android:layout_width="120dp"
-                android:layout_height="120dp"
+                android:layout_height="130dp"
                 android:layout_marginTop="5dp"
-                android:background="@drawable/acceptance_info"
+                android:background="@drawable/real_report2"
                 android:scaleType="fitCenter" />
 
             <TextView
@@ -50,7 +50,7 @@
                 android:layout_margin="5dp"
                 android:fontFamily="serif"
                 android:gravity="center_horizontal"
-                android:text="@string/acceptance_info"
+                android:text="Report 1"
                 android:textColor="@color/orange"
                 android:textSize="20sp" />
         </LinearLayout>
@@ -61,7 +61,7 @@
             android:layout_height="@dimen/stage3_views2"
             android:layout_marginStart="@dimen/stage1_p_margin_start"
             android:layout_marginLeft="@dimen/stage1_p_margin_start"
-            android:layout_marginTop="236dp"
+            android:layout_marginTop="136dp"
             android:background="@drawable/frame_shape"
             android:gravity="center"
             android:orientation="vertical"
@@ -154,7 +154,7 @@
                 android:layout_margin="10dp"
                 android:fontFamily="serif"
                 android:gravity="center_horizontal"
-                android:text="@string/report"
+                android:text="Report 2"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
         </LinearLayout>

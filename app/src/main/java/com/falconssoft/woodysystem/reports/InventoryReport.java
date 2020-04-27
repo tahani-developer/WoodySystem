@@ -153,6 +153,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private ListView listView;
     private InventoryReportAdapter adapter;
     private int sortFlag = 0;
+    private List<Double> doubleList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -458,6 +459,15 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         Set<String> set = new HashSet<>(list);
         list.clear();
         list.addAll(set);
+        doubleList = new ArrayList<>();
+        for (int n = 0; n< list.size(); n++)
+            doubleList.add(Double.valueOf(list.get(n)));
+
+        Collections.sort(doubleList);
+        list.clear();
+        for (int n = 0; n< doubleList.size(); n++)
+            list.add(String.valueOf(doubleList.get(n)));
+
     }
 
     class watchTextChange implements TextWatcher {
