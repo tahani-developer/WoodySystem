@@ -6,9 +6,10 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class BundleInfo {
+public class BundleInfo implements Serializable {
 
     private double thickness;
     private double length;

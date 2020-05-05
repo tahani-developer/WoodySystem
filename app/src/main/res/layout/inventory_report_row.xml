@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
+        android:paddingVertical="10dp"
         android:background="@color/light_orange"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -121,6 +122,17 @@
             android:text="@string/p_list"
             android:textColor="@color/gray_dark_one"
             android:textSize="15sp" />
+
+        <ImageView
+            android:id="@+id/inventoryReportRaw_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0"
+            android:paddingHorizontal="10dp"
+            android:src="@drawable/ic_edit_24dp"
+            android:tint="@color/orange"
+            android:layout_marginEnd="1dp"
+            android:layout_marginRight="1dp"/>
 
     </TableRow>
 
