@@ -70,7 +70,7 @@ public class AcceptanceReportAdapter extends BaseAdapter {
         holder.acceptor = (TextView) view.findViewById(R.id.name_of_person_to_accept);
         holder.date = (TextView) view.findViewById(R.id.date_of_acceptance);
         holder.ttn = (TextView) view.findViewById(R.id.ttn_no);
-        holder.netBundle = (TextView) view.findViewById(R.id.net);
+//        holder.netBundle = (TextView) view.findViewById(R.id.net);
         holder.location = (TextView) view.findViewById(R.id.location_of_acceptance);
         holder.rejected = (TextView) view.findViewById(R.id.rejected_pieces);
 //        holder.pic = (ImageView) view.findViewById(R.id.pic);
@@ -79,7 +79,7 @@ public class AcceptanceReportAdapter extends BaseAdapter {
         holder.acceptor.setText(itemsList.get(i).getAcceptedPersonName());
         holder.date.setText(itemsList.get(i).getDate());
         holder.ttn.setText( itemsList.get(i).getTtnNo());
-        holder.netBundle.setText( itemsList.get(i).getNetBundles());
+//        holder.netBundle.setText( itemsList.get(i).getNetBundles());
         holder.location.setText( itemsList.get(i).getLocationOfAcceptance());
         holder.rejected.setText( itemsList.get(i).getTotalRejectedNo());
 

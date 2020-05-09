@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -51,6 +52,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.falconssoft.woodysystem.AddToInventory;
 import com.falconssoft.woodysystem.DatabaseHandler;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.WoodPresenter;
@@ -88,6 +90,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.net.URI;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -153,6 +156,9 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private ListView listView;
     private InventoryReportAdapter adapter;
     private int sortFlag = 0;
+    private List<Double> doubleList;
+    public static final String EDIT_BUNDLE = "EDIT_BUNDLE";
+    public static final String EDIT_FLAG_BUNDLE = "EDIT_FLAG_BUNDLE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -458,6 +464,15 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         Set<String> set = new HashSet<>(list);
         list.clear();
         list.addAll(set);
+        doubleList = new ArrayList<>();
+        for (int n = 0; n< list.size(); n++)
+            doubleList.add(Double.valueOf(list.get(n)));
+
+        Collections.sort(doubleList);
+        list.clear();
+        for (int n = 0; n< doubleList.size(); n++)
+            list.add(String.valueOf(doubleList.get(n)));
+
     }
 
     class watchTextChange implements TextWatcher {
@@ -1108,6 +1123,17 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 
                 break;
         }
+
+    }
+
+    public void editBundle(BundleInfo bundleInfo){
+        Intent intent = new Intent(InventoryReport.this, AddToInventory.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(EDIT_BUNDLE, bundleInfo);
+       showLog("edit", "bundle no", bundleInfo.getBundleNo());
+        intent.putExtras(bundle);
+        intent.putExtra(EDIT_FLAG_BUNDLE, 55);
+        startActivity(intent);
 
     }
 

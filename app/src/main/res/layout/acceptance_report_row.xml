@@ -100,21 +100,6 @@
             android:textSize="15sp"
             />
 
-        <TextView
-            android:id="@+id/net"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:fontFamily="serif"
-            android:background="@color/light_orange"
-            android:layout_marginTop="2dp"
-            android:layout_marginStart="2dp"
-            android:layout_marginLeft="2dp"
-            android:text="@string/net"
-            android:textColor="@color/gray_dark_one"
-            android:textSize="15sp"
-            />
-
         <Button
             android:id="@+id/preview"
             android:layout_width="0dp"
