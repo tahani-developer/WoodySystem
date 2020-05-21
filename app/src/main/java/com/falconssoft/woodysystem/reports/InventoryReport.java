@@ -289,7 +289,8 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 
                             woodPresenter.updatePackingList(InventoryReport.this, bundleInfoForPList.get(i).getBundleNo(), newPackingList, bundleInfoForPList.get(i).getLocation());
                         }
-                        adapter.notifyDataSetChanged();
+//                        filters();
+//                        adapter.notifyDataSetChanged();
                         packingListDialog.dismiss();
 
                     }
@@ -302,53 +303,6 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 
         });
 //
-       /* searchViewTh.setOnQueryTextListener(new android.support.v7.widget.SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String query) {
-
-                f1 = query;
-                filters();
-
-                return false;
-            }
-        });
-
-        searchViewW.setOnQueryTextListener(new android.support.v7.widget.SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String query) {
-
-                f2 = query;
-                filters();
-
-                return false;
-            }
-        });
-
-        searchViewL.setOnQueryTextListener(new android.support.v7.widget.SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String query) {
-
-                f3 = query;
-                filters();
-
-                return false;
-            }
-        });*/
 
     }
 
@@ -413,6 +367,10 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 
     public void fillSpinnerAdapter(List<String> thicknessList) {
 
+        locationList.clear();
+        areaList.clear();
+        plList.clear();
+        gradeList.clear();
         showLog("fillSpinnerAdapter", "thickness size", "" + thicknessList.size());
         removeDuplicate(thicknessList);
         showLog("fillSpinnerAdapter", "thickness size", "" + thicknessList.size());

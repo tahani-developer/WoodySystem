@@ -69,7 +69,7 @@
     <string name="loading_order_report2">Loading Order Report</string>
     <string name="placing_no_">Truck No</string>
     <string name="order_no_">Order No</string>
-    <string name="container_no_">Container No</string>
+    <string name="container_no_">Container#</string>
 
     <string name="about_developers">About Developers</string>
     <string name="falcons_soft">Falcons Soft</string>

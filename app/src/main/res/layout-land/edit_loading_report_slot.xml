@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:ignore="MissingDefaultResource">
+
+    <LinearLayout
+        android:paddingVertical="5dp"
+        android:paddingHorizontal="10dp"
+        android:layout_marginTop="2dp"
+        android:orientation="horizontal"
+        android:background="@color/light_orange"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/bundle"
+            android:textSize="15sp"
+            android:textColor="@color/orange"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"/>
+
+        <EditText
+            android:id="@+id/th"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/orange"
+            android:textSize="15sp" />
+
+        <EditText
+            android:id="@+id/w"
+            android:textSize="15sp"
+            android:textColor="@color/orange"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <EditText
+            android:id="@+id/l"
+            android:textSize="15sp"
+            android:textColor="@color/orange"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <Spinner
+            android:id="@+id/grade"
+            android:textSize="15sp"
+            android:textColor="@color/orange"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <EditText
+            android:id="@+id/pcs"
+            android:textSize="15sp"
+            android:textColor="@color/orange"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/location"
+            android:textSize="15sp"
+            android:textColor="@color/orange"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <Spinner
+            android:id="@+id/area"
+            android:textSize="15sp"
+            android:textColor="@color/orange"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

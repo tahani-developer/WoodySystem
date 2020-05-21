@@ -1,6 +1,7 @@
 package com.falconssoft.woodysystem.reports;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.falconssoft.woodysystem.EditLoadingReport;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.Orders;
@@ -23,13 +25,13 @@ import java.util.List;
 
 public class LoadingOrderReportAdapter extends BaseAdapter {
 
-    private Context context;
+    private LoadingOrderReport context;
     //    private List<BundleInfo> mOriginalValues;
     private static List<Orders> itemsList;
     private static List<Orders> bundles;
 //    private static List<BundleInfo> selectedBundles ;
 
-    public LoadingOrderReportAdapter(Context context, List<Orders> itemsList, List<Orders> bundles) {
+    public LoadingOrderReportAdapter(LoadingOrderReport context, List<Orders> itemsList, List<Orders> bundles) {
         this.context = context;
 //        this.mOriginalValues = itemsList;
         this.itemsList = itemsList;
@@ -64,6 +66,7 @@ public class LoadingOrderReportAdapter extends BaseAdapter {
         ImageView pic;
         Button bundleNo;
         TextView orderNo, truckNo, containerNo, date, destination;
+        ImageView edit;
     }
 
     @Override
@@ -79,6 +82,7 @@ public class LoadingOrderReportAdapter extends BaseAdapter {
         holder.destination = (TextView) view.findViewById(R.id.destination);
         holder.bundleNo = (Button) view.findViewById(R.id.bundleNo);
         holder.pic = (ImageView) view.findViewById(R.id.pic);
+        holder.edit = view.findViewById(R.id.loading_order_raw_edit);
 
         holder.orderNo.setText(itemsList.get(i).getOrderNo());
         holder.truckNo.setText(itemsList.get(i).getPlacingNo());
@@ -88,6 +92,14 @@ public class LoadingOrderReportAdapter extends BaseAdapter {
 
         LoadingOrderReport obj = new LoadingOrderReport();
 
+        holder.edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               context.goToEditPage(itemsList.get(i));
+                Log.e("showwwwwwwwwwww1", itemsList.get(i).getPlacingNo());
+
+            }
+        });
 
         holder.bundleNo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,6 +140,15 @@ public class LoadingOrderReportAdapter extends BaseAdapter {
             }
         });
 
+        view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                Log.e("rawtttttttttt", "position" + i );
+
+                context.deleteOrder(itemsList, i);
+                return false;
+            }
+        });
 
         return view;
     }

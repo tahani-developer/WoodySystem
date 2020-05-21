@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -19,6 +20,8 @@ import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -39,6 +42,7 @@ import com.falconssoft.woodysystem.models.NewRowInfo;
 import com.falconssoft.woodysystem.models.Orders;
 import com.falconssoft.woodysystem.models.Pictures;
 import com.falconssoft.woodysystem.models.Settings;
+import com.falconssoft.woodysystem.stage_one.AddNewRaw;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -54,6 +58,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
@@ -67,6 +72,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+
+import static com.falconssoft.woodysystem.reports.AcceptanceInfoReport.EDIT_FLAG;
 
 public class AcceptanceReport extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -96,7 +103,11 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
     SimpleDateFormat sdf;
     private ProgressDialog progressDialog;
     private int rowsCount = 0;
-
+    private List<NewRowInfo> filtered;
+    public static String truckNoBeforeUpdate2 = "";
+    public static final String EDIT_LIST2 = "EDIT_LIST";
+    public static final String EDIT_RAW2 = "EDIT_RAW";
+//    public static final String EDIT_FLAG2= "EDIT_FLAG";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,6 +126,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
         acceptorList = new ArrayList<>();
         ttnList = new ArrayList<>();
         locationList = new ArrayList<>();
+        filtered = new ArrayList<>();
 
         count = findViewById(R.id.acceptanceReport_count);
         list = findViewById(R.id.list);
@@ -128,6 +140,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
         truckSpinner = findViewById(R.id.acceptanceInfoReport_truckNo);
         acceptorSpinner = findViewById(R.id.acceptanceInfoReport_acceptor);
         ttnSpinner = findViewById(R.id.acceptanceInfoReport_ttn);
+
         myFormat = "dd/MM/yyyy";
         sdf = new SimpleDateFormat(myFormat, Locale.US);
 
@@ -187,6 +200,33 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
+        
+    }
+
+    public void goToEditPage(NewRowInfo newRowInfo) {
+        List<NewRowInfo> list = new ArrayList<>();
+        for (int i = 0; i < details.size(); i++)
+            if (truckNoBeforeUpdate2.equals(details.get(i).getTruckNo()))
+                if (!(details.get(i).getThickness() == newRowInfo.getThickness()
+                        && details.get(i).getLength() == newRowInfo.getLength()
+                        && details.get(i).getWidth() == newRowInfo.getWidth()
+                        && details.get(i).getNoOfPieces() == newRowInfo.getNoOfPieces()
+                        && details.get(i).getGrade() == newRowInfo.getGrade()
+                        && details.get(i).getNoOfRejected() == newRowInfo.getNoOfRejected()
+                        && details.get(i).getNoOfBundles() == newRowInfo.getNoOfBundles()
+                        && details.get(i).getSupplierName() == newRowInfo.getSupplierName())
+                )
+                    list.add(details.get(i));
+
+        Intent intent = new Intent(AcceptanceReport.this, AddNewRaw.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(EDIT_RAW2, newRowInfo);
+//        bundle.putParcelable(EDIT_LIST, list);
+        intent.putExtras(bundle);
+        intent.putExtra(EDIT_FLAG, 11);
+        intent.putExtra(EDIT_LIST2, (Serializable) list);
+        Log.e("seria size", "" + list.size());
+        startActivity(intent);
 
     }
 
@@ -314,7 +354,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
                     acceptorList.add(0, "All");
                     truckList.add(0, "All");
                     locationList.add(0, "All");
-                    rowsCount= master.size();
+                    rowsCount = master.size();
 
                 } catch (JSONException e) {
                     Log.e("Import Data1", e.getMessage());
@@ -640,7 +680,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
 
         Log.e("AcceptanceReport", "filter/" + loc + "/" + truckString + "/" + acceptorString + "/" + ttnString);
         try {
-            List<NewRowInfo> filtered = new ArrayList<>();
+            filtered = new ArrayList<>();
             for (int k = 0; k < master.size(); k++) {
 
                 Log.e("****", fromDate + "  " + master.get(k).getDate());

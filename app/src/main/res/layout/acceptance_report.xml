@@ -273,18 +273,14 @@
             android:layout_marginRight="5dp"
             android:layout_marginBottom="5dp"
             android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/acceptanceInfo_report_linear2"
-            app:layout_constraintVertical_bias="0.0">
+           >
 
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingVertical="10dp"
+                android:paddingVertical="5dp"
                 android:background="@color/orange">
+
 
                 <TextView
                     android:layout_width="0dp"
@@ -298,7 +294,7 @@
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:fontFamily="serif"
                     android:text="@string/name_of_person_to_accept"
@@ -317,7 +313,7 @@
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:fontFamily="serif"
                     android:text="@string/date_of_acceptance"
@@ -326,7 +322,7 @@
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:fontFamily="serif"
                     android:text="@string/location_of_acceptance"
@@ -354,6 +350,14 @@
                     android:textColor="@color/white"
                     android:textSize="15sp" />
 
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:layout_marginHorizontal="5dp"
+                    android:background="@drawable/ic_edit_24dp"
+                    />
 
             </TableRow>
 
@@ -398,6 +402,7 @@
                 android:background="@drawable/jjj" />
 
         </LinearLayout>
+
 
     </RelativeLayout>
 
