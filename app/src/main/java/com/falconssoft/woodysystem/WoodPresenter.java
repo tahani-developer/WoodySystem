@@ -183,19 +183,19 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
 //                    response = response.substring(response.indexOf("{"));
                     response = new String(response.getBytes("ISO-8859-1"), "UTF-8");// cloud
                 }
-//                Log.e("presenter/users/res ", "" + response);
+                Log.e("presenter/users/res ", "" + response);
 
                 JSONObject object = new JSONObject(response);
-//                Log.e("presenter:obj1", "" + object.toString());
+                Log.e("presenter:obj1", "" + object.toString());
                 JSONArray array = object.getJSONArray("USERS");
-//                Log.e("presenter:obj2", "" + array.toString());
+                Log.e("presenter:obj2", "" + array.toString());
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject innerObject = array.getJSONObject(i);
                     String username = innerObject.getString("USER_NAME");
                     String password = innerObject.getString("PASSWORD");
 //                    Log.e("presenter:obj3 ", "" +username + password);
                     Users users = new Users(username, password);
-//                    Log.e("presenter:obj4", "" + innerObject.getString("USER_NAME"));
+                    Log.e("presenter:obj4", "" + innerObject.getString("USER_NAME"));
 
                     loginActivity.getUsersDataMethod(username, password);
                     SettingsFile.usersList.add(users);
@@ -408,7 +408,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                     response = new String(response.getBytes("ISO-8859-1"), "UTF-8");
 //                    response = response.substring(response.indexOf("{"));
                 inventoryReport.updatedPackingList();
-                getBundlesData(inventoryReport);
+                getUpdatedData(inventoryReport);
 //                Log.e("presenter/packingList", "/res/" + response);
 //                JSONObject object = new JSONObject(response);
 //                Log.e("presenter:bun1", "" + object.toString());
@@ -426,6 +426,89 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    //-------------------------------------------- Get Data After Update P List-----------------------------------------/
+
+    public void getUpdatedData(InventoryReport inventoryReport) {
+        settings = databaseHandler.getSettings();
+        this.inventoryReport = inventoryReport;
+        inventoryReport.showProgressDialog();
+
+        urlBundles = "http://" + settings.getIpAddress() + "/import.php?FLAG=3";//http://5.189.130.98:8085/import.php?FLAG=3
+//        Log.e("presenter/urlUsers ", "" + urlUsers);
+//        Log.e("presenter:ipUsers ", "" + SettingsFile.ipAddress);
+        bundlesJsonObjectRequest = new StringRequest(Request.Method.GET, urlBundles, new UpdatedBundlesResponseClass(), new UpdatedBundlesResponseClass());
+        requestQueue.add(bundlesJsonObjectRequest);
+    }
+
+    class UpdatedBundlesResponseClass implements Response.Listener<String>, Response.ErrorListener {
+
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            Log.e("presenter/update/err ", "pl" + error);
+            inventoryReport.hideProgressDialog();
+        }
+
+        @Override
+        public void onResponse(String response) {
+            try {
+                bundleInfoServer.clear();
+                bundleInfoServer2.clear();
+                thickness.clear();
+                if (response.indexOf("{") == 3)
+                    response = new String(response.getBytes("ISO-8859-1"), "UTF-8");
+//                    response = response.substring(response.indexOf("{"));
+
+//                Log.e("presenter/bundle/res ", "" + response);
+                JSONObject object = new JSONObject(response);
+//                Log.e("presenter:bun1", "" + object.toString());
+                JSONArray array = object.getJSONArray("BUNDLE_INFO");
+                Log.e("presenter:bun2", "" + array.length());
+                for (int i = 0; i < array.length(); i++) {
+                    JSONObject innerObject = array.getJSONObject(i);//ORDERED
+                    Log.e("presenter:bun3 ", "" + innerObject.toString());
+                    if (innerObject.getInt("ORDERED") == 0) {
+                        BundleInfo bundleInfo = new BundleInfo();
+                        bundleInfo.setThickness(innerObject.getDouble("THICKNESS"));
+                        bundleInfo.setWidth(innerObject.getDouble("WIDTH"));
+                        bundleInfo.setLength(innerObject.getDouble("LENGTH"));
+                        bundleInfo.setGrade(innerObject.getString("GRADE"));
+                        bundleInfo.setNoOfPieces(innerObject.getDouble("PIECES"));
+                        bundleInfo.setBundleNo(innerObject.getString("BUNDLE_NO"));
+                        bundleInfo.setLocation(innerObject.getString("LOCATION"));
+                        bundleInfo.setArea(innerObject.getString("AREA"));
+                        bundleInfo.setBarcode(innerObject.getString("BARCODE"));
+                        bundleInfo.setOrdered(innerObject.getInt("ORDERED"));
+//                    bundleInfo.setPicture(innerObject.getString("PIC"));
+                        bundleInfo.setAddingDate(innerObject.getString("BUNDLE_DATE"));
+                        bundleInfo.setSerialNo(innerObject.getString("B_SERIAL"));
+                        bundleInfo.setBackingList(innerObject.getString("BACKING_LIST"));
+                        Log.e("presenter:bun3 ", "" + bundleInfo.getBackingList());
+
+                        bundleInfoServer2.add(bundleInfo);
+                        bundleInfoServer.add(bundleInfo);
+                        thickness.add(String.valueOf(innerObject.getDouble("THICKNESS")));
+                    }
+                }
+//                Log.e("bundleInfoServer", "/size/" + bundleInfoServer.size());
+                inventoryReport.filters();
+//                inventoryReport.fillSpinnerAdapter(thickness);
+                showLog("Get Inventory Report Data", "thickness size" , "" + thickness.size());
+
+//                inventoryReport.fillTable(bundleInfoServer);
+////                Log.e("presenter3: import ", "" + SettingsFile.serialNumber);
+//
+            } catch (JSONException e) {
+                e.printStackTrace();
+//            } catch (UnsupportedEncodingException e) {
+//                e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+
+            inventoryReport.hideProgressDialog();
         }
     }
 
