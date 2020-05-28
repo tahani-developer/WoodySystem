@@ -81,7 +81,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
     private static LinearLayout linearLayout;
     private EditText from, to;
     private Button arrow;
-    private static HorizontalListView listView;
+    private static ListView listView;
     private static List<NewRowInfo> master, details;
     private static List<Pictures> pictures;
     private Animation animation;
@@ -107,7 +107,8 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
     public static String truckNoBeforeUpdate2 = "";
     public static final String EDIT_LIST2 = "EDIT_LIST";
     public static final String EDIT_RAW2 = "EDIT_RAW";
-//    public static final String EDIT_FLAG2= "EDIT_FLAG";
+
+    //    public static final String EDIT_FLAG2= "EDIT_FLAG";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -200,7 +201,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
-        
+
     }
 
     public void goToEditPage(NewRowInfo newRowInfo) {
@@ -298,6 +299,8 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
 
             try {
 //                http://10.0.0.214/woody/import.php?FLAG=5
+ //                http://5.189.130.98:8085/import.php?FLAG=5
+
                 URL url = new URL("http://" + generalSettings.getIpAddress() + "/import.php?FLAG=5");
 
                 URLConnection conn = url.openConnection();
@@ -361,7 +364,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
                 }
 
                 try {
-                    JSONArray parentArray = parentObject.getJSONArray("RAW_INFO_DETAILS");
+                    JSONArray parentArray = parentObject.getJSONArray("RAW_INFO_MIX");//RAW_INFO_DETAILS
                     details.clear();
                     for (int i = 0; i < parentArray.length(); i++) {
                         JSONObject finalObject = parentArray.getJSONObject(i);
@@ -373,9 +376,10 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
                         newRowInfo.setWidth(finalObject.getDouble("WIDTH"));
                         newRowInfo.setLength(finalObject.getDouble("LENGTH"));
                         newRowInfo.setNoOfPieces(finalObject.getInt("PIECES"));
-                        newRowInfo.setNoOfRejected(finalObject.getInt("REJECTED"));
+                        newRowInfo.setNoOfRejected(finalObject.getInt("REJ"));//REJECTED
                         newRowInfo.setNoOfBundles(finalObject.getDouble("NO_BUNDLES"));
                         newRowInfo.setGrade(finalObject.getString("GRADE"));
+                        newRowInfo.setTtnNo(finalObject.getString("TTN_NO"));
 
 //                        String pic = finalObject.getString("PART1") + finalObject.getString("PART2") +
 //                                finalObject.getString("PART3") + finalObject.getString("PART4") +
@@ -439,13 +443,15 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
         }
     }
 
-    public void previewLinear(int index, Context Context) {
+    public void previewLinear(String truckString,String ttnString , Context Context) {
 
         rawInfos = new ArrayList<>();
 
         for (int i = 0; i < details.size(); i++) {
-//                                    Log.e("ooo  " , ""+ orders.get(index).getOrderNo() + "  " + bundles.get(i).getBundleNo());
-            if (master.get(index).getTruckNo().equals(details.get(i).getTruckNo())) {
+            if (truckString.contains(details.get(i).getTruckNo())
+            && (ttnString.equals(details.get(i).getTtnNo()))) {//master.get(index).getTruckNo()
+                Log.e("acceptanceReport", "/truck/" + truckString + "/truckd/" + details.get(i).getTruckNo()
+                        + "/ttn/" + ttnString+ "/ttnd/" + details.get(i).getTtnNo());
 
                 rawInfos.add(new NewRowInfo(
                         details.get(i).getSupplierName(),

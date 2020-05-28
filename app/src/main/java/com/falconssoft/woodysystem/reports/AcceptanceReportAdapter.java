@@ -98,7 +98,7 @@ public class AcceptanceReportAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
 
-                obj.previewLinear(i, context);
+                obj.previewLinear(itemsList.get(i).getTruckNo(),itemsList.get(i).getTtnNo(), context);
 
             }
         });
