@@ -394,12 +394,112 @@
                 android:layout_gravity="center_horizontal"
                 android:background="@drawable/arrow" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/jjj"
+                android:orientation="vertical">
 
-            <com.falconssoft.woodysystem.HorizontalListView
-                android:id="@+id/listview"
-                android:layout_width="fill_parent"
-                android:layout_height="280dp"
-                android:background="@drawable/jjj" />
+                <LinearLayout
+                    android:paddingVertical="5dp"
+                    android:paddingHorizontal="10dp"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:text="@string/supplier_name"
+                        android:textSize="15sp"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/orange"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5"/>
+
+                    <TextView
+                        android:text="@string/thickness"
+                        android:textSize="15sp"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/orange"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:text="@string/width"
+                        android:textSize="15sp"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/orange"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:text="@string/length"
+                        android:textSize="15sp"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/orange"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:text="@string/grade"
+                        android:textSize="15sp"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/orange"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:text="@string/no_of_pieces"
+                        android:textSize="15sp"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/orange"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:text="@string/rejected_pieces"
+                        android:textSize="15sp"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/orange"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:text="@string/no_bundle"
+                        android:textSize="15sp"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/orange"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignBottom="@+id/linear"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginEnd="1dp"
+                        android:layout_marginRight="1dp"
+                        android:background="@drawable/frame_shape"
+                        android:padding="4dp"
+                        app:srcCompat="@drawable/pic" />
+                </LinearLayout>
+
+                <ListView
+                    android:id="@+id/listview"
+                    android:layout_width="fill_parent"
+                    android:layout_height="280dp"
+                    android:background="@drawable/jjj" />
+            </LinearLayout>
+
+
 
         </LinearLayout>
 

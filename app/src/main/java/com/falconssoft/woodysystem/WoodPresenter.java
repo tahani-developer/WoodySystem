@@ -456,7 +456,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
             try {
                 bundleInfoServer.clear();
                 bundleInfoServer2.clear();
-                thickness.clear();
+//                thickness.clear();
                 if (response.indexOf("{") == 3)
                     response = new String(response.getBytes("ISO-8859-1"), "UTF-8");
 //                    response = response.substring(response.indexOf("{"));
@@ -489,7 +489,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
 
                         bundleInfoServer2.add(bundleInfo);
                         bundleInfoServer.add(bundleInfo);
-                        thickness.add(String.valueOf(innerObject.getDouble("THICKNESS")));
+//                        thickness.add(String.valueOf(innerObject.getDouble("THICKNESS")));
                     }
                 }
 //                Log.e("bundleInfoServer", "/size/" + bundleInfoServer.size());
