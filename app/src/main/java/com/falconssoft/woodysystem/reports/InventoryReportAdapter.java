@@ -18,10 +18,10 @@ import java.util.List;
 
 public class InventoryReportAdapter extends BaseAdapter {
 
-//    private Context context;
+    //    private Context context;
 //    private List<BundleInfo> mOriginalValues;
     private static List<BundleInfo> itemsList;
-    private static List<BundleInfo> selectedBundles ;
+    private static List<BundleInfo> selectedBundles;
     private InventoryReport inventoryReport;
 
     public InventoryReportAdapter(InventoryReport inventoryReport, List<BundleInfo> itemsList) {
@@ -113,16 +113,28 @@ public class InventoryReportAdapter extends BaseAdapter {
             }
         });
 
+        view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+//                Log.e("show plist", ""  +itemsList.get(i).getBackingList().equals(null) + itemsList.get(i).getBackingList().equals("null"));
+                if (itemsList.get(i).getBackingList().equals("null"))
+                    inventoryReport.addBackingList(itemsList, i);
+                else
+                    inventoryReport.showPasswordDialog(itemsList, i);
+                    return false;
+                }
+            });
+
         return view;
+        }
+
+        public List<BundleInfo> getSelectedItems () {
+
+            selectedBundles.clear();
+            for (int i = 0; i < itemsList.size(); i++)
+                if (itemsList.get(i).getChecked())
+                    selectedBundles.add(itemsList.get(i));
+
+            return selectedBundles;
+        }
     }
-
-    public List<BundleInfo> getSelectedItems() {
-
-        selectedBundles.clear();
-        for(int i = 0 ; i< itemsList.size() ; i++)
-            if(itemsList.get(i).getChecked())
-                selectedBundles.add(itemsList.get(i));
-
-        return selectedBundles;
-    }
-}

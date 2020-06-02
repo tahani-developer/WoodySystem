@@ -1,10 +1,12 @@
 package com.falconssoft.woodysystem.reports;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -260,49 +262,66 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
             public void onClick(View v) {
 
                 bundleInfoForPList.clear();
+                boolean found = false; // check if one has p list
 
                 InventoryReportAdapter obj = new InventoryReportAdapter();
                 List<BundleInfo> selected = obj.getSelectedItems();
                 for (int i = 0; i < selected.size(); i++) {
                     if (selected.get(i).getChecked()) {
-                        bundleInfoForPList.add(selected.get(i));
+//                        Log.e("showcheckedd", selected.get(i).getBundleNo());
+                        if (selected.get(i).getBackingList().equals("null")) {
+                            bundleInfoForPList.add(selected.get(i));
+                        } else {
+                            found = true;
+                            AlertDialog.Builder builder = new AlertDialog.Builder(InventoryReport.this);
+                            builder.setMessage("One bundle or more has packing list, uncheck it or cancel the operation")
+                                    .setTitle("Warning")
+                                    .show();
+                            break;
+
+                        }
                     }
                 }
 
-                Dialog packingListDialog = new Dialog(InventoryReport.this);
-                packingListDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                packingListDialog.setContentView(R.layout.packing_list_dialog);
-                packingListDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-                EditText packingList = packingListDialog.findViewById(R.id.packingList_dialog_packing_list);
-                TextView done = packingListDialog.findViewById(R.id.packingList_dialog_done);
-                TextView bundleNo = packingListDialog.findViewById(R.id.packingList_dialog_bundle_no);
-
-                done.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String newPackingList = packingList.getText().toString();
-                        if (packingList.getText().toString().equals(""))
-                            newPackingList = "null";
-
-                        for (int i = 0; i < bundleInfoForPList.size(); i++) {
-
-                            woodPresenter.updatePackingList(InventoryReport.this, bundleInfoForPList.get(i).getBundleNo(), newPackingList, bundleInfoForPList.get(i).getLocation());
-                        }
-//                        filters();
-//                        adapter.notifyDataSetChanged();
-                        packingListDialog.dismiss();
-
-                    }
-                });
-
-                packingListDialog.show();
-
+                if (!found)
+                    setGroupBackingList();
 
             }
 
         });
 //
+
+    }
+
+    void setGroupBackingList() {
+        Dialog packingListDialog = new Dialog(InventoryReport.this);
+        packingListDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        packingListDialog.setContentView(R.layout.packing_list_dialog);
+        packingListDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        EditText packingList = packingListDialog.findViewById(R.id.packingList_dialog_packing_list);
+        TextView done = packingListDialog.findViewById(R.id.packingList_dialog_done);
+        TextView bundleNo = packingListDialog.findViewById(R.id.packingList_dialog_bundle_no);
+
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String newPackingList = packingList.getText().toString();
+                if (packingList.getText().toString().equals(""))
+                    newPackingList = "null";
+
+                for (int i = 0; i < bundleInfoForPList.size(); i++) {
+
+                    woodPresenter.updatePackingList(InventoryReport.this, bundleInfoForPList.get(i).getBundleNo(), newPackingList, bundleInfoForPList.get(i).getLocation());
+                }
+//                        filters();
+//                        adapter.notifyDataSetChanged();
+                packingListDialog.dismiss();
+
+            }
+        });
+
+        packingListDialog.show();
 
     }
 
@@ -423,12 +442,12 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         list.clear();
         list.addAll(set);
         doubleList = new ArrayList<>();
-        for (int n = 0; n< list.size(); n++)
+        for (int n = 0; n < list.size(); n++)
             doubleList.add(Double.valueOf(list.get(n)));
 
         Collections.sort(doubleList);
         list.clear();
-        for (int n = 0; n< doubleList.size(); n++)
+        for (int n = 0; n < doubleList.size(); n++)
             list.add(String.valueOf(doubleList.get(n)));
 
     }
@@ -737,52 +756,72 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         adapter = new InventoryReportAdapter(InventoryReport.this, filtered);
         listView.setAdapter(adapter);
 
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
-                serialNumber = filtered.get(position).getSerialNo();
-                String bundleNumber = filtered.get(position).getBundleNo();
-                String location = filtered.get(position).getLocation();
-                Log.e("serialNumber", serialNumber);
-
-                Dialog packingListDialog = new Dialog(InventoryReport.this);
-                packingListDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                packingListDialog.setContentView(R.layout.packing_list_dialog);
-                packingListDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-                EditText packingList = packingListDialog.findViewById(R.id.packingList_dialog_packing_list);
-                TextView done = packingListDialog.findViewById(R.id.packingList_dialog_done);
-                TextView bundleNo = packingListDialog.findViewById(R.id.packingList_dialog_bundle_no);
-
-                bundleNo.setText("Bundle: " + bundleNumber);
-
-
-                done.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String newPackingList = packingList.getText().toString();
-                        if (packingList.getText().toString().equals(""))
-                            newPackingList = "null";
-
-                        woodPresenter.updatePackingList(InventoryReport.this, bundleNumber, newPackingList, location);
-                        adapter.notifyDataSetChanged();
-                        packingListDialog.dismiss();
-
-                    }
-                });
-
-                packingListDialog.show();
-                return true;
-
-            }
-        });
-
         noOfBundles.setText("" + sumOfBundles);
         noOfPieces.setText("" + String.format("%.3f", sumOfPieces));
         cubicField.setText("" + String.format("%.3f", (sumOfCubic / 1000000000)));
 //        fillTable(filtered);
 
+    }
+
+    public void addBackingList(List<BundleInfo> filtered, int position) {
+
+        serialNumber = filtered.get(position).getSerialNo();
+        String bundleNumber = filtered.get(position).getBundleNo();
+        String location = filtered.get(position).getLocation();
+        Log.e("serialNumber", serialNumber);
+
+        Dialog packingListDialog = new Dialog(InventoryReport.this);
+        packingListDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        packingListDialog.setContentView(R.layout.packing_list_dialog);
+        packingListDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        EditText packingList = packingListDialog.findViewById(R.id.packingList_dialog_packing_list);
+        TextView done = packingListDialog.findViewById(R.id.packingList_dialog_done);
+        TextView bundleNo = packingListDialog.findViewById(R.id.packingList_dialog_bundle_no);
+
+        bundleNo.setText("Bundle: " + bundleNumber);
+
+
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String newPackingList = packingList.getText().toString();
+                if (packingList.getText().toString().equals(""))
+                    newPackingList = "null";
+
+                woodPresenter.updatePackingList(InventoryReport.this, bundleNumber, newPackingList, location);
+                adapter.notifyDataSetChanged();
+                packingListDialog.dismiss();
+
+            }
+        });
+
+        packingListDialog.show();
+    }
+
+    public void showPasswordDialog(List<BundleInfo> filtered, int position) {
+        Dialog passwordDialog = new Dialog(this);
+        passwordDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        passwordDialog.setContentView(R.layout.password_dialog);
+        passwordDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        TextInputEditText password = passwordDialog.findViewById(R.id.password_dialog_password);
+        TextView done = passwordDialog.findViewById(R.id.password_dialog_done);
+
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (password.getText().toString().equals("301190")) {
+
+                    addBackingList(filtered, position);
+                    passwordDialog.dismiss();
+                } else {
+                    Toast.makeText(InventoryReport.this, "Not Authorized!", Toast.LENGTH_SHORT).show();
+                    password.setText("");
+                }
+            }
+        });
+        passwordDialog.show();
     }
 
     public void updatedPackingList() {
@@ -1084,11 +1123,11 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 
     }
 
-    public void editBundle(BundleInfo bundleInfo){
+    public void editBundle(BundleInfo bundleInfo) {
         Intent intent = new Intent(InventoryReport.this, AddToInventory.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable(EDIT_BUNDLE, bundleInfo);
-       showLog("edit", "bundle no", bundleInfo.getBundleNo());
+        showLog("edit", "bundle no", bundleInfo.getBundleNo());
         intent.putExtras(bundle);
         intent.putExtra(EDIT_FLAG_BUNDLE, 55);
         startActivity(intent);
@@ -1249,11 +1288,11 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 
     }
 
-    public void showProgressDialog(){
+    public void showProgressDialog() {
         progressDialog.show();
     }
 
-    public void hideProgressDialog(){
+    public void hideProgressDialog() {
         progressDialog.dismiss();
     }
 
