@@ -303,8 +303,12 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
                                                                 || dateFiltered.get(k).getThickness() == Double.parseDouble(toThicknessNo))) {
                                                             filtered.add(dateFiltered.get(k));
                                                             sumOfBundles = filtered.size();
-                                                            sumOfPieces += dateFiltered.get(k).getNoOfPieces();
-                                                            sumOfCubic += (dateFiltered.get(k).getLength() * dateFiltered.get(k).getWidth() * dateFiltered.get(k).getThickness() * dateFiltered.get(k).getNoOfPieces());
+                                                            sumOfPieces += (dateFiltered.get(k).getNoOfPieces() * dateFiltered.get(k).getNoOfBundles());
+                                                            sumOfCubic += (dateFiltered.get(k).getLength()
+                                                                    * dateFiltered.get(k).getWidth()
+                                                                    * dateFiltered.get(k).getThickness()
+                                                                    * dateFiltered.get(k).getNoOfPieces()
+                                                                    * dateFiltered.get(k).getNoOfBundles());
 
                                                         }
         }
