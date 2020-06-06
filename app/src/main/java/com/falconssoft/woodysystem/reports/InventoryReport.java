@@ -1060,7 +1060,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                 break;
         }
 
-    }
+    } 
 
     public boolean isStoragePermissionGranted() {
         if (Build.VERSION.SDK_INT >= 23) {
