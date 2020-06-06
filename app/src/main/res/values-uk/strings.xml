@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Деревна система</string>
-    <string name="version">Version 19.0</string>
+    <string name="version">Version 29.0</string>
 
     <string name="stage1">Прийняття та контроль якості</string>
     <string name="stage2">Этап 2</string>
@@ -56,6 +56,7 @@
     <string name="search_by_barcode">Поиск по штрих-коду</string>
     <string name="login">Логин</string>
     <string name="add">Добавлять</string>
+    <string name="add_bundle">Add Bundle</string>
     <string name="done">Выполнено</string>
     <string name="save">Зберегти</string>
     <string name="generate_bundle_no">Створіть пакет #</string>

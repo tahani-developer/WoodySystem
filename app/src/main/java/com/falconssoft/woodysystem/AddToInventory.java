@@ -1,6 +1,7 @@
 package com.falconssoft.woodysystem;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -29,7 +30,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.falconssoft.woodysystem.models.BundleInfo;
+import com.falconssoft.woodysystem.models.NewRowInfo;
 import com.falconssoft.woodysystem.models.Settings;
+import com.falconssoft.woodysystem.reports.InventoryReport;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -49,6 +52,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import static com.falconssoft.woodysystem.reports.InventoryReport.EDIT_BUNDLE;
+import static com.falconssoft.woodysystem.reports.InventoryReport.EDIT_FLAG_BUNDLE;
 
 public class AddToInventory extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
@@ -81,12 +87,16 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
     private Dialog dialog;
     private String takeThick, takeWidth, takeLength, takeNoOfPieces; // used in choose action dialog
     private RelativeLayout coordinatorLayout;
+    private String flag = "0";
+    private int edieFlag;
 //    private List<TableRow> tableRowList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_to_inventory);
+
+        flag = getIntent().getStringExtra("flag");
 
         databaseHandler = new DatabaseHandler(this);
 //        presenter = new WoodPresenter(this);
@@ -122,6 +132,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_to_right);
         textView.startAnimation(animation);
 
+        checkIfEditItem();
     }
 
     @Override
@@ -189,15 +200,19 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                     bundleInfoList.add(newBundle);
 //                                    Log.e("date is", generateDate);
 
-                                    TableRow tableRow = new TableRow(this);
-                                    editTableRow(tableRow, bundleNoString, lengthText, widthText, thicknessText
-                                            , noOfPiecesText, generalSettings.getStore());
+                                    if (edieFlag == 55)
+                                        new JSONTask4().execute();
+                                    else{
+                                        TableRow tableRow = new TableRow(this);
+                                        editTableRow(tableRow, bundleNoString, lengthText, widthText, thicknessText
+                                                , noOfPiecesText, generalSettings.getStore());
 //                                    tableRowList.add(tableRow);
 
-                                    jsonArrayBundles.put(newBundle.getJSONObject());
-                                    publicTableRow = tableRow;
+                                        jsonArrayBundles.put(newBundle.getJSONObject());
+                                        publicTableRow = tableRow;
 //                                      bundlesTable.addView(tableRow);
-                                    new JSONTask().execute();
+
+                                        new JSONTask().execute();
 
                                     tableRow.setOnLongClickListener(new View.OnLongClickListener() {
                                         @Override
@@ -207,6 +222,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                             return false;
                                         }
                                     });
+                                    }
                                     serialNo.requestFocus();
 
                                 } else {
@@ -227,6 +243,33 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                 break;
         }
     }
+
+    void checkIfEditItem() {
+        edieFlag = getIntent().getIntExtra(EDIT_FLAG_BUNDLE, 0);
+        if (edieFlag == 55) {
+            Bundle bundle = getIntent().getExtras();
+            BundleInfo bundleInfo = (BundleInfo) bundle.getSerializable(EDIT_BUNDLE);
+
+            oldBundleNoString = bundleInfo.getBundleNo();
+            thickness.setText("" + (int) bundleInfo.getThickness());
+            width.setText("" + (int) bundleInfo.getWidth());
+            length.setText("" + (int) bundleInfo.getLength());
+            noOfPieces.setText("" + (int) bundleInfo.getNoOfPieces());
+            serialNo.setText(bundleInfo.getSerialNo());
+            serialNo.setEnabled(false);
+
+            int position = gradeAdapter.getPosition(bundleInfo.getGrade());
+            gradeSpinner.setSelection(position);
+
+            int position2 = areaAdapter.getPosition(bundleInfo.getArea());
+            areaSpinner.setSelection(position2);
+
+            int position3 = descriptionaAdapter.getPosition(bundleInfo.getDescription());
+            descriptionSpinner.setSelection(position3);
+
+        }
+    }
+
 
     String isContainValueAfterDot(String string) {
         String isConten = "";
@@ -743,6 +786,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
     public void onNothingSelected(AdapterView<?> parent) {
     }
 
+    // ******************************************** ADD NEW BUNDLE ***************************************************
     private class JSONTask extends AsyncTask<String, String, String> {
 
         @Override
@@ -832,6 +876,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    // ******************************************** DELETE BUNDLE ***************************************************
     private class JSONTask2 extends AsyncTask<String, String, String> {
 
         @Override
@@ -902,9 +947,10 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                 Log.e("tag", "****Failed to export data Please check internet connection");
             }
         }
-    }// used to export data
+    }
 
-    private class JSONTask4 extends AsyncTask<String, String, String> { // used to update bundle info
+    // ******************************************** UPDATE BUNDLE ***************************************************
+    private class JSONTask4 extends AsyncTask<String, String, String> {
 
         @Override
         protected void onPreExecute() {
@@ -957,57 +1003,65 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
             super.onPostExecute(s);
             if (s != null) {
                 if (s.contains("UPDATE BUNDLE SUCCESS")) {
-                    oldBundleNoString = newBundle.getBundleNo();
-                    gradeText = "Fresh";
-                    areaText = "Zone 1";
-                    descriptionText = "Ukrainian Wood";
-                    setSpinnerSelectionPosition(gradeSpinner2, areaSpinner2, descriptionSpinner2, gradeText, areaText, descriptionText);
-                    setSpinnerSelectionPosition(gradeSpinner, areaSpinner, descriptionSpinner, gradeText, areaText, descriptionText);
-                    dialog.dismiss();
-                    snackbar = Snackbar.make(coordinatorLayout, Html.fromHtml("<font color=\"#3167F0\">Updated Successfully</font>"), Snackbar.LENGTH_SHORT);//Updated Successfully
-                    View snackbarLayout = snackbar.getView();
-                    TextView textViewSnackbar = (TextView) snackbarLayout.findViewById(android.support.design.R.id.snackbar_text);
-                    textViewSnackbar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check_24dp, 0, 0, 0);
-//                    textView.setCompoundDrawablePadding(10);//getResources().getDimensionPixelOffset(R.dimen.snackbar_icon_padding
-                    snackbar.show();
-//                    Log.e("addNewToInventory", "" + "   " + "      " + publicTableRow.getTag().toString());
-                    for (int i = 0; i < 9; i++) {
-                        TextView textView = (TextView) publicTableRow.getChildAt(i);
-                        switch (i) {
-                            case 0:
-                                textView.setText(newBundle.getBundleNo());
-                                break;
-                            case 1:
-                                textView.setText(isContainValueAfterDot("" + newBundle.getThickness()));
-                                break;
-                            case 2:
-                                textView.setText(isContainValueAfterDot("" + newBundle.getWidth()));
-                                break;
-                            case 3:
-                                textView.setText(isContainValueAfterDot("" + newBundle.getLength()));
-                                break;
-                            case 4:
-                                textView.setText(isContainValueAfterDot("" + newBundle.getNoOfPieces()));
-                                break;
-                            case 5:
-                                textView.setText("" + newBundle.getGrade());
-                                break;
-                            case 6:
-                                textView.setText("" + newBundle.getLocation());
-                                break;
-                            case 7:
-                                textView.setText("" + newBundle.getArea());
-                                break;
-                            case 8:
-                                textView.setText("" + newBundle.getDescription());
-                                break;
-                        }
-                    }
-                    areaSpinner.setSelection(0);
-                    gradeSpinner.setSelection(0);
-                    descriptionSpinner.setSelection(0);
 
-                    Log.e("tag", "updated bundle raw/Success");
+                    if (edieFlag == 55) {
+                        Intent intent = new Intent(AddToInventory.this, InventoryReport.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        oldBundleNoString = newBundle.getBundleNo();
+                        gradeText = "Fresh";
+                        areaText = "Zone 1";
+                        descriptionText = "Ukrainian Wood";
+                        setSpinnerSelectionPosition(gradeSpinner2, areaSpinner2, descriptionSpinner2, gradeText, areaText, descriptionText);
+                        setSpinnerSelectionPosition(gradeSpinner, areaSpinner, descriptionSpinner, gradeText, areaText, descriptionText);
+                        dialog.dismiss();
+                        snackbar = Snackbar.make(coordinatorLayout, Html.fromHtml("<font color=\"#3167F0\">Updated Successfully</font>"), Snackbar.LENGTH_SHORT);//Updated Successfully
+                        View snackbarLayout = snackbar.getView();
+                        TextView textViewSnackbar = (TextView) snackbarLayout.findViewById(android.support.design.R.id.snackbar_text);
+                        textViewSnackbar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check_24dp, 0, 0, 0);
+//                    textView.setCompoundDrawablePadding(10);//getResources().getDimensionPixelOffset(R.dimen.snackbar_icon_padding
+                        snackbar.show();
+//                    Log.e("addNewToInventory", "" + "   " + "      " + publicTableRow.getTag().toString());
+                        for (int i = 0; i < 9; i++) {
+                            TextView textView = (TextView) publicTableRow.getChildAt(i);
+                            switch (i) {
+                                case 0:
+                                    textView.setText(newBundle.getBundleNo());
+                                    break;
+                                case 1:
+                                    textView.setText(isContainValueAfterDot("" + newBundle.getThickness()));
+                                    break;
+                                case 2:
+                                    textView.setText(isContainValueAfterDot("" + newBundle.getWidth()));
+                                    break;
+                                case 3:
+                                    textView.setText(isContainValueAfterDot("" + newBundle.getLength()));
+                                    break;
+                                case 4:
+                                    textView.setText(isContainValueAfterDot("" + newBundle.getNoOfPieces()));
+                                    break;
+                                case 5:
+                                    textView.setText("" + newBundle.getGrade());
+                                    break;
+                                case 6:
+                                    textView.setText("" + newBundle.getLocation());
+                                    break;
+                                case 7:
+                                    textView.setText("" + newBundle.getArea());
+                                    break;
+                                case 8:
+                                    textView.setText("" + newBundle.getDescription());
+                                    break;
+                            }
+                        }
+                        areaSpinner.setSelection(0);
+                        gradeSpinner.setSelection(0);
+                        descriptionSpinner.setSelection(0);
+
+                        Log.e("tag", "updated bundle raw/Success");
+                    }
                 } else {
                     Log.e("tag", "updated bundle raw/Failed to export data");
                 }
@@ -1054,6 +1108,16 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         super.onBackPressed();
 //        Intent intent = new Intent(AddToInventory.this , Stage3.class);
 //        startActivity(intent);
+        if (!TextUtils.isEmpty(flag) && flag.equals("1")) {
+            LoadingOrder.bundles.addAll(bundleInfoList);
+            LoadingOrder.adapter.notifyDataSetChanged();
+        }
+
+        if (edieFlag == 55) {
+            Intent intent = new Intent(AddToInventory.this, InventoryReport.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }
         finish();
     }
 }

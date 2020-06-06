@@ -17,24 +17,39 @@
         android:background="@color/alpha_black_dark"
         >
 
-        <TextView
-            android:id="@+id/loading_order_report"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingVertical="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+            android:id="@+id/loading_order_report"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+                android:layout_weight="9"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_gravity="center"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="20dp"
             android:fontFamily="serif"
             android:gravity="center"
             android:text="@string/loading_order_report2"
             android:textColor="@color/orange"
             android:textSize="30sp" />
 
+            <TextView
+                android:id="@+id/loadingOrderReport_rows_count"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:textSize="30sp"
+                android:fontFamily="serif"
+                android:textColor="@color/orange"/>
+
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -271,6 +286,14 @@
                     android:textColor="@color/white"
                     android:textSize="20sp" />
 
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_edit_24dp"
+                    android:padding="10dp"
+                    android:layout_marginHorizontal="5dp"
+                    />
+
 
             </TableRow>
 
@@ -295,7 +318,7 @@
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="350dp"
             android:layout_alignParentBottom="true"
             android:orientation="vertical"
             android:visibility="gone">
@@ -314,7 +337,7 @@
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:paddingVertical="10dp"
+                    android:paddingVertical="5dp"
                     android:paddingHorizontal="10dp"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
@@ -323,7 +346,7 @@
                     <TextView
                         android:text="@string/bundle_no"
                         android:textSize="15sp"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="5dp"
                         android:textColor="@color/orange"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -332,7 +355,7 @@
                     <TextView
                         android:text="@string/thickness"
                         android:textSize="15sp"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="5dp"
                         android:textColor="@color/orange"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -341,7 +364,7 @@
                     <TextView
                         android:text="@string/width"
                         android:textSize="15sp"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="5dp"
                         android:textColor="@color/orange"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -350,7 +373,7 @@
                     <TextView
                         android:text="@string/length"
                         android:textSize="15sp"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="5dp"
                         android:textColor="@color/orange"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -359,7 +382,7 @@
                     <TextView
                         android:text="@string/grade"
                         android:textSize="15sp"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="5dp"
                         android:textColor="@color/orange"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -368,7 +391,7 @@
                     <TextView
                         android:text="@string/no_of_pieces"
                         android:textSize="15sp"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="5dp"
                         android:textColor="@color/orange"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -377,7 +400,7 @@
                     <TextView
                         android:text="@string/loc"
                         android:textSize="15sp"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="5dp"
                         android:textColor="@color/orange"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -386,15 +409,15 @@
                     <TextView
                         android:text="@string/area"
                         android:textSize="15sp"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="5dp"
                         android:textColor="@color/orange"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"/>
 
                     <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_alignBottom="@+id/linear"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"

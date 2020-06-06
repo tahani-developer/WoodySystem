@@ -8,22 +8,20 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
 import android.support.v7.widget.SearchView;
-
+import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.falconssoft.woodysystem.models.BundleInfo;
-import com.falconssoft.woodysystem.models.Orders;
-import com.falconssoft.woodysystem.models.Pictures;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -34,6 +32,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -44,17 +43,24 @@ public class LoadingOrder extends AppCompatActivity {
 
     private ImageButton deleteBarcode;
     private GridView items;
-    private Button done, barcode;
+    private Button done, barcode, addBundle;
     View view;
     private SearchView searchViewTh, searchViewW, searchViewL;
     private DatabaseHandler DHandler;
-    private List<BundleInfo> bundles, filteredList;
+    public static List<BundleInfo> bundles, filteredList, selectedBundle;
     private String f1 = "", f2 = "", f3 = "", barcodeValue = "";
-    private ItemsListAdapter adapter;
+    public static ItemsListAdapter adapter;
     private Activity activity;
     public  static  TextView searchBar;
     String loc;
     int no = 0;
+
+    static ListView listView2;
+    static HorizontalListView listView;
+    ItemsListAdapter5 adapter2;
+    private final String STATE_VISIBILITY = "state-visibility";
+    private boolean mState = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,13 +72,19 @@ public class LoadingOrder extends AppCompatActivity {
         searchViewL = (SearchView) findViewById(R.id.mSearchL);
         done = (Button) findViewById(R.id.done);
         barcode = (Button) findViewById(R.id.barcode);
+        addBundle = (Button) findViewById(R.id.add);
         deleteBarcode = (ImageButton) findViewById(R.id.deletebaarcode);
+        listView2 = findViewById(R.id.verticalListView);
+        listView = findViewById(R.id.listview);
+
         DHandler = new DatabaseHandler(LoadingOrder.this);
         loc = DHandler.getSettings().getStore();
 //        bundles = DHandler.getBundleInfo();
         searchBar=findViewById(R.id.searchBar);
 
         bundles = new ArrayList<>();
+        selectedBundle = new ArrayList<>();
+
 
         new JSONTask().execute();
 
@@ -126,6 +138,16 @@ public class LoadingOrder extends AppCompatActivity {
                 ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, bundles);
                 items.setAdapter(adapter);
 
+            }
+        });
+
+        addBundle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(LoadingOrder.this, AddToInventory.class);
+                intent.putExtra("flag", "1");
+                startActivity(intent);
             }
         });
 
@@ -214,8 +236,10 @@ public class LoadingOrder extends AppCompatActivity {
             if (
                     (("" + list.get(k).getThickness()).toUpperCase().startsWith(s1) || s1.equals("")) &&
                             (("" + list.get(k).getWidth()).toUpperCase().startsWith(s2) || s2.equals("")) &&
-                            (("" + list.get(k).getLength()).toUpperCase().startsWith(s3) || s3.equals("")))
+                            (("" + list.get(k).getLength()).toUpperCase().startsWith(s3) || s3.equals(""))) {
+                list.get(k).setFoucoseColor("0");
                 tempList.add(list.get(k));
+            }
         }
 
         return tempList;
@@ -260,9 +284,15 @@ public class LoadingOrder extends AppCompatActivity {
                     items.post(new Runnable() {
                         @Override
                         public void run() {
+                            bundles.get(no).setFoucoseColor("1");
+                            items.setAdapter(adapter);
                             items.setSelection(no);
-                        items.requestFocusFromTouch();
-                        items.setSelection(no);
+                            items.requestFocusFromTouch();
+                            items.setSelection(no);
+
+
+
+
                         }
                     });
 
@@ -361,22 +391,23 @@ public class LoadingOrder extends AppCompatActivity {
                         if (innerObject.getInt("ORDERED") == 0
                                 && innerObject.getString("LOCATION").equals(loc)) {
 
-                                BundleInfo bundleInfo = new BundleInfo();
-                                bundleInfo.setThickness(innerObject.getDouble("THICKNESS"));
-                                bundleInfo.setWidth(innerObject.getDouble("WIDTH"));
-                                bundleInfo.setLength(innerObject.getDouble("LENGTH"));
-                                bundleInfo.setGrade(innerObject.getString("GRADE"));
-                                bundleInfo.setNoOfPieces(innerObject.getInt("PIECES"));
-                                bundleInfo.setBundleNo(innerObject.getString("BUNDLE_NO"));
-                                bundleInfo.setLocation(innerObject.getString("LOCATION"));
-                                bundleInfo.setArea(innerObject.getString("AREA"));
-                                bundleInfo.setBarcode(innerObject.getString("BARCODE"));
-                                bundleInfo.setOrdered(innerObject.getInt("ORDERED"));
-                                bundleInfo.setAddingDate(innerObject.getString("BUNDLE_DATE"));
-                                bundleInfo.setBackingList(innerObject.getString("BACKING_LIST"));
-                                bundleInfo.setChecked(false);
+                            BundleInfo bundleInfo = new BundleInfo();
+                            bundleInfo.setThickness(innerObject.getDouble("THICKNESS"));
+                            bundleInfo.setWidth(innerObject.getDouble("WIDTH"));
+                            bundleInfo.setLength(innerObject.getDouble("LENGTH"));
+                            bundleInfo.setGrade(innerObject.getString("GRADE"));
+                            bundleInfo.setNoOfPieces(innerObject.getInt("PIECES"));
+                            bundleInfo.setBundleNo(innerObject.getString("BUNDLE_NO"));
+                            bundleInfo.setLocation(innerObject.getString("LOCATION"));
+                            bundleInfo.setArea(innerObject.getString("AREA"));
+                            bundleInfo.setBarcode(innerObject.getString("BARCODE"));
+                            bundleInfo.setOrdered(innerObject.getInt("ORDERED"));
+                            bundleInfo.setAddingDate(innerObject.getString("BUNDLE_DATE"));
+                            bundleInfo.setBackingList(innerObject.getString("BACKING_LIST"));
+                            bundleInfo.setChecked(false);
+                            bundleInfo.setFoucoseColor("0");
 
-                                bundles.add(bundleInfo);
+                            bundles.add(bundleInfo);
                         }
                     }
                 } catch (JSONException e) {
@@ -419,10 +450,66 @@ public class LoadingOrder extends AppCompatActivity {
                 Log.e("result", "*****************" + result.size());
                 adapter = new ItemsListAdapter(LoadingOrder.this, bundles);
                 items.setAdapter(adapter);
+
+                adapter2 = new ItemsListAdapter5(LoadingOrder.this, selectedBundle);
+                listView2.setAdapter(adapter2);
+                listView.setAdapter(adapter2);
+
             } else {
                 Toast.makeText(LoadingOrder.this, "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean(STATE_VISIBILITY, mState);
+
+//        outState.putSerializable("selectedBundle", (Serializable) selectedBundle);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+
+        // Restore state members from saved instance
+        mState = savedInstanceState.getBoolean(STATE_VISIBILITY);
+
+        ItemsListAdapter obj = new ItemsListAdapter();
+        bundles = obj.getSelectedItems();
+        adapter = new ItemsListAdapter(LoadingOrder.this, bundles);
+        items.setAdapter(adapter);
+
+
+        selectedBundle = obj.getSelectedItems();
+        adapter2 = new ItemsListAdapter5(LoadingOrder.this, selectedBundle);
+        listView2.setAdapter(adapter2);
+        listView.setAdapter(adapter2);
+
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    public void notifyAdapter(BundleInfo bundle, Context context) {
+
+//        if (bundle.getChecked()) {
+//            selectedBundle.add(bundle);
+//        } else {
+//
+//            for (int i = 0; i < selectedBundle.size(); i++) {
+//                if (bundle.getBundleNo().equals(selectedBundle.get(i).getBundleNo())) {
+//                    selectedBundle.remove(i);
+//                    break;
+//                }
+//            }
+//        }
+
+        ItemsListAdapter obj = new ItemsListAdapter();
+        selectedBundle = obj.getSelectedItems();
+        adapter2 = new ItemsListAdapter5(context, selectedBundle);
+        listView2.setAdapter(adapter2);
+        listView.setAdapter(adapter2);
+
+
     }
 
 

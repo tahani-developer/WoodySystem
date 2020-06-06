@@ -6,9 +6,10 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class BundleInfo {
+public class BundleInfo implements Serializable {
 
     private double thickness;
     private double length;
@@ -34,6 +35,7 @@ public class BundleInfo {
     private String userNo;
     private String backingList;
     List<String> bundleNoString;
+    private String foucoseColor="0";
 
     public BundleInfo() {
     }
@@ -256,5 +258,11 @@ public class BundleInfo {
         return obj;
     }
 
+    public String getFoucoseColor() {
+        return foucoseColor;
+    }
 
+    public void setFoucoseColor(String foucoseColor) {
+        this.foucoseColor = foucoseColor;
+    }
 }

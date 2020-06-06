@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Wood System</string>
-    <string name="version">Version 19.0</string>
+    <string name="version">Version 29.0</string>
 
     <string name="stage1">Acceptance &amp; Quality Control</string>
     <string name="stage2">Stage 2</string>
@@ -55,6 +55,7 @@
     <string name="search_by_barcode">"Search by barcode</string>
     <string name="login">Login</string>
     <string name="add">Add</string>
+    <string name="add_bundle">Add Bundle</string>
     <string name="done">Done</string>
     <string name="save">Save</string>
     <string name="generate_bundle_no">Generate Bundle #</string>
@@ -68,7 +69,7 @@
     <string name="loading_order_report2">Loading Order Report</string>
     <string name="placing_no_">Truck No</string>
     <string name="order_no_">Order No</string>
-    <string name="container_no_">Container No</string>
+    <string name="container_no_">Container#</string>
 
     <string name="about_developers">About Developers</string>
     <string name="falcons_soft">Falcons Soft</string>
@@ -91,11 +92,11 @@
 
     <string name="accept_raw">Accept Row</string>
     <string name="name_of_supplier">Name Of Supplier</string>
-    <string name="truck_no">Truck Number</string>
+    <string name="truck_no">Truck No</string>
     <string name="date_of_acceptance">Acceptance Date</string>
     <string name="name_of_person_to_accept">Acceptor Name</string>
-    <string name="location_of_acceptance">Acceptance Location</string>
-    <string name="ttn_no">TTN Number</string>
+    <string name="location_of_acceptance">Acceptance Loc</string>
+    <string name="ttn_no">TTN NO</string>
     <string name="rejection_list">Rejection List</string>
     <string name="new_supplier">New Supplier</string>
     <string name="find_supplier">Find Supplier</string>
