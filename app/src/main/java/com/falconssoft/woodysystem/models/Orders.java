@@ -5,7 +5,9 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Orders {
+import java.io.Serializable;
+
+public class Orders implements Serializable {
 
     private double thickness;
     private double length;
@@ -21,6 +23,7 @@ public class Orders {
     private String dateOfLoad;
     private String destination;
     private String picture;
+    private boolean checked;
 
     public Orders() {
     }
@@ -41,6 +44,14 @@ public class Orders {
         this.dateOfLoad = dateOfLoad;
         this.destination = destination;
         this.picture = picture;
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 
     public double getThickness() {

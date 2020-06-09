@@ -24,6 +24,28 @@
         android:name="android.permission.CONNECTIVITY_INTERNAL"
         tools:ignore="ProtectedPermissions" />
 
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:requiresSmallestWidthDp="480"
+        android:xlargeScreens="true" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission
+        android:name="android.permission.CONNECTIVITY_INTERNAL"
+        tools:ignore="ProtectedPermissions" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/logo"
@@ -33,7 +55,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".stage_one.ReportsStageOne"></activity>
+        <activity android:name=".EditLoadingReport"></activity>
+        <activity android:name=".stage_one.ReportsStageOne" />
         <activity
             android:name=".reports.AcceptanceInfoReport"
             android:screenOrientation="sensorLandscape"
@@ -76,13 +99,10 @@
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".LoadingOrder"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" >
-
-        </activity>
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"></activity>
         <activity
             android:name=".LoadingOrder2"
-            android:windowSoftInputMode="stateAlwaysHidden">
-        </activity>
+            android:windowSoftInputMode="stateAlwaysHidden"></activity>
         <activity
             android:name=".reports.LoadingOrderReport"
             android:screenOrientation="sensorLandscape"
@@ -94,29 +114,5 @@
             android:name="org.apache.http.legacy"
             android:required="false" />
     </application>
-
-    <supports-screens
-        android:anyDensity="true"
-        android:largeScreens="true"
-        android:requiresSmallestWidthDp="480"
-        android:xlargeScreens="true" />
-
-    <uses-feature android:name="android.hardware.camera" />
-
-    <uses-feature android:name="android.hardware.camera.autofocus" />
-
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-
-    <uses-permission
-        android:name="android.permission.CONNECTIVITY_INTERNAL"
-        tools:ignore="ProtectedPermissions" />
 
 </manifest>

@@ -9,20 +9,21 @@
 
     <TextView
         android:id="@+id/supplier_row_supplier_no"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_margin="1dp"
-        android:layout_weight="1"
+        android:layout_weight="1.5"
         android:background="@color/light_orange"
         android:hint="@string/supplier_no"
-        android:padding="5dp"
+        android:paddingVertical="15dp"
+        android:textSize="18sp"
         android:textColor="#474444"
         android:textColorHint="#474444"
         app:fontFamily="serif" />
 
     <TextView
         android:id="@+id/supplier_row_supplier_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_margin="1dp"
         android:layout_marginLeft="2dp"
@@ -30,6 +31,7 @@
         android:background="@color/light_orange"
         android:hint="@string/supplier_name"
         android:padding="5dp"
+        android:textSize="18sp"
         android:textColor="#474444"
         android:textColorHint="#474444"
         app:fontFamily="serif" />

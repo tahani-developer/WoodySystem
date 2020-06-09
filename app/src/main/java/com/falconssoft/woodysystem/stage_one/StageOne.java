@@ -8,45 +8,46 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 
-import com.falconssoft.woodysystem.AddToInventory;
-import com.falconssoft.woodysystem.LoadingOrder;
 import com.falconssoft.woodysystem.R;
-import com.falconssoft.woodysystem.ReportsActivity;
 import com.falconssoft.woodysystem.reports.AcceptanceInfoReport;
 import com.falconssoft.woodysystem.reports.AcceptanceReport;
 
 public class StageOne extends AppCompatActivity implements View.OnClickListener {
 
-    private LinearLayout addRaw, acceptInfo, generateBarcode, reports;
+    private LinearLayout addRaw,  generateBarcode, report2, report1;//acceptInfo
     private Animation animation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stage_one);
+
         addRaw = findViewById(R.id.stage1_new_raw);
-        acceptInfo = findViewById(R.id.stage1_accept_info);
+//        acceptInfo = findViewById(R.id.stage1_accept_info);
+        report1 = findViewById(R.id.stage1_accept_info);
         generateBarcode = findViewById(R.id.stage1_generate_barcode);
-        reports = findViewById(R.id.stage1_reports);
+        report2 = findViewById(R.id.stage1_reports);
 
         addRaw.setOnClickListener(this);
-        acceptInfo.setOnClickListener(this);
+        report1.setOnClickListener(this);
         generateBarcode.setOnClickListener(this);
-        reports.setOnClickListener(this);
+        report2.setOnClickListener(this);
 
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
         addRaw.setAnimation(animation);
 
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
-        acceptInfo.setAnimation(animation);
+        report1.setAnimation(animation);
 
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
         generateBarcode.setAnimation(animation);
 
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
-        reports.setAnimation(animation);
+        report2.setAnimation(animation);
+
 
     }
+
 
     @Override
     public void onClick(View v) {
@@ -56,18 +57,20 @@ public class StageOne extends AppCompatActivity implements View.OnClickListener 
                 startActivity(intent);
 //                setSlideAnimation();
                 break;
-            case R.id.stage1_accept_info:
-                Intent intent2 = new Intent(this, AcceptRow.class);
+            case R.id.stage1_accept_info: // report1
+                Intent intent2 = new Intent(this, AcceptanceReport.class);//AcceptRow
                 startActivity(intent2);
                 break;
             case R.id.stage1_generate_barcode:
                 Intent intent3 = new Intent(this, GenerateBarCode.class);
                 startActivity(intent3);
                 break;
-            case R.id.stage1_reports:
-                Intent intent4 = new Intent(this, ReportsStageOne.class);
+            case R.id.stage1_reports: //report 2
+                Intent intent4 = new Intent(this, AcceptanceInfoReport.class);//ReportsStageOne
                 startActivity(intent4);
                 break;
         }
     }
+
+
 }

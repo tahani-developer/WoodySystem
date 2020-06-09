@@ -3,7 +3,9 @@ package com.falconssoft.woodysystem.models;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class NewRowInfo {
+import java.io.Serializable;
+
+public class NewRowInfo implements Serializable {
 
     private String supplierName;
     private double thickness;
@@ -13,6 +15,7 @@ public class NewRowInfo {
     private double noOfRejected;
     private double noOfBundles;
     private String grade;
+    private boolean checked;
 
     private String truckNo;
     private String date;
@@ -35,6 +38,14 @@ public class NewRowInfo {
         this.noOfBundles = noOfBundles;
         this.grade = grade;
         this.truckNo = truckNo;
+    }
+
+    public boolean getChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 
     public String getSupplierName() {
@@ -170,6 +181,12 @@ public class NewRowInfo {
             jsonObject.put("REJECTED", "'" + noOfRejected + "'");
             jsonObject.put("NO_BUNDLES", "'" + noOfBundles + "'");
             jsonObject.put("GRADE", "'" + grade + "'");
+
+
+            jsonObject.put("DATE_OF_ACCEPTANCE", "'" + date + "'");
+            jsonObject.put("NAME_OF_ACCEPTER", "'" + acceptedPersonName + "'");
+            jsonObject.put("LOCATION_OF_ACCEPTANCE", "'" + locationOfAcceptance + "'");
+            jsonObject.put("TTN_NO", "'" + ttnNo + "'");
 
         } catch (JSONException e) {
             e.printStackTrace();

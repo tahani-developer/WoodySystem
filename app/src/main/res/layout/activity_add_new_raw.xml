@@ -37,14 +37,14 @@
                 android:textSize="20sp" />
 
             <TextView
-            android:id="@+id/addNewRaw_acceptRaw_button"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:background="@drawable/frame_shape_2"
-            android:text="@string/accept_raw"
-            android:fontFamily="serif"
-            android:textColor="@color/white"/>
+                android:id="@+id/addNewRaw_acceptRaw_button"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:background="@drawable/frame_shape_2"
+                android:text="@string/accept_raw"
+                android:fontFamily="serif"
+                android:textColor="@color/white"/>
 
         </LinearLayout>
 
@@ -93,6 +93,7 @@
                         android:id="@+id/addNewRaw_search_supplier"
                         android:layout_width="wrap_content"
                         android:layout_height="45dp"
+                        android:textSize="15sp"
                         android:layout_marginStart="5dp"
                         android:layout_marginLeft="5dp"
                         android:layout_marginEnd="5dp"
@@ -371,121 +372,121 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-               android:layout_marginHorizontal="10dp"
+                android:layout_marginHorizontal="10dp"
                 android:gravity="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:orientation="horizontal">
 
-                    <ImageView
-                        android:id="@+id/addNewRaw_image1"
-                        android:layout_width="0dp"
-                        android:layout_height="50dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/border_background"
-                        android:padding="7dp"
-                        android:layout_marginHorizontal="2dp"
-                        app:srcCompat="@drawable/pic" />
+                <ImageView
+                    android:id="@+id/addNewRaw_image1"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/border_background"
+                    android:padding="7dp"
+                    android:layout_marginHorizontal="2dp"
+                    app:srcCompat="@drawable/pic" />
 
-                    <ImageView
-                        android:id="@+id/addNewRaw_image2"
-                        android:layout_width="0dp"
-                        android:layout_height="50dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/border_background"
-                        android:padding="7dp"
-                        android:layout_marginHorizontal="2dp"
-                        app:srcCompat="@drawable/pic" />
+                <ImageView
+                    android:id="@+id/addNewRaw_image2"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/border_background"
+                    android:padding="7dp"
+                    android:layout_marginHorizontal="2dp"
+                    app:srcCompat="@drawable/pic" />
 
-                    <ImageView
-                        android:id="@+id/addNewRaw_image3"
-                        android:layout_width="0dp"
-                        android:layout_height="50dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/border_background"
-                        android:padding="7dp"
-                        android:layout_marginHorizontal="2dp"
-                        app:srcCompat="@drawable/pic" />
+                <ImageView
+                    android:id="@+id/addNewRaw_image3"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/border_background"
+                    android:padding="7dp"
+                    android:layout_marginHorizontal="2dp"
+                    app:srcCompat="@drawable/pic" />
 
-                    <ImageView
-                        android:id="@+id/addNewRaw_image4"
-                        android:layout_width="0dp"
-                        android:layout_height="50dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/border_background"
-                        android:padding="7dp"
-                        android:layout_marginHorizontal="2dp"
-                        app:srcCompat="@drawable/pic" />
+                <ImageView
+                    android:id="@+id/addNewRaw_image4"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/border_background"
+                    android:padding="7dp"
+                    android:layout_marginHorizontal="2dp"
+                    app:srcCompat="@drawable/pic" />
 
-                    <ImageView
-                        android:id="@+id/addNewRaw_image5"
-                        android:layout_width="0dp"
-                        android:layout_height="50dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/border_background"
-                        android:padding="7dp"
-                        android:layout_marginHorizontal="2dp"
-                        app:srcCompat="@drawable/pic" />
+                <ImageView
+                    android:id="@+id/addNewRaw_image5"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/border_background"
+                    android:padding="7dp"
+                    android:layout_marginHorizontal="2dp"
+                    app:srcCompat="@drawable/pic" />
 
-                    <ImageView
-                        android:id="@+id/addNewRaw_image6"
-                        android:layout_width="0dp"
-                        android:layout_height="50dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/border_background"
-                        android:padding="7dp"
-                        android:layout_marginHorizontal="2dp"
-                        app:srcCompat="@drawable/pic" />
+                <ImageView
+                    android:id="@+id/addNewRaw_image6"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/border_background"
+                    android:padding="7dp"
+                    android:layout_marginHorizontal="2dp"
+                    app:srcCompat="@drawable/pic" />
 
-                    <ImageView
-                        android:id="@+id/addNewRaw_image7"
-                        android:layout_width="0dp"
-                        android:layout_height="50dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/border_background"
-                        android:padding="7dp"
-                        android:layout_marginHorizontal="2dp"
-                        app:srcCompat="@drawable/pic" />
+                <ImageView
+                    android:id="@+id/addNewRaw_image7"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/border_background"
+                    android:padding="7dp"
+                    android:layout_marginHorizontal="2dp"
+                    app:srcCompat="@drawable/pic" />
 
-                    <ImageView
-                        android:id="@+id/addNewRaw_image8"
-                        android:layout_width="0dp"
-                        android:layout_height="50dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/border_background"
-                        android:padding="7dp"
-                        android:layout_marginHorizontal="2dp"
-                        app:srcCompat="@drawable/pic" />
+                <ImageView
+                    android:id="@+id/addNewRaw_image8"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/border_background"
+                    android:padding="7dp"
+                    android:layout_marginHorizontal="2dp"
+                    app:srcCompat="@drawable/pic" />
 
-                    <TextView
-                        android:id="@+id/addNewRaw_add_photo"
-                        android:layout_width="0dp"
-                        android:layout_height="50dp"
-                        android:layout_weight="2"
-                        android:background="@drawable/frame_shape"
-                        android:drawableStart="@drawable/ic_add_a_photo"
-                        android:drawableLeft="@drawable/ic_add_a_photo"
-                        android:fontFamily="serif"
-                        android:layout_marginHorizontal="5dp"
-                        android:paddingStart="25dp"
-                        android:paddingLeft="25dp"
-                        android:layout_gravity="end"
-                        android:textColor="@color/white"/>
+                <TextView
+                    android:id="@+id/addNewRaw_add_photo"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="2"
+                    android:background="@drawable/frame_shape"
+                    android:drawableStart="@drawable/ic_add_a_photo"
+                    android:drawableLeft="@drawable/ic_add_a_photo"
+                    android:fontFamily="serif"
+                    android:layout_marginHorizontal="5dp"
+                    android:paddingStart="25dp"
+                    android:paddingLeft="25dp"
+                    android:layout_gravity="end"
+                    android:textColor="@color/white"/>
 
-                    <TextView
-                        android:id="@+id/addNewRaw_add_button"
-                        android:layout_width="0dp"
-                        android:layout_height="50dp"
-                        android:layout_weight="2"
-                        android:background="@drawable/frame_shape"
-                        android:drawableStart="@drawable/ic_add_white_32dp"
-                        android:drawableLeft="@drawable/ic_add_white_32dp"
-                        android:fontFamily="serif"
-                        android:paddingStart="25dp"
-                        android:paddingLeft="25dp"
-                        android:layout_marginHorizontal="5dp"
-                        android:layout_gravity="end"
-                        android:textColor="@color/white"/>
+                <TextView
+                    android:id="@+id/addNewRaw_add_button"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="2"
+                    android:background="@drawable/frame_shape"
+                    android:drawableStart="@drawable/ic_add_white_32dp"
+                    android:drawableLeft="@drawable/ic_add_white_32dp"
+                    android:fontFamily="serif"
+                    android:paddingStart="25dp"
+                    android:paddingLeft="25dp"
+                    android:layout_marginHorizontal="5dp"
+                    android:layout_gravity="end"
+                    android:textColor="@color/white"/>
 
             </LinearLayout>
 
@@ -506,53 +507,123 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:layout_marginHorizontal="10dp">
 
                 <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/shape_with_corner"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_one">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:fontFamily="serif"
+                        android:layout_marginVertical="15dp"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:text="@string/rejected_pieces"
+                        android:textSize="15sp"
+                        android:theme="@style/AppTheme" />
+
+                    <TextView
+                        android:id="@+id/addNewRaw_total_rejected"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:background="@color/gray_un_editable"
+                        android:nextFocusDown="@id/addNewRaw_ttn_no"
+                        android:singleLine="true"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_with_corner"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_four"
+                    tools:layout_editor_absoluteX="50dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:fontFamily="serif"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:text="@string/no_bundle"
+                        android:textSize="15sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/addNewRaw_total_bundles"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/gray_un_editable"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:inputType="text"
+                        android:nextFocusDown="@id/addNewRaw_total_bundles"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:layout_marginHorizontal="10dp">
+                <LinearLayout
                     android:id="@+id/addToInventory_linear_two"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginRight="30dp"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
                     android:background="@drawable/shape_with_corner"
                     android:orientation="horizontal"
                     android:padding="5dp"
                     app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_one">
 
                     <TextView
-                        android:layout_width="230dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:fontFamily="serif"
-                        android:gravity="start"
+                        android:gravity="center_horizontal|center_vertical"
                         android:text="@string/truck_no"
-                        android:textSize="18sp"
-                        android:theme="@style/AppTheme"
-                        />
+                        android:textSize="15sp"
+                        android:theme="@style/AppTheme" />
 
                     <EditText
                         android:id="@+id/addNewRaw_truckNo"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:ems="10"
-                        android:nextFocusDown="@id/addNewRaw_acceptor"
-                        android:singleLine="true" />
+                        android:nextFocusDown="@id/addNewRaw_ttn_no"
+                        android:singleLine="true"
+                        android:textSize="18sp" />
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginRight="30dp"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:background="@drawable/shape_with_corner"
                     android:orientation="horizontal"
                     android:padding="5dp"
@@ -560,39 +631,44 @@
                     tools:layout_editor_absoluteX="50dp">
 
                     <TextView
-                        android:layout_width="230dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:fontFamily="serif"
-                        android:gravity="start"
+                        android:gravity="center_horizontal|center_vertical"
                         android:text="@string/name_of_person_to_accept"
-                        android:textSize="18sp"
+                        android:textSize="15sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <EditText
                         android:id="@+id/addNewRaw_acceptor"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:ems="10"
-                        android:nextFocusDown="@id/addNewRaw_ttn_no"
-                        android:inputType="text" />
+                        android:inputType="text"
+                        android:nextFocusDown="@id/addNewRaw_total_bundles"
+                        android:textSize="18sp" />
 
                 </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:layout_marginHorizontal="10dp">
 
                 <LinearLayout
                     android:id="@+id/addToInventory_linear_four"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginRight="30dp"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
                     android:background="@drawable/shape_with_corner"
                     android:orientation="horizontal"
                     android:padding="5dp"
@@ -600,209 +676,130 @@
 
                     <TextView
                         android:id="@+id/textView4"
-                        android:layout_width="230dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:fontFamily="serif"
-                        android:gravity="start"
+                        android:gravity="center_horizontal|center_vertical"
                         android:text="@string/ttn_no"
-                        android:textSize="18sp"
+                        android:textSize="15sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <EditText
                         android:id="@+id/addNewRaw_ttn_no"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:ems="10"
-                        android:inputType="text"
-                        android:nextFocusDown="@id/addNewRaw_total_bundles"
-                        android:singleLine="true" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginRight="30dp"
-                    android:background="@drawable/shape_with_corner"
-                    android:orientation="horizontal"
-                    android:padding="5dp"
-                    app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_three">
-
-                    <TextView
-                        android:layout_width="230dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp"
                         android:layout_weight="1"
-                        android:fontFamily="serif"
-                        android:gravity="start"
-                        android:text="@string/net"
-                        android:textSize="18sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <EditText
-                        android:id="@+id/addNewRaw_total_bundles"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
                         android:ems="10"
                         android:inputType="text"
                         android:nextFocusDown="@id/addNewRaw_acceptance_location"
-                        android:singleLine="true" />
+                        android:singleLine="true"
+                        android:textSize="18sp" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/addToInventory_linear_three"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginRight="30dp"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:background="@drawable/shape_with_corner"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal"
                     app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_two">
 
                     <TextView
-                        android:layout_width="230dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="15dp"
                         android:layout_weight="1"
                         android:fontFamily="serif"
-                        android:gravity="start"
+                        android:gravity="center_horizontal|center_vertical"
                         android:text="@string/date_of_acceptance"
-                        android:textSize="18sp"
+                        android:textSize="15sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/addNewRaw_acceptance_date"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:ems="10"
-                        android:nextFocusDown="@id/addNewRaw_acceptance_location"
-                        android:singleLine="true" />
+                        android:singleLine="true"
+                        android:textSize="18sp" />
 
                 </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:layout_marginHorizontal="10dp">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginRight="30dp"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:background="@drawable/shape_with_corner"
                     android:orientation="horizontal"
                     android:padding="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
                     app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_four"
                     tools:layout_editor_absoluteX="50dp">
 
                     <TextView
-                        android:layout_width="230dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:fontFamily="serif"
-                        android:gravity="start"
+                        android:gravity="center_horizontal|center_vertical"
                         android:text="@string/location_of_acceptance"
-                        android:textSize="18sp"
+                        android:textSize="15sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <EditText
                         android:id="@+id/addNewRaw_acceptance_location"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:ems="10"
-                        android:nextFocusDown="@id/addNewRaw_total_rejected"
-                        android:inputType="text" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="30dp"
-                    android:layout_marginRight="30dp"
-                    android:background="@drawable/shape_with_corner"
-                    android:orientation="horizontal"
-                    android:padding="5dp"
-                    app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_three">
-
-                    <TextView
-                        android:layout_width="230dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp"
                         android:layout_weight="1"
-                        android:fontFamily="serif"
-                        android:gravity="start"
-                        android:text="@string/rejected_pieces_on_truck"
-                        android:textSize="18sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <EditText
-                        android:id="@+id/addNewRaw_total_rejected"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
                         android:ems="10"
                         android:inputType="text"
-                        android:singleLine="true" />
+                        android:nextFocusDown="@id/addNewRaw_total_rejected"
+                        android:textSize="18sp" />
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="horizontal">
 
                     <Button
                         android:id="@+id/addNewRaw_acceptRow_done"
-                        android:layout_width="wrap_content"
-                        android:layout_height="50dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:background="@drawable/frame_shape"
                         android:fontFamily="serif"
-                        android:layout_marginRight="10dp"
                         android:text="@string/done"
                         android:textAllCaps="false"
                         android:textColor="@color/white"
                         android:textSize="20sp" />
 
-
                 </LinearLayout>
+
             </LinearLayout>
 
         </LinearLayout>
@@ -810,7 +807,8 @@
         <LinearLayout
             android:id="@+id/addNewRaw_table_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:background="@color/alpha_black"
             android:layout_marginStart="1dp"
             android:layout_marginLeft="1dp"
@@ -818,7 +816,7 @@
             android:layout_marginRight="1dp"
             android:layout_marginBottom="10dp"
             android:orientation="vertical"
-           >
+            >
 
             <TableLayout
                 android:id="@+id/addNewRaw_table_header"

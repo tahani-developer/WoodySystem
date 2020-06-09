@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.falconssoft.woodysystem.R;
@@ -17,13 +18,15 @@ import java.util.List;
 
 public class InventoryReportAdapter extends BaseAdapter {
 
-    private Context context;
+    //    private Context context;
 //    private List<BundleInfo> mOriginalValues;
     private static List<BundleInfo> itemsList;
-    private static List<BundleInfo> selectedBundles ;
+    private static List<BundleInfo> selectedBundles;
+    private InventoryReport inventoryReport;
 
-    public InventoryReportAdapter(Context context, List<BundleInfo> itemsList) {
-        this.context = context;
+    public InventoryReportAdapter(InventoryReport inventoryReport, List<BundleInfo> itemsList) {
+//        this.context = context;
+        this.inventoryReport = inventoryReport;
 //        this.mOriginalValues = itemsList;
         this.itemsList = itemsList;
         selectedBundles = new ArrayList<>();
@@ -55,13 +58,14 @@ public class InventoryReportAdapter extends BaseAdapter {
     private class ViewHolder {
         CheckBox checkBox;
         TextView serial, bundle, th, w, l, grade, pcs, location, area, pL;
+        ImageView edit;
     }
 
     @Override
     public View getView(final int i, View view, ViewGroup viewGroup) {
 
         final ViewHolder holder = new ViewHolder();
-        view = View.inflate(context, R.layout.inventory_report_row, null);
+        view = View.inflate(inventoryReport, R.layout.inventory_report_row, null);
 
         holder.checkBox = (CheckBox) view.findViewById(R.id.checkBoxPrint);
         holder.serial = (TextView) view.findViewById(R.id.serial);
@@ -74,6 +78,7 @@ public class InventoryReportAdapter extends BaseAdapter {
         holder.location = (TextView) view.findViewById(R.id.location);
         holder.area = (TextView) view.findViewById(R.id.area);
         holder.pL = (TextView) view.findViewById(R.id.pl);
+        holder.edit = view.findViewById(R.id.inventoryReportRaw_edit);
 
         holder.serial.setText("" + itemsList.get(i).getSerialNo());
         holder.th.setText("" + (int) itemsList.get(i).getThickness());
@@ -100,16 +105,36 @@ public class InventoryReportAdapter extends BaseAdapter {
             }
         });
 
+        holder.edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                inventoryReport.editBundle(itemsList.get(i));
+
+            }
+        });
+
+        view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+//                Log.e("show plist", ""  +itemsList.get(i).getBackingList().equals(null) + itemsList.get(i).getBackingList().equals("null"));
+                if (itemsList.get(i).getBackingList().equals("null"))
+                    inventoryReport.addBackingList(itemsList, i);
+                else
+                    inventoryReport.showPasswordDialog(itemsList, i);
+                    return false;
+                }
+            });
+
         return view;
+        }
+
+        public List<BundleInfo> getSelectedItems () {
+
+            selectedBundles.clear();
+            for (int i = 0; i < itemsList.size(); i++)
+                if (itemsList.get(i).getChecked())
+                    selectedBundles.add(itemsList.get(i));
+
+            return selectedBundles;
+        }
     }
-
-    public List<BundleInfo> getSelectedItems() {
-
-        selectedBundles.clear();
-        for(int i = 0 ; i< itemsList.size() ; i++)
-            if(itemsList.get(i).getChecked())
-                selectedBundles.add(itemsList.get(i));
-
-        return selectedBundles;
-    }
-}

@@ -1,9 +1,13 @@
 package com.falconssoft.woodysystem.reports;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -29,6 +33,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Html;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -49,6 +54,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.falconssoft.woodysystem.AddToInventory;
 import com.falconssoft.woodysystem.DatabaseHandler;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.WoodPresenter;
@@ -86,6 +92,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.net.URI;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -95,15 +102,19 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.WHITE;
 
 public class InventoryReport extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
+    private ProgressDialog progressDialog;
     private Snackbar snackbar;
     private ConstraintLayout containerLayout;
     private DatabaseHandler databaseHandler;
@@ -119,14 +130,16 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private JSONArray jsonArrayBundles = new JSONArray();
     private WoodPresenter woodPresenter;
     private Animation animation;
-    private TextView textView, noOfBundles, noOfPieces, cubicField, deleteAll, dateFrom, dateTo, thicknessOrder, widthOrder, lengthOrder, searchPListTool;
-    private Spinner location, area, ordered, pList, grade;
+    private TextView textView, noOfBundles, noOfPieces, cubicField, deleteAll, dateFrom, dateTo, thicknessOrder, widthOrder, lengthOrder, searchPListTool, searchSerialTool;
+    private Spinner location, area, ordered, pList, grade, thicknessSpinner;
     private ArrayAdapter<String> locationAdapter;
     private ArrayAdapter<String> areaAdapter;
     private ArrayAdapter<String> orderedAdapter;
     private ArrayAdapter<String> gradeAdapter;
     private ArrayAdapter<String> plAdapter;
-    private String loc = "All", areaField = "All", orderedField = "All", plField = "All", gradeFeld = "All";
+    private ArrayAdapter<String> thicknessAdapter;
+    private String loc = "All", areaField = "All", orderedField = "All", plField = "All", gradeFeld = "All", thicknessField = "All", serialString = "All";
+
     private Settings generalSettings;
     private Calendar calendar;
     private Date date;
@@ -138,14 +151,16 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private List<BundleInfo> bundleInfoForPList = new ArrayList<>();
     private Button printAll, pListAll;
     private TableRow tableRowToDelete = null;
-    private EditText fromLength, toLength, fromWidth, toWidth, fromThickness, toThickness, searchPListTextView;
+    private EditText fromLength, toLength, fromWidth, toWidth, searchPListTextView, searchSerial;//, fromThickness, toThickness
     private boolean isThicknessAsc = true, isWidthAsc = true, isLengthAsc = true;
-    private String fromLengthNo = "", toLengthNo = "", fromWidthNo = "", toWidthNo = "", fromThicknessNo = "", toThicknessNo = "", searchPackingList = "";
-//    private String f1 = "", f2 = "", f3 = "";
+    private String fromLengthNo = "", toLengthNo = "", fromWidthNo = "", toWidthNo = "", searchPackingList = "";//, fromThicknessNo = "", toThicknessNo = ""
 
     private ListView listView;
     private InventoryReportAdapter adapter;
     private int sortFlag = 0;
+    private List<Double> doubleList;
+    public static final String EDIT_BUNDLE = "EDIT_BUNDLE";
+    public static final String EDIT_FLAG_BUNDLE = "EDIT_FLAG_BUNDLE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,7 +178,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_to_right);
         textView.startAnimation(animation);
 
-        fillSpinnerAdapter();
+//        fillSpinnerAdapter();
 
         woodPresenter.getBundlesData(this);
         deleteAll.setOnClickListener(this);
@@ -174,6 +189,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         lengthOrder.setOnClickListener(this);
         location.setOnItemSelectedListener(this);
         area.setOnItemSelectedListener(this);
+        thicknessSpinner.setOnItemSelectedListener(this);
 //        ordered.setOnItemSelectedListener(this);
         pList.setOnItemSelectedListener(this);
         grade.setOnItemSelectedListener(this);
@@ -246,95 +262,66 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
             public void onClick(View v) {
 
                 bundleInfoForPList.clear();
+                boolean found = false; // check if one has p list
 
                 InventoryReportAdapter obj = new InventoryReportAdapter();
                 List<BundleInfo> selected = obj.getSelectedItems();
                 for (int i = 0; i < selected.size(); i++) {
                     if (selected.get(i).getChecked()) {
-                        bundleInfoForPList.add(selected.get(i));
+//                        Log.e("showcheckedd", selected.get(i).getBundleNo());
+                        if (selected.get(i).getBackingList().equals("null")) {
+                            bundleInfoForPList.add(selected.get(i));
+                        } else {
+                            found = true;
+                            AlertDialog.Builder builder = new AlertDialog.Builder(InventoryReport.this);
+                            builder.setMessage("One bundle or more has packing list, uncheck it or cancel the operation")
+                                    .setTitle("Warning")
+                                    .show();
+                            break;
+
+                        }
                     }
                 }
 
-                Dialog packingListDialog = new Dialog(InventoryReport.this);
-                packingListDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                packingListDialog.setContentView(R.layout.packing_list_dialog);
-                packingListDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-                EditText packingList = packingListDialog.findViewById(R.id.packingList_dialog_packing_list);
-                TextView done = packingListDialog.findViewById(R.id.packingList_dialog_done);
-                TextView bundleNo = packingListDialog.findViewById(R.id.packingList_dialog_bundle_no);
-
-                done.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String newPackingList = packingList.getText().toString();
-                        if (packingList.getText().toString().equals(""))
-                            newPackingList = "null";
-
-                        for (int i = 0; i < bundleInfoForPList.size(); i++) {
-
-                            woodPresenter.updatePackingList(InventoryReport.this, bundleInfoForPList.get(i).getBundleNo(), newPackingList, bundleInfoForPList.get(i).getLocation());
-                        }
-                        adapter.notifyDataSetChanged();
-                        packingListDialog.dismiss();
-
-                    }
-                });
-
-                packingListDialog.show();
-
+                if (!found)
+                    setGroupBackingList();
 
             }
 
         });
 //
-       /* searchViewTh.setOnQueryTextListener(new android.support.v7.widget.SearchView.OnQueryTextListener() {
+
+    }
+
+    void setGroupBackingList() {
+        Dialog packingListDialog = new Dialog(InventoryReport.this);
+        packingListDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        packingListDialog.setContentView(R.layout.packing_list_dialog);
+        packingListDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        EditText packingList = packingListDialog.findViewById(R.id.packingList_dialog_packing_list);
+        TextView done = packingListDialog.findViewById(R.id.packingList_dialog_done);
+        TextView bundleNo = packingListDialog.findViewById(R.id.packingList_dialog_bundle_no);
+
+        done.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
+            public void onClick(View v) {
+                String newPackingList = packingList.getText().toString();
+                if (packingList.getText().toString().equals(""))
+                    newPackingList = "null";
 
-            @Override
-            public boolean onQueryTextChange(String query) {
+                for (int i = 0; i < bundleInfoForPList.size(); i++) {
 
-                f1 = query;
-                filters();
+                    woodPresenter.updatePackingList(InventoryReport.this, bundleInfoForPList.get(i).getBundleNo(), newPackingList, bundleInfoForPList.get(i).getLocation());
+                }
+//                        filters();
+//                        adapter.notifyDataSetChanged();
+                packingListDialog.dismiss();
 
-                return false;
             }
         });
 
-        searchViewW.setOnQueryTextListener(new android.support.v7.widget.SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String query) {
-
-                f2 = query;
-                filters();
-
-                return false;
-            }
-        });
-
-        searchViewL.setOnQueryTextListener(new android.support.v7.widget.SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String query) {
-
-                f3 = query;
-                filters();
-
-                return false;
-            }
-        });*/
+        packingListDialog.show();
 
     }
 
@@ -345,7 +332,10 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         generalSettings = databaseHandler.getSettings();
         calendar = Calendar.getInstance();
         date = Calendar.getInstance().getTime();
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Please Waiting...");
 
+        thicknessSpinner = findViewById(R.id.inventory_report_thick_spinner);
         containerLayout = findViewById(R.id.inventory_report_container);
 //        bundlesTable = findViewById(R.id.inventory_report_table);
         location = findViewById(R.id.inventory_report_location);
@@ -367,8 +357,8 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         toLength = findViewById(R.id.inventory_report_toLength);
         fromWidth = findViewById(R.id.inventory_report_fromWidth);
         toWidth = findViewById(R.id.inventory_report_toWidth);
-        fromThickness = findViewById(R.id.inventory_report_fromThick);
-        toThickness = findViewById(R.id.inventory_report_toThick);
+//        fromThickness = findViewById(R.id.inventory_report_fromThick);
+//        toThickness = findViewById(R.id.inventory_report_toThick);
         listView = findViewById(R.id.list);
         thicknessOrder = findViewById(R.id.inventory_report_thick_order);
         widthOrder = findViewById(R.id.inventory_report_width_order);
@@ -376,25 +366,46 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         searchPListTextView = findViewById(R.id.inventory_report_search_pList_box);
         searchPListTool = findViewById(R.id.inventory_report_search_pList_tool);
         searchPListTextView.setVisibility(View.GONE);
+        searchSerial = findViewById(R.id.inventory_report_search_serial);
+        searchSerialTool = findViewById(R.id.inventory_report_search_serial_tool);
 
+        searchSerialTool.setOnClickListener(this);
         searchPListTool.setOnClickListener(this);
         searchPListTextView.addTextChangedListener(new watchTextChange(searchPListTextView));
         fromLength.addTextChangedListener(new watchTextChange(fromLength));
         toLength.addTextChangedListener(new watchTextChange(toLength));
         fromWidth.addTextChangedListener(new watchTextChange(fromWidth));
         toWidth.addTextChangedListener(new watchTextChange(toWidth));
-        fromThickness.addTextChangedListener(new watchTextChange(fromThickness));
-        toThickness.addTextChangedListener(new watchTextChange(toThickness));
+//        fromThickness.addTextChangedListener(new watchTextChange(fromThickness));
+//        toThickness.addTextChangedListener(new watchTextChange(toThickness));
     }
 
-    void fillSpinnerAdapter() {
+    void showLog(String method, String key, String value) {
+        Log.e("inventory report", method + "/" + key + "/" + value);
+    }
+
+    public void fillSpinnerAdapter(List<String> thicknessList) {
+
+        locationList.clear();
+        areaList.clear();
+        plList.clear();
+        gradeList.clear();
+        showLog("fillSpinnerAdapter", "thickness size", "" + thicknessList.size());
+        removeDuplicate(thicknessList);
+        showLog("fillSpinnerAdapter", "thickness size", "" + thicknessList.size());
+
+        thicknessList.add(0, "All");
+        thicknessAdapter = new ArrayAdapter<>(this, R.layout.spinner_layout, thicknessList);
+        thicknessAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
+        thicknessSpinner.setAdapter(thicknessAdapter);
+
         locationList.add("All");
         locationList.add("Amman");
         locationList.add("Kalinovka");
         locationList.add("Rudniya Store");
         locationList.add("Rudniya Sawmill");
-        locationAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, locationList);
-        locationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        locationAdapter = new ArrayAdapter<>(this, R.layout.spinner_layout, locationList);
+        locationAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
         location.setAdapter(locationAdapter);
 
         areaList.add("All");
@@ -403,15 +414,15 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         areaList.add("Zone 3");
         areaList.add("Zone 4");
         areaList.add("Zone 5");
-        areaAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, areaList);
-        areaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        areaAdapter = new ArrayAdapter<>(this, R.layout.spinner_layout, areaList);
+        areaAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
         area.setAdapter(areaAdapter);
 
         plList.add("All");
         plList.add("P_List");
         plList.add("Not P_List");
-        plAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, plList);
-        plAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        plAdapter = new ArrayAdapter<>(this, R.layout.spinner_layout, plList);
+        plAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);//android.R.layout.simple_spinner_dropdown_item);
         pList.setAdapter(plAdapter);
 
         gradeList.add("All");
@@ -421,9 +432,24 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         gradeList.add("KD");
         gradeList.add("KD Blue Stain");
         gradeList.add("Second Sort");
-        gradeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, gradeList);
-        gradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        gradeAdapter = new ArrayAdapter<String>(this, R.layout.spinner_layout, gradeList);
+        gradeAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
         grade.setAdapter(gradeAdapter);
+    }
+
+    void removeDuplicate(List<String> list) {
+        Set<String> set = new HashSet<>(list);
+        list.clear();
+        list.addAll(set);
+        doubleList = new ArrayList<>();
+        for (int n = 0; n < list.size(); n++)
+            doubleList.add(Double.valueOf(list.get(n)));
+
+        Collections.sort(doubleList);
+        list.clear();
+        for (int n = 0; n < doubleList.size(); n++)
+            list.add(String.valueOf(doubleList.get(n)));
+
     }
 
     class watchTextChange implements TextWatcher {
@@ -461,14 +487,14 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                     toWidthNo = String.valueOf(s);//formatDecimalValue(String.valueOf(s));
                     filters();
                     break;
-                case R.id.inventory_report_fromThick:
-                    fromThicknessNo = String.valueOf(s);//formatDecimalValue(String.valueOf(s));
-                    filters();
-                    break;
-                case R.id.inventory_report_toThick:
-                    toThicknessNo = String.valueOf(s);//formatDecimalValue(String.valueOf(s));
-                    filters();
-                    break;
+//                case R.id.inventory_report_fromThick:
+//                    fromThicknessNo = String.valueOf(s);//formatDecimalValue(String.valueOf(s));
+//                    filters();
+//                    break;
+//                case R.id.inventory_report_toThick:
+//                    toThicknessNo = String.valueOf(s);//formatDecimalValue(String.valueOf(s));
+//                    filters();
+//                    break;
             }
         }
 
@@ -671,7 +697,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 //        Log.e("follow", fromDate + " to " + toDate + " size1 " + bundleInfoServer.size() + " loc: " + loc + "   area: " + areaField + "  ordered: " + orderedField);
 
         for (int m = 0; m < bundleInfoServer.size(); m++) {
-            JSONObject jsonObject = bundleInfoServer.get(m).getJSONObject();
+//            JSONObject jsonObject = bundleInfoServer.get(m).getJSONObject();
             if ((formatDate(bundleInfoServer.get(m).getAddingDate()).after(formatDate(fromDate))
                     || formatDate(bundleInfoServer.get(m).getAddingDate()).equals(formatDate(fromDate)))
                     && (formatDate(bundleInfoServer.get(m).getAddingDate()).before(formatDate(toDate))
@@ -683,33 +709,34 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 //        Log.e("follow", fromDate + " to " + toDate + " size1 " + bundleInfoServer.size() + " size2 " + dateFiltered.size());
 
         for (int k = 0; k < dateFiltered.size(); k++) {
-            Log.e("datefiltered", "" + dateFiltered.get(k).getBackingList());
+//            Log.e("datefiltered", "" + dateFiltered.get(k).getBackingList());
             String dateFiltered2 = String.valueOf(dateFiltered.get(k).getOrdered());
-            if (loc.equals("All") || loc.equals(dateFiltered.get(k).getLocation())) {
-                if (areaField.equals("All") || areaField.equals(dateFiltered.get(k).getArea())) {
-                    if (gradeFeld.equals("All") || gradeFeld.equals(dateFiltered.get(k).getGrade())) {
+            if (serialString.equals("All") || serialString.equals(String.valueOf(dateFiltered.get(k).getSerialNo())))
+                if (loc.equals("All") || loc.equals(dateFiltered.get(k).getLocation())) {
+                    if (areaField.equals("All") || areaField.equals(dateFiltered.get(k).getArea())) {
+                        if (gradeFeld.equals("All") || gradeFeld.equals(dateFiltered.get(k).getGrade())) {
 
-                        if (plField.equals("All") || (plField.equals("0") && dateFiltered.get(k).getBackingList().equals("null"))
-                                || (plField.equals("1") && !dateFiltered.get(k).getBackingList().equals("null"))) {
+                            if (plField.equals("All") || (plField.equals("0") && dateFiltered.get(k).getBackingList().equals("null"))
+                                    || (plField.equals("1") && !dateFiltered.get(k).getBackingList().equals("null"))) {
 
-                            if (fromLengthNo.equals("") || ((dateFiltered.get(k).getLength() > Double.parseDouble(fromLengthNo))
-                                    || dateFiltered.get(k).getLength() == Double.parseDouble(fromLengthNo)))
+                                if (fromLengthNo.equals("") || ((dateFiltered.get(k).getLength() > Double.parseDouble(fromLengthNo))
+                                        || dateFiltered.get(k).getLength() == Double.parseDouble(fromLengthNo)))
 
-                                if (toLengthNo.equals("") || ((dateFiltered.get(k).getLength() < Double.parseDouble(toLengthNo))
-                                        || dateFiltered.get(k).getLength() == Double.parseDouble(toLengthNo)))
+                                    if (toLengthNo.equals("") || ((dateFiltered.get(k).getLength() < Double.parseDouble(toLengthNo))
+                                            || dateFiltered.get(k).getLength() == Double.parseDouble(toLengthNo)))
 
-                                    if (fromWidthNo.equals("") || ((dateFiltered.get(k).getWidth() > Double.parseDouble(fromWidthNo))
-                                            || dateFiltered.get(k).getWidth() == Double.parseDouble(fromWidthNo)))
+                                        if (fromWidthNo.equals("") || ((dateFiltered.get(k).getWidth() > Double.parseDouble(fromWidthNo))
+                                                || dateFiltered.get(k).getWidth() == Double.parseDouble(fromWidthNo)))
 
-                                        if (toWidthNo.equals("") || ((dateFiltered.get(k).getWidth() < Double.parseDouble(toWidthNo))
-                                                || dateFiltered.get(k).getWidth() == Double.parseDouble(toWidthNo)))
+                                            if (toWidthNo.equals("") || ((dateFiltered.get(k).getWidth() < Double.parseDouble(toWidthNo))
+                                                    || dateFiltered.get(k).getWidth() == Double.parseDouble(toWidthNo)))
 
-                                            if (fromThicknessNo.equals("") || ((dateFiltered.get(k).getThickness() > Double.parseDouble(fromThicknessNo))
-                                                    || dateFiltered.get(k).getThickness() == Double.parseDouble(fromThicknessNo)))
-
-                                                if (toThicknessNo.equals("") || ((dateFiltered.get(k).getThickness() < Double.parseDouble(toThicknessNo))
-                                                        || dateFiltered.get(k).getThickness() == Double.parseDouble(toThicknessNo)))
-
+                                                if (thicknessField.equals("All") || thicknessField.equals(String.valueOf(dateFiltered.get(k).getThickness()))) {
+//                                            if (fromThicknessNo.equals("") || ((dateFiltered.get(k).getThickness() > Double.parseDouble(fromThicknessNo))
+//                                                    || dateFiltered.get(k).getThickness() == Double.parseDouble(fromThicknessNo)))
+//
+//                                                if (toThicknessNo.equals("") || ((dateFiltered.get(k).getThickness() < Double.parseDouble(toThicknessNo))
+//                                                        || dateFiltered.get(k).getThickness() == Double.parseDouble(toThicknessNo)))
                                                     if (searchPackingList.equals("") || ((dateFiltered.get(k).getBackingList().contains(searchPackingList)))) {
                                                         filtered.add(dateFiltered.get(k));
 
@@ -718,62 +745,83 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                                                         sumOfCubic += (dateFiltered.get(k).getLength() * dateFiltered.get(k).getWidth() * dateFiltered.get(k).getThickness() * dateFiltered.get(k).getNoOfPieces());
 
                                                     }
+                                                }
+                            }
                         }
                     }
                 }
-            }
         }
         Log.e("follow/", "size3/filtered/" + filtered.size());
 
         adapter = new InventoryReportAdapter(InventoryReport.this, filtered);
         listView.setAdapter(adapter);
 
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
-                serialNumber = filtered.get(position).getSerialNo();
-                String bundleNumber = filtered.get(position).getBundleNo();
-                String location = filtered.get(position).getLocation();
-                Log.e("serialNumber", serialNumber);
-
-                Dialog packingListDialog = new Dialog(InventoryReport.this);
-                packingListDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                packingListDialog.setContentView(R.layout.packing_list_dialog);
-                packingListDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-                EditText packingList = packingListDialog.findViewById(R.id.packingList_dialog_packing_list);
-                TextView done = packingListDialog.findViewById(R.id.packingList_dialog_done);
-                TextView bundleNo = packingListDialog.findViewById(R.id.packingList_dialog_bundle_no);
-
-                bundleNo.setText("Bundle: " + bundleNumber);
-
-
-                done.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String newPackingList = packingList.getText().toString();
-                        if (packingList.getText().toString().equals(""))
-                            newPackingList = "null";
-
-                        woodPresenter.updatePackingList(InventoryReport.this, bundleNumber, newPackingList, location);
-                        adapter.notifyDataSetChanged();
-                        packingListDialog.dismiss();
-
-                    }
-                });
-
-                packingListDialog.show();
-                return true;
-
-            }
-        });
-
         noOfBundles.setText("" + sumOfBundles);
         noOfPieces.setText("" + String.format("%.3f", sumOfPieces));
         cubicField.setText("" + String.format("%.3f", (sumOfCubic / 1000000000)));
 //        fillTable(filtered);
 
+    }
+
+    public void addBackingList(List<BundleInfo> filtered, int position) {
+
+        serialNumber = filtered.get(position).getSerialNo();
+        String bundleNumber = filtered.get(position).getBundleNo();
+        String location = filtered.get(position).getLocation();
+        Log.e("serialNumber", serialNumber);
+
+        Dialog packingListDialog = new Dialog(InventoryReport.this);
+        packingListDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        packingListDialog.setContentView(R.layout.packing_list_dialog);
+        packingListDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        EditText packingList = packingListDialog.findViewById(R.id.packingList_dialog_packing_list);
+        TextView done = packingListDialog.findViewById(R.id.packingList_dialog_done);
+        TextView bundleNo = packingListDialog.findViewById(R.id.packingList_dialog_bundle_no);
+
+        bundleNo.setText("Bundle: " + bundleNumber);
+
+
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String newPackingList = packingList.getText().toString();
+                if (packingList.getText().toString().equals(""))
+                    newPackingList = "null";
+
+                woodPresenter.updatePackingList(InventoryReport.this, bundleNumber, newPackingList, location);
+                adapter.notifyDataSetChanged();
+                packingListDialog.dismiss();
+
+            }
+        });
+
+        packingListDialog.show();
+    }
+
+    public void showPasswordDialog(List<BundleInfo> filtered, int position) {
+        Dialog passwordDialog = new Dialog(this);
+        passwordDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        passwordDialog.setContentView(R.layout.password_dialog);
+        passwordDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        TextInputEditText password = passwordDialog.findViewById(R.id.password_dialog_password);
+        TextView done = passwordDialog.findViewById(R.id.password_dialog_done);
+
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (password.getText().toString().equals("301190")) {
+
+                    addBackingList(filtered, position);
+                    passwordDialog.dismiss();
+                } else {
+                    Toast.makeText(InventoryReport.this, "Not Authorized!", Toast.LENGTH_SHORT).show();
+                    password.setText("");
+                }
+            }
+        });
+        passwordDialog.show();
     }
 
     public void updatedPackingList() {
@@ -950,6 +998,10 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                 gradeFeld = parent.getSelectedItem().toString();
                 filters();
                 break;
+            case R.id.inventory_report_thick_spinner:
+                thicknessField = parent.getSelectedItem().toString();
+                filters();
+                break;
         }
     }
 
@@ -1058,7 +1110,27 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                 });
                 passwordDialog.show();
                 break;
+            case R.id.inventory_report_search_serial_tool:
+                if (!TextUtils.isEmpty(searchSerial.getText().toString()))
+                    serialString = searchSerial.getText().toString();
+                else
+                    serialString = "All";
+
+                filters();
+
+                break;
         }
+
+    } 
+
+    public void editBundle(BundleInfo bundleInfo) {
+        Intent intent = new Intent(InventoryReport.this, AddToInventory.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(EDIT_BUNDLE, bundleInfo);
+        showLog("edit", "bundle no", bundleInfo.getBundleNo());
+        intent.putExtras(bundle);
+        intent.putExtra(EDIT_FLAG_BUNDLE, 55);
+        startActivity(intent);
 
     }
 
@@ -1216,6 +1288,15 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 
     }
 
+    public void showProgressDialog() {
+        progressDialog.show();
+    }
+
+    public void hideProgressDialog() {
+        progressDialog.dismiss();
+    }
+
+    // ************************************ DELETE ************************************
     private class JSONTask3 extends AsyncTask<String, String, String> {
 
         @Override

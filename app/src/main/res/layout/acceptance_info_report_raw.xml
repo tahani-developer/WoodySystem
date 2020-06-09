@@ -17,7 +17,7 @@
         <CheckBox
             android:id="@+id/acceptanceInfo_raw_checkBox"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp" />
 
@@ -25,10 +25,8 @@
 
             android:id="@+id/acceptanceInfo_raw_supplier"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.5"
             android:fontFamily="serif"
             android:text="@string/supplier_name"
             android:textColor="@color/gray_dark_one"
@@ -37,7 +35,7 @@
         <TextView
             android:id="@+id/acceptanceInfo_raw_bundle"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:fontFamily="serif"
             android:text="@string/bundle_no"
@@ -47,7 +45,7 @@
         <TextView
             android:id="@+id/acceptanceInfo_raw_thick"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:fontFamily="serif"
             android:text="@string/th"
@@ -57,8 +55,8 @@
         <TextView
             android:id="@+id/acceptanceInfo_raw_width"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.8"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:fontFamily="serif"
             android:text="@string/w"
             android:textColor="@color/gray_dark_one"
@@ -67,8 +65,8 @@
         <TextView
             android:id="@+id/acceptanceInfo_raw_length"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.8"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:fontFamily="serif"
             android:text="@string/l"
             android:textColor="@color/gray_dark_one"
@@ -77,7 +75,7 @@
         <TextView
             android:id="@+id/acceptanceInfo_raw_pcs"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:fontFamily="serif"
             android:text="@string/no_pieces"
@@ -87,8 +85,8 @@
         <TextView
             android:id="@+id/acceptanceInfo_raw_grade"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.9"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:fontFamily="serif"
             android:text="@string/grade"
             android:textColor="@color/gray_dark_one"
@@ -97,7 +95,7 @@
             android:visibility="gone"
             android:id="@+id/acceptanceInfo_raw_location"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1.2"
             android:fontFamily="serif"
             android:text="@string/loc"
@@ -107,7 +105,7 @@
         <TextView
             android:id="@+id/acceptanceInfo_raw_rejected"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:fontFamily="serif"
             android:text="@string/reject"
@@ -117,10 +115,21 @@
         <TextView
             android:id="@+id/acceptanceInfo_raw_pic"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="0"
             android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="10dp"
             android:background="@drawable/ic_image_orange" />
+
+        <TextView
+            android:id="@+id/acceptanceInfo_raw_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="10dp"
+            android:background="@drawable/ic_edit_24dp"
+            android:backgroundTint="@color/orange"/>
 
     </TableRow>
 

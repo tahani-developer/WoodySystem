@@ -14,7 +14,6 @@
         app:layout_constraintTop_toBottomOf="@+id/inventory_report_linear3">
 
         <TextView
-
             android:id="@+id/truck_no"
             android:layout_width="0dp"
             android:layout_height="40dp"
@@ -100,21 +99,6 @@
             android:textSize="15sp"
             />
 
-        <TextView
-            android:id="@+id/net"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:fontFamily="serif"
-            android:background="@color/light_orange"
-            android:layout_marginTop="2dp"
-            android:layout_marginStart="2dp"
-            android:layout_marginLeft="2dp"
-            android:text="@string/net"
-            android:textColor="@color/gray_dark_one"
-            android:textSize="15sp"
-            />
-
         <Button
             android:id="@+id/preview"
             android:layout_width="0dp"
@@ -129,6 +113,18 @@
             android:textColor="@color/preview"
             android:textSize="15sp" />
 
+        <ImageView
+            android:id="@+id/acceptanceReport_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:padding="10dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:background="@color/light_orange"
+            android:src="@drawable/ic_edit_24dp"
+            android:tint="@color/orange"
+            />
 
     </TableRow>
 

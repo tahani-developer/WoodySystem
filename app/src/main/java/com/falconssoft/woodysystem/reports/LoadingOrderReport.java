@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -26,6 +27,8 @@ import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -38,6 +41,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.falconssoft.woodysystem.DatabaseHandler;
+import com.falconssoft.woodysystem.EditLoadingReport;
 import com.falconssoft.woodysystem.HorizontalListView;
 import com.falconssoft.woodysystem.ItemsListAdapter2;
 import com.falconssoft.woodysystem.PicturesAdapter;
@@ -61,6 +65,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
@@ -76,12 +81,20 @@ import java.util.Locale;
 
 public class LoadingOrderReport extends AppCompatActivity {
 
+
+//    android:hardwareAccelerated="false"
+//    android:largeHeap="true"
+
+    public static final String EDIT_ORDER = "EDIT_ORDER";
+    public static final String EDIT_BUNDLES = "EDIT_BUNDLES";
+    public static final String EDIT_LOADING_ORDER_FLAG = "EDIT_LOADING_ORDER_FLAG";
+
     private ProgressDialog progressDialog;
-    private TextView textView;
+    private TextView textView, rowsCount;
     private static LinearLayout linearLayout, headerLinear;
     private EditText from, to, searchBundleNo;
     private Button arrow;
-//    private static HorizontalListView listView;
+    //    private static HorizontalListView listView;
     private static ListView listView;
     private static List<Orders> orders, bundles;
     private static List<Pictures> pictures;
@@ -97,10 +110,13 @@ public class LoadingOrderReport extends AppCompatActivity {
     private Settings generalSettings;
     private String orderNo;
     private JSONArray bundleNo = new JSONArray();
+    private JSONObject updateOrder = new JSONObject();
     private DatabaseHandler MHandler;
     List<BundleInfo> bundleInfos;
     //    List<String> bundleNoString;
-    static Dialog dialog;
+    static Dialog dialog, updateDialog;
+    private int delteIndex = -1;
+    private List<Orders> filtered;
 
     String myFormat;
     SimpleDateFormat sdf;
@@ -111,13 +127,14 @@ public class LoadingOrderReport extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.loading_order_report);
 
-        progressDialog = new ProgressDialog(this,R.style.MyAlertDialogStyle);
+        progressDialog = new ProgressDialog(this, R.style.MyAlertDialogStyle);
         progressDialog.setMessage("Please Waiting...");
         MHandler = new DatabaseHandler(LoadingOrderReport.this);
         generalSettings = new DatabaseHandler(this).getSettings();
         orders = new ArrayList<>();
         bundles = new ArrayList<>();
         pictures = new ArrayList<>();
+        filtered = new ArrayList<>();
 //        bundleNoString= new ArrayList<>();
 
         list = findViewById(R.id.list);
@@ -130,6 +147,7 @@ public class LoadingOrderReport extends AppCompatActivity {
         to = (EditText) findViewById(R.id.Loding_Order_to);
         searchBundleNo = findViewById(R.id.loadingOrder_report_search_bundleNo);
         searchBundleNo.addTextChangedListener(new watchTextChange(searchBundleNo));
+        rowsCount = findViewById(R.id.loadingOrderReport_rows_count);
 
         myFormat = "dd/MM/yyyy";
         sdf = new SimpleDateFormat(myFormat, Locale.US);
@@ -200,7 +218,6 @@ public class LoadingOrderReport extends AppCompatActivity {
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
-
 //        fillTable(orders);
 
     }
@@ -233,194 +250,6 @@ public class LoadingOrderReport extends AppCompatActivity {
         @Override
         public void afterTextChanged(Editable s) {
 
-        }
-    }
-
-    private class JSONTask extends AsyncTask<String, String, List<Orders>> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            showDialog();
-
-        }
-
-        @Override
-        protected List<Orders> doInBackground(String... params) {
-            URLConnection connection = null;
-            BufferedReader reader = null;
-
-            try {
-//                http://10.0.0.214/woody/import.php?FLAG=2
-                URL url = new URL("http://" + generalSettings.getIpAddress() + "/import.php?FLAG=2");
-
-                URLConnection conn = url.openConnection();
-                conn.setDoOutput(true);
-
-                reader = new BufferedReader(new
-                        InputStreamReader(conn.getInputStream()));
-
-                StringBuilder sb = new StringBuilder();
-                String line = null;
-
-                // Read Server Response
-                while ((line = reader.readLine()) != null) {
-                    sb.append(line);
-                }
-
-                String finalJson = sb.toString();
-                Log.e("finalJson*********", finalJson);
-
-                JSONObject parentObject = new JSONObject(finalJson);
-
-                try {
-                    JSONArray parentArrayOrders = parentObject.getJSONArray("ONLY_ORDER");
-                    orders.clear();
-                    for (int i = 0; i < parentArrayOrders.length(); i++) {
-                        JSONObject finalObject = parentArrayOrders.getJSONObject(i);
-
-                        Orders order = new Orders();
-                        order.setPlacingNo(finalObject.getString("PLACING_NO"));
-                        order.setOrderNo(finalObject.getString("ORDER_NO"));
-                        order.setContainerNo(finalObject.getString("CONTAINER_NO"));
-                        order.setDateOfLoad(finalObject.getString("DATE_OF_LOAD"));
-                        order.setDestination(finalObject.getString("DESTINATION"));
-                        order.setLocation(finalObject.getString("LOCATION"));
-
-                        orders.add(order);
-                    }
-                } catch (JSONException e) {
-                    Log.e("Import Data2", e.getMessage().toString());
-                }
-
-                try {
-                    JSONArray parentArrayOrders = parentObject.getJSONArray("BUNDLE_ORDER");
-                    bundles.clear();
-
-                    for (int i = 0; i < parentArrayOrders.length(); i++) {
-                        JSONObject finalObject = parentArrayOrders.getJSONObject(i);
-
-                        Orders order = new Orders();
-                        order.setThickness(finalObject.getDouble("THICKNESS"));
-                        order.setWidth(finalObject.getDouble("WIDTH"));
-                        order.setLength(finalObject.getDouble("LENGTH"));
-                        order.setGrade(finalObject.getString("GRADE"));
-                        order.setNoOfPieces(finalObject.getDouble("PIECES"));
-                        order.setBundleNo(finalObject.getString("BUNDLE_NO"));
-                        order.setLocation(finalObject.getString("LOCATION"));
-                        order.setArea(finalObject.getString("AREA"));
-                        order.setPlacingNo(finalObject.getString("PLACING_NO"));
-                        order.setOrderNo(finalObject.getString("ORDER_NO"));
-                        order.setContainerNo(finalObject.getString("CONTAINER_NO"));
-                        order.setDateOfLoad(finalObject.getString("DATE_OF_LOAD"));
-                        order.setDestination(finalObject.getString("DESTINATION"));
-
-                        String pic = finalObject.getString("PART1") + finalObject.getString("PART2") +
-                                finalObject.getString("PART3") + finalObject.getString("PART4") +
-                                finalObject.getString("PART5") + finalObject.getString("PART6") +
-                                finalObject.getString("PART7") + finalObject.getString("PART8");
-
-                        pic = pic.replaceAll("null", "");
-
-                        order.setPicture(pic);
-
-                        bundles.add(order);
-                    }
-                } catch (JSONException e) {
-                    Log.e("Import Data1", e.getMessage().toString());
-                }
-
-
-                try {
-                    JSONArray parentArrayOrders = parentObject.getJSONArray("BUNDLE_PIC");
-                    pictures.clear();
-                    for (int i = 0; i < parentArrayOrders.length(); i++) {
-                        JSONObject finalObject = parentArrayOrders.getJSONObject(i);
-
-                        Pictures picture = new Pictures();
-                        picture.setOrderNo(finalObject.getString("ORDER_NO"));
-
-                        String[] rowPics = new String[8];
-
-                        for (int k = 1; k <= 8; k++) {
-                            String pic = finalObject.getString("PIC" + k + "PART1") + finalObject.getString("PIC" + k + "PART2") +
-                                    finalObject.getString("PIC" + k + "PART3") + finalObject.getString("PIC" + k + "PART4") +
-                                    finalObject.getString("PIC" + k + "PART5") + finalObject.getString("PIC" + k + "PART6") +
-                                    finalObject.getString("PIC" + k + "PART7") + finalObject.getString("PIC" + k + "PART8");
-
-                            pic = pic.replaceAll("null", "");
-                            rowPics[k - 1] = pic;
-                        }
-
-                        picture.setPic1(rowPics[0]);
-                        picture.setPic2(rowPics[1]);
-                        picture.setPic3(rowPics[2]);
-                        picture.setPic4(rowPics[3]);
-                        picture.setPic5(rowPics[4]);
-                        picture.setPic6(rowPics[5]);
-                        picture.setPic7(rowPics[6]);
-                        picture.setPic8(rowPics[7]);
-
-                        pictures.add(picture);
-                    }
-                } catch (JSONException e) {
-                    Log.e("Import Data1", e.getMessage().toString());
-                }
-
-
-            } catch (MalformedURLException e) {
-                Log.e("Customer", "********ex1");
-                e.printStackTrace();
-            } catch (IOException e) {
-                Log.e("Customer", e.getMessage().toString());
-                e.printStackTrace();
-
-            } catch (JSONException e) {
-                Log.e("Customer", "********ex3  " + e.toString());
-                e.printStackTrace();
-            } finally {
-                Log.e("Customer", "********finally");
-                if (connection != null) {
-                    Log.e("Customer", "********ex4");
-                    // connection.disconnect();
-                }
-                try {
-                    if (reader != null) {
-                        reader.close();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            return orders;
-        }
-
-
-        @Override
-        protected void onPostExecute(final List<Orders> result) {
-            super.onPostExecute(result);
-
-            if (result != null) {
-                Log.e("result", "*****************" + orders.size());
-                adapter2 = new LoadingOrderReportAdapter(LoadingOrderReport.this, orders, bundles);
-                list.setAdapter(adapter2);
-                dismissDialog();
-
-                list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                    @Override
-                    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
-                        orders.remove(position);
-                        deleteOrder(orders ,position);
-                        return false;
-                    }
-                });
-
-                //fillTable(orders);
-//                storeInDatabase();
-            } else {
-                Toast.makeText(LoadingOrderReport.this, "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();
-            }
         }
     }
 
@@ -674,7 +503,73 @@ public class LoadingOrderReport extends AppCompatActivity {
 //
 //    }
 
-    public void deleteOrder(List<Orders> orders , int index){
+    public void goToEditPage(Orders orders) {
+
+        Log.e("showwwwwwwwwwww", orders.getPlacingNo());
+         updateDialog = new Dialog(this);
+        updateDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        updateDialog.setCancelable(false);
+        updateDialog.setContentView(R.layout.edit_loading_report_dialog);
+
+        EditText orderNo = updateDialog.findViewById(R.id.editLoadingOrder_orderNo);
+        TextView truckNo = updateDialog.findViewById(R.id.editLoadingOrder_truckNo);
+        EditText containerNo = updateDialog.findViewById(R.id.editLoadingOrder_containerNo);
+        EditText destenation = updateDialog.findViewById(R.id.editLoadingOrder_destination);
+        TextView update = updateDialog.findViewById(R.id.editLoadingOrder_update);
+        TextView cancel = updateDialog.findViewById(R.id.editLoadingOrder_cancel);
+        truckNo.setText(orders.getPlacingNo());
+
+        update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!TextUtils.isEmpty(orderNo.getText().toString()))
+                        if (!TextUtils.isEmpty(containerNo.getText().toString()))
+                            if (!TextUtils.isEmpty(destenation.getText().toString())) {
+                                destenation.setError(null);
+                                containerNo.setError(null);
+                                orderNo.setError(null);
+
+                                updateOrder = new JSONObject();
+                                orders.setOrderNo(orderNo.getText().toString());
+//                                orders.setPlacingNo(truckNo.getText().toString());
+                                orders.setContainerNo(containerNo.getText().toString());
+                                orders.setDestination(destenation.getText().toString());
+
+                                updateOrder = orders.getJSONObject();
+
+                                new JSONTask2().execute();
+
+                            } else
+                                destenation.setError("Required");
+                        else
+                            containerNo.setError("Required");
+                else
+                    orderNo.setError("Required");
+
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateDialog.dismiss();
+
+            }
+        });
+
+        updateDialog.show();
+
+//        Intent intent = new Intent(LoadingOrderReport.this, EditLoadingReport.class);
+//        Bundle bundle = new Bundle();
+//        bundle.putSerializable(EDIT_ORDER , orders);
+////        bundle.putParcelable(EDIT_BUNDLES , bundles);
+//        intent.putExtras(bundle);
+//        intent.putExtra(EDIT_BUNDLES , (Serializable) bundles);// too large data
+//        intent.putExtra(EDIT_LOADING_ORDER_FLAG, 20);
+//        startActivity(intent);
+    }
+
+    public void deleteOrder(List<Orders> orders, int index) {
         Dialog passwordDialog = new Dialog(LoadingOrderReport.this);
         passwordDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         passwordDialog.setContentView(R.layout.password_dialog);
@@ -688,7 +583,9 @@ public class LoadingOrderReport extends AppCompatActivity {
             public void onClick(View v) {
                 if (password.getText().toString().equals("301190")) {
 
+                    delteIndex = index;
                     orderNo = orders.get(index).getOrderNo();
+                    Log.e("raw", "orderno " + orderNo);
 
                     bundleInfos = new ArrayList<>();
 
@@ -709,12 +606,21 @@ public class LoadingOrderReport extends AppCompatActivity {
                                     bundles.get(i).getArea(),
                                     "",
                                     ""));
+                            Log.e("raw", "" + bundles.get(i).getThickness()
+                                    + bundles.get(i).getWidth() +
+                                    bundles.get(i).getLength() +
+                                    bundles.get(i).getGrade() +
+                                    bundles.get(i).getNoOfPieces() +
+                                    bundles.get(i).getBundleNo() +
+                                    bundles.get(i).getLocation() +
+                                    bundles.get(i).getArea());
+
                         }
                     }
                     for (int i = 0; i < bundleInfos.size(); i++) {
                         bundleNo.put(bundleInfos.get(i).getJSONObject());
                     }
-                    new JSONTask2().execute();
+                    new JSONTask4().execute();
 //                                    ordersTable.removeView(tableRow);
                     passwordDialog.dismiss();
                 } else {
@@ -727,7 +633,7 @@ public class LoadingOrderReport extends AppCompatActivity {
         passwordDialog.show();
     }
 
-    public void openLargePicDialog(Bitmap picts , Context context) {
+    public void openLargePicDialog(Bitmap picts, Context context) {
         Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
@@ -804,19 +710,472 @@ public class LoadingOrderReport extends AppCompatActivity {
         }
     }
 
-    public void showDialog(){
+    public void showDialog() {
         progressDialog.show();
     }
 
-    public void dismissDialog(){
+    public void dismissDialog() {
         progressDialog.dismiss();
     }
 
+
+    // ********************************** GET DATA ***************************************
+    private class JSONTask extends AsyncTask<String, String, List<Orders>> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            showDialog();
+
+        }
+
+        @Override
+        protected List<Orders> doInBackground(String... params) {
+            URLConnection connection = null;
+            BufferedReader reader = null;
+
+            try {
+//                http://10.0.0.214/woody/import.php?FLAG=2
+                URL url = new URL("http://" + generalSettings.getIpAddress() + "/import.php?FLAG=2");
+
+                URLConnection conn = url.openConnection();
+                conn.setDoOutput(true);
+
+                reader = new BufferedReader(new
+                        InputStreamReader(conn.getInputStream()));
+
+                StringBuilder sb = new StringBuilder();
+                String line = null;
+
+                // Read Server Response
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                String finalJson = sb.toString();
+                Log.e("finalJson*********", finalJson);
+
+                JSONObject parentObject = new JSONObject(finalJson);
+
+                try {
+                    JSONArray parentArrayOrders = parentObject.getJSONArray("ONLY_ORDER");
+                    orders.clear();
+                    for (int i = 0; i < parentArrayOrders.length(); i++) {
+                        JSONObject finalObject = parentArrayOrders.getJSONObject(i);
+
+                        Orders order = new Orders();
+                        order.setPlacingNo(finalObject.getString("PLACING_NO"));
+                        order.setOrderNo(finalObject.getString("ORDER_NO"));
+                        order.setContainerNo(finalObject.getString("CONTAINER_NO"));
+                        order.setDateOfLoad(finalObject.getString("DATE_OF_LOAD"));
+                        order.setDestination(finalObject.getString("DESTINATION"));
+                        order.setLocation(finalObject.getString("LOCATION"));
+
+                        orders.add(order);
+                    }
+
+                } catch (JSONException e) {
+                    Log.e("Import Data2", e.getMessage().toString());
+                }
+
+                try {
+                    JSONArray parentArrayOrders = parentObject.getJSONArray("BUNDLE_ORDER");
+                    bundles.clear();
+
+                    for (int i = 0; i < parentArrayOrders.length(); i++) {
+                        JSONObject finalObject = parentArrayOrders.getJSONObject(i);
+
+                        Orders order = new Orders();
+                        order.setThickness(finalObject.getDouble("THICKNESS"));
+                        order.setWidth(finalObject.getDouble("WIDTH"));
+                        order.setLength(finalObject.getDouble("LENGTH"));
+                        order.setGrade(finalObject.getString("GRADE"));
+                        order.setNoOfPieces(finalObject.getDouble("PIECES"));
+                        order.setBundleNo(finalObject.getString("BUNDLE_NO"));
+                        order.setLocation(finalObject.getString("LOCATION"));
+                        order.setArea(finalObject.getString("AREA"));
+                        order.setPlacingNo(finalObject.getString("PLACING_NO"));
+                        order.setOrderNo(finalObject.getString("ORDER_NO"));
+                        order.setContainerNo(finalObject.getString("CONTAINER_NO"));
+                        order.setDateOfLoad(finalObject.getString("DATE_OF_LOAD"));
+                        order.setDestination(finalObject.getString("DESTINATION"));
+
+                        String pic = finalObject.getString("PART1") + finalObject.getString("PART2") +
+                                finalObject.getString("PART3") + finalObject.getString("PART4") +
+                                finalObject.getString("PART5") + finalObject.getString("PART6") +
+                                finalObject.getString("PART7") + finalObject.getString("PART8");
+
+                        pic = pic.replaceAll("null", "");
+
+                        order.setPicture(pic);
+
+                        bundles.add(order);
+                    }
+                } catch (JSONException e) {
+                    Log.e("Import Data1", e.getMessage().toString());
+                }
+
+
+                try {
+                    JSONArray parentArrayOrders = parentObject.getJSONArray("BUNDLE_PIC");
+                    pictures.clear();
+                    for (int i = 0; i < parentArrayOrders.length(); i++) {
+                        JSONObject finalObject = parentArrayOrders.getJSONObject(i);
+
+                        Pictures picture = new Pictures();
+                        picture.setOrderNo(finalObject.getString("ORDER_NO"));
+
+                        String[] rowPics = new String[8];
+
+                        for (int k = 1; k <= 8; k++) {
+                            String pic = finalObject.getString("PIC" + k + "PART1") + finalObject.getString("PIC" + k + "PART2") +
+                                    finalObject.getString("PIC" + k + "PART3") + finalObject.getString("PIC" + k + "PART4") +
+                                    finalObject.getString("PIC" + k + "PART5") + finalObject.getString("PIC" + k + "PART6") +
+                                    finalObject.getString("PIC" + k + "PART7") + finalObject.getString("PIC" + k + "PART8");
+
+                            pic = pic.replaceAll("null", "");
+                            rowPics[k - 1] = pic;
+                        }
+
+                        picture.setPic1(rowPics[0]);
+                        picture.setPic2(rowPics[1]);
+                        picture.setPic3(rowPics[2]);
+                        picture.setPic4(rowPics[3]);
+                        picture.setPic5(rowPics[4]);
+                        picture.setPic6(rowPics[5]);
+                        picture.setPic7(rowPics[6]);
+                        picture.setPic8(rowPics[7]);
+
+                        pictures.add(picture);
+                    }
+                } catch (JSONException e) {
+                    Log.e("Import Data1", e.getMessage().toString());
+                }
+
+
+            } catch (MalformedURLException e) {
+                Log.e("Customer", "********ex1");
+                e.printStackTrace();
+            } catch (IOException e) {
+                Log.e("Customer", e.getMessage().toString());
+                e.printStackTrace();
+
+            } catch (JSONException e) {
+                Log.e("Customer", "********ex3  " + e.toString());
+                e.printStackTrace();
+            } finally {
+                Log.e("Customer", "********finally");
+                if (connection != null) {
+                    Log.e("Customer", "********ex4");
+                    // connection.disconnect();
+                }
+                try {
+                    if (reader != null) {
+                        reader.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return orders;
+        }
+
+
+        @Override
+        protected void onPostExecute(final List<Orders> result) {
+            super.onPostExecute(result);
+
+            if (result != null) {
+                Log.e("result", "*****************" + orders.size());
+                rowsCount.setText(""+orders.size());
+                filters();
+//                adapter2 = new LoadingOrderReportAdapter(LoadingOrderReport.this, orders, bundles);
+//                list.setAdapter(adapter2);
+
+//                list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+//                    @Override
+//                    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+//
+////                        orders.remove(position);
+//                        deleteOrder(orders ,position);
+//                        return false;
+//                    }
+//                });
+
+                //fillTable(orders);
+//                storeInDatabase();
+            } else {
+                Toast.makeText(LoadingOrderReport.this, "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();
+            }
+            dismissDialog();
+
+        }
+    }
+
+    // ******************************* UPDATE MASTER *******************************
     private class JSONTask2 extends AsyncTask<String, String, String> {
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            showDialog();
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                String JsonResponse = null;
+                HttpClient client = new DefaultHttpClient();
+                HttpPost request = new HttpPost();
+                request.setURI(new URI("http://" + generalSettings.getIpAddress() + "/export.php"));//import 10.0.0.214
+
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+                nameValuePairs.add(new BasicNameValuePair("UPDATE_ORDER", updateOrder.toString()));
+//                nameValuePairs.add(new BasicNameValuePair("ORDER_NO", orderNo));
+//                nameValuePairs.add(new BasicNameValuePair("BUNDLE_NO", bundleNo.toString()));
+
+                request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                HttpResponse response = client.execute(request);
+
+                BufferedReader in = new BufferedReader(new
+                        InputStreamReader(response.getEntity().getContent()));
+
+                StringBuffer sb = new StringBuffer("");
+                String line = "";
+
+                while ((line = in.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                in.close();
+
+                JsonResponse = sb.toString();
+                Log.e("tag", "" + JsonResponse);
+
+                return JsonResponse;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (s != null) {
+                if (s.contains("UPDATE_ORDER SUCCESS")) {
+                   new JSONTask3().execute();
+//                    adapter2.notifyDataSetChanged();
+                } else {
+                    Toast.makeText(LoadingOrderReport.this, "Failed to export data!", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(LoadingOrderReport.this, "No internet connection!", Toast.LENGTH_SHORT).show();
+            }
+            updateDialog.dismiss();
+        }
+    }
+
+    // ********************************** GET DATA AFTER APDATE ***************************************
+    private class JSONTask3 extends AsyncTask<String, String, List<Orders>> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected List<Orders> doInBackground(String... params) {
+            URLConnection connection = null;
+            BufferedReader reader = null;
+
+            try {
+//                http://10.0.0.214/woody/import.php?FLAG=2
+                URL url = new URL("http://" + generalSettings.getIpAddress() + "/import.php?FLAG=2");
+
+                URLConnection conn = url.openConnection();
+                conn.setDoOutput(true);
+
+                reader = new BufferedReader(new
+                        InputStreamReader(conn.getInputStream()));
+
+                StringBuilder sb = new StringBuilder();
+                String line = null;
+
+                // Read Server Response
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                String finalJson = sb.toString();
+                Log.e("finalJson*********", finalJson);
+
+                JSONObject parentObject = new JSONObject(finalJson);
+
+                try {
+                    JSONArray parentArrayOrders = parentObject.getJSONArray("ONLY_ORDER");
+                    orders.clear();
+                    for (int i = 0; i < parentArrayOrders.length(); i++) {
+                        JSONObject finalObject = parentArrayOrders.getJSONObject(i);
+
+                        Orders order = new Orders();
+                        order.setPlacingNo(finalObject.getString("PLACING_NO"));
+                        order.setOrderNo(finalObject.getString("ORDER_NO"));
+                        order.setContainerNo(finalObject.getString("CONTAINER_NO"));
+                        order.setDateOfLoad(finalObject.getString("DATE_OF_LOAD"));
+                        order.setDestination(finalObject.getString("DESTINATION"));
+                        order.setLocation(finalObject.getString("LOCATION"));
+
+                        orders.add(order);
+                    }
+                } catch (JSONException e) {
+                    Log.e("Import Data2", e.getMessage().toString());
+                }
+
+                try {
+                    JSONArray parentArrayOrders = parentObject.getJSONArray("BUNDLE_ORDER");
+                    bundles.clear();
+
+                    for (int i = 0; i < parentArrayOrders.length(); i++) {
+                        JSONObject finalObject = parentArrayOrders.getJSONObject(i);
+
+                        Orders order = new Orders();
+                        order.setThickness(finalObject.getDouble("THICKNESS"));
+                        order.setWidth(finalObject.getDouble("WIDTH"));
+                        order.setLength(finalObject.getDouble("LENGTH"));
+                        order.setGrade(finalObject.getString("GRADE"));
+                        order.setNoOfPieces(finalObject.getDouble("PIECES"));
+                        order.setBundleNo(finalObject.getString("BUNDLE_NO"));
+                        order.setLocation(finalObject.getString("LOCATION"));
+                        order.setArea(finalObject.getString("AREA"));
+                        order.setPlacingNo(finalObject.getString("PLACING_NO"));
+                        order.setOrderNo(finalObject.getString("ORDER_NO"));
+                        order.setContainerNo(finalObject.getString("CONTAINER_NO"));
+                        order.setDateOfLoad(finalObject.getString("DATE_OF_LOAD"));
+                        order.setDestination(finalObject.getString("DESTINATION"));
+
+                        String pic = finalObject.getString("PART1") + finalObject.getString("PART2") +
+                                finalObject.getString("PART3") + finalObject.getString("PART4") +
+                                finalObject.getString("PART5") + finalObject.getString("PART6") +
+                                finalObject.getString("PART7") + finalObject.getString("PART8");
+
+                        pic = pic.replaceAll("null", "");
+
+                        order.setPicture(pic);
+
+                        bundles.add(order);
+                    }
+                } catch (JSONException e) {
+                    Log.e("Import Data1", e.getMessage().toString());
+                }
+
+
+                try {
+                    JSONArray parentArrayOrders = parentObject.getJSONArray("BUNDLE_PIC");
+                    pictures.clear();
+                    for (int i = 0; i < parentArrayOrders.length(); i++) {
+                        JSONObject finalObject = parentArrayOrders.getJSONObject(i);
+
+                        Pictures picture = new Pictures();
+                        picture.setOrderNo(finalObject.getString("ORDER_NO"));
+
+                        String[] rowPics = new String[8];
+
+                        for (int k = 1; k <= 8; k++) {
+                            String pic = finalObject.getString("PIC" + k + "PART1") + finalObject.getString("PIC" + k + "PART2") +
+                                    finalObject.getString("PIC" + k + "PART3") + finalObject.getString("PIC" + k + "PART4") +
+                                    finalObject.getString("PIC" + k + "PART5") + finalObject.getString("PIC" + k + "PART6") +
+                                    finalObject.getString("PIC" + k + "PART7") + finalObject.getString("PIC" + k + "PART8");
+
+                            pic = pic.replaceAll("null", "");
+                            rowPics[k - 1] = pic;
+                        }
+
+                        picture.setPic1(rowPics[0]);
+                        picture.setPic2(rowPics[1]);
+                        picture.setPic3(rowPics[2]);
+                        picture.setPic4(rowPics[3]);
+                        picture.setPic5(rowPics[4]);
+                        picture.setPic6(rowPics[5]);
+                        picture.setPic7(rowPics[6]);
+                        picture.setPic8(rowPics[7]);
+
+                        pictures.add(picture);
+                    }
+                } catch (JSONException e) {
+                    Log.e("Import Data1", e.getMessage().toString());
+                }
+
+
+            } catch (MalformedURLException e) {
+                Log.e("Customer", "********ex1");
+                e.printStackTrace();
+            } catch (IOException e) {
+                Log.e("Customer", e.getMessage().toString());
+                e.printStackTrace();
+
+            } catch (JSONException e) {
+                Log.e("Customer", "********ex3  " + e.toString());
+                e.printStackTrace();
+            } finally {
+                Log.e("Customer", "********finally");
+                if (connection != null) {
+                    Log.e("Customer", "********ex4");
+                    // connection.disconnect();
+                }
+                try {
+                    if (reader != null) {
+                        reader.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return orders;
+        }
+
+
+        @Override
+        protected void onPostExecute(final List<Orders> result) {
+            super.onPostExecute(result);
+
+            if (result != null) {
+                Log.e("result", "*****************" + orders.size());
+                filters();
+//                adapter2 = new LoadingOrderReportAdapter(LoadingOrderReport.this, orders, bundles);
+//                list.setAdapter(adapter2);
+
+//                list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+//                    @Override
+//                    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+//
+////                        orders.remove(position);
+//                        deleteOrder(orders ,position);
+//                        return false;
+//                    }
+//                });
+
+                //fillTable(orders);
+//                storeInDatabase();
+            } else {
+                Toast.makeText(LoadingOrderReport.this, "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();
+            }
+            dismissDialog();
+
+        }
+    }
+
+    // ******************************* DELETE *******************************
+    private class JSONTask4 extends AsyncTask<String, String, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            showDialog();
 
         }
 
@@ -864,17 +1223,19 @@ public class LoadingOrderReport extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (s != null) {
-                if (s.contains("DELETE ORDER SUCCESS")) {
-                    MHandler.deleteOrder(orderNo);
-                    adapter2.notifyDataSetChanged();
+                if (s.contains("UPDATE_ORDER SUCCESS")) {
+                    new JSONTask3().execute();
+//                    adapter2.notifyDataSetChanged();
                 } else {
                     Toast.makeText(LoadingOrderReport.this, "Failed to export data!", Toast.LENGTH_SHORT).show();
                 }
             } else {
                 Toast.makeText(LoadingOrderReport.this, "No internet connection!", Toast.LENGTH_SHORT).show();
             }
+            dismissDialog();
         }
     }
+
 
     public void slideUp(View view) {
         view.setVisibility(View.VISIBLE);
@@ -920,7 +1281,6 @@ public class LoadingOrderReport extends AppCompatActivity {
 
         String fromDate = from.getText().toString().trim();
         String toDate = to.getText().toString();
-        List<Orders> filtered = new ArrayList<>();
         try {
 
             filtered.clear();
@@ -983,16 +1343,6 @@ public class LoadingOrderReport extends AppCompatActivity {
             adapter2 = new LoadingOrderReportAdapter(LoadingOrderReport.this, filtered, bundles);
             list.setAdapter(adapter2);
 
-            list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                @Override
-                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
-                    filtered.remove(position);
-                    deleteOrder(filtered, position);
-
-                    return false;
-                }
-            });
 //            ordersTable.removeAllViews();
 //            fillTable(filtered);
 
