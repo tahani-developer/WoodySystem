@@ -536,7 +536,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                                     rowInfo.setSupplierName(supplierName);
                                     rowInfo.setThickness(Double.parseDouble(thicknessLocal));
                                     rowInfo.setWidth(Double.parseDouble(widthLocal));
-                                    rowInfo.setLength(Double.parseDouble(lengthLocal)); 
+                                    rowInfo.setLength(Double.parseDouble(lengthLocal));
                                     rowInfo.setNoOfPieces(Double.parseDouble(noOfPiecesLocal));
                                     rowInfo.setNoOfRejected(Double.parseDouble(noOfRejectedLocal));
                                     rowInfo.setNoOfBundles(Double.parseDouble(noOfBundlesLocal));
