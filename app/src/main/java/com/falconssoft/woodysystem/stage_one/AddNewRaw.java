@@ -372,7 +372,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                 truckNo.requestFocus();
 
                 netRejectedString = 0;
-                netBundlesString =0;
+                netBundlesString = 0;
                 if (edieFlag == 11)
                     for (int n = 0; n < editList.size(); n++) {
                         netRejectedString += editList.get(n).getNoOfRejected();
@@ -396,6 +396,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                 break;
             case R.id.addNewRaw_add_supplier:
                 Intent intent = new Intent(AddNewRaw.this, AddNewSupplier.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 break;
             case R.id.addNewRaw_search_supplier:
@@ -515,6 +516,13 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                             if (!TextUtils.isEmpty(noOfRejectedLocal) && (!checkValidData(noOfRejectedLocal)))
                                 if (!TextUtils.isEmpty(noOfBundlesLocal) && (!checkValidData(noOfBundlesLocal))) {
 
+                                    thickness.setError(null);
+                                    width.setError(null);
+                                    length.setError(null);
+                                    noOfPieces.setError(null);
+                                    noOfRejected.setError(null);
+                                    noOfBundles.setError(null);
+
                                     thicknessLocal = formatDecimalValue(thicknessLocal);
                                     widthLocal = formatDecimalValue(widthLocal);
                                     lengthLocal = formatDecimalValue(lengthLocal);
@@ -529,8 +537,8 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                                     noOfRejectedLocal = isContainValueAfterDot(noOfRejectedLocal);
                                     noOfBundlesLocal = isContainValueAfterDot(noOfBundlesLocal);
 
-                                    netBundlesString += Integer.parseInt(noOfBundlesLocal);
-                                    netRejectedString += Integer.parseInt(noOfRejectedLocal);
+                                    netBundlesString += Double.parseDouble(noOfBundlesLocal);
+                                    netRejectedString += Double.parseDouble(noOfRejectedLocal);
 
                                     NewRowInfo rowInfo = new NewRowInfo();
                                     rowInfo.setSupplierName(supplierName);
@@ -563,6 +571,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                                             )
                                                 editList.remove(m);
 
+                                        oldNewRowInfo = new NewRowInfo();
                                         editList.add(rowInfo);
                                         tableLayout.removeAllViews();
                                         fillDataFromReport1();

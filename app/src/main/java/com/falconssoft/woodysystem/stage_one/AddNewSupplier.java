@@ -7,6 +7,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -76,7 +77,7 @@ public class AddNewSupplier extends AppCompatActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!supName.getText().toString().equals("")) {
+                if (!TextUtils.isEmpty(supName.getText().toString())) {
 
                     jsonArray = new JSONArray();
                     SupplierInfo supplierInfo = new SupplierInfo();

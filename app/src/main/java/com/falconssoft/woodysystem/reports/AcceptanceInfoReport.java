@@ -83,7 +83,8 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
     private EditText fromThickness, toThickness, fromWidth, toWidth, fromLength, toLength;
     private TextView fromDate, toDate, bundleNo, noOfPieces, cubic, delete;
     private double noOfPiecesSum, cubicSum;
-    private String gradeString = "", supplierString = "", truckString = "", acceptorString = "", ttnString = "", accLocationString = "", fromTime = "", toTime = "";
+    private String gradeString = "", supplierString = "", truckString = "", acceptorString = ""
+            , ttnString = "", accLocationString = "", fromTime = "", toTime = "";
     private Date date;
     private Calendar calendar;
     private int timeFlag = 0;// 0=> from, 1=> to
@@ -696,8 +697,8 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
                         newRowInfo.setLocationOfAcceptance(finalObject.getString("LOCATION_OF_ACCEPTANCE"));
                         newRowInfo.setTtnNo(finalObject.getString("TTN_NO"));
 
-                        noOfPiecesSum += newRowInfo.getNoOfPieces();
-                        cubicSum += (newRowInfo.getLength() * newRowInfo.getWidth() * newRowInfo.getThickness() * newRowInfo.getNoOfPieces());
+                        noOfPiecesSum += (newRowInfo.getNoOfPieces() * newRowInfo.getNoOfBundles());
+                        cubicSum += (newRowInfo.getLength() * newRowInfo.getWidth() * newRowInfo.getThickness() * newRowInfo.getNoOfPieces() * newRowInfo.getNoOfBundles());
 
                         details.add(newRowInfo);
                     }
@@ -744,8 +745,13 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
                 listView.setAdapter(adapter);
 
                 bundleNo.setText("" + details.size());
-                cubic.setText("" + String.format("%.3f", (cubicSum / 1000000000)));
-                noOfPieces.setText("" + String.format("%.3f", (noOfPiecesSum)));
+                if (details.size() == 0){
+                    cubic.setText("0");
+                    noOfPieces.setText("0");
+                }else {
+                    cubic.setText("" + String.format("%.3f", (cubicSum / 1000000000)));
+                    noOfPieces.setText("" + String.format("%.3f", (noOfPiecesSum)));
+                }
 
             } else {
                 Toast.makeText(AcceptanceInfoReport.this, "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();

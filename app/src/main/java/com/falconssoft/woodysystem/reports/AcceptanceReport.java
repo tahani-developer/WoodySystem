@@ -207,18 +207,20 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
     public void goToEditPage(NewRowInfo newRowInfo) {
         List<NewRowInfo> list = new ArrayList<>();
         for (int i = 0; i < details.size(); i++)
-            if (truckNoBeforeUpdate2.equals(details.get(i).getTruckNo()))
-                if (!(details.get(i).getThickness() == newRowInfo.getThickness()
-                        && details.get(i).getLength() == newRowInfo.getLength()
-                        && details.get(i).getWidth() == newRowInfo.getWidth()
-                        && details.get(i).getNoOfPieces() == newRowInfo.getNoOfPieces()
-                        && details.get(i).getGrade() == newRowInfo.getGrade()
-                        && details.get(i).getNoOfRejected() == newRowInfo.getNoOfRejected()
-                        && details.get(i).getNoOfBundles() == newRowInfo.getNoOfBundles()
-                        && details.get(i).getSupplierName() == newRowInfo.getSupplierName())
-                )
+            if (details.get(i).getTruckNo().equals(newRowInfo.getTruckNo())
+                    && details.get(i).getTtnNo().equals(newRowInfo.getTtnNo())
+            )
                     list.add(details.get(i));
 
+//        if (!(details.get(i).getThickness() == newRowInfo.getThickness()
+//                && details.get(i).getLength() == newRowInfo.getLength()
+//                && details.get(i).getWidth() == newRowInfo.getWidth()
+//                && details.get(i).getNoOfPieces() == newRowInfo.getNoOfPieces()
+//                && details.get(i).getGrade() == newRowInfo.getGrade()
+//                && details.get(i).getNoOfRejected() == newRowInfo.getNoOfRejected()
+//                && details.get(i).getNoOfBundles() == newRowInfo.getNoOfBundles()
+//                && details.get(i).getSupplierName() == newRowInfo.getSupplierName())
+//        )
         Intent intent = new Intent(AcceptanceReport.this, AddNewRaw.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable(EDIT_RAW2, newRowInfo);
@@ -299,7 +301,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
 
             try {
 //                http://10.0.0.214/woody/import.php?FLAG=5
- //                http://5.189.130.98:8085/import.php?FLAG=5
+                //                http://5.189.130.98:8085/import.php?FLAG=5
 
                 URL url = new URL("http://" + generalSettings.getIpAddress() + "/import.php?FLAG=5");
 
@@ -443,15 +445,17 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
         }
     }
 
-    public void previewLinear(String truckString,String ttnString , Context Context) {
+    public void previewLinear(NewRowInfo newRowInfo, Context Context) {
 
         rawInfos = new ArrayList<>();
 
         for (int i = 0; i < details.size(); i++) {
-            if (truckString.contains(details.get(i).getTruckNo())
-            && (ttnString.equals(details.get(i).getTtnNo()))) {//master.get(index).getTruckNo()
+
+            if (details.get(i).getTruckNo().equals(newRowInfo.getTruckNo())
+                    && details.get(i).getTtnNo().equals(newRowInfo.getTtnNo())
+            ) {
                 Log.e("acceptanceReport", "/truck/" + truckString + "/truckd/" + details.get(i).getTruckNo()
-                        + "/ttn/" + ttnString+ "/ttnd/" + details.get(i).getTtnNo());
+                        + "/ttn/" + ttnString + "/ttnd/" + details.get(i).getTtnNo());
 
                 rawInfos.add(new NewRowInfo(
                         details.get(i).getSupplierName(),
@@ -680,7 +684,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
 
     public void filters() {
 
-
+        slideDown(linearLayout);
         String fromDate = from.getText().toString().trim();
         String toDate = to.getText().toString();
 
