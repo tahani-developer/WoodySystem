@@ -375,7 +375,7 @@ public class LoadingOrder2 extends AppCompatActivity {
         if (requestCode == 1888 && resultCode == Activity.RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-            thumbnail = getResizedBitmap(thumbnail, 100, 100);
+            //thumbnail = getResizedBitmap(thumbnail, 100, 100);
             File picture = null;
 
             if (extras != null) {
@@ -532,7 +532,7 @@ public class LoadingOrder2 extends AppCompatActivity {
     public String BitMapToString(Bitmap bitmap) {
         if (bitmap != null) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] arr = baos.toByteArray();
             String result = Base64.encodeToString(arr, Base64.DEFAULT);
             return result;
