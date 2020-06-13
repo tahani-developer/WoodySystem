@@ -508,7 +508,7 @@ public class LoadingOrderReport extends AppCompatActivity {
     public void goToEditPage(Orders orders) {
 
         Log.e("showwwwwwwwwwww", orders.getPlacingNo());
-         updateDialog = new Dialog(this);
+        updateDialog = new Dialog(this);
         updateDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         updateDialog.setCancelable(false);
         updateDialog.setContentView(R.layout.edit_loading_report_dialog);
@@ -525,26 +525,26 @@ public class LoadingOrderReport extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (!TextUtils.isEmpty(orderNo.getText().toString()))
-                        if (!TextUtils.isEmpty(containerNo.getText().toString()))
-                            if (!TextUtils.isEmpty(destenation.getText().toString())) {
-                                destenation.setError(null);
-                                containerNo.setError(null);
-                                orderNo.setError(null);
+                    if (!TextUtils.isEmpty(containerNo.getText().toString()))
+                        if (!TextUtils.isEmpty(destenation.getText().toString())) {
+                            destenation.setError(null);
+                            containerNo.setError(null);
+                            orderNo.setError(null);
 
-                                updateOrder = new JSONObject();
-                                orders.setOrderNo(orderNo.getText().toString());
+                            updateOrder = new JSONObject();
+                            orders.setOrderNo(orderNo.getText().toString());
 //                                orders.setPlacingNo(truckNo.getText().toString());
-                                orders.setContainerNo(containerNo.getText().toString());
-                                orders.setDestination(destenation.getText().toString());
+                            orders.setContainerNo(containerNo.getText().toString());
+                            orders.setDestination(destenation.getText().toString());
 
-                                updateOrder = orders.getJSONObject();
+                            updateOrder = orders.getJSONObject();
 
-                                new JSONTask2().execute();
+                            new JSONTask2().execute();
 
-                            } else
-                                destenation.setError("Required");
-                        else
-                            containerNo.setError("Required");
+                        } else
+                            destenation.setError("Required");
+                    else
+                        containerNo.setError("Required");
                 else
                     orderNo.setError("Required");
 
@@ -894,7 +894,7 @@ public class LoadingOrderReport extends AppCompatActivity {
 
             if (result != null) {
                 Log.e("result", "*****************" + orders.size());
-                rowsCount.setText(""+orders.size());
+                rowsCount.setText("" + orders.size());
                 filters();
 //                adapter2 = new LoadingOrderReportAdapter(LoadingOrderReport.this, orders, bundles);
 //                list.setAdapter(adapter2);
@@ -974,7 +974,7 @@ public class LoadingOrderReport extends AppCompatActivity {
             super.onPostExecute(s);
             if (s != null) {
                 if (s.contains("UPDATE_ORDER SUCCESS")) {
-                   new JSONTask3().execute();
+                    new JSONTask3().execute();
 //                    adapter2.notifyDataSetChanged();
                 } else {
                     Toast.makeText(LoadingOrderReport.this, "Failed to export data!", Toast.LENGTH_SHORT).show();
