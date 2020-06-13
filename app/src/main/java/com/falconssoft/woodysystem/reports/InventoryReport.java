@@ -811,7 +811,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (password.getText().toString().equals("301190")) {
+                if (password.getText().toString().equals("010010")) {
 
                     addBackingList(filtered, position);
                     passwordDialog.dismiss();
@@ -1087,7 +1087,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                 done.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (password.getText().toString().equals("301190")) {
+                        if (password.getText().toString().equals("010010")) {
                             bundleInfoForPrint.clear();
 
                             InventoryReportAdapter obj = new InventoryReportAdapter();
