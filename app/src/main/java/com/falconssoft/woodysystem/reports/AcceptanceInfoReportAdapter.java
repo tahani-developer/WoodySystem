@@ -15,6 +15,7 @@ import com.falconssoft.woodysystem.models.NewRowInfo;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.falconssoft.woodysystem.stage_one.AddNewRaw.serialBeforeUpdate;
 import static com.falconssoft.woodysystem.stage_one.AddNewRaw.truckNoBeforeUpdate;
 
 public class AcceptanceInfoReportAdapter extends BaseAdapter {
@@ -95,6 +96,8 @@ public class AcceptanceInfoReportAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 truckNoBeforeUpdate = list.get(position).getTruckNo();
+                serialBeforeUpdate = list.get(position).getSerial();
+
                 infoReport.goToEditPage(list.get(position));
             }
         });

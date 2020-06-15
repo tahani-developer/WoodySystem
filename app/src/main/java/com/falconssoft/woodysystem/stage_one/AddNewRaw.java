@@ -87,7 +87,6 @@ import static com.falconssoft.woodysystem.reports.AcceptanceInfoReport.EDIT_LIST
 import static com.falconssoft.woodysystem.reports.AcceptanceInfoReport.EDIT_RAW;
 import static com.falconssoft.woodysystem.reports.AcceptanceReport.EDIT_LIST2;
 import static com.falconssoft.woodysystem.reports.AcceptanceReport.EDIT_RAW2;
-import static com.falconssoft.woodysystem.stage_one.AddNewSupplier.BACK_FLAG;
 
 public class AddNewRaw extends AppCompatActivity implements View.OnClickListener {
 
@@ -132,7 +131,10 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     private int netBundlesString = 0, netRejectedString = 0;
     private ProgressDialog progressDialog;
     public static String truckNoBeforeUpdate = "";
+    public static String serialBeforeUpdate = "";
+
     private NewRowInfo oldNewRowInfo, updatedNewRowInfo;
+    private String oldTruck = "", editSerial = "";// for edit
 
     private String thicknessLocal, widthLocal, lengthLocal, noOfPiecesLocal, noOfRejectedLocal, noOfBundlesLocal;
 
@@ -254,9 +256,12 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         if (edieFlag == 10) {// from Acceptance Report 2
             Bundle bundle = getIntent().getExtras();
             NewRowInfo rowInfo = (NewRowInfo) bundle.getSerializable(EDIT_RAW);
-            editList = (List<NewRowInfo>) bundle.getSerializable(EDIT_LIST);
-            Log.e("serializable", "" + editList.size());
+//            editList = (List<NewRowInfo>) bundle.getSerializable(EDIT_LIST);
+            // todo
+            Log.e("serializable", "" + rowInfo.getSerial());
 
+            oldTruck = rowInfo.getTruckNo();
+            editSerial = rowInfo.getSerial();
             thickness.setText("" + (int) rowInfo.getThickness());
             width.setText("" + (int) rowInfo.getWidth());
             length.setText("" + (int) rowInfo.getLength());
@@ -282,7 +287,9 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
             Bundle bundle = getIntent().getExtras();
             NewRowInfo rowInfo = (NewRowInfo) bundle.getSerializable(EDIT_RAW2);
             editList = (List<NewRowInfo>) bundle.getSerializable(EDIT_LIST2);
-            Log.e("serializable2", "" + editList.size());
+            oldTruck = rowInfo.getTruckNo();
+            // todo remove
+            Log.e("show truck", "" + rowInfo.getTruckNo() + "///" + oldTruck);
             oldNewRowInfo = new NewRowInfo();
             updatedNewRowInfo = new NewRowInfo();
             searchSupplier.setClickable(false);
@@ -550,6 +557,8 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                                     rowInfo.setNoOfBundles(Double.parseDouble(noOfBundlesLocal));
                                     rowInfo.setGrade(gradeText);
 
+
+
                                     if (headerTableLayout.getChildCount() == 0)
                                         addTableHeader(headerTableLayout);
 
@@ -557,6 +566,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                                     if (edieFlag == 10 && tableLayout.getChildCount() == 1) { //Report 2
                                         tableLayout.removeAllViews();
                                         newRowList.clear();
+                                        rowInfo.setSerial(editSerial);
                                         fillTableRow(tableRow, thicknessLocal, widthLocal, lengthLocal, noOfPiecesLocal, noOfRejectedLocal, noOfBundlesLocal);
                                         tableLayout.addView(tableRow);
                                     } else if (edieFlag == 11 && tableLayout.getChildCount() > 0) { //Report 1
@@ -641,10 +651,13 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
                                 jsonArray = new JSONArray();
 
-                                if (edieFlag == 10 && editList.size() > 0) {
-                                    for (int m = 0; m < editList.size(); m++)
-                                        newRowList.add(editList.get(m));
-                                }
+//                                if (edieFlag == 10 && editList.size() > 0) {
+//                                    for (int m = 0; m < editList.size(); m++) {
+//                                        newRowList.add(editList.get(m));
+//                                        // todo remove
+//                                        Log.e("showc", editList.get(m).getSerial());
+//                                    }
+//                                }
 
                                 for (int i = 0; i < newRowList.size(); i++) {
                                     newRowList.get(i).setTruckNo(truckNoLocal);
@@ -659,7 +672,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                                     jsonArray.put(object);
 
                                 }
-                                Log.e("newRowList", "" + newRowList.size());
+                                Log.e("newRowList//", "" + newRowList.get(0).getSerial());
 
                                 masterData = new JSONObject();
                                 masterData = newRowList.get(0).getJsonDataMaster();
@@ -667,6 +680,16 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
                                 if (edieFlag == 10 || edieFlag == 11) {
                                     Log.e("edit", "" + edieFlag);
+                                    Log.e("addNewRow44/", "update" + masterData.toString().trim());
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        try {
+                                            Log.e("addNewRow55/", "update" + jsonArray.get(i).toString().trim());
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                    // todo remove
+                                    Log.e("show truck", "" + oldTruck);
 
                                     new JSONTask2().execute();// update
                                 } else {
@@ -1323,9 +1346,10 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 //                for (int i=0 ;i< newRowList.size();i++) {
 //                    nameValuePairs.add(new BasicNameValuePair("ROW_INFO_DETAILS", newRowList.get(i).toString()));
 //                }
+                nameValuePairs.add(new BasicNameValuePair("TRUCK", oldTruck));//oldTruck
                 nameValuePairs.add(new BasicNameValuePair("RAW_INFO_DETAILS", jsonArray.toString().trim()));// list
                 nameValuePairs.add(new BasicNameValuePair("RAW_INFO_MASTER", masterData.toString().trim())); // json object
-                Log.e("addNewRow/", "update" + masterData.toString().trim());
+//                Log.e("addNewRow/", "update" + masterData.toString().trim() + " ///oldTruck" + oldTruck);
 
                 request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 

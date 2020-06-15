@@ -20,8 +20,6 @@ import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -33,13 +31,10 @@ import android.widget.Toast;
 
 import com.falconssoft.woodysystem.DatabaseHandler;
 import com.falconssoft.woodysystem.HorizontalListView;
-import com.falconssoft.woodysystem.ItemsListAdapter2;
 import com.falconssoft.woodysystem.ItemsListAdapter4;
 import com.falconssoft.woodysystem.PicturesAdapter;
 import com.falconssoft.woodysystem.R;
-import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.NewRowInfo;
-import com.falconssoft.woodysystem.models.Orders;
 import com.falconssoft.woodysystem.models.Pictures;
 import com.falconssoft.woodysystem.models.Settings;
 import com.falconssoft.woodysystem.stage_one.AddNewRaw;
@@ -208,9 +203,9 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
         List<NewRowInfo> list = new ArrayList<>();
         for (int i = 0; i < details.size(); i++)
             if (details.get(i).getTruckNo().equals(newRowInfo.getTruckNo())
-                    && details.get(i).getTtnNo().equals(newRowInfo.getTtnNo())
+                    && details.get(i).getSerial().equals(newRowInfo.getSerial())
             )
-                    list.add(details.get(i));
+                list.add(details.get(i));
 
 //        if (!(details.get(i).getThickness() == newRowInfo.getThickness()
 //                && details.get(i).getLength() == newRowInfo.getLength()
@@ -228,7 +223,8 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
         intent.putExtras(bundle);
         intent.putExtra(EDIT_FLAG, 11);
         intent.putExtra(EDIT_LIST2, (Serializable) list);
-        Log.e("seria size", "" + list.size());
+        //todo remove
+        Log.e("look", "" + details.get(0).getTruckNo());
         startActivity(intent);
 
     }
@@ -263,6 +259,8 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
         switch (parent.getId()) {
             case R.id.acceptanceInfoReport_truckNo:
                 truckString = parent.getItemAtPosition(position).toString();
+                // todo remove log
+                Log.e("showtruck", truckString);
                 filters();
                 break;
             case R.id.acceptanceInfoReport_acceptor:
@@ -285,6 +283,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
 
     }
 
+    // ******************************************** GET DATA *****************************************
     private class JSONTask extends AsyncTask<String, String, List<NewRowInfo>> {
 
         @Override
@@ -341,6 +340,10 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
                         newRowInfo.setLocationOfAcceptance(finalObject.getString("LOCATION_OF_ACCEPTANCE"));
                         newRowInfo.setTtnNo(finalObject.getString("TTN_NO"));
                         newRowInfo.setTotalRejectedNo(finalObject.getString("REJECTED"));
+                        newRowInfo.setSerial(finalObject.getString("SERIAL"));
+
+                        // todo remove log
+                        Log.e("showdatamaster", finalObject.getString("TRUCK_NO") + finalObject.getString("SERIAL"));
 
                         master.add(newRowInfo);
                         ttnList.add(finalObject.getString("TTN_NO"));
@@ -382,7 +385,11 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
                         newRowInfo.setNoOfBundles(finalObject.getDouble("NO_BUNDLES"));
                         newRowInfo.setGrade(finalObject.getString("GRADE"));
                         newRowInfo.setTtnNo(finalObject.getString("TTN_NO"));
+                        newRowInfo.setSerial(finalObject.getString("SERIAL"));
+                        newRowInfo.setLocationOfAcceptance(finalObject.getString("LOCATION_OF_ACCEPTANCE"));
 
+                        // todo remove log
+                        Log.e("showdatamix", finalObject.getString("TRUCK_NO") + finalObject.getString("SERIAL"));
 //                        String pic = finalObject.getString("PART1") + finalObject.getString("PART2") +
 //                                finalObject.getString("PART3") + finalObject.getString("PART4") +
 //                                finalObject.getString("PART5") + finalObject.getString("PART6") +
@@ -452,10 +459,10 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
         for (int i = 0; i < details.size(); i++) {
 
             if (details.get(i).getTruckNo().equals(newRowInfo.getTruckNo())
-                    && details.get(i).getTtnNo().equals(newRowInfo.getTtnNo())
+                    && details.get(i).getSerial().equals(newRowInfo.getSerial())
             ) {
                 Log.e("acceptanceReport", "/truck/" + truckString + "/truckd/" + details.get(i).getTruckNo()
-                        + "/ttn/" + ttnString + "/ttnd/" + details.get(i).getTtnNo());
+                        + "/serial/" + details.get(i).getSerial() + "/seriald/" + newRowInfo.getSerial());
 
                 rawInfos.add(new NewRowInfo(
                         details.get(i).getSupplierName(),
@@ -466,7 +473,10 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
                         details.get(i).getNoOfRejected(),
                         details.get(i).getNoOfBundles(),
                         details.get(i).getGrade(),
-                        details.get(i).getTruckNo()));
+                        details.get(i).getTruckNo(),
+                        details.get(i).getSerial()
+                ));
+
             }
         }
 
@@ -684,16 +694,21 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
 
     public void filters() {
 
-        slideDown(linearLayout);
+        if (linearLayout.getVisibility() == View.VISIBLE)
+            slideDown(linearLayout);
         String fromDate = from.getText().toString().trim();
         String toDate = to.getText().toString();
 
-        Log.e("AcceptanceReport", "filter/" + loc + "/" + truckString + "/" + acceptorString + "/" + ttnString);
+//        Log.e("AcceptanceReport", "filter/" + loc + "/" + truckString + "/" + acceptorString + "/" + ttnString);
         try {
             filtered = new ArrayList<>();
             for (int k = 0; k < master.size(); k++) {
+//                Log.e("AcceptanceReport", "filter/" + loc + "/" + truckString + "/"
+//                        + acceptorString + "/" + ttnString
+//                        + "/" + master.size()
+//                        + "/" + (truckString.equals("All") || truckString.equals(master.get(k).getTruckNo())));
 
-                Log.e("****", fromDate + "  " + master.get(k).getDate());
+//                Log.e("****", fromDate + "  " + master.get(k).getDate());
                 if ((formatDate(master.get(k).getDate()).after(formatDate(fromDate)) || formatDate(master.get(k).getDate()).equals(formatDate(fromDate))) &&
                         (formatDate(master.get(k).getDate()).before(formatDate(toDate)) || formatDate(master.get(k).getDate()).equals(formatDate(toDate))))
                     if (loc.equals("All") || loc.equals(master.get(k).getLocationOfAcceptance()))
@@ -706,8 +721,6 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
 
             adapter2 = new AcceptanceReportAdapter(AcceptanceReport.this, filtered, details);
             list.setAdapter(adapter2);
-//            ordersTable.removeAllViews();
-//            fillTable(filtered);
 
         } catch (ParseException e) {
             e.printStackTrace();

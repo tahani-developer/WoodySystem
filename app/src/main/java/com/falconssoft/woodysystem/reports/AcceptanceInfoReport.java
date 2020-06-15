@@ -68,6 +68,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import static com.falconssoft.woodysystem.stage_one.AddNewRaw.serialBeforeUpdate;
 import static com.falconssoft.woodysystem.stage_one.AddNewRaw.truckNoBeforeUpdate;
 
 public class AcceptanceInfoReport extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -97,6 +98,7 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
     public static final String EDIT_LIST = "EDIT_LIST";
     public static final String EDIT_RAW = "EDIT_RAW";
     public static final String EDIT_FLAG = "EDIT_FLAG";
+
     private ProgressDialog progressDialog;
 
     @Override
@@ -382,27 +384,27 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
 
     public void goToEditPage(NewRowInfo newRowInfo) {
         List<NewRowInfo> list = new ArrayList<>();
-        for (int i = 0; i < details.size(); i++)
-            if (truckNoBeforeUpdate.equals(details.get(i).getTruckNo()))
-                if (!(details.get(i).getThickness() == newRowInfo.getThickness()
-                        && details.get(i).getLength() == newRowInfo.getLength()
-                        && details.get(i).getWidth() == newRowInfo.getWidth()
-                        && details.get(i).getNoOfPieces() == newRowInfo.getNoOfPieces()
-                        && details.get(i).getGrade() == newRowInfo.getGrade()
-                        && details.get(i).getNoOfRejected() == newRowInfo.getNoOfRejected()
-                        && details.get(i).getNoOfBundles() == newRowInfo.getNoOfBundles()
-                        && details.get(i).getSupplierName() == newRowInfo.getSupplierName())
-                )
-                    list.add(details.get(i));
+//        for (int i = 0; i < details.size(); i++)
+//            if (truckNoBeforeUpdate.equals(details.get(i).getTruckNo()) &&
+//                    serialBeforeUpdate.equals(details.get(i).getSerial()))
+//                if (!(details.get(i).getThickness() == newRowInfo.getThickness()
+//                        && details.get(i).getLength() == newRowInfo.getLength()
+//                        && details.get(i).getWidth() == newRowInfo.getWidth()
+//                        && details.get(i).getNoOfPieces() == newRowInfo.getNoOfPieces()
+//                        && details.get(i).getGrade() == newRowInfo.getGrade()
+//                        && details.get(i).getNoOfRejected() == newRowInfo.getNoOfRejected()
+//                        && details.get(i).getNoOfBundles() == newRowInfo.getNoOfBundles()
+//                        && details.get(i).getSupplierName() == newRowInfo.getSupplierName())
+//                )
+//                    list.add(details.get(i));
 
         Intent intent = new Intent(AcceptanceInfoReport.this, AddNewRaw.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable(EDIT_RAW, newRowInfo);
-//        bundle.putParcelable(EDIT_LIST, list);
         intent.putExtras(bundle);
         intent.putExtra(EDIT_FLAG, 10);
-        intent.putExtra(EDIT_LIST, (Serializable) list);
-        Log.e("seria size", "" + list.size());
+//        intent.putExtra(EDIT_LIST, (Serializable) list);
+        Log.e("look22", "" + newRowInfo.getSerial());
         startActivity(intent);
 
     }
@@ -649,6 +651,7 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
                         newRowInfo.setLocationOfAcceptance(finalObject.getString("LOCATION_OF_ACCEPTANCE"));
                         newRowInfo.setTtnNo(finalObject.getString("TTN_NO"));
                         newRowInfo.setTotalRejectedNo(finalObject.getString("REJECTED"));
+                        newRowInfo.setSerial(finalObject.getString("SERIAL"));
 
                         master.add(newRowInfo);
                         ttnList.add(finalObject.getString("TTN_NO"));
@@ -696,6 +699,7 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
                         newRowInfo.setAcceptedPersonName(finalObject.getString("NAME_OF_ACCEPTER"));
                         newRowInfo.setLocationOfAcceptance(finalObject.getString("LOCATION_OF_ACCEPTANCE"));
                         newRowInfo.setTtnNo(finalObject.getString("TTN_NO"));
+                        newRowInfo.setSerial(finalObject.getString("SERIAL"));
 
                         noOfPiecesSum += (newRowInfo.getNoOfPieces() * newRowInfo.getNoOfBundles());
                         cubicSum += (newRowInfo.getLength() * newRowInfo.getWidth() * newRowInfo.getThickness() * newRowInfo.getNoOfPieces() * newRowInfo.getNoOfBundles());
@@ -741,8 +745,9 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
             progressDialog.dismiss();
             if (result != null) {
                 Log.e("infoReport", "/GET/" + details.size());
-                adapter = new AcceptanceInfoReportAdapter(AcceptanceInfoReport.this, details);
-                listView.setAdapter(adapter);
+                filters();
+//                adapter = new AcceptanceInfoReportAdapter(AcceptanceInfoReport.this, details);
+//                listView.setAdapter(adapter);
 
                 bundleNo.setText("" + details.size());
                 if (details.size() == 0){
