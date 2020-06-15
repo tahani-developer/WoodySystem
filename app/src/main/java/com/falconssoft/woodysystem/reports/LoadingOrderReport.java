@@ -64,6 +64,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.net.MalformedURLException;
@@ -281,7 +282,8 @@ public class LoadingOrderReport extends AppCompatActivity {
                         bundles.get(i).getLocation(),
                         bundles.get(i).getArea(),
                         "",
-                        bundles.get(i).getPicture()));
+                        bundles.get(i).getPicture(),
+                        bundles.get(i).getPicBitmap()));
             }
         }
 
@@ -292,7 +294,7 @@ public class LoadingOrderReport extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                openLargePicDialog(StringToBitMap(bundleInfos.get(position).getPicture()), Context);
+                openLargePicDialog(bundleInfos.get(position).getPicBitmap(), Context);
             }
         });
 
@@ -605,7 +607,8 @@ public class LoadingOrderReport extends AppCompatActivity {
                                     bundles.get(i).getLocation(),
                                     bundles.get(i).getArea(),
                                     "",
-                                    ""));
+                                    "",
+                                    null));
                             Log.e("raw", "" + bundles.get(i).getThickness()
                                     + bundles.get(i).getWidth() +
                                     bundles.get(i).getLength() +
@@ -799,15 +802,19 @@ public class LoadingOrderReport extends AppCompatActivity {
                         order.setContainerNo(finalObject.getString("CONTAINER_NO"));
                         order.setDateOfLoad(finalObject.getString("DATE_OF_LOAD"));
                         order.setDestination(finalObject.getString("DESTINATION"));
+                        order.setPicture(finalObject.getString("PIC"));
 
-                        String pic = finalObject.getString("PART1") + finalObject.getString("PART2") +
+                        InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC")).openStream();
+                        order.setPicBitmap(BitmapFactory.decodeStream(in));
+
+                       /* String pic = finalObject.getString("PART1") + finalObject.getString("PART2") +
                                 finalObject.getString("PART3") + finalObject.getString("PART4") +
                                 finalObject.getString("PART5") + finalObject.getString("PART6") +
                                 finalObject.getString("PART7") + finalObject.getString("PART8");
 
                         pic = pic.replaceAll("null", "");
+*/
 
-                        order.setPicture(pic);
 
                         bundles.add(order);
                     }

@@ -36,11 +36,12 @@ public class BundleInfo implements Serializable {
     private String backingList;
     List<String> bundleNoString;
     private String foucoseColor="0";
+    private Bitmap picBitmap;
 
     public BundleInfo() {
     }
 
-    public BundleInfo(double thickness, double length, double width, String grade, double noOfPieces, String bundleNo, String location, String area, String barcode, String pic) {
+    public BundleInfo(double thickness, double length, double width, String grade, double noOfPieces, String bundleNo, String location, String area, String barcode, String pic, Bitmap picBitmap) {
         this.thickness = thickness;
         this.length = length;
         this.width = width;
@@ -51,6 +52,7 @@ public class BundleInfo implements Serializable {
         this.area = area;
         this.barcode = barcode;
         this.picture = pic;
+        this.picBitmap = picBitmap;
     }
 
     public BundleInfo(double thickness, double length, double width, String grade, double noOfPieces, String bundleNo, String location, String area, String addingDate, int isPrinted, String description, String serialNo, String userNo, String backingList, int ordered) {
@@ -205,6 +207,14 @@ public class BundleInfo implements Serializable {
 
     public void setPicture(String picture) {
         this.picture = picture;
+    }
+
+    public Bitmap getPicBitmap() {
+        return picBitmap;
+    }
+
+    public void setPicBitmap(Bitmap picBitmap) {
+        this.picBitmap = picBitmap;
     }
 
     public int getOrdered() {

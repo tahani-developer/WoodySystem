@@ -1,5 +1,6 @@
 package com.falconssoft.woodysystem.models;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -24,6 +25,7 @@ public class Orders implements Serializable {
     private String destination;
     private String picture;
     private boolean checked;
+    private Bitmap picBitmap;
 
     public Orders() {
     }
@@ -164,6 +166,14 @@ public class Orders implements Serializable {
 
     public void setPicture(String picture) {
         this.picture = picture;
+    }
+
+    public Bitmap getPicBitmap() {
+        return picBitmap;
+    }
+
+    public void setPicBitmap(Bitmap picBitmap) {
+        this.picBitmap = picBitmap;
     }
 
     public JSONObject getJSONObject() {
