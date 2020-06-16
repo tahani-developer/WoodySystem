@@ -93,13 +93,13 @@ public class AddNewSupplier extends AppCompatActivity {
 
     }
 
-    @Override
-    public void onBackPressed() {
-//        super.onBackPressed();
-        Intent intent = new Intent(AddNewSupplier.this, AddNewRaw.class);
-        startActivity(intent);
-        finish();
-    }
+//    @Override
+//    public void onBackPressed() {
+////        super.onBackPressed();
+//        Intent intent = new Intent(AddNewSupplier.this, AddNewRaw.class);
+//        startActivity(intent);
+//        finish();
+//    }
 
     private class JSONTask extends AsyncTask<String, String, List<SupplierInfo>> {
 
