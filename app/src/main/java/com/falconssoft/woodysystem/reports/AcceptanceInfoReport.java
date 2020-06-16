@@ -384,26 +384,26 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
 
     public void goToEditPage(NewRowInfo newRowInfo) {
         List<NewRowInfo> list = new ArrayList<>();
-//        for (int i = 0; i < details.size(); i++)
-//            if (truckNoBeforeUpdate.equals(details.get(i).getTruckNo()) &&
-//                    serialBeforeUpdate.equals(details.get(i).getSerial()))
-//                if (!(details.get(i).getThickness() == newRowInfo.getThickness()
-//                        && details.get(i).getLength() == newRowInfo.getLength()
-//                        && details.get(i).getWidth() == newRowInfo.getWidth()
-//                        && details.get(i).getNoOfPieces() == newRowInfo.getNoOfPieces()
-//                        && details.get(i).getGrade() == newRowInfo.getGrade()
-//                        && details.get(i).getNoOfRejected() == newRowInfo.getNoOfRejected()
-//                        && details.get(i).getNoOfBundles() == newRowInfo.getNoOfBundles()
-//                        && details.get(i).getSupplierName() == newRowInfo.getSupplierName())
-//                )
-//                    list.add(details.get(i));
+        for (int i = 0; i < details.size(); i++)
+            if (truckNoBeforeUpdate.equals(details.get(i).getTruckNo()) &&
+                    serialBeforeUpdate.equals(details.get(i).getSerial()))
+                if (!(details.get(i).getThickness() == newRowInfo.getThickness()
+                        && details.get(i).getLength() == newRowInfo.getLength()
+                        && details.get(i).getWidth() == newRowInfo.getWidth()
+                        && details.get(i).getNoOfPieces() == newRowInfo.getNoOfPieces()
+                        && details.get(i).getGrade() == newRowInfo.getGrade()
+                        && details.get(i).getNoOfRejected() == newRowInfo.getNoOfRejected()
+                        && details.get(i).getNoOfBundles() == newRowInfo.getNoOfBundles()
+                        && details.get(i).getSupplierName() == newRowInfo.getSupplierName())
+                ) // to add other sons
+                    list.add(details.get(i));
 
         Intent intent = new Intent(AcceptanceInfoReport.this, AddNewRaw.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable(EDIT_RAW, newRowInfo);
         intent.putExtras(bundle);
         intent.putExtra(EDIT_FLAG, 10);
-//        intent.putExtra(EDIT_LIST, (Serializable) list);
+        intent.putExtra(EDIT_LIST, (Serializable) list);
         Log.e("look22", "" + newRowInfo.getSerial());
         startActivity(intent);
 
