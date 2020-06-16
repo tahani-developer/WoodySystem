@@ -584,6 +584,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                                         supplierName = "";
                                     } else if (edieFlag == 11 && tableLayout.getChildCount() > 0) { //Report 1
 
+                                        boolean isOverflowRaw = false;
                                         for (int m = 0; m < editList.size(); m++)
                                             if (oldNewRowInfo.getThickness() == editList.get(m).getThickness()
                                                     && oldNewRowInfo.getWidth() == editList.get(m).getWidth()
@@ -591,19 +592,27 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                                                     && oldNewRowInfo.getNoOfPieces() == editList.get(m).getNoOfPieces()
                                                     && oldNewRowInfo.getNoOfRejected() == editList.get(m).getNoOfRejected()
                                                     && oldNewRowInfo.getNoOfBundles() == editList.get(m).getNoOfBundles()
-                                            )
+                                            ) {
+                                                isOverflowRaw = true;
                                                 editList.remove(m);
+                                            }
 
-                                        rowInfo.setSerial(oldNewRowInfo.getSerial());
-                                        oldNewRowInfo = new NewRowInfo();
-                                        editList.add(rowInfo);
-                                        tableLayout.removeAllViews();
-                                        fillDataFromReport1();
+                                        if (isOverflowRaw) {
+                                            rowInfo.setSerial(oldNewRowInfo.getSerial());
+                                            oldNewRowInfo = new NewRowInfo();
+                                            editList.add(rowInfo);
+                                            tableLayout.removeAllViews();
+                                            fillDataFromReport1();
+                                        } else {
+                                            rowInfo = null;
+                                            Toast.makeText(this, "Please choose the raw first!", Toast.LENGTH_SHORT).show();
+                                        }
                                     } else {
                                         fillTableRow(tableRow, thicknessLocal, widthLocal, lengthLocal, noOfPiecesLocal, noOfRejectedLocal, noOfBundlesLocal);
                                         tableLayout.addView(tableRow);
                                     }
-                                    newRowList.add(rowInfo);
+                                    if (!(rowInfo == null))
+                                        newRowList.add(rowInfo);
 
                                     thickness.setText("");
                                     width.setText("");
