@@ -269,22 +269,22 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                 for (int i = 0; i < selected.size(); i++) {
                     if (selected.get(i).getChecked()) {
 //                        Log.e("showcheckedd", selected.get(i).getBundleNo());
-                        if (selected.get(i).getBackingList().equals("null")) {
-                            bundleInfoForPList.add(selected.get(i));
-                        } else {
-                            found = true;
-                            AlertDialog.Builder builder = new AlertDialog.Builder(InventoryReport.this);
-                            builder.setMessage("One bundle or more has packing list, uncheck it or cancel the operation")
-                                    .setTitle("Warning")
-                                    .show();
-                            break;
-
-                        }
+//                        if (selected.get(i).getBackingList().equals("null")) {
+                        bundleInfoForPList.add(selected.get(i));
+//                        } else {
+//                            found = true;
+//                            AlertDialog.Builder builder = new AlertDialog.Builder(InventoryReport.this);
+//                            builder.setMessage("One bundle or more has packing list, uncheck it or cancel the operation")
+//                                    .setTitle("Warning")
+//                                    .show();
+//                            break;
+//
+//                        }
                     }
                 }
 
-                if (!found)
-                    setGroupBackingList();
+//                if (!found)
+                setGroupBackingList();
 
             }
 
@@ -312,7 +312,10 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 
                 for (int i = 0; i < bundleInfoForPList.size(); i++) {
 
-                    woodPresenter.updatePackingList(InventoryReport.this, bundleInfoForPList.get(i).getBundleNo(), newPackingList, bundleInfoForPList.get(i).getLocation());
+                    woodPresenter.updatePackingList(InventoryReport.this
+                            , bundleInfoForPList.get(i).getBundleNo()
+                            , newPackingList
+                            , bundleInfoForPList.get(i).getLocation());
                 }
 //                        filters();
 //                        adapter.notifyDataSetChanged();
@@ -431,6 +434,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         gradeList.add("Reject");
         gradeList.add("KD");
         gradeList.add("KD Blue Stain");
+        gradeList.add("KD Reject");
         gradeList.add("Second Sort");
         gradeAdapter = new ArrayAdapter<String>(this, R.layout.spinner_layout, gradeList);
         gradeAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
@@ -811,7 +815,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (password.getText().toString().equals("010010")) {
+                if (password.getText().toString().equals("301190")) {//010010
 
                     addBackingList(filtered, position);
                     passwordDialog.dismiss();
@@ -1121,7 +1125,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                 break;
         }
 
-    } 
+    }
 
     public void editBundle(BundleInfo bundleInfo) {
         Intent intent = new Intent(InventoryReport.this, AddToInventory.class);

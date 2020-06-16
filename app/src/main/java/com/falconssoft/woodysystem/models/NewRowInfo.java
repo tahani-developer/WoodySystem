@@ -16,6 +16,7 @@ public class NewRowInfo implements Serializable {
     private double noOfBundles;
     private String grade;
     private boolean checked;
+    private String serial;
 
     private String truckNo;
     private String date;
@@ -28,7 +29,7 @@ public class NewRowInfo implements Serializable {
     public NewRowInfo() {
     }
 
-    public NewRowInfo(String supplierName, double thickness, double width, double length, double noOfPieces, double noOfRejected, double noOfBundles, String grade, String truckNo) {
+    public NewRowInfo(String supplierName, double thickness, double width, double length, double noOfPieces, double noOfRejected, double noOfBundles, String grade, String truckNo, String serial) {
         this.supplierName = supplierName;
         this.thickness = thickness;
         this.width = width;
@@ -38,6 +39,16 @@ public class NewRowInfo implements Serializable {
         this.noOfBundles = noOfBundles;
         this.grade = grade;
         this.truckNo = truckNo;
+        this.serial = serial;
+
+    }
+
+    public String getSerial() {
+        return serial;
+    }
+
+    public void setSerial(String serial) {
+        this.serial = serial;
     }
 
     public boolean getChecked() {
@@ -181,6 +192,7 @@ public class NewRowInfo implements Serializable {
             jsonObject.put("REJECTED", "'" + noOfRejected + "'");
             jsonObject.put("NO_BUNDLES", "'" + noOfBundles + "'");
             jsonObject.put("GRADE", "'" + grade + "'");
+            jsonObject.put("SERIAL", "'" + serial + "'");
 
 
             jsonObject.put("DATE_OF_ACCEPTANCE", "'" + date + "'");
@@ -205,6 +217,8 @@ public class NewRowInfo implements Serializable {
             jsonObject.put("LOCATION_OF_ACCEPTANCE", "'" + locationOfAcceptance + "'");
             jsonObject.put("TTN_NO", "'" + ttnNo + "'");
             jsonObject.put("REJECTED", "'" + totalRejectedNo + "'");
+            jsonObject.put("SERIAL", "'" + serial + "'");
+
 
         } catch (JSONException e) {
             e.printStackTrace();
