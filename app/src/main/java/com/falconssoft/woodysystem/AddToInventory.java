@@ -613,8 +613,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         gradeList.add("KD Blue Stain");
         gradeList.add("KD Reject");
         gradeList.add("Second Sort");
-        gradeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, gradeList);
-        gradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        gradeAdapter = new ArrayAdapter<String>(this, R.layout.spinner_layout, gradeList);
+        gradeAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
         gradeSpinner.setAdapter(gradeAdapter);
         gradeSpinner.setOnItemSelectedListener(this);
 
@@ -623,8 +623,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         areaList.add("Zone 3");
         areaList.add("Zone 4");
         areaList.add("Zone 5");
-        areaAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, areaList);
-        areaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        areaAdapter = new ArrayAdapter<String>(this, R.layout.spinner_layout, areaList);
+        areaAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
         areaSpinner.setAdapter(areaAdapter);
         areaSpinner.setOnItemSelectedListener(this);
 
@@ -638,8 +638,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         descriptionList.add("Canadian Wood");
         descriptionList.add("Swedian Wood");
         descriptionList.add("Latvian Wood");
-        descriptionaAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, descriptionList);
-        descriptionaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        descriptionaAdapter = new ArrayAdapter<String>(this, R.layout.spinner_layout, descriptionList);
+        descriptionaAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
         descriptionSpinner.setAdapter(descriptionaAdapter);
         descriptionSpinner.setOnItemSelectedListener(this);
     }

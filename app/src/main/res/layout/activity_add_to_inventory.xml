@@ -100,7 +100,8 @@
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textSize="18sp"
+                        android:textSize="15sp"
+                        android:fontFamily="serif"
                         android:text="@string/serial_no" />
 
                     <EditText
@@ -131,7 +132,8 @@
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textSize="18sp"
+                        android:textSize="15sp"
+                        android:fontFamily="serif"
                         android:text="@string/no_of_pieces" />
 
                     <EditText
@@ -171,7 +173,8 @@
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textSize="18sp"
+                        android:textSize="15sp"
+                        android:fontFamily="serif"
                         android:text="@string/thickness" />
 
                     <EditText
@@ -202,7 +205,8 @@
                         android:layout_weight="1"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
-                        android:textSize="18sp"
+                        android:textSize="15sp"
+                        android:fontFamily="serif"
                         android:text="@string/grade" />
 
                     <Spinner
@@ -241,7 +245,8 @@
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textSize="18sp"
+                        android:textSize="15sp"
+                        android:fontFamily="serif"
                         android:text="@string/width" />
 
                     <EditText
@@ -273,7 +278,8 @@
                         android:layout_weight="1"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
-                        android:textSize="18sp"
+                        android:textSize="15sp"
+                        android:fontFamily="serif"
                         android:text="@string/area" />
 
                     <Spinner
@@ -310,7 +316,8 @@
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textSize="18sp"
+                        android:textSize="15sp"
+                        android:fontFamily="serif"
                         android:text="@string/length" />
 
                     <EditText
@@ -343,7 +350,8 @@
                         android:layout_marginBottom="10dp"
                         android:layout_weight="1"
                         android:text="@string/details"
-                        android:textSize="18sp" />
+                        android:textSize="15sp"
+                        android:fontFamily="serif" />
 
                     <Spinner
                         android:id="@+id/addToInventory_description"
