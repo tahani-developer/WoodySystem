@@ -802,10 +802,10 @@ public class LoadingOrderReport extends AppCompatActivity {
                         order.setContainerNo(finalObject.getString("CONTAINER_NO"));
                         order.setDateOfLoad(finalObject.getString("DATE_OF_LOAD"));
                         order.setDestination(finalObject.getString("DESTINATION"));
-                        order.setPicture(finalObject.getString("PIC"));
-
-                        InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC")).openStream();
-                        order.setPicBitmap(BitmapFactory.decodeStream(in));
+//                        order.setPicture(finalObject.getString("PIC"));
+//
+//                        InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC")).openStream();
+//                        order.setPicBitmap(BitmapFactory.decodeStream(in));
 
                        /* String pic = finalObject.getString("PART1") + finalObject.getString("PART2") +
                                 finalObject.getString("PART3") + finalObject.getString("PART4") +
@@ -823,41 +823,41 @@ public class LoadingOrderReport extends AppCompatActivity {
                 }
 
 
-                try {
-                    JSONArray parentArrayOrders = parentObject.getJSONArray("BUNDLE_PIC");
-                    pictures.clear();
-                    for (int i = 0; i < parentArrayOrders.length(); i++) {
-                        JSONObject finalObject = parentArrayOrders.getJSONObject(i);
-
-                        Pictures picture = new Pictures();
-                        picture.setOrderNo(finalObject.getString("ORDER_NO"));
-
-                        String[] rowPics = new String[8];
-
-                        for (int k = 1; k <= 8; k++) {
-                            String pic = finalObject.getString("PIC" + k + "PART1") + finalObject.getString("PIC" + k + "PART2") +
-                                    finalObject.getString("PIC" + k + "PART3") + finalObject.getString("PIC" + k + "PART4") +
-                                    finalObject.getString("PIC" + k + "PART5") + finalObject.getString("PIC" + k + "PART6") +
-                                    finalObject.getString("PIC" + k + "PART7") + finalObject.getString("PIC" + k + "PART8");
-
-                            pic = pic.replaceAll("null", "");
-                            rowPics[k - 1] = pic;
-                        }
-
-                        picture.setPic1(rowPics[0]);
-                        picture.setPic2(rowPics[1]);
-                        picture.setPic3(rowPics[2]);
-                        picture.setPic4(rowPics[3]);
-                        picture.setPic5(rowPics[4]);
-                        picture.setPic6(rowPics[5]);
-                        picture.setPic7(rowPics[6]);
-                        picture.setPic8(rowPics[7]);
-
-                        pictures.add(picture);
-                    }
-                } catch (JSONException e) {
-                    Log.e("Import Data1", e.getMessage().toString());
-                }
+//                try {
+//                    JSONArray parentArrayOrders = parentObject.getJSONArray("BUNDLE_PIC");
+//                    pictures.clear();
+//                    for (int i = 0; i < parentArrayOrders.length(); i++) {
+//                        JSONObject finalObject = parentArrayOrders.getJSONObject(i);
+//
+//                        Pictures picture = new Pictures();
+//                        picture.setOrderNo(finalObject.getString("ORDER_NO"));
+//
+//                        String[] rowPics = new String[8];
+//
+//                        for (int k = 1; k <= 8; k++) {
+//                            String pic = finalObject.getString("PIC" + k + "PART1") + finalObject.getString("PIC" + k + "PART2") +
+//                                    finalObject.getString("PIC" + k + "PART3") + finalObject.getString("PIC" + k + "PART4") +
+//                                    finalObject.getString("PIC" + k + "PART5") + finalObject.getString("PIC" + k + "PART6") +
+//                                    finalObject.getString("PIC" + k + "PART7") + finalObject.getString("PIC" + k + "PART8");
+//
+//                            pic = pic.replaceAll("null", "");
+//                            rowPics[k - 1] = pic;
+//                        }
+//
+//                        picture.setPic1(rowPics[0]);
+//                        picture.setPic2(rowPics[1]);
+//                        picture.setPic3(rowPics[2]);
+//                        picture.setPic4(rowPics[3]);
+//                        picture.setPic5(rowPics[4]);
+//                        picture.setPic6(rowPics[5]);
+//                        picture.setPic7(rowPics[6]);
+//                        picture.setPic8(rowPics[7]);
+//
+//                        pictures.add(picture);
+//                    }
+//                } catch (JSONException e) {
+//                    Log.e("Import Data1", e.getMessage().toString());
+//                }
 
 
             } catch (MalformedURLException e) {

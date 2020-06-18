@@ -342,6 +342,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
                         newRowInfo.setTtnNo(finalObject.getString("TTN_NO"));
                         newRowInfo.setTotalRejectedNo(finalObject.getString("REJECTED"));
                         newRowInfo.setSerial(finalObject.getString("SERIAL"));
+                        newRowInfo.setNetBundles(finalObject.getString("NET_BUNDLES"));
 
                         // todo remove log
                         Log.e("showdatamaster", finalObject.getString("TRUCK_NO") + finalObject.getString("SERIAL"));
@@ -370,7 +371,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
                 }
 
                 try {
-                    JSONArray parentArray = parentObject.getJSONArray("RAW_INFO_MIX");//RAW_INFO_DETAILS
+                    JSONArray parentArray = parentObject.getJSONArray("RAW_INFO_DETAILS");//RAW_INFO_DETAILS
                     details.clear();
                     for (int i = 0; i < parentArray.length(); i++) {
                         JSONObject finalObject = parentArray.getJSONObject(i);
@@ -382,12 +383,12 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
                         newRowInfo.setWidth(finalObject.getDouble("WIDTH"));
                         newRowInfo.setLength(finalObject.getDouble("LENGTH"));
                         newRowInfo.setNoOfPieces(finalObject.getInt("PIECES"));
-                        newRowInfo.setNoOfRejected(finalObject.getInt("REJ"));//REJECTED
+                        newRowInfo.setNoOfRejected(finalObject.getInt("REJECTED"));//REJ
                         newRowInfo.setNoOfBundles(finalObject.getDouble("NO_BUNDLES"));
                         newRowInfo.setGrade(finalObject.getString("GRADE"));
-                        newRowInfo.setTtnNo(finalObject.getString("TTN_NO"));
+//                        newRowInfo.setTtnNo(finalObject.getString("TTN_NO"));
                         newRowInfo.setSerial(finalObject.getString("SERIAL"));
-                        newRowInfo.setLocationOfAcceptance(finalObject.getString("LOCATION_OF_ACCEPTANCE"));
+//                        newRowInfo.setLocationOfAcceptance(finalObject.getString("LOCATION_OF_ACCEPTANCE"));
 
                         // todo remove log
                         Log.e("showdatamix", finalObject.getString("TRUCK_NO") + finalObject.getString("SERIAL"));
@@ -453,17 +454,18 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
         }
     }
 
-    public void previewLinear(NewRowInfo newRowInfo, Context Context) {
+    public void previewLinear(NewRowInfo newRowInfo, Context Context, List<NewRowInfo> details) {
 
         rawInfos = new ArrayList<>();
 
         for (int i = 0; i < details.size(); i++) {
-
+            Log.e("acceptanceReport", "/truck/" + truckString + "/truckd/" + details.get(i).getTruckNo()
+                    + "/serial/" + details.get(i).getSerial() + "/seriald/" + newRowInfo.getSerial());
             if (details.get(i).getTruckNo().equals(newRowInfo.getTruckNo())
                     && details.get(i).getSerial().equals(newRowInfo.getSerial())
             ) {
-                Log.e("acceptanceReport", "/truck/" + truckString + "/truckd/" + details.get(i).getTruckNo()
-                        + "/serial/" + details.get(i).getSerial() + "/seriald/" + newRowInfo.getSerial());
+//                Log.e("acceptanceReport", "/truck/" + truckString + "/truckd/" + details.get(i).getTruckNo()
+//                        + "/serial/" + details.get(i).getSerial() + "/seriald/" + newRowInfo.getSerial());
 
                 rawInfos.add(new NewRowInfo(
                         details.get(i).getSupplierName(),

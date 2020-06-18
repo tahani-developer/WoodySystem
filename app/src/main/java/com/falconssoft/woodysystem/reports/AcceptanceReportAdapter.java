@@ -56,7 +56,7 @@ public class AcceptanceReportAdapter extends BaseAdapter {
     private class ViewHolder {
         ImageView pic;
         Button preview;
-        TextView truckNo, acceptor, ttn, netBundle, date, location, rejected;
+        TextView truckNo, acceptor, ttn, netBundle, date, noOfBundles, rejected;
         ImageView edit;
     }
 
@@ -73,7 +73,7 @@ public class AcceptanceReportAdapter extends BaseAdapter {
         holder.acceptor = (TextView) view.findViewById(R.id.name_of_person_to_accept);
         holder.date = (TextView) view.findViewById(R.id.date_of_acceptance);
         holder.ttn = (TextView) view.findViewById(R.id.ttn_no);
-        holder.location = (TextView) view.findViewById(R.id.location_of_acceptance);
+        holder.noOfBundles = (TextView) view.findViewById(R.id.noOfBundles_acceptance);
         holder.rejected = (TextView) view.findViewById(R.id.rejected_pieces);
         holder.edit =  view.findViewById(R.id.acceptanceReport_edit);
 
@@ -82,7 +82,7 @@ public class AcceptanceReportAdapter extends BaseAdapter {
         holder.date.setText(itemsList.get(i).getDate());
         holder.ttn.setText(itemsList.get(i).getTtnNo());
 //        holder.netBundle.setText( itemsList.get(i).getNetBundles());
-        holder.location.setText(itemsList.get(i).getLocationOfAcceptance());
+        holder.noOfBundles.setText("" + itemsList.get(i).getNetBundles());
         holder.rejected.setText(itemsList.get(i).getTotalRejectedNo());
 
         AcceptanceReport obj = new AcceptanceReport();
@@ -98,7 +98,7 @@ public class AcceptanceReportAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
 
-                obj.previewLinear(itemsList.get(i), context);
+                obj.previewLinear(itemsList.get(i), context, bundles);
 
             }
         });
