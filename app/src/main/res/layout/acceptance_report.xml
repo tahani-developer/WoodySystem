@@ -325,7 +325,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:fontFamily="serif"
-                    android:text="@string/location_of_acceptance"
+                    android:text="@string/no_bundle"
                     android:textColor="@color/white"
                     android:textSize="15sp" />
 

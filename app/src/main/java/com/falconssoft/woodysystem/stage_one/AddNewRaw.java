@@ -688,7 +688,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                                     newRowList.get(i).setTruckNo(truckNoLocal);
                                     newRowList.get(i).setAcceptedPersonName(acceptorLocal);
                                     newRowList.get(i).setTtnNo(ttnNoLocal);
-//                                    newRowList.get(i).setNetBundles(totalBundelsLocal);
+                                    newRowList.get(i).setNetBundles("" + netBundlesString);
                                     newRowList.get(i).setDate(acceptanceDateLocal);
                                     newRowList.get(i).setLocationOfAcceptance(locationLocal);
                                     newRowList.get(i).setTotalRejectedNo("" + netRejectedString);

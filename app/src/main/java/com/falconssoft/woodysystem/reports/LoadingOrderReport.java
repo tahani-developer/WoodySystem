@@ -802,10 +802,10 @@ public class LoadingOrderReport extends AppCompatActivity {
                         order.setContainerNo(finalObject.getString("CONTAINER_NO"));
                         order.setDateOfLoad(finalObject.getString("DATE_OF_LOAD"));
                         order.setDestination(finalObject.getString("DESTINATION"));
-                        order.setPicture(finalObject.getString("PIC"));
-
-                        InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC")).openStream();
-                        order.setPicBitmap(BitmapFactory.decodeStream(in));
+//                        order.setPicture(finalObject.getString("PIC"));
+//
+//                        InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC")).openStream();
+//                        order.setPicBitmap(BitmapFactory.decodeStream(in));
 
                        /* String pic = finalObject.getString("PART1") + finalObject.getString("PART2") +
                                 finalObject.getString("PART3") + finalObject.getString("PART4") +
