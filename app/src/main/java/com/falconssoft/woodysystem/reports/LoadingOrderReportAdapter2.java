@@ -86,13 +86,13 @@ public class LoadingOrderReportAdapter2 extends BaseAdapter {
         holder.location.setText("" + itemsList.get(i).getLocation());
         holder.area.setText("" + itemsList.get(i).getArea());
 
-        if (itemsList.get(i).getPicBitmap() == null) {
-            holder.image.setImageDrawable(context.getDrawable(R.drawable.pic));
-        }
-        else {
-            holder.image.setImageBitmap(itemsList.get(i).getPicBitmap());
-
-        }
+//        if (itemsList.get(i).getPicBitmap() == null) {
+//            holder.image.setImageDrawable(context.getDrawable(R.drawable.pic));
+//        }
+//        else {
+//            holder.image.setImageBitmap(itemsList.get(i).getPicBitmap());
+//
+//        }
 //        holder.image.setOnClickListener(new View.OnClickListener() {
 //            @RequiresApi(api = Build.VERSION_CODES.M)
 //            @Override
