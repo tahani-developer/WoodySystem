@@ -1,5 +1,6 @@
 package com.falconssoft.woodysystem.models;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -16,6 +17,15 @@ public class Pictures {
     String pic6;
     String pic7;
     String pic8;
+
+    Bitmap pic11;
+    Bitmap pic22;
+    Bitmap pic33;
+    Bitmap pic44;
+    Bitmap pic55;
+    Bitmap pic66;
+    Bitmap pic77;
+    Bitmap pic88;
 
     public Pictures(String orderNo, String pic1, String pic2, String pic3, String pic4, String pic5, String pic6, String pic7, String pic8) {
         this.orderNo = orderNo;
@@ -103,6 +113,70 @@ public class Pictures {
 
     public void setPic8(String pic8) {
         this.pic8 = pic8;
+    }
+
+    public Bitmap getPic11() {
+        return pic11;
+    }
+
+    public void setPic11(Bitmap pic11) {
+        this.pic11 = pic11;
+    }
+
+    public Bitmap getPic22() {
+        return pic22;
+    }
+
+    public void setPic22(Bitmap pic22) {
+        this.pic22 = pic22;
+    }
+
+    public Bitmap getPic33() {
+        return pic33;
+    }
+
+    public void setPic33(Bitmap pic33) {
+        this.pic33 = pic33;
+    }
+
+    public Bitmap getPic44() {
+        return pic44;
+    }
+
+    public void setPic44(Bitmap pic44) {
+        this.pic44 = pic44;
+    }
+
+    public Bitmap getPic55() {
+        return pic55;
+    }
+
+    public void setPic55(Bitmap pic55) {
+        this.pic55 = pic55;
+    }
+
+    public Bitmap getPic66() {
+        return pic66;
+    }
+
+    public void setPic66(Bitmap pic66) {
+        this.pic66 = pic66;
+    }
+
+    public Bitmap getPic77() {
+        return pic77;
+    }
+
+    public void setPic77(Bitmap pic77) {
+        this.pic77 = pic77;
+    }
+
+    public Bitmap getPic88() {
+        return pic88;
+    }
+
+    public void setPic88(Bitmap pic88) {
+        this.pic88 = pic88;
     }
 
     public JSONObject getJSONObject() {

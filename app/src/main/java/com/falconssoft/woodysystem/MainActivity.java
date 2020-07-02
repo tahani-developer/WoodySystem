@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.falconssoft.woodysystem.stage_one.AddNewRaw;
 import com.falconssoft.woodysystem.stage_one.StageOne;
+import com.falconssoft.woodysystem.stage_two.PlannedPackingList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -89,8 +90,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 showPasswordDialog();
                 break;
             case R.id.s2:
-//                Intent intent = new Intent(MainActivity.this , Stage3.class);
-//                startActivity(intent);
+                if (SystemClock.elapsedRealtime() - mLastClickTime3 < 1000) {
+                    break;
+                }
+                mLastClickTime3 = SystemClock.elapsedRealtime();
+                Intent intent = new Intent(MainActivity.this , PlannedPackingList.class);
+                startActivity(intent);
                 break;
             case R.id.s3:
                 if (SystemClock.elapsedRealtime() - mLastClickTime3 < 1000) {

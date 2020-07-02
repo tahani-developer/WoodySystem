@@ -1089,7 +1089,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
 
         // Restore state members from saved instance
-        mState = savedInstanceState.getBoolean(STATE_VISIBILITY);
+        mState = savedInstanceState.getBoolean(STATE_VISIBILITY);//
         thickness.requestFocus();
 //        linearLayoutView.setVisibility(mState ? View.VISIBLE : View.GONE);
 //        presenter.getImportData();
