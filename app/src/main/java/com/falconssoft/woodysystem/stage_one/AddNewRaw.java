@@ -663,7 +663,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
         if (edieFlag == 11 && editList.size() > 0)
             newRowList = editList;
-//        Log.e("ddddddddddddddddddddd", "" + newRowList.size());
+        Log.e("ddddddddddddddddddddd", "" + netBundlesString);
 
         if (newRowList.size() > 0) {
             if (!TextUtils.isEmpty(truckNoLocal)) {

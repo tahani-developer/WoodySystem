@@ -99,10 +99,10 @@
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".LoadingOrder"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"></activity>
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
         <activity
             android:name=".LoadingOrder2"
-            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".reports.LoadingOrderReport"
             android:screenOrientation="sensorLandscape"
