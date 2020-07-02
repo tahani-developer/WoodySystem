@@ -218,7 +218,7 @@ public class NewRowInfo implements Serializable {
             jsonObject.put("TTN_NO", "'" + ttnNo + "'");
             jsonObject.put("REJECTED", "'" + totalRejectedNo + "'");
             jsonObject.put("SERIAL", "'" + serial + "'");
-
+            jsonObject.put("NO_BUNDLES", "'" + netBundles + "'");
 
         } catch (JSONException e) {
             e.printStackTrace();
