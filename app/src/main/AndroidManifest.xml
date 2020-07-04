@@ -83,6 +83,12 @@
             android:name=".LoginActivity"
             android:windowSoftInputMode="stateAlwaysHidden">
 
+        </activity>
+
+        <activity
+            android:name=".stage_two.UnloadPackingList"
+            android:windowSoftInputMode="stateAlwaysHidden">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

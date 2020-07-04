@@ -149,7 +149,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
                 recyclerView = searchDialog.findViewById(R.id.search_supplier_recyclerView);
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
-                adapter = new CustomerAdapter(this, customers);
+                adapter = new CustomerAdapter(1, this, customers);
                 recyclerView.setAdapter(adapter);
 
                 searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -190,7 +190,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                 }
             }
         }
-        adapter = new CustomerAdapter(this, arraylist);
+        adapter = new CustomerAdapter(1,this, arraylist);
         recyclerView.setAdapter(adapter);
     }
 
@@ -283,17 +283,17 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
     }
 
-    void saveButtonMethod(){
+    void saveButtonMethod() {
 
         boolean isOk = true;
-        for(int i = 0 ; i<PlannedPLList.size() ; i++){
-            if(!PlannedPLList.get(i).getExist()){
+        for (int i = 0; i < PlannedPLList.size(); i++) {
+            if (!PlannedPLList.get(i).getExist()) {
                 isOk = false;
                 break;
             }
         }
 
-        if(isOk) {
+        if (isOk) {
             PlannedPLListJSON = new JSONArray();
             for (int i = 0; i < PlannedPLList.size(); i++) {
                 PlannedPLListJSON.put(PlannedPLList.get(i).getJSONObject());
@@ -736,28 +736,42 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                 JSONObject object = new JSONObject(JsonResponse);
 
                 bundleInfosList.clear();
+//                String ff=JsonResponse.r((JsonResponse.indexOf("result")+5));
+                Log.e("tag___", "" + JsonResponse.indexOf("result"));
+
+                int index=PlannedPLListJSON.length();
+
                 for (int i = 0; i < object.length(); i++) {
-                    JSONArray array = object.getJSONArray("result" + (i + 1));
-                    JSONObject innerObject = array.getJSONObject(0);
+                    for(int f=0;f<index;f++) {
+                        try {
 
-                    BundleInfo bundleInfo = new BundleInfo();
-                    bundleInfo.setThickness(innerObject.getDouble("THICKNESS"));
-                    bundleInfo.setWidth(innerObject.getDouble("WIDTH"));
-                    bundleInfo.setLength(innerObject.getDouble("LENGTH"));
-                    bundleInfo.setGrade(innerObject.getString("GRADE"));
-                    bundleInfo.setNoOfPieces(innerObject.getDouble("PIECES"));
-                    bundleInfo.setBundleNo(innerObject.getString("BUNDLE_NO"));
-                    bundleInfo.setLocation(innerObject.getString("LOCATION"));
-                    bundleInfo.setArea(innerObject.getString("AREA"));
-                    bundleInfo.setBarcode(innerObject.getString("BARCODE"));
-                    bundleInfo.setOrdered(innerObject.getInt("ORDERED"));
-                    bundleInfo.setAddingDate(innerObject.getString("BUNDLE_DATE"));
-                    bundleInfo.setSerialNo(innerObject.getString("B_SERIAL"));
-                    bundleInfo.setBackingList(innerObject.getString("BACKING_LIST"));
+                            JSONArray array = object.getJSONArray("result" + (f+ 1));
 
-                    bundleInfosList.add(bundleInfo);
+                            JSONObject innerObject = array.getJSONObject(0);
 
-                }
+                            BundleInfo bundleInfo = new BundleInfo();
+                            bundleInfo.setThickness(innerObject.getDouble("THICKNESS"));
+                            bundleInfo.setWidth(innerObject.getDouble("WIDTH"));
+                            bundleInfo.setLength(innerObject.getDouble("LENGTH"));
+                            bundleInfo.setGrade(innerObject.getString("GRADE"));
+                            bundleInfo.setNoOfPieces(innerObject.getDouble("PIECES"));
+                            bundleInfo.setBundleNo(innerObject.getString("BUNDLE_NO"));
+                            bundleInfo.setLocation(innerObject.getString("LOCATION"));
+                            bundleInfo.setArea(innerObject.getString("AREA"));
+                            bundleInfo.setBarcode(innerObject.getString("BARCODE"));
+                            bundleInfo.setOrdered(innerObject.getInt("ORDERED"));
+                            bundleInfo.setAddingDate(innerObject.getString("BUNDLE_DATE"));
+                            bundleInfo.setSerialNo(innerObject.getString("B_SERIAL"));
+                            bundleInfo.setBackingList(innerObject.getString("BACKING_LIST"));
+
+                            bundleInfosList.add(bundleInfo);
+
+                        } catch (Exception e) {
+
+                        }
+                    }
+                    }
+//                }
                 Log.e("tag2", "" + bundleInfosList.size());
                 Log.e("tag3", "" + object.length());
                 return JsonResponse;
@@ -871,7 +885,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                 fillTableRow2();
 
             } else {
-                Toast.makeText(PlannedPackingList.this, "No internet connection!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(PlannedPackingList.this, "No internet connection!", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -956,10 +970,10 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
             if (s != null) {
                 if (s.contains("PLANNED_PACKING_LIST SUCCESS")) {
                     Toast.makeText(PlannedPackingList.this, "Saved!", Toast.LENGTH_SHORT).show();
-                    Log.e("tag", "PLANNED_PACKING_LIST SUCCESS" );
+                    Log.e("tag", "PLANNED_PACKING_LIST SUCCESS");
                 } else {
                     Toast.makeText(PlannedPackingList.this, "Failed to export data!", Toast.LENGTH_SHORT).show();
-                    Log.e("tag", "Failed to export data!" );
+                    Log.e("tag", "Failed to export data!");
                 }
 
             } else {
@@ -985,7 +999,15 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                         PlannedPLList.get(i).getNoOfPieces() == bundleInfosList.get(k).getNoOfPieces()) {
 
                     PlannedPLList.get(i).setExist(true);
+                } else {
+                    PlannedPLList.get(i).setExist(false);
                 }
+
+                Log.e("****out", "***" + PlannedPLList.get(i).getThickness() + "==" + bundleInfosList.get(k).getThickness() + "&&" +
+                        PlannedPLList.get(i).getWidth() + "==" + bundleInfosList.get(k).getWidth() + "&&" +
+                        PlannedPLList.get(i).getLength() + "==" + bundleInfosList.get(k).getLength() + "&&" +
+                        PlannedPLList.get(i).getNoOfPieces() + "==" + bundleInfosList.get(k).getNoOfPieces());
+
             }
         }
 
@@ -997,7 +1019,6 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
             TableRow tableRow2 = (TableRow) tableLayout.getChildAt(i);
             TextView textView2 = (TextView) tableRow2.getChildAt(7);
-            textView2.setVisibility(View.VISIBLE);
 
             if (PlannedPLList.get(i).getExist())
                 textView2.setText("Exist");
