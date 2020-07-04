@@ -140,17 +140,18 @@ public class LoadingOrder2 extends AppCompatActivity {
         Drawable myDrawable = getResources().getDrawable(R.drawable.pic);
         Bitmap myBitmap = ((BitmapDrawable) myDrawable).getBitmap();
         myBitmap = getResizedBitmap(myBitmap, 100, 100);
-        pics.add(BitMapToString(myBitmap));
-        pics.add(BitMapToString(myBitmap));
-        pics.add(BitMapToString(myBitmap));
-        pics.add(BitMapToString(myBitmap));
-        pics.add(BitMapToString(myBitmap));
-        pics.add(BitMapToString(myBitmap));
-        pics.add(BitMapToString(myBitmap));
-        pics.add(BitMapToString(myBitmap));
+        pics.add(null);
+        pics.add(null);
+        pics.add(null);
+        pics.add(null);
+        pics.add(null);
+        pics.add(null);
+        pics.add(null);
+        pics.add(null);
 
         ItemsListAdapter obj = new ItemsListAdapter();
         bundles = obj.getSelectedItems();
+
 
         adapter = new ItemsListAdapter2(LoadingOrder2.this, bundles);
         listView.setAdapter(adapter);
@@ -445,13 +446,28 @@ public class LoadingOrder2 extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        img1.setImageBitmap(StringToBitMap(pics.get(0)));
+        if(pics.get(0) != null)
+            img1.setImageBitmap(StringToBitMap(pics.get(0)));
+
+        if(pics.get(1) != null)
         img2.setImageBitmap(StringToBitMap(pics.get(1)));
+
+        if(pics.get(2) != null)
         img3.setImageBitmap(StringToBitMap(pics.get(2)));
+
+        if(pics.get(3) != null)
         img4.setImageBitmap(StringToBitMap(pics.get(3)));
+
+        if(pics.get(4) != null)
         img5.setImageBitmap(StringToBitMap(pics.get(4)));
+
+        if(pics.get(5) != null)
         img6.setImageBitmap(StringToBitMap(pics.get(5)));
+
+        if(pics.get(6) != null)
         img7.setImageBitmap(StringToBitMap(pics.get(6)));
+
+        if(pics.get(7) != null)
         img8.setImageBitmap(StringToBitMap(pics.get(7)));
     }
 
@@ -574,6 +590,7 @@ public class LoadingOrder2 extends AppCompatActivity {
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
                 nameValuePairs.add(new BasicNameValuePair("BUNDLE_ORDERS", jsonArrayOrders.toString().trim()));
                 nameValuePairs.add(new BasicNameValuePair("BUNDLE_PIC", jsonArrayPics.toString().trim()));
+                //Log.e("tag", "" + jsonArrayPics.toString());
 
                 request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 

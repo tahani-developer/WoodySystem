@@ -57,7 +57,8 @@ public class PicturesAdapter extends BaseAdapter {
         view = View.inflate(context, R.layout.pic_row, null);
 
         holder.pic = view.findViewById(R.id.pic);
-        holder.pic.setImageBitmap(itemsList.get(i));
+        if (itemsList.get(i) != null)
+            holder.pic.setImageBitmap(itemsList.get(i));
 
         return view;
     }

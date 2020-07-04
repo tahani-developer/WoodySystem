@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Wood System</string>
-    <string name="version">Version 33.0</string>
+    <string name="version">Version 35.0</string>
 
     <string name="stage1">Acceptance &amp; Quality Control</string>
-    <string name="stage2">Stage 2</string> 
+    <string name="stage2">Stage 2</string>
     <string name="stage3">Inventory &amp; Loading</string>
 
     <string name="enter_inventory">Enter Inventory</string>
@@ -89,6 +89,14 @@
     <string name="search">Search ...</string>
     <string name="acceptance_info">Acceptance Info</string>
     <string name="generate_barcode">Generate Barcode</string>
+
+    <string name="cust">Customer</string>
+    <string name="cust_no">Customer #</string>
+    <string name="new_cust">New Customer</string>
+    <string name="find_cust">Find Customer</string>
+    <string name="edit_item">Edit Item</string>
+    <string name="destination_">Dest</string>
+    <string name="comparable_results">Comparable Results :</string>
 
     <string name="accept_raw">Accept Row</string>
     <string name="name_of_supplier">Name Of Supplier</string>
