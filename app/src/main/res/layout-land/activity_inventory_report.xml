@@ -21,6 +21,7 @@
             android:id="@+id/inventory_report_linear1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/orange"
             android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -31,14 +32,13 @@
                 android:id="@+id/inventory_report_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_weight="7"
+                android:layout_marginHorizontal="20dp"
+                android:paddingVertical="5dp"
                 android:fontFamily="serif"
-                android:gravity="center"
+                android:gravity="start|left"
                 android:text="@string/inventory_report"
-                android:textColor="@color/orange"
-                android:textSize="30sp" />
+                android:textColor="@color/white"
+                android:textSize="20sp" />
 
         </LinearLayout>
 
@@ -47,6 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_marginTop="10dp"
             android:layout_marginHorizontal="5dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

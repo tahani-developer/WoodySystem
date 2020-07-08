@@ -163,8 +163,8 @@ public class LoadingOrderReport extends AppCompatActivity {
         locationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         location.setAdapter(locationAdapter);
 
-        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_to_right);
-        textView.startAnimation(animation);
+//        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_to_right);
+//        textView.startAnimation(animation);
 
 //        adapter = new ItemsListAdapter2(LoadingOrderReport.this, new ArrayList<>());
         adapter = new LoadingOrderReportAdapter2(LoadingOrderReport.this, new ArrayList<>());
@@ -797,11 +797,11 @@ public class LoadingOrderReport extends AppCompatActivity {
                         JSONObject finalObject = parentArrayOrders.getJSONObject(i);
 
                         Orders order = new Orders();
-                        order.setThickness(finalObject.getDouble("THICKNESS"));
-                        order.setWidth(finalObject.getDouble("WIDTH"));
-                        order.setLength(finalObject.getDouble("LENGTH"));
+                        order.setThickness(finalObject.getInt("THICKNESS"));
+                        order.setWidth(finalObject.getInt("WIDTH"));
+                        order.setLength(finalObject.getInt("LENGTH"));
                         order.setGrade(finalObject.getString("GRADE"));
-                        order.setNoOfPieces(finalObject.getDouble("PIECES"));
+                        order.setNoOfPieces(finalObject.getInt("PIECES"));
                         order.setBundleNo(finalObject.getString("BUNDLE_NO"));
                         order.setLocation(finalObject.getString("LOCATION"));
                         order.setArea(finalObject.getString("AREA"));
@@ -1099,11 +1099,11 @@ public class LoadingOrderReport extends AppCompatActivity {
                         JSONObject finalObject = parentArrayOrders.getJSONObject(i);
 
                         Orders order = new Orders();
-                        order.setThickness(finalObject.getDouble("THICKNESS"));
-                        order.setWidth(finalObject.getDouble("WIDTH"));
-                        order.setLength(finalObject.getDouble("LENGTH"));
+                        order.setThickness(finalObject.getInt("THICKNESS"));
+                        order.setWidth(finalObject.getInt("WIDTH"));
+                        order.setLength(finalObject.getInt("LENGTH"));
                         order.setGrade(finalObject.getString("GRADE"));
-                        order.setNoOfPieces(finalObject.getDouble("PIECES"));
+                        order.setNoOfPieces(finalObject.getInt("PIECES"));
                         order.setBundleNo(finalObject.getString("BUNDLE_NO"));
                         order.setLocation(finalObject.getString("LOCATION"));
                         order.setArea(finalObject.getString("AREA"));

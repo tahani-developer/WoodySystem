@@ -169,7 +169,8 @@
                         android:drawableLeft="@drawable/ic_search_24dp"
                         android:fontFamily="serif"
                         android:gravity="center"
-                        android:padding="30dp"
+                        android:drawableTint="@color/white"
+                        android:padding="55dp"
                         android:textColor="@color/white"/>
 
                     <TextView
@@ -184,7 +185,7 @@
                         android:drawableLeft="@drawable/ic_delete_black_24dp"
                         android:fontFamily="serif"
                         android:gravity="center"
-                        android:padding="30dp"
+                        android:padding="45dp"
                         android:textColor="@color/white"/>
 
                 </LinearLayout>
@@ -201,7 +202,6 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="@color/alpha_black"
             android:layout_marginStart="1dp"
             android:layout_marginLeft="1dp"
             android:layout_marginEnd="1dp"

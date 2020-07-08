@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.falconssoft.woodysystem.stage_one.AddNewRaw;
 import com.falconssoft.woodysystem.stage_one.StageOne;
 import com.falconssoft.woodysystem.stage_two.PlannedPackingList;
+import com.falconssoft.woodysystem.stage_two.StageTwo;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -94,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     break;
                 }
                 mLastClickTime3 = SystemClock.elapsedRealtime();
-                Intent intent = new Intent(MainActivity.this , PlannedPackingList.class);
+                Intent intent = new Intent(MainActivity.this , StageTwo.class);
                 startActivity(intent);
                 break;
             case R.id.s3:

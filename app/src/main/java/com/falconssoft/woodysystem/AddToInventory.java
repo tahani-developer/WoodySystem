@@ -181,11 +181,11 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                         addTableHeader(bundlesTable);
                                     }
 
-                                    newBundle = new BundleInfo(Double.parseDouble(thicknessText)
-                                            , Double.parseDouble(lengthText)
-                                            , Double.parseDouble(widthText)
+                                    newBundle = new BundleInfo(Integer.parseInt(thicknessText)
+                                            , Integer.parseInt(lengthText)
+                                            , Integer.parseInt(widthText)
                                             , gradeText
-                                            , Double.parseDouble(noOfPiecesText)
+                                            , Integer.parseInt(noOfPiecesText)
                                             , bundleNoString
                                             , generalSettings.getStore()
                                             , areaText
@@ -195,14 +195,15 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                             , serialNoText
                                             , generalSettings.getUserNo()
                                             , "null"
-                                            , 0);//presenter.getSerialNo());//SettingsFile.serialNumber
+                                            , 0
+                                    );//presenter.getSerialNo());//SettingsFile.serialNumber
 
                                     bundleInfoList.add(newBundle);
 //                                    Log.e("date is", generateDate);
 
                                     if (edieFlag == 55)
                                         new JSONTask4().execute();
-                                    else{
+                                    else {
                                         TableRow tableRow = new TableRow(this);
                                         editTableRow(tableRow, bundleNoString, lengthText, widthText, thicknessText
                                                 , noOfPiecesText, generalSettings.getStore());
@@ -214,14 +215,14 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 
                                         new JSONTask().execute();
 
-                                    tableRow.setOnLongClickListener(new View.OnLongClickListener() {
-                                        @Override
-                                        public boolean onLongClick(View v) {
-                                            publicTableRow = tableRow;
-                                            showActionDialog(tableRow);
-                                            return false;
-                                        }
-                                    });
+                                        tableRow.setOnLongClickListener(new View.OnLongClickListener() {
+                                            @Override
+                                            public boolean onLongClick(View v) {
+                                                publicTableRow = tableRow;
+                                                showActionDialog(tableRow);
+                                                return false;
+                                            }
+                                        });
                                     }
                                     serialNo.requestFocus();
 
@@ -547,11 +548,11 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                                     , takeNoOfPieces, locationString);
                                             updatedTable.addView(tableRow1);
 
-                                            newBundle = new BundleInfo(Double.parseDouble(takeThick)
-                                                    , Double.parseDouble(takeLength)
-                                                    , Double.parseDouble(takeWidth)
+                                            newBundle = new BundleInfo(Integer.parseInt(takeThick)
+                                                    , Integer.parseInt(takeLength)
+                                                    , Integer.parseInt(takeWidth)
                                                     , gradeText
-                                                    , Double.parseDouble(takeNoOfPieces)
+                                                    , Integer.parseInt(takeNoOfPieces)
                                                     , newBundleNoString
                                                     , generalSettings.getStore()
                                                     , areaText
@@ -561,7 +562,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                                     , serialString
                                                     , generalSettings.getUserNo()
                                                     , packingListText
-                                                    , 0);//presenter.getSerialNo());//SettingsFile.serialNumber
+                                                    , 0
+                                                    );//presenter.getSerialNo());//SettingsFile.serialNumber
 
 //                                            publicTableRow = tableRow1;
                                             new JSONTask4().execute();

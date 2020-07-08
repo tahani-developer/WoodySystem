@@ -590,7 +590,7 @@
                         android:layout_weight="1"
                         android:ems="10"
                         android:inputType="text"
-                        android:nextFocusDown="@id/addNewRaw_total_bundles"
+                        android:nextFocusDown="@id/addNewRaw_acceptance_location"
                         android:singleLine="true"
                         android:textSize="15sp" />
 
@@ -666,7 +666,6 @@
                         android:layout_weight="1"
                         android:ems="10"
                         android:inputType="text"
-                        android:nextFocusDown="@id/addNewRaw_total_rejected"
                         android:textSize="15sp" />
 
                 </LinearLayout>

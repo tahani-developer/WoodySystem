@@ -85,7 +85,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
     private List<PlannedPL> PlannedPLList = new ArrayList<>();
     private List<BundleInfo> bundleInfosList = new ArrayList<>();
     private List<BundleInfo> bundleInfosList2 = new ArrayList<>();
-    private JSONArray PlannedPLListJSON = new JSONArray();
+    private JSONArray plannedPLListJSON = new JSONArray();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,11 +125,16 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                 addButtonMethod();
                 break;
             case R.id.check_button:
-                if (PlannedPLList.size() > 0)
+                if (plannedPLListJSON.length() > 0)
                     new JSONTask2().execute();
+                else
+                    Toast.makeText(this, "Please add rows first!", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.save_button:
-                saveButtonMethod();
+                if (plannedPLListJSON.length() > 0)
+                    saveButtonMethod();
+                else
+                    Toast.makeText(this, "No rows added!", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.add_cust:
                 Intent intent = new Intent(PlannedPackingList.this, AddNewCustomer.class);
@@ -241,7 +246,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
                                     if (!(packingList == null)) {
                                         PlannedPLList.add(packingList);
-                                        PlannedPLListJSON.put(packingList.getJSONObject());
+                                        plannedPLListJSON.put(packingList.getJSONObject());
                                     }
 
                                     if (headerTableLayout.getChildCount() == 0)
@@ -295,9 +300,9 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
         }
 
         if (isOk) {
-            PlannedPLListJSON = new JSONArray();
+            plannedPLListJSON = new JSONArray();
             for (int i = 0; i < PlannedPLList.size(); i++) {
-                PlannedPLListJSON.put(PlannedPLList.get(i).getJSONObject());
+                plannedPLListJSON.put(PlannedPLList.get(i).getJSONObject());
             }
             new JSONTask4().execute();
         } else
@@ -534,9 +539,9 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                     PlannedPLList.get(index).setExist(true);
                 }
 
-                PlannedPLListJSON = new JSONArray();
+                plannedPLListJSON = new JSONArray();
                 for (int i = 0; i < PlannedPLList.size(); i++) {
-                    PlannedPLListJSON.put(PlannedPLList.get(i).getJSONObject());
+                    plannedPLListJSON.put(PlannedPLList.get(i).getJSONObject());
                 }
 
                 dialog.dismiss();
@@ -729,6 +734,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
         }
     }  // import customers
 
+    // ********************************* FIND SAME DATA ***************************
     private class JSONTask2 extends AsyncTask<String, String, String> {  // check
 
         @Override
@@ -747,7 +753,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                 request.setURI(new URI("http://" + databaseHandler.getSettings().getIpAddress() + "/export.php"));
 
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-                nameValuePairs.add(new BasicNameValuePair("CHECK_CONTENT", PlannedPLListJSON.toString()));
+                nameValuePairs.add(new BasicNameValuePair("CHECK_CONTENT", plannedPLListJSON.toString()));
                 nameValuePairs.add(new BasicNameValuePair("LOCATION", databaseHandler.getSettings().getStore().toString()));
 
                 request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
@@ -775,7 +781,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 //                String ff=JsonResponse.r((JsonResponse.indexOf("result")+5));
                 Log.e("tag___", "" + JsonResponse.indexOf("result"));
 
-                int index = PlannedPLListJSON.length();
+                int index = plannedPLListJSON.length();
 
                 for (int i = 0; i < object.length(); i++) {
                     for (int f = 0; f < index; f++) {
@@ -927,6 +933,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
         }
     }
 
+    // ********************************* SAVE NEW PACKING LIST ***************************
     private class JSONTask4 extends AsyncTask<String, String, String> {  // save
 
         @Override
@@ -945,7 +952,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                 request.setURI(new URI("http://" + databaseHandler.getSettings().getIpAddress() + "/export.php"));
 
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-                nameValuePairs.add(new BasicNameValuePair("SAVE_PLANNED_PACKING_LIST", PlannedPLListJSON.toString()));
+                nameValuePairs.add(new BasicNameValuePair("SAVE_PLANNED_PACKING_LIST", plannedPLListJSON.toString()));
                 nameValuePairs.add(new BasicNameValuePair("LOCATION", databaseHandler.getSettings().getStore()));
 
                 request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
