@@ -379,12 +379,12 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
                         NewRowInfo newRowInfo = new NewRowInfo();
                         newRowInfo.setSupplierName(finalObject.getString("SUPLIER"));
                         newRowInfo.setTruckNo(finalObject.getString("TRUCK_NO"));
-                        newRowInfo.setThickness(finalObject.getDouble("THICKNESS"));
-                        newRowInfo.setWidth(finalObject.getDouble("WIDTH"));
-                        newRowInfo.setLength(finalObject.getDouble("LENGTH"));
+                        newRowInfo.setThickness(finalObject.getInt("THICKNESS"));
+                        newRowInfo.setWidth(finalObject.getInt("WIDTH"));
+                        newRowInfo.setLength(finalObject.getInt("LENGTH"));
                         newRowInfo.setNoOfPieces(finalObject.getInt("PIECES"));
                         newRowInfo.setNoOfRejected(finalObject.getInt("REJECTED"));//REJ
-                        newRowInfo.setNoOfBundles(finalObject.getDouble("NO_BUNDLES"));
+                        newRowInfo.setNoOfBundles(finalObject.getInt("NO_BUNDLES"));
                         newRowInfo.setGrade(finalObject.getString("GRADE"));
 //                        newRowInfo.setTtnNo(finalObject.getString("TTN_NO"));
                         newRowInfo.setSerial(finalObject.getString("SERIAL"));
@@ -460,7 +460,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
 
         for (int i = 0; i < details.size(); i++) {
             Log.e("acceptanceReport", "/truck/" + truckString + "/truckd/" + details.get(i).getTruckNo()
-                    + "/serial/" + details.get(i).getSerial() + "/seriald/" + newRowInfo.getSerial());
+                    + "/serial/" + details.get(i).getSerial() + "/seriald/" + newRowInfo.getSerial() + "/thickness/" + newRowInfo.getThickness());
             if (details.get(i).getTruckNo().equals(newRowInfo.getTruckNo())
                     && details.get(i).getSerial().equals(newRowInfo.getSerial())
             ) {

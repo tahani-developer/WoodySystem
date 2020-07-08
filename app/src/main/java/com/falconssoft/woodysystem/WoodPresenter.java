@@ -255,11 +255,11 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                     Log.e("presenter:bun3 ", "" + innerObject.toString());
                     if (innerObject.getInt("ORDERED") == 0) {
                         BundleInfo bundleInfo = new BundleInfo();
-                        bundleInfo.setThickness(innerObject.getInt("THICKNESS"));
-                        bundleInfo.setWidth(innerObject.getInt("WIDTH"));
-                        bundleInfo.setLength(innerObject.getInt("LENGTH"));
+                        bundleInfo.setThickness(innerObject.getDouble("THICKNESS"));
+                        bundleInfo.setWidth(innerObject.getDouble("WIDTH"));
+                        bundleInfo.setLength(innerObject.getDouble("LENGTH"));
                         bundleInfo.setGrade(innerObject.getString("GRADE"));
-                        bundleInfo.setNoOfPieces(innerObject.getInt("PIECES"));
+                        bundleInfo.setNoOfPieces(innerObject.getDouble("PIECES"));
                         bundleInfo.setBundleNo(innerObject.getString("BUNDLE_NO"));
                         bundleInfo.setLocation(innerObject.getString("LOCATION"));
                         bundleInfo.setArea(innerObject.getString("AREA"));
@@ -337,11 +337,11 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                             && (innerObject.getString("LOCATION").equals(settings.getStore()))
                             && (innerObject.getString("IS_PRINTED").equals("0"))) {
                         BundleInfo bundleInfo = new BundleInfo();
-                        bundleInfo.setThickness(innerObject.getInt("THICKNESS"));
-                        bundleInfo.setWidth(innerObject.getInt("WIDTH"));
-                        bundleInfo.setLength(innerObject.getInt("LENGTH"));
+                        bundleInfo.setThickness(innerObject.getDouble("THICKNESS"));
+                        bundleInfo.setWidth(innerObject.getDouble("WIDTH"));
+                        bundleInfo.setLength(innerObject.getDouble("LENGTH"));
                         bundleInfo.setGrade(innerObject.getString("GRADE"));
-                        bundleInfo.setNoOfPieces(innerObject.getInt("PIECES"));
+                        bundleInfo.setNoOfPieces(innerObject.getDouble("PIECES"));
                         bundleInfo.setBundleNo(innerObject.getString("BUNDLE_NO"));
                         bundleInfo.setLocation(innerObject.getString("LOCATION"));
                         bundleInfo.setArea(innerObject.getString("AREA"));
@@ -471,11 +471,11 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                     Log.e("presenter:bun3 ", "" + innerObject.toString());
                     if (innerObject.getInt("ORDERED") == 0) {
                         BundleInfo bundleInfo = new BundleInfo();
-                        bundleInfo.setThickness(innerObject.getInt("THICKNESS"));
-                        bundleInfo.setWidth(innerObject.getInt("WIDTH"));
-                        bundleInfo.setLength(innerObject.getInt("LENGTH"));
+                        bundleInfo.setThickness(innerObject.getDouble("THICKNESS"));
+                        bundleInfo.setWidth(innerObject.getDouble("WIDTH"));
+                        bundleInfo.setLength(innerObject.getDouble("LENGTH"));
                         bundleInfo.setGrade(innerObject.getString("GRADE"));
-                        bundleInfo.setNoOfPieces(innerObject.getInt("PIECES"));
+                        bundleInfo.setNoOfPieces(innerObject.getDouble("PIECES"));
                         bundleInfo.setBundleNo(innerObject.getString("BUNDLE_NO"));
                         bundleInfo.setLocation(innerObject.getString("LOCATION"));
                         bundleInfo.setArea(innerObject.getString("AREA"));

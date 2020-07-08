@@ -252,15 +252,15 @@ public class GenerateBarCode extends AppCompatActivity {
 
             BundleInfo bundleInfo = new BundleInfo();
             if(i==4){
-                bundleInfo.setThickness(38);//38.124
+                bundleInfo.setThickness(38.124);//38.124
             }else{
-                bundleInfo.setThickness(38);
+                bundleInfo.setThickness(38.0);
             }
 
-            bundleInfo.setWidth(100);
-            bundleInfo.setLength(547);
+            bundleInfo.setWidth(100.0);
+            bundleInfo.setLength(547.0);
             bundleInfo.setGrade("Fresh");
-            bundleInfo.setNoOfPieces(100);
+            bundleInfo.setNoOfPieces(100.0);
             bundleInfo.setBundleNo("FRAmm38.100.547.100."+(9+i));
             bundleInfo.setLocation("Amman");
             bundleInfo.setArea("Zone1");

@@ -396,11 +396,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             do {
                 BundleInfo bundleInfo = new BundleInfo();
 
-                bundleInfo.setThickness(Integer.parseInt(cursor.getString(0)));
-                bundleInfo.setLength(Integer.parseInt(cursor.getString(1)));
-                bundleInfo.setWidth(Integer.parseInt(cursor.getString(2)));
+                bundleInfo.setThickness(Double.parseDouble(cursor.getString(0)));
+                bundleInfo.setLength(Double.parseDouble(cursor.getString(1)));
+                bundleInfo.setWidth(Double.parseDouble(cursor.getString(2)));
                 bundleInfo.setGrade(cursor.getString(3));
-                bundleInfo.setNoOfPieces(Integer.parseInt(cursor.getString(4)));
+                bundleInfo.setNoOfPieces(Double.parseDouble(cursor.getString(4)));
                 bundleInfo.setBundleNo(cursor.getString(5));
                 bundleInfo.setLocation(cursor.getString(6));
                 bundleInfo.setArea(cursor.getString(7));
@@ -430,11 +430,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             do {
                 BundleInfo bundleInfo = new BundleInfo();
 
-                bundleInfo.setThickness(Integer.parseInt(cursor.getString(0)));
-                bundleInfo.setLength(Integer.parseInt(cursor.getString(1)));
-                bundleInfo.setWidth(Integer.parseInt(cursor.getString(2)));
+                bundleInfo.setThickness(Double.parseDouble(cursor.getString(0)));
+                bundleInfo.setLength(Double.parseDouble(cursor.getString(1)));
+                bundleInfo.setWidth(Double.parseDouble(cursor.getString(2)));
                 bundleInfo.setGrade(cursor.getString(3));
-                bundleInfo.setNoOfPieces(Integer.parseInt(cursor.getString(4)));
+                bundleInfo.setNoOfPieces(Double.parseDouble(cursor.getString(4)));
                 bundleInfo.setBundleNo(cursor.getString(5));
                 bundleInfo.setLocation(cursor.getString(6));
                 bundleInfo.setArea(cursor.getString(7));
@@ -478,11 +478,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             do {
                 BundleInfo bundleInfo = new BundleInfo();
 
-                bundleInfo.setThickness(Integer.parseInt(cursor.getString(0)));
-                bundleInfo.setLength(Integer.parseInt(cursor.getString(1)));
-                bundleInfo.setWidth(Integer.parseInt(cursor.getString(2)));
+                bundleInfo.setThickness(Double.parseDouble(cursor.getString(0)));
+                bundleInfo.setLength(Double.parseDouble(cursor.getString(1)));
+                bundleInfo.setWidth(Double.parseDouble(cursor.getString(2)));
                 bundleInfo.setGrade(cursor.getString(3));
-                bundleInfo.setNoOfPieces(Integer.parseInt(cursor.getString(4)));
+                bundleInfo.setNoOfPieces(Double.parseDouble(cursor.getString(4)));
                 bundleInfo.setBundleNo(cursor.getString(5));
                 bundleInfo.setLocation(cursor.getString(6));
                 bundleInfo.setArea(cursor.getString(7));

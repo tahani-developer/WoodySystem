@@ -181,11 +181,11 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                         addTableHeader(bundlesTable);
                                     }
 
-                                    newBundle = new BundleInfo(Integer.parseInt(thicknessText)
-                                            , Integer.parseInt(lengthText)
-                                            , Integer.parseInt(widthText)
+                                    newBundle = new BundleInfo(Double.parseDouble(thicknessText)
+                                            , Double.parseDouble(lengthText)
+                                            , Double.parseDouble(widthText)
                                             , gradeText
-                                            , Integer.parseInt(noOfPiecesText)
+                                            , Double.parseDouble(noOfPiecesText)
                                             , bundleNoString
                                             , generalSettings.getStore()
                                             , areaText
@@ -252,10 +252,10 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
             BundleInfo bundleInfo = (BundleInfo) bundle.getSerializable(EDIT_BUNDLE);
 
             oldBundleNoString = bundleInfo.getBundleNo();
-            thickness.setText("" + (int) bundleInfo.getThickness());
-            width.setText("" + (int) bundleInfo.getWidth());
-            length.setText("" + (int) bundleInfo.getLength());
-            noOfPieces.setText("" + (int) bundleInfo.getNoOfPieces());
+            thickness.setText("" + bundleInfo.getThickness());
+            width.setText("" + bundleInfo.getWidth());
+            length.setText("" + bundleInfo.getLength());
+            noOfPieces.setText("" + bundleInfo.getNoOfPieces());
             serialNo.setText(bundleInfo.getSerialNo());
             serialNo.setEnabled(false);
 
@@ -548,11 +548,11 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                                     , takeNoOfPieces, locationString);
                                             updatedTable.addView(tableRow1);
 
-                                            newBundle = new BundleInfo(Integer.parseInt(takeThick)
-                                                    , Integer.parseInt(takeLength)
-                                                    , Integer.parseInt(takeWidth)
+                                            newBundle = new BundleInfo(Double.parseDouble(takeThick)
+                                                    , Double.parseDouble(takeLength)
+                                                    , Double.parseDouble(takeWidth)
                                                     , gradeText
-                                                    , Integer.parseInt(takeNoOfPieces)
+                                                    , Double.parseDouble(takeNoOfPieces)
                                                     , newBundleNoString
                                                     , generalSettings.getStore()
                                                     , areaText

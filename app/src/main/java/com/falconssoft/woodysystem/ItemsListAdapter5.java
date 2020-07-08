@@ -73,11 +73,11 @@ public class ItemsListAdapter5 extends BaseAdapter {
         holder.location = (TextView) view.findViewById(R.id.location);
         holder.area = (TextView) view.findViewById(R.id.area);
 
-        holder.th.setText("" + itemsList.get(i).getThickness());
-        holder.w.setText("" + itemsList.get(i).getWidth());
-        holder.l.setText("" + itemsList.get(i).getLength());
+        holder.th.setText("" + (int)itemsList.get(i).getThickness());
+        holder.w.setText("" + (int)itemsList.get(i).getWidth());
+        holder.l.setText("" + (int)itemsList.get(i).getLength());
         holder.grade.setText("" + itemsList.get(i).getGrade());
-        holder.pcs.setText("" + itemsList.get(i).getNoOfPieces());
+        holder.pcs.setText("" + (int)itemsList.get(i).getNoOfPieces());
         holder.bundle.setText("" + itemsList.get(i).getBundleNo());
         holder.location.setText("" + itemsList.get(i).getLocation());
         holder.area.setText("" + itemsList.get(i).getArea());

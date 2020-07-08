@@ -78,13 +78,13 @@ public class ItemsListAdapter4 extends BaseAdapter {
         holder.supplier = (TextView) view.findViewById(R.id.supplier);
         holder.image = (ImageView) view.findViewById(R.id.image);
 
-        holder.th.setText("" + itemsList.get(i).getThickness());
-        holder.w.setText("" + itemsList.get(i).getWidth());
-        holder.l.setText("" + itemsList.get(i).getLength());
+        holder.th.setText("" + (int) itemsList.get(i).getThickness());
+        holder.w.setText("" +  (int) itemsList.get(i).getWidth());
+        holder.l.setText("" + (int)  itemsList.get(i).getLength());
         holder.grade.setText("" + itemsList.get(i).getGrade());
-        holder.pcs.setText("" + itemsList.get(i).getNoOfPieces());
-        holder.bundle.setText("" + itemsList.get(i).getNoOfBundles());
-        holder.rejected.setText("" + itemsList.get(i).getNoOfRejected());
+        holder.pcs.setText("" + (int) itemsList.get(i).getNoOfPieces());
+        holder.bundle.setText("" +  (int) itemsList.get(i).getNoOfBundles());
+        holder.rejected.setText("" +  (int) itemsList.get(i).getNoOfRejected());
         holder.supplier.setText("" + itemsList.get(i).getSupplierName());
 
 //        if (itemsList.get(i).getPicture() == null) {

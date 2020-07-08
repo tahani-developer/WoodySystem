@@ -131,7 +131,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                     Toast.makeText(this, "Please add rows first!", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.save_button:
-                if (plannedPLListJSON.length() > 0)
+                if (PlannedPLList.size() > 0)
                     saveButtonMethod();
                 else
                     Toast.makeText(this, "No rows added!", Toast.LENGTH_SHORT).show();
@@ -242,7 +242,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                                     packingList.setCustNo(customerNo);
                                     packingList.setPackingList(packLiastLocal);
                                     packingList.setDestination(destinationLocal);
-                                    packingList.setExist(true);
+                                    packingList.setExist(false);
 
                                     if (!(packingList == null)) {
                                         PlannedPLList.add(packingList);
@@ -528,10 +528,10 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                 t3.setText(widthD.getText().toString());
                 t4.setText(thickD.getText().toString());
 
-                PlannedPLList.get(index).setNoOfPieces(Double.parseDouble(piecesD.getText().toString()));
-                PlannedPLList.get(index).setLength(Double.parseDouble(lengthD.getText().toString()));
-                PlannedPLList.get(index).setWidth(Double.parseDouble(widthD.getText().toString()));
-                PlannedPLList.get(index).setThickness(Double.parseDouble(thickD.getText().toString()));
+                PlannedPLList.get(index).setNoOfPieces(Integer.parseInt(piecesD.getText().toString()));
+                PlannedPLList.get(index).setLength(Integer.parseInt(lengthD.getText().toString()));
+                PlannedPLList.get(index).setWidth(Integer.parseInt(widthD.getText().toString()));
+                PlannedPLList.get(index).setThickness(Integer.parseInt(thickD.getText().toString()));
 
 
                 if (flagIsChanged == 1) {
@@ -792,11 +792,11 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                             JSONObject innerObject = array.getJSONObject(0);
 
                             BundleInfo bundleInfo = new BundleInfo();
-                            bundleInfo.setThickness(innerObject.getInt("THICKNESS"));
-                            bundleInfo.setWidth(innerObject.getInt("WIDTH"));
-                            bundleInfo.setLength(innerObject.getInt("LENGTH"));
+                            bundleInfo.setThickness(innerObject.getDouble("THICKNESS"));
+                            bundleInfo.setWidth(innerObject.getDouble("WIDTH"));
+                            bundleInfo.setLength(innerObject.getDouble("LENGTH"));
                             bundleInfo.setGrade(innerObject.getString("GRADE"));
-                            bundleInfo.setNoOfPieces(innerObject.getInt("PIECES"));
+                            bundleInfo.setNoOfPieces(innerObject.getDouble("PIECES"));
                             bundleInfo.setBundleNo(innerObject.getString("BUNDLE_NO"));
                             bundleInfo.setLocation(innerObject.getString("LOCATION"));
                             bundleInfo.setArea(innerObject.getString("AREA"));
@@ -893,11 +893,11 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                     JSONObject innerObject = array.getJSONObject(i);
 
                     BundleInfo bundleInfo = new BundleInfo();
-                    bundleInfo.setThickness(innerObject.getInt("THICKNESS"));
-                    bundleInfo.setWidth(innerObject.getInt("WIDTH"));
-                    bundleInfo.setLength(innerObject.getInt("LENGTH"));
+                    bundleInfo.setThickness(innerObject.getDouble("THICKNESS"));
+                    bundleInfo.setWidth(innerObject.getDouble("WIDTH"));
+                    bundleInfo.setLength(innerObject.getDouble("LENGTH"));
                     //bundleInfo.setGrade(innerObject.getString("GRADE"));
-                    bundleInfo.setNoOfPieces(innerObject.getInt("PIECES"));
+                    bundleInfo.setNoOfPieces(innerObject.getDouble("PIECES"));
                     //bundleInfo.setBundleNo(innerObject.getString("BUNDLE_NO"));
                     //bundleInfo.setLocation(innerObject.getString("LOCATION"));
                     //bundleInfo.setArea(innerObject.getString("AREA"));
@@ -1013,6 +1013,16 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
             if (s != null) {
                 if (s.contains("PLANNED_PACKING_LIST SUCCESS")) {
+                    plannedPLListJSON = new JSONArray();
+                    PlannedPLList.clear();
+                    paclingList.setText("");
+                    destination.setText("");
+                    thickness.setText("");
+                    width.setText("");
+                    length.setText("");
+                    noOfPieces.setText("");
+                    searchCustomer.setText("");
+
                     Toast.makeText(PlannedPackingList.this, "Saved!", Toast.LENGTH_SHORT).show();
                     Log.e("tag", "PLANNED_PACKING_LIST SUCCESS");
                 } else {

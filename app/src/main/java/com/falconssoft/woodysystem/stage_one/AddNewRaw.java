@@ -556,8 +556,8 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                                     noOfRejectedLocal = isContainValueAfterDot(noOfRejectedLocal);
                                     noOfBundlesLocal = isContainValueAfterDot(noOfBundlesLocal);
 
-                                    netBundlesString += Double.parseDouble(noOfBundlesLocal);
-                                    netRejectedString += Double.parseDouble(noOfRejectedLocal);
+                                    netBundlesString += Integer.parseInt(noOfBundlesLocal);
+                                    netRejectedString += Integer.parseInt(noOfRejectedLocal);
 
                                     NewRowInfo rowInfo = new NewRowInfo();
                                     rowInfo.setSupplierName(supplierName);
@@ -912,7 +912,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
             String isConten = "";
             String afterDot = string.substring(string.indexOf(".") + 1, string.length());
             Log.e("afterDot1", "" + afterDot + "      " + string);
-            if (!(Integer.parseInt(afterDot) > 0)) {
+            if (!(Double.parseDouble(afterDot) > 0)) {
                 Log.e("afterDot2", "" + string.substring(0, string.indexOf(".")));
                 isConten = string.substring(0, string.indexOf("."));
 

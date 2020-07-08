@@ -62,7 +62,7 @@ public class BundelsReportAdapter extends BaseAdapter {
         holder.serial.setText("" + itemsList.get(i).getSerialNo());
         holder.th.setText("" + (int) itemsList.get(i).getThickness());
         holder.w.setText("" + (int) itemsList.get(i).getWidth());
-        holder.l.setText("" + (int) itemsList.get(i).getLength());
+        holder.l.setText("" +  (int)itemsList.get(i).getLength());
         holder.grade.setText("" + itemsList.get(i).getGrade());
         holder.pcs.setText("" + (int) itemsList.get(i).getNoOfPieces());
         holder.bundle.setText("" + itemsList.get(i).getBundleNo());

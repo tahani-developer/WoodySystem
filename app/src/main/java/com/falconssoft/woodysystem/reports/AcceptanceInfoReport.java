@@ -688,13 +688,13 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
                         truckNoLocal = finalObject.getString("TRUCK_NO");
                         newRowInfo.setSupplierName(finalObject.getString("SUPLIER"));
                         newRowInfo.setTruckNo(truckNoLocal);
-                        newRowInfo.setThickness(finalObject.getDouble("THICKNESS"));
-                        newRowInfo.setWidth(finalObject.getDouble("WIDTH"));
-                        newRowInfo.setLength(finalObject.getDouble("LENGTH"));
+                        newRowInfo.setThickness(finalObject.getInt("THICKNESS"));
+                        newRowInfo.setWidth(finalObject.getInt("WIDTH"));
+                        newRowInfo.setLength(finalObject.getInt("LENGTH"));
                         newRowInfo.setNoOfRejected(Double.parseDouble(finalObject.getString("REJ")));
-                        newRowInfo.setNoOfBundles(finalObject.getDouble("NO_BUNDLES"));
+                        newRowInfo.setNoOfBundles(finalObject.getInt("NO_BUNDLES"));
                         newRowInfo.setGrade(finalObject.getString("GRADE"));
-                        newRowInfo.setNoOfPieces(finalObject.getDouble("PIECES"));
+                        newRowInfo.setNoOfPieces(finalObject.getInt("PIECES"));
                         newRowInfo.setDate(finalObject.getString("DATE_OF_ACCEPTANCE"));
                         newRowInfo.setAcceptedPersonName(finalObject.getString("NAME_OF_ACCEPTER"));
                         newRowInfo.setLocationOfAcceptance(finalObject.getString("LOCATION_OF_ACCEPTANCE"));

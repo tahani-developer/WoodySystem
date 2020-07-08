@@ -11,11 +11,11 @@ import java.util.List;
 
 public class BundleInfo implements Serializable {
 
-    private int thickness;
-    private int length;
-    private int width;
+    private double thickness;
+    private double length;
+    private double width;
     private String grade;
-    private int noOfPieces;
+    private double noOfPieces;
     private String bundleNo;
     private String location;
     private String area;
@@ -42,7 +42,7 @@ public class BundleInfo implements Serializable {
     public BundleInfo() {
     }
 
-    public BundleInfo(int thickness, int length, int width, String grade, int noOfPieces, String bundleNo, String location, String area, String barcode, String pic, Bitmap picBitmap) {
+    public BundleInfo(double thickness, double length, double width, String grade, double noOfPieces, String bundleNo, String location, String area, String barcode, String pic, Bitmap picBitmap) {
         this.thickness = thickness;
         this.length = length;
         this.width = width;
@@ -56,7 +56,7 @@ public class BundleInfo implements Serializable {
         this.picBitmap = picBitmap;
     }
 
-    public BundleInfo(int thickness, int length, int width, String grade, int noOfPieces, String bundleNo, String location, String area, String addingDate, int isPrinted, String description, String serialNo, String userNo, String backingList, int ordered) {
+    public BundleInfo(double thickness, double length, double width, String grade, double noOfPieces, String bundleNo, String location, String area, String addingDate, int isPrinted, String description, String serialNo, String userNo, String backingList, int ordered) {
         this.thickness = thickness;
         this.length = length;
         this.width = width;
@@ -131,27 +131,27 @@ public class BundleInfo implements Serializable {
         this.dateOfLoad = dateOfLoad;
     }
 
-    public int getThickness() {
+    public double getThickness() {
         return thickness;
     }
 
-    public void setThickness(int thickness) {
+    public void setThickness(double thickness) {
         this.thickness = thickness;
     }
 
-    public int getLength() {
+    public double getLength() {
         return length;
     }
 
-    public void setLength(int length) {
+    public void setLength(double length) {
         this.length = length;
     }
 
-    public int getWidth() {
+    public double getWidth() {
         return width;
     }
 
-    public void setWidth(int width) {
+    public void setWidth(double width) {
         this.width = width;
     }
 
@@ -163,11 +163,11 @@ public class BundleInfo implements Serializable {
         this.grade = grade;
     }
 
-    public int getNoOfPieces() {
+    public double getNoOfPieces() {
         return noOfPieces;
     }
 
-    public void setNoOfPieces(int noOfPieces) {
+    public void setNoOfPieces(double noOfPieces) {
         this.noOfPieces = noOfPieces;
     }
 

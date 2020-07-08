@@ -10,11 +10,11 @@ import java.io.Serializable;
 
 public class Orders implements Serializable {
 
-    private int thickness;
-    private int length;
-    private int width;
+    private Double thickness;
+    private Double length;
+    private Double width;
     private String grade;
-    private int noOfPieces;
+    private Double noOfPieces;
     private String bundleNo;
     private String location;
     private String area;
@@ -30,7 +30,7 @@ public class Orders implements Serializable {
     public Orders() {
     }
 
-    public Orders(int thickness, int length, int width, String grade, int noOfPieces, String bundleNo, String location, String area
+    public Orders(Double thickness, Double length, Double width, String grade, Double noOfPieces, String bundleNo, String location, String area
             , String placingNo, String orderNo, String containerNo, String dateOfLoad, String destination, String picture) {
         this.thickness = thickness;
         this.length = length;
@@ -56,27 +56,27 @@ public class Orders implements Serializable {
         this.checked = checked;
     }
 
-    public int getThickness() {
+    public Double getThickness() {
         return thickness;
     }
 
-    public void setThickness(int thickness) {
+    public void setThickness(Double thickness) {
         this.thickness = thickness;
     }
 
-    public int getLength() {
+    public Double getLength() {
         return length;
     }
 
-    public void setLength(int length) {
+    public void setLength(Double length) {
         this.length = length;
     }
 
-    public int getWidth() {
+    public Double getWidth() {
         return width;
     }
 
-    public void setWidth(int width) {
+    public void setWidth(Double width) {
         this.width = width;
     }
 
@@ -88,11 +88,11 @@ public class Orders implements Serializable {
         this.grade = grade;
     }
 
-    public int getNoOfPieces() {
+    public Double getNoOfPieces() {
         return noOfPieces;
     }
 
-    public void setNoOfPieces(int noOfPieces) {
+    public void setNoOfPieces(Double noOfPieces) {
         this.noOfPieces = noOfPieces;
     }
 
