@@ -125,7 +125,8 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                 addButtonMethod();
                 break;
             case R.id.check_button:
-                new JSONTask2().execute();
+                if (PlannedPLList.size() > 0)
+                    new JSONTask2().execute();
                 break;
             case R.id.save_button:
                 saveButtonMethod();
@@ -190,7 +191,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                 }
             }
         }
-        adapter = new CustomerAdapter(1,this, arraylist);
+        adapter = new CustomerAdapter(1, this, arraylist);
         recyclerView.setAdapter(adapter);
     }
 
@@ -252,9 +253,9 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                                     width.setText("");
                                     length.setText("");
                                     noOfPieces.setText("");
-                                    searchCustomer.setText("");
-                                    paclingList.setText("");
-                                    destination.setText("");
+                                    //searchCustomer.setText("");
+                                    //paclingList.setText("");
+                                    //destination.setText("");
 
                                     paclingList.requestFocus();
 
@@ -324,16 +325,16 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                     textView.setText("Destination");
                     break;
                 case 3:
-                    textView.setText("Pieces");
+                    textView.setText("Thickness");
                     break;
                 case 4:
-                    textView.setText("Length");
-                    break;
-                case 5:
                     textView.setText("Width");
                     break;
+                case 5:
+                    textView.setText("Length");
+                    break;
                 case 6:
-                    textView.setText("Thickness");
+                    textView.setText("Pieces");
                     break;
                 case 7:
                     textView.setText("Is Exist");
@@ -369,16 +370,16 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                     textView.setText(packingList.getDestination());
                     break;
                 case 3:
-                    textView.setText("" + packingList.getNoOfPieces());
+                    textView.setText("" + packingList.getThickness());
                     break;
                 case 4:
-                    textView.setText("" + packingList.getLength());
-                    break;
-                case 5:
                     textView.setText("" + packingList.getWidth());
                     break;
+                case 5:
+                    textView.setText("" + packingList.getLength());
+                    break;
                 case 6:
-                    textView.setText("" + packingList.getThickness());
+                    textView.setText("" + packingList.getNoOfPieces());
                     break;
                 case 7:
                     textView.setText("");
@@ -401,6 +402,28 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
     void fillTableRow2() {
 
+        int index = 0;
+        if (bundleInfosList2.get(0).getThickness() != Double.parseDouble(thickD.getText().toString())) {
+            thickD.setTextColor(ContextCompat.getColor(this, R.color.preview));
+            index = 0;
+        }
+
+        if (bundleInfosList2.get(0).getWidth() != Double.parseDouble(widthD.getText().toString())) {
+            widthD.setTextColor(ContextCompat.getColor(this, R.color.preview));
+            index = 1;
+        }
+
+        if (bundleInfosList2.get(0).getLength() != Double.parseDouble(lengthD.getText().toString())) {
+            lengthD.setTextColor(ContextCompat.getColor(this, R.color.preview));
+            index = 2;
+        }
+
+        if (bundleInfosList2.get(0).getNoOfPieces() != Double.parseDouble(piecesD.getText().toString())) {
+            piecesD.setTextColor(ContextCompat.getColor(this, R.color.preview));
+            index = 3;
+        }
+
+
         TableRow tableRow;
         for (int k = 0; k < bundleInfosList2.size(); k++) {
 
@@ -417,18 +440,22 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                 textView.setLayoutParams(textViewParam);
                 switch (i) {
                     case 0:
-                        textView.setText("" + bundleInfosList2.get(k).getNoOfPieces());
-                        break;
-                    case 1:
-                        textView.setText("" + bundleInfosList2.get(k).getLength());
-                        break;
-                    case 2:
-                        textView.setText("" + bundleInfosList2.get(k).getWidth());
-                        break;
-                    case 3:
                         textView.setText("" + bundleInfosList2.get(k).getThickness());
                         break;
+                    case 1:
+                        textView.setText("" + bundleInfosList2.get(k).getWidth());
+                        break;
+                    case 2:
+                        textView.setText("" + bundleInfosList2.get(k).getLength());
+                        break;
+                    case 3:
+                        textView.setText("" + bundleInfosList2.get(k).getNoOfPieces());
+                        break;
                 }
+
+                if (i == index)
+                    textView.setTextColor(ContextCompat.getColor(this, R.color.preview));
+
                 tableRow.addView(textView);
 
 
@@ -473,6 +500,11 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
         lengthD.setText("" + plannedPL.getLength());
         widthD.setText("" + plannedPL.getWidth());
         thickD.setText("" + plannedPL.getThickness());
+
+        thickD.setTextColor(ContextCompat.getColor(this, R.color.black));
+        widthD.setTextColor(ContextCompat.getColor(this, R.color.black));
+        lengthD.setTextColor(ContextCompat.getColor(this, R.color.black));
+        piecesD.setTextColor(ContextCompat.getColor(this, R.color.black));
 
         plannedPLJObject = plannedPL.getJSONObject();
         new JSONTask3().execute();
@@ -555,6 +587,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
     }
 
+    /*
     @Override
     protected void onSaveInstanceState(Bundle outState) {
 //        linearLayoutView.getVisibility();
@@ -600,6 +633,9 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 //        }
         super.onRestoreInstanceState(savedInstanceState);
     }
+
+
+     */
 
     private class JSONTask extends AsyncTask<String, String, List<CustomerInfo>> {
 
@@ -739,13 +775,13 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 //                String ff=JsonResponse.r((JsonResponse.indexOf("result")+5));
                 Log.e("tag___", "" + JsonResponse.indexOf("result"));
 
-                int index=PlannedPLListJSON.length();
+                int index = PlannedPLListJSON.length();
 
                 for (int i = 0; i < object.length(); i++) {
-                    for(int f=0;f<index;f++) {
+                    for (int f = 0; f < index; f++) {
                         try {
 
-                            JSONArray array = object.getJSONArray("result" + (f+ 1));
+                            JSONArray array = object.getJSONArray("result" + (f + 1));
 
                             JSONObject innerObject = array.getJSONObject(0);
 
@@ -770,7 +806,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
                         }
                     }
-                    }
+                }
 //                }
                 Log.e("tag2", "" + bundleInfosList.size());
                 Log.e("tag3", "" + object.length());
@@ -821,6 +857,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
                 nameValuePairs.add(new BasicNameValuePair("COMPARE_CONTENT", plannedPLJObject.toString()));
+                nameValuePairs.add(new BasicNameValuePair("LOCATION", databaseHandler.getSettings().getStore().toString()));
 
                 request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
