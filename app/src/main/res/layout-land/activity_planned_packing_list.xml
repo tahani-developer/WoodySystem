@@ -5,7 +5,7 @@
     android:id="@+id/addNewRow_coordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/w10"
+    android:background="@drawable/wooddecor"
     tools:context=".stage_one.AddNewRaw">
 
     <LinearLayout
@@ -301,7 +301,7 @@
                         android:drawableLeft="@drawable/ic_add_white_32dp"
                         android:fontFamily="serif"
                         android:gravity="center"
-                        android:padding="30dp"
+                        android:padding="20dp"
                         android:textColor="@color/white" />
 
                     <TextView
@@ -316,7 +316,7 @@
                         android:drawableLeft="@drawable/ic_check_24dp"
                         android:fontFamily="serif"
                         android:gravity="center"
-                        android:padding="30dp"
+                        android:padding="20dp"
                         android:textColor="@color/white" />
 
                     <TextView
@@ -329,7 +329,7 @@
                         android:drawableLeft="@drawable/ic_save_white_24dp"
                         android:fontFamily="serif"
                         android:gravity="center"
-                        android:padding="30dp"
+                        android:padding="20dp"
                         android:textColor="@color/white"/>
 
 

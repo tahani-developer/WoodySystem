@@ -34,7 +34,7 @@
                 android:gravity="center"
                 android:text="@string/print_barcode_report"
                 android:textColor="@color/orange"
-                android:textSize="30sp" />
+                android:textSize="25sp" />
 
             <Button
                     android:id="@+id/loading_order_report_printAll"

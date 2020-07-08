@@ -649,7 +649,6 @@
                         android:layout_weight="1"
                         android:ems="10"
                         android:inputType="text"
-                        android:nextFocusDown="@id/addNewRaw_total_bundles"
                         android:textSize="18sp" />
 
                 </LinearLayout>
@@ -774,7 +773,7 @@
                         android:layout_weight="1"
                         android:ems="10"
                         android:inputType="text"
-                        android:nextFocusDown="@id/addNewRaw_total_rejected"
+                        android:nextFocusDown="@id/addNewRaw_acceptor"
                         android:textSize="18sp" />
 
                 </LinearLayout>

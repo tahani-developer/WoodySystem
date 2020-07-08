@@ -11,11 +11,11 @@ import java.util.List;
 
 public class BundleInfo implements Serializable {
 
-    private double thickness;
-    private double length;
-    private double width;
+    private int thickness;
+    private int length;
+    private int width;
     private String grade;
-    private double noOfPieces;
+    private int noOfPieces;
     private String bundleNo;
     private String location;
     private String area;
@@ -37,11 +37,12 @@ public class BundleInfo implements Serializable {
     List<String> bundleNoString;
     private String foucoseColor="0";
     private Bitmap picBitmap;
+    private String customer="";
 
     public BundleInfo() {
     }
 
-    public BundleInfo(double thickness, double length, double width, String grade, double noOfPieces, String bundleNo, String location, String area, String barcode, String pic, Bitmap picBitmap) {
+    public BundleInfo(int thickness, int length, int width, String grade, int noOfPieces, String bundleNo, String location, String area, String barcode, String pic, Bitmap picBitmap) {
         this.thickness = thickness;
         this.length = length;
         this.width = width;
@@ -55,7 +56,7 @@ public class BundleInfo implements Serializable {
         this.picBitmap = picBitmap;
     }
 
-    public BundleInfo(double thickness, double length, double width, String grade, double noOfPieces, String bundleNo, String location, String area, String addingDate, int isPrinted, String description, String serialNo, String userNo, String backingList, int ordered) {
+    public BundleInfo(int thickness, int length, int width, String grade, int noOfPieces, String bundleNo, String location, String area, String addingDate, int isPrinted, String description, String serialNo, String userNo, String backingList, int ordered) {
         this.thickness = thickness;
         this.length = length;
         this.width = width;
@@ -71,6 +72,15 @@ public class BundleInfo implements Serializable {
         this.userNo = userNo;
         this.backingList = backingList;
         this.ordered = ordered;
+        this.customer = customer;
+    }
+
+    public String getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(String customer) {
+        this.customer = customer;
     }
 
     public String getBackingList() {
@@ -121,27 +131,27 @@ public class BundleInfo implements Serializable {
         this.dateOfLoad = dateOfLoad;
     }
 
-    public double getThickness() {
+    public int getThickness() {
         return thickness;
     }
 
-    public void setThickness(double thickness) {
+    public void setThickness(int thickness) {
         this.thickness = thickness;
     }
 
-    public double getLength() {
+    public int getLength() {
         return length;
     }
 
-    public void setLength(double length) {
+    public void setLength(int length) {
         this.length = length;
     }
 
-    public double getWidth() {
+    public int getWidth() {
         return width;
     }
 
-    public void setWidth(double width) {
+    public void setWidth(int width) {
         this.width = width;
     }
 
@@ -153,11 +163,11 @@ public class BundleInfo implements Serializable {
         this.grade = grade;
     }
 
-    public double getNoOfPieces() {
+    public int getNoOfPieces() {
         return noOfPieces;
     }
 
-    public void setNoOfPieces(double noOfPieces) {
+    public void setNoOfPieces(int noOfPieces) {
         this.noOfPieces = noOfPieces;
     }
 
@@ -261,6 +271,7 @@ public class BundleInfo implements Serializable {
             obj.put("USER_NO", "'" + userNo + "'");
             obj.put("IS_PRINTED", "'" + isPrinted + "'");
             obj.put("BACKING_LIST", "'" + backingList + "'");
+//            obj.put("CUSTOMER", "'" + customer + "'");
 
         } catch (JSONException e) {
             Log.e("Tag", "JSONException");

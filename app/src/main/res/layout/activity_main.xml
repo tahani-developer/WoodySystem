@@ -102,7 +102,7 @@
                 android:layout_marginBottom="@dimen/main_p_margin3_bottom"
                 android:background="@drawable/frame_shape"
                 android:fontFamily="serif"
-                android:text="@string/stage2"
+                android:text="Planned P.List"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
 

@@ -5,7 +5,7 @@
     android:id="@+id/addNewRow_coordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/w10"
+    android:background="@drawable/wooddecor"
     tools:context=".stage_one.AddNewRaw">
 
     <LinearLayout
@@ -159,8 +159,9 @@
                         android:drawableStart="@drawable/ic_search_24dp"
                         android:drawableLeft="@drawable/ic_search_24dp"
                         android:fontFamily="serif"
+                        android:drawableTint="@color/white"
                         android:gravity="center"
-                        android:padding="30dp"
+                        android:padding="40dp"
                         android:textColor="@color/white"/>
 
                     <TextView

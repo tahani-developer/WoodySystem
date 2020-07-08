@@ -7,6 +7,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,7 +74,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
     SimpleDateFormat sdf;
     String today;
 
-    private JSONArray PlannedPLListJSON = new JSONArray();
+    private JSONArray plannedPLListJSON = new JSONArray();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,12 +110,16 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
         switch (v.getId()) {
             case R.id.search:
 
-                if (!searchCustomer.getText().equals("") && !paclingList.getText().equals("")) {
+                if (!TextUtils.isEmpty(searchCustomer.getText().toString()) && !TextUtils.isEmpty(paclingList.getText().toString())) {
                     new JSONTask2().execute();
-                }
+                } else
+                    Toast.makeText(this, "Please select customer and packing list first!", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.unload:
-                new JSONTask3().execute();
+                if (plannedPLListJSON.length() > 0)
+                    new JSONTask3().execute();
+                else
+                    Toast.makeText(this, "Please choose customer and packing list first!", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.cust:
                 customers.clear();
@@ -130,7 +135,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
 
                 recyclerView = searchDialog.findViewById(R.id.search_supplier_recyclerView);
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
-                adapter = new CustomerAdapter(2,this, customers);
+                adapter = new CustomerAdapter(2, this, customers);
                 recyclerView.setAdapter(adapter);
 
                 searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -214,9 +219,9 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
 //        bundlesTable.addView(tableRow);
     }
 
-    void fillTableRow(List<PlannedPL>  packingList) {
+    void fillTableRow(List<PlannedPL> packingList) {
 
-        for(int k = 0 ; k <packingList.size() ; k++) {
+        for (int k = 0; k < packingList.size(); k++) {
 
             tableRow = new TableRow(this);
 
@@ -317,6 +322,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
         super.onRestoreInstanceState(savedInstanceState);
     }
 
+    // ************************************** GET CUSTOMERS *******************************
     private class JSONTask extends AsyncTask<String, String, List<CustomerInfo>> {
 
         @Override
@@ -409,6 +415,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
         }
     }  // import customers
 
+    // ************************************** SEARCH *******************************
     private class JSONTask2 extends AsyncTask<String, String, String> {  // check
 
         @Override
@@ -487,22 +494,24 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
 
             if (s != null) {
 
-                if(PLList.size()>0){
+                if (PLList.size() > 0) {
                     if (headerTableLayout.getChildCount() == 0)
                         addTableHeader(headerTableLayout);
 
-                    fillTableRow( PLList);
+                    fillTableRow(PLList);
 
                     for (int i = 0; i < PLList.size(); i++) {
-                        PlannedPLListJSON.put(PLList.get(i).getJSONObject());
+                        plannedPLListJSON.put(PLList.get(i).getJSONObject());
                     }
                 }
             } else {
-                Toast.makeText(UnloadPackingList.this, "No internet connection!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(UnloadPackingList.this, "No same data found!", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(UnloadPackingList.this, "No internet connection!", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
+    // ************************************** UNLOAD P.LIST *******************************
     private class JSONTask3 extends AsyncTask<String, String, String> {  // save
 
         @Override
@@ -521,7 +530,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
                 request.setURI(new URI("http://" + databaseHandler.getSettings().getIpAddress() + "/export.php"));
 
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-                nameValuePairs.add(new BasicNameValuePair("UNLOAD_PLANNED_PACKING_LIST", PlannedPLListJSON.toString()));
+                nameValuePairs.add(new BasicNameValuePair("UNLOAD_PLANNED_PACKING_LIST", plannedPLListJSON.toString()));
                 nameValuePairs.add(new BasicNameValuePair("LOCATION", databaseHandler.getSettings().getStore()));
 
                 request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
