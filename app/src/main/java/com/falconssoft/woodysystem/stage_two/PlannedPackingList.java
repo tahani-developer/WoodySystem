@@ -81,6 +81,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
     String today;
     TableRow tableRowToBeEdit;
     int flagIsChanged = 0;
+    boolean check = false;
 
     private List<PlannedPL> PlannedPLList = new ArrayList<>();
     private List<BundleInfo> bundleInfosList = new ArrayList<>();
@@ -122,6 +123,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
         switch (v.getId()) {
             case R.id.add_button:
+                check = false;
                 addButtonMethod();
                 break;
             case R.id.check_button:
@@ -132,7 +134,10 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                 break;
             case R.id.save_button:
                 if (PlannedPLList.size() > 0)
+                    if (check)
                     saveButtonMethod();
+                    else
+                        Toast.makeText(this, "Please check if exist first!", Toast.LENGTH_SHORT).show();
                 else
                     Toast.makeText(this, "No rows added!", Toast.LENGTH_SHORT).show();
                 break;
@@ -242,7 +247,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                                     packingList.setCustNo(customerNo);
                                     packingList.setPackingList(packLiastLocal);
                                     packingList.setDestination(destinationLocal);
-                                    packingList.setExist(false);
+                                    packingList.setExist(true);
 
                                     if (!(packingList == null)) {
                                         PlannedPLList.add(packingList);
@@ -827,6 +832,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+            check = true;
             compare();
 
 //            if (s != null) {
@@ -1013,6 +1019,8 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
             if (s != null) {
                 if (s.contains("PLANNED_PACKING_LIST SUCCESS")) {
+                    tableLayout.removeAllViews();
+                    check = false;
                     plannedPLListJSON = new JSONArray();
                     PlannedPLList.clear();
                     paclingList.setText("");
