@@ -396,9 +396,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             do {
                 BundleInfo bundleInfo = new BundleInfo();
 
-                bundleInfo.setThickness(Double.parseDouble(cursor.getString(0)));
-                bundleInfo.setLength(Double.parseDouble(cursor.getString(1)));
-                bundleInfo.setWidth(Double.parseDouble(cursor.getString(2)));
+                bundleInfo.setThickness(Integer.parseInt(cursor.getString(0)));
+                bundleInfo.setLength(Integer.parseInt(cursor.getString(1)));
+                bundleInfo.setWidth(Integer.parseInt(cursor.getString(2)));
                 bundleInfo.setGrade(cursor.getString(3));
                 bundleInfo.setNoOfPieces(Integer.parseInt(cursor.getString(4)));
                 bundleInfo.setBundleNo(cursor.getString(5));
@@ -430,9 +430,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             do {
                 BundleInfo bundleInfo = new BundleInfo();
 
-                bundleInfo.setThickness(Double.parseDouble(cursor.getString(0)));
-                bundleInfo.setLength(Double.parseDouble(cursor.getString(1)));
-                bundleInfo.setWidth(Double.parseDouble(cursor.getString(2)));
+                bundleInfo.setThickness(Integer.parseInt(cursor.getString(0)));
+                bundleInfo.setLength(Integer.parseInt(cursor.getString(1)));
+                bundleInfo.setWidth(Integer.parseInt(cursor.getString(2)));
                 bundleInfo.setGrade(cursor.getString(3));
                 bundleInfo.setNoOfPieces(Integer.parseInt(cursor.getString(4)));
                 bundleInfo.setBundleNo(cursor.getString(5));
@@ -478,9 +478,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             do {
                 BundleInfo bundleInfo = new BundleInfo();
 
-                bundleInfo.setThickness(Double.parseDouble(cursor.getString(0)));
-                bundleInfo.setLength(Double.parseDouble(cursor.getString(1)));
-                bundleInfo.setWidth(Double.parseDouble(cursor.getString(2)));
+                bundleInfo.setThickness(Integer.parseInt(cursor.getString(0)));
+                bundleInfo.setLength(Integer.parseInt(cursor.getString(1)));
+                bundleInfo.setWidth(Integer.parseInt(cursor.getString(2)));
                 bundleInfo.setGrade(cursor.getString(3));
                 bundleInfo.setNoOfPieces(Integer.parseInt(cursor.getString(4)));
                 bundleInfo.setBundleNo(cursor.getString(5));

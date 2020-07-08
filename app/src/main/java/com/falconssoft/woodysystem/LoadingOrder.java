@@ -392,9 +392,9 @@ public class LoadingOrder extends AppCompatActivity {
                                 && innerObject.getString("LOCATION").equals(loc)) {
 
                             BundleInfo bundleInfo = new BundleInfo();
-                            bundleInfo.setThickness(innerObject.getDouble("THICKNESS"));
-                            bundleInfo.setWidth(innerObject.getDouble("WIDTH"));
-                            bundleInfo.setLength(innerObject.getDouble("LENGTH"));
+                            bundleInfo.setThickness(innerObject.getInt("THICKNESS"));
+                            bundleInfo.setWidth(innerObject.getInt("WIDTH"));
+                            bundleInfo.setLength(innerObject.getInt("LENGTH"));
                             bundleInfo.setGrade(innerObject.getString("GRADE"));
                             bundleInfo.setNoOfPieces(innerObject.getInt("PIECES"));
                             bundleInfo.setBundleNo(innerObject.getString("BUNDLE_NO"));

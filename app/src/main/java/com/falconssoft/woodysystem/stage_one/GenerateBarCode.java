@@ -252,7 +252,7 @@ public class GenerateBarCode extends AppCompatActivity {
 
             BundleInfo bundleInfo = new BundleInfo();
             if(i==4){
-                bundleInfo.setThickness(38.124);
+                bundleInfo.setThickness(38);//38.124
             }else{
                 bundleInfo.setThickness(38);
             }

@@ -792,11 +792,11 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                             JSONObject innerObject = array.getJSONObject(0);
 
                             BundleInfo bundleInfo = new BundleInfo();
-                            bundleInfo.setThickness(innerObject.getDouble("THICKNESS"));
-                            bundleInfo.setWidth(innerObject.getDouble("WIDTH"));
-                            bundleInfo.setLength(innerObject.getDouble("LENGTH"));
+                            bundleInfo.setThickness(innerObject.getInt("THICKNESS"));
+                            bundleInfo.setWidth(innerObject.getInt("WIDTH"));
+                            bundleInfo.setLength(innerObject.getInt("LENGTH"));
                             bundleInfo.setGrade(innerObject.getString("GRADE"));
-                            bundleInfo.setNoOfPieces(innerObject.getDouble("PIECES"));
+                            bundleInfo.setNoOfPieces(innerObject.getInt("PIECES"));
                             bundleInfo.setBundleNo(innerObject.getString("BUNDLE_NO"));
                             bundleInfo.setLocation(innerObject.getString("LOCATION"));
                             bundleInfo.setArea(innerObject.getString("AREA"));
@@ -893,11 +893,11 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                     JSONObject innerObject = array.getJSONObject(i);
 
                     BundleInfo bundleInfo = new BundleInfo();
-                    bundleInfo.setThickness(innerObject.getDouble("THICKNESS"));
-                    bundleInfo.setWidth(innerObject.getDouble("WIDTH"));
-                    bundleInfo.setLength(innerObject.getDouble("LENGTH"));
+                    bundleInfo.setThickness(innerObject.getInt("THICKNESS"));
+                    bundleInfo.setWidth(innerObject.getInt("WIDTH"));
+                    bundleInfo.setLength(innerObject.getInt("LENGTH"));
                     //bundleInfo.setGrade(innerObject.getString("GRADE"));
-                    bundleInfo.setNoOfPieces(innerObject.getDouble("PIECES"));
+                    bundleInfo.setNoOfPieces(innerObject.getInt("PIECES"));
                     //bundleInfo.setBundleNo(innerObject.getString("BUNDLE_NO"));
                     //bundleInfo.setLocation(innerObject.getString("LOCATION"));
                     //bundleInfo.setArea(innerObject.getString("AREA"));
