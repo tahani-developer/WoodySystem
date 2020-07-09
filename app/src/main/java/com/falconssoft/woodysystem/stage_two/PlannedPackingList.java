@@ -533,10 +533,10 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                 t3.setText(widthD.getText().toString());
                 t4.setText(thickD.getText().toString());
 
-                PlannedPLList.get(index).setNoOfPieces(Integer.parseInt(piecesD.getText().toString()));
-                PlannedPLList.get(index).setLength(Integer.parseInt(lengthD.getText().toString()));
-                PlannedPLList.get(index).setWidth(Integer.parseInt(widthD.getText().toString()));
-                PlannedPLList.get(index).setThickness(Integer.parseInt(thickD.getText().toString()));
+                PlannedPLList.get(index).setNoOfPieces(Double.parseDouble(piecesD.getText().toString()));
+                PlannedPLList.get(index).setLength(Double.parseDouble(lengthD.getText().toString()));
+                PlannedPLList.get(index).setWidth(Double.parseDouble(widthD.getText().toString()));
+                PlannedPLList.get(index).setThickness(Double.parseDouble(thickD.getText().toString()));
 
 
                 if (flagIsChanged == 1) {
