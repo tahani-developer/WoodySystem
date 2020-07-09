@@ -135,7 +135,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
             case R.id.save_button:
                 if (PlannedPLList.size() > 0)
                     if (check)
-                    saveButtonMethod();
+                        saveButtonMethod();
                     else
                         Toast.makeText(this, "Please check if exist first!", Toast.LENGTH_SHORT).show();
                 else
@@ -380,16 +380,16 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                     textView.setText(packingList.getDestination());
                     break;
                 case 3:
-                    textView.setText("" + packingList.getThickness());
+                    textView.setText("" + (int) packingList.getThickness());
                     break;
                 case 4:
-                    textView.setText("" + packingList.getWidth());
+                    textView.setText("" + (int) packingList.getWidth());
                     break;
                 case 5:
-                    textView.setText("" + packingList.getLength());
+                    textView.setText("" + (int) packingList.getLength());
                     break;
                 case 6:
-                    textView.setText("" + packingList.getNoOfPieces());
+                    textView.setText("" + (int) packingList.getNoOfPieces());
                     break;
                 case 7:
                     textView.setText("");
@@ -506,10 +506,10 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
         tableLayout2 = dialog.findViewById(R.id.table);
         TextView save = dialog.findViewById(R.id.save);
 
-        piecesD.setText("" + plannedPL.getNoOfPieces());
-        lengthD.setText("" + plannedPL.getLength());
-        widthD.setText("" + plannedPL.getWidth());
-        thickD.setText("" + plannedPL.getThickness());
+        piecesD.setText("" + (int) plannedPL.getNoOfPieces());
+        lengthD.setText("" +(int) plannedPL.getLength());
+        widthD.setText("" + (int)plannedPL.getWidth());
+        thickD.setText("" + (int)plannedPL.getThickness());
 
         thickD.setTextColor(ContextCompat.getColor(this, R.color.black));
         widthD.setTextColor(ContextCompat.getColor(this, R.color.black));
@@ -528,10 +528,10 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                 TextView t4 = (TextView) tableRowToBeEdit.getChildAt(6);
                 TextView t5 = (TextView) tableRowToBeEdit.getChildAt(7);
 
-                t1.setText(piecesD.getText().toString());
-                t2.setText(lengthD.getText().toString());
-                t3.setText(widthD.getText().toString());
-                t4.setText(thickD.getText().toString());
+                t1.setText(Integer.parseInt(piecesD.getText().toString()));
+                t2.setText(Integer.parseInt(lengthD.getText().toString()));
+                t3.setText(Integer.parseInt(widthD.getText().toString()));
+                t4.setText(Integer.parseInt(thickD.getText().toString()));
 
                 PlannedPLList.get(index).setNoOfPieces(Double.parseDouble(piecesD.getText().toString()));
                 PlannedPLList.get(index).setLength(Double.parseDouble(lengthD.getText().toString()));
