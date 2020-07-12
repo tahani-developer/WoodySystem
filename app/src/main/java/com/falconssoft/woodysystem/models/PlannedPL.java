@@ -10,6 +10,7 @@ public class PlannedPL {
     private String custNo;
     private String packingList;
     private String destination;
+    private String orderNo;
     private double thickness;
     private double width;
     private double length;
@@ -17,11 +18,12 @@ public class PlannedPL {
     private String date;
     private boolean exist;
 
-    public PlannedPL(String custName, String custNo, String packingList, String destination, double thickness, double width, double length, double noOfPieces, String date) {
+    public PlannedPL(String custName, String custNo, String packingList, String destination, String orderNo, double thickness, double width, double length, double noOfPieces, String date) {
         this.custName = custName;
         this.custNo = custNo;
         this.packingList = packingList;
         this.destination = destination;
+        this.orderNo = orderNo;
         this.thickness = thickness;
         this.width = width;
         this.length = length;
@@ -63,6 +65,14 @@ public class PlannedPL {
 
     public void setDestination(String destination) {
         this.destination = destination;
+    }
+
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
     }
 
     public double getThickness() {
@@ -121,6 +131,7 @@ public class PlannedPL {
             obj.put("CUST_NO", "'" + custNo + "'");
             obj.put("PACKING_LIST", "'" + packingList + "'");
             obj.put("DESTINATION", "'" + destination + "'");
+            obj.put("ORDER_NO", "'" + orderNo + "'");
             obj.put("THICKNESS", "'" + thickness + "'");
             obj.put("WIDTH", "'" + width + "'");
             obj.put("LENGTH", "'" + length + "'");

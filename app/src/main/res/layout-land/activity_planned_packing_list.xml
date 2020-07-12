@@ -147,7 +147,7 @@
                         android:layout_weight="3"
                         android:singleLine="true"
                         android:ems="10"
-                        android:nextFocusDown="@id/thickness" />
+                        android:nextFocusDown="@id/order_no" />
 
                 </LinearLayout>
 
@@ -155,6 +155,49 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:background="@drawable/shape_with_corner"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="serif"
+                        android:text="@string/order_no"
+                        android:textSize="18sp" />
+
+                    <EditText
+                        android:id="@+id/order_no"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="2"
+                        android:singleLine="true"
+                        android:ems="10"
+                        android:nextFocusDown="@id/thickness" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
                     android:background="@drawable/shape_with_corner"
                     android:orientation="horizontal"
                     android:padding="5dp">
@@ -179,20 +222,6 @@
                         android:nextFocusDown="@id/width" />
 
                 </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
-                android:orientation="horizontal">
-
-
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -229,7 +258,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
-                    android:layout_weight="1"
+                    android:layout_weight="1.2"
                     android:background="@drawable/shape_with_corner"
                     android:orientation="horizontal"
                     android:padding="5dp">
@@ -248,7 +277,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
-                        android:layout_weight="2"
+                        android:layout_weight="3"
                         android:ems="10"
                         android:inputType="numberDecimal"
                         android:nextFocusDown="@id/pieces" />
@@ -258,9 +287,7 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_weight="1.2"
+                    android:layout_weight="1"
                     android:background="@drawable/shape_with_corner"
                     android:orientation="horizontal"
                     android:padding="5dp">
@@ -279,9 +306,76 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
-                        android:layout_weight="3"
+                        android:layout_weight="2"
                         android:ems="10"
                         android:inputType="numberDecimal"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:visibility="invisible"
+                    android:background="@drawable/shape_with_corner"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="serif"
+                        android:text="@string/length"
+                        android:textSize="18sp" />
+
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="3"
+                        android:ems="10"
+                        android:inputType="numberDecimal"
+                        android:nextFocusDown="@id/pieces" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1.2"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -295,31 +389,31 @@
                         android:id="@+id/add_button"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
+                        android:layout_weight="2"
                         android:layout_marginEnd="5dp"
                         android:layout_marginRight="5dp"
-                        android:layout_weight="2"
                         android:background="@drawable/frame_shape"
                         android:drawableStart="@drawable/ic_add_white_32dp"
                         android:drawableLeft="@drawable/ic_add_white_32dp"
                         android:fontFamily="serif"
                         android:gravity="center"
-                        android:padding="20dp"
-                        android:textColor="@color/white" />
+                        android:padding="30dp"
+                        android:textColor="@color/white"/>
 
                     <TextView
                         android:id="@+id/check_button"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
+                        android:layout_weight="2"
                         android:layout_marginEnd="5dp"
                         android:layout_marginRight="5dp"
-                        android:layout_weight="2"
                         android:background="@drawable/frame_shape"
                         android:drawableStart="@drawable/ic_check_24dp"
                         android:drawableLeft="@drawable/ic_check_24dp"
                         android:fontFamily="serif"
                         android:gravity="center"
-                        android:padding="20dp"
-                        android:textColor="@color/white" />
+                        android:padding="30dp"
+                        android:textColor="@color/white"/>
 
                     <TextView
                         android:id="@+id/save_button"
@@ -331,14 +425,12 @@
                         android:drawableLeft="@drawable/ic_save_white_24dp"
                         android:fontFamily="serif"
                         android:gravity="center"
-                        android:padding="20dp"
+                        android:padding="30dp"
                         android:textColor="@color/white"/>
 
 
                 </LinearLayout>
             </LinearLayout>
-
-
 
         </LinearLayout>
 
