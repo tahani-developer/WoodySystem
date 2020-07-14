@@ -570,10 +570,10 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                 TextView t4 = (TextView) tableRowToBeEdit.getChildAt(6);
                 TextView t5 = (TextView) tableRowToBeEdit.getChildAt(7);
 
-                t1.setText(Integer.parseInt(piecesD.getText().toString()));
-                t2.setText(Integer.parseInt(lengthD.getText().toString()));
-                t3.setText(Integer.parseInt(widthD.getText().toString()));
-                t4.setText(Integer.parseInt(thickD.getText().toString()));
+                t1.setText(piecesD.getText().toString());
+                t2.setText(lengthD.getText().toString());
+                t3.setText(widthD.getText().toString());
+                t4.setText(thickD.getText().toString());
 
                 PlannedPLList.get(index).setNoOfPieces(Double.parseDouble(piecesD.getText().toString()));
                 PlannedPLList.get(index).setLength(Double.parseDouble(lengthD.getText().toString()));
