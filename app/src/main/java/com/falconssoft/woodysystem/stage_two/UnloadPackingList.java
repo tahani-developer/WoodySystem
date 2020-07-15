@@ -7,7 +7,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,9 +62,13 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
     private boolean mState = false;
     private final String STATE_VISIBILITY = "state-visibility";
 
+    private UnloadPLAdapter adapter2;
+
     private RecyclerView recyclerView;
+    private RecyclerView recycler;
     private EditText paclingList;
-    private TextView searchCustomer, search, unload;
+    private TextView searchCustomer, search, unload, noBundles, totalCBM, delete;
+    ;
     private TableLayout tableLayout, headerTableLayout;
     private TableRow tableRow;
     private CustomerAdapter adapter;
@@ -70,6 +76,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
     private List<CustomerInfo> customers;
     private List<CustomerInfo> arraylist;
     private List<PlannedPL> PLList = new ArrayList<>();
+    private List<PlannedPL> PLListFiltered = new ArrayList<>();
 
     SimpleDateFormat sdf;
     String today;
@@ -98,9 +105,14 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
 
         paclingList.requestFocus();
 
+        paclingList.addTextChangedListener(new watchTextChange(paclingList));
+
         search.setOnClickListener(this);
         unload.setOnClickListener(this);
+        delete.setOnClickListener(this);
         searchCustomer.setOnClickListener(this);
+
+        new JSONTask2().execute();
 
     }
 
@@ -108,18 +120,18 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
     public void onClick(View v) {
 
         switch (v.getId()) {
-            case R.id.search:
-
-                if (!TextUtils.isEmpty(searchCustomer.getText().toString()) && !TextUtils.isEmpty(paclingList.getText().toString())) {
-                    new JSONTask2().execute();
-                } else
-                    Toast.makeText(this, "Please select customer and packing list first!", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.unload:
-                if (plannedPLListJSON.length() > 0)
+//            case R.id.search:
+//
+//                if (!TextUtils.isEmpty(searchCustomer.getText().toString()) && !TextUtils.isEmpty(paclingList.getText().toString())) {
+//                    new JSONTask2().execute();
+//                } else
+//                    Toast.makeText(this, "Please select customer and packing list first!", Toast.LENGTH_SHORT).show();
+//                break;
+            case R.id.delete:
+               // if (plannedPLListJSON.length() > 0)
                     new JSONTask3().execute();
-                else
-                    Toast.makeText(this, "Please choose customer and packing list first!", Toast.LENGTH_SHORT).show();
+//                else
+//                    Toast.makeText(this, "Please choose customer and packing list first!", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.cust:
                 customers.clear();
@@ -164,6 +176,28 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
         }
     }
 
+    public void filters() {
+
+        PLListFiltered.clear();
+        for (int i = 0; i < PLList.size(); i++) {
+
+            if (customerName.equals(PLList.get(i).getCustName()) || customerName.equals("All")) {
+                if (PLList.get(i).getPackingList().startsWith(paclingList.getText().toString()) || paclingList.getText().toString().equals("")) {
+
+                    PLListFiltered.add(PLList.get(i));
+
+                }
+            }
+
+        }
+
+        adapter2 = new UnloadPLAdapter(this, PLListFiltered);
+        recycler.setAdapter(adapter2);
+
+        calculateTotal();
+
+    }
+
     public void filter(String charText) { // by Name
         charText = charText.toLowerCase(Locale.getDefault());
         arraylist.clear();
@@ -180,37 +214,85 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
         recyclerView.setAdapter(adapter);
     }
 
+    public void getSearchSupplierInfo(String supplierName, String supplierNo) {
+    }
+
+    class watchTextChange implements TextWatcher {
+
+        private View view;
+
+        public watchTextChange(View view) {
+            this.view = view;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            switch (view.getId()) {
+                case R.id.p_list:
+                    filters();
+                    break;
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    }
+
     void addTableHeader(TableLayout tableLayout) {
         TableRow tableRow = new TableRow(this);
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 10; i++) {
             TextView textView = new TextView(this);
             textView.setBackgroundResource(R.color.orange);
             TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f);
+            TableRow.LayoutParams textViewParam2 = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 0.45f);
+            TableRow.LayoutParams textViewParam3 = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 0.7f);
 //            textViewParam.setMargins(1, 5, 1, 1);
             textView.setTextSize(15);
             textView.setTextColor(ContextCompat.getColor(this, R.color.white));
             textView.setLayoutParams(textViewParam);
             switch (i) {
                 case 0:
-                    textView.setText("Customer");
+                    textView.setLayoutParams(textViewParam2);
+                    textView.setText("#");
                     break;
                 case 1:
-                    textView.setText("PL #");
+                    textView.setText("Customer");
                     break;
                 case 2:
-                    textView.setText("Destination");
+                    textView.setText("PL #");
                     break;
                 case 3:
-                    textView.setText("Pieces");
+                    textView.setText("Destination");
                     break;
                 case 4:
-                    textView.setText("Length");
+                    textView.setText("Order No");
+                    textView.setLayoutParams(textViewParam3);
                     break;
                 case 5:
-                    textView.setText("Width");
+                    textView.setText("Supplier");
+                    textView.setLayoutParams(textViewParam3);
                     break;
                 case 6:
-                    textView.setText("Thickness");
+                    textView.setText("Pieces");
+                    textView.setLayoutParams(textViewParam3);
+                    break;
+                case 7:
+                    textView.setText("# Bundles");
+                    textView.setLayoutParams(textViewParam3);
+                    break;
+                case 8:
+                    textView.setText("Cubic");
+                    textView.setLayoutParams(textViewParam3);
+                    break;
+                case 9:
+                    textView.setText("");
+                    textView.setLayoutParams(textViewParam2);
                     break;
             }
             tableRow.addView(textView);
@@ -219,60 +301,13 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
 //        bundlesTable.addView(tableRow);
     }
 
-    void fillTableRow(List<PlannedPL> packingList) {
-
-        for (int k = 0; k < packingList.size(); k++) {
-
-            tableRow = new TableRow(this);
-
-            for (int i = 0; i < 7; i++) {
-                TextView textView = new TextView(this);
-                textView.setBackgroundResource(R.color.light_orange);
-                TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f);
-                textViewParam.setMargins(1, 5, 1, 1);
-                textView.setPadding(0, 10, 0, 10);
-                textView.setTextSize(15);
-                textView.setTextColor(ContextCompat.getColor(this, R.color.gray_dark_one));
-                textView.setLayoutParams(textViewParam);
-                switch (i) {
-                    case 0:
-                        textView.setText(packingList.get(k).getCustName());
-                        break;
-                    case 1:
-                        textView.setText(packingList.get(k).getPackingList());
-                        break;
-                    case 2:
-                        textView.setText(packingList.get(k).getDestination());
-                        break;
-                    case 3:
-                        textView.setText("" + packingList.get(k).getNoOfPieces());
-                        break;
-                    case 4:
-                        textView.setText("" + packingList.get(k).getLength());
-                        break;
-                    case 5:
-                        textView.setText("" + packingList.get(k).getWidth());
-                        break;
-                    case 6:
-                        textView.setText("" + packingList.get(k).getThickness());
-                        break;
-
-                }
-                tableRow.addView(textView);
-            }
-
-            tableLayout.addView(tableRow);
-        }
-
-    }
-
-
     public void getSearchCustomerInfo(String customerNameLocal, String customerNoLocal) {
         customerName = customerNameLocal;
         customerNo = customerNoLocal;
         searchCustomer.setText(customerName);
         searchCustomer.setError(null);
         searchDialog.dismiss();
+        filters();
 
     }
 
@@ -357,6 +392,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
 
                 JSONObject parentObject = new JSONObject(finalJson);
 
+                customers.add(new CustomerInfo("0" , "All"));
                 try {
                     JSONArray parentArrayOrders = parentObject.getJSONArray("CUSTOMERS");
 
@@ -431,11 +467,11 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
                 String JsonResponse = null;
                 HttpClient client = new DefaultHttpClient();
                 HttpPost request = new HttpPost();
-                request.setURI(new URI("http://" + databaseHandler.getSettings().getIpAddress() + "/import.php?FLAG=8"));
+                request.setURI(new URI("http://" + databaseHandler.getSettings().getIpAddress() + "/import.php?FLAG=9"));
 
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-                nameValuePairs.add(new BasicNameValuePair("CUSTOMER", searchCustomer.getText().toString()));
-                nameValuePairs.add(new BasicNameValuePair("PACKING_LIST", paclingList.getText().toString()));
+                //nameValuePairs.add(new BasicNameValuePair("CUSTOMER", searchCustomer.getText().toString()));
+                //nameValuePairs.add(new BasicNameValuePair("PACKING_LIST", paclingList.getText().toString()));
 
                 request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
@@ -458,6 +494,9 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
 
                 JSONObject parentObject = new JSONObject(JsonResponse);
 
+                PLList.clear();
+                PLListFiltered.clear();
+
                 try {
                     JSONArray parentArrayOrders = parentObject.getJSONArray("PLANNED");
 
@@ -466,15 +505,19 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
 
                         PlannedPL planned = new PlannedPL();
                         planned.setCustName(innerObject.getString("CUST_NAME"));
+                        planned.setSupplier(innerObject.getString("SUPPLIER"));
                         planned.setPackingList(innerObject.getString("PACKING_LIST"));
                         planned.setDestination(innerObject.getString("DESTINATION"));
+                        planned.setOrderNo(innerObject.getString("ORDER_NO"));
                         planned.setNoOfPieces(innerObject.getDouble("PIECES"));
                         planned.setLength(innerObject.getDouble("LENGTH"));
                         planned.setWidth(innerObject.getDouble("WIDTH"));
                         planned.setThickness(innerObject.getDouble("THICKNESS"));
+                        planned.setNoOfCopies(innerObject.getInt("COUNT"));
 
 
                         PLList.add(planned);
+                        PLListFiltered.add(planned);
 
                     }
                 } catch (JSONException e) {
@@ -498,14 +541,16 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
                     if (headerTableLayout.getChildCount() == 0)
                         addTableHeader(headerTableLayout);
 
-                    fillTableRow(PLList);
+                    adapter2.notifyDataSetChanged();
 
-                    for (int i = 0; i < PLList.size(); i++) {
-                        plannedPLListJSON.put(PLList.get(i).getJSONObject());
-                    }
+                    calculateTotal();
+
+//                    for (int i = 0; i < PLList.size(); i++) {
+//                        plannedPLListJSON.put(PLList.get(i).getJSONObject());
+//                    }
                 }
             } else {
-                Toast.makeText(UnloadPackingList.this, "No same data found!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(UnloadPackingList.this, "No data found!", Toast.LENGTH_SHORT).show();
 //                Toast.makeText(UnloadPackingList.this, "No internet connection!", Toast.LENGTH_SHORT).show();
             }
         }
@@ -528,6 +573,14 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
                 HttpClient client = new DefaultHttpClient();
                 HttpPost request = new HttpPost();
                 request.setURI(new URI("http://" + databaseHandler.getSettings().getIpAddress() + "/export.php"));
+
+
+                plannedPLListJSON = new JSONArray();
+
+                for (int i = 0; i < PLListFiltered.size(); i++) {
+                    if (PLListFiltered.get(i).getIsChecked())
+                        plannedPLListJSON.put(PLListFiltered.get(i).getJSONObject());
+                }
 
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
                 nameValuePairs.add(new BasicNameValuePair("UNLOAD_PLANNED_PACKING_LIST", plannedPLListJSON.toString()));
@@ -591,10 +644,18 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
 
             if (s != null) {
                 if (s.contains("PLANNED_PACKING_LIST SUCCESS")) {
-                    Toast.makeText(UnloadPackingList.this, "Saved!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UnloadPackingList.this, "Loaded!", Toast.LENGTH_SHORT).show();
                     Log.e("tag", "PLANNED_PACKING_LIST SUCCESS");
 
-                    tableLayout.removeAllViews();
+                    //tableLayout.removeAllViews();
+                    for (int i = 0; i < PLListFiltered.size(); i++) {
+                        if (PLList.get(i).getIsChecked()) {
+                           // PLList.get(i).setIsChecked(false);
+                            PLListFiltered.remove(i);
+                        }
+                    }
+                    adapter2.notifyDataSetChanged();
+
                     searchCustomer.setText("");
                     paclingList.setText("");
 
@@ -610,6 +671,18 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
     }
 
 
+    void calculateTotal() {
+        int sumOfBundles = 0;
+        double totalCbm = 0;
+        for (int i = 0; i < PLListFiltered.size(); i++) {
+            sumOfBundles += (PLListFiltered.get(i).getNoOfPieces() * PLListFiltered.get(i).getNoOfCopies());
+            totalCbm += (PLListFiltered.get(i).getThickness() * PLListFiltered.get(i).getWidth() * PLListFiltered.get(i).getLength() * PLListFiltered.get(i).getNoOfPieces() * PLListFiltered.get(i).getNoOfCopies());
+        }
+
+        noBundles.setText("" + sumOfBundles);
+        totalCBM.setText("" + String.format("%.3f", (totalCbm / 1000000000)));
+    }
+
     void init() {
 
         searchCustomer = findViewById(R.id.cust);
@@ -619,6 +692,14 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
         unload = findViewById(R.id.unload);
         tableLayout = findViewById(R.id.addNewRaw_table);
         headerTableLayout = findViewById(R.id.addNewRaw_table_header);
+        noBundles = findViewById(R.id.no_bundles);
+        totalCBM = findViewById(R.id.total_cbm);
+        delete = findViewById(R.id.delete);
+
+        recycler = findViewById(R.id.recycler);
+        recycler.setLayoutManager(new LinearLayoutManager(this));
+        adapter2 = new UnloadPLAdapter(this, PLListFiltered);
+        recycler.setAdapter(adapter2);
 
     }
 }

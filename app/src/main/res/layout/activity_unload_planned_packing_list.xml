@@ -221,22 +221,16 @@
                 android:layout_marginRight="3dp"/>
 
 
-            <ScrollView
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
-
-                <TableLayout
-                    android:id="@+id/addNewRaw_table"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="3dp"
-                    android:layout_marginLeft="3dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginEnd="3dp"
-                    android:layout_marginRight="3dp"/>
-
-            </ScrollView>
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                />
 
         </LinearLayout>
 
