@@ -121,10 +121,10 @@
     <!--  portrait reports activity-->
     <dimen name="reports_p_margin_start">100dp</dimen>
     <dimen name="reports_p_margin_end">100dp</dimen>
-    <dimen name="reports_p_margin_top">100dp</dimen>
+    <dimen name="reports_p_margin_top">200dp</dimen>
     <dimen name="reports_p_margin2_top">50dp</dimen>
     <!--  land reports activity-->
-    <dimen name="reports_margin_start">80dp</dimen>
+    <dimen name="reports_margin_start">200dp</dimen>
     <dimen name="reports_margin_end">80dp</dimen>
     <dimen name="reports_margin_top">160dp</dimen>
     <dimen name="reports_margin2_start">72dp</dimen>

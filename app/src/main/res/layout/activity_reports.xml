@@ -13,6 +13,7 @@
         android:background="@color/alpha_black_dark">
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/reports_bundles"
             android:layout_width="0dp"
             android:layout_height="200dp"
@@ -36,7 +37,7 @@
             android:id="@+id/reports_orders"
             android:layout_width="0dp"
             android:layout_height="200dp"
-            android:layout_marginTop="@dimen/reports_p_margin2_top"
+            android:layout_marginTop="@dimen/reports_p_margin_top"
             android:layout_marginStart="@dimen/reports_p_margin_start"
             android:layout_marginLeft="@dimen/reports_p_margin_start"
             android:layout_marginEnd="@dimen/reports_p_margin_end"
@@ -50,7 +51,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/reports_bundles" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/reports_inventory"

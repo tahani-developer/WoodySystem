@@ -70,15 +70,16 @@ public class AcceptanceReportAdapter extends BaseAdapter {
 //        holder.netBundle = (TextView) view.findViewById(R.id.net);
         holder.preview = (Button) view.findViewById(R.id.preview);
         holder.truckNo = (TextView) view.findViewById(R.id.truck_no);
-        holder.acceptor = (TextView) view.findViewById(R.id.name_of_person_to_accept);
+        holder.acceptor = (TextView) view.findViewById(R.id.name_of_person_to_accept); //supplier after edit not acceptor
         holder.date = (TextView) view.findViewById(R.id.date_of_acceptance);
         holder.ttn = (TextView) view.findViewById(R.id.ttn_no);
         holder.noOfBundles = (TextView) view.findViewById(R.id.noOfBundles_acceptance);
         holder.rejected = (TextView) view.findViewById(R.id.rejected_pieces);
-        holder.edit =  view.findViewById(R.id.acceptanceReport_edit);
+        holder.edit = view.findViewById(R.id.acceptanceReport_edit);
+
 
         holder.truckNo.setText(itemsList.get(i).getTruckNo());
-        holder.acceptor.setText(itemsList.get(i).getAcceptedPersonName());
+        holder.acceptor.setText(findSupplier(itemsList.get(i)));//itemsList.get(i).getAcceptedPersonName());
         holder.date.setText(itemsList.get(i).getDate());
         holder.ttn.setText(itemsList.get(i).getTtnNo());
 //        holder.netBundle.setText( itemsList.get(i).getNetBundles());
@@ -91,7 +92,7 @@ public class AcceptanceReportAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 truckNoBeforeUpdate2 = itemsList.get(i).getTruckNo();
-                context.goToEditPage( itemsList.get(i));
+                context.goToEditPage(itemsList.get(i));
             }
         });
         holder.preview.setOnClickListener(new View.OnClickListener() {
@@ -104,5 +105,14 @@ public class AcceptanceReportAdapter extends BaseAdapter {
         });
 
         return view;
+    }
+
+    String findSupplier(NewRowInfo newRowInfo) {
+        for (int i = 0; i < bundles.size(); i++) {
+            if (newRowInfo.getSerial().equals(bundles.get(i).getSerial()))
+                return bundles.get(i).getSupplierName();
+        }
+
+        return "----";
     }
 }

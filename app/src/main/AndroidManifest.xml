@@ -50,6 +50,11 @@
             android:name=".LoginActivity"
             android:windowSoftInputMode="stateAlwaysHidden">
 
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
         </activity>
 
@@ -68,6 +73,7 @@
             android:name=".stage_two.PlannedPackingList"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="adjustNothing|stateAlwaysHidden">
+
 
 
         </activity>

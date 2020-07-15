@@ -290,7 +290,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:fontFamily="serif"
-                    android:text="@string/name_of_person_to_accept"
+                    android:text="@string/supplier_name"
                     android:textColor="@color/white"
                     android:textSize="15sp" />
 
