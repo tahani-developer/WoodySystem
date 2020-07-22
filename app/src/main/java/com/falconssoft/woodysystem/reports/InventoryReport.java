@@ -307,7 +307,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
             @Override
             public void onClick(View v) {
                 String newPackingList = packingList.getText().toString();
-                if (packingList.getText().toString().equals(""))
+                if (newPackingList.equals(""))
                     newPackingList = "null";
 
                 for (int i = 0; i < bundleInfoForPList.size(); i++) {
@@ -320,6 +320,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                             , bundleInfoForPList.get(i).getLength()
                             , bundleInfoForPList.get(i).getNoOfPieces()
                             , bundleInfoForPList.get(i).getThickness()
+                            , bundleInfoForPList.get(i).getBackingList()
 
                     );
                 }
@@ -783,6 +784,8 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         double thickness = filtered.get(position).getThickness();
         double pieces = filtered.get(position).getNoOfPieces();
 
+        String oldBackinkList = filtered.get(position).getBackingList();
+
         Log.e("serialNumber", serialNumber);
 
         Dialog packingListDialog = new Dialog(InventoryReport.this);
@@ -804,7 +807,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                 if (packingList.getText().toString().equals(""))
                     newPackingList = "null";
 
-                woodPresenter.updatePackingList(InventoryReport.this, bundleNumber, newPackingList, location, width, length, pieces, thickness);
+                woodPresenter.updatePackingList(InventoryReport.this, bundleNumber, newPackingList, location, width, length, pieces, thickness ,oldBackinkList);
                 adapter.notifyDataSetChanged();
                 packingListDialog.dismiss();
 

@@ -379,7 +379,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
 
     //-------------------------------------------- update p.list from inventory report Data------------------------------------------/
 
-    public void updatePackingList(InventoryReport inventoryReport, String bundleNumber, String packingList, String location, double width,  double length,  double pieces,  double thickness) {
+    public void updatePackingList(InventoryReport inventoryReport, String bundleNumber, String packingList, String location, double width,  double length,  double pieces,  double thickness, String oldBackingList) {
         settings = databaseHandler.getSettings();
         this.inventoryReport = inventoryReport;
 //export.php?ADD_PACKING_LIST=1&BUNDLE_NO='" + bundleNo + "'&PACKING_LIST='" + packingList + "'");
