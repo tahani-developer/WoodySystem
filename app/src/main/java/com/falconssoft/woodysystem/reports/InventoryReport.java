@@ -307,7 +307,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
             @Override
             public void onClick(View v) {
                 String newPackingList = packingList.getText().toString();
-                if (packingList.getText().toString().equals(""))
+                if (newPackingList.equals(""))
                     newPackingList = "null";
 
                 for (int i = 0; i < bundleInfoForPList.size(); i++) {
@@ -315,7 +315,9 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                     woodPresenter.updatePackingList(InventoryReport.this
                             , bundleInfoForPList.get(i).getBundleNo()
                             , newPackingList
-                            , bundleInfoForPList.get(i).getLocation());
+                            , bundleInfoForPList.get(i).getLocation()
+                            , bundleInfoForPList.get(i).getBackingList()
+                    );
                 }
 //                        filters();
 //                        adapter.notifyDataSetChanged();
@@ -772,6 +774,8 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         serialNumber = filtered.get(position).getSerialNo();
         String bundleNumber = filtered.get(position).getBundleNo();
         String location = filtered.get(position).getLocation();
+        String oldBackinkList = filtered.get(position).getBackingList();
+
         Log.e("serialNumber", serialNumber);
 
         Dialog packingListDialog = new Dialog(InventoryReport.this);
@@ -793,7 +797,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                 if (packingList.getText().toString().equals(""))
                     newPackingList = "null";
 
-                woodPresenter.updatePackingList(InventoryReport.this, bundleNumber, newPackingList, location);
+                woodPresenter.updatePackingList(InventoryReport.this, bundleNumber, newPackingList, location, oldBackinkList);
                 adapter.notifyDataSetChanged();
                 packingListDialog.dismiss();
 
