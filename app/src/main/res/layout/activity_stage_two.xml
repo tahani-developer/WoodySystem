@@ -85,7 +85,7 @@
                 android:layout_margin="5dp"
                 android:fontFamily="serif"
                 android:gravity="center_horizontal"
-                android:text="Unload Packing list"
+                android:text="@string/planned_report"
                 android:textColor="@color/orange"
                 android:textSize="20sp" />
         </LinearLayout>

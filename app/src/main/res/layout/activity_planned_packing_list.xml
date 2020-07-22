@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="3dp"
             android:layout_marginTop="10dp"
             android:visibility="visible"
             >
@@ -335,100 +335,6 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginRight="5dp"
-                    android:visibility="invisible"
-                    android:background="@drawable/shape_with_corner"
-                    android:orientation="horizontal"
-                    android:padding="5dp">
-
-                    <TextView
-                        android:layout_width="150dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/no_pieces"
-                        android:fontFamily="serif"
-                        android:textSize="18sp" />
-
-                    <EditText
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="3"
-                        android:ems="10"
-                        android:inputType="numberDecimal"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/addNewRaw_linear_seven"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/add_button"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="2"
-                        android:layout_marginEnd="5dp"
-                        android:layout_marginRight="5dp"
-                        android:background="@drawable/frame_shape"
-                        android:drawableStart="@drawable/ic_add_white_32dp"
-                        android:drawableLeft="@drawable/ic_add_white_32dp"
-                        android:fontFamily="serif"
-                        android:gravity="center"
-                        android:padding="30dp"
-                        android:textColor="@color/white"/>
-
-                    <TextView
-                        android:id="@+id/check_button"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="2"
-                        android:layout_marginEnd="5dp"
-                        android:layout_marginRight="5dp"
-                        android:background="@drawable/frame_shape"
-                        android:drawableStart="@drawable/ic_check_24dp"
-                        android:drawableLeft="@drawable/ic_check_24dp"
-                        android:fontFamily="serif"
-                        android:gravity="center"
-                        android:padding="30dp"
-                        android:textColor="@color/white"/>
-
-                    <TextView
-                        android:id="@+id/save_button"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="2"
-                        android:background="@drawable/frame_shape"
-                        android:drawableStart="@drawable/ic_save_white_24dp"
-                        android:drawableLeft="@drawable/ic_save_white_24dp"
-                        android:fontFamily="serif"
-                        android:gravity="center"
-                        android:padding="30dp"
-                        android:textColor="@color/white"/>
-
-
-                </LinearLayout>
-            </LinearLayout>
-
-
 
         </LinearLayout>
 
@@ -457,23 +363,159 @@
                 android:layout_marginRight="3dp"/>
 
 
-            <ScrollView
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler"
                 android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/inventory_report_linear6"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/inventory_report_linear7"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/inventory_report_linear7"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                >
+                android:layout_gravity="bottom"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:visibility="invisible"
+                android:layout_weight="0.25"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
 
-                <TableLayout
-                    android:id="@+id/addNewRaw_table"
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="120dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="7dp"
+                    android:layout_marginRight="7dp"
+                    android:background="@drawable/border_background"
+                    android:orientation="horizontal"
+                    android:paddingEnd="5dp"
+                    android:paddingRight="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/frame_shape"
+                        android:fontFamily="serif"
+                        android:paddingStart="5dp"
+                        android:paddingLeft="5dp"
+                        android:paddingEnd="5dp"
+                        android:paddingRight="5dp"
+                        android:text="@string/no_bundle"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/no_bundles"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:textColor="@color/orange"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/addNewRaw_linear_seven"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:paddingVertical="5dp"
+                android:layout_weight="1.2"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/planned"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="3dp"
-                    android:layout_marginLeft="3dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginEnd="3dp"
-                    android:layout_marginRight="3dp"/>
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="2.3"
+                    android:background="@drawable/frame_shape"
+                    android:fontFamily="serif"
+                    android:gravity="center"
+                    android:text="Planned"
+                    android:textColor="@color/white" />
 
-            </ScrollView>
+                <TextView
+                    android:id="@+id/add_button"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="2"
+                    android:background="@drawable/frame_shape"
+                    android:drawableStart="@drawable/ic_add_white_32dp"
+                    android:drawableLeft="@drawable/ic_add_white_32dp"
+                    android:fontFamily="serif"
+                    android:gravity="center"
+                    android:padding="30dp"
+                    android:textColor="@color/white" />
 
+                <TextView
+                    android:id="@+id/check_button"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="2"
+                    android:background="@drawable/frame_shape"
+                    android:drawableStart="@drawable/ic_check_24dp"
+                    android:drawableLeft="@drawable/ic_check_24dp"
+                    android:fontFamily="serif"
+                    android:gravity="center"
+                    android:padding="30dp"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/save_button"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:background="@drawable/frame_shape"
+                    android:drawableStart="@drawable/ic_save_white_24dp"
+                    android:drawableLeft="@drawable/ic_save_white_24dp"
+                    android:fontFamily="serif"
+                    android:gravity="center"
+                    android:padding="30dp"
+                    android:textColor="@color/white" />
+
+
+            </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>

@@ -16,7 +16,12 @@ public class PlannedPL {
     private double length;
     private double noOfPieces;
     private String date;
-    private boolean exist;
+    private String  exist;
+    private int noOfExixt;
+    private int noOfCopies;
+    private String supplier;
+    private boolean isChecked;
+    private int loaded;
 
     public PlannedPL(String custName, String custNo, String packingList, String destination, String orderNo, double thickness, double width, double length, double noOfPieces, String date) {
         this.custName = custName;
@@ -115,12 +120,52 @@ public class PlannedPL {
         this.date = date;
     }
 
-    public boolean getExist() {
+    public String getExist() {
         return exist;
     }
 
-    public void setExist(boolean exist) {
+    public void setExist(String exist) {
         this.exist = exist;
+    }
+
+    public int getNoOfExixt() {
+        return noOfExixt;
+    }
+
+    public void setNoOfExixt(int noOfExixt) {
+        this.noOfExixt = noOfExixt;
+    }
+
+    public int getNoOfCopies() {
+        return noOfCopies;
+    }
+
+    public void setNoOfCopies(int noOfCopies) {
+        this.noOfCopies = noOfCopies;
+    }
+
+    public String getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(String supplier) {
+        this.supplier = supplier;
+    }
+
+    public boolean getIsChecked() {
+        return isChecked;
+    }
+
+    public void setIsChecked(boolean checked) {
+        isChecked = checked;
+    }
+
+    public int getLoaded() {
+        return loaded;
+    }
+
+    public void setLoaded(int loaded) {
+        this.loaded = loaded;
     }
 
     public JSONObject getJSONObject() {
@@ -132,6 +177,7 @@ public class PlannedPL {
             obj.put("PACKING_LIST", "'" + packingList + "'");
             obj.put("DESTINATION", "'" + destination + "'");
             obj.put("ORDER_NO", "'" + orderNo + "'");
+            obj.put("SUPPLIER", "'" + supplier + "'");
             obj.put("THICKNESS", "'" + thickness + "'");
             obj.put("WIDTH", "'" + width + "'");
             obj.put("LENGTH", "'" + length + "'");

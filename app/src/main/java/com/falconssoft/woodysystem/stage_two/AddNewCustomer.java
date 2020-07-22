@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.falconssoft.woodysystem.DatabaseHandler;
 import com.falconssoft.woodysystem.R;
+import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.CustomerInfo;
 import com.falconssoft.woodysystem.models.SupplierInfo;
 import com.falconssoft.woodysystem.stage_one.AddSupplierAdapter;
@@ -49,6 +50,10 @@ public class AddNewCustomer extends AppCompatActivity {
     private List<CustomerInfo> customers;
     private JSONArray jsonArray;
 
+    private static String custNameDel="12";
+    private static String custNoDel;
+    private static int i;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +70,7 @@ public class AddNewCustomer extends AppCompatActivity {
         new JSONTask().execute();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new AddCustomerAdapter(customers);
+        adapter = new AddCustomerAdapter(AddNewCustomer.this, customers);
         recyclerView.setAdapter(adapter);
 
         add.setOnClickListener(new View.OnClickListener() {
@@ -85,6 +90,14 @@ public class AddNewCustomer extends AppCompatActivity {
             }
         });
 
+    }
+
+    void deleteCustomer(int index){
+        i = index;
+        custNameDel = customers.get(index).getCustName();
+        Log.e("****" ,custNameDel );
+        custNoDel = customers.get(index).getCustNo();
+        new JSONTask3().execute();
     }
 
 
@@ -242,6 +255,79 @@ public class AddNewCustomer extends AppCompatActivity {
                 }
             } else {
                 Log.e("tag", "****Failed to export data Please check internet connection");
+            }
+        }
+    }
+
+    private class JSONTask3 extends AsyncTask<String, String, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //showDialog();
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                String JsonResponse = null;
+                HttpClient client = new DefaultHttpClient();
+                HttpPost request = new HttpPost();
+                request.setURI(new URI("http://" +  DHandler.getSettings().getIpAddress()  + "/export.php"));
+
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+                nameValuePairs.add(new BasicNameValuePair("DELETE_CUSTOMER", "1"));
+                nameValuePairs.add(new BasicNameValuePair("DELETE_CUSTOMER_NAME", custNameDel));
+                nameValuePairs.add(new BasicNameValuePair("DELETE_CUSTOMER_NO", custNoDel));
+                Log.e("****in" ,custNameDel );
+                request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                HttpResponse response = client.execute(request);
+
+                BufferedReader in = new BufferedReader(new
+                        InputStreamReader(response.getEntity().getContent()));
+
+                StringBuffer sb = new StringBuffer("");
+                String line = "";
+
+                while ((line = in.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                in.close();
+
+                JsonResponse = sb.toString();
+                Log.e("tag", "" + JsonResponse);
+
+                return JsonResponse;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            if (s != null) {
+                if (s.contains("DELETE_CUSTOMER SUCCESS")) {
+
+                    customers.remove(i);
+                    adapter.notifyDataSetChanged();
+
+
+                    Toast.makeText(AddNewCustomer.this, "Customer Deleted!", Toast.LENGTH_SHORT).show();
+                    Log.e("tag", "DELETE_CUSTOMER SUCCESS");
+                } else {
+                    Toast.makeText(AddNewCustomer.this, "Failed to export data!", Toast.LENGTH_SHORT).show();
+                    Log.e("tag", "Failed to export data!");
+                }
+
+            } else {
+                Toast.makeText(AddNewCustomer.this, "No internet connection!", Toast.LENGTH_SHORT).show();
             }
         }
     }

@@ -12,7 +12,16 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".stage_two.StageTwo"></activity>
+
+        <activity android:name=".stage_two.StageTwo">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
         <activity android:name=".EditLoadingReport" />
         <activity android:name=".stage_one.ReportsStageOne" />
         <activity
@@ -51,7 +60,8 @@
 
         <activity
             android:name=".stage_two.UnloadPackingList"
-            android:windowSoftInputMode="stateAlwaysHidden"/>
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden"/>
 
         <activity
             android:name=".AddToInventory"
@@ -59,7 +69,10 @@
         <activity
             android:name=".stage_one.GenerateBarCode"
             android:screenOrientation="sensorLandscape" />
-        <activity android:name=".stage_two.PlannedPackingList">
+        <activity
+            android:name=".stage_two.PlannedPackingList"
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden">
 
 
 

@@ -38,6 +38,7 @@ public class BundleInfo implements Serializable {
     private String foucoseColor="0";
     private Bitmap picBitmap;
     private String customer="";
+    private int noOfExist;
 
     public BundleInfo() {
     }
@@ -249,6 +250,14 @@ public class BundleInfo implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getNoOfExist() {
+        return noOfExist;
+    }
+
+    public void setNoOfExist(int noOfExist) {
+        this.noOfExist = noOfExist;
     }
 
     public JSONObject getJSONObject() {
