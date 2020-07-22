@@ -117,6 +117,19 @@
                         android:hint="@string/search"
                         android:textSize="15sp" />
 
+                    <TextView
+                        android:id="@+id/add_supplier"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0"
+                        android:background="@drawable/frame_shape"
+                        android:drawableStart="@drawable/ic_person_add_24dp"
+                        android:drawableLeft="@drawable/ic_person_add_24dp"
+                        android:paddingStart="5dp"
+                        android:paddingLeft="5dp"
+                        android:paddingEnd="5dp"
+                        android:paddingRight="5dp" />
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -224,6 +237,36 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
                 android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_with_corner"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="serif"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/grade"
+                        android:textSize="18sp" />
+
+                    <Spinner
+                        android:id="@+id/grade"
+                        android:layout_width="0dp"
+                        android:layout_height="45dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1" />
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -346,7 +389,6 @@
             </LinearLayout>
 
 
-
         </LinearLayout>
 
         <LinearLayout
@@ -396,9 +438,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="bottom"
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
+            android:gravity="bottom"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -502,9 +544,9 @@
                 android:id="@+id/addNewRaw_linear_seven"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:paddingVertical="5dp"
                 android:layout_weight="2"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingVertical="5dp">
 
                 <TextView
                     android:id="@+id/planned"
@@ -517,7 +559,8 @@
                     android:fontFamily="serif"
                     android:gravity="center"
                     android:text="Planned"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:visibility="invisible" />
 
                 <TextView
                     android:id="@+id/add_button"

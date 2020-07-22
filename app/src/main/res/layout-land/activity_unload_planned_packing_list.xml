@@ -36,7 +36,7 @@
                 android:gravity="start|left"
                 android:text="@string/planned_report"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:textSize="17sp" />
 
         </LinearLayout>
 
@@ -45,7 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="5dp"
             android:layout_marginTop="10dp"
             android:visibility="visible"
             >
@@ -99,6 +99,84 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_with_corner"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="serif"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="@string/supplier_name"
+                        android:textSize="17sp" />
+
+                    <TextView
+                        android:id="@+id/sup"
+                        android:layout_width="wrap_content"
+                        android:layout_height="45dp"
+                        android:textSize="15sp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="10"
+                        android:gravity="start|left"
+                        android:hint="@string/search" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_with_corner"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="serif"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/grade"
+                        android:textSize="18sp" />
+
+                    <Spinner
+                        android:id="@+id/grade"
+                        android:layout_width="0dp"
+                        android:layout_height="45dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
                     android:id="@+id/addNewRaw_linear_five"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -121,7 +199,7 @@
                     <EditText
                         android:id="@+id/p_list"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="45dp"
                         android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_weight="2"
@@ -131,80 +209,64 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/addNewRaw_linear_one"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
-                    android:layout_weight="1.2"
                     android:background="@drawable/shape_with_corner"
                     android:orientation="horizontal"
-                    android:visibility="invisible"
                     android:padding="5dp">
 
                     <TextView
-                        android:id="@+id/textView1"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:text="dest"
                         android:fontFamily="serif"
-
-                        android:text="@string/destination"
-                        android:textSize="17sp" />
+                        android:textSize="18sp" />
 
                     <EditText
                         android:id="@+id/destination"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="45dp"
                         android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
-                        android:layout_weight="3"
-                        android:singleLine="true"
+                        android:layout_weight="2"
                         android:ems="10"
-                        android:nextFocusDown="@id/pieces" />
-
+                        android:singleLine="true"
+                        android:nextFocusDown="@id/destination" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/addNewRaw_linear_seven"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:visibility="invisible"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:orientation="horizontal">
+                    android:background="@drawable/shape_with_corner"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
 
                     <TextView
-                        android:id="@+id/search"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="2"
-                        android:layout_marginEnd="5dp"
-                        android:layout_marginRight="5dp"
-                        android:background="@drawable/frame_shape"
-                        android:drawableStart="@drawable/ic_search_24dp"
-                        android:drawableLeft="@drawable/ic_search_24dp"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/order_no"
                         android:fontFamily="serif"
-                        android:drawableTint="@color/white"
-                        android:gravity="center"
-                        android:padding="40dp"
-                        android:textColor="@color/white"/>
+                        android:textSize="18sp" />
 
-                    <TextView
-                        android:id="@+id/unload"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginEnd="5dp"
-                        android:layout_marginRight="5dp"
+                    <EditText
+                        android:id="@+id/order_no"
+                        android:layout_width="wrap_content"
+                        android:layout_height="45dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
                         android:layout_weight="2"
-                        android:background="@drawable/frame_shape"
-                        android:drawableStart="@drawable/ic_delete_black_24dp"
-                        android:drawableLeft="@drawable/ic_delete_black_24dp"
-                        android:fontFamily="serif"
-                        android:gravity="center"
-                        android:padding="30dp"
-                        android:textColor="@color/white" />
-
+                        android:ems="10"
+                        android:singleLine="true"
+                        android:nextFocusDown="@id/destination" />
                 </LinearLayout>
+
+
             </LinearLayout>
 
 
@@ -220,7 +282,7 @@
             android:layout_marginLeft="1dp"
             android:layout_marginEnd="1dp"
             android:layout_marginRight="1dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="1dp"
             android:orientation="vertical"
             >
 
@@ -230,7 +292,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="3dp"
                 android:layout_marginLeft="3dp"
-                android:layout_marginTop="5dp"
                 android:layout_marginEnd="3dp"
                 android:layout_marginRight="3dp"/>
 
@@ -258,7 +319,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="bottom"
+            android:gravity="center"
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
             android:orientation="horizontal">
@@ -271,7 +332,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="5dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="5dp"
                 android:layout_weight="2"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -355,8 +416,7 @@
                 android:layout_marginRight="5dp"
                 android:layout_weight="0.5"
                 android:orientation="horizontal"
-                android:gravity="end"
-                android:padding="5dp">
+                android:gravity="end">
 
                 <TextView
                     android:id="@+id/delete"
@@ -371,7 +431,7 @@
                     android:paddingLeft="10dp"
                     android:paddingEnd="10dp"
                     android:paddingRight="10dp"
-                    android:text="@string/delete"
+                    android:text="@string/loaded"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="18sp" />

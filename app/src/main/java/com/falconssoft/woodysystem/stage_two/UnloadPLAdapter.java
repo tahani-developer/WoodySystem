@@ -47,11 +47,12 @@ public class UnloadPLAdapter extends RecyclerView.Adapter<UnloadPLAdapter.Suppli
         holder.dest.setText(PlannedPL.get(i).getDestination());
         holder.order.setText(PlannedPL.get(i).getOrderNo());
         holder.supplier.setText(PlannedPL.get(i).getSupplier());
+        holder.grade.setText(PlannedPL.get(i).getGrade());
 //        holder.width.setText("" + (int) PlannedPL.get(i).getWidth());
 //        holder.length.setText("" + (int) PlannedPL.get(i).getLength());
         holder.pieces.setText("" + (int) PlannedPL.get(i).getNoOfPieces());
         holder.copies.setText("" + PlannedPL.get(i).getNoOfCopies());
-        holder.cubic.setText("" + String.format("%.3f", (CBM / 1000000000)));
+        holder.cubic.setText("" + String.format("%.3f", (PlannedPL.get(i).getCubic() )));
 
         if(PlannedPL.get(i).getIsChecked())
             holder.checkBox.setChecked(true);
@@ -76,7 +77,7 @@ public class UnloadPLAdapter extends RecyclerView.Adapter<UnloadPLAdapter.Suppli
 
     class SuppliersViewHolder extends RecyclerView.ViewHolder {
 
-        TextView serial, cust, pl, dest, order, supplier, width, length, pieces, copies, isExist, edit, delete, copy, cubic;
+        TextView serial, cust, pl, dest, order, supplier,grade , width, length, pieces, copies, isExist, edit, delete, copy, cubic;
         LinearLayout linearLayout;
         CheckBox checkBox;
 
@@ -90,6 +91,7 @@ public class UnloadPLAdapter extends RecyclerView.Adapter<UnloadPLAdapter.Suppli
             dest = itemView.findViewById(R.id.dest);
             order = itemView.findViewById(R.id.order_no);
             supplier = itemView.findViewById(R.id.supplier);
+            grade = itemView.findViewById(R.id.grade);
 //            width = itemView.findViewById(R.id.width);
 //            length = itemView.findViewById(R.id.length);
             pieces = itemView.findViewById(R.id.pieces);

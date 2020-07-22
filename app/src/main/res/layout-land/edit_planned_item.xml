@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="880dp"
-    android:layout_height="350dp"
+    android:layout_width="700dp"
+    android:layout_height="390dp"
     android:background="@drawable/wooddecor"
     android:paddingTop="20dp">
 
@@ -107,7 +107,7 @@
                         android:fontFamily="serif"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
-                        android:text="@string/cust"
+                        android:text="@string/supplier_name"
                         android:textSize="17sp" />
 
                     <TextView
@@ -154,8 +154,21 @@
                         android:layout_weight="2"
                         android:ems="10"
                         android:singleLine="true"
-                        android:nextFocusDown="@id/destination" />
+                        android:nextFocusDown="@id/destination"
+                        android:textSize="17sp"/>
                 </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:id="@+id/addNewRaw_linear_one"
@@ -163,7 +176,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
-                    android:layout_weight="1.2"
+                    android:layout_weight="1"
                     android:background="@drawable/shape_with_corner"
                     android:orientation="horizontal"
                     android:padding="5dp">
@@ -186,7 +199,8 @@
                         android:layout_weight="3"
                         android:singleLine="true"
                         android:ems="10"
-                        android:nextFocusDown="@id/order_no" />
+                        android:nextFocusDown="@id/order_no"
+                        android:textSize="17sp"/>
 
                 </LinearLayout>
 
@@ -194,6 +208,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
                     android:background="@drawable/shape_with_corner"
                     android:orientation="horizontal"
                     android:padding="5dp">
@@ -215,7 +231,38 @@
                         android:layout_weight="2"
                         android:ems="10"
                         android:singleLine="true"
-                        android:nextFocusDown="@id/thickness" />
+                        android:nextFocusDown="@id/thickness"
+                        android:textSize="17sp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/shape_with_corner"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="serif"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/grade"
+                        android:textSize="18sp" />
+
+                    <Spinner
+                        android:id="@+id/grade"
+                        android:layout_width="0dp"
+                        android:layout_height="45dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1" />
 
                 </LinearLayout>
 
@@ -255,7 +302,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:ems="10"
                         android:inputType="numberDecimal"
                         android:nextFocusDown="@id/width" />
@@ -286,7 +333,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:ems="10"
                         android:nextFocusDown="@id/length"
                         android:inputType="numberDecimal" />
@@ -316,7 +363,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
-                        android:layout_weight="3"
+                        android:layout_weight="1"
                         android:ems="10"
                         android:inputType="numberDecimal"
                         android:nextFocusDown="@id/pieces" />
@@ -345,7 +392,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:ems="10"
                         android:inputType="numberDecimal"/>
                 </LinearLayout>

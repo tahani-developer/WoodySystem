@@ -315,7 +315,13 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                     woodPresenter.updatePackingList(InventoryReport.this
                             , bundleInfoForPList.get(i).getBundleNo()
                             , newPackingList
-                            , bundleInfoForPList.get(i).getLocation());
+                            , bundleInfoForPList.get(i).getLocation()
+                            , bundleInfoForPList.get(i).getWidth()
+                            , bundleInfoForPList.get(i).getLength()
+                            , bundleInfoForPList.get(i).getNoOfPieces()
+                            , bundleInfoForPList.get(i).getThickness()
+
+                    );
                 }
 //                        filters();
 //                        adapter.notifyDataSetChanged();
@@ -772,6 +778,11 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         serialNumber = filtered.get(position).getSerialNo();
         String bundleNumber = filtered.get(position).getBundleNo();
         String location = filtered.get(position).getLocation();
+        double width = filtered.get(position).getWidth();
+        double length = filtered.get(position).getLength();
+        double thickness = filtered.get(position).getThickness();
+        double pieces = filtered.get(position).getNoOfPieces();
+
         Log.e("serialNumber", serialNumber);
 
         Dialog packingListDialog = new Dialog(InventoryReport.this);
@@ -793,7 +804,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                 if (packingList.getText().toString().equals(""))
                     newPackingList = "null";
 
-                woodPresenter.updatePackingList(InventoryReport.this, bundleNumber, newPackingList, location);
+                woodPresenter.updatePackingList(InventoryReport.this, bundleNumber, newPackingList, location, width, length, pieces, thickness);
                 adapter.notifyDataSetChanged();
                 packingListDialog.dismiss();
 

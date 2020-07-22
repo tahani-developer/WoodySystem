@@ -22,6 +22,8 @@ public class PlannedPL {
     private String supplier;
     private boolean isChecked;
     private int loaded;
+    private double cubic;
+    private String grade;
 
     public PlannedPL(String custName, String custNo, String packingList, String destination, String orderNo, double thickness, double width, double length, double noOfPieces, String date) {
         this.custName = custName;
@@ -168,6 +170,22 @@ public class PlannedPL {
         this.loaded = loaded;
     }
 
+    public double getCubic() {
+        return cubic;
+    }
+
+    public void setCubic(double cubic) {
+        this.cubic = cubic;
+    }
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
+
     public JSONObject getJSONObject() {
         JSONObject obj = new JSONObject();
 
@@ -178,6 +196,7 @@ public class PlannedPL {
             obj.put("DESTINATION", "'" + destination + "'");
             obj.put("ORDER_NO", "'" + orderNo + "'");
             obj.put("SUPPLIER", "'" + supplier + "'");
+            obj.put("GRADE", "'" + grade + "'");
             obj.put("THICKNESS", "'" + thickness + "'");
             obj.put("WIDTH", "'" + width + "'");
             obj.put("LENGTH", "'" + length + "'");

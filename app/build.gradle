@@ -6,7 +6,7 @@ android {
         applicationId "com.falconssoft.woodysystem"
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 41
+        versionCode 46
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -19,10 +19,13 @@ android {
     buildToolsVersion '28.0.3'
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
+
+
+
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    lintOptions {
+    lintOptions {000
         checkReleaseBuilds false
         // Or, if you prefer, you can continue to check for errors in release builds,
         // but continue the build even when errors are found:

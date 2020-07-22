@@ -44,6 +44,7 @@ public class PlannedListAdapter extends RecyclerView.Adapter<PlannedListAdapter.
         holder.dest.setText(PlannedPL.get(i).getDestination());
         holder.order.setText(PlannedPL.get(i).getOrderNo());
         holder.supplier.setText(PlannedPL.get(i).getSupplier());
+        holder.grade.setText(PlannedPL.get(i).getGrade());
         holder.thick.setText("" + (int) PlannedPL.get(i).getThickness());
         holder.width.setText("" + (int) PlannedPL.get(i).getWidth());
         holder.length.setText("" + (int) PlannedPL.get(i).getLength());
@@ -60,6 +61,11 @@ public class PlannedListAdapter extends RecyclerView.Adapter<PlannedListAdapter.
 
         if (PlannedPL.get(i).getExist().equals("null"))
             holder.isExist.setText("");
+
+        if (PlannedPL.get(i).getExist().equals("Planned")) {
+            holder.isExist.setText("Planned Exist(" + PlannedPL.get(i).getNoOfExixt() + ")");
+            holder.isExist.setTextColor(ContextCompat.getColor(plannedPL, R.color.orange));
+        }
 
         int index = i;
         holder.edit.setOnClickListener(new View.OnClickListener() {
@@ -101,7 +107,7 @@ public class PlannedListAdapter extends RecyclerView.Adapter<PlannedListAdapter.
 
         class SuppliersViewHolder extends RecyclerView.ViewHolder {
 
-            TextView serial, cust, pl, dest, order, supplier, thick, width, length, pieces, copies, isExist, edit, delete, copy;
+            TextView serial, cust, pl, dest, order, supplier,grade , thick, width, length, pieces, copies, isExist, edit, delete, copy;
             LinearLayout linearLayout;
 
             public SuppliersViewHolder(@NonNull View itemView) {
@@ -114,6 +120,7 @@ public class PlannedListAdapter extends RecyclerView.Adapter<PlannedListAdapter.
                 dest = itemView.findViewById(R.id.dest);
                 order = itemView.findViewById(R.id.order_no);
                 supplier = itemView.findViewById(R.id.supplier);
+                grade = itemView.findViewById(R.id.grade);
                 thick = itemView.findViewById(R.id.thick);
                 width = itemView.findViewById(R.id.width);
                 length = itemView.findViewById(R.id.length);

@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Wood System</string>
-    <string name="version">Version 41.0</string>
+    <string name="version">Version 46.0</string>
 
     <string name="stage1">Acceptance &amp; Quality Control</string>
     <string name="stage2">Stage 2</string>
@@ -95,13 +95,14 @@
     <string name="new_cust">New Customer</string>
     <string name="find_cust">Find Customer</string>
     <string name="edit_item">Edit Item</string>
-    <string name="edit_no_item">Edit Number of Copies</string>
+    <string name="edit_no_item">Edit Number of Bundles</string>
     <string name="no_of_copy">No Of Copies</string>
     <string name="closed_results">Closed Results</string>
     <string name="destination_">Dest</string>
     <string name="comparable_results">Comparable Results :</string>
     <string name="total_cbm">Total CBM</string>
     <string name="planned_report">Planned Packing List Report</string>
+    <string name="loaded">Loaded</string>
 
     <string name="accept_raw">Accept Row</string>
     <string name="name_of_supplier">Name Of Supplier</string>

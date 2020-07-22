@@ -13,16 +13,27 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name=".stage_two.StageTwo">
 
+        <activity
+            android:name=".LoginActivity"
+            android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
+
+        <activity android:name=".stage_two.StageTwo">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity android:name=".EditLoadingReport" />
+        <activity android:name=".stage_two.AddNewSupplier" />
         <activity android:name=".stage_one.ReportsStageOne" />
         <activity
             android:name=".reports.AcceptanceInfoReport"
@@ -46,17 +57,7 @@
             android:name=".reports.BundlesReport"
             android:screenOrientation="sensorLandscape" />
         <activity android:name=".ReportsActivity" />
-        <activity
-            android:name=".LoginActivity"
-            android:windowSoftInputMode="stateAlwaysHidden">
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-        </activity>
 
         <activity
             android:name=".stage_two.UnloadPackingList"
@@ -73,7 +74,6 @@
             android:name=".stage_two.PlannedPackingList"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="adjustNothing|stateAlwaysHidden">
-
 
 
         </activity>

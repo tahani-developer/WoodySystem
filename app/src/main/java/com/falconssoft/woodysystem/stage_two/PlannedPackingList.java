@@ -8,14 +8,19 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -60,16 +65,16 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
     private DatabaseHandler databaseHandler;
     private Calendar myCalendar;
     private Settings generalSettings;
-    private Dialog searchDialog , searchDialog2;
+    private Dialog searchDialog, searchDialog2;
     Dialog dialog;
 
     private boolean mState = false;
     private final String STATE_VISIBILITY = "state-visibility";
 
-    public static int flag , flag2;
+    public static int flag, flag2;
     private RecyclerView recyclerView;
     private EditText thickness, width, length, noOfPieces, paclingList, destination, orderNo;
-    private TextView searchCustomer, searchSupplier, addButton, saveButton, checkButton, addCust, noBundles, totalCBM;
+    private TextView searchCustomer, searchSupplier, addButton, saveButton, checkButton, addCust, addSupp, noBundles, totalCBM;
     private TableLayout headerTableLayout;
     private TableRow tableRow;
     private CustomerAdapter adapter;
@@ -82,7 +87,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
     private List<SupplierInfo> suppliers;
     private List<SupplierInfo> arraylist2;
     private JSONObject plannedPLJObject;
-    TextView customerD , supplierD;
+    TextView customerD, supplierD;
     private RecyclerView recycler;
 
     TableLayout tableLayout2;
@@ -91,15 +96,22 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
     TextView piecesD, lengthD, widthD, thickD;
     SimpleDateFormat sdf;
     String today;
+    private ArrayList<String> gradeList = new ArrayList<>();
+    private ArrayAdapter<String> gradeAdapter;
+    private Spinner gradeSpinner;
+    private String gradeText = "Fresh";
     //TableRow tableRowToBeEdit;
     int flagIsChanged = 0;
     public static int noOfExist;
     boolean check = false;
+    int ind ;
 
     public static List<PlannedPL> PlannedPLList = new ArrayList<>();
+    public static List<PlannedPL> oldList = new ArrayList<>();
     private List<BundleInfo> bundleInfosList = new ArrayList<>();
     private List<BundleInfo> bundleInfosList2 = new ArrayList<>();
     private JSONArray plannedPLListJSON = new JSONArray();
+    private JSONArray plannedPLListJSONDELETE = new JSONArray();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +127,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
         generalSettings = databaseHandler.getSettings();
         customers = new ArrayList<>();
         arraylist = new ArrayList<>();
+        arraylist2 = new ArrayList<>();
         suppliers = new ArrayList<>();
 
         myCalendar = Calendar.getInstance();
@@ -125,13 +138,45 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
         paclingList.requestFocus();
 
+        gradeList.clear();
+        gradeList.add("Fresh");
+        gradeList.add("KD");
+        gradeList.add("Blue Stain");
+        gradeList.add("KD Blue Stain");
+        gradeList.add("AST");
+        gradeList.add("AST Blue Stain");
+        gradeList.add("Second Sort");
+        gradeList.add("Reject");
+        gradeAdapter = new ArrayAdapter<String>(this, R.layout.spinner_layout, gradeList);
+        gradeAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
+        gradeSpinner.setAdapter(gradeAdapter);
+        gradeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                switch (parent.getId()) {
+//                    case R.id.addNewRaw_grade:
+                gradeText = parent.getItemAtPosition(position).toString();
+//                        break;
+//                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         addButton.setOnClickListener(this);
         checkButton.setOnClickListener(this);
         saveButton.setOnClickListener(this);
         addCust.setOnClickListener(this);
+        addSupp.setOnClickListener(this);
         searchCustomer.setOnClickListener(this);
         searchSupplier.setOnClickListener(this);
 
+        new JSONTask6().execute();
+
+        paclingList.addTextChangedListener(new watchTextChange(paclingList));
     }
 
     @Override
@@ -176,6 +221,11 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
                 customersDialog();
                 break;
+            case R.id.add_supplier:
+                Intent intent2 = new Intent(PlannedPackingList.this, AddNewSupplier.class);
+                intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent2);
+                break;
             case R.id.supplier:
                 flag2 = 1;
                 suppliers.clear();
@@ -184,6 +234,61 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                 suppliersDialog();
                 break;
         }
+    }
+
+    class watchTextChange implements TextWatcher {
+
+        private View view;
+
+        public watchTextChange(View view) {
+            this.view = view;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            getOldPList(paclingList.getText().toString());
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    }
+
+    void getOldPList(String packingL) {
+        PlannedPLList.clear();
+        for (int i = 0; i < oldList.size(); i++) {
+            if (packingL.equals(oldList.get(i).getPackingList())) {
+                PlannedPLList.add(oldList.get(i));
+                searchCustomer.setText(oldList.get(i).getCustName());
+                searchSupplier.setText(oldList.get(i).getSupplier());
+                destination.setText(oldList.get(i).getDestination());
+                orderNo.setText(oldList.get(i).getOrderNo());
+                gradeSpinner.setSelection(gradeList.indexOf(oldList.get(i).getGrade()));
+            }
+        }
+
+        if (headerTableLayout.getChildCount() == 0)
+            addTableHeader(headerTableLayout);
+
+        adapter2.notifyDataSetChanged();
+        calculateTotal();
+
+
+        //***** no of unplanned
+        plannedPLListJSON = new JSONArray();
+        for (int i = 0; i < PlannedPLList.size(); i++) {
+            for (int k = 0; k < PlannedPLList.get(i).getNoOfCopies(); k++) {
+                plannedPLListJSON.put(PlannedPLList.get(i).getJSONObject());
+            }
+        }
+
+        if (plannedPLListJSON.length() > 0)
+            new JSONTask2().execute();
     }
 
     public void filter(String charText) { // by Name
@@ -204,7 +309,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
     public void filter2(String charText) { // by Name
         charText = charText.toLowerCase(Locale.getDefault());
-        arraylist.clear();
+        arraylist2.clear();
         if (charText.length() == 0) {
             arraylist2.addAll(suppliers);
         } else {
@@ -215,7 +320,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
             }
         }
         adapter3 = new SupplierAdapter(1, this, arraylist2);
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(adapter3);
     }
 
     void addButtonMethod() {
@@ -228,14 +333,15 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
         noOfPiecesLocal = noOfPieces.getText().toString();
 
         if (!TextUtils.isEmpty(customerName)) {
-            if (!TextUtils.isEmpty(supplierName)) {
-                if (!TextUtils.isEmpty(packLiastLocal)) {
-                    if (!TextUtils.isEmpty(destinationLocal)) {
-                        if (!TextUtils.isEmpty(orderNoLocal)) {
-                            if (!TextUtils.isEmpty(thicknessLocal)) {
-                                if (!TextUtils.isEmpty(widthLocal)) {
-                                    if (!TextUtils.isEmpty(lengthLocal)) {
-                                        if (!TextUtils.isEmpty(noOfPiecesLocal)) {
+            //if (!TextUtils.isEmpty(supplierName)) {
+            if (!TextUtils.isEmpty(packLiastLocal)) {
+                if (!TextUtils.isEmpty(destinationLocal)) {
+                    if (!TextUtils.isEmpty(orderNoLocal)) {
+                        if (!TextUtils.isEmpty(thicknessLocal)) {
+                            if (!TextUtils.isEmpty(widthLocal)) {
+                                if (!TextUtils.isEmpty(lengthLocal)) {
+                                    if (!TextUtils.isEmpty(noOfPiecesLocal)) {
+                                        if (!TextUtils.isEmpty(gradeText)) {
 
                                             BundleInfo bundleInfo = new BundleInfo();
                                             bundleInfo.setNoOfPieces(Double.parseDouble(noOfPiecesLocal));
@@ -276,6 +382,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                                                 packingList.setPackingList(packLiastLocal);
                                                 packingList.setDestination(destinationLocal);
                                                 packingList.setOrderNo(orderNoLocal);
+                                                packingList.setGrade(gradeText);
                                                 packingList.setExist("null");
                                                 packingList.setNoOfCopies(1);
                                                 packingList.setLoaded(0);
@@ -287,9 +394,6 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                                                 if (headerTableLayout.getChildCount() == 0)
                                                     addTableHeader(headerTableLayout);
 
-                                                //fillTableRow(packingList, PlannedPLList.size() - 1);
-                                                //adapter2 = new PlannedListAdapter( this, PlannedPLList);
-                                                //recycler.setAdapter(adapter2);
                                                 adapter2.notifyDataSetChanged();
 
                                                 thickness.setText("");
@@ -302,30 +406,31 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                                                 calculateTotal();
                                             }
 
-                                        } else {
-                                            noOfPieces.setError("Required!");
                                         }
                                     } else {
-                                        length.setError("Required!");
+                                        noOfPieces.setError("Required!");
                                     }
                                 } else {
-                                    width.setError("Required!");
+                                    length.setError("Required!");
                                 }
                             } else {
-                                thickness.setError("Required!");
+                                width.setError("Required!");
                             }
                         } else {
-                            orderNo.setError("Required!");
+                            thickness.setError("Required!");
                         }
                     } else {
-                        destination.setError("Required!");
+                        orderNo.setError("Required!");
                     }
                 } else {
-                    paclingList.setError("Required!");
+                    destination.setError("Required!");
                 }
             } else {
-                searchSupplier.setError("Please Select First!");
+                paclingList.setError("Required!");
             }
+//            } else {
+//                searchSupplier.setError("Please Select First!");
+//            }
         } else {
             searchCustomer.setError("Please Select First!");
         }
@@ -337,7 +442,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
         boolean isOk = true;
         for (int i = 0; i < PlannedPLList.size(); i++) {
-            if (!PlannedPLList.get(i).getExist().equals("Exist")) {
+            if (PlannedPLList.get(i).getExist().equals("Not Exist")) {
                 isOk = false;
                 break;
             }
@@ -357,7 +462,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
     void addTableHeader(TableLayout tableLayout) {
         TableRow tableRow = new TableRow(this);
-        for (int i = 0; i < 15; i++) {
+        for (int i = 0; i < 16; i++) {
             TextView textView = new TextView(this);
             textView.setBackgroundResource(R.color.orange);
             TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f);
@@ -377,6 +482,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                     break;
                 case 2:
                     textView.setText("PL #");
+                    textView.setLayoutParams(textViewParam3);
                     break;
                 case 3:
                     textView.setText("Dest");
@@ -387,39 +493,45 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                     break;
                 case 5:
                     textView.setText("Supplier");
+                    textView.setLayoutParams(textViewParam3);
                     break;
                 case 6:
-                    textView.setText("Thick");
+                    textView.setText("Grade");
                     textView.setLayoutParams(textViewParam3);
                     break;
                 case 7:
-                    textView.setText("Width");
+                    textView.setText("Thick");
                     textView.setLayoutParams(textViewParam3);
                     break;
                 case 8:
-                    textView.setText("Length");
+                    textView.setText("Width");
                     textView.setLayoutParams(textViewParam3);
                     break;
                 case 9:
-                    textView.setText("Pieces");
+                    textView.setText("Length");
                     textView.setLayoutParams(textViewParam3);
                     break;
                 case 10:
-                    textView.setText("Copies");
+                    textView.setText("Pieces");
                     textView.setLayoutParams(textViewParam3);
                     break;
                 case 11:
-                    textView.setText("Is Exist");
+                    textView.setText("#Bundl");
+                    textView.setLayoutParams(textViewParam3);
                     break;
                 case 12:
-                    textView.setLayoutParams(textViewParam2);
-                    textView.setText("E");
+                    textView.setText("Is Exist");
+                    textView.setLayoutParams(textViewParam3);
                     break;
                 case 13:
                     textView.setLayoutParams(textViewParam2);
-                    textView.setText("D");
+                    textView.setText("E");
                     break;
                 case 14:
+                    textView.setLayoutParams(textViewParam2);
+                    textView.setText("D");
+                    break;
+                case 15:
                     textView.setLayoutParams(textViewParam2);
                     textView.setText("C");
                     break;
@@ -523,7 +635,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
     int addedBefore(BundleInfo bundleInfo) {
         for (int i = 0; i < PlannedPLList.size(); i++) {
-            if (PlannedPLList.get(i).getLoaded() == 0 &&
+            if (PlannedPLList.get(i).getLoaded() == 0 && !PlannedPLList.get(i).getExist().equals("Planned") &&
                     bundleInfo.getThickness() == PlannedPLList.get(i).getThickness() &&
                     bundleInfo.getWidth() == PlannedPLList.get(i).getWidth() &&
                     bundleInfo.getLength() == PlannedPLList.get(i).getLength() &&
@@ -541,7 +653,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
         searchDialog = new Dialog(this);
         searchDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         searchDialog.setContentView(R.layout.search_customer_dialog);
-        searchDialog.setCancelable(false);
+        searchDialog.setCancelable(true);
 
         SearchView searchView = searchDialog.findViewById(R.id.search_supplier_searchView);
         TextView close = searchDialog.findViewById(R.id.search_supplier_close);
@@ -581,7 +693,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
         searchDialog2 = new Dialog(this);
         searchDialog2.requestWindowFeature(Window.FEATURE_NO_TITLE);
         searchDialog2.setContentView(R.layout.search_supplier_dialog);
-        searchDialog2.setCancelable(false);
+        searchDialog2.setCancelable(true);
 
         SearchView searchView = searchDialog2.findViewById(R.id.search_supplier_searchView);
         TextView close = searchDialog2.findViewById(R.id.search_supplier_close);
@@ -668,6 +780,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
     public void editItemDialog(int index) {
 
         flagIsChanged = 0;
+
         Dialog dialog = new Dialog(PlannedPackingList.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.edit_planned_item);
@@ -682,8 +795,44 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
         EditText widthD = dialog.findViewById(R.id.width);
         EditText thickD = dialog.findViewById(R.id.thickness);
         Button save = dialog.findViewById(R.id.save);
+        Spinner gradeSpinner2 = dialog.findViewById(R.id.grade);
+        ;
 
+
+        ArrayList<String> gradeList2 = new ArrayList<>();
+        ArrayAdapter<String> gradeAdapter;
+
+        final String[] gradeText = {PlannedPLList.get(index).getGrade()};
+        gradeList2.clear();
+        gradeList2.add("Fresh");
+        gradeList2.add("KD");
+        gradeList2.add("Blue Stain");
+        gradeList2.add("KD Blue Stain");
+        gradeList2.add("AST");
+        gradeList2.add("AST Blue Stain");
+        gradeList2.add("Second Sort");
+        gradeList2.add("Reject");
+        gradeAdapter = new ArrayAdapter<String>(this, R.layout.spinner_layout, gradeList2);
+        gradeAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
+        gradeSpinner2.setAdapter(gradeAdapter);
+        gradeSpinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                switch (parent.getId()) {
+//                    case R.id.addNewRaw_grade:
+                gradeText[0] = parent.getItemAtPosition(position).toString();
+//                        break;
+//                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        gradeSpinner2.setSelection(gradeList.indexOf(PlannedPLList.get(index).getGrade()));
         customerD.setText(PlannedPLList.get(index).getCustName());
+        customerName2 = PlannedPLList.get(index).getCustName();
         supplierD.setText(PlannedPLList.get(index).getSupplier());
         plD.setText(PlannedPLList.get(index).getPackingList());
         destD.setText(PlannedPLList.get(index).getDestination());
@@ -724,15 +873,16 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                 lengthL = lengthD.getText().toString();
                 noOfPiecesL = piecesD.getText().toString();
 
-                if (!TextUtils.isEmpty(customerName)) {                // ***************** edit this
-                    if (!TextUtils.isEmpty(supplierName)) {
-                        if (!TextUtils.isEmpty(packLiastL)) {
-                            if (!TextUtils.isEmpty(destinationL)) {
-                                if (!TextUtils.isEmpty(orderNoL)) {
-                                    if (!TextUtils.isEmpty(thicknessL)) {
-                                        if (!TextUtils.isEmpty(widthL)) {
-                                            if (!TextUtils.isEmpty(lengthL)) {
-                                                if (!TextUtils.isEmpty(noOfPiecesL)) {
+                if (!TextUtils.isEmpty(customerName2)) {                // ***************** edit this
+                    //if (!TextUtils.isEmpty(supplierName)) {
+                    if (!TextUtils.isEmpty(packLiastL)) {
+                        if (!TextUtils.isEmpty(destinationL)) {
+                            if (!TextUtils.isEmpty(orderNoL)) {
+                                if (!TextUtils.isEmpty(thicknessL)) {
+                                    if (!TextUtils.isEmpty(widthL)) {
+                                        if (!TextUtils.isEmpty(lengthL)) {
+                                            if (!TextUtils.isEmpty(noOfPiecesL)) {
+                                                if (!TextUtils.isEmpty(gradeText[0])) {
 
                                                     BundleInfo bundleInfo = new BundleInfo();
                                                     bundleInfo.setNoOfPieces(Double.parseDouble(piecesD.getText().toString()));
@@ -744,15 +894,27 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                                                     if (a != -1)
                                                         Toast.makeText(PlannedPackingList.this, "This item is added before ! Please change its copies", Toast.LENGTH_LONG).show();
                                                     else {
+
+
+                                                        if(PlannedPLList.get(index).getNoOfPieces() == Double.parseDouble(piecesD.getText().toString())&&
+                                                                PlannedPLList.get(index).getLength() == Double.parseDouble(lengthD.getText().toString()) &&
+                                                                PlannedPLList.get(index).getWidth() == Double.parseDouble(widthD.getText().toString()) &&
+                                                                PlannedPLList.get(index).getThickness() == Double.parseDouble(thickD.getText().toString()) ){
+                                                            // do nothing
+                                                        } else {
+                                                            PlannedPLList.get(index).setExist("null");
+                                                        }
+
                                                         PlannedPLList.get(index).setNoOfPieces(Double.parseDouble(piecesD.getText().toString()));
                                                         PlannedPLList.get(index).setLength(Double.parseDouble(lengthD.getText().toString()));
                                                         PlannedPLList.get(index).setWidth(Double.parseDouble(widthD.getText().toString()));
                                                         PlannedPLList.get(index).setThickness(Double.parseDouble(thickD.getText().toString()));
                                                         PlannedPLList.get(index).setCustName(customerD.getText().toString());
+                                                        PlannedPLList.get(index).setSupplier(supplierD.getText().toString());
                                                         PlannedPLList.get(index).setPackingList(plD.getText().toString());
                                                         PlannedPLList.get(index).setDestination(destD.getText().toString());
                                                         PlannedPLList.get(index).setOrderNo(orderNoD.getText().toString());
-                                                        PlannedPLList.get(index).setExist("null");
+                                                        PlannedPLList.get(index).setGrade(gradeText[0]);
 
                                                         adapter2.notifyDataSetChanged();
 
@@ -762,31 +924,32 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
                                                         dialog.dismiss();
                                                     }
-
-                                                } else {
-                                                    noOfPieces.setError("Required!");
                                                 }
+
                                             } else {
-                                                length.setError("Required!");
+                                                noOfPieces.setError("Required!");
                                             }
                                         } else {
-                                            width.setError("Required!");
+                                            length.setError("Required!");
                                         }
                                     } else {
-                                        thickness.setError("Required!");
+                                        width.setError("Required!");
                                     }
                                 } else {
-                                    orderNo.setError("Required!");
+                                    thickness.setError("Required!");
                                 }
                             } else {
-                                destination.setError("Required!");
+                                orderNo.setError("Required!");
                             }
                         } else {
-                            paclingList.setError("Required!");
+                            destination.setError("Required!");
                         }
                     } else {
-                        supplierD.setError("Please Select First!");
+                        paclingList.setError("Required!");
                     }
+//                    } else {
+//                        supplierD.setError("Please Select First!");
+//                    }
                 } else {
                     customerD.setError("Please Select First!");
                 }
@@ -799,10 +962,13 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
     public void deleteItemDialog(int index) {
 
-        PlannedPLList.remove(index);
-        adapter2.notifyDataSetChanged();
+        plannedPLListJSONDELETE = new JSONArray();
+        for (int i = 0; i < PlannedPLList.get(index).getNoOfCopies(); i++) {
+            plannedPLListJSONDELETE.put(PlannedPLList.get(index).getJSONObject());
+        }
 
-        calculateTotal();
+        ind = index;
+        new JSONTask7().execute();
 
     }
 
@@ -824,15 +990,33 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                 String copy = copies.getText().toString();
 
                 if (!TextUtils.isEmpty(copy)) {                // ***************** edit this
-                    if (Integer.parseInt(copy) <= PlannedPLList.get(index).getNoOfExixt()) {
 
-                        PlannedPLList.get(index).setNoOfCopies(Integer.parseInt(copy));
-                        adapter2.notifyDataSetChanged();
-                        calculateTotal();
+                    if(PlannedPLList.get(index).getExist().contains("Planned")){
+                        Log.e("****" , "in");
+                        if (Integer.parseInt(copy) <= (PlannedPLList.get(index).getNoOfExixt() + PlannedPLList.get(index).getNoOfCopies())) {
 
-                        dialog.dismiss();
+                            PlannedPLList.get(index).setNoOfExixt((PlannedPLList.get(index).getNoOfExixt() + PlannedPLList.get(index).getNoOfCopies()) -Integer.parseInt(copy));
+                            PlannedPLList.get(index).setNoOfCopies(Integer.parseInt(copy));
+                            adapter2.notifyDataSetChanged();
+                            calculateTotal();
+
+                            dialog.dismiss();
+                        } else {
+                            copies.setError("Exist(" + (PlannedPLList.get(index).getNoOfExixt() + PlannedPLList.get(index).getNoOfCopies()) + ")!");
+                        }
+
+
                     } else {
-                        copies.setError("Exist(" + PlannedPLList.get(index).getNoOfExixt() + ")!");
+                        if (Integer.parseInt(copy) <= PlannedPLList.get(index).getNoOfExixt()) {
+
+                            PlannedPLList.get(index).setNoOfCopies(Integer.parseInt(copy));
+                            adapter2.notifyDataSetChanged();
+                            calculateTotal();
+
+                            dialog.dismiss();
+                        } else {
+                            copies.setError("Exist(" + PlannedPLList.get(index).getNoOfExixt() + ")!");
+                        }
                     }
                 } else {
                     copies.setError("Please Enter No Of Copies!");
@@ -905,55 +1089,6 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
     }
 
-    /*
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-//        linearLayoutView.getVisibility();
-        outState.putBoolean(STATE_VISIBILITY, mState);
-
-        List<TableRow> tableRows = new ArrayList<>();
-        int rowcount = tableLayout.getChildCount();
-        for (int i = 0; i < rowcount; i++) {
-            TableRow row = (TableRow) tableLayout.getChildAt(i);
-            tableRows.add(row);
-        }
-        outState.putSerializable("table", (Serializable) tableRows);
-        super.onSaveInstanceState(outState);
-    }
-
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-
-        mState = savedInstanceState.getBoolean(STATE_VISIBILITY);
-        tableLayout.setVisibility(mState ? View.VISIBLE : View.GONE);
-
-        // Restore state members from saved instance
-        paclingList.requestFocus();
-
-        List<TableRow> tableRows = (List<TableRow>) savedInstanceState.getSerializable("table");
-        for (int i = 0; i < tableRows.size(); i++) {
-            if (tableRows.get(i).getParent() != null) {
-                ((ViewGroup) tableRows.get(i).getParent()).removeView(tableRows.get(i)); // <- fix
-            }
-            tableLayout.addView(tableRows.get(i));
-        }
-
-        Log.e("tag1", "");
-//        if(PlannedPLList.size() != 0){
-//
-//            Log.e("tag2", "");
-//            addTableHeader(headerTableLayout);
-//
-//            for (int i = 0 ; i< PlannedPLList.size() ; i++) {
-//                fillTableRow(PlannedPLList.get(i), i);
-//            }
-//        }
-        super.onRestoreInstanceState(savedInstanceState);
-    }
-
-
-     */
 
     private class JSONTask extends AsyncTask<String, String, List<CustomerInfo>> {
 
@@ -1308,6 +1443,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                     noOfPieces.setText("");
                     searchCustomer.setText("");
                     searchSupplier.setText("");
+                    gradeSpinner.setSelection(gradeList.indexOf("Fresh"));
 
                     Toast.makeText(PlannedPackingList.this, "Saved!", Toast.LENGTH_SHORT).show();
                     Log.e("tag", "PLANNED_PACKING_LIST SUCCESS");
@@ -1335,7 +1471,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
             BufferedReader reader = null;
 
             try {
-                URL url = new URL("http://" + databaseHandler.getSettings().getIpAddress() + "/import.php?FLAG=4");
+                URL url = new URL("http://" + databaseHandler.getSettings().getIpAddress() + "/import.php?FLAG=10");
 
                 URLConnection conn = url.openConnection();
                 conn.setDoOutput(true);
@@ -1414,138 +1550,235 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
         }
     }  // import Suppliers
 
-//    private class JSONTask5 extends AsyncTask<String, String, String> {  // check
-//
-//        @Override
-//        protected void onPreExecute() {
-//            super.onPreExecute();
-//            //showDialog();
-//
-//        }
-//
-//        @Override
-//        protected String doInBackground(String... params) {
-//            try {
-//                String JsonResponse = null;
-//                HttpClient client = new DefaultHttpClient();
-//                HttpPost request = new HttpPost();
-//                request.setURI(new URI("http://" + databaseHandler.getSettings().getIpAddress() + "/import.php?FLAG=9"));
-//
-//                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-//                //nameValuePairs.add(new BasicNameValuePair("CUSTOMER", searchCustomer.getText().toString()));
-//                //nameValuePairs.add(new BasicNameValuePair("PACKING_LIST", paclingList.getText().toString()));
-//
-//                request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-//
-//                HttpResponse response = client.execute(request);
-//
-//                BufferedReader in = new BufferedReader(new
-//                        InputStreamReader(response.getEntity().getContent()));
-//
-//                StringBuffer sb = new StringBuffer("");
-//                String line = "";
-//
-//                while ((line = in.readLine()) != null) {
-//                    sb.append(line);
-//                }
-//
-//                in.close();
-//
-//                JsonResponse = sb.toString();
-//                Log.e("tag", "" + JsonResponse);
-//
-//                JSONObject parentObject = new JSONObject(JsonResponse);
-//
-//                PLList.clear();
-//                PLListFiltered.clear();
-//
-//                try {
-//                    JSONArray parentArrayOrders = parentObject.getJSONArray("PLANNED");
-//
-//                    for (int i = 0; i < parentArrayOrders.length(); i++) {
-//                        JSONObject innerObject = parentArrayOrders.getJSONObject(i);
-//
-//                        PlannedPL planned = new PlannedPL();
-//                        planned.setCustName(innerObject.getString("CUST_NAME"));
-//                        planned.setPackingList(innerObject.getString("PACKING_LIST"));
-//                        planned.setDestination(innerObject.getString("DESTINATION"));
-//                        planned.setOrderNo(innerObject.getString("ORDER_NO"));
-//                        planned.setNoOfPieces(innerObject.getDouble("PIECES"));
-//                        planned.setLength(innerObject.getDouble("LENGTH"));
-//                        planned.setWidth(innerObject.getDouble("WIDTH"));
-//                        planned.setThickness(innerObject.getDouble("THICKNESS"));
-//                        planned.setNoOfCopies(innerObject.getInt("COUNT"));
-//
-//
-//                        PLList.add(planned);
-//                        PLListFiltered.add(planned);
-//
-//                    }
-//                } catch (JSONException e) {
-//                    Log.e("Import Data2", e.getMessage().toString());
-//                }
-//                return JsonResponse;
-//
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                return null;
-//            }
-//        }
-//
-//        @Override
-//        protected void onPostExecute(String s) {
-//            super.onPostExecute(s);
-//
-//            if (s != null) {
-//
-//                if (PLList.size() > 0) {
-//                    if (headerTableLayout.getChildCount() == 0)
-//                        addTableHeader(headerTableLayout);
-//
-//                    adapter2.notifyDataSetChanged();
-//
-//                    calculateTotal();
-//
+    private class JSONTask6 extends AsyncTask<String, String, String> {  // old planned
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //showDialog();
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                String JsonResponse = null;
+                HttpClient client = new DefaultHttpClient();
+                HttpPost request = new HttpPost();
+                request.setURI(new URI("http://" + databaseHandler.getSettings().getIpAddress() + "/import.php?FLAG=11"));
+
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+
+                request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                HttpResponse response = client.execute(request);
+
+                BufferedReader in = new BufferedReader(new
+                        InputStreamReader(response.getEntity().getContent()));
+
+                StringBuffer sb = new StringBuffer("");
+                String line = "";
+
+                while ((line = in.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                in.close();
+
+                JsonResponse = sb.toString();
+                Log.e("tag", "" + JsonResponse);
+
+                JSONObject parentObject = new JSONObject(JsonResponse);
+
+                oldList.clear();
+
+                try {
+                    JSONArray parentArrayOrders = parentObject.getJSONArray("OLD_PLANNED");
+
+                    for (int i = 0; i < parentArrayOrders.length(); i++) {
+                        JSONObject innerObject = parentArrayOrders.getJSONObject(i);
+
+                        PlannedPL planned = new PlannedPL();
+                        planned.setCustName(innerObject.getString("CUST_NAME"));
+                        planned.setCustNo(innerObject.getString("CUST_NO"));
+                        planned.setPackingList(innerObject.getString("PACKING_LIST"));
+                        planned.setDestination(innerObject.getString("DESTINATION"));
+                        planned.setOrderNo(innerObject.getString("ORDER_NO"));
+                        planned.setSupplier(innerObject.getString("SUPPLIER"));
+                        planned.setGrade(innerObject.getString("GRADE"));
+                        planned.setNoOfPieces(innerObject.getDouble("PIECES"));
+                        planned.setLength(innerObject.getDouble("LENGTH"));
+                        planned.setWidth(innerObject.getDouble("WIDTH"));
+                        planned.setThickness(innerObject.getDouble("THICKNESS"));
+                        planned.setDate(innerObject.getString("DATE_"));
+                        planned.setNoOfCopies(innerObject.getInt("COUNT"));
+                        planned.setLoaded(innerObject.getInt("LOADED"));
+                        planned.setExist("Planned");
+
+                        oldList.add(planned);
+
+                    }
+                } catch (JSONException e) {
+                    Log.e("Import Data2", e.getMessage().toString());
+                }
+                return JsonResponse;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            if (s != null) {
+
+                if (oldList.size() > 0) {
+
+
 //                    for (int i = 0; i < PLList.size(); i++) {
 //                        plannedPLListJSON.put(PLList.get(i).getJSONObject());
 //                    }
-//                }
-//            } else {
-//                Toast.makeText(UnloadPackingList.this, "No same data found!", Toast.LENGTH_SHORT).show();
-////                Toast.makeText(UnloadPackingList.this, "No internet connection!", Toast.LENGTH_SHORT).show();
-//            }
-//        }
-//    }
+                }
+            } else {
+                Toast.makeText(PlannedPackingList.this, "No data found!", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(UnloadPackingList.this, "No internet connection!", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private class JSONTask7 extends AsyncTask<String, String, String> {  // delete
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //showDialog();
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                String JsonResponse = null;
+                HttpClient client = new DefaultHttpClient();
+                HttpPost request = new HttpPost();
+                request.setURI(new URI("http://" + databaseHandler.getSettings().getIpAddress() + "/export.php"));
+
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+                nameValuePairs.add(new BasicNameValuePair("DELETE_PLANNED_PACKING_LIST", plannedPLListJSONDELETE.toString()));
+                nameValuePairs.add(new BasicNameValuePair("LOCATION", databaseHandler.getSettings().getStore()));
+
+                request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                HttpResponse response = client.execute(request);
+
+                BufferedReader in = new BufferedReader(new
+                        InputStreamReader(response.getEntity().getContent()));
+
+                StringBuffer sb = new StringBuffer("");
+                String line = "";
+
+                while ((line = in.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                in.close();
+
+                JsonResponse = sb.toString();
+                Log.e("tag", "" + JsonResponse);
+
+                return JsonResponse;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            if (s != null) {
+                if (s.contains("DELETE SUCCESS")) {
+
+                    PlannedPLList.remove(ind);
+                    adapter2.notifyDataSetChanged();
+
+                    calculateTotal();
+
+                    Toast.makeText(PlannedPackingList.this, "Saved!", Toast.LENGTH_SHORT).show();
+                    Log.e("tag", "DELETE SUCCESS");
+                } else {
+                    Toast.makeText(PlannedPackingList.this, "Failed to delete!", Toast.LENGTH_SHORT).show();
+                    Log.e("tag", "Failed to export data!");
+                }
+
+            } else {
+                Toast.makeText(PlannedPackingList.this, "No internet connection!", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 
     void compare() {
 
         if (bundleInfosList.size() == 0) {
             for (int i = 0; i < PlannedPLList.size(); i++) {
-                PlannedPLList.get(i).setExist("Not Exist");
+                if (!PlannedPLList.get(i).getExist().equals("Planned"))
+                    PlannedPLList.get(i).setExist("Not Exist");
             }
         }
 
         for (int i = 0; i < PlannedPLList.size(); i++) {
-            for (int k = 0; k < bundleInfosList.size(); k++) {
+            if (!PlannedPLList.get(i).getExist().equals("Planned")) {
+                for (int k = 0; k < bundleInfosList.size(); k++) {
 
-                if (PlannedPLList.get(i).getThickness() == bundleInfosList.get(k).getThickness() &&
-                        PlannedPLList.get(i).getWidth() == bundleInfosList.get(k).getWidth() &&
-                        PlannedPLList.get(i).getLength() == bundleInfosList.get(k).getLength() &&
-                        PlannedPLList.get(i).getNoOfPieces() == bundleInfosList.get(k).getNoOfPieces()) {
+                    if (PlannedPLList.get(i).getThickness() == bundleInfosList.get(k).getThickness() &&
+                            PlannedPLList.get(i).getWidth() == bundleInfosList.get(k).getWidth() &&
+                            PlannedPLList.get(i).getLength() == bundleInfosList.get(k).getLength() &&
+                            PlannedPLList.get(i).getNoOfPieces() == bundleInfosList.get(k).getNoOfPieces()) {
 
-                    PlannedPLList.get(i).setExist("Exist");
-                    PlannedPLList.get(i).setNoOfExixt(bundleInfosList.get(k).getNoOfExist());
+                        PlannedPLList.get(i).setExist("Exist");
+                        PlannedPLList.get(i).setNoOfExixt(bundleInfosList.get(k).getNoOfExist());
 
-                    break;
-                } else {
-                    PlannedPLList.get(i).setExist("Not Exist");
-                    PlannedPLList.get(i).setNoOfExixt(0);
+                        break;
+                    } else {
+                        PlannedPLList.get(i).setExist("Not Exist");
+                        PlannedPLList.get(i).setNoOfExixt(0);
+                    }
+
+                    Log.e("****out1", "***" + PlannedPLList.get(i).getThickness() + "==" + bundleInfosList.get(k).getThickness() + "&&" +
+                            PlannedPLList.get(i).getWidth() + "==" + bundleInfosList.get(k).getWidth() + "&&" +
+                            PlannedPLList.get(i).getLength() + "==" + bundleInfosList.get(k).getLength() + "&&" +
+                            PlannedPLList.get(i).getNoOfPieces() + "==" + bundleInfosList.get(k).getNoOfPieces());
+
                 }
+            } else {
 
-                Log.e("****out", "***" + PlannedPLList.get(i).getThickness() + "==" + bundleInfosList.get(k).getThickness() + "&&" +
-                        PlannedPLList.get(i).getWidth() + "==" + bundleInfosList.get(k).getWidth() + "&&" +
-                        PlannedPLList.get(i).getLength() + "==" + bundleInfosList.get(k).getLength() + "&&" +
-                        PlannedPLList.get(i).getNoOfPieces() + "==" + bundleInfosList.get(k).getNoOfPieces());
+                for (int k = 0; k < bundleInfosList.size(); k++) {
+
+                    if (PlannedPLList.get(i).getThickness() == bundleInfosList.get(k).getThickness() &&
+                            PlannedPLList.get(i).getWidth() == bundleInfosList.get(k).getWidth() &&
+                            PlannedPLList.get(i).getLength() == bundleInfosList.get(k).getLength() &&
+                            PlannedPLList.get(i).getNoOfPieces() == bundleInfosList.get(k).getNoOfPieces()) {
+
+                        //PlannedPLList.get(i).setExist("Exist");
+                        PlannedPLList.get(i).setNoOfExixt(bundleInfosList.get(k).getNoOfExist());
+
+                        break;
+                    } else {
+                        //PlannedPLList.get(i).setExist("Not Exist");
+                        PlannedPLList.get(i).setNoOfExixt(0);
+                    }
+
+                    Log.e("****out2", "***" + PlannedPLList.get(i).getThickness() + "==" + bundleInfosList.get(k).getThickness() + "&&" +
+                            PlannedPLList.get(i).getWidth() + "==" + bundleInfosList.get(k).getWidth() + "&&" +
+                            PlannedPLList.get(i).getLength() + "==" + bundleInfosList.get(k).getLength() + "&&" +
+                            PlannedPLList.get(i).getNoOfPieces() + "==" + bundleInfosList.get(k).getNoOfPieces());
+
+                }
 
             }
         }
@@ -1559,7 +1792,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
         int sumOfBundles = 0;
         double totalCbm = 0;
         for (int i = 0; i < PlannedPLList.size(); i++) {
-            sumOfBundles += (PlannedPLList.get(i).getNoOfPieces() * PlannedPLList.get(i).getNoOfCopies());
+            sumOfBundles += PlannedPLList.get(i).getNoOfCopies();
             totalCbm += (PlannedPLList.get(i).getThickness() * PlannedPLList.get(i).getWidth() * PlannedPLList.get(i).getLength() * PlannedPLList.get(i).getNoOfPieces() * PlannedPLList.get(i).getNoOfCopies());
         }
 
@@ -1578,11 +1811,13 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
         checkButton = findViewById(R.id.check_button);
         saveButton = findViewById(R.id.save_button);
         addCust = findViewById(R.id.add_cust);
+        addSupp = findViewById(R.id.add_supplier);
         thickness = findViewById(R.id.thickness);
         width = findViewById(R.id.width);
         length = findViewById(R.id.length);
         noOfPieces = findViewById(R.id.pieces);
         headerTableLayout = findViewById(R.id.addNewRaw_table_header);
+        gradeSpinner = findViewById(R.id.grade);
         noBundles = findViewById(R.id.no_bundles);
         totalCBM = findViewById(R.id.total_cbm);
 

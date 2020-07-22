@@ -310,10 +310,10 @@ public class LoadingOrderReport extends AppCompatActivity {
 
     public void previewPics(int index, Context context) {
         Pictures pics = new Pictures();
-        Log.e("kk" , ""+pictures.size());
+        Log.e("kk", "" + pictures.size());
         for (int i = 0; i < pictures.size(); i++) {
 
-            Log.e("kk" , ""+pictures.get(i).getOrderNo()+"="+ orders.get(index).getOrderNo());
+            Log.e("kk", "" + pictures.get(i).getOrderNo() + "=" + orders.get(index).getOrderNo());
             if (pictures.get(i).getOrderNo().equals(orders.get(index).getOrderNo())) {
                 pics = pictures.get(i);
 
@@ -812,9 +812,16 @@ public class LoadingOrderReport extends AppCompatActivity {
                         order.setDestination(finalObject.getString("DESTINATION"));
                         order.setPicture(finalObject.getString("PIC"));
 
-                        if(!order.getPicture().equals("null")) {
-                            InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC")).openStream();
-                            order.setPicBitmap(BitmapFactory.decodeStream(in));
+
+                        try {
+
+
+                            if (!order.getPicture().equals("null")) {
+                                InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC")).openStream();
+                                order.setPicBitmap(BitmapFactory.decodeStream(in));
+                            }
+                        } catch (Exception e){
+                            order.setPicture("null");
                         }
                        /* String pic = finalObject.getString("PART1") + finalObject.getString("PART2") +
                                 finalObject.getString("PART3") + finalObject.getString("PART4") +
@@ -861,47 +868,47 @@ public class LoadingOrderReport extends AppCompatActivity {
 //                            rowPics[k - 1] = pic;
 //                        }
                         //InputStream in ;
-                        if(!picture.getPic1().equals("null")) {
-                            InputStream  in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC1")).openStream();
+                        if (!picture.getPic1().equals("null")) {
+                            InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC1")).openStream();
                             picture.setPic11(BitmapFactory.decodeStream(in));
                         }
 
-                        if(!picture.getPic2().equals("null")) {
+                        if (!picture.getPic2().equals("null")) {
                             InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC2")).openStream();
                             picture.setPic22(BitmapFactory.decodeStream(in));
                         }
 
-                        if(!picture.getPic3().equals("null")) {
+                        if (!picture.getPic3().equals("null")) {
                             InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC3")).openStream();
                             picture.setPic33(BitmapFactory.decodeStream(in));
                         }
 
-                        if(!picture.getPic4().equals("null")) {
+                        if (!picture.getPic4().equals("null")) {
                             InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC4")).openStream();
                             picture.setPic44(BitmapFactory.decodeStream(in));
                         }
 
-                        if(!picture.getPic5().equals("null")) {
+                        if (!picture.getPic5().equals("null")) {
                             InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC5")).openStream();
                             picture.setPic55(BitmapFactory.decodeStream(in));
                         }
 
-                        if(!picture.getPic6().equals("null")) {
+                        if (!picture.getPic6().equals("null")) {
                             InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC6")).openStream();
                             picture.setPic66(BitmapFactory.decodeStream(in));
                         }
 
-                        if(!picture.getPic7().equals("null")) {
+                        if (!picture.getPic7().equals("null")) {
                             InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC7")).openStream();
                             picture.setPic77(BitmapFactory.decodeStream(in));
                         }
 
-                        if(!picture.getPic8().equals("null")) {
+                        if (!picture.getPic8().equals("null")) {
                             InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC8")).openStream();
                             picture.setPic88(BitmapFactory.decodeStream(in));
                         }
                         pictures.add(picture);
-                        Log.e("Ii", ""+pictures.size());
+                        Log.e("Ii", "" + pictures.size());
                     }
                 } catch (JSONException e) {
                     Log.e("Import Data1", e.getMessage().toString());
@@ -1114,7 +1121,7 @@ public class LoadingOrderReport extends AppCompatActivity {
                         order.setDestination(finalObject.getString("DESTINATION"));
                         order.setPicture(finalObject.getString("PIC"));
 
-                        if(!order.getPicture().equals("null")) {
+                        if (!order.getPicture().equals("null")) {
                             InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC")).openStream();
                             order.setPicBitmap(BitmapFactory.decodeStream(in));
                         }
@@ -1156,42 +1163,42 @@ public class LoadingOrderReport extends AppCompatActivity {
 //                            rowPics[k - 1] = pic;
 //                        }
 
-                        if(!picture.getPic1().equals("null")) {
-                            InputStream  in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC1")).openStream();
+                        if (!picture.getPic1().equals("null")) {
+                            InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC1")).openStream();
                             picture.setPic11(BitmapFactory.decodeStream(in));
                         }
 
-                        if(!picture.getPic2().equals("null")) {
+                        if (!picture.getPic2().equals("null")) {
                             InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC2")).openStream();
                             picture.setPic22(BitmapFactory.decodeStream(in));
                         }
 
-                        if(!picture.getPic3().equals("null")) {
+                        if (!picture.getPic3().equals("null")) {
                             InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC3")).openStream();
                             picture.setPic33(BitmapFactory.decodeStream(in));
                         }
 
-                        if(!picture.getPic4().equals("null")) {
+                        if (!picture.getPic4().equals("null")) {
                             InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC4")).openStream();
                             picture.setPic44(BitmapFactory.decodeStream(in));
                         }
 
-                        if(!picture.getPic5().equals("null")) {
+                        if (!picture.getPic5().equals("null")) {
                             InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC5")).openStream();
                             picture.setPic55(BitmapFactory.decodeStream(in));
                         }
 
-                        if(!picture.getPic6().equals("null")) {
+                        if (!picture.getPic6().equals("null")) {
                             InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC6")).openStream();
                             picture.setPic66(BitmapFactory.decodeStream(in));
                         }
 
-                        if(!picture.getPic7().equals("null")) {
+                        if (!picture.getPic7().equals("null")) {
                             InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC7")).openStream();
                             picture.setPic77(BitmapFactory.decodeStream(in));
                         }
 
-                        if(!picture.getPic8().equals("null")) {
+                        if (!picture.getPic8().equals("null")) {
                             InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC8")).openStream();
                             picture.setPic88(BitmapFactory.decodeStream(in));
                         }
@@ -1399,6 +1406,7 @@ public class LoadingOrderReport extends AppCompatActivity {
                                     && (orders.get(k).getPlacingNo().equals(localPlacingNo) || localPlacingNo.equals(""))
                                     && (orders.get(k).getOrderNo().equals(localOrderNo) || localOrderNo.equals(""))
                                     && (orders.get(k).getDateOfLoad().equals(localDate) || localDate.equals(""))) {
+
                                 filtered.add(orders.get(k));
                                 break;
                             }
@@ -1427,10 +1435,12 @@ public class LoadingOrderReport extends AppCompatActivity {
 ////                }
 //            }
             //Log.e("set 1", "" + filtered.size());
+
+
             HashSet<Orders> listToSet = new HashSet<Orders>(filtered);
             filtered.clear();
             filtered.addAll(listToSet);
-           // Log.e("set", "" + filtered.size());
+            // Log.e("set", "" + filtered.size());
             adapter2 = new LoadingOrderReportAdapter(LoadingOrderReport.this, filtered, bundles);
             list.setAdapter(adapter2);
 
