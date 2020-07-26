@@ -7,11 +7,12 @@
     android:background="@drawable/w10"
     tools:context=".stage_two.StageTwo">
 
-    <android.support.constraint.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/alpha_black_dark"
         android:orientation="vertical"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -23,16 +24,10 @@
             android:id="@+id/stage2_planned_packingList"
             android:layout_width="@dimen/stage3_views"
             android:layout_height="@dimen/stage3_views2"
-            android:layout_marginStart="@dimen/stage1_p_margin_start"
-            android:layout_marginLeft="@dimen/stage1_p_margin_start"
-            android:layout_marginTop="220dp"
             android:background="@drawable/frame_shape"
             android:gravity="center"
             android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.319"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            >
 
             <ImageView
                 android:layout_width="100dp"
@@ -58,8 +53,6 @@
             android:id="@+id/stage2_unload_packingList"
             android:layout_width="@dimen/stage3_views"
             android:layout_height="@dimen/stage3_views2"
-            android:layout_marginStart="@dimen/stage1_p_margin_start"
-            android:layout_marginLeft="@dimen/stage1_p_margin_start"
             android:layout_marginTop="@dimen/stage1_p_margin2_top"
             android:background="@drawable/border_background"
             android:gravity="center"
@@ -91,15 +84,14 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/stage1_reports"
+            android:id="@+id/stage2_loaded_packingList"
             android:layout_width="@dimen/stage3_views"
             android:layout_height="@dimen/stage3_views2"
-            android:layout_marginStart="@dimen/stage1_p_margin_start"
-            android:layout_marginLeft="@dimen/stage1_p_margin_start"
+
             android:layout_marginTop="@dimen/stage1_p_margin2_top"
             android:background="@drawable/frame_shape"
             android:gravity="center"
-            android:visibility="gone"
+            android:visibility="visible"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.318"
@@ -120,11 +112,11 @@
                 android:layout_margin="10dp"
                 android:fontFamily="serif"
                 android:gravity="center_horizontal"
-                android:text="Report 2"
+                android:text="Loaded Packing List Report"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
         </LinearLayout>
 
-    </android.support.constraint.ConstraintLayout>
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

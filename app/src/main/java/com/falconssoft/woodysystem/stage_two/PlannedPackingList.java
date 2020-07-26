@@ -80,11 +80,11 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
     private CustomerAdapter adapter;
     private SupplierAdapter adapter3;
     private PlannedListAdapter adapter2;
-    public static String customerName = "", customerNo = "", customerName2 = "", customerNo2 = "";
+    public static String customerName = "null", customerNo = "0", customerName2 = "null", customerNo2 = "0";
     public static String supplierName = "", supplierNo = "", supplierName2 = "", supplierNo2 = "";
-    private List<CustomerInfo> customers;
+    private static List<CustomerInfo> customers;
     private List<CustomerInfo> arraylist;
-    private List<SupplierInfo> suppliers;
+    private static List<SupplierInfo> suppliers;
     private List<SupplierInfo> arraylist2;
     private JSONObject plannedPLJObject;
     TextView customerD, supplierD;
@@ -99,12 +99,12 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
     private ArrayList<String> gradeList = new ArrayList<>();
     private ArrayAdapter<String> gradeAdapter;
     private Spinner gradeSpinner;
-    private String gradeText = "Fresh";
+    private static String gradeText = "Fresh";
     //TableRow tableRowToBeEdit;
     int flagIsChanged = 0;
     public static int noOfExist;
     boolean check = false;
-    int ind ;
+    int ind;
 
     public static List<PlannedPL> PlannedPLList = new ArrayList<>();
     public static List<PlannedPL> oldList = new ArrayList<>();
@@ -846,7 +846,9 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
         customerD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                flag = 2;
+                 flag = 2;
+                if (customers.size() == 0)
+                    new JSONTask().execute();
                 customersDialog();
             }
         });
@@ -855,6 +857,8 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
             @Override
             public void onClick(View v) {
                 flag2 = 2;
+                if (suppliers.size() == 0)
+                    new JSONTask5().execute();
                 suppliersDialog();
             }
         });
@@ -896,10 +900,10 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                                                     else {
 
 
-                                                        if(PlannedPLList.get(index).getNoOfPieces() == Double.parseDouble(piecesD.getText().toString())&&
+                                                        if (PlannedPLList.get(index).getNoOfPieces() == Double.parseDouble(piecesD.getText().toString()) &&
                                                                 PlannedPLList.get(index).getLength() == Double.parseDouble(lengthD.getText().toString()) &&
                                                                 PlannedPLList.get(index).getWidth() == Double.parseDouble(widthD.getText().toString()) &&
-                                                                PlannedPLList.get(index).getThickness() == Double.parseDouble(thickD.getText().toString()) ){
+                                                                PlannedPLList.get(index).getThickness() == Double.parseDouble(thickD.getText().toString())) {
                                                             // do nothing
                                                         } else {
                                                             PlannedPLList.get(index).setExist("null");
@@ -991,11 +995,11 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
                 if (!TextUtils.isEmpty(copy)) {                // ***************** edit this
 
-                    if(PlannedPLList.get(index).getExist().contains("Planned")){
-                        Log.e("****" , "in");
+                    if (PlannedPLList.get(index).getExist().contains("Planned")) {
+                        Log.e("****", "in");
                         if (Integer.parseInt(copy) <= (PlannedPLList.get(index).getNoOfExixt() + PlannedPLList.get(index).getNoOfCopies())) {
 
-                            PlannedPLList.get(index).setNoOfExixt((PlannedPLList.get(index).getNoOfExixt() + PlannedPLList.get(index).getNoOfCopies()) -Integer.parseInt(copy));
+                            PlannedPLList.get(index).setNoOfExixt((PlannedPLList.get(index).getNoOfExixt() + PlannedPLList.get(index).getNoOfCopies()) - Integer.parseInt(copy));
                             PlannedPLList.get(index).setNoOfCopies(Integer.parseInt(copy));
                             adapter2.notifyDataSetChanged();
                             calculateTotal();
@@ -1122,6 +1126,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                 String finalJson = sb.toString();
                 Log.e("finalJson*********", finalJson);
 
+                customers.add(new CustomerInfo("0" , "null"));
                 JSONObject parentObject = new JSONObject(finalJson);
 
                 try {
@@ -1490,6 +1495,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                 String finalJson = sb.toString();
                 Log.e("finalJson*********", finalJson);
 
+                //suppliers.add(new SupplierInfo("0" , "null"));
                 JSONObject parentObject = new JSONObject(finalJson);
 
                 try {

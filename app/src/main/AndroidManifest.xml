@@ -25,11 +25,7 @@
         </activity>
 
         <activity android:name=".stage_two.StageTwo">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <activity android:name=".EditLoadingReport" />
@@ -61,6 +57,11 @@
 
         <activity
             android:name=".stage_two.UnloadPackingList"
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden"/>
+
+        <activity
+            android:name=".stage_two.LoadPackingList"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="adjustNothing|stateAlwaysHidden"/>
 

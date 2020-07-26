@@ -92,7 +92,7 @@ public class PlannedListAdapter extends RecyclerView.Adapter<PlannedListAdapter.
         holder.isExist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (PlannedPL.get(i).getExist().equals("Not Exist"))
+               // if (PlannedPL.get(i).getExist().equals("Not Exist"))
                     plannedPL.closedResultsDialog(index);
                 }
             });

@@ -480,23 +480,28 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
             switch (view.getId()) {
                 case R.id.inventory_report_search_pList_box:
                     searchPackingList = String.valueOf(s);//formatDecimalValue(String.valueOf(s));
-                    filters();
+                    if (searchPackingList.length() >= 4)
+                        filters();
                     break;
                 case R.id.inventory_report_fromLength:
                     fromLengthNo = String.valueOf(s);//formatDecimalValue(String.valueOf(s));
-                    filters();
+                    if (fromLengthNo.length() >= 3)
+                        filters();
                     break;
                 case R.id.inventory_report_toLength:
                     toLengthNo = String.valueOf(s);//formatDecimalValue(String.valueOf(s));
-                    filters();
+                    if (toLengthNo.length() >= 3)
+                        filters();
                     break;
                 case R.id.inventory_report_fromWidth:
                     fromWidthNo = String.valueOf(s);//formatDecimalValue(String.valueOf(s));
-                    filters();
+                    if (fromWidthNo.length() >= 2)
+                        filters();
                     break;
                 case R.id.inventory_report_toWidth:
                     toWidthNo = String.valueOf(s);//formatDecimalValue(String.valueOf(s));
-                    filters();
+                    if (fromWidthNo.length() >= 2)
+                        filters();
                     break;
 //                case R.id.inventory_report_fromThick:
 //                    fromThicknessNo = String.valueOf(s);//formatDecimalValue(String.valueOf(s));
@@ -807,7 +812,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                 if (packingList.getText().toString().equals(""))
                     newPackingList = "null";
 
-                woodPresenter.updatePackingList(InventoryReport.this, bundleNumber, newPackingList, location, width, length, pieces, thickness ,oldBackinkList);
+                woodPresenter.updatePackingList(InventoryReport.this, bundleNumber, newPackingList, location, width, length, pieces, thickness, oldBackinkList);
                 adapter.notifyDataSetChanged();
                 packingListDialog.dismiss();
 
