@@ -143,4 +143,8 @@
     <string name="rejected_pieces"># Відхилено</string>
     <string name="main_info">Основна інформація</string>
     <string name="net">Чисті пачки</string>
+    <string name="f_w">F.W</string>
+    <string name="t_w">T.W</string>
+    <string name="f_l">F.L</string>
+    <string name="t_l">T.L</string>
 </resources>

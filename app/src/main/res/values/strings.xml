@@ -160,5 +160,9 @@
     <string name="acceptor">Acceptor</string>
     <string name="ttn">TTN</string>
     <string name="acceptance_loc">A.Location</string>
+    <string name="f_w">F.W</string>
+    <string name="t_w">T.W</string>
+    <string name="f_l">F.L</string>
+    <string name="t_l">T.L</string>
 
 </resources>

@@ -40,6 +40,8 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
     private RequestQueue requestQueue;
     private DatabaseHandler databaseHandler;
     private List<String> thickness = new ArrayList<>();
+    private List<String> length = new ArrayList<>();
+    private List<String> width = new ArrayList<>();
 
 //    private StringRequest jsonObjectRequest;
 //    private String urlImport;
@@ -241,6 +243,9 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                 bundleInfoServer.clear();
                 bundleInfoServer2.clear();
                 thickness.clear();
+                length.clear();
+                width.clear();
+
                 if (response.indexOf("{") == 3)
                     response = new String(response.getBytes("ISO-8859-1"), "UTF-8");
 //                    response = response.substring(response.indexOf("{"));
@@ -274,11 +279,14 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                         bundleInfoServer2.add(bundleInfo);
                         bundleInfoServer.add(bundleInfo);
                         thickness.add(String.valueOf(innerObject.getDouble("THICKNESS")));
+                        width.add(String.valueOf(innerObject.getDouble("WIDTH")));
+                        length.add(String.valueOf(innerObject.getDouble("LENGTH")));
+
                     }
                 }
 //                Log.e("bundleInfoServer", "/size/" + bundleInfoServer.size());
                 inventoryReport.filters();
-                inventoryReport.fillSpinnerAdapter(thickness);
+                inventoryReport.fillSpinnerAdapter(thickness, width, length);
                 showLog("Get Inventory Report Data", "thickness size" , "" + thickness.size());
 
 //                inventoryReport.fillTable(bundleInfoServer);
