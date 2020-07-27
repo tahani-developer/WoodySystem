@@ -76,6 +76,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
     private EditText thickness, width, length, noOfPieces, paclingList, destination, orderNo;
     private TextView searchCustomer, searchSupplier, addButton, saveButton, checkButton, addCust, addSupp, noBundles, totalCBM;
     private TableLayout headerTableLayout;
+    TableRow tableHeader;
     private TableRow tableRow;
     private CustomerAdapter adapter;
     private SupplierAdapter adapter3;
@@ -1495,7 +1496,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                 String finalJson = sb.toString();
                 Log.e("finalJson*********", finalJson);
 
-                //suppliers.add(new SupplierInfo("0" , "null"));
+                suppliers.add(new SupplierInfo("0" , "null"));
                 JSONObject parentObject = new JSONObject(finalJson);
 
                 try {
@@ -1826,6 +1827,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
         gradeSpinner = findViewById(R.id.grade);
         noBundles = findViewById(R.id.no_bundles);
         totalCBM = findViewById(R.id.total_cbm);
+        tableHeader = findViewById(R.id.table_header);
 
         recycler = findViewById(R.id.recycler);
         recycler.setLayoutManager(new LinearLayoutManager(this));

@@ -16,7 +16,7 @@ import com.falconssoft.woodysystem.stage_one.GenerateBarCode;
 
 public class StageTwo extends AppCompatActivity implements View.OnClickListener {
 
-    private LinearLayout plannedPackingLis,  unloadPackingLis, loadedPackingLis;
+    private LinearLayout plannedPackingLis,  unloadPackingLis, loadedPackingLis, plannedUnplannedList;
     private Animation animation;
 
     @Override
@@ -27,10 +27,12 @@ public class StageTwo extends AppCompatActivity implements View.OnClickListener 
         plannedPackingLis = findViewById(R.id.stage2_planned_packingList);
         unloadPackingLis = findViewById(R.id.stage2_unload_packingList);
         loadedPackingLis = findViewById(R.id.stage2_loaded_packingList);
+        plannedUnplannedList = findViewById(R.id.stage2_planned_unplanned_packingList);
 
         plannedPackingLis.setOnClickListener(this);
         unloadPackingLis.setOnClickListener(this);
         loadedPackingLis.setOnClickListener(this);
+        plannedUnplannedList.setOnClickListener(this);
 
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
         plannedPackingLis.setAnimation(animation);
@@ -40,6 +42,9 @@ public class StageTwo extends AppCompatActivity implements View.OnClickListener 
 
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
         loadedPackingLis.setAnimation(animation);
+
+        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
+        plannedUnplannedList.setAnimation(animation);
     }
 
 
@@ -58,6 +63,10 @@ public class StageTwo extends AppCompatActivity implements View.OnClickListener 
             case R.id.stage2_loaded_packingList: // report2
                 Intent intent3 = new Intent(this, LoadPackingList.class);
                 startActivity(intent3);
+                break;
+            case R.id.stage2_planned_unplanned_packingList: // report3
+                Intent intent4 = new Intent(this, LoadPackingList.class);
+                startActivity(intent4);
                 break;
 
         }
