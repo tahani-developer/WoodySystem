@@ -217,12 +217,12 @@
             app:layout_constraintTop_toBottomOf="@+id/inventory_report_linear2">
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="45dp"
                 android:layout_gravity="center"
                 android:layout_marginRight="5dp"
                 android:layout_marginEnd="5dp"
-                android:layout_weight="1"
+                android:layout_weight="0.5"
                 android:background="@drawable/shape_with_corner"
                 android:orientation="horizontal"
                 android:paddingEnd="5dp"
@@ -340,9 +340,10 @@
                     android:gravity="center"
                     android:inputType="number"
                     android:textSize="15sp"
-                    android:hint="@string/from"/>
+                    android:hint="@string/f_w"/>
 
                 <TextView
+                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="0.5"
@@ -352,6 +353,13 @@
                     android:textColor="@color/white"
                     android:textSize="18sp" />
 
+                <Spinner
+                    android:id="@+id/inventory_report_width_spinner"
+                    android:background="@color/orange"
+                    android:layout_weight="0.5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+
                 <EditText
                     android:id="@+id/inventory_report_toWidth"
                     android:layout_width="0dp"
@@ -360,7 +368,7 @@
                     android:gravity="center"
                     android:inputType="number"
                     android:textSize="15sp"
-                    android:hint="@string/to"/>
+                    android:hint="@string/t_w"/>
 
             </LinearLayout>
 
@@ -381,9 +389,10 @@
                     android:inputType="number"
                     android:gravity="center"
                     android:textSize="15sp"
-                    android:hint="@string/from"/>
+                    android:hint="@string/f_l"/>
 
                 <TextView
+                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="0.5"
@@ -393,6 +402,13 @@
                     android:textColor="@color/white"
                     android:textSize="18sp" />
 
+                <Spinner
+                    android:id="@+id/inventory_report_length_spinner"
+                    android:background="@color/orange"
+                    android:layout_weight="0.5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+
                 <EditText
                     android:id="@+id/inventory_report_toLength"
                     android:layout_width="0dp"
@@ -401,7 +417,7 @@
                     android:gravity="center"
                     android:inputType="number"
                     android:textSize="15sp"
-                    android:hint="@string/to"/>
+                    android:hint="@string/t_l"/>
 
 
             </LinearLayout>
@@ -493,7 +509,7 @@
                 android:fontFamily="serif"
                 android:text="@string/serial"
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:layout_marginEnd="1dp"
                 android:layout_marginRight="1dp" />
 
@@ -505,7 +521,7 @@
                 android:fontFamily="serif"
                 android:text="@string/bundle_no"
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:layout_marginEnd="1dp"
                 android:layout_marginRight="1dp" />
 
@@ -525,7 +541,7 @@
                     android:fontFamily="serif"
                     android:text="T"
                     android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/inventory_report_thick_order"
@@ -555,7 +571,7 @@
                     android:fontFamily="serif"
                     android:text="W"
                     android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/inventory_report_width_order"
@@ -586,7 +602,7 @@
                     android:fontFamily="serif"
                     android:text="L"
                     android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/inventory_report_length_order"
@@ -608,7 +624,7 @@
                 android:fontFamily="serif"
                 android:text="@string/no_pieces"
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:layout_marginEnd="1dp"
                 android:layout_marginRight="1dp" />
 
@@ -620,7 +636,7 @@
                 android:fontFamily="serif"
                 android:text="@string/grade"
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:layout_marginEnd="1dp"
                 android:layout_marginRight="1dp"/>
 
@@ -632,7 +648,7 @@
                 android:fontFamily="serif"
                 android:text="@string/loc"
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:layout_marginEnd="1dp"
                 android:layout_marginRight="1dp" />
 
@@ -644,7 +660,7 @@
                 android:fontFamily="serif"
                 android:text="@string/area"
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:layout_marginEnd="1dp"
                 android:layout_marginRight="1dp" />
 
@@ -656,7 +672,7 @@
                 android:fontFamily="serif"
                 android:text="@string/p_list"
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:layout_marginEnd="1dp"
                 android:layout_marginRight="1dp"/>
 

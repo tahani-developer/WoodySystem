@@ -131,14 +131,17 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private WoodPresenter woodPresenter;
     private Animation animation;
     private TextView textView, noOfBundles, noOfPieces, cubicField, deleteAll, dateFrom, dateTo, thicknessOrder, widthOrder, lengthOrder, searchPListTool, searchSerialTool;
-    private Spinner location, area, ordered, pList, grade, thicknessSpinner;
+    private Spinner location, area, ordered, pList, grade, thicknessSpinner, widthSpinner, lengthSpinner;
     private ArrayAdapter<String> locationAdapter;
     private ArrayAdapter<String> areaAdapter;
     private ArrayAdapter<String> orderedAdapter;
     private ArrayAdapter<String> gradeAdapter;
     private ArrayAdapter<String> plAdapter;
     private ArrayAdapter<String> thicknessAdapter;
-    private String loc = "All", areaField = "All", orderedField = "All", plField = "All", gradeFeld = "All", thicknessField = "All", serialString = "All";
+    private ArrayAdapter<String> widthAdapter;
+    private ArrayAdapter<String> lengthAdapter;
+    private String loc = "All", areaField = "All", orderedField = "All", plField = "All", gradeFeld = "All", thicknessField = "All"
+            , serialString = "All", widthField = "All", lengthField = "All";
 
     private Settings generalSettings;
     private Calendar calendar;
@@ -190,6 +193,8 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         location.setOnItemSelectedListener(this);
         area.setOnItemSelectedListener(this);
         thicknessSpinner.setOnItemSelectedListener(this);
+        widthSpinner.setOnItemSelectedListener(this);
+        lengthSpinner.setOnItemSelectedListener(this);
 //        ordered.setOnItemSelectedListener(this);
         pList.setOnItemSelectedListener(this);
         grade.setOnItemSelectedListener(this);
@@ -367,6 +372,9 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         toLength = findViewById(R.id.inventory_report_toLength);
         fromWidth = findViewById(R.id.inventory_report_fromWidth);
         toWidth = findViewById(R.id.inventory_report_toWidth);
+        lengthSpinner = findViewById(R.id.inventory_report_length_spinner);
+        widthSpinner = findViewById(R.id.inventory_report_width_spinner);
+
 //        fromThickness = findViewById(R.id.inventory_report_fromThick);
 //        toThickness = findViewById(R.id.inventory_report_toThick);
         listView = findViewById(R.id.list);
@@ -394,15 +402,27 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         Log.e("inventory report", method + "/" + key + "/" + value);
     }
 
-    public void fillSpinnerAdapter(List<String> thicknessList) {
+    public void fillSpinnerAdapter(List<String> thicknessList, List<String> widthList, List<String> lengthList) {
 
         locationList.clear();
         areaList.clear();
         plList.clear();
         gradeList.clear();
-        showLog("fillSpinnerAdapter", "thickness size", "" + thicknessList.size());
+//        showLog("fillSpinnerAdapter", "thickness size", "" + thicknessList.size());
         removeDuplicate(thicknessList);
-        showLog("fillSpinnerAdapter", "thickness size", "" + thicknessList.size());
+        removeDuplicate(widthList);
+        removeDuplicate(lengthList);
+//        showLog("fillSpinnerAdapter", "thickness size", "" + thicknessList.size());
+
+        lengthList.add(0, "All");
+        lengthAdapter = new ArrayAdapter<>(this, R.layout.spinner_layout, lengthList);
+        lengthAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
+        lengthSpinner.setAdapter(lengthAdapter);
+
+        widthList.add(0, "All");
+        widthAdapter = new ArrayAdapter<>(this, R.layout.spinner_layout, widthList);
+        widthAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
+        widthSpinner.setAdapter(widthAdapter);
 
         thicknessList.add(0, "All");
         thicknessAdapter = new ArrayAdapter<>(this, R.layout.spinner_layout, thicknessList);
@@ -747,21 +767,25 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                                             if (toWidthNo.equals("") || ((dateFiltered.get(k).getWidth() < Double.parseDouble(toWidthNo))
                                                     || dateFiltered.get(k).getWidth() == Double.parseDouble(toWidthNo)))
 
-                                                if (thicknessField.equals("All") || thicknessField.equals(String.valueOf(dateFiltered.get(k).getThickness()))) {
+                                                if (thicknessField.equals("All") || thicknessField.equals(String.valueOf(dateFiltered.get(k).getThickness())))
+
+                                                    if (widthField.equals("All") || widthField.equals(String.valueOf(dateFiltered.get(k).getWidth())))
+
+                                                        if (lengthField.equals("All") || lengthField.equals(String.valueOf(dateFiltered.get(k).getLength()))) {
 //                                            if (fromThicknessNo.equals("") || ((dateFiltered.get(k).getThickness() > Double.parseDouble(fromThicknessNo))
 //                                                    || dateFiltered.get(k).getThickness() == Double.parseDouble(fromThicknessNo)))
 //
 //                                                if (toThicknessNo.equals("") || ((dateFiltered.get(k).getThickness() < Double.parseDouble(toThicknessNo))
 //                                                        || dateFiltered.get(k).getThickness() == Double.parseDouble(toThicknessNo)))
-                                                    if (searchPackingList.equals("") || ((dateFiltered.get(k).getBackingList().contains(searchPackingList)))) {
-                                                        filtered.add(dateFiltered.get(k));
+                                                            if (searchPackingList.equals("") || ((dateFiltered.get(k).getBackingList().contains(searchPackingList)))) {
+                                                                filtered.add(dateFiltered.get(k));
 
-                                                        sumOfBundles = filtered.size();
-                                                        sumOfPieces += dateFiltered.get(k).getNoOfPieces();
-                                                        sumOfCubic += (dateFiltered.get(k).getLength() * dateFiltered.get(k).getWidth() * dateFiltered.get(k).getThickness() * dateFiltered.get(k).getNoOfPieces());
+                                                                sumOfBundles = filtered.size();
+                                                                sumOfPieces += dateFiltered.get(k).getNoOfPieces();
+                                                                sumOfCubic += (dateFiltered.get(k).getLength() * dateFiltered.get(k).getWidth() * dateFiltered.get(k).getThickness() * dateFiltered.get(k).getNoOfPieces());
 
-                                                    }
-                                                }
+                                                            }
+                                                        }
                             }
                         }
                     }
@@ -1014,7 +1038,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                     plField = "1";
                 else if (plField.equals("Not P_List"))
                     plField = "0";
-                Log.e("P_Listpinner", plField);
+//                Log.e("P_Listpinner", plField);
                 filters();
                 break;
             case R.id.inventory_report_grade:
@@ -1023,6 +1047,14 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                 break;
             case R.id.inventory_report_thick_spinner:
                 thicknessField = parent.getSelectedItem().toString();
+                filters();
+                break;
+            case R.id.inventory_report_width_spinner:
+                widthField = parent.getSelectedItem().toString();
+                filters();
+                break;
+            case R.id.inventory_report_length_spinner:
+                lengthField = parent.getSelectedItem().toString();
                 filters();
                 break;
         }
