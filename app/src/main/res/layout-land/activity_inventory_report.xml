@@ -222,7 +222,7 @@
                 android:layout_gravity="center"
                 android:layout_marginRight="5dp"
                 android:layout_marginEnd="5dp"
-                android:layout_weight="0.5"
+                android:layout_weight="0.3"
                 android:background="@drawable/shape_with_corner"
                 android:orientation="horizontal"
                 android:paddingEnd="5dp"
@@ -263,7 +263,7 @@
                 android:layout_gravity="center"
                 android:layout_marginRight="5dp"
                 android:layout_marginEnd="5dp"
-                android:layout_weight="1"
+                android:layout_weight="0.8"
                 android:background="@drawable/shape_with_corner"
                 android:orientation="horizontal"
                 android:visibility="visible"
@@ -340,7 +340,7 @@
                     android:gravity="center"
                     android:inputType="number"
                     android:textSize="15sp"
-                    android:hint="@string/f_w"/>
+                    android:hint="@string/from"/>
 
                 <TextView
                     android:visibility="gone"
@@ -353,12 +353,31 @@
                     android:textColor="@color/white"
                     android:textSize="18sp" />
 
-                <Spinner
-                    android:id="@+id/inventory_report_width_spinner"
-                    android:background="@color/orange"
+                <LinearLayout
                     android:layout_weight="0.5"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:background="@color/orange">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1.2"
+                        android:background="@drawable/frame_shape"
+                        android:fontFamily="serif"
+                        android:text="@string/width"
+                        android:textColor="@color/white"
+                        android:textSize="13sp" />
+
+                    <Spinner
+                        android:id="@+id/inventory_report_width_spinner"
+                        android:background="@color/orange"
+                        android:layout_weight="2"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp" />
+
+                </LinearLayout>
 
                 <EditText
                     android:id="@+id/inventory_report_toWidth"
@@ -368,7 +387,7 @@
                     android:gravity="center"
                     android:inputType="number"
                     android:textSize="15sp"
-                    android:hint="@string/t_w"/>
+                    android:hint="to"/>
 
             </LinearLayout>
 
@@ -389,7 +408,7 @@
                     android:inputType="number"
                     android:gravity="center"
                     android:textSize="15sp"
-                    android:hint="@string/f_l"/>
+                    android:hint="@string/from"/>
 
                 <TextView
                     android:visibility="gone"
@@ -402,12 +421,31 @@
                     android:textColor="@color/white"
                     android:textSize="18sp" />
 
-                <Spinner
-                    android:id="@+id/inventory_report_length_spinner"
-                    android:background="@color/orange"
+                <LinearLayout
                     android:layout_weight="0.5"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:background="@color/orange">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1.2"
+                        android:background="@drawable/frame_shape"
+                        android:fontFamily="serif"
+                        android:text="@string/length"
+                        android:textColor="@color/white"
+                        android:textSize="13sp" />
+
+                    <Spinner
+                        android:id="@+id/inventory_report_length_spinner"
+                        android:background="@color/orange"
+                        android:layout_weight="2"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp" />
+
+                </LinearLayout>
 
                 <EditText
                     android:id="@+id/inventory_report_toLength"
@@ -417,7 +455,7 @@
                     android:gravity="center"
                     android:inputType="number"
                     android:textSize="15sp"
-                    android:hint="@string/t_l"/>
+                    android:hint="@string/to"/>
 
 
             </LinearLayout>
@@ -429,7 +467,7 @@
                 android:layout_gravity="center"
                 android:layout_marginRight="5dp"
                 android:layout_marginEnd="5dp"
-                android:layout_weight="1.2"
+                android:layout_weight="1"
                 android:background="@drawable/shape_with_corner"
                 android:orientation="horizontal"
                 android:paddingEnd="5dp"

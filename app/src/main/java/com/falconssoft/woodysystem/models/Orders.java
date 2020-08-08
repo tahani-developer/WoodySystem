@@ -26,12 +26,14 @@ public class Orders implements Serializable {
     private String picture;
     private boolean checked;
     private Bitmap picBitmap;
+    private String packingList;
+    private String customer;
 
     public Orders() {
     }
 
-    public Orders(Double thickness, Double length, Double width, String grade, Double noOfPieces, String bundleNo, String location, String area
-            , String placingNo, String orderNo, String containerNo, String dateOfLoad, String destination, String picture) {
+    public Orders(Double thickness,  Double width ,Double length, String grade, Double noOfPieces, String bundleNo, String location, String area
+            , String placingNo, String orderNo, String containerNo, String dateOfLoad, String destination, String picture, String packingList, String customer) {
         this.thickness = thickness;
         this.length = length;
         this.width = width;
@@ -46,6 +48,8 @@ public class Orders implements Serializable {
         this.dateOfLoad = dateOfLoad;
         this.destination = destination;
         this.picture = picture;
+        this.packingList = packingList;
+        this.customer = customer;
     }
 
     public boolean isChecked() {
@@ -176,6 +180,22 @@ public class Orders implements Serializable {
         this.picBitmap = picBitmap;
     }
 
+    public String getPackingList() {
+        return packingList;
+    }
+
+    public void setPackingList(String packingList) {
+        this.packingList = packingList;
+    }
+
+    public String getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(String customer) {
+        this.customer = customer;
+    }
+
     public JSONObject getJSONObject() {
         JSONObject obj = new JSONObject();
 
@@ -194,6 +214,8 @@ public class Orders implements Serializable {
             obj.put("DATE_OF_LOAD", "'" +dateOfLoad+ "'");
             obj.put("DESTINATION", "'" +destination+ "'");
             obj.put("PIC", "'" +picture+ "'");
+            obj.put("PACKING_LIST", "'" +packingList+ "'");
+            obj.put("CUSTOMER", "'" +customer+ "'");
 
 
         } catch (JSONException e) {

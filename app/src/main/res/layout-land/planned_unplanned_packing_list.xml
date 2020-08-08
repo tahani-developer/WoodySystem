@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/wooddecor"
-    tools:context=".stage_one.AddNewRaw">
+    tools:context=".stage_one.AddNewRaw"
+    tools:ignore="MissingDefaultResource">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -41,234 +42,291 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/addNewRaw_linearLayoutHeader"
+            android:id="@+id/inventory_report_linear3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="10dp"
-            android:visibility="visible"
-            >
+            android:layout_marginVertical="5dp"
+            android:layout_marginHorizontal="5dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/inventory_report_linear2">
 
             <LinearLayout
-                android:id="@+id/mar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
-                android:orientation="horizontal">
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_with_corner"
+                android:orientation="horizontal"
+                android:paddingEnd="5dp"
+                android:paddingRight="5dp">
 
-                <LinearLayout
-                    android:id="@+id/addNewRaw_linear_two"
-                    android:layout_width="0dp"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/shape_with_corner"
-                    android:orientation="horizontal"
-                    android:padding="5dp">
+                    android:fontFamily="serif"
+                    android:paddingTop="10dp"
+                    android:paddingStart="10dp"
+                    android:paddingLeft="10dp"
+                    android:text="Type"
+                    android:textSize="15sp" />
 
-                    <TextView
-                        android:id="@+id/textView7"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="serif"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:text="@string/cust"
-                        android:textSize="17sp" />
-
-                    <TextView
-                        android:id="@+id/cust"
-                        android:layout_width="wrap_content"
-                        android:layout_height="45dp"
-                        android:textSize="15sp"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginEnd="5dp"
-                        android:layout_marginRight="5dp"
-                        android:layout_weight="10"
-                        android:gravity="start|left"
-                        android:hint="@string/search" />
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/shape_with_corner"
-                    android:orientation="horizontal"
-                    android:padding="5dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="serif"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:text="@string/supplier_name"
-                        android:textSize="17sp" />
-
-                    <TextView
-                        android:id="@+id/sup"
-                        android:layout_width="wrap_content"
-                        android:layout_height="45dp"
-                        android:textSize="15sp"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginEnd="5dp"
-                        android:layout_marginRight="5dp"
-                        android:layout_weight="10"
-                        android:gravity="start|left"
-                        android:hint="@string/search" />
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
+                <Spinner
+                    android:id="@+id/planned_unplanned"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-
+                    android:layout_marginStart="10dp"
                     android:layout_weight="1"
-                    android:background="@drawable/shape_with_corner"
-                    android:orientation="horizontal"
-                    android:padding="5dp">
+                    android:paddingTop="10dp"
+                    android:visibility="visible"
+                    android:layout_marginLeft="5dp" />
 
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_with_corner"
+                android:orientation="horizontal"
+                android:visibility="visible"
+                android:paddingVertical="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="serif"
+                    android:paddingLeft="5dp"
+                    android:text="@string/thickness"
+                    android:textSize="15sp" />
+
+                <Spinner
+                    android:id="@+id/inventory_report_thick_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:visibility="gone"
+                android:background="@drawable/shape_with_corner"
+                android:gravity="center">
+
+                <EditText
+                    android:id="@+id/inventory_report_fromThick"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:hint="@string/from"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/frame_shape"
+                    android:fontFamily="serif"
+                    android:text="Th"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/inventory_report_toThick"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:hint="@string/to"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1.2"
+                android:background="@drawable/shape_with_corner"
+                android:gravity="center">
+
+                <EditText
+                    android:id="@+id/inventory_report_fromWidth"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:textSize="15sp"
+                    android:hint="from"/>
+
+                <TextView
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/frame_shape"
+                    android:fontFamily="serif"
+                    android:text="W"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+                <LinearLayout
+                    android:layout_weight="0.5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:background="@color/orange">
 
                     <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1.2"
+                        android:background="@drawable/frame_shape"
                         android:fontFamily="serif"
-                        android:layout_gravity="center_vertical"
-                        android:text="@string/grade"
-                        android:textSize="18sp" />
+                        android:text="@string/width"
+                        android:textColor="@color/white"
+                        android:textSize="13sp" />
 
                     <Spinner
-                        android:id="@+id/grade"
-                        android:layout_width="0dp"
-                        android:layout_height="45dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="1" />
+                        android:id="@+id/inventory_report_width_spinner"
+                        android:background="@color/orange"
+                        android:layout_weight="2"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp" />
 
                 </LinearLayout>
+
+
+
+                <EditText
+                    android:id="@+id/inventory_report_toWidth"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:textSize="15sp"
+                    android:hint="to"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1.2"
+                android:background="@drawable/shape_with_corner"
+                android:gravity="center">
+
+                <EditText
+                    android:id="@+id/inventory_report_fromLength"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:inputType="number"
+                    android:gravity="center"
+                    android:textSize="15sp"
+                    android:hint="from"/>
+
+                <TextView
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/frame_shape"
+                    android:fontFamily="serif"
+                    android:text="L"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+                <LinearLayout
+                    android:layout_weight="0.5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:background="@color/orange">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1.2"
+                        android:background="@drawable/frame_shape"
+                        android:fontFamily="serif"
+                        android:text="@string/length"
+                        android:textColor="@color/white"
+                        android:textSize="13sp" />
+
+                    <Spinner
+                        android:id="@+id/inventory_report_length_spinner"
+                        android:background="@color/orange"
+                        android:layout_weight="2"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp" />
+
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/inventory_report_toLength"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:textSize="15sp"
+                    android:hint="to"/>
 
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
-                android:orientation="horizontal">
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1.2"
+                android:background="@drawable/shape_with_corner"
+                android:orientation="horizontal"
+                android:paddingEnd="5dp"
+                android:paddingRight="5dp">
 
-                <LinearLayout
-                    android:id="@+id/addNewRaw_linear_five"
-                    android:layout_width="0dp"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="serif"
+                    android:paddingTop="10dp"
+                    android:paddingStart="10dp"
+                    android:paddingLeft="10dp"
+                    android:text="@string/grade"
+                    android:textSize="15sp" />
+
+                <Spinner
+                    android:id="@+id/grade"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
                     android:layout_weight="1"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginRight="5dp"
-                    android:background="@drawable/shape_with_corner"
-                    android:orientation="horizontal"
-                    android:padding="5dp">
-
-                    <TextView
-                        android:id="@+id/textView2"
-                        android:layout_width="150dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/p_list"
-                        android:fontFamily="serif"
-                        android:textSize="18sp" />
-
-                    <EditText
-                        android:id="@+id/p_list"
-                        android:layout_width="wrap_content"
-                        android:layout_height="45dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="2"
-                        android:ems="10"
-                        android:singleLine="true"
-                        android:nextFocusDown="@id/destination" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginRight="5dp"
-                    android:background="@drawable/shape_with_corner"
-                    android:orientation="horizontal"
-                    android:padding="5dp">
-
-                    <TextView
-                        android:layout_width="150dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="dest"
-                        android:fontFamily="serif"
-                        android:textSize="18sp" />
-
-                    <EditText
-                        android:id="@+id/destination"
-                        android:layout_width="wrap_content"
-                        android:layout_height="45dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="2"
-                        android:ems="10"
-                        android:singleLine="true"
-                        android:nextFocusDown="@id/destination" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/shape_with_corner"
-                    android:orientation="horizontal"
-                    android:padding="5dp">
-
-                    <TextView
-                        android:layout_width="150dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/order_no"
-                        android:fontFamily="serif"
-                        android:textSize="18sp" />
-
-                    <EditText
-                        android:id="@+id/order_no"
-                        android:layout_width="wrap_content"
-                        android:layout_height="45dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="2"
-                        android:ems="10"
-                        android:singleLine="true"
-                        android:nextFocusDown="@id/destination" />
-                </LinearLayout>
+                    android:paddingTop="10dp"
+                    android:visibility="visible"
+                    android:layout_marginLeft="5dp" />
 
 
             </LinearLayout>
-
 
         </LinearLayout>
 
@@ -317,7 +375,7 @@
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="1"
+                            android:layout_weight="2"
                             android:fontFamily="serif"
                             android:text="T"
                             android:textColor="@color/white"
@@ -347,7 +405,7 @@
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="1"
+                            android:layout_weight="2"
                             android:fontFamily="serif"
                             android:text="W"
                             android:textColor="@color/white"
@@ -378,7 +436,7 @@
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="1"
+                            android:layout_weight="2"
                             android:fontFamily="serif"
                             android:text="L"
                             android:textColor="@color/white"
@@ -570,24 +628,6 @@
                 android:layout_weight="0.5"
                 android:orientation="horizontal"
                 android:gravity="end">
-
-                <TextView
-                    android:id="@+id/delete"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:layout_marginTop="1dp"
-                    android:layout_marginEnd="7dp"
-                    android:layout_marginRight="7dp"
-                    android:background="@drawable/frame_shape"
-                    android:fontFamily="serif"
-                    android:paddingStart="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingEnd="10dp"
-                    android:paddingRight="10dp"
-                    android:text="@string/loaded"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="18sp" />
 
             </LinearLayout>
 

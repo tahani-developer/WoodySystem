@@ -24,6 +24,7 @@ public class PlannedPL {
     private int loaded;
     private double cubic;
     private String grade;
+    private int isOld;
 
     public PlannedPL(String custName, String custNo, String packingList, String destination, String orderNo, double thickness, double width, double length, double noOfPieces, String date) {
         this.custName = custName;
@@ -184,6 +185,14 @@ public class PlannedPL {
 
     public void setGrade(String grade) {
         this.grade = grade;
+    }
+
+    public int getIsOld() {
+        return isOld;
+    }
+
+    public void setIsOld(int isOld) {
+        this.isOld = isOld;
     }
 
     public JSONObject getJSONObject() {

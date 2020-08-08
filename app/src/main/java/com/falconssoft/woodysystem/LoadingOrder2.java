@@ -304,7 +304,9 @@ public class LoadingOrder2 extends AppCompatActivity {
                             , containerNo.getText().toString()
                             , dateOfLoad.getText().toString()
                             , destination.getText().toString()
-                            , bundles.get(i).getPicture());
+                            , bundles.get(i).getPicture()
+                            , bundles.get(i).getBackingList()
+                            , bundles.get(i).getCustomer());
                     databaseHandler.addOrder(order);
 
 //                    Log.e("**********", "" + bundles.get(i).getPicture().length());
@@ -330,7 +332,7 @@ public class LoadingOrder2 extends AppCompatActivity {
 
                 new JSONTask().execute();
 
-                new Handler(Looper.getMainLooper()).post(new Runnable(){
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
                         searchBar.setText("2");
@@ -446,29 +448,29 @@ public class LoadingOrder2 extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        if(pics.get(0) != null)
+        if (pics.get(0) != null)
             img1.setImageBitmap(StringToBitMap(pics.get(0)));
 
-        if(pics.get(1) != null)
-        img2.setImageBitmap(StringToBitMap(pics.get(1)));
+        if (pics.get(1) != null)
+            img2.setImageBitmap(StringToBitMap(pics.get(1)));
 
-        if(pics.get(2) != null)
-        img3.setImageBitmap(StringToBitMap(pics.get(2)));
+        if (pics.get(2) != null)
+            img3.setImageBitmap(StringToBitMap(pics.get(2)));
 
-        if(pics.get(3) != null)
-        img4.setImageBitmap(StringToBitMap(pics.get(3)));
+        if (pics.get(3) != null)
+            img4.setImageBitmap(StringToBitMap(pics.get(3)));
 
-        if(pics.get(4) != null)
-        img5.setImageBitmap(StringToBitMap(pics.get(4)));
+        if (pics.get(4) != null)
+            img5.setImageBitmap(StringToBitMap(pics.get(4)));
 
-        if(pics.get(5) != null)
-        img6.setImageBitmap(StringToBitMap(pics.get(5)));
+        if (pics.get(5) != null)
+            img6.setImageBitmap(StringToBitMap(pics.get(5)));
 
-        if(pics.get(6) != null)
-        img7.setImageBitmap(StringToBitMap(pics.get(6)));
+        if (pics.get(6) != null)
+            img7.setImageBitmap(StringToBitMap(pics.get(6)));
 
-        if(pics.get(7) != null)
-        img8.setImageBitmap(StringToBitMap(pics.get(7)));
+        if (pics.get(7) != null)
+            img8.setImageBitmap(StringToBitMap(pics.get(7)));
     }
 
     public DatePickerDialog.OnDateSetListener openDatePickerDialog(final int flag) {
@@ -625,7 +627,7 @@ public class LoadingOrder2 extends AppCompatActivity {
 
             if (s != null) {
                 if (s.contains("BUNDLE_ORDER SUCCESS")) {
-pics.clear();
+                    pics.clear();
                     Log.e("tag", "****Success");
                 } else {
                     Log.e("tag", "****Failed to export data");

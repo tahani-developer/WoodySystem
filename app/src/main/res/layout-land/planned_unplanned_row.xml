@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linear"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="2dp"
+    android:orientation="horizontal"
+    tools:ignore="MissingDefaultResource">
+
+
+    <TextView
+        android:id="@+id/thick"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="1dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="1dp"
+        android:layout_weight="0.7"
+        android:background="@color/light_orange"
+        android:gravity="center"
+        android:hint="thick"
+        android:paddingVertical="7dp"
+        android:textColor="@color/gray_dark_one"
+        android:textColorHint="#474444"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/width"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="1dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="1dp"
+        android:layout_weight="0.7"
+        android:background="@color/light_orange"
+        android:gravity="center"
+        android:hint="width"
+        android:textColor="@color/gray_dark_one"
+        android:textColorHint="#474444"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/length"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="1dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="1dp"
+        android:layout_weight="0.7"
+        android:background="@color/light_orange"
+        android:gravity="center"
+        android:hint="length"
+        android:paddingVertical="7dp"
+        android:textColor="@color/gray_dark_one"
+        android:textColorHint="#474444"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/pieces"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="1dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="1dp"
+        android:layout_weight="0.7"
+        android:background="@color/light_orange"
+        android:gravity="center"
+        android:hint="# pieces"
+        android:paddingVertical="7dp"
+        android:textColor="@color/gray_dark_one"
+        android:textColorHint="#474444"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/grade"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="1dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="1dp"
+        android:layout_weight="0.7"
+        android:background="@color/light_orange"
+        android:gravity="center"
+        android:hint="grade"
+        android:paddingVertical="7dp"
+        android:textColor="@color/gray_dark_one"
+        android:textColorHint="#474444"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/copies"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="1dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="1dp"
+        android:layout_weight="0.7"
+        android:background="@color/light_orange"
+        android:gravity="center"
+        android:hint="# bundles"
+        android:paddingVertical="7dp"
+        android:textColor="@color/gray_dark_one"
+        android:textColorHint="#474444"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/cubic"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="1dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="1dp"
+        android:layout_weight="0.7"
+        android:background="@color/light_orange"
+        android:gravity="center"
+        android:hint="cubic"
+        android:paddingVertical="7dp"
+        android:textColor="@color/gray_dark_one"
+        android:textColorHint="#474444"
+        android:textSize="15sp" />
+
+</LinearLayout>

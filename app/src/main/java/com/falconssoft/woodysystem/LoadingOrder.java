@@ -343,10 +343,7 @@ public class LoadingOrder extends AppCompatActivity {
         finish();
     }
 
-    public  void Refresh(Activity activity){
-//        Intent reOpen = new Intent (LoadingOrder, LoadingOrder.class);
-//        startActivity(reOpen);
-    }
+
 
     private class JSONTask extends AsyncTask<String, String, List<BundleInfo>> {
 
@@ -404,6 +401,7 @@ public class LoadingOrder extends AppCompatActivity {
                             bundleInfo.setOrdered(innerObject.getInt("ORDERED"));
                             bundleInfo.setAddingDate(innerObject.getString("BUNDLE_DATE"));
                             bundleInfo.setBackingList(innerObject.getString("BACKING_LIST"));
+                            bundleInfo.setCustomer(innerObject.getString("CUSTOMER"));
                             bundleInfo.setChecked(false);
                             bundleInfo.setFoucoseColor("0");
 
