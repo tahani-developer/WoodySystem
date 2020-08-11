@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/w10"
-    tools:context=".stage_two.StageTwo">
+    tools:context=".stage_two.StageTwoReports">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,23 +20,30 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0">
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginVertical="40dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            >
+
             <LinearLayout
-                android:id="@+id/stage2_planned_packingList"
-                android:layout_width="@dimen/stage3_views"
-                android:layout_height="@dimen/stage3_views2"
-                android:layout_marginTop="@dimen/stage3_p_margin_top"
-                android:background="@drawable/frame_shape"
+                android:id="@+id/stage2_unload_packingList"
+                android:layout_width="250dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1"
+                android:background="@drawable/border_background"
                 android:gravity="center"
                 android:orientation="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:visibility="visible">
 
                 <ImageView
-                    android:layout_width="90dp"
+                    android:layout_width="130dp"
                     android:layout_height="90dp"
                     android:layout_marginTop="5dp"
-                    android:background="@drawable/planned"
+                    android:background="@drawable/container3"
                     android:scaleType="fitCenter" />
 
                 <TextView
@@ -46,28 +53,58 @@
                     android:layout_margin="10dp"
                     android:fontFamily="serif"
                     android:gravity="center_horizontal"
-                    android:text="Planned packing list"
+                    android:text="@string/planned_report"
+                    android:textColor="@color/orange"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/stage2_loaded_packingList"
+                android:layout_width="250dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1"
+                android:background="@drawable/frame_shape"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <ImageView
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/unload"
+                    android:scaleType="fitCenter" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="10dp"
+                    android:fontFamily="serif"
+                    android:gravity="center_horizontal"
+                    android:text="Loaded Packing List Report"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/stage2_reports"
-                android:layout_width="@dimen/stage3_views"
-                android:layout_height="@dimen/stage3_views2"
-                android:layout_marginTop="@dimen/stage3_p_margin2_top"
+                android:id="@+id/stage2_planned_unplanned_packingList"
+                android:layout_width="250dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1"
                 android:background="@drawable/border_background"
                 android:gravity="center"
                 android:orientation="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/stage3_enter_inventory">
+                android:visibility="visible">
 
-
-            <ImageView
+                <ImageView
                     android:layout_width="130dp"
                     android:layout_height="90dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
                     android:background="@drawable/real_report"
                     android:scaleType="fitCenter" />
 
@@ -78,12 +115,13 @@
                     android:layout_margin="10dp"
                     android:fontFamily="serif"
                     android:gravity="center_horizontal"
-                    android:text="@string/reports"
+                    android:text="Planned Unplanned Inventory Report"
                     android:textColor="@color/orange"
                     android:textSize="20sp" />
             </LinearLayout>
 
         </LinearLayout>
 
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

@@ -1,8 +1,12 @@
 package com.falconssoft.woodysystem.stage_two;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,6 +20,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TableLayout;
@@ -25,10 +30,14 @@ import android.widget.Toast;
 
 import com.falconssoft.woodysystem.DatabaseHandler;
 import com.falconssoft.woodysystem.R;
+import com.falconssoft.woodysystem.SharedClass;
+import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.CustomerInfo;
 import com.falconssoft.woodysystem.models.PlannedPL;
 import com.falconssoft.woodysystem.models.Settings;
 import com.falconssoft.woodysystem.models.SupplierInfo;
+import com.falconssoft.woodysystem.reports.InventoryReport;
+import com.falconssoft.woodysystem.reports.InventoryReportAdapter;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -90,6 +99,9 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
     private ArrayAdapter<String> gradeAdapter;
     private Spinner gradeSpinner;
     private String gradeText = "All";
+    private ProgressDialog progressDialog;
+    private RelativeLayout containerLayout;
+    private SharedClass sharedClass;
 
     SimpleDateFormat sdf;
     String today;
@@ -107,6 +119,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
         myCalendar = Calendar.getInstance();
         generalSettings = new Settings();
         generalSettings = databaseHandler.getSettings();
+        sharedClass = new SharedClass(this);
         customers = new ArrayList<>();
         arraylist = new ArrayList<>();
         arraylist2 = new ArrayList<SupplierInfo>();
@@ -117,6 +130,10 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
         String myFormat = "dd/MM/yyyy";
         sdf = new SimpleDateFormat(myFormat, Locale.US);
         today = sdf.format(myCalendar.getTime());
+
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Please Waiting...");
 
         paclingList.requestFocus();
 
@@ -171,9 +188,31 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
 //                break;
             case R.id.delete:
                 // if (plannedPLListJSON.length() > 0)
-                new JSONTask3().execute();
-//                else
-//                    Toast.makeText(this, "Please choose customer and packing list first!", Toast.LENGTH_SHORT).show();
+                if (PLListFiltered.size()>0){
+                Dialog passwordDialog = new Dialog(this);
+                passwordDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                passwordDialog.setContentView(R.layout.password_dialog);
+                passwordDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                TextInputEditText password = passwordDialog.findViewById(R.id.password_dialog_password);
+                TextView done = passwordDialog.findViewById(R.id.password_dialog_done);
+                done.setText(R.string.loaded);
+
+                done.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (password.getText().toString().equals("0200200")) {
+                            progressDialog.show();
+                            new JSONTask3().execute();
+                            passwordDialog.dismiss();
+                        } else {
+                            sharedClass.showSnackbar(containerLayout, getString(R.string.not_authorized), false);
+                            password.setText("");
+                        }
+                    }
+                });
+                passwordDialog.show();
+                }
                 break;
             case R.id.cust:
                 customers.clear();
@@ -815,6 +854,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
 
+            progressDialog.dismiss();
             if (s != null) {
                 if (s.contains("PLANNED_PACKING_LIST SUCCESS")) {
                     Toast.makeText(UnloadPackingList.this, "Loaded!", Toast.LENGTH_SHORT).show();
@@ -967,6 +1007,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
         totalCBM = findViewById(R.id.total_cbm);
         delete = findViewById(R.id.delete);
         gradeSpinner = findViewById(R.id.grade);
+        containerLayout = findViewById(R.id.unloadBackingList_coordinator);
 
         recycler = findViewById(R.id.recycler);
         recycler.setLayoutManager(new LinearLayoutManager(this));
