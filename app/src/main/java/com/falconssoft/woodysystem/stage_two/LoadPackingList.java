@@ -628,9 +628,9 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
                         planned.setDestination(innerObject.getString("DESTINATION"));
                         planned.setOrderNo(innerObject.getString("ORDER_NO"));
                         planned.setNoOfPieces(innerObject.getDouble("PIECES"));
-                        //planned.setLength(innerObject.getDouble("LENGTH"));
-                        //planned.setWidth(innerObject.getDouble("WIDTH"));
-                        //planned.setThickness(innerObject.getDouble("THICKNESS"));
+                        planned.setLength(innerObject.getDouble("LENGTH"));
+                        planned.setWidth(innerObject.getDouble("WIDTH"));
+                        planned.setThickness(innerObject.getDouble("THICKNESS"));
                         planned.setNoOfCopies(innerObject.getInt("COUNT"));
 
                         float cub = Float.parseFloat(innerObject.getString("CUBIC"));
@@ -756,7 +756,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
                 }
 
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-                nameValuePairs.add(new BasicNameValuePair("UNLOAD_PLANNED_PACKING_LIST", plannedPLListJSON.toString()));
+                nameValuePairs.add(new BasicNameValuePair("UN_LOADED_PLANNED_PACKING_LIST", plannedPLListJSON.toString()));
                 nameValuePairs.add(new BasicNameValuePair("LOCATION", databaseHandler.getSettings().getStore()));
 
                 request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
@@ -973,7 +973,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
         adapter2 = new LoadPLAdapter(this, PLListFiltered);
         recycler.setAdapter(adapter2);
 
-        delete.setVisibility(View.GONE);
+        delete.setText("Unloaded");
         TextView title = findViewById(R.id.inventory_report_tv);
         title.setText("Loaded Packing List Report");
 

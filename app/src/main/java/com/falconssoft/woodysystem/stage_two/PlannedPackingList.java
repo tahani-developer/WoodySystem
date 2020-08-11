@@ -773,6 +773,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
         piecesD.setTextColor(ContextCompat.getColor(this, R.color.black));
 
         plannedPLJObject = PlannedPLList.get(index).getJSONObject();
+        Log.e("tagPlanned", " COMPARE_CONTENT " +plannedPLJObject.toString());
         new JSONTask3().execute();
 
         save.setOnClickListener(new View.OnClickListener() {
@@ -1337,6 +1338,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                 nameValuePairs.add(new BasicNameValuePair("COMPARE_CONTENT", plannedPLJObject.toString()));
                 nameValuePairs.add(new BasicNameValuePair("LOCATION", databaseHandler.getSettings().getStore().toString()));
 
+//                Log.e("tagPlanned", " COMPARE_CONTENT " +plannedPLJObject.toString());
                 request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
                 HttpResponse response = client.execute(request);
@@ -1354,7 +1356,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                 in.close();
 
                 JsonResponse = sb.toString();
-                Log.e("tag", "" + JsonResponse);
+                Log.e("tag", " COMPARE_CONTENT " + JsonResponse);
 
                 JSONObject object = new JSONObject(JsonResponse);
                 JSONArray array = object.getJSONArray("COMPARABLE_RESULTS");
