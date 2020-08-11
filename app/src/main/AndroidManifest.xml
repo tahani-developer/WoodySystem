@@ -12,8 +12,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-
-
+        <activity android:name=".stage_two.StageTwoReports"></activity>
         <activity
             android:name=".LoginActivity"
             android:windowSoftInputMode="stateAlwaysHidden">
@@ -23,11 +22,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".stage_two.StageTwo">
-
-        </activity>
-
+        <activity android:name=".stage_two.StageTwo"></activity>
         <activity android:name=".EditLoadingReport" />
         <activity android:name=".stage_two.AddNewSupplier" />
         <activity android:name=".stage_one.ReportsStageOne" />
@@ -53,24 +48,18 @@
             android:name=".reports.BundlesReport"
             android:screenOrientation="sensorLandscape" />
         <activity android:name=".ReportsActivity" />
-
-
         <activity
             android:name=".stage_two.UnloadPackingList"
             android:screenOrientation="sensorLandscape"
-            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden"/>
-
+            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden" />
         <activity
             android:name=".stage_two.PlannedUnplanned"
             android:screenOrientation="sensorLandscape"
-            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden"/>
-
-
+            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden" />
         <activity
             android:name=".stage_two.LoadPackingList"
             android:screenOrientation="sensorLandscape"
-            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden"/>
-
+            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden" />
         <activity
             android:name=".AddToInventory"
             android:windowSoftInputMode="stateAlwaysHidden" />
@@ -80,24 +69,21 @@
         <activity
             android:name=".stage_two.PlannedPackingList"
             android:screenOrientation="sensorLandscape"
-            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden">
-
-
-        </activity>
+            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden"></activity>
         <activity android:name=".stage_two.AddNewCustomer" />
         <activity
             android:name=".Stage3"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".LoadingOrder"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
         <activity
             android:name=".LoadingOrder2"
-            android:windowSoftInputMode="stateAlwaysHidden"/>
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".reports.LoadingOrderReport"
             android:screenOrientation="sensorLandscape"
-            android:windowSoftInputMode="stateAlwaysHidden"/>
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".MainActivity" />
         <activity android:name=".QrReader" />
 
@@ -105,33 +91,29 @@
             android:name="org.apache.http.legacy"
             android:required="false" />
     </application>
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:requiresSmallestWidthDp="480"
+        android:xlargeScreens="true" />
 
     <supports-screens
         android:anyDensity="true"
         android:largeScreens="true"
         android:requiresSmallestWidthDp="480"
         android:xlargeScreens="true" />
-    <supports-screens
-        android:anyDensity="true"
-        android:largeScreens="true"
-        android:requiresSmallestWidthDp="480"
-        android:xlargeScreens="true" />
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera" />
+
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
-
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
     <uses-permission android:name="android.permission.BLUETOOTH" />
-
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-
     <uses-permission
         android:name="android.permission.CONNECTIVITY_INTERNAL"
         tools:ignore="ProtectedPermissions" />
