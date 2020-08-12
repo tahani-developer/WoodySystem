@@ -96,7 +96,7 @@
         android:layout_weight="0.7"
         android:background="@color/light_orange"
         android:gravity="center"
-        android:hint="sup"
+        android:hint=""
         android:textColor="@color/gray_dark_one"
         android:textColorHint="#474444"
         android:textSize="15sp" />

@@ -795,7 +795,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
                 }
 
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-                nameValuePairs.add(new BasicNameValuePair("UNLOAD_PLANNED_PACKING_LIST", plannedPLListJSON.toString()));
+                nameValuePairs.add(new BasicNameValuePair("LOADED_PLANNED_PACKING_LIST", plannedPLListJSON.toString()));
                 nameValuePairs.add(new BasicNameValuePair("LOCATION", databaseHandler.getSettings().getStore()));
 
                 request.setEntity(new UrlEncodedFormEntity(nameValuePairs));

@@ -67,6 +67,14 @@ public class LoadPLAdapter extends RecyclerView.Adapter<LoadPLAdapter.SuppliersV
             }
         });
 
+
+        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                plannedPL.detailsDialog(PlannedPL.get(i).getPackingList());
+            }
+        });
+
     }
 
     @Override

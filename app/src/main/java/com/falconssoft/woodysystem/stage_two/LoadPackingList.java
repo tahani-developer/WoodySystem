@@ -16,6 +16,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TableLayout;
@@ -52,6 +53,7 @@ import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -68,6 +70,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
 
     private LoadPLAdapter adapter2;
     private SupplierAdapter adapter3;
+    private PLDetailsAdapter adapter4;
 
     private RecyclerView recyclerView , recyclerView2;
     private RecyclerView recycler;
@@ -82,9 +85,12 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
     private List<CustomerInfo> customers;
     private List<CustomerInfo> arraylist;
     private List<SupplierInfo> arraylist2;
-    private List<PlannedPL> PLList = new ArrayList<>();
-    private List<PlannedPL> PLListFiltered = new ArrayList<>();
+    private List<PlannedPL> PLList ;
+    private List<PlannedPL> PLListFiltered ;
+    private  List<PlannedPL> PLListDetails ;
     private List<SupplierInfo> suppliers;
+
+
 
     private ArrayList<String> gradeList = new ArrayList<>();
     private ArrayAdapter<String> gradeAdapter;
@@ -111,6 +117,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
         arraylist = new ArrayList<>();
         arraylist2 = new ArrayList<SupplierInfo>();
         suppliers = new ArrayList<>();
+
 
         myCalendar = Calendar.getInstance();
 
@@ -570,11 +577,12 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
 
     // ************************************** SEARCH *******************************
     private class JSONTask2 extends AsyncTask<String, String, String> {  // check
-
+        List<PlannedPL>PlandTemp;
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             //showDialog();
+
 
         }
 
@@ -611,8 +619,11 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
 
                 JSONObject parentObject = new JSONObject(JsonResponse);
 
-                PLList.clear();
+                PlandTemp=new ArrayList();
+               PLList .clear();
                 PLListFiltered.clear();
+                PLListDetails.clear();
+
 
                 try {
                     JSONArray parentArrayOrders = parentObject.getJSONArray("PLANNED");
@@ -628,9 +639,9 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
                         planned.setDestination(innerObject.getString("DESTINATION"));
                         planned.setOrderNo(innerObject.getString("ORDER_NO"));
                         planned.setNoOfPieces(innerObject.getDouble("PIECES"));
-                        //planned.setLength(innerObject.getDouble("LENGTH"));
-                        //planned.setWidth(innerObject.getDouble("WIDTH"));
-                        //planned.setThickness(innerObject.getDouble("THICKNESS"));
+                        planned.setLength(innerObject.getDouble("LENGTH"));
+                        planned.setWidth(innerObject.getDouble("WIDTH"));
+                        planned.setThickness(innerObject.getDouble("THICKNESS"));
                         planned.setNoOfCopies(innerObject.getInt("COUNT"));
 
                         float cub = Float.parseFloat(innerObject.getString("CUBIC"));
@@ -638,12 +649,30 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
                         planned.setCubic(c);
 
                         Log.e("***1**", "" + cub + " * " + planned.getNoOfCopies() + " / " + "1000000000 = " + (cub * planned.getNoOfCopies() / 1000000000));
-
                         PLList.add(planned);
-                        //PLListFiltered.add(planned);
 
+                        PlannedPL planned2 = new PlannedPL();
+                        planned2.setCustName(innerObject.getString("CUST_NAME"));
+                        planned2.setSupplier(innerObject.getString("SUPPLIER"));
+                        planned2.setGrade(innerObject.getString("GRADE"));
+                        planned2.setPackingList(innerObject.getString("PACKING_LIST"));
+                        planned2.setDestination(innerObject.getString("DESTINATION"));
+                        planned2.setOrderNo(innerObject.getString("ORDER_NO"));
+                        planned2.setNoOfPieces(innerObject.getDouble("PIECES"));
+                        planned2.setLength(innerObject.getDouble("LENGTH"));
+                        planned2.setWidth(innerObject.getDouble("WIDTH"));
+                        planned2.setThickness(innerObject.getDouble("THICKNESS"));
+                        planned2.setNoOfCopies(innerObject.getInt("COUNT"));
+
+                        float cub2 = Float.parseFloat(innerObject.getString("CUBIC"));
+                        double c2 = cub2 * planned2.getNoOfCopies() / 1000000000;
+                        planned2.setCubic(c2);
+
+                        //PLListFiltered.add(planned);
+                        PLListDetails.add(planned2);
                     }
 
+                    Log.e("*****1****", ""+PLListDetails.get(0).getNoOfCopies() +"  "+ PLList.get(0).getNoOfCopies());
 
                 } catch (JSONException e) {
                     Log.e("Import Data2", e.getMessage().toString());
@@ -659,7 +688,6 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-
             if (s != null) {
 
                 if (PLList.size() > 0) {
@@ -667,6 +695,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
                     PLList = clustering(PLList);
                     PLListFiltered.addAll(PLList);
 
+                    Log.e("*****2****", ""+PLListDetails.get(0).getNoOfCopies()+"  " +PLList.get(0).getNoOfCopies());
                     if (headerTableLayout.getChildCount() == 0)
                         addTableHeader(headerTableLayout);
 
@@ -729,6 +758,44 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
 
     }
 
+    public void detailsDialog(String pl) {
+
+        Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.planned_details_dialog);
+        dialog.setCancelable(true);
+
+        SearchView searchView = dialog.findViewById(R.id.search_supplier_searchView);
+        TextView close = dialog.findViewById(R.id.search_supplier_close);
+        TextView plist = dialog.findViewById(R.id.pl);
+
+        plist.setText("Packing List : " +pl);
+
+        Log.e("*****3****", ""+PLListDetails.get(0).getNoOfCopies() );
+        List<PlannedPL> temp = new ArrayList<>();
+        temp.clear();
+        for (int i = 0 ; i< PLListDetails.size() ; i++){
+            if(PLListDetails.get(i).getPackingList().equals(pl))
+                temp.add(PLListDetails.get(i));
+        }
+
+        recyclerView = dialog.findViewById(R.id.search_supplier_recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter4 = new PLDetailsAdapter(1, this, temp);
+        recyclerView.setAdapter(adapter4);
+
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                //isCamera = false;
+            }
+        });
+        dialog.show();
+
+    }
+
+
     // ************************************** UNLOAD P.LIST *******************************
     private class JSONTask3 extends AsyncTask<String, String, String> {  // save
 
@@ -756,7 +823,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
                 }
 
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-                nameValuePairs.add(new BasicNameValuePair("UNLOAD_PLANNED_PACKING_LIST", plannedPLListJSON.toString()));
+                nameValuePairs.add(new BasicNameValuePair("UN_LOADED_PLANNED_PACKING_LIST", plannedPLListJSON.toString()));
                 nameValuePairs.add(new BasicNameValuePair("LOCATION", databaseHandler.getSettings().getStore()));
 
                 request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
@@ -968,12 +1035,16 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
         delete = findViewById(R.id.delete);
         gradeSpinner = findViewById(R.id.grade);
 
+        PLListDetails = new ArrayList<>();
+        PLListFiltered = new ArrayList<>();
+        PLList = new ArrayList<>();
+
         recycler = findViewById(R.id.recycler);
         recycler.setLayoutManager(new LinearLayoutManager(this));
         adapter2 = new LoadPLAdapter(this, PLListFiltered);
         recycler.setAdapter(adapter2);
 
-        delete.setVisibility(View.GONE);
+        delete.setText("Unloaded");
         TextView title = findViewById(R.id.inventory_report_tv);
         title.setText("Loaded Packing List Report");
 

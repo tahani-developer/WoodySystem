@@ -457,6 +457,8 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                     plannedPLListJSON.put(PlannedPLList.get(i).getJSONObject());
                 }
             }
+            Log.e("*****", "sizeofplannedbefore" + PlannedPLList.size());
+
             new JSONTask4().execute();
         } else
             Toast.makeText(PlannedPackingList.this, "Some bundle does not exists, please edit!", Toast.LENGTH_SHORT).show();
@@ -773,21 +775,24 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
         piecesD.setTextColor(ContextCompat.getColor(this, R.color.black));
 
         plannedPLJObject = PlannedPLList.get(index).getJSONObject();
+        Log.e("tagPlanned", " COMPARE_CONTENT " +plannedPLJObject.toString());
         new JSONTask3().execute();
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                PlannedPLList.get(index).setNoOfPieces(Double.parseDouble(piecesD.getText().toString()));
-                PlannedPLList.get(index).setLength(Double.parseDouble(lengthD.getText().toString()));
-                PlannedPLList.get(index).setWidth(Double.parseDouble(widthD.getText().toString()));
-                PlannedPLList.get(index).setThickness(Double.parseDouble(thickD.getText().toString()));
-                PlannedPLList.get(index).setExist("Exist");
-                PlannedPLList.get(index).setNoOfExixt(noOfExist);
-                adapter2.notifyDataSetChanged();
+                if(flagIsChanged == 1) {
+                    PlannedPLList.get(index).setNoOfPieces(Double.parseDouble(piecesD.getText().toString()));
+                    PlannedPLList.get(index).setLength(Double.parseDouble(lengthD.getText().toString()));
+                    PlannedPLList.get(index).setWidth(Double.parseDouble(widthD.getText().toString()));
+                    PlannedPLList.get(index).setThickness(Double.parseDouble(thickD.getText().toString()));
+                    PlannedPLList.get(index).setExist("Exist");
+                    PlannedPLList.get(index).setNoOfExixt(noOfExist);
+                    adapter2.notifyDataSetChanged();
 
-                calculateTotal();
+                    calculateTotal();
+                }
 
                 dialog.dismiss();
             }
@@ -1338,6 +1343,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                 nameValuePairs.add(new BasicNameValuePair("COMPARE_CONTENT", plannedPLJObject.toString()));
                 nameValuePairs.add(new BasicNameValuePair("LOCATION", databaseHandler.getSettings().getStore().toString()));
 
+//                Log.e("tagPlanned", " COMPARE_CONTENT " +plannedPLJObject.toString());
                 request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
                 HttpResponse response = client.execute(request);
@@ -1355,7 +1361,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                 in.close();
 
                 JsonResponse = sb.toString();
-                Log.e("tag", "" + JsonResponse);
+                Log.e("tag", " COMPARE_CONTENT " + JsonResponse);
 
                 JSONObject object = new JSONObject(JsonResponse);
                 JSONArray array = object.getJSONArray("COMPARABLE_RESULTS");
@@ -1426,6 +1432,8 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                 HttpPost request = new HttpPost();
                 request.setURI(new URI("http://" + databaseHandler.getSettings().getIpAddress() + "/export.php"));
 
+
+                Log.e("******", "sizeofplanned   " + plannedPLListJSON.length());
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
                 nameValuePairs.add(new BasicNameValuePair("SAVE_PLANNED_PACKING_LIST", plannedPLListJSON.toString()));
                 nameValuePairs.add(new BasicNameValuePair("LOCATION", databaseHandler.getSettings().getStore()));
