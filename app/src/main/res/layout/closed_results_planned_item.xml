@@ -88,6 +88,30 @@
                     android:textColor="@color/light_orange"
                     android:textSize="15sp" />
 
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="1dp"
+                    android:layout_weight="1"
+                    android:background="@color/orange"
+                    android:gravity="center"
+                    android:visibility="invisible"
+                    android:text="@string/grade"
+                    android:textColor="@color/light_orange"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="1dp"
+                    android:layout_weight="1"
+                    android:background="@color/orange"
+                    android:gravity="center"
+                    android:visibility="invisible"
+                    android:text="@string/location"
+                    android:textColor="@color/light_orange"
+                    android:textSize="15sp" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -142,6 +166,30 @@
                     android:text="0"
                     android:textColor="#000000"
                     android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="1dp"
+                    android:layout_weight="1"
+                    android:background="@color/orange"
+                    android:gravity="center"
+                    android:visibility="invisible"
+                    android:text="@string/grade"
+                    android:textColor="@color/light_orange"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="1dp"
+                    android:layout_weight="1"
+                    android:background="@color/orange"
+                    android:gravity="center"
+                    android:visibility="invisible"
+                    android:text="@string/location"
+                    android:textColor="@color/light_orange"
+                    android:textSize="15sp" />
 
             </LinearLayout>
 
@@ -229,6 +277,28 @@
                 android:background="@color/orange"
                 android:gravity="center"
                 android:text="@string/no_pieces"
+                android:textColor="@color/light_orange"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:layout_weight="1"
+                android:background="@color/orange"
+                android:gravity="center"
+                android:text="@string/grade"
+                android:textColor="@color/light_orange"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:layout_weight="1"
+                android:background="@color/orange"
+                android:gravity="center"
+                android:text="@string/location"
                 android:textColor="@color/light_orange"
                 android:textSize="15sp" />
 

@@ -581,7 +581,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
             tableRow = new TableRow(this);
 
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < 6; i++) {
                 TextView textView = new TextView(this);
                 textView.setBackgroundResource(R.color.light_orange);
                 TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f);
@@ -602,6 +602,12 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                         break;
                     case 3:
                         textView.setText("" + (int) bundleInfosList2.get(k).getNoOfPieces() + "(" + noOfE + ")");
+                        break;
+                    case 4:
+                        textView.setText(bundleInfosList2.get(k).getGrade());
+                        break;
+                    case 5:
+                        textView.setText(bundleInfosList2.get(k).getLocation());
                         break;
                 }
 
@@ -1377,7 +1383,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                     bundleInfo.setGrade(innerObject.getString("GRADE"));
                     bundleInfo.setNoOfPieces(innerObject.getDouble("PIECES"));
                     //bundleInfo.setBundleNo(innerObject.getString("BUNDLE_NO"));
-                    //bundleInfo.setLocation(innerObject.getString("LOCATION"));
+                    bundleInfo.setLocation(innerObject.getString("LOCATION"));
                     //bundleInfo.setArea(innerObject.getString("AREA"));
                     //bundleInfo.setBarcode(innerObject.getString("BARCODE"));
                     //bundleInfo.setOrdered(innerObject.getInt("ORDERED"));
@@ -1486,6 +1492,8 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                     searchCustomer.setText("");
                     searchSupplier.setText("");
                     gradeSpinner.setSelection(gradeList.indexOf("Fresh"));
+
+                    new JSONTask6().execute();
 
                     Toast.makeText(PlannedPackingList.this, "Saved!", Toast.LENGTH_SHORT).show();
                     Log.e("tag", "PLANNED_PACKING_LIST SUCCESS");

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="650dp"
+    android:layout_width="700dp"
     android:layout_height="500dp"
     android:paddingTop="20dp">
 
@@ -88,6 +88,30 @@
                     android:textColor="@color/light_orange"
                     android:textSize="15sp" />
 
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="1dp"
+                    android:layout_weight="1"
+                    android:background="@color/orange"
+                    android:gravity="center"
+                    android:visibility="invisible"
+                    android:text="@string/grade"
+                    android:textColor="@color/light_orange"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="1dp"
+                    android:layout_weight="1"
+                    android:background="@color/orange"
+                    android:gravity="center"
+                    android:visibility="invisible"
+                    android:text="@string/location"
+                    android:textColor="@color/light_orange"
+                    android:textSize="15sp" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -142,6 +166,30 @@
                     android:text="0"
                     android:textColor="#000000"
                     android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="1dp"
+                    android:layout_weight="1"
+                    android:background="@color/orange"
+                    android:gravity="center"
+                    android:visibility="invisible"
+                    android:text="@string/grade"
+                    android:textColor="@color/light_orange"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="1dp"
+                    android:layout_weight="1"
+                    android:background="@color/orange"
+                    android:gravity="center"
+                    android:visibility="invisible"
+                    android:text="@string/location"
+                    android:textColor="@color/light_orange"
+                    android:textSize="15sp" />
 
             </LinearLayout>
 
@@ -231,6 +279,28 @@
                 android:textColor="@color/light_orange"
                 android:textSize="15sp" />
 
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:layout_weight="1"
+                android:background="@color/orange"
+                android:gravity="center"
+                android:text="@string/grade"
+                android:textColor="@color/light_orange"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:layout_weight="1"
+                android:background="@color/orange"
+                android:gravity="center"
+                android:text="@string/location"
+                android:textColor="@color/light_orange"
+                android:textSize="15sp" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -255,11 +325,9 @@
                     android:id="@+id/table"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="3dp"
-                    android:layout_marginLeft="3dp"
+
                     android:layout_marginTop="2dp"
-                    android:layout_marginEnd="3dp"
-                    android:layout_marginRight="3dp"/>
+                    />
 
             </ScrollView>
 
