@@ -132,7 +132,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
         today = sdf.format(myCalendar.getTime());
 
 
-        progressDialog = new ProgressDialog(this);
+        progressDialog = new ProgressDialog(this, R.style.MyAlertDialogStyle);
         progressDialog.setMessage("Please Waiting...");
 
         paclingList.requestFocus();

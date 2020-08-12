@@ -150,4 +150,6 @@
     <string name="choose_rows">Please Choose Rows First!</string>
     <string name="not_authorized">Not Authorized!</string>
     <string name="loaded">Loaded</string>
+    <string name="unloaded">Unloaded</string>
+    <string name="unloaded_successfully">Unloaded Successfully</string>
 </resources>
