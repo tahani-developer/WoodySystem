@@ -1,8 +1,12 @@
 package com.falconssoft.woodysystem.stage_two;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TableLayout;
@@ -26,6 +31,7 @@ import android.widget.Toast;
 
 import com.falconssoft.woodysystem.DatabaseHandler;
 import com.falconssoft.woodysystem.R;
+import com.falconssoft.woodysystem.SharedClass;
 import com.falconssoft.woodysystem.models.CustomerInfo;
 import com.falconssoft.woodysystem.models.PlannedPL;
 import com.falconssoft.woodysystem.models.Settings;
@@ -89,8 +95,11 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
     private List<PlannedPL> PLListFiltered ;
     private  List<PlannedPL> PLListDetails ;
     private List<SupplierInfo> suppliers;
+    private List<PlannedPL> getChildrenList;
 
-
+    private ProgressDialog progressDialog;
+    private RelativeLayout containerLayout;
+    private SharedClass sharedClass;
 
     private ArrayList<String> gradeList = new ArrayList<>();
     private ArrayAdapter<String> gradeAdapter;
@@ -112,12 +121,15 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
         databaseHandler = new DatabaseHandler(LoadPackingList.this);
         myCalendar = Calendar.getInstance();
         generalSettings = new Settings();
+        sharedClass = new SharedClass(this);
         generalSettings = databaseHandler.getSettings();
         customers = new ArrayList<>();
         arraylist = new ArrayList<>();
         arraylist2 = new ArrayList<SupplierInfo>();
         suppliers = new ArrayList<>();
 
+        progressDialog = new ProgressDialog(this, R.style.MyAlertDialogStyle);
+        progressDialog.setMessage("Please Waiting...");
 
         myCalendar = Calendar.getInstance();
 
@@ -178,7 +190,32 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
 //                break;
             case R.id.delete:
                 // if (plannedPLListJSON.length() > 0)
-                new JSONTask3().execute();
+                if (PLListFiltered.size()>0){
+                    Dialog passwordDialog = new Dialog(this);
+                    passwordDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    passwordDialog.setContentView(R.layout.password_dialog);
+                    passwordDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                    TextInputEditText password = passwordDialog.findViewById(R.id.password_dialog_password);
+                    TextView done = passwordDialog.findViewById(R.id.password_dialog_done);
+                    done.setText(R.string.unloaded);
+
+                    done.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (password.getText().toString().equals("0200200")) {
+                                progressDialog.show();
+                                new JSONTask3().execute();
+                                passwordDialog.dismiss();
+                            } else {
+                                sharedClass.showSnackbar(containerLayout, getString(R.string.not_authorized), false);
+                                password.setText("");
+                            }
+                        }
+                    });
+                    passwordDialog.show();
+                }
+
 //                else
 //                    Toast.makeText(this, "Please choose customer and packing list first!", Toast.LENGTH_SHORT).show();
                 break;
@@ -620,9 +657,10 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
                 JSONObject parentObject = new JSONObject(JsonResponse);
 
                 PlandTemp=new ArrayList();
-               PLList .clear();
+                PLList .clear();
                 PLListFiltered.clear();
                 PLListDetails.clear();
+                getChildrenList = new ArrayList<>();
 
 
                 try {
@@ -672,6 +710,28 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
                         PLListDetails.add(planned2);
                     }
 
+                    JSONArray detailsArrayOrders = parentObject.getJSONArray("PLANNED_DETAILS");
+                    for (int i = 0; i < detailsArrayOrders.length(); i++) {
+                        JSONObject innerObject = detailsArrayOrders.getJSONObject(i);
+
+                        PlannedPL planned = new PlannedPL();
+                        planned.setThickness(innerObject.getDouble("THICKNESS"));
+                        planned.setWidth(innerObject.getDouble("WIDTH"));
+                        planned.setLength(innerObject.getDouble("LENGTH"));
+                        planned.setNoOfPieces(innerObject.getDouble("PIECES"));
+                        planned.setDate(innerObject.getString("DATE_"));
+                        planned.setCustName(innerObject.getString("CUST_NAME"));
+                        planned.setCustNo(innerObject.getString("CUST_NO"));
+                        planned.setPackingList(innerObject.getString("PACKING_LIST"));
+                        planned.setDestination(innerObject.getString("DESTINATION"));
+                        planned.setOrderNo(innerObject.getString("ORDER_NO"));
+                        planned.setLoaded(Integer.parseInt(innerObject.getString("LOADED")));
+                        planned.setSupplier(innerObject.getString("SUPPLIER"));
+                        planned.setGrade(innerObject.getString("GRADE"));
+
+                        getChildrenList.add(planned);
+                    }
+
                     Log.e("*****1****", ""+PLListDetails.get(0).getNoOfCopies() +"  "+ PLList.get(0).getNoOfCopies());
 
                 } catch (JSONException e) {
@@ -699,7 +759,8 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
                     if (headerTableLayout.getChildCount() == 0)
                         addTableHeader(headerTableLayout);
 
-                    adapter2.notifyDataSetChanged();
+//                    adapter2.notifyDataSetChanged();
+                    filters();
 
                     calculateTotal();
 
@@ -814,13 +875,22 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
                 HttpPost request = new HttpPost();
                 request.setURI(new URI("http://" + databaseHandler.getSettings().getIpAddress() + "/export.php"));
 
-
                 plannedPLListJSON = new JSONArray();
 
                 for (int i = 0; i < PLListFiltered.size(); i++) {
                     if (PLListFiltered.get(i).getIsChecked())
-                        plannedPLListJSON.put(PLListFiltered.get(i).getJSONObject());
+                        for (int m = 0 ; m< getChildrenList.size() ; m++){
+                            if(PLListFiltered.get(i).getPackingList().equals(getChildrenList.get(m).getPackingList()))//if(PLListDetails.get(m).getPackingList().equals(PLListFiltered.get(i).getPackingList()))
+                                plannedPLListJSON.put(getChildrenList.get(m).getJSONObject());
+                        }
+//                        plannedPLListJSON.put(PLListFiltered.get(i).getJSONObject());
                 }
+                Log.e("unload" , " plannedPLListJSON" + plannedPLListJSON.length());
+
+//                for (int i = 0; i < PLListFiltered.size(); i++) {
+//                    if (PLListFiltered.get(i).getIsChecked())
+//                        plannedPLListJSON.put(PLListFiltered.get(i).getJSONObject());
+//                }
 
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
                 nameValuePairs.add(new BasicNameValuePair("UN_LOADED_PLANNED_PACKING_LIST", plannedPLListJSON.toString()));
@@ -881,11 +951,12 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-
+            Log.e("tag", "unload" + s);
+            progressDialog.dismiss();
             if (s != null) {
-                if (s.contains("PLANNED_PACKING_LIST SUCCESS")) {
-                    Toast.makeText(LoadPackingList.this, "Loaded!", Toast.LENGTH_SHORT).show();
-                    Log.e("tag", "PLANNED_PACKING_LIST SUCCESS");
+                if (s.contains("UN_PLANNED_PACKING_LIST SUCCESS")) {
+                    sharedClass.showSnackbar(containerLayout,getString(R.string.unloaded_successfully), true);
+                    Log.e("tag", "UN_PLANNED_PACKING_LIST SUCCESS");
 
                     //tableLayout.removeAllViews();
                     for (int i = 0; i < PLListFiltered.size(); i++) {
@@ -894,7 +965,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
                             PLListFiltered.remove(i);
                         }
                     }
-                    adapter2.notifyDataSetChanged();
+                    notifyLoadedAdapter();
 
                     searchCustomer.setText("");
                     searchSupplier.setText("");
@@ -1020,6 +1091,11 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
         totalCBM.setText("" + String.format("%.3f", (totalCbm)));
     }
 
+    void notifyLoadedAdapter(){
+        adapter2 = new LoadPLAdapter(LoadPackingList.this, PLListFiltered);
+        recycler.setAdapter(adapter2);
+    }
+
     void init() {
 
         searchCustomer = findViewById(R.id.cust);
@@ -1027,6 +1103,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
         paclingList = findViewById(R.id.p_list);
         dest = findViewById(R.id.destination);
         orderNo = findViewById(R.id.order_no);
+        containerLayout = findViewById(R.id.unloadBackingList_coordinator);
 
         tableLayout = findViewById(R.id.addNewRaw_table);
         headerTableLayout = findViewById(R.id.addNewRaw_table_header);

@@ -1133,7 +1133,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
     }
 
-
+    // ********************************* FIND customer ***************************
     private class JSONTask extends AsyncTask<String, String, List<CustomerInfo>> {
 
         @Override
@@ -1327,6 +1327,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
         }
     }
 
+    // ********************************* get compared DATA ***************************
     private class JSONTask3 extends AsyncTask<String, String, String> {
 
         @Override
@@ -1508,6 +1509,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
         }
     }
 
+    // ********************************* get Suppliers ***************************
     private class JSONTask5 extends AsyncTask<String, String, List<SupplierInfo>> {
 
         @Override
@@ -1601,6 +1603,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
         }
     }  // import Suppliers
 
+    // ********************************* get old planned ***************************
     private class JSONTask6 extends AsyncTask<String, String, String> {  // old planned
 
         @Override
@@ -1701,6 +1704,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
         }
     }
 
+    // ********************************* delete ***************************
     private class JSONTask7 extends AsyncTask<String, String, String> {  // delete
 
         @Override
