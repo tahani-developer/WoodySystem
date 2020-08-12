@@ -862,7 +862,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
 
                     //tableLayout.removeAllViews();
                     for (int i = 0; i < PLListFiltered.size(); i++) {
-                        if (PLList.get(i).getIsChecked()) {
+                        if (PLListFiltered.get(i).getIsChecked()) {
                             // PLList.get(i).setIsChecked(false);
                             PLListFiltered.remove(i);
                         }
@@ -1009,7 +1009,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
         gradeSpinner = findViewById(R.id.grade);
         containerLayout = findViewById(R.id.unloadBackingList_coordinator);
 
-        recycler = findViewById(R.id.recycler);
+        recycler = findViewById(R.id.recycler2);
         recycler.setLayoutManager(new LinearLayoutManager(this));
         adapter2 = new UnloadPLAdapter(this, PLListFiltered);
         recycler.setAdapter(adapter2);

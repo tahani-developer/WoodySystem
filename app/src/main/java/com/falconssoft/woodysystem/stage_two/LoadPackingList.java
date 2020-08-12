@@ -114,7 +114,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_unload_planned_packing_list);
+        setContentView(R.layout.activity_load_planned_packing_list);
 
         init();
 
@@ -965,7 +965,8 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
                             PLListFiltered.remove(i);
                         }
                     }
-                    notifyLoadedAdapter();
+                    //notifyLoadedAdapter();
+                    //adapter2.notifyDataSetChanged();
 
                     searchCustomer.setText("");
                     searchSupplier.setText("");
@@ -1091,10 +1092,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
         totalCBM.setText("" + String.format("%.3f", (totalCbm)));
     }
 
-    void notifyLoadedAdapter(){
-        adapter2 = new LoadPLAdapter(LoadPackingList.this, PLListFiltered);
-        recycler.setAdapter(adapter2);
-    }
+
 
     void init() {
 
