@@ -106,7 +106,7 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_acceptance_info_report);
 
-        progressDialog = new ProgressDialog(this);
+        progressDialog = new ProgressDialog(this, R.style.MyAlertDialogStyle);
         progressDialog.setMessage("Please Waiting...");
 
         databaseHandler = new DatabaseHandler(this);
@@ -154,6 +154,7 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
         toDate.setText(dateFormat.format(date));
 
         adapter = new AcceptanceInfoReportAdapter(AcceptanceInfoReport.this, details);
+        progressDialog.show();
         new JSONTask().execute();
         new JSONTask1().execute();
 
@@ -213,7 +214,7 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
                         public void onClick(View v) {
 //                            Log.e("selected", "" + selected.size() + (selected.size() > 0) + (allCheckBox.isChecked()));
 
-                            if (password.getText().toString().equals("301190")) {
+                            if (password.getText().toString().equals("0100100")) {
 //                            bundleInfoForPrint.clear();
                                 jsonArray = new JSONArray();
                                 if (allCheckBox.isChecked()) {
@@ -271,7 +272,7 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
         String toDateLocal = toDate.getText().toString();
         filtered = new ArrayList<>();
         dateFiltered = new ArrayList<>();
-//        Log.e("follow1/", "size2/dateFiltered/ " + details.size());
+        Log.e("follow1/", "size2/dateFiltered/ " + details.size());
         for (int m = 0; m < details.size(); m++) {
             if ((formatDate(details.get(m).getDate()).after(formatDate(fromDateLocal))
                     || formatDate(details.get(m).getDate()).equals(formatDate(fromDateLocal)))
@@ -279,7 +280,7 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
                     || formatDate(details.get(m).getDate()).equals(formatDate(toDateLocal))))
                 dateFiltered.add(details.get(m));
         }
-//        Log.e("follow/", "size2/dateFiltered/ " + dateFiltered.size());
+        Log.e("follow/", "size2/dateFiltered/ " + dateFiltered.size());
         for (int k = 0; k < dateFiltered.size(); k++) {
             if (supplierString.equals("All") || supplierString.equals(dateFiltered.get(k).getSupplierName()))
                 if (gradeString.equals("All") || gradeString.equals(dateFiltered.get(k).getGrade()))

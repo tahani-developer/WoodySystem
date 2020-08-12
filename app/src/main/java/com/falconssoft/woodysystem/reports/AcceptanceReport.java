@@ -110,7 +110,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acceptance_report);
 
-        progressDialog = new ProgressDialog(this);
+        progressDialog = new ProgressDialog(this, R.style.MyAlertDialogStyle);
         progressDialog.setMessage("Please Waiting...");
 
         MHandler = new DatabaseHandler(AcceptanceReport.this);

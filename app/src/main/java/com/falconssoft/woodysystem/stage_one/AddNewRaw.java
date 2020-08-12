@@ -262,7 +262,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
             Log.e("serializable", "" + rowInfo.getSerial());
 
             addNewSupplier.setVisibility(View.INVISIBLE);
-            searchSupplier.setClickable(false);
+//            searchSupplier.setClickable(false);
             oldTruck = rowInfo.getTruckNo();
             editSerial = rowInfo.getSerial();
             thickness.setText("" + (int) rowInfo.getThickness());
@@ -526,6 +526,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         noOfPiecesLocal = noOfPieces.getText().toString();
         noOfRejectedLocal = noOfRejected.getText().toString();
         noOfBundlesLocal = noOfBundles.getText().toString();
+        Log.e("abeer", supplierName);
 
         if (!TextUtils.isEmpty(supplierName)) {
             if (!TextUtils.isEmpty(thicknessLocal) && (!checkValidData(thicknessLocal)))
