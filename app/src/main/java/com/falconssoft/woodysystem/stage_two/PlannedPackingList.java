@@ -457,6 +457,8 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                     plannedPLListJSON.put(PlannedPLList.get(i).getJSONObject());
                 }
             }
+            Log.e("*****", "sizeofplannedbefore" + PlannedPLList.size());
+
             new JSONTask4().execute();
         } else
             Toast.makeText(PlannedPackingList.this, "Some bundle does not exists, please edit!", Toast.LENGTH_SHORT).show();
@@ -780,15 +782,17 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
             @Override
             public void onClick(View v) {
 
-                PlannedPLList.get(index).setNoOfPieces(Double.parseDouble(piecesD.getText().toString()));
-                PlannedPLList.get(index).setLength(Double.parseDouble(lengthD.getText().toString()));
-                PlannedPLList.get(index).setWidth(Double.parseDouble(widthD.getText().toString()));
-                PlannedPLList.get(index).setThickness(Double.parseDouble(thickD.getText().toString()));
-                PlannedPLList.get(index).setExist("Exist");
-                PlannedPLList.get(index).setNoOfExixt(noOfExist);
-                adapter2.notifyDataSetChanged();
+                if(flagIsChanged == 1) {
+                    PlannedPLList.get(index).setNoOfPieces(Double.parseDouble(piecesD.getText().toString()));
+                    PlannedPLList.get(index).setLength(Double.parseDouble(lengthD.getText().toString()));
+                    PlannedPLList.get(index).setWidth(Double.parseDouble(widthD.getText().toString()));
+                    PlannedPLList.get(index).setThickness(Double.parseDouble(thickD.getText().toString()));
+                    PlannedPLList.get(index).setExist("Exist");
+                    PlannedPLList.get(index).setNoOfExixt(noOfExist);
+                    adapter2.notifyDataSetChanged();
 
-                calculateTotal();
+                    calculateTotal();
+                }
 
                 dialog.dismiss();
             }
@@ -1427,6 +1431,8 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                 HttpPost request = new HttpPost();
                 request.setURI(new URI("http://" + databaseHandler.getSettings().getIpAddress() + "/export.php"));
 
+
+                Log.e("******", "sizeofplanned   " + plannedPLListJSON.length());
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
                 nameValuePairs.add(new BasicNameValuePair("SAVE_PLANNED_PACKING_LIST", plannedPLListJSON.toString()));
                 nameValuePairs.add(new BasicNameValuePair("LOCATION", databaseHandler.getSettings().getStore()));

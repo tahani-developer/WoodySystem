@@ -115,6 +115,7 @@
                         android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_weight="2"
+                        android:enabled="false"
                         android:singleLine="true"
                         android:ems="10"
                         android:nextFocusDown="@id/destination" />
