@@ -68,7 +68,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
     private DatabaseHandler databaseHandler;
     private Calendar myCalendar;
     private Settings generalSettings;
-    private Dialog searchDialog , searchDialog2;
+    private Dialog searchDialog, searchDialog2;
 
     public static int flag2;
     private boolean mState = false;
@@ -78,9 +78,9 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
     private SupplierAdapter adapter3;
     private PLDetailsAdapter adapter4;
 
-    private RecyclerView recyclerView , recyclerView2;
+    private RecyclerView recyclerView, recyclerView2;
     private RecyclerView recycler;
-    private EditText paclingList , dest , orderNo;
+    private EditText paclingList, dest, orderNo;
     private TextView searchCustomer, searchSupplier, noBundles, totalCBM, delete;
     ;
     private TableLayout tableLayout, headerTableLayout;
@@ -91,9 +91,9 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
     private List<CustomerInfo> customers;
     private List<CustomerInfo> arraylist;
     private List<SupplierInfo> arraylist2;
-    private List<PlannedPL> PLList ;
-    private List<PlannedPL> PLListFiltered ;
-    private  List<PlannedPL> PLListDetails ;
+    private List<PlannedPL> PLList;
+    private List<PlannedPL> PLListFiltered = new ArrayList<>();
+    private List<PlannedPL> PLListDetails;
     private List<SupplierInfo> suppliers;
     private List<PlannedPL> getChildrenList;
 
@@ -190,7 +190,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
 //                break;
             case R.id.delete:
                 // if (plannedPLListJSON.length() > 0)
-                if (PLListFiltered.size()>0){
+                if (PLListFiltered.size() > 0) {
                     Dialog passwordDialog = new Dialog(this);
                     passwordDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                     passwordDialog.setContentView(R.layout.password_dialog);
@@ -373,7 +373,6 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
     }
 
 
-
     class watchTextChange implements TextWatcher {
 
         private View view;
@@ -390,7 +389,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
         public void onTextChanged(CharSequence s, int start, int before, int count) {
 //            switch (view.getId()) {
 //                case R.id.p_list:
-                    filters();
+            filters();
 //                    break;
 //            }
         }
@@ -614,7 +613,8 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
 
     // ************************************** SEARCH *******************************
     private class JSONTask2 extends AsyncTask<String, String, String> {  // check
-        List<PlannedPL>PlandTemp;
+        List<PlannedPL> PlandTemp;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -656,8 +656,8 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
 
                 JSONObject parentObject = new JSONObject(JsonResponse);
 
-                PlandTemp=new ArrayList();
-                PLList .clear();
+                PlandTemp = new ArrayList();
+                PLList.clear();
                 PLListFiltered.clear();
                 PLListDetails.clear();
                 getChildrenList = new ArrayList<>();
@@ -732,7 +732,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
                         getChildrenList.add(planned);
                     }
 
-                    Log.e("*****1****", ""+PLListDetails.get(0).getNoOfCopies() +"  "+ PLList.get(0).getNoOfCopies());
+                    Log.e("*****1****", "" + PLListDetails.get(0).getNoOfCopies() + "  " + PLList.get(0).getNoOfCopies());
 
                 } catch (JSONException e) {
                     Log.e("Import Data2", e.getMessage().toString());
@@ -755,7 +755,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
                     PLList = clustering(PLList);
                     PLListFiltered.addAll(PLList);
 
-                    Log.e("*****2****", ""+PLListDetails.get(0).getNoOfCopies()+"  " +PLList.get(0).getNoOfCopies());
+                    Log.e("*****2****", "" + PLListDetails.get(0).getNoOfCopies() + "  " + PLList.get(0).getNoOfCopies());
                     if (headerTableLayout.getChildCount() == 0)
                         addTableHeader(headerTableLayout);
 
@@ -830,13 +830,13 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
         TextView close = dialog.findViewById(R.id.search_supplier_close);
         TextView plist = dialog.findViewById(R.id.pl);
 
-        plist.setText("Packing List : " +pl);
+        plist.setText("Packing List : " + pl);
 
-        Log.e("*****3****", ""+PLListDetails.get(0).getNoOfCopies() );
+        Log.e("*****3****", "" + PLListDetails.get(0).getNoOfCopies());
         List<PlannedPL> temp = new ArrayList<>();
         temp.clear();
-        for (int i = 0 ; i< PLListDetails.size() ; i++){
-            if(PLListDetails.get(i).getPackingList().equals(pl))
+        for (int i = 0; i < PLListDetails.size(); i++) {
+            if (PLListDetails.get(i).getPackingList().equals(pl))
                 temp.add(PLListDetails.get(i));
         }
 
@@ -879,13 +879,13 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
 
                 for (int i = 0; i < PLListFiltered.size(); i++) {
                     if (PLListFiltered.get(i).getIsChecked())
-                        for (int m = 0 ; m< getChildrenList.size() ; m++){
-                            if(PLListFiltered.get(i).getPackingList().equals(getChildrenList.get(m).getPackingList()))//if(PLListDetails.get(m).getPackingList().equals(PLListFiltered.get(i).getPackingList()))
+                        for (int m = 0; m < getChildrenList.size(); m++) {
+                            if (PLListFiltered.get(i).getPackingList().equals(getChildrenList.get(m).getPackingList()))//if(PLListDetails.get(m).getPackingList().equals(PLListFiltered.get(i).getPackingList()))
                                 plannedPLListJSON.put(getChildrenList.get(m).getJSONObject());
                         }
 //                        plannedPLListJSON.put(PLListFiltered.get(i).getJSONObject());
                 }
-                Log.e("unload" , " plannedPLListJSON" + plannedPLListJSON.length());
+                Log.e("unload", " plannedPLListJSON" + plannedPLListJSON.length());
 
 //                for (int i = 0; i < PLListFiltered.size(); i++) {
 //                    if (PLListFiltered.get(i).getIsChecked())
@@ -955,18 +955,21 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
             progressDialog.dismiss();
             if (s != null) {
                 if (s.contains("UN_PLANNED_PACKING_LIST SUCCESS")) {
-                    sharedClass.showSnackbar(containerLayout,getString(R.string.unloaded_successfully), true);
+                    sharedClass.showSnackbar(containerLayout, getString(R.string.unloaded_successfully), true);
                     Log.e("tag", "UN_PLANNED_PACKING_LIST SUCCESS");
 
                     //tableLayout.removeAllViews();
-                    for (int i = 0; i < PLListFiltered.size(); i++) {
+                    int localSize = PLListFiltered.size();
+                    for (int i = 0; i < localSize; i++) {
                         if (PLList.get(i).getIsChecked()) {
                             // PLList.get(i).setIsChecked(false);
-                            PLListFiltered.remove(i);
+//                            Log.e("tracking ", PLList.get(i).getPackingList() + PLList.get(i).getIsChecked());
+                            PLList.remove(i);
+                            localSize--;
                         }
                     }
                     //notifyLoadedAdapter();
-                    //adapter2.notifyDataSetChanged();
+                    adapter2.notifyDataSetChanged();
 
                     searchCustomer.setText("");
                     searchSupplier.setText("");
@@ -1093,7 +1096,6 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
     }
 
 
-
     void init() {
 
         searchCustomer = findViewById(R.id.cust);
@@ -1111,7 +1113,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
         gradeSpinner = findViewById(R.id.grade);
 
         PLListDetails = new ArrayList<>();
-        PLListFiltered = new ArrayList<>();
+//        PLListFiltered = new ArrayList<>();
         PLList = new ArrayList<>();
 
         recycler = findViewById(R.id.recycler);
