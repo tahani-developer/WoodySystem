@@ -92,7 +92,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
     private List<CustomerInfo> arraylist;
     private List<SupplierInfo> arraylist2;
     private List<PlannedPL> PLList = new ArrayList<>();
-    private List<PlannedPL> PLListFiltered = new ArrayList<>();
+    private List<PlannedPL> UPLListFiltered = new ArrayList<>();
     private List<SupplierInfo> suppliers;
 
     private ArrayList<String> gradeList = new ArrayList<>();
@@ -188,7 +188,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
 //                break;
             case R.id.delete:
                 // if (plannedPLListJSON.length() > 0)
-                if (PLListFiltered.size()>0){
+                if (UPLListFiltered.size()>0){
                 Dialog passwordDialog = new Dialog(this);
                 passwordDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 passwordDialog.setContentView(R.layout.password_dialog);
@@ -309,7 +309,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
 
     public void filters() {
 
-        PLListFiltered.clear();
+        UPLListFiltered.clear();
         for (int i = 0; i < PLList.size(); i++) {
 
             if (customerName.equals(PLList.get(i).getCustName()) || customerName.equals("All") || customerName.equals("")) {
@@ -320,7 +320,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
                                 if (PLList.get(i).getGrade().startsWith(gradeText) || gradeText.equals("All")) {
 
 
-                                    PLListFiltered.add(PLList.get(i));
+                                    UPLListFiltered.add(PLList.get(i));
                                 }
                             }
                         }
@@ -329,7 +329,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
             }
         }
 
-        adapter2 = new UnloadPLAdapter(this, PLListFiltered);
+        adapter2 = new UnloadPLAdapter(this, UPLListFiltered);
         recycler.setAdapter(adapter2);
 
         calculateTotal();
@@ -651,7 +651,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
                 JSONObject parentObject = new JSONObject(JsonResponse);
 
                 PLList.clear();
-                PLListFiltered.clear();
+                UPLListFiltered.clear();
 
                 try {
                     JSONArray parentArrayOrders = parentObject.getJSONArray("PLANNED");
@@ -679,7 +679,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
                         Log.e("***1**", "" + cub + " * " + planned.getNoOfCopies() + " / " + "1000000000 = " + (cub * planned.getNoOfCopies() / 1000000000));
 
                         PLList.add(planned);
-                        //PLListFiltered.add(planned);
+                        //UPLListFiltered.add(planned);
 
                     }
 
@@ -704,7 +704,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
                 if (PLList.size() > 0) {
 
                     PLList = clustering(PLList);
-                    PLListFiltered.addAll(PLList);
+                    UPLListFiltered.addAll(PLList);
 
                     if (headerTableLayout.getChildCount() == 0)
                         addTableHeader(headerTableLayout);
@@ -789,9 +789,9 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
 
                 plannedPLListJSON = new JSONArray();
 
-                for (int i = 0; i < PLListFiltered.size(); i++) {
-                    if (PLListFiltered.get(i).getIsChecked())
-                        plannedPLListJSON.put(PLListFiltered.get(i).getJSONObject());
+                for (int i = 0; i < UPLListFiltered.size(); i++) {
+                    if (UPLListFiltered.get(i).getIsChecked())
+                        plannedPLListJSON.put(UPLListFiltered.get(i).getJSONObject());
                 }
 
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
@@ -861,10 +861,19 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
                     Log.e("tag", "PLANNED_PACKING_LIST SUCCESS");
 
                     //tableLayout.removeAllViews();
-                    for (int i = 0; i < PLListFiltered.size(); i++) {
-                        if (PLListFiltered.get(i).getIsChecked()) {
+//                    for (int i = 0; i < UPLListFiltered.size(); i++) {
+//                        if (UPLListFiltered.get(i).getIsChecked()) {
+//                            // PLList.get(i).setIsChecked(false);
+//                            UPLListFiltered.remove(i);
+//                        }
+//                    }
+                    int localSize = UPLListFiltered.size();
+                    for (int i = 0; i < localSize; i++) {
+                        if (PLList.get(i).getIsChecked()) {
                             // PLList.get(i).setIsChecked(false);
-                            PLListFiltered.remove(i);
+                            Log.e("tracking ", PLList.get(i).getPackingList() + PLList.get(i).getIsChecked());
+                            PLList.remove(i);
+                            localSize--;
                         }
                     }
                     adapter2.notifyDataSetChanged();
@@ -983,10 +992,10 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
     void calculateTotal() {
         int sumOfBundles = 0;
         double totalCbm = 0;
-        for (int i = 0; i < PLListFiltered.size(); i++) {
-            sumOfBundles += PLListFiltered.get(i).getNoOfCopies();
-            //totalCbm += (PLListFiltered.get(i).getThickness() * PLListFiltered.get(i).getWidth() * PLListFiltered.get(i).getLength() * PLListFiltered.get(i).getNoOfPieces() * PLListFiltered.get(i).getNoOfCopies());
-            totalCbm += PLListFiltered.get(i).getCubic();
+        for (int i = 0; i < UPLListFiltered.size(); i++) {
+            sumOfBundles += UPLListFiltered.get(i).getNoOfCopies();
+            //totalCbm += (UPLListFiltered.get(i).getThickness() * UPLListFiltered.get(i).getWidth() * UPLListFiltered.get(i).getLength() * UPLListFiltered.get(i).getNoOfPieces() * UPLListFiltered.get(i).getNoOfCopies());
+            totalCbm += UPLListFiltered.get(i).getCubic();
         }
 
         noBundles.setText("" + sumOfBundles);
@@ -1011,7 +1020,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
 
         recycler = findViewById(R.id.recycler2);
         recycler.setLayoutManager(new LinearLayoutManager(this));
-        adapter2 = new UnloadPLAdapter(this, PLListFiltered);
+        adapter2 = new UnloadPLAdapter(this, UPLListFiltered);
         recycler.setAdapter(adapter2);
 
     }
