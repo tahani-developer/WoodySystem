@@ -54,7 +54,7 @@
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/cust"
-                        android:textSize="17sp" />
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/cust"
@@ -102,7 +102,7 @@
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/supplier_name"
-                        android:textSize="17sp" />
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/supplier"
@@ -132,6 +132,7 @@
 
                 </LinearLayout>
 
+
                 <LinearLayout
                     android:id="@+id/addNewRaw_linear_five"
                     android:layout_width="0dp"
@@ -150,7 +151,7 @@
                         android:layout_weight="1"
                         android:fontFamily="serif"
                         android:text="@string/p_list"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
 
                     <EditText
                         android:id="@+id/p_list"
@@ -161,7 +162,8 @@
                         android:layout_weight="1"
                         android:ems="10"
                         android:nextFocusDown="@id/destination"
-                        android:singleLine="true" />
+                        android:singleLine="true"
+                        android:textSize="15sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -182,7 +184,7 @@
                         android:layout_weight="1"
                         android:fontFamily="serif"
                         android:text="@string/destination"
-                        android:textSize="17sp" />
+                        android:textSize="15sp" />
 
                     <EditText
                         android:id="@+id/destination"
@@ -193,7 +195,8 @@
                         android:layout_weight="2"
                         android:ems="10"
                         android:nextFocusDown="@id/order_no"
-                        android:singleLine="true" />
+                        android:singleLine="true"
+                        android:textSize="15sp" />
 
                 </LinearLayout>
 
@@ -211,7 +214,7 @@
                         android:layout_weight="1"
                         android:fontFamily="serif"
                         android:text="@string/order_no"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
 
                     <EditText
                         android:id="@+id/order_no"
@@ -222,7 +225,8 @@
                         android:layout_weight="2"
                         android:ems="10"
                         android:nextFocusDown="@id/thickness"
-                        android:singleLine="true" />
+                        android:singleLine="true"
+                        android:textSize="15sp" />
 
                 </LinearLayout>
 
@@ -256,7 +260,7 @@
                         android:fontFamily="serif"
                         android:layout_gravity="center_vertical"
                         android:text="@string/grade"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
 
                     <Spinner
                         android:id="@+id/grade"
@@ -284,7 +288,7 @@
                         android:layout_weight="1"
                         android:fontFamily="serif"
                         android:text="@string/thickness"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
 
                     <EditText
                         android:id="@+id/thickness"
@@ -295,7 +299,8 @@
                         android:layout_weight="2"
                         android:ems="10"
                         android:inputType="numberDecimal"
-                        android:nextFocusDown="@id/width" />
+                        android:nextFocusDown="@id/width"
+                        android:textSize="15sp" />
 
                 </LinearLayout>
 
@@ -315,7 +320,7 @@
                         android:layout_weight="1"
                         android:fontFamily="serif"
                         android:text="@string/width"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
 
                     <EditText
                         android:id="@+id/width"
@@ -326,7 +331,8 @@
                         android:layout_weight="2"
                         android:ems="10"
                         android:inputType="numberDecimal"
-                        android:nextFocusDown="@id/length" />
+                        android:nextFocusDown="@id/length"
+                        android:textSize="15sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -345,7 +351,7 @@
                         android:layout_weight="1"
                         android:fontFamily="serif"
                         android:text="@string/length"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
 
                     <EditText
                         android:id="@+id/length"
@@ -356,7 +362,8 @@
                         android:layout_weight="2"
                         android:ems="10"
                         android:inputType="numberDecimal"
-                        android:nextFocusDown="@id/pieces" />
+                        android:nextFocusDown="@id/pieces"
+                        android:textSize="15sp" />
 
                 </LinearLayout>
 
@@ -374,7 +381,7 @@
                         android:layout_weight="1"
                         android:fontFamily="serif"
                         android:text="@string/no_pieces"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
 
                     <EditText
                         android:id="@+id/pieces"
@@ -384,7 +391,8 @@
                         android:layout_marginRight="10dp"
                         android:layout_weight="2"
                         android:ems="10"
-                        android:inputType="numberDecimal" />
+                        android:inputType="numberDecimal"
+                        android:textSize="15sp" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -486,7 +494,7 @@
                         android:paddingRight="5dp"
                         android:text="@string/no_bundle"
                         android:textColor="@color/white"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/no_bundles"
@@ -520,7 +528,7 @@
                         android:paddingRight="5dp"
                         android:text="@string/cubic"
                         android:textColor="@color/white"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/total_cbm"

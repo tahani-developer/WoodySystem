@@ -152,4 +152,7 @@
     <string name="loaded">Loaded</string>
     <string name="unloaded">Unloaded</string>
     <string name="unloaded_successfully">Unloaded Successfully</string>
+    <string name="f">F</string>
+    <string name="loaded_packing_list_report">Loaded Packing List Report</string>
+    <string name="planned_unplanned_inventory_report">Planned Unplanned Inventory Report</string>
 </resources>

@@ -7,12 +7,13 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.falconssoft.woodysystem.R;
 
 public class StageTwoReports extends AppCompatActivity implements View.OnClickListener {
 
-    private LinearLayout   unloadPackingLis, loadedPackingLis, plannedUnplannedList;
+    private TextView unloadPackingLis, loadedPackingLis, plannedUnplannedList;
     private Animation animation;
 
     @Override

@@ -337,10 +337,11 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:fontFamily="serif"
                     android:gravity="center"
                     android:inputType="number"
                     android:textSize="15sp"
-                    android:hint="@string/from"/>
+                    android:hint="@string/f"/>
 
                 <TextView
                     android:visibility="gone"
@@ -384,10 +385,11 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:fontFamily="serif"
                     android:gravity="center"
                     android:inputType="number"
                     android:textSize="15sp"
-                    android:hint="to"/>
+                    android:hint="@string/to"/>
 
             </LinearLayout>
 
@@ -407,8 +409,9 @@
                     android:layout_weight="1"
                     android:inputType="number"
                     android:gravity="center"
+                    android:fontFamily="serif"
                     android:textSize="15sp"
-                    android:hint="@string/from"/>
+                    android:hint="@string/f"/>
 
                 <TextView
                     android:visibility="gone"
@@ -452,6 +455,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:fontFamily="serif"
                     android:gravity="center"
                     android:inputType="number"
                     android:textSize="15sp"

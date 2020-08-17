@@ -57,9 +57,11 @@ import android.widget.Toast;
 import com.falconssoft.woodysystem.AddToInventory;
 import com.falconssoft.woodysystem.DatabaseHandler;
 import com.falconssoft.woodysystem.R;
+import com.falconssoft.woodysystem.SpinnerCustomAdapter;
 import com.falconssoft.woodysystem.WoodPresenter;
 import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.Settings;
+import com.falconssoft.woodysystem.models.SpinnerModel;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -127,6 +129,9 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private List<String> gradeList = new ArrayList<>();
     private List<BundleInfo> bundlesForDelete = new ArrayList<>();
     private List<BundleInfo> dateFiltered, filtered;
+    private List<SpinnerModel> thicknessChecked = new ArrayList<>();
+    private List<SpinnerModel> lengthChecked = new ArrayList<>();
+    private List<SpinnerModel> widthChecked = new ArrayList<>();
     private JSONArray jsonArrayBundles = new JSONArray();
     private WoodPresenter woodPresenter;
     private Animation animation;
@@ -137,12 +142,13 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private ArrayAdapter<String> orderedAdapter;
     private ArrayAdapter<String> gradeAdapter;
     private ArrayAdapter<String> plAdapter;
-    private ArrayAdapter<String> thicknessAdapter;
-    private ArrayAdapter<String> widthAdapter;
-    private ArrayAdapter<String> lengthAdapter;
-    private String loc = "All", areaField = "All", orderedField = "All", plField = "All", gradeFeld = "All", thicknessField = "All"
-            , serialString = "All", widthField = "All", lengthField = "All";
-
+    //    private ArrayAdapter<String> thicknessAdapter;
+//    private ArrayAdapter<String> widthAdapter;
+//    private ArrayAdapter<String> lengthAdapter;
+    private String loc = "All", areaField = "All", orderedField = "All", plField = "All", gradeFeld = "All", thicknessField = "All", serialString = "All", widthField = "All", lengthField = "All";
+    private SpinnerCustomAdapter thicknessAdapter;
+    private SpinnerCustomAdapter widthAdapter;
+    private SpinnerCustomAdapter lengthAdapter;
     private Settings generalSettings;
     private Calendar calendar;
     private Date date;
@@ -347,7 +353,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         generalSettings = databaseHandler.getSettings();
         calendar = Calendar.getInstance();
         date = Calendar.getInstance().getTime();
-        progressDialog = new ProgressDialog(this);
+        progressDialog = new ProgressDialog(this, R.style.MyAlertDialogStyle);
         progressDialog.setMessage("Please Waiting...");
 
         thicknessSpinner = findViewById(R.id.inventory_report_thick_spinner);
@@ -408,25 +414,56 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         areaList.clear();
         plList.clear();
         gradeList.clear();
+        List<SpinnerModel> thicknessCheckList = new ArrayList<>();
+        List<SpinnerModel> widthCheckList = new ArrayList<>();
+        List<SpinnerModel> lengthCheckList = new ArrayList<>();
+
 //        showLog("fillSpinnerAdapter", "thickness size", "" + thicknessList.size());
         removeDuplicate(thicknessList);
         removeDuplicate(widthList);
         removeDuplicate(lengthList);
 //        showLog("fillSpinnerAdapter", "thickness size", "" + thicknessList.size());
 
-        lengthList.add(0, "All");
-        lengthAdapter = new ArrayAdapter<>(this, R.layout.spinner_layout, lengthList);
-        lengthAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
+//        lengthList.add(0, "All");
+//        lengthAdapter = new ArrayAdapter<>(this, R.layout.spinner_layout, lengthList);
+//        lengthAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
+//        lengthSpinner.setAdapter(lengthAdapter);
+        for (int i = 0; i < lengthList.size(); i++) {
+            SpinnerModel spinnerModel = new SpinnerModel();
+            spinnerModel.setTitle(lengthList.get(i));
+            spinnerModel.setChecked(false);
+            lengthCheckList.add(spinnerModel);
+        }
+        lengthCheckList.add(0, new SpinnerModel("       ", false));
+        lengthAdapter = new SpinnerCustomAdapter(InventoryReport.this, 0, lengthCheckList, 3);
         lengthSpinner.setAdapter(lengthAdapter);
 
-        widthList.add(0, "All");
-        widthAdapter = new ArrayAdapter<>(this, R.layout.spinner_layout, widthList);
-        widthAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
+//        widthList.add(0, "All");
+//        widthAdapter = new ArrayAdapter<>(this, R.layout.spinner_layout, widthList);
+//        widthAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
+//        widthSpinner.setAdapter(widthAdapter);
+        for (int i = 0; i < widthList.size(); i++) {
+            SpinnerModel spinnerModel = new SpinnerModel();
+            spinnerModel.setTitle(widthList.get(i));
+            spinnerModel.setChecked(false);
+            widthCheckList.add(spinnerModel);
+        }
+        widthCheckList.add(0, new SpinnerModel("       ", false));
+        widthAdapter = new SpinnerCustomAdapter(InventoryReport.this, 0, widthCheckList, 2);
         widthSpinner.setAdapter(widthAdapter);
 
-        thicknessList.add(0, "All");
-        thicknessAdapter = new ArrayAdapter<>(this, R.layout.spinner_layout, thicknessList);
-        thicknessAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
+//        thicknessList.add(0, "All");
+//        thicknessAdapter = new ArrayAdapter<>(this, R.layout.spinner_layout, thicknessList);
+//        thicknessAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
+//        thicknessSpinner.setAdapter(thicknessAdapter);
+        for (int i = 0; i < thicknessList.size(); i++) {
+            SpinnerModel spinnerModel = new SpinnerModel();
+            spinnerModel.setTitle(thicknessList.get(i));
+            spinnerModel.setChecked(false);
+            thicknessCheckList.add(spinnerModel);
+        }
+        thicknessCheckList.add(0, new SpinnerModel("       ", false));
+        thicknessAdapter = new SpinnerCustomAdapter(InventoryReport.this, 0, thicknessCheckList, 1);
         thicknessSpinner.setAdapter(thicknessAdapter);
 
         locationList.add("All");
@@ -767,31 +804,35 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                                             if (toWidthNo.equals("") || ((dateFiltered.get(k).getWidth() < Double.parseDouble(toWidthNo))
                                                     || dateFiltered.get(k).getWidth() == Double.parseDouble(toWidthNo)))
 
-                                                if (thicknessField.equals("All") || thicknessField.equals(String.valueOf(dateFiltered.get(k).getThickness())))
+                                                if (searchPackingList.equals("") || ((dateFiltered.get(k).getBackingList().contains(searchPackingList))))
 
-                                                    if (widthField.equals("All") || widthField.equals(String.valueOf(dateFiltered.get(k).getWidth())))
-
-                                                        if (lengthField.equals("All") || lengthField.equals(String.valueOf(dateFiltered.get(k).getLength()))) {
+                                                    if ((thicknessChecked.size() == 0) || checkIfItemChecked(thicknessChecked, String.valueOf(dateFiltered.get(k).getThickness())))
+                                                        if ((widthChecked.size() == 0) || checkIfItemChecked(widthChecked, String.valueOf(dateFiltered.get(k).getWidth())))
+                                                            if ((lengthChecked.size() == 0) || checkIfItemChecked(lengthChecked, String.valueOf(dateFiltered.get(k).getLength())))
+                                                            {
 //                                            if (fromThicknessNo.equals("") || ((dateFiltered.get(k).getThickness() > Double.parseDouble(fromThicknessNo))
 //                                                    || dateFiltered.get(k).getThickness() == Double.parseDouble(fromThicknessNo)))
 //
 //                                                if (toThicknessNo.equals("") || ((dateFiltered.get(k).getThickness() < Double.parseDouble(toThicknessNo))
 //                                                        || dateFiltered.get(k).getThickness() == Double.parseDouble(toThicknessNo)))
-                                                            if (searchPackingList.equals("") || ((dateFiltered.get(k).getBackingList().contains(searchPackingList)))) {
-                                                                filtered.add(dateFiltered.get(k));
+                                                                {
+                                                                    filtered.add(dateFiltered.get(k));
 
-                                                                sumOfBundles = filtered.size();
-                                                                sumOfPieces += dateFiltered.get(k).getNoOfPieces();
-                                                                sumOfCubic += (dateFiltered.get(k).getLength() * dateFiltered.get(k).getWidth() * dateFiltered.get(k).getThickness() * dateFiltered.get(k).getNoOfPieces());
+                                                                    sumOfBundles = filtered.size();
+                                                                    sumOfPieces += dateFiltered.get(k).getNoOfPieces();
+                                                                    sumOfCubic += (dateFiltered.get(k).getLength() * dateFiltered.get(k).getWidth() * dateFiltered.get(k).getThickness() * dateFiltered.get(k).getNoOfPieces());
 
+                                                                }
                                                             }
-                                                        }
                             }
                         }
                     }
                 }
         }
-        Log.e("follow/", "size3/filtered/" + filtered.size());
+//        if (widthField.equals("All") || widthField.equals(String.valueOf(dateFiltered.get(k).getWidth())))
+//            if (lengthField.equals("All") || lengthField.equals(String.valueOf(dateFiltered.get(k).getLength())))
+//        if (thicknessField.equals("All") || thicknessField.equals(String.valueOf(dateFiltered.get(k).getThickness())))
+//        Log.e("follow/", "size3/filtered/" + filtered.size());
 
         adapter = new InventoryReportAdapter(InventoryReport.this, filtered);
         listView.setAdapter(adapter);
@@ -800,6 +841,51 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         noOfPieces.setText("" + String.format("%.3f", sumOfPieces));
         cubicField.setText("" + String.format("%.3f", (sumOfCubic / 1000000000)));
 //        fillTable(filtered);
+
+    }
+
+    boolean checkIfItemChecked(List<SpinnerModel> list, String value) {
+        for (int i = 0; i < list.size(); i++)
+            if (value.equals(list.get(i).getTitle()))
+                return true;
+
+        return false;
+    }
+
+    public void sendOtherLists(List<SpinnerModel> list, int flag) {
+        switch (flag) {
+            case 1://thickness
+                if (list != null || list.size() != 0) {
+                    thicknessChecked = new ArrayList<>();
+                    for (int i = 0; i < list.size(); i++)
+                        if (list.get(i).isChecked())
+                            thicknessChecked.add(list.get(i));
+                    Log.e("follow/", "size3/thicknessChecked/" + thicknessChecked.size());
+                    filters();
+                }
+                break;
+            case 2://width
+                if (list != null || list.size() != 0) {
+                    widthChecked = new ArrayList<>();
+                    for (int i = 0; i < list.size(); i++)
+                        if (list.get(i).isChecked())
+                            widthChecked.add(list.get(i));
+                    Log.e("follow/", "size3/widthChecked/" + widthChecked.size());
+                    filters();
+                }
+                break;
+            case 3://length
+                if (list != null || list.size() != 0) {
+                    lengthChecked = new ArrayList<>();
+                    for (int i = 0; i < list.size(); i++)
+                        if (list.get(i).isChecked())
+                            lengthChecked.add(list.get(i));
+                    Log.e("follow/", "size3/lengthChecked/" + lengthChecked.size());
+                    filters();
+                }
+                break;
+        }
+
 
     }
 

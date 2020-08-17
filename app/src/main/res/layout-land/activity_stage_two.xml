@@ -34,7 +34,7 @@
                     android:layout_width="90dp"
                     android:layout_height="90dp"
                     android:layout_marginTop="5dp"
-                    android:background="@drawable/planned"
+                    android:background="@drawable/ic_post_add"
                     android:scaleType="fitCenter" />
 
                 <TextView
