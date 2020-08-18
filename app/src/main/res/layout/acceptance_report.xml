@@ -268,87 +268,87 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/orange"
-            android:layout_margin="5dp"
+            android:layout_marginVertical="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/acceptanceInfo_report_linear2">
 
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="serif"
+                    android:gravity="center"
+                    android:text="@string/placing_no_"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="5dp"
-                android:background="@drawable/ic_edit_24dp"
-                android:gravity="center"
-                android:padding="10dp" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="serif"
+                    android:text="@string/supplier_name"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:fontFamily="serif"
-                android:text="@string/supplier_name"
-                android:textColor="@color/white"
-                android:textSize="15sp" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="serif"
+                    android:gravity="center"
+                    android:text="@string/ttn_no"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:fontFamily="serif"
-                android:gravity="center"
-                android:text="@string/ttn_no"
-                android:textColor="@color/white"
-                android:textSize="15sp" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="serif"
+                    android:text="@string/date_of_acceptance"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:fontFamily="serif"
-                android:text="@string/date_of_acceptance"
-                android:textColor="@color/white"
-                android:textSize="15sp" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="serif"
+                    android:text="@string/no_bundle"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:fontFamily="serif"
-                android:text="@string/no_bundle"
-                android:textColor="@color/white"
-                android:textSize="15sp" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:fontFamily="serif"
-                android:gravity="center"
-                android:text="@string/rejected_pieces"
-                android:textColor="@color/white"
-                android:textSize="15sp" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="serif"
+                    android:gravity="center"
+                    android:text="@string/rejected_pieces"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
 
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:fontFamily="serif"
-                android:gravity="center"
-                android:text="Preview"
-                android:textColor="@color/white"
-                android:textSize="15sp" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="serif"
+                    android:gravity="center"
+                    android:text="Preview"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:fontFamily="serif"
-                android:gravity="center"
-                android:text="@string/placing_no_"
-                android:textColor="@color/white"
-                android:textSize="15sp" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:layout_marginHorizontal="5dp"
+                    android:background="@drawable/ic_edit_24dp"
+                    />
 
         </TableRow>
 
@@ -440,6 +440,86 @@
                     android:paddingHorizontal="10dp"
                     android:paddingVertical="5dp">
 
+                    <TextView
+                        android:text="@string/supplier_name"
+                        android:textSize="15sp"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="serif"
+                        android:textColor="@color/orange"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5"/>
+
+                    <TextView
+                        android:text="@string/thickness"
+                        android:textSize="15sp"
+                        android:fontFamily="serif"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/orange"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:text="@string/width"
+                        android:textSize="15sp"
+                        android:fontFamily="serif"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/orange"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:text="@string/length"
+                        android:textSize="15sp"
+                        android:fontFamily="serif"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/orange"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:text="@string/grade"
+                        android:textSize="15sp"
+                        android:fontFamily="serif"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/orange"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:text="@string/no_of_pieces"
+                        android:textSize="15sp"
+                        android:fontFamily="serif"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/orange"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:text="@string/rejected_pieces"
+                        android:textSize="15sp"
+                        android:fontFamily="serif"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/orange"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:text="@string/no_bundle"
+                        android:textSize="15sp"
+                        android:fontFamily="serif"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/orange"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
@@ -451,78 +531,6 @@
                         android:background="@drawable/frame_shape"
                         android:padding="4dp"
                         app:srcCompat="@drawable/pic" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_weight="1"
-                        android:text="@string/thickness"
-                        android:textColor="@color/orange"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_weight="1"
-                        android:text="@string/width"
-                        android:textColor="@color/orange"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_weight="1"
-                        android:text="@string/length"
-                        android:textColor="@color/orange"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_weight="1"
-                        android:text="@string/grade"
-                        android:textColor="@color/orange"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_weight="1"
-                        android:text="@string/no_of_pieces"
-                        android:textColor="@color/orange"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_weight="1"
-                        android:text="@string/rejected_pieces"
-                        android:textColor="@color/orange"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_weight="1"
-                        android:text="@string/no_bundle"
-                        android:textColor="@color/orange"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_weight="1.5"
-                        android:text="@string/supplier_name"
-                        android:textColor="@color/orange"
-                        android:textSize="15sp" />
                 </LinearLayout>
 
                 <ListView
