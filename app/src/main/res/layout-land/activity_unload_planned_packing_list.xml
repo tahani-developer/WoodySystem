@@ -414,7 +414,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
                 android:layout_marginRight="5dp"
-                android:layout_weight="0.5"
+                android:layout_weight="1.25"
                 android:orientation="horizontal"
                 android:gravity="end">
 
@@ -432,6 +432,24 @@
                     android:paddingEnd="10dp"
                     android:paddingRight="10dp"
                     android:text="@string/loaded"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/export"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginEnd="7dp"
+                    android:layout_marginRight="7dp"
+                    android:background="@drawable/frame_shape"
+                    android:fontFamily="serif"
+                    android:paddingStart="10dp"
+                    android:paddingLeft="10dp"
+                    android:paddingEnd="10dp"
+                    android:paddingRight="10dp"
+                    android:text="@string/export_to_excel"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="18sp" />

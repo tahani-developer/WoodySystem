@@ -169,4 +169,6 @@
     <string name="unloaded">Unloaded</string>
     <string name="unloaded_successfully">Unloaded Successfully</string>
 
+    <string name="export_to_excel">Export To Excel</string>
+
 </resources>

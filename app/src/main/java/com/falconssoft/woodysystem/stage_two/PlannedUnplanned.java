@@ -1,8 +1,11 @@
 package com.falconssoft.woodysystem.stage_two;
 
 import android.app.Dialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.falconssoft.woodysystem.DatabaseHandler;
+import com.falconssoft.woodysystem.ExportToExcel;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.CustomerInfo;
@@ -31,6 +35,18 @@ import com.falconssoft.woodysystem.models.PlannedPL;
 import com.falconssoft.woodysystem.models.Settings;
 import com.falconssoft.woodysystem.models.SupplierInfo;
 import com.falconssoft.woodysystem.reports.InventoryReport;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -44,6 +60,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Serializable;
@@ -61,6 +80,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import static com.itextpdf.text.Element.ALIGN_CENTER;
+
 public class PlannedUnplanned extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
     private DatabaseHandler databaseHandler;
@@ -70,9 +91,10 @@ public class PlannedUnplanned extends AppCompatActivity implements AdapterView.O
 
     private PlannedUnPlannedAdapter adapter2;
 
-    private TextView thick ,thicknessOrder, widthOrder, lengthOrder;
+    TextView export;
+    private TextView thick, thicknessOrder, widthOrder, lengthOrder;
     private RecyclerView recycler;
-    private TextView  noBundles, totalCBM;
+    private TextView noBundles, totalCBM;
     ;
     private TableLayout tableLayout, headerTableLayout;
     private TableRow tableRow;
@@ -88,7 +110,7 @@ public class PlannedUnplanned extends AppCompatActivity implements AdapterView.O
 
     private ArrayList<String> typeList = new ArrayList<>();
     private ArrayAdapter<String> typeAdapter;
-    private Spinner typeSpinner ,thicknessSpinner, widthSpinner, lengthSpinner;
+    private Spinner typeSpinner, thicknessSpinner, widthSpinner, lengthSpinner;
     private String typeText = "Planned";
 
     private List<Double> doubleList;
@@ -106,7 +128,7 @@ public class PlannedUnplanned extends AppCompatActivity implements AdapterView.O
 
     private EditText fromLength, toLength, fromWidth, toWidth;
 
-    private String  gradeFeld = "All", thicknessField = "All" ,widthField = "All", lengthField = "All";
+    private String gradeFeld = "All", thicknessField = "All", widthField = "All", lengthField = "All";
     private String fromLengthNo = "", toLengthNo = "", fromWidthNo = "", toWidthNo = "";
 
     private int sortFlag = 0;
@@ -125,7 +147,6 @@ public class PlannedUnplanned extends AppCompatActivity implements AdapterView.O
         String myFormat = "dd/MM/yyyy";
         sdf = new SimpleDateFormat(myFormat, Locale.US);
         today = sdf.format(myCalendar.getTime());
-
 
 
         thicknessOrder.setOnClickListener(new View.OnClickListener() {
@@ -179,6 +200,15 @@ public class PlannedUnplanned extends AppCompatActivity implements AdapterView.O
             }
         });
 
+        export.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                ExportToExcel obj = new ExportToExcel(PlannedUnplanned.this);
+                obj.exportPlannedUnplanned(PLListFiltered);
+            }
+        });
+
         thicknessSpinner.setOnItemSelectedListener(this);
         widthSpinner.setOnItemSelectedListener(this);
         lengthSpinner.setOnItemSelectedListener(this);
@@ -200,7 +230,7 @@ public class PlannedUnplanned extends AppCompatActivity implements AdapterView.O
                 typeText = parent.getItemAtPosition(position).toString();
 
                 PLList.clear();
-                if(typeText.equals("Planned"))
+                if (typeText.equals("Planned"))
                     PLList.addAll(plannedList);
                 else
                     PLList.addAll(unPlannedList);
@@ -284,7 +314,7 @@ public class PlannedUnplanned extends AppCompatActivity implements AdapterView.O
             if (fromLengthNo.equals("") || (PLList.get(i).getLength() >= Double.parseDouble(fromLengthNo)))
                 if (toLengthNo.equals("") || (PLList.get(i).getLength() <= Double.parseDouble(toLengthNo)))
                     if (fromWidthNo.equals("") || (PLList.get(i).getWidth() >= Double.parseDouble(fromWidthNo)))
-                        if (toWidthNo.equals("") || (PLList.get(i).getWidth() <= Double.parseDouble(toWidthNo))){
+                        if (toWidthNo.equals("") || (PLList.get(i).getWidth() <= Double.parseDouble(toWidthNo))) {
 
                             if (thicknessField.equals("All") || thicknessField.equals(String.valueOf(PLList.get(i).getThickness()))) {
                                 if (widthField.equals("All") || widthField.equals(String.valueOf(PLList.get(i).getWidth()))) {
@@ -306,47 +336,11 @@ public class PlannedUnplanned extends AppCompatActivity implements AdapterView.O
         calculateTotal();
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putBoolean(STATE_VISIBILITY, mState);
-
-        List<TableRow> tableRows = new ArrayList<>();
-        int rowcount = tableLayout.getChildCount();
-        for (int i = 0; i < rowcount; i++) {
-            TableRow row = (TableRow) tableLayout.getChildAt(i);
-            tableRows.add(row);
-        }
-        outState.putSerializable("table", (Serializable) tableRows);
-        super.onSaveInstanceState(outState);
-    }
-
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-
-        mState = savedInstanceState.getBoolean(STATE_VISIBILITY);
-        tableLayout.setVisibility(mState ? View.VISIBLE : View.GONE);
-
-        // Restore state members from saved instance
-
-        List<TableRow> tableRows = (List<TableRow>) savedInstanceState.getSerializable("table");
-        for (int i = 0; i < tableRows.size(); i++) {
-            if (tableRows.get(i).getParent() != null) {
-                ((ViewGroup) tableRows.get(i).getParent()).removeView(tableRows.get(i)); // <- fix
-            }
-            tableLayout.addView(tableRows.get(i));
-        }
-
-        Log.e("tag1", "");
-
-        super.onRestoreInstanceState(savedInstanceState);
-    }
 
     @Override
     public void onClick(View v) {
 
     }
-
 
     class SorterClass implements Comparator<PlannedPL> {
         @Override
@@ -626,6 +620,7 @@ public class PlannedUnplanned extends AppCompatActivity implements AdapterView.O
         toLength = findViewById(R.id.inventory_report_toLength);
         fromWidth = findViewById(R.id.inventory_report_fromWidth);
         toWidth = findViewById(R.id.inventory_report_toWidth);
+        export = findViewById(R.id.export);
 
         recycler = findViewById(R.id.recycler);
         recycler.setLayoutManager(new LinearLayoutManager(this));
