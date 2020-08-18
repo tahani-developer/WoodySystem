@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.falconssoft.woodysystem.DatabaseHandler;
+import com.falconssoft.woodysystem.ExportToExcel;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.SharedClass;
 import com.falconssoft.woodysystem.models.BundleInfo;
@@ -94,6 +95,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
     private List<PlannedPL> PLList = new ArrayList<>();
     private List<PlannedPL> UPLListFiltered = new ArrayList<>();
     private List<SupplierInfo> suppliers;
+    TextView export;
 
     private ArrayList<String> gradeList = new ArrayList<>();
     private ArrayAdapter<String> gradeAdapter;
@@ -170,6 +172,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
         delete.setOnClickListener(this);
         searchCustomer.setOnClickListener(this);
         searchSupplier.setOnClickListener(this);
+        export.setOnClickListener(this);
 
         new JSONTask2().execute();
 
@@ -261,6 +264,11 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
                 new JSONTask4().execute();
 
                 suppliersDialog();
+
+                break;
+            case R.id.export:
+                ExportToExcel obj = new ExportToExcel(UnloadPackingList.this);
+                obj.exportUnloadPackingList(UPLListFiltered);
 
                 break;
 
@@ -475,43 +483,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
         filters();
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-//        linearLayoutView.getVisibility();
-        outState.putBoolean(STATE_VISIBILITY, mState);
-
-        List<TableRow> tableRows = new ArrayList<>();
-        int rowcount = tableLayout.getChildCount();
-        for (int i = 0; i < rowcount; i++) {
-            TableRow row = (TableRow) tableLayout.getChildAt(i);
-            tableRows.add(row);
-        }
-        outState.putSerializable("table", (Serializable) tableRows);
-        super.onSaveInstanceState(outState);
-    }
-
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-
-        mState = savedInstanceState.getBoolean(STATE_VISIBILITY);
-        tableLayout.setVisibility(mState ? View.VISIBLE : View.GONE);
-
-        // Restore state members from saved instance
-        paclingList.requestFocus();
-
-        List<TableRow> tableRows = (List<TableRow>) savedInstanceState.getSerializable("table");
-        for (int i = 0; i < tableRows.size(); i++) {
-            if (tableRows.get(i).getParent() != null) {
-                ((ViewGroup) tableRows.get(i).getParent()).removeView(tableRows.get(i)); // <- fix
-            }
-            tableLayout.addView(tableRows.get(i));
-        }
-
-        Log.e("tag1", "");
-
-        super.onRestoreInstanceState(savedInstanceState);
-    }
+    
 
     // ************************************** GET CUSTOMERS *******************************
     private class JSONTask extends AsyncTask<String, String, List<CustomerInfo>> {
@@ -1009,6 +981,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
         paclingList = findViewById(R.id.p_list);
         dest = findViewById(R.id.destination);
         orderNo = findViewById(R.id.order_no);
+        export = findViewById(R.id.export);
 
         tableLayout = findViewById(R.id.addNewRaw_table);
         headerTableLayout = findViewById(R.id.addNewRaw_table_header);

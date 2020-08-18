@@ -172,4 +172,6 @@
     <string name="loaded_packing_list_report">Loaded Packing List Report</string>
     <string name="planned_unplanned_inventory_report">Planned Unplanned Inventory Report</string>
 
+    <string name="export_to_excel">Export To Excel</string>
+
 </resources>

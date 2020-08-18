@@ -22,7 +22,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".stage_two.StageTwo"></activity>
+        <activity android:name=".stage_two.StageTwo">
+
+
+        </activity>
+
         <activity android:name=".EditLoadingReport" />
         <activity android:name=".stage_two.AddNewSupplier" />
         <activity android:name=".stage_one.ReportsStageOne" />
