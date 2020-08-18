@@ -14,7 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/alpha_black_dark"
-        android:orientation="vertical"
         >
 
         <LinearLayout
@@ -643,21 +642,20 @@
 
         <ListView
             android:id="@+id/acceptanceInfo_list"
+            app:layout_constraintBottom_toTopOf="@+id/acceptanceInfo_report_linear7"
+            app:layout_constraintTop_toBottomOf="@+id/acceptanceInfo_report_linear4"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginBottom="5dp"
-            app:layout_constraintBottom_toTopOf="@+id/acceptanceInfo_report_linear7"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/acceptanceInfo_report_linear4"
             app:layout_constraintVertical_bias="0.0" />
 
         <LinearLayout
             android:id="@+id/acceptanceInfo_report_linear7"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/orange"
             android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -667,6 +665,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="40dp"
+                android:layout_marginRight="5dp"
                 android:layout_weight="1"
                 android:layout_gravity="center"
                 android:orientation="horizontal"
@@ -685,7 +684,7 @@
                     android:text="@string/no_bundle"
                     android:fontFamily="serif"
                     android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/acceptanceInfo_report_no_bundles"
@@ -701,6 +700,7 @@
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_weight="1"
+                android:layout_marginRight="5dp"
                 android:layout_gravity="center"
                 android:background="@drawable/white_border"
                 android:orientation="horizontal"
@@ -718,7 +718,7 @@
                     android:text="@string/no_pieces"
                     android:fontFamily="serif"
                     android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/acceptanceInfo_report_no_pieces"
@@ -734,6 +734,7 @@
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_weight="1"
+                android:layout_marginRight="5dp"
                 android:layout_gravity="center"
                 android:background="@drawable/white_border"
                 android:orientation="horizontal"
@@ -751,7 +752,7 @@
                     android:text="@string/cubic"
                     android:fontFamily="serif"
                     android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/acceptanceInfo_report_cubic"
@@ -767,9 +768,9 @@
                 android:id="@+id/acceptanceInfo_report_delete"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
+                android:layout_marginRight="5dp"
                 android:background="@drawable/frame_shape"
-                android:drawableStart="@drawable/ic_delete_black_24dp"
-                android:drawableLeft="@drawable/ic_delete_black_24dp"
+                android:text="@string/delete"
                 android:fontFamily="serif"
                 android:padding="10dp"
                 android:paddingStart="10dp"
@@ -777,23 +778,23 @@
                 android:paddingRight="10dp"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="18sp"
-                android:visibility="visible" />
+                android:textSize="15sp" />
 
             <Button
-                android:id="@+id/printAll"
+                android:id="@+id/acceptanceInfo_report_export"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:visibility="gone"
-                android:layout_marginTop="1dp"
-                android:layout_marginEnd="7dp"
-                android:layout_marginRight="7dp"
+                android:layout_marginRight="5dp"
                 android:background="@drawable/frame_shape"
+                android:text="Export"
                 android:fontFamily="serif"
-                android:text="@string/print"
+                android:padding="10dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:paddingRight="10dp"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:textSize="15sp" />
 
             <Button
                 android:id="@+id/p_list_all"
