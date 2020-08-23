@@ -11,29 +11,33 @@
     tools:ignore="MissingDefaultResource">
 
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="@color/alpha_black_dark"
         >
 
         <LinearLayout
+            android:id="@+id/linearLayout4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/orange"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/loading_order_report"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="9"
                 android:layout_gravity="center"
-                android:fontFamily="serif"
+                android:layout_marginHorizontal="5dp"
                 android:layout_marginVertical="10dp"
+                android:layout_weight="9"
+                android:fontFamily="serif"
                 android:gravity="start|center_vertical"
                 android:text="@string/acceptance_info"
-                android:layout_marginHorizontal="5dp"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
 
@@ -41,8 +45,8 @@
                 android:id="@+id/acceptanceReport_count"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:layout_gravity="center"
+                android:layout_weight="1"
                 android:fontFamily="serif"
                 android:gravity="center"
                 android:text="1"
@@ -54,22 +58,24 @@
             android:id="@+id/acceptanceInfo_report_linear22"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
             android:layout_marginHorizontal="10dp"
-            >
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/linearLayout4">
 
             <LinearLayout
                 android:id="@+id/addToInventory_linear_two"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_weight="1"
-                android:paddingTop="10dp"
                 android:layout_marginEnd="5dp"
-                android:paddingBottom="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
                 android:background="@drawable/shape_with_corner"
                 android:orientation="horizontal"
-                android:layout_marginRight="5dp">
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -84,17 +90,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
+
+
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginEnd="5dp"
                 android:layout_gravity="center"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
                 android:background="@drawable/shape_with_corner"
-                android:orientation="horizontal"
-                android:layout_marginRight="5dp">
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -111,24 +119,23 @@
                     android:id="@+id/Loding_Order_from"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:focusable="false"
                     android:fontFamily="serif"
-                    android:textSize="15sp"
-                    />
+                    android:gravity="center"
+                    android:textSize="15sp" />
+
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_gravity="center"
+                android:layout_weight="1"
                 android:background="@drawable/shape_with_corner"
-                android:orientation="horizontal"
-                >
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -145,13 +152,14 @@
                     android:id="@+id/Loding_Order_to"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:focusable="false"
                     android:fontFamily="serif"
-                    android:textSize="15sp"
-                    />
+                    android:gravity="center"
+                    android:textSize="15sp" />
+
+
 
             </LinearLayout>
 
@@ -255,25 +263,15 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/linear"
+        <TableRow
+            android:id="@+id/acceptanceInfo_header"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="165dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginBottom="5dp"
-            android:orientation="vertical"
-           >
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingVertical="5dp"
-                android:background="@color/orange">
-
+            android:layout_height="wrap_content"
+            android:background="@color/orange"
+            android:layout_marginVertical="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/acceptanceInfo_report_linear2">
 
                 <TextView
                     android:layout_width="0dp"
@@ -352,24 +350,63 @@
                     android:background="@drawable/ic_edit_24dp"
                     />
 
-            </TableRow>
+        </TableRow>
 
-            <ListView
-                android:id="@+id/list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_constraintBottom_toTopOf="@+id/inventory_report_linear6"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/inventory_report_linear4"
-                app:layout_constraintVertical_bias="0.0"/>
+        <ListView
+            android:id="@+id/list"
+            app:layout_constraintTop_toBottomOf="@+id/acceptanceInfo_header"
+            app:layout_constraintBottom_toTopOf="@+id/acceptanceInfo_report_linear7"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="5dp"
-                android:layout_marginTop="2dp"
-                android:background="@color/orange" />
+        <LinearLayout
+            android:id="@+id/acceptanceInfo_report_linear7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end|right"
+            android:layout_margin="5dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            >
+
+
+            <Button
+                android:id="@+id/acceptance_report_export"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/frame_shape"
+                android:text="Export"
+                android:fontFamily="serif"
+                android:padding="10dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:paddingRight="10dp"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/p_list_all"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginTop="1dp"
+                android:background="@drawable/frame_shape"
+                android:fontFamily="serif"
+                android:visibility="gone"
+                android:text="@string/p_list"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -378,7 +415,10 @@
             android:layout_height="290dp"
             android:layout_alignParentBottom="true"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
             <Button
                 android:id="@+id/arrow"
@@ -394,16 +434,17 @@
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:paddingVertical="5dp"
-                    android:paddingHorizontal="10dp"
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="5dp">
 
                     <TextView
                         android:text="@string/supplier_name"
                         android:textSize="15sp"
                         android:layout_marginTop="5dp"
+                        android:fontFamily="serif"
                         android:textColor="@color/orange"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -412,6 +453,7 @@
                     <TextView
                         android:text="@string/thickness"
                         android:textSize="15sp"
+                        android:fontFamily="serif"
                         android:layout_marginTop="5dp"
                         android:textColor="@color/orange"
                         android:layout_width="0dp"
@@ -421,6 +463,7 @@
                     <TextView
                         android:text="@string/width"
                         android:textSize="15sp"
+                        android:fontFamily="serif"
                         android:layout_marginTop="5dp"
                         android:textColor="@color/orange"
                         android:layout_width="0dp"
@@ -430,6 +473,7 @@
                     <TextView
                         android:text="@string/length"
                         android:textSize="15sp"
+                        android:fontFamily="serif"
                         android:layout_marginTop="5dp"
                         android:textColor="@color/orange"
                         android:layout_width="0dp"
@@ -439,6 +483,7 @@
                     <TextView
                         android:text="@string/grade"
                         android:textSize="15sp"
+                        android:fontFamily="serif"
                         android:layout_marginTop="5dp"
                         android:textColor="@color/orange"
                         android:layout_width="0dp"
@@ -448,6 +493,7 @@
                     <TextView
                         android:text="@string/no_of_pieces"
                         android:textSize="15sp"
+                        android:fontFamily="serif"
                         android:layout_marginTop="5dp"
                         android:textColor="@color/orange"
                         android:layout_width="0dp"
@@ -457,6 +503,7 @@
                     <TextView
                         android:text="@string/rejected_pieces"
                         android:textSize="15sp"
+                        android:fontFamily="serif"
                         android:layout_marginTop="5dp"
                         android:textColor="@color/orange"
                         android:layout_width="0dp"
@@ -466,6 +513,7 @@
                     <TextView
                         android:text="@string/no_bundle"
                         android:textSize="15sp"
+                        android:fontFamily="serif"
                         android:layout_marginTop="5dp"
                         android:textColor="@color/orange"
                         android:layout_width="0dp"
@@ -491,12 +539,7 @@
                     android:layout_height="280dp"
                     android:background="@drawable/jjj" />
             </LinearLayout>
-
-
-
         </LinearLayout>
-
-
-    </RelativeLayout>
+    </android.support.constraint.ConstraintLayout>
 
 </LinearLayout>
