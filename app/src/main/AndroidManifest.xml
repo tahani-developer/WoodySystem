@@ -21,6 +21,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity android:name=".stage_two.StageTwo">
 
@@ -43,7 +44,12 @@
         <activity
             android:name=".reports.InventoryReport"
             android:screenOrientation="sensorLandscape"
-            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden" />
+            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden" >
+
+
+
+        </activity>
+
         <activity
             android:name=".reports.AcceptanceReport"
             android:screenOrientation="sensorLandscape"
@@ -77,7 +83,11 @@
         <activity android:name=".stage_two.AddNewCustomer" />
         <activity
             android:name=".Stage3"
-            android:windowSoftInputMode="stateAlwaysHidden" />
+            android:windowSoftInputMode="stateAlwaysHidden" >
+
+
+
+        </activity>
         <activity
             android:name=".LoadingOrder"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />

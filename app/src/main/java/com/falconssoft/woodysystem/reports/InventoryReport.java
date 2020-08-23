@@ -56,12 +56,14 @@ import android.widget.Toast;
 
 import com.falconssoft.woodysystem.AddToInventory;
 import com.falconssoft.woodysystem.DatabaseHandler;
+import com.falconssoft.woodysystem.ExportToExcel;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.SpinnerCustomAdapter;
 import com.falconssoft.woodysystem.WoodPresenter;
 import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.Settings;
 import com.falconssoft.woodysystem.models.SpinnerModel;
+import com.falconssoft.woodysystem.stage_two.UnloadPackingList;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -135,7 +137,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private JSONArray jsonArrayBundles = new JSONArray();
     private WoodPresenter woodPresenter;
     private Animation animation;
-    private TextView textView, noOfBundles, noOfPieces, cubicField, deleteAll, dateFrom, dateTo, thicknessOrder, widthOrder, lengthOrder, searchPListTool, searchSerialTool;
+    private TextView textView, noOfBundles, noOfPieces, cubicField, deleteAll, dateFrom, dateTo, thicknessOrder, widthOrder, lengthOrder, searchPListTool, searchSerialTool , export;
     private Spinner location, area, ordered, pList, grade, thicknessSpinner, widthSpinner, lengthSpinner;
     private ArrayAdapter<String> locationAdapter;
     private ArrayAdapter<String> areaAdapter;
@@ -196,6 +198,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         thicknessOrder.setOnClickListener(this);
         widthOrder.setOnClickListener(this);
         lengthOrder.setOnClickListener(this);
+        export.setOnClickListener(this);
         location.setOnItemSelectedListener(this);
         area.setOnItemSelectedListener(this);
         thicknessSpinner.setOnItemSelectedListener(this);
@@ -365,6 +368,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         grade = findViewById(R.id.inventory_report_grade);
 //        ordered = findViewById(R.id.inventory_report_ordered);
         textView = findViewById(R.id.inventory_report_tv);
+        export = findViewById(R.id.export);
         dateFrom = findViewById(R.id.inventory_report_from);
         dateTo = findViewById(R.id.inventory_report_to);
         noOfBundles = findViewById(R.id.inventory_report_no_bundles);
@@ -1258,6 +1262,11 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                     serialString = "All";
 
                 filters();
+
+                break;
+            case R.id.export:
+                ExportToExcel obj = new ExportToExcel(InventoryReport.this);
+                obj.exportInventoryReport(filtered);
 
                 break;
         }

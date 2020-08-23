@@ -31,7 +31,12 @@ public class PlannedListAdapter extends RecyclerView.Adapter<PlannedListAdapter.
     @Override
 
     public SuppliersViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.planned_list_row, viewGroup, false);
+        View view;
+//        if (PlannedPL.get(i).getHide() == 1) {
+//            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.planned_list_row2, viewGroup, false);
+//        } else {
+            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.planned_list_row, viewGroup, false);
+//        }
         return new SuppliersViewHolder(view);
     }
 
@@ -51,6 +56,40 @@ public class PlannedListAdapter extends RecyclerView.Adapter<PlannedListAdapter.
         holder.pieces.setText("" + (int) PlannedPL.get(i).getNoOfPieces());
         holder.copies.setText("" + PlannedPL.get(i).getNoOfCopies());
 
+        if (PlannedPL.get(i).getHide() == 1) {
+            holder.serial.setBackgroundColor(plannedPL.getResources().getColor(R.color.gray_un_editable));
+            holder.cust.setBackgroundColor(plannedPL.getResources().getColor(R.color.gray_un_editable));
+            holder.pl.setBackgroundColor(plannedPL.getResources().getColor(R.color.gray_un_editable));
+            holder.dest.setBackgroundColor(plannedPL.getResources().getColor(R.color.gray_un_editable));
+            holder.order.setBackgroundColor(plannedPL.getResources().getColor(R.color.gray_un_editable));
+            holder.supplier.setBackgroundColor(plannedPL.getResources().getColor(R.color.gray_un_editable));
+            holder.grade.setBackgroundColor(plannedPL.getResources().getColor(R.color.gray_un_editable));
+            holder.thick.setBackgroundColor(plannedPL.getResources().getColor(R.color.gray_un_editable));
+            holder.width.setBackgroundColor(plannedPL.getResources().getColor(R.color.gray_un_editable));
+            holder.length.setBackgroundColor(plannedPL.getResources().getColor(R.color.gray_un_editable));
+            holder.pieces.setBackgroundColor(plannedPL.getResources().getColor(R.color.gray_un_editable));
+            holder.copies.setBackgroundColor(plannedPL.getResources().getColor(R.color.gray_un_editable));
+            holder.isExist.setBackgroundColor(plannedPL.getResources().getColor(R.color.gray_un_editable));
+            holder.linEdit.setBackgroundColor(plannedPL.getResources().getColor(R.color.gray_un_editable));
+            holder.linCopy.setBackgroundColor(plannedPL.getResources().getColor(R.color.gray_un_editable));
+        } else {
+            holder.serial.setBackgroundColor(plannedPL.getResources().getColor(R.color.light_orange));
+            holder.cust.setBackgroundColor(plannedPL.getResources().getColor(R.color.light_orange));
+            holder.pl.setBackgroundColor(plannedPL.getResources().getColor(R.color.light_orange));
+            holder.dest.setBackgroundColor(plannedPL.getResources().getColor(R.color.light_orange));
+            holder.order.setBackgroundColor(plannedPL.getResources().getColor(R.color.light_orange));
+            holder.supplier.setBackgroundColor(plannedPL.getResources().getColor(R.color.light_orange));
+            holder.grade.setBackgroundColor(plannedPL.getResources().getColor(R.color.light_orange));
+            holder.thick.setBackgroundColor(plannedPL.getResources().getColor(R.color.light_orange));
+            holder.width.setBackgroundColor(plannedPL.getResources().getColor(R.color.light_orange));
+            holder.length.setBackgroundColor(plannedPL.getResources().getColor(R.color.light_orange));
+            holder.pieces.setBackgroundColor(plannedPL.getResources().getColor(R.color.light_orange));
+            holder.copies.setBackgroundColor(plannedPL.getResources().getColor(R.color.light_orange));
+            holder.isExist.setBackgroundColor(plannedPL.getResources().getColor(R.color.light_orange));
+            holder.linEdit.setBackgroundColor(plannedPL.getResources().getColor(R.color.light_orange));
+            holder.linCopy.setBackgroundColor(plannedPL.getResources().getColor(R.color.light_orange));
+        }
+
         if (PlannedPL.get(i).getExist().equals("Exist")) {
             holder.isExist.setText("Exist(" + PlannedPL.get(i).getNoOfExixt() + ")");
             holder.isExist.setTextColor(ContextCompat.getColor(plannedPL, R.color.colorPrimary));
@@ -67,11 +106,16 @@ public class PlannedListAdapter extends RecyclerView.Adapter<PlannedListAdapter.
             holder.isExist.setTextColor(ContextCompat.getColor(plannedPL, R.color.orange));
         }
 
+        if (PlannedPL.get(i).getHide() == 1) {
+            holder.isExist.setText("Ordered");
+        }
+
         int index = i;
         holder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                plannedPL.editItemDialog(index);
+                if (PlannedPL.get(i).getHide() != 1)
+                    plannedPL.editItemDialog(index);
             }
         });
 
@@ -84,7 +128,8 @@ public class PlannedListAdapter extends RecyclerView.Adapter<PlannedListAdapter.
         holder.copy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                plannedPL.editNoOfItemsDialog(index);
+                if (PlannedPL.get(i).getHide() != 1)
+                    plannedPL.editNoOfItemsDialog(index);
             }
         });
 
@@ -92,44 +137,46 @@ public class PlannedListAdapter extends RecyclerView.Adapter<PlannedListAdapter.
         holder.isExist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // if (PlannedPL.get(i).getExist().equals("Not Exist"))
-                    plannedPL.closedResultsDialog(index);
-                }
-            });
-
-
-        }
-
-        @Override
-        public int getItemCount () {
-            return PlannedPL.size();
-        }
-
-        class SuppliersViewHolder extends RecyclerView.ViewHolder {
-
-            TextView serial, cust, pl, dest, order, supplier,grade , thick, width, length, pieces, copies, isExist, edit, delete, copy;
-            LinearLayout linearLayout;
-
-            public SuppliersViewHolder(@NonNull View itemView) {
-                super(itemView);
-                linearLayout = itemView.findViewById(R.id.linear);
-
-                serial = itemView.findViewById(R.id.serial);
-                cust = itemView.findViewById(R.id.cust);
-                pl = itemView.findViewById(R.id.pl);
-                dest = itemView.findViewById(R.id.dest);
-                order = itemView.findViewById(R.id.order_no);
-                supplier = itemView.findViewById(R.id.supplier);
-                grade = itemView.findViewById(R.id.grade);
-                thick = itemView.findViewById(R.id.thick);
-                width = itemView.findViewById(R.id.width);
-                length = itemView.findViewById(R.id.length);
-                pieces = itemView.findViewById(R.id.pieces);
-                copies = itemView.findViewById(R.id.copies);
-                isExist = itemView.findViewById(R.id.is_exist);
-                edit = itemView.findViewById(R.id.edit);
-                delete = itemView.findViewById(R.id.delete);
-                copy = itemView.findViewById(R.id.copy);
+                // if (PlannedPL.get(i).getExist().equals("Not Exist"))
+                plannedPL.closedResultsDialog(index);
             }
+        });
+
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return PlannedPL.size();
+    }
+
+    class SuppliersViewHolder extends RecyclerView.ViewHolder {
+
+        TextView serial, cust, pl, dest, order, supplier, grade, thick, width, length, pieces, copies, isExist, edit, delete, copy;
+        LinearLayout linearLayout , linEdit , linCopy;
+
+        public SuppliersViewHolder(@NonNull View itemView) {
+            super(itemView);
+            linearLayout = itemView.findViewById(R.id.linear);
+
+            serial = itemView.findViewById(R.id.serial);
+            cust = itemView.findViewById(R.id.cust);
+            pl = itemView.findViewById(R.id.pl);
+            dest = itemView.findViewById(R.id.dest);
+            order = itemView.findViewById(R.id.order_no);
+            supplier = itemView.findViewById(R.id.supplier);
+            grade = itemView.findViewById(R.id.grade);
+            thick = itemView.findViewById(R.id.thick);
+            width = itemView.findViewById(R.id.width);
+            length = itemView.findViewById(R.id.length);
+            pieces = itemView.findViewById(R.id.pieces);
+            copies = itemView.findViewById(R.id.copies);
+            isExist = itemView.findViewById(R.id.is_exist);
+            edit = itemView.findViewById(R.id.edit);
+            delete = itemView.findViewById(R.id.delete);
+            copy = itemView.findViewById(R.id.copy);
+            linEdit = itemView.findViewById(R.id.lin_edit);
+            linCopy = itemView.findViewById(R.id.lin_copy);
         }
     }
+}

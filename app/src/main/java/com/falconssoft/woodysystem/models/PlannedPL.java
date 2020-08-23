@@ -25,6 +25,7 @@ public class PlannedPL {
     private double cubic;
     private String grade;
     private int isOld;
+    private int hide;
 
     public PlannedPL(String custName, String custNo, String packingList, String destination, String orderNo, double thickness, double width, double length, double noOfPieces, String date) {
         this.custName = custName;
@@ -195,6 +196,14 @@ public class PlannedPL {
         this.isOld = isOld;
     }
 
+    public int getHide() {
+        return hide;
+    }
+
+    public void setHide(int hide) {
+        this.hide = hide;
+    }
+
     public JSONObject getJSONObject() {
         JSONObject obj = new JSONObject();
 
@@ -211,6 +220,7 @@ public class PlannedPL {
             obj.put("LENGTH", "'" + length + "'");
             obj.put("PIECES", "'" + noOfPieces + "'");
             obj.put("DATE", "'" + date + "'");
+            obj.put("HIDE", "'" + hide + "'");
 
 
         } catch (JSONException e) {
