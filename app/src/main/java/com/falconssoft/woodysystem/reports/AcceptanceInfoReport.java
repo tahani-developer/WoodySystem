@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -31,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.falconssoft.woodysystem.DatabaseHandler;
+import com.falconssoft.woodysystem.ExportToExcel;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.NewRowInfo;
@@ -98,6 +100,8 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
     public static final String EDIT_LIST = "EDIT_LIST";
     public static final String EDIT_RAW = "EDIT_RAW";
     public static final String EDIT_FLAG = "EDIT_FLAG";
+    private Button export;
+    private SimpleDateFormat dateFormat, dfReport;
 
     private ProgressDialog progressDialog;
 
@@ -132,6 +136,7 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
         accLocationSpinner = findViewById(R.id.acceptanceInfo_report_location);
         delete = findViewById(R.id.acceptanceInfo_report_delete);
         containerLayout = findViewById(R.id.acceptanceInfo_report_containerLayout);
+        export = findViewById(R.id.acceptanceInfo_report_export);
 
         fromThickness = findViewById(R.id.acceptanceInfo_report_fromThick);
         toThickness = findViewById(R.id.acceptanceInfo_report_toThick);
@@ -149,9 +154,10 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
 
         date = Calendar.getInstance().getTime();
         calendar = Calendar.getInstance();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+         dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         fromDate.setText("1/12/2019");
         toDate.setText(dateFormat.format(date));
+        dfReport = new SimpleDateFormat("yyyyMMdd_hhmmss");
 
         adapter = new AcceptanceInfoReportAdapter(AcceptanceInfoReport.this, details);
         progressDialog.show();
@@ -243,6 +249,15 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
                     passwordDialog.show();
                 } else
                     Toast.makeText(AcceptanceInfoReport.this, "Please select items first!", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        export.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExportToExcel obj = new ExportToExcel(AcceptanceInfoReport.this);
+                obj.exportReportTwo(filtered, fromDate.getText().toString(), toDate.getText().toString(), dfReport.format(calendar.getTime()));
 
             }
         });

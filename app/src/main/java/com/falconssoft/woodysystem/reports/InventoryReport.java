@@ -56,12 +56,14 @@ import android.widget.Toast;
 
 import com.falconssoft.woodysystem.AddToInventory;
 import com.falconssoft.woodysystem.DatabaseHandler;
+import com.falconssoft.woodysystem.ExportToExcel;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.SpinnerCustomAdapter;
 import com.falconssoft.woodysystem.WoodPresenter;
 import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.Settings;
 import com.falconssoft.woodysystem.models.SpinnerModel;
+import com.falconssoft.woodysystem.stage_two.PlannedUnplanned;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -158,7 +160,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private CheckBox checkBoxPrint;
     private List<BundleInfo> bundleInfoForPrint = new ArrayList<>();
     private List<BundleInfo> bundleInfoForPList = new ArrayList<>();
-    private Button printAll, pListAll;
+    private Button printAll, pListAll, export;
     private TableRow tableRowToDelete = null;
     private EditText fromLength, toLength, fromWidth, toWidth, searchPListTextView, searchSerial;//, fromThickness, toThickness
     private boolean isThicknessAsc = true, isWidthAsc = true, isLengthAsc = true;
@@ -170,6 +172,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private List<Double> doubleList;
     public static final String EDIT_BUNDLE = "EDIT_BUNDLE";
     public static final String EDIT_FLAG_BUNDLE = "EDIT_FLAG_BUNDLE";
+    private SimpleDateFormat df, dfReport;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -180,7 +183,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 //        searchViewTh = (SearchView) findViewById(R.id.mSearchTh);
 //        searchViewW = (SearchView) findViewById(R.id.mSearchW);
 //        searchViewL = (SearchView) findViewById(R.id.mSearchL);
-        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+         df = new SimpleDateFormat("dd/MM/yyyy");
         dateFrom.setText("1/12/2019");
         dateTo.setText(df.format(date));
 
@@ -380,6 +383,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         toWidth = findViewById(R.id.inventory_report_toWidth);
         lengthSpinner = findViewById(R.id.inventory_report_length_spinner);
         widthSpinner = findViewById(R.id.inventory_report_width_spinner);
+        export = findViewById(R.id.inventory_report_export);
 
 //        fromThickness = findViewById(R.id.inventory_report_fromThick);
 //        toThickness = findViewById(R.id.inventory_report_toThick);
@@ -393,6 +397,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         searchSerial = findViewById(R.id.inventory_report_search_serial);
         searchSerialTool = findViewById(R.id.inventory_report_search_serial_tool);
 
+        export.setOnClickListener(this);
         searchSerialTool.setOnClickListener(this);
         searchPListTool.setOnClickListener(this);
         searchPListTextView.addTextChangedListener(new watchTextChange(searchPListTextView));
@@ -1154,6 +1159,11 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     public void onClick(View v) {
         int flag = 0;
         switch (v.getId()) {
+            case R.id.inventory_report_export:
+                dfReport = new SimpleDateFormat("yyyyMMdd_hhmmss");
+                ExportToExcel obj = new ExportToExcel(InventoryReport.this);
+                obj.exportInventoryReport(filtered,loc, areaField, gradeFeld,dateFrom.getText().toString(), dateTo.getText().toString(), dfReport.format(date));
+                break;
             case R.id.inventory_report_search_pList_tool:
                 if (searchPListTextView.getVisibility() == View.VISIBLE) {
                     searchPListTextView.setVisibility(View.GONE);

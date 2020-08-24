@@ -30,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.falconssoft.woodysystem.DatabaseHandler;
+import com.falconssoft.woodysystem.ExportToExcel;
 import com.falconssoft.woodysystem.HorizontalListView;
 import com.falconssoft.woodysystem.ItemsListAdapter4;
 import com.falconssoft.woodysystem.PicturesAdapter;
@@ -76,7 +77,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
     private TextView textView, count;
     private static LinearLayout linearLayout;
     private EditText from, to;
-    private Button arrow;
+    private Button arrow, export;
     private static ListView listView;
     private static List<NewRowInfo> master, details;
     private static List<Pictures> pictures;
@@ -96,7 +97,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
     static Dialog dialog;
     private List<String> locationList, truckList, acceptorList, ttnList;
     String myFormat;
-    SimpleDateFormat sdf;
+    private SimpleDateFormat sdf, dfReport;
     private ProgressDialog progressDialog;
     private int rowsCount = 0;
     private List<NewRowInfo> filtered;
@@ -137,10 +138,11 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
         truckSpinner = findViewById(R.id.acceptanceInfoReport_truckNo);
         acceptorSpinner = findViewById(R.id.acceptanceInfoReport_acceptor);
         ttnSpinner = findViewById(R.id.acceptanceInfoReport_ttn);
+        export = findViewById(R.id.acceptance_report_export);
 
         myFormat = "dd/MM/yyyy";
         sdf = new SimpleDateFormat(myFormat, Locale.US);
-
+        dfReport = new SimpleDateFormat("yyyyMMdd_hhmmss");
 
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_to_right);
         textView.startAnimation(animation);
@@ -152,6 +154,14 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
         list.setAdapter(adapter2);
 
 
+        export.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExportToExcel obj = new ExportToExcel(AcceptanceReport.this);
+                obj.exportReportOne(details,filtered, truckString, loc, from.getText().toString(), to.getText().toString(), dfReport.format(myCalendar.getTime()));
+
+            }
+        });
         arrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

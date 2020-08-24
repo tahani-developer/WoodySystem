@@ -109,7 +109,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
     private Spinner gradeSpinner;
     private String gradeText = "All";
 
-    SimpleDateFormat sdf;
+    private SimpleDateFormat sdf, dfReport;
     String today;
 
     private JSONArray plannedPLListJSON = new JSONArray();
@@ -139,6 +139,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
         String myFormat = "dd/MM/yyyy";
         sdf = new SimpleDateFormat(myFormat, Locale.US);
         today = sdf.format(myCalendar.getTime());
+        dfReport = new SimpleDateFormat("yyyyMMdd_hhmmss");
 
         paclingList.requestFocus();
 
@@ -274,7 +275,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.export:
                 ExportToExcel obj = new ExportToExcel(LoadPackingList.this);
-                obj.exportLoadPackingList(PLListFiltered);
+                obj.exportLoadPackingList(PLListFiltered, searchCustomer.getText().toString(), searchSupplier.getText().toString(),  dfReport.format(Calendar.getInstance().getTime()), gradeText, today);
 
                 break;
 

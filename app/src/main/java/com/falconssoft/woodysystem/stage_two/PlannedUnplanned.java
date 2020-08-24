@@ -115,7 +115,7 @@ public class PlannedUnplanned extends AppCompatActivity implements AdapterView.O
 
     private List<Double> doubleList;
 
-    SimpleDateFormat sdf;
+    SimpleDateFormat sdf, dfReport;
     String today;
 
     private List<String> thickness = new ArrayList<>();
@@ -147,7 +147,7 @@ public class PlannedUnplanned extends AppCompatActivity implements AdapterView.O
         String myFormat = "dd/MM/yyyy";
         sdf = new SimpleDateFormat(myFormat, Locale.US);
         today = sdf.format(myCalendar.getTime());
-
+        dfReport = new SimpleDateFormat("yyyyMMdd_hhmmss");
 
         thicknessOrder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -205,7 +205,7 @@ public class PlannedUnplanned extends AppCompatActivity implements AdapterView.O
             public void onClick(View v) {
 
                 ExportToExcel obj = new ExportToExcel(PlannedUnplanned.this);
-                obj.exportPlannedUnplanned(PLListFiltered);
+                obj.exportPlannedUnplanned(PLListFiltered,  dfReport.format(Calendar.getInstance().getTime()), today);
             }
         });
 
