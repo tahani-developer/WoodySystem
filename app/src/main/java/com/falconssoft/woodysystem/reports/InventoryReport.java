@@ -172,6 +172,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private List<Double> doubleList;
     public static final String EDIT_BUNDLE = "EDIT_BUNDLE";
     public static final String EDIT_FLAG_BUNDLE = "EDIT_FLAG_BUNDLE";
+    String DateString="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,6 +186,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         dateFrom.setText("1/12/2019");
         dateTo.setText(df.format(date));
+        DateString=df.format(date);
 
 //        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_to_right);
 //        textView.startAnimation(animation);
@@ -1015,7 +1017,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.barcode_design);
-        TextView companyName, bundelNo, TLW, pcsNo, grade;
+        TextView companyName, bundelNo, TLW, pcsNo, grade,DatePrint;
 
         companyName = (TextView) dialog.findViewById(R.id.companyName);
         bundelNo = (TextView) dialog.findViewById(R.id.bundelNo);
@@ -1023,7 +1025,9 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         pcsNo = (TextView) dialog.findViewById(R.id.pcsNo);
         grade = (TextView) dialog.findViewById(R.id.grade);
         ImageView iv = (ImageView) dialog.findViewById(R.id.barcode);
+        DatePrint= dialog.findViewById(R.id.DatePrint);
 
+        DatePrint.setText(""+DateString);
         companyName.setText(generalSettings.getCompanyName());
         bundelNo.setText(data);
         TLW.setText(thic + " X " + width + " X " + length);
