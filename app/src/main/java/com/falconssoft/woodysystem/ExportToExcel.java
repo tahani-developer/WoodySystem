@@ -468,9 +468,9 @@ public class ExportToExcel {
 
         insertCell(pdfPTableHeader, "Report Two", Element.ALIGN_CENTER, 9, arabicFontHeader, BaseColor.WHITE);
 //        insertCell(pdfPTableHeader, context.getString(R.string.location) + ": " + location, Element.ALIGN_RIGHT, 5, arabicFontHeader, BaseColor.WHITE);
-        insertCell(pdfPTableHeader, context.getString(R.string.from) + ": " + fromDate, Element.ALIGN_LEFT, 9, arabicFontHeader, BaseColor.WHITE);
+        insertCell(pdfPTableHeader, context.getString(R.string.from) + ": " + fromDate, Element.ALIGN_RIGHT, 4, arabicFontHeader, BaseColor.WHITE);
+        insertCell(pdfPTableHeader, context.getString(R.string.to) + ": " + toDate, Element.ALIGN_LEFT, 5, arabicFont, BaseColor.WHITE);
 //        insertCell(pdfPTableHeader, context.getString(R.string.truck_no) + ": " + truck, Element.ALIGN_RIGHT, 5, arabicFont, BaseColor.WHITE);
-        insertCell(pdfPTableHeader, context.getString(R.string.to) + ": " + toDate, Element.ALIGN_RIGHT, 9, arabicFont, BaseColor.WHITE);
         insertCell(pdfPTableHeader, "", directionOfHeader, 1, arabicFontHeader, BaseColor.WHITE);
 
 

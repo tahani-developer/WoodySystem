@@ -161,7 +161,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private CheckBox checkBoxPrint;
     private List<BundleInfo> bundleInfoForPrint = new ArrayList<>();
     private List<BundleInfo> bundleInfoForPList = new ArrayList<>();
-    private Button printAll, pListAll, export;
+    private Button printAll, pListAll;
     private TableRow tableRowToDelete = null;
     private EditText fromLength, toLength, fromWidth, toWidth, searchPListTextView, searchSerial;//, fromThickness, toThickness
     private boolean isThicknessAsc = true, isWidthAsc = true, isLengthAsc = true;
@@ -1278,8 +1278,8 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 
                 break;
             case R.id.export:
-                ExportToExcel obj = new ExportToExcel(InventoryReport.this);
-                obj.exportInventoryReport(filtered);
+                ExportToExcel export = new ExportToExcel(InventoryReport.this);
+                export.exportInventoryReport(filtered);
 
                 break;
         }

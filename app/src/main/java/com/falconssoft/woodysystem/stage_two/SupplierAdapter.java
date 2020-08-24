@@ -19,14 +19,18 @@ public class SupplierAdapter extends RecyclerView.Adapter<SupplierAdapter.Suppli
 
     private PlannedPackingList plannedPL;
     private UnloadPackingList plannedPL2;
+    private LoadPackingList loadPackingList;
+
     private List<SupplierInfo> customerInfoList;
     private int flag;
 
     public SupplierAdapter(int flag, Context plannedPL, List<SupplierInfo> customerInfoList) {
         if (flag == 1)
             this.plannedPL = (PlannedPackingList) plannedPL;
-        else
+        else if (flag == 2)
             this.plannedPL2 = (UnloadPackingList) plannedPL;
+        else
+            this.loadPackingList = (LoadPackingList) plannedPL;
 
         this.flag = flag;
         this.customerInfoList = customerInfoList;
@@ -52,8 +56,11 @@ public class SupplierAdapter extends RecyclerView.Adapter<SupplierAdapter.Suppli
                 if (flag == 1)
                     plannedPL.getSearchSupplierInfo(customerInfoList.get(index).getSupplierName()
                             , customerInfoList.get(index).getSupplierNo());
-                else
+                else if (flag == 2)
                     plannedPL2.getSearchSupplierInfo(customerInfoList.get(index).getSupplierName()
+                            , customerInfoList.get(index).getSupplierNo());
+                else
+                    loadPackingList.getSearchSupplierInfo(customerInfoList.get(index).getSupplierName()
                             , customerInfoList.get(index).getSupplierNo());
             }
         });

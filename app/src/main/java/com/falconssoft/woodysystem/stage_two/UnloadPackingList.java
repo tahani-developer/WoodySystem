@@ -321,7 +321,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
         for (int i = 0; i < PLList.size(); i++) {
 
             if (customerName.equals(PLList.get(i).getCustName()) || customerName.equals("All") || customerName.equals("")) {
-                if (supplierName.equals(PLList.get(i).getCustName()) || supplierName.equals("All") || supplierName.equals("")) {
+                if (supplierName.equals(PLList.get(i).getSupplier()) || supplierName.equals("All") || supplierName.equals("")) {
                     if (PLList.get(i).getPackingList().startsWith(paclingList.getText().toString()) || paclingList.getText().toString().equals("")) {
                         if (PLList.get(i).getDestination().startsWith(dest.getText().toString()) || dest.getText().toString().equals("")) {
                             if (PLList.get(i).getOrderNo().startsWith(orderNo.getText().toString()) || orderNo.getText().toString().equals("")) {

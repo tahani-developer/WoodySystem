@@ -24,5 +24,6 @@
     <color name="wooden">#643F18</color>
     <color name="preview">#C24641</color>
     <color name="alpha_white2">#E2FFFEFE</color>
+    <color name="light_gray">#EFEBEB</color>
 
 </resources>
