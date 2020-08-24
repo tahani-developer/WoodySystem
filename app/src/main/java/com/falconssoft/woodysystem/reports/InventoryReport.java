@@ -64,6 +64,7 @@ import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.Settings;
 import com.falconssoft.woodysystem.models.SpinnerModel;
 import com.falconssoft.woodysystem.stage_two.PlannedUnplanned;
+import com.falconssoft.woodysystem.stage_two.UnloadPackingList;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -137,7 +138,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private JSONArray jsonArrayBundles = new JSONArray();
     private WoodPresenter woodPresenter;
     private Animation animation;
-    private TextView textView, noOfBundles, noOfPieces, cubicField, deleteAll, dateFrom, dateTo, thicknessOrder, widthOrder, lengthOrder, searchPListTool, searchSerialTool;
+    private TextView textView, noOfBundles, noOfPieces, cubicField, deleteAll, dateFrom, dateTo, thicknessOrder, widthOrder, lengthOrder, searchPListTool, searchSerialTool , export;
     private Spinner location, area, ordered, pList, grade, thicknessSpinner, widthSpinner, lengthSpinner;
     private ArrayAdapter<String> locationAdapter;
     private ArrayAdapter<String> areaAdapter;
@@ -173,6 +174,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     public static final String EDIT_BUNDLE = "EDIT_BUNDLE";
     public static final String EDIT_FLAG_BUNDLE = "EDIT_FLAG_BUNDLE";
     private SimpleDateFormat df, dfReport;
+    String DateString="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,6 +188,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
          df = new SimpleDateFormat("dd/MM/yyyy");
         dateFrom.setText("1/12/2019");
         dateTo.setText(df.format(date));
+        DateString=df.format(date);
 
 //        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_to_right);
 //        textView.startAnimation(animation);
@@ -199,6 +202,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         thicknessOrder.setOnClickListener(this);
         widthOrder.setOnClickListener(this);
         lengthOrder.setOnClickListener(this);
+        export.setOnClickListener(this);
         location.setOnItemSelectedListener(this);
         area.setOnItemSelectedListener(this);
         thicknessSpinner.setOnItemSelectedListener(this);
@@ -368,6 +372,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         grade = findViewById(R.id.inventory_report_grade);
 //        ordered = findViewById(R.id.inventory_report_ordered);
         textView = findViewById(R.id.inventory_report_tv);
+        export = findViewById(R.id.export);
         dateFrom = findViewById(R.id.inventory_report_from);
         dateTo = findViewById(R.id.inventory_report_to);
         noOfBundles = findViewById(R.id.inventory_report_no_bundles);
@@ -1016,7 +1021,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.barcode_design);
-        TextView companyName, bundelNo, TLW, pcsNo, grade;
+        TextView companyName, bundelNo, TLW, pcsNo, grade,DatePrint;
 
         companyName = (TextView) dialog.findViewById(R.id.companyName);
         bundelNo = (TextView) dialog.findViewById(R.id.bundelNo);
@@ -1024,7 +1029,9 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         pcsNo = (TextView) dialog.findViewById(R.id.pcsNo);
         grade = (TextView) dialog.findViewById(R.id.grade);
         ImageView iv = (ImageView) dialog.findViewById(R.id.barcode);
+        DatePrint= dialog.findViewById(R.id.DatePrint);
 
+        DatePrint.setText(""+DateString);
         companyName.setText(generalSettings.getCompanyName());
         bundelNo.setText(data);
         TLW.setText(thic + " X " + width + " X " + length);
@@ -1268,6 +1275,11 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                     serialString = "All";
 
                 filters();
+
+                break;
+            case R.id.export:
+                ExportToExcel obj = new ExportToExcel(InventoryReport.this);
+                obj.exportInventoryReport(filtered);
 
                 break;
         }

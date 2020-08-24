@@ -119,11 +119,6 @@ public class LoadingOrder extends AppCompatActivity {
                 if (listContainsItems()) {
                     Intent intent = new Intent(LoadingOrder.this, LoadingOrder2.class);
                     startActivity(intent);
-//                    finish();
-
-//                    setSlideAnimation();
-
-
 
                 } else {
                     Toast.makeText(LoadingOrder.this, "No item selected !", Toast.LENGTH_LONG).show();
@@ -375,7 +370,7 @@ public class LoadingOrder extends AppCompatActivity {
                 }
 
                 String finalJson = sb.toString();
-                Log.e("finalJson*********", finalJson);
+               // Log.e("finalJson*********", finalJson);
 
                 JSONObject parentObject = new JSONObject(finalJson);
 

@@ -1667,6 +1667,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                         planned.setDate(innerObject.getString("DATE_"));
                         planned.setNoOfCopies(innerObject.getInt("COUNT"));
                         planned.setLoaded(innerObject.getInt("LOADED"));
+                        planned.setHide(innerObject.getInt("HIDE"));
                         planned.setExist("Planned");
                         planned.setIsOld(1);
 
@@ -1816,19 +1817,24 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
                 for (int k = 0; k < bundleInfosList.size(); k++) {
 
-                    if (PlannedPLList.get(i).getThickness() == bundleInfosList.get(k).getThickness() &&
-                            PlannedPLList.get(i).getWidth() == bundleInfosList.get(k).getWidth() &&
-                            PlannedPLList.get(i).getLength() == bundleInfosList.get(k).getLength() &&
-                            PlannedPLList.get(i).getNoOfPieces() == bundleInfosList.get(k).getNoOfPieces() &&
-                            PlannedPLList.get(i).getGrade().equals(bundleInfosList.get(k).getGrade())) {
+                    if(PlannedPLList.get(i).getHide() != 1) {
+                        if (PlannedPLList.get(i).getThickness() == bundleInfosList.get(k).getThickness() &&
+                                PlannedPLList.get(i).getWidth() == bundleInfosList.get(k).getWidth() &&
+                                PlannedPLList.get(i).getLength() == bundleInfosList.get(k).getLength() &&
+                                PlannedPLList.get(i).getNoOfPieces() == bundleInfosList.get(k).getNoOfPieces() &&
+                                PlannedPLList.get(i).getGrade().equals(bundleInfosList.get(k).getGrade())) {
 
-                        //PlannedPLList.get(i).setExist("Exist");
-                        PlannedPLList.get(i).setNoOfExixt(bundleInfosList.get(k).getNoOfExist());
+                            //PlannedPLList.get(i).setExist("Exist");
+                            PlannedPLList.get(i).setNoOfExixt(bundleInfosList.get(k).getNoOfExist());
 
-                        break;
+                            break;
+                        } else {
+                            //PlannedPLList.get(i).setExist("Not Exist");
+                            PlannedPLList.get(i).setNoOfExixt(0);
+                        }
                     } else {
-                        //PlannedPLList.get(i).setExist("Not Exist");
-                        PlannedPLList.get(i).setNoOfExixt(0);
+
+                        PlannedPLList.get(i).setExist("Hide");
                     }
 
                     Log.e("****out2", "***" + PlannedPLList.get(i).getThickness() + "==" + bundleInfosList.get(k).getThickness() + "&&" +

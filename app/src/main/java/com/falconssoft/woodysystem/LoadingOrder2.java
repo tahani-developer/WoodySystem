@@ -1,6 +1,7 @@
 package com.falconssoft.woodysystem;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
@@ -46,6 +47,7 @@ import com.falconssoft.woodysystem.email.SendMailTask;
 import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.Orders;
 import com.falconssoft.woodysystem.models.Pictures;
+import com.falconssoft.woodysystem.models.PlannedPL;
 import com.falconssoft.woodysystem.models.Settings;
 
 import org.apache.http.HttpResponse;
@@ -56,6 +58,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -67,6 +71,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.lang.reflect.Array;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -99,9 +104,13 @@ public class LoadingOrder2 extends AppCompatActivity {
     private Calendar myCalendar;
     static int index = 0;
     ItemsListAdapter2 adapter;
+    private List<BundleInfo> bundleInfosList = new ArrayList<>();
     int imageNo = 0;
     private Settings generalSettings;
+    JSONArray ordered = new JSONArray();
 
+    List<PlannedPL> plannedList = new ArrayList<>();
+    List<Orders> missedBundles = new ArrayList<>();
 //    BluetoothAdapter mBluetoothAdapter;
 //    BluetoothSocket mmSocket;
 //    BluetoothDevice mmDevice;
@@ -112,6 +121,7 @@ public class LoadingOrder2 extends AppCompatActivity {
 //    private boolean checkImageExist = false;
 
     JSONArray jsonArrayOrders;
+    JSONArray jsonArrayMissedBundles;
     JSONArray jsonArrayPics;
 
     static ArrayList<String> pics = new ArrayList<>();
@@ -134,6 +144,7 @@ public class LoadingOrder2 extends AppCompatActivity {
         databaseHandler = new DatabaseHandler(this);
         generalSettings = new Settings();
         generalSettings = databaseHandler.getSettings();
+        jsonArrayMissedBundles = new JSONArray();
         jsonArrayOrders = new JSONArray();
         jsonArrayPics = new JSONArray();
 
@@ -151,6 +162,8 @@ public class LoadingOrder2 extends AppCompatActivity {
 
         ItemsListAdapter obj = new ItemsListAdapter();
         bundles = obj.getSelectedItems();
+
+        new JSONTask2().execute();
 
 
         adapter = new ItemsListAdapter2(LoadingOrder2.this, bundles);
@@ -307,11 +320,20 @@ public class LoadingOrder2 extends AppCompatActivity {
                             , bundles.get(i).getPicture()
                             , bundles.get(i).getBackingList()
                             , bundles.get(i).getCustomer());
+
+
                     databaseHandler.addOrder(order);
 
 //                    Log.e("**********", "" + bundles.get(i).getPicture().length());
 
                     jsonArrayOrders.put(order.getJSONObject());
+
+                    // Log.e("getsamedata", "" + bundles.get(i).getNoOfExist());
+                    if (!order.getPackingList().equals(order.getOrderNo()) && !order.getPackingList().equals("null") && bundles.get(i).getNoOfExist() == 0) {
+                        // this case when i want to exchange my bundles with others but i don't have enough count
+                        missedBundles.add(order);
+                        jsonArrayMissedBundles.put(order.getJSONObject());
+                    }
 
                     databaseHandler.updateTableBundles(bundles.get(i).getBundleNo());
                 }
@@ -330,7 +352,8 @@ public class LoadingOrder2 extends AppCompatActivity {
 
                 databaseHandler.addPictures(picture);
 
-                new JSONTask().execute();
+                new JSONTask3().execute();
+//                new JSONTask().execute();
 
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
@@ -589,9 +612,16 @@ public class LoadingOrder2 extends AppCompatActivity {
                 HttpPost request = new HttpPost();
                 request.setURI(new URI("http://" + generalSettings.getIpAddress() + "/export.php"));
 
+                String newCust = "";
+                if(plannedList.size()>0)
+                    newCust = plannedList.get(0).getCustName();
+
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
                 nameValuePairs.add(new BasicNameValuePair("BUNDLE_ORDERS", jsonArrayOrders.toString().trim()));
+                nameValuePairs.add(new BasicNameValuePair("NEW_CUST", "'"+ newCust + "'"));
                 nameValuePairs.add(new BasicNameValuePair("BUNDLE_PIC", jsonArrayPics.toString().trim()));
+                nameValuePairs.add(new BasicNameValuePair("MISSED_BUNDLES", jsonArrayMissedBundles.toString().trim()));
+
                 //Log.e("tag", "" + jsonArrayPics.toString());
 
                 request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
@@ -636,5 +666,270 @@ public class LoadingOrder2 extends AppCompatActivity {
                 Log.e("tag", "****Failed to export data Please check internet connection");
             }
         }
+    }
+
+    private class JSONTask2 extends AsyncTask<String, String, String> {  // check
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //showDialog();
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                String JsonResponse = null;
+                HttpClient client = new DefaultHttpClient();
+                HttpPost request = new HttpPost();
+                request.setURI(new URI("http://" + databaseHandler.getSettings().getIpAddress() + "/export.php"));
+
+                for (int i = 0; i < bundles.size(); i++) {
+                    ordered.put(bundles.get(i).getJSONObject());
+                }
+
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+                nameValuePairs.add(new BasicNameValuePair("CHECK_CONTENT", ordered.toString()));
+                nameValuePairs.add(new BasicNameValuePair("LOCATION", databaseHandler.getSettings().getStore().toString()));
+
+                request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                HttpResponse response = client.execute(request);
+
+                BufferedReader in = new BufferedReader(new
+                        InputStreamReader(response.getEntity().getContent()));
+
+                StringBuffer sb = new StringBuffer("");
+                String line = "";
+
+                while ((line = in.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                in.close();
+
+                JsonResponse = sb.toString();
+                Log.e("tag", "" + JsonResponse);
+
+                JSONObject object = new JSONObject(JsonResponse);
+
+                bundleInfosList.clear();
+//                String ff=JsonResponse.r((JsonResponse.indexOf("result")+5));
+                Log.e("tag___", "" + JsonResponse.indexOf("result"));
+
+                int ind = ordered.length();
+
+                for (int i = 0; i < object.length(); i++) {
+                    for (int f = 0; f < ind; f++) {
+                        try {
+
+                            JSONArray array = object.getJSONArray("result" + (f + 1));
+
+                            JSONObject innerObject = array.getJSONObject(0);
+
+                            BundleInfo bundleInfo = new BundleInfo();
+                            bundleInfo.setThickness(innerObject.getDouble("THICKNESS"));
+                            bundleInfo.setWidth(innerObject.getDouble("WIDTH"));
+                            bundleInfo.setLength(innerObject.getDouble("LENGTH"));
+                            bundleInfo.setGrade(innerObject.getString("GRADE"));
+                            bundleInfo.setNoOfPieces(innerObject.getDouble("PIECES"));
+                            //bundleInfo.setBundleNo(innerObject.getString("BUNDLE_NO"));
+                            //bundleInfo.setLocation(innerObject.getString("LOCATION"));
+                            //bundleInfo.setArea(innerObject.getString("AREA"));
+                            //bundleInfo.setBarcode(innerObject.getString("BARCODE"));
+                            //bundleInfo.setOrdered(innerObject.getInt("ORDERED"));
+                            //bundleInfo.setAddingDate(innerObject.getString("BUNDLE_DATE"));
+                            //bundleInfo.setSerialNo(innerObject.getString("B_SERIAL"));
+                            bundleInfo.setBackingList(innerObject.getString("BACKING_LIST"));
+                            bundleInfo.setNoOfExist(innerObject.getInt("COUNT"));
+
+                            bundleInfosList.add(bundleInfo);
+
+                        } catch (Exception e) {
+
+                        }
+                    }
+                }
+//                }
+                Log.e("tag2", "" + bundleInfosList.size());
+                Log.e("tag3", "" + object.length());
+                return JsonResponse;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            compare();
+
+        }
+    }
+
+    private class JSONTask3 extends AsyncTask<String, String, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //showDialog();
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                String JsonResponse = null;
+                HttpClient client = new DefaultHttpClient();
+                HttpPost request = new HttpPost();
+                request.setURI(new URI("http://" + databaseHandler.getSettings().getIpAddress() + "/export.php"));
+
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+                nameValuePairs.add(new BasicNameValuePair("GET_PLANNED", orderNo.getText().toString()));
+
+//                Log.e("tagPlanned", " COMPARE_CONTENT " +plannedPLJObject.toString());
+                request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                HttpResponse response = client.execute(request);
+
+                BufferedReader in = new BufferedReader(new
+                        InputStreamReader(response.getEntity().getContent()));
+
+                StringBuffer sb = new StringBuffer("");
+                String line = "";
+
+                while ((line = in.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                in.close();
+
+                JsonResponse = sb.toString();
+                Log.e("tag***", "  " + JsonResponse);
+
+                JSONObject object = new JSONObject(JsonResponse);
+                JSONArray array = object.getJSONArray("PLANNED");
+
+                plannedList.clear();
+                for (int i = 0; i < array.length(); i++) {
+
+                    JSONObject innerObject = array.getJSONObject(i);
+
+                    PlannedPL pl = new PlannedPL();
+                    pl.setThickness(innerObject.getInt("THICKNESS"));
+                    pl.setWidth(innerObject.getDouble("WIDTH"));
+                    pl.setLength(innerObject.getDouble("LENGTH"));
+                    pl.setGrade(innerObject.getString("GRADE"));
+                    pl.setNoOfPieces(innerObject.getDouble("PIECES"));
+                    pl.setPackingList(innerObject.getString("PACKING_LIST"));
+                    pl.setCustName(innerObject.getString("CUST_NAME"));
+
+                    plannedList.add(pl);
+
+                }
+
+                //Log.e("****", "" + plannedList.size());
+
+                return JsonResponse;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @SuppressLint("NewApi")
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            if (s != null) {
+
+                for (int i = 0; i < plannedList.size(); i++) {
+                    for (int k = 0; k < missedBundles.size(); k++) {
+
+                        if (plannedList.get(i).getThickness() == missedBundles.get(k).getThickness() &&
+                                plannedList.get(i).getWidth() == missedBundles.get(k).getWidth() &&
+                                plannedList.get(i).getLength() == missedBundles.get(k).getLength() &&
+                                plannedList.get(i).getNoOfPieces() == missedBundles.get(k).getNoOfPieces() &&
+                                plannedList.get(i).getGrade().equals(missedBundles.get(k).getGrade())) {
+
+                            //Log.e("tag1***", " in ");
+                            missedBundles.remove(k);
+                            jsonArrayMissedBundles.remove(k);
+                            break;
+                        }
+
+                    }
+                }
+
+                //Log.e("tag2***", "  " + missedBundles.size());
+
+                new JSONTask().execute();
+
+            } else {
+                //Toast.makeText(PlannedPackingList.this, "No internet connection!", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+
+    void compare() {
+
+        for (int i = 0; i < bundles.size(); i++) {
+            for (int k = 0; k < bundleInfosList.size(); k++) {
+
+                if (bundles.get(i).getThickness() == bundleInfosList.get(k).getThickness() &&
+                        bundles.get(i).getWidth() == bundleInfosList.get(k).getWidth() &&
+                        bundles.get(i).getLength() == bundleInfosList.get(k).getLength() &&
+                        bundles.get(i).getNoOfPieces() == bundleInfosList.get(k).getNoOfPieces() &&
+                        bundles.get(i).getGrade().equals(bundleInfosList.get(k).getGrade())) {
+
+                    //bundles.get(i).setExist("Exist");
+                    bundles.get(i).setNoOfExist(bundleInfosList.get(k).getNoOfExist());
+
+                    break;
+                } else {
+                    //bundles.get(i).setExist("Not Exist");
+                    bundles.get(i).setNoOfExist(0);
+                }
+
+            }
+
+        }
+
+        // clustering
+        List<BundleInfo> temp = new ArrayList(bundles);
+        for (int i = 0; i < temp.size(); i++) {
+
+            if(temp.get(i).getNoOfExist() > 0) {
+                for (int k = i+1; k < bundles.size(); k++) {
+
+                    if (temp.get(i).getThickness() == bundles.get(k).getThickness() &&
+                            temp.get(i).getWidth() == bundles.get(k).getWidth() &&
+                            temp.get(i).getLength() == bundles.get(k).getLength() &&
+                            temp.get(i).getNoOfPieces() == bundles.get(k).getNoOfPieces() &&
+                            temp.get(i).getGrade().equals(bundles.get(k).getGrade())) {
+
+                        if(bundles.get(k).getNoOfExist() > 0) {
+                            bundles.get(k).setNoOfExist(bundles.get(k).getNoOfExist() - 1);
+                        }
+
+                    }
+
+                }
+            }
+        }
+
+        bundles = new ArrayList<>();
+        bundles.addAll(temp);
+
+        for (int i = 0; i < bundles.size(); i++) {
+            Log.e("*****", " " + bundles.get(i).getNoOfExist());
+        }
+
     }
 }
