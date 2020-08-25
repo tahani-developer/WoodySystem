@@ -444,8 +444,8 @@ public class ExportToExcel {
         pdfPTableHeader.setRunDirection(PdfWriter.RUN_DIRECTION_LTR);
 //        directionOfHeader = Element.ALIGN_RIGHT;
 
-        insertCell(pdfPTable, context.getString(R.string.truck), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
-        insertCell(pdfPTable, context.getString(R.string.supplier_name), ALIGN_CENTER, 4, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.truck), ALIGN_CENTER, 2, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.supplier_name), ALIGN_CENTER, 3, arabicFont, BaseColor.BLACK);
         insertCell(pdfPTable, context.getString(R.string.ttn), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
         insertCell(pdfPTable, context.getString(R.string.date_of_acceptance), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
         insertCell(pdfPTable, context.getString(R.string.no_bundle), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
@@ -454,8 +454,8 @@ public class ExportToExcel {
         pdfPTable.setHeaderRows(1);
         for (int i = 0; i < list.size(); i++) {
 
-            insertCell(pdfPTable, String.valueOf(list.get(i).getTruckNo()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
-            insertCell(pdfPTable, String.valueOf(list.get(i).getSupplierName()), Element.ALIGN_CENTER, 4, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getTruckNo()), Element.ALIGN_CENTER, 2, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getSupplierName()), Element.ALIGN_CENTER, 3, arabicFont, BaseColor.BLACK);
             insertCell(pdfPTable, String.valueOf(list.get(i).getTtnNo()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
             insertCell(pdfPTable, String.valueOf(list.get(i).getDate()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
             insertCell(pdfPTable, String.valueOf(list.get(i).getNoOfBundles()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
