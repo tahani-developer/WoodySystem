@@ -202,7 +202,6 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         thicknessOrder.setOnClickListener(this);
         widthOrder.setOnClickListener(this);
         lengthOrder.setOnClickListener(this);
-        export.setOnClickListener(this);
         location.setOnItemSelectedListener(this);
         area.setOnItemSelectedListener(this);
         thicknessSpinner.setOnItemSelectedListener(this);
@@ -372,7 +371,6 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         grade = findViewById(R.id.inventory_report_grade);
 //        ordered = findViewById(R.id.inventory_report_ordered);
         textView = findViewById(R.id.inventory_report_tv);
-        export = findViewById(R.id.export);
         dateFrom = findViewById(R.id.inventory_report_from);
         dateTo = findViewById(R.id.inventory_report_to);
         noOfBundles = findViewById(R.id.inventory_report_no_bundles);
@@ -1275,11 +1273,6 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                     serialString = "All";
 
                 filters();
-
-                break;
-            case R.id.export:
-                ExportToExcel export = new ExportToExcel(InventoryReport.this);
-                export.exportInventoryReport(filtered);
 
                 break;
         }

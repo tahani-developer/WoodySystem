@@ -18,12 +18,12 @@ import java.util.List;
 
 public class PlannedListAdapter extends RecyclerView.Adapter<PlannedListAdapter.SuppliersViewHolder> {
 
-    private PlannedPackingList plannedPL;
+    private PlannedPackingList context;
     private List<PlannedPL> PlannedPL;
 
-    public PlannedListAdapter(Context plannedPL, List<PlannedPL> PlannedPL) {
+    public PlannedListAdapter(Context context, List<PlannedPL> PlannedPL) {
 
-        this.plannedPL = (PlannedPackingList) plannedPL;
+        this.context = (PlannedPackingList) context;
         this.PlannedPL = PlannedPL;
     }
 
@@ -57,45 +57,45 @@ public class PlannedListAdapter extends RecyclerView.Adapter<PlannedListAdapter.
         holder.copies.setText("" + PlannedPL.get(i).getNoOfCopies());
 
         if (PlannedPL.get(i).getHide() == 1) {
-            holder.serial.setBackgroundColor(plannedPL.getResources().getColor(R.color.gray_un_editable));
-            holder.cust.setBackgroundColor(plannedPL.getResources().getColor(R.color.gray_un_editable));
-            holder.pl.setBackgroundColor(plannedPL.getResources().getColor(R.color.gray_un_editable));
-            holder.dest.setBackgroundColor(plannedPL.getResources().getColor(R.color.gray_un_editable));
-            holder.order.setBackgroundColor(plannedPL.getResources().getColor(R.color.gray_un_editable));
-            holder.supplier.setBackgroundColor(plannedPL.getResources().getColor(R.color.gray_un_editable));
-            holder.grade.setBackgroundColor(plannedPL.getResources().getColor(R.color.gray_un_editable));
-            holder.thick.setBackgroundColor(plannedPL.getResources().getColor(R.color.gray_un_editable));
-            holder.width.setBackgroundColor(plannedPL.getResources().getColor(R.color.gray_un_editable));
-            holder.length.setBackgroundColor(plannedPL.getResources().getColor(R.color.gray_un_editable));
-            holder.pieces.setBackgroundColor(plannedPL.getResources().getColor(R.color.gray_un_editable));
-            holder.copies.setBackgroundColor(plannedPL.getResources().getColor(R.color.gray_un_editable));
-            holder.isExist.setBackgroundColor(plannedPL.getResources().getColor(R.color.gray_un_editable));
-            holder.linEdit.setBackgroundColor(plannedPL.getResources().getColor(R.color.gray_un_editable));
-            holder.linCopy.setBackgroundColor(plannedPL.getResources().getColor(R.color.gray_un_editable));
+            holder.serial.setBackgroundColor(context.getResources().getColor(R.color.gray_un_editable));
+            holder.cust.setBackgroundColor(context.getResources().getColor(R.color.gray_un_editable));
+            holder.pl.setBackgroundColor(context.getResources().getColor(R.color.gray_un_editable));
+            holder.dest.setBackgroundColor(context.getResources().getColor(R.color.gray_un_editable));
+            holder.order.setBackgroundColor(context.getResources().getColor(R.color.gray_un_editable));
+            holder.supplier.setBackgroundColor(context.getResources().getColor(R.color.gray_un_editable));
+            holder.grade.setBackgroundColor(context.getResources().getColor(R.color.gray_un_editable));
+            holder.thick.setBackgroundColor(context.getResources().getColor(R.color.gray_un_editable));
+            holder.width.setBackgroundColor(context.getResources().getColor(R.color.gray_un_editable));
+            holder.length.setBackgroundColor(context.getResources().getColor(R.color.gray_un_editable));
+            holder.pieces.setBackgroundColor(context.getResources().getColor(R.color.gray_un_editable));
+            holder.copies.setBackgroundColor(context.getResources().getColor(R.color.gray_un_editable));
+            holder.isExist.setBackgroundColor(context.getResources().getColor(R.color.gray_un_editable));
+            holder.linEdit.setBackgroundColor(context.getResources().getColor(R.color.gray_un_editable));
+            holder.linCopy.setBackgroundColor(context.getResources().getColor(R.color.gray_un_editable));
         } else {
-            holder.serial.setBackgroundColor(plannedPL.getResources().getColor(R.color.light_orange));
-            holder.cust.setBackgroundColor(plannedPL.getResources().getColor(R.color.light_orange));
-            holder.pl.setBackgroundColor(plannedPL.getResources().getColor(R.color.light_orange));
-            holder.dest.setBackgroundColor(plannedPL.getResources().getColor(R.color.light_orange));
-            holder.order.setBackgroundColor(plannedPL.getResources().getColor(R.color.light_orange));
-            holder.supplier.setBackgroundColor(plannedPL.getResources().getColor(R.color.light_orange));
-            holder.grade.setBackgroundColor(plannedPL.getResources().getColor(R.color.light_orange));
-            holder.thick.setBackgroundColor(plannedPL.getResources().getColor(R.color.light_orange));
-            holder.width.setBackgroundColor(plannedPL.getResources().getColor(R.color.light_orange));
-            holder.length.setBackgroundColor(plannedPL.getResources().getColor(R.color.light_orange));
-            holder.pieces.setBackgroundColor(plannedPL.getResources().getColor(R.color.light_orange));
-            holder.copies.setBackgroundColor(plannedPL.getResources().getColor(R.color.light_orange));
-            holder.isExist.setBackgroundColor(plannedPL.getResources().getColor(R.color.light_orange));
-            holder.linEdit.setBackgroundColor(plannedPL.getResources().getColor(R.color.light_orange));
-            holder.linCopy.setBackgroundColor(plannedPL.getResources().getColor(R.color.light_orange));
+            holder.serial.setBackgroundColor(context.getResources().getColor(R.color.light_orange));
+            holder.cust.setBackgroundColor(context.getResources().getColor(R.color.light_orange));
+            holder.pl.setBackgroundColor(context.getResources().getColor(R.color.light_orange));
+            holder.dest.setBackgroundColor(context.getResources().getColor(R.color.light_orange));
+            holder.order.setBackgroundColor(context.getResources().getColor(R.color.light_orange));
+            holder.supplier.setBackgroundColor(context.getResources().getColor(R.color.light_orange));
+            holder.grade.setBackgroundColor(context.getResources().getColor(R.color.light_orange));
+            holder.thick.setBackgroundColor(context.getResources().getColor(R.color.light_orange));
+            holder.width.setBackgroundColor(context.getResources().getColor(R.color.light_orange));
+            holder.length.setBackgroundColor(context.getResources().getColor(R.color.light_orange));
+            holder.pieces.setBackgroundColor(context.getResources().getColor(R.color.light_orange));
+            holder.copies.setBackgroundColor(context.getResources().getColor(R.color.light_orange));
+            holder.isExist.setBackgroundColor(context.getResources().getColor(R.color.light_orange));
+            holder.linEdit.setBackgroundColor(context.getResources().getColor(R.color.light_orange));
+            holder.linCopy.setBackgroundColor(context.getResources().getColor(R.color.light_orange));
         }
 
         if (PlannedPL.get(i).getExist().equals("Exist")) {
             holder.isExist.setText("Exist(" + PlannedPL.get(i).getNoOfExixt() + ")");
-            holder.isExist.setTextColor(ContextCompat.getColor(plannedPL, R.color.colorPrimary));
+            holder.isExist.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
         } else {
             holder.isExist.setText("Not Exist");
-            holder.isExist.setTextColor(ContextCompat.getColor(plannedPL, R.color.preview));
+            holder.isExist.setTextColor(ContextCompat.getColor(context, R.color.preview));
         }
 
         if (PlannedPL.get(i).getExist().equals("null"))
@@ -103,7 +103,7 @@ public class PlannedListAdapter extends RecyclerView.Adapter<PlannedListAdapter.
 
         if (PlannedPL.get(i).getExist().equals("Planned")) {
             holder.isExist.setText("Planned Exist(" + PlannedPL.get(i).getNoOfExixt() + ")");
-            holder.isExist.setTextColor(ContextCompat.getColor(plannedPL, R.color.orange));
+            holder.isExist.setTextColor(ContextCompat.getColor(context, R.color.orange));
         }
 
         if (PlannedPL.get(i).getHide() == 1) {
@@ -115,21 +115,21 @@ public class PlannedListAdapter extends RecyclerView.Adapter<PlannedListAdapter.
             @Override
             public void onClick(View v) {
                 if (PlannedPL.get(i).getHide() != 1)
-                    plannedPL.editItemDialog(index);
+                    context.editItemDialog(index);
             }
         });
 
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                plannedPL.deleteItemDialog(index);
+                context.deleteItemDialog(index);
             }
         });
         holder.copy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (PlannedPL.get(i).getHide() != 1)
-                    plannedPL.editNoOfItemsDialog(index);
+                    context.editNoOfItemsDialog(index);
             }
         });
 
@@ -138,7 +138,7 @@ public class PlannedListAdapter extends RecyclerView.Adapter<PlannedListAdapter.
             @Override
             public void onClick(View v) {
                 // if (PlannedPL.get(i).getExist().equals("Not Exist"))
-                plannedPL.closedResultsDialog(index);
+                context.closedResultsDialog(index);
             }
         });
 

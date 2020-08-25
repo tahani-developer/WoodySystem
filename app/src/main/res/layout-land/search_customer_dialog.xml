@@ -24,13 +24,13 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:fontFamily="serif"
             android:paddingStart="10dp"
             android:paddingLeft="10dp"
             android:text="@string/find_cust"
             android:textColor="@color/orange"
-            android:textSize="25sp" />
+            android:textSize="20sp" />
 
         <SearchView
             android:id="@+id/search_supplier_searchView"
@@ -55,6 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="1dp"
             android:layout_weight="1"
+            android:textSize="18sp"
             android:background="@color/orange"
             android:text="@string/cust_no"
             android:padding="5dp"
@@ -67,6 +68,7 @@
             android:layout_margin="1dp"
             android:layout_marginLeft="2dp"
             android:layout_weight="4"
+            android:textSize="18sp"
             android:background="@color/orange"
             android:text="@string/cust"
             android:padding="5dp"

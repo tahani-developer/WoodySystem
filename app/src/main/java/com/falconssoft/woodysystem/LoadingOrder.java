@@ -14,6 +14,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -45,7 +46,7 @@ public class LoadingOrder extends AppCompatActivity {
     private GridView items;
     private Button done, barcode, addBundle;
     View view;
-    private SearchView searchViewTh, searchViewW, searchViewL;
+    private EditText searchViewTh, searchViewW, searchViewL;
     private DatabaseHandler DHandler;
     public static List<BundleInfo> bundles, filteredList, selectedBundle;
     private String f1 = "", f2 = "", f3 = "", barcodeValue = "";
@@ -67,9 +68,9 @@ public class LoadingOrder extends AppCompatActivity {
         setContentView(R.layout.loading_order);
 
         items = (GridView) findViewById(R.id.items);
-        searchViewTh = (SearchView) findViewById(R.id.mSearchTh);
-        searchViewW = (SearchView) findViewById(R.id.mSearchW);
-        searchViewL = (SearchView) findViewById(R.id.mSearchL);
+        searchViewTh = findViewById(R.id.mSearchTh);
+        searchViewW = findViewById(R.id.mSearchW);
+        searchViewL = findViewById(R.id.mSearchL);
         done = (Button) findViewById(R.id.done);
         barcode = (Button) findViewById(R.id.barcode);
         addBundle = (Button) findViewById(R.id.add);
@@ -130,7 +131,7 @@ public class LoadingOrder extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, bundles);
+                ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, bundles, true);
                 items.setAdapter(adapter);
 
             }
@@ -146,23 +147,43 @@ public class LoadingOrder extends AppCompatActivity {
             }
         });
 
-        searchViewTh.setOnQueryTextListener(new android.support.v7.widget.SearchView.OnQueryTextListener() {
+        searchViewTh.addTextChangedListener(new TextWatcher() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
             }
 
             @Override
-            public boolean onQueryTextChange(String query) {
-
-                f1 = query;
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                f1 = String.valueOf(s);
                 filteredList = filter(bundles, f1, f2, f3);
-                ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, filteredList);
+                ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, filteredList, false);
                 items.setAdapter(adapter);
+            }
 
-                return false;
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
+//        searchViewTh.setOnQueryTextListener(new android.support.v7.widget.SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String query) {
+//
+//                f1 = query;
+//                filteredList = filter(bundles, f1, f2, f3);
+//                ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, filteredList, false);
+//                items.setAdapter(adapter);
+//
+//                return false;
+//            }
+//        });
+
         searchBar.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -188,41 +209,79 @@ public class LoadingOrder extends AppCompatActivity {
             }
         });
 
-        searchViewW.setOnQueryTextListener(new android.support.v7.widget.SearchView.OnQueryTextListener() {
+        searchViewW.addTextChangedListener(new TextWatcher() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
             }
 
             @Override
-            public boolean onQueryTextChange(String query) {
-
-                f2 = query;
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                f2 = String.valueOf(s);
                 filteredList = filter(bundles, f1, f2, f3);
-                ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, filteredList);
+                ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, filteredList, false);
                 items.setAdapter(adapter);
+            }
 
-                return false;
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
+//        searchViewW.setOnQueryTextListener(new android.support.v7.widget.SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String query) {
+//
+//                f2 = query;
+//                filteredList = filter(bundles, f1, f2, f3);
+//                ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, filteredList, false);
+//                items.setAdapter(adapter);
+//
+//                return false;
+//            }
+//        });
 
-        searchViewL.setOnQueryTextListener(new android.support.v7.widget.SearchView.OnQueryTextListener() {
+        searchViewL.addTextChangedListener(new TextWatcher() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
             }
 
             @Override
-            public boolean onQueryTextChange(String query) {
-
-                f3 = query;
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                f3 = String.valueOf(s);
                 filteredList = filter(bundles, f1, f2, f3);
-                ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, filteredList);
+                ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, filteredList, false);
                 items.setAdapter(adapter);
+            }
 
-                return false;
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
+//        searchViewL.setOnQueryTextListener(new android.support.v7.widget.SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String query) {
+//
+//                f3 = query;
+//                filteredList = filter(bundles, f1, f2, f3);
+//                ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, filteredList, false);
+//                items.setAdapter(adapter);
+//
+//                return false;
+//            }
+//        });
     }
 
     List<BundleInfo> filter(List<BundleInfo> list, String s1, String s2, String s3) {
@@ -296,7 +355,7 @@ public class LoadingOrder extends AppCompatActivity {
             }
 
         } else {
-            ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, bundles);
+            ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, bundles, false);
             items.setAdapter(adapter);
         }
 
@@ -441,7 +500,7 @@ public class LoadingOrder extends AppCompatActivity {
 
             if (result != null) {
                 Log.e("result", "*****************" + result.size());
-                adapter = new ItemsListAdapter(LoadingOrder.this, bundles);
+                adapter = new ItemsListAdapter(LoadingOrder.this, bundles, false);
                 items.setAdapter(adapter);
 
                 adapter2 = new ItemsListAdapter5(LoadingOrder.this, selectedBundle);
@@ -470,7 +529,7 @@ public class LoadingOrder extends AppCompatActivity {
 
         ItemsListAdapter obj = new ItemsListAdapter();
         bundles = obj.getSelectedItems();
-        adapter = new ItemsListAdapter(LoadingOrder.this, bundles);
+        adapter = new ItemsListAdapter(LoadingOrder.this, bundles, false);
         items.setAdapter(adapter);
 
 

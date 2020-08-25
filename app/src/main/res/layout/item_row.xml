@@ -29,10 +29,10 @@
                 android:textColor="#000000" />
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:gravity="left"
+                android:fontFamily="serif"
                 android:layout_marginHorizontal="5dp"
                 android:layout_gravity="center"
                 android:text="@string/bundle_num"
@@ -42,10 +42,34 @@
             <TextView
                 android:id="@+id/bundle"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1.5"
+                android:fontFamily="serif"
+                android:gravity="start"
+                android:paddingHorizontal="10dp"
+                android:text="0"
+                android:textColor="#000000"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:layout_marginHorizontal="10dp"
                 android:layout_gravity="center"
                 android:gravity="center"
+                android:fontFamily="serif"
+                android:text="Packing List: "
+                android:textColor="#000000"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/loadingOrder_packingList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:fontFamily="serif"
                 android:text="0"
                 android:textColor="#000000"
                 android:textSize="15sp" />
@@ -70,6 +94,7 @@
                     android:background="@color/orange"
                     android:gravity="center"
                     android:text="@string/th"
+                    android:fontFamily="serif"
                     android:textColor="@color/light_orange"
                     android:textSize="12sp" />
 
@@ -81,6 +106,7 @@
                     android:background="@color/orange"
                     android:gravity="center"
                     android:text="@string/w"
+                    android:fontFamily="serif"
                     android:textColor="@color/light_orange"
                     android:textSize="12sp" />
 
@@ -92,6 +118,7 @@
                     android:background="@color/orange"
                     android:gravity="center"
                     android:text="@string/l"
+                    android:fontFamily="serif"
                     android:textColor="@color/light_orange"
                     android:textSize="12sp" />
 
@@ -103,6 +130,7 @@
                     android:background="@color/orange"
                     android:gravity="center"
                     android:text="@string/grade"
+                    android:fontFamily="serif"
                     android:textColor="@color/light_orange"
                     android:textSize="12sp" />
 
@@ -114,6 +142,7 @@
                     android:background="@color/orange"
                     android:gravity="center"
                     android:text="@string/no_pieces"
+                    android:fontFamily="serif"
                     android:textColor="@color/light_orange"
                     android:textSize="12sp" />
 
@@ -125,6 +154,7 @@
                     android:background="@color/orange"
                     android:gravity="center"
                     android:text="@string/location"
+                    android:fontFamily="serif"
                     android:textColor="@color/light_orange"
                     android:textSize="12sp" />
 
@@ -136,6 +166,7 @@
                     android:background="@color/orange"
                     android:gravity="center"
                     android:text="@string/area"
+                    android:fontFamily="serif"
                     android:textColor="@color/light_orange"
                     android:textSize="12sp" />
 
@@ -155,6 +186,7 @@
                     android:background="@color/light_orange"
                     android:gravity="center"
                     android:text="0"
+                    android:fontFamily="serif"
                     android:textColor="#000000"
                     android:textSize="16sp" />
 
@@ -167,6 +199,7 @@
                     android:background="@color/light_orange"
                     android:gravity="center"
                     android:text="0"
+                    android:fontFamily="serif"
                     android:textColor="#000000"
                     android:textSize="16sp" />
 
@@ -179,6 +212,7 @@
                     android:background="@color/light_orange"
                     android:gravity="center"
                     android:text="0"
+                    android:fontFamily="serif"
                     android:textColor="#000000"
                     android:textSize="16sp" />
 
@@ -191,6 +225,7 @@
                     android:background="@color/light_orange"
                     android:gravity="center"
                     android:text="0"
+                    android:fontFamily="serif"
                     android:textColor="#000000"
                     android:textSize="16sp" />
 
@@ -203,6 +238,7 @@
                     android:background="@color/light_orange"
                     android:gravity="center"
                     android:text="0"
+                    android:fontFamily="serif"
                     android:textColor="#000000"
                     android:textSize="16sp" />
 
@@ -215,6 +251,7 @@
                     android:background="@color/light_orange"
                     android:gravity="center"
                     android:text="0"
+                    android:fontFamily="serif"
                     android:textColor="#000000"
                     android:textSize="16sp" />
 
@@ -227,6 +264,7 @@
                     android:background="@color/light_orange"
                     android:gravity="center"
                     android:text="0"
+                    android:fontFamily="serif"
                     android:textColor="#000000"
                     android:textSize="16sp" />
 

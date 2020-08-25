@@ -194,18 +194,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                 addButtonMethod();
                 break;
             case R.id.check_button:
-                plannedPLListJSON = new JSONArray();
-                for (int i = 0; i < PlannedPLList.size(); i++) {
-                    for (int k = 0; k < PlannedPLList.get(i).getNoOfCopies(); k++) {
-                        plannedPLListJSON.put(PlannedPLList.get(i).getJSONObject());
-                    }
-                }
-
-                if (plannedPLListJSON.length() > 0) {
-                    new JSONTask2().execute();
-                    bundleInfosList.clear();
-                } else
-                    Toast.makeText(this, "Please add rows first!", Toast.LENGTH_SHORT).show();
+                checkBundlesExistence();
                 break;
             case R.id.save_button:
                 if (PlannedPLList.size() > 0)
@@ -241,6 +230,22 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                 suppliersDialog();
                 break;
         }
+    }
+
+    void checkBundlesExistence(){
+        plannedPLListJSON = new JSONArray();
+        for (int i = 0; i < PlannedPLList.size(); i++) {
+            for (int k = 0; k < PlannedPLList.get(i).getNoOfCopies(); k++) {
+                plannedPLListJSON.put(PlannedPLList.get(i).getJSONObject());
+            }
+        }
+
+        if (plannedPLListJSON.length() > 0) {
+            new JSONTask2().execute();
+            bundleInfosList.clear();
+        }
+//        else
+//            Toast.makeText(this, "Please add rows first!", Toast.LENGTH_SHORT).show();
     }
 
     class watchTextChange implements TextWatcher {
@@ -299,6 +304,8 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
         if (plannedPLListJSON.length() > 0)
             new JSONTask2().execute();
+
+        checkBundlesExistence();
     }
 
     public void filter(String charText) { // by Name
