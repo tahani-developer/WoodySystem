@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Деревна система</string>
-    <string name="version">Version 56.0</string>
+    <string name="version">Version 58.0</string>
 
     <string name="stage1">Прийняття та контроль якості</string>
     <string name="stage2">Этап 2</string>

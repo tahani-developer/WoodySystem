@@ -6,13 +6,14 @@ android {
         applicationId "com.falconssoft.woodysystem"
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 56
-        versionName "1.0"
+        versionCode 58
+        versionName "58.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
