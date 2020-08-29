@@ -443,7 +443,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
             lengthCheckList.add(spinnerModel);
         }
         lengthCheckList.add(0, new SpinnerModel("       ", false));
-        lengthAdapter = new SpinnerCustomAdapter(InventoryReport.this, 0, lengthCheckList, 3);
+        lengthAdapter = new SpinnerCustomAdapter(InventoryReport.this, 0, lengthCheckList, 3, 1);
         lengthSpinner.setAdapter(lengthAdapter);
 
 //        widthList.add(0, "All");
@@ -457,7 +457,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
             widthCheckList.add(spinnerModel);
         }
         widthCheckList.add(0, new SpinnerModel("       ", false));
-        widthAdapter = new SpinnerCustomAdapter(InventoryReport.this, 0, widthCheckList, 2);
+        widthAdapter = new SpinnerCustomAdapter(InventoryReport.this, 0, widthCheckList, 2, 1);
         widthSpinner.setAdapter(widthAdapter);
 
 //        thicknessList.add(0, "All");
@@ -471,7 +471,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
             thicknessCheckList.add(spinnerModel);
         }
         thicknessCheckList.add(0, new SpinnerModel("       ", false));
-        thicknessAdapter = new SpinnerCustomAdapter(InventoryReport.this, 0, thicknessCheckList, 1);
+        thicknessAdapter = new SpinnerCustomAdapter(InventoryReport.this, 0, thicknessCheckList, 1, 1);
         thicknessSpinner.setAdapter(thicknessAdapter);
 
         locationList.add("All");

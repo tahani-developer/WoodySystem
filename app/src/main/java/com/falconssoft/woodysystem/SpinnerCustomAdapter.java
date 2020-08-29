@@ -14,22 +14,30 @@ import android.widget.TextView;
 
 import com.falconssoft.woodysystem.models.SpinnerModel;
 import com.falconssoft.woodysystem.reports.InventoryReport;
+import com.falconssoft.woodysystem.stage_two.PlannedUnplanned;
 
 import java.util.List;
 
 public class SpinnerCustomAdapter extends ArrayAdapter<SpinnerModel> {
 
-    private InventoryReport context;
+    //    private Context context;
     private List<SpinnerModel> list;
+    private InventoryReport inventoryReport;
+    private PlannedUnplanned plannedUnplanned;
     private boolean isFromView = false;
-    private int flag;
+    private int flag, page;
 
 
-    public SpinnerCustomAdapter(@NonNull InventoryReport context, int resource, @NonNull List<SpinnerModel> list, int flag) {
+    public SpinnerCustomAdapter(@NonNull Context context, int resource, @NonNull List<SpinnerModel> list, int flag, int page) {
         super(context, resource, list);
-        this.context = context;
         this.list = list;
         this.flag = flag;
+        this.page = page;
+        if (page == 1)
+            this.inventoryReport = (InventoryReport) context;
+        else // 2
+            this.plannedUnplanned = (PlannedUnplanned) context;
+
 //        this.myAdapter = this;
     }
 
@@ -48,7 +56,11 @@ public class SpinnerCustomAdapter extends ArrayAdapter<SpinnerModel> {
 
         SpinnerViewHolder holder;
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.spinner_with_checkbox, null);
+            if (page == 1)
+                convertView = LayoutInflater.from(inventoryReport).inflate(R.layout.spinner_with_checkbox, null);
+            else
+                convertView = LayoutInflater.from(plannedUnplanned).inflate(R.layout.spinner_with_checkbox, null);
+
             holder = new SpinnerViewHolder();
             holder.title = convertView.findViewById(R.id.spinner_checkbox_title);
             holder.checkBox = convertView.findViewById(R.id.spinner_checkbox_check);
@@ -78,7 +90,11 @@ public class SpinnerCustomAdapter extends ArrayAdapter<SpinnerModel> {
 
                 if (!isFromView) {
                     list.get(position).setChecked(isChecked);
-                    context.sendOtherLists(list, flag);
+                    if (page == 1)
+                        inventoryReport.sendOtherLists(list, flag);
+                    else
+                        plannedUnplanned.sendOtherLists(list, flag);
+
                     Log.e("spinneradapter", list.get(position).getTitle() + list.get(position).isChecked());
                 }
             }
