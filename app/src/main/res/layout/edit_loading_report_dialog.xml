@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="serif"
-                android:text="@string/order_no"
+                android:text="@string/packing_list"
                 android:textColor="@color/orange"
                 android:textSize="15sp" />
 

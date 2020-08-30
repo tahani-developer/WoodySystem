@@ -90,9 +90,10 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"
                     android:layout_weight="1"
+                    android:fontFamily="serif"
                     android:gravity="start"
                     android:text="@string/placing_no"
-                    android:fontFamily="serif"
+                    android:textSize="15sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -104,6 +105,7 @@
                     android:layout_marginTop="5dp"
                     android:layout_weight="2"
                     android:singleLine="true"
+                    android:fontFamily="serif"
                     android:nextFocusDown="@id/order_no"
                     android:ems="10" />
 
@@ -130,9 +132,10 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"
                     android:layout_weight="1"
-                    android:gravity="start"
-                    android:text="@string/order_no"
                     android:fontFamily="serif"
+                    android:gravity="start"
+                    android:text="@string/packing_list"
+                    android:textSize="15sp"
                     android:theme="@style/AppTheme"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -144,6 +147,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:singleLine="true"
+                    android:fontFamily="serif"
                     android:nextFocusDown="@id/container_no"
                     android:ems="10"/>
 
@@ -170,9 +174,10 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"
                     android:layout_weight="1"
+                    android:fontFamily="serif"
                     android:gravity="start"
                     android:text="@string/container_no"
-                    android:fontFamily="serif"
+                    android:textSize="15sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -183,7 +188,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:singleLine="true"
-                    android:nextFocusDown="@id/date_of_load"
+                    android:fontFamily="serif"
+                    android:nextFocusDown="@id/destination"
                     android:ems="10" />
 
             </LinearLayout>
@@ -200,7 +206,7 @@
                 android:background="@drawable/shape_with_corner"
                 android:orientation="horizontal"
                 android:padding="5dp"
-                app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_three">
+                app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_nine">
 
                 <TextView
                     android:id="@+id/textView4"
@@ -209,9 +215,10 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"
                     android:layout_weight="1"
+                    android:fontFamily="serif"
                     android:gravity="start"
                     android:text="@string/date_of_load"
-                    android:fontFamily="serif"
+                    android:textSize="15sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -222,7 +229,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:singleLine="true"
-                    android:nextFocusDown="@id/destination"
+                    android:fontFamily="serif"
                     android:ems="10"
                     android:focusable="false"
                     android:inputType="text" />
@@ -230,6 +237,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/addToInventory_linear_nine"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -240,7 +248,7 @@
                 android:background="@drawable/shape_with_corner"
                 android:orientation="horizontal"
                 android:padding="5dp"
-                app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_four"
+                app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_three"
                 tools:layout_editor_absoluteX="50dp">
 
                 <TextView
@@ -250,9 +258,10 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"
                     android:layout_weight="1"
+                    android:fontFamily="serif"
                     android:gravity="start"
                     android:text="@string/destination"
-                    android:fontFamily="serif"
+                    android:textSize="15sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -263,6 +272,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:ems="10"
+                    android:fontFamily="serif"
                     android:inputType="text" />
 
             </LinearLayout>
