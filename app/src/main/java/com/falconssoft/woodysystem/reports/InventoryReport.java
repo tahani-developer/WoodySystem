@@ -1028,10 +1028,22 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         DatePrint= dialog.findViewById(R.id.DatePrint);
 
         DatePrint.setText(""+DateString);
-        companyName.setText(generalSettings.getCompanyName());
+        companyName.setText(generalSettings.getCompanyName().toUpperCase());
         bundelNo.setText(data);
-        TLW.setText(thic + " X " + width + " X " + length);
-        pcsNo.setText(pcs);
+
+        String thicNoDot=thic.substring(0,thic.indexOf("."));
+        Log.e("thicNoDot",thicNoDot);
+        String widthNoDot=width.substring(0,width.indexOf("."));
+        Log.e("widthNoDot",widthNoDot);
+        String lengthNoDot=length.substring(0,length.indexOf("."));
+        Log.e("lengthNoDot",lengthNoDot);
+        TLW.setText(thicNoDot + " X " + widthNoDot + " X " + lengthNoDot);
+
+
+        String pcsNoDot=pcs.substring(0,pcs.indexOf("."));
+        Log.e("pcsNoDot",pcsNoDot);
+        pcsNo.setText(pcsNoDot);
+
         grade.setText(grades);
 
 

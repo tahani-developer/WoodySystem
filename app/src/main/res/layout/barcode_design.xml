@@ -23,6 +23,7 @@
                 android:layout_weight="1"
                 android:gravity="start"
                 android:text="KOSKISEN"
+                android:fontFamily="serif"
                 android:textColor="@color/black"
                 android:textSize="30sp" />
 
@@ -50,6 +51,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="T1665464"
+                android:fontFamily="serif"
+
                 android:textColor="@color/black"
                 android:textSize="25sp" />
         </LinearLayout>
@@ -71,6 +74,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="44 X 100 X 400"
+                android:fontFamily="serif"
+
                 android:textColor="@color/black"
                 android:textSize="20sp" />
         </LinearLayout>
@@ -91,6 +96,8 @@
                 android:layout_width="85dp"
                 android:layout_height="wrap_content"
                 android:text="PCS  "
+                android:fontFamily="serif"
+
                 android:textColor="@color/black"
                 android:textSize="25sp" />
 
@@ -99,6 +106,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="275"
+                android:fontFamily="serif"
                 android:textColor="@color/black"
                 android:textSize="25sp" />
 
@@ -108,6 +116,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="70dp"
                 android:text="Grade"
+                android:fontFamily="serif"
                 android:textColor="@color/black"
                 android:textSize="25sp" />
 
@@ -116,6 +125,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="SF"
+                android:fontFamily="serif"
                 android:textColor="@color/black"
                 android:textSize="25sp" />
 
@@ -145,6 +155,7 @@
                 android:id="@+id/DatePrint"
                 android:layout_width="wrap_content"
                 android:text="27/05/2325"
+                android:fontFamily="serif"
                 android:textColor="@color/black"
                 android:textSize="25sp"
                 android:layout_height="wrap_content" />
