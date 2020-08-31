@@ -75,10 +75,17 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class LoadingOrderReport extends AppCompatActivity {
 
@@ -187,7 +194,7 @@ public class LoadingOrderReport extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 loc = parent.getSelectedItem().toString();
-                filters();
+                filters(0);
             }
 
             @Override
@@ -243,7 +250,7 @@ public class LoadingOrderReport extends AppCompatActivity {
                         slideDown(linearLayout);
 
                     searchBundleNoString = String.valueOf(s);//formatDecimalValue(String.valueOf(s));
-                    filters();
+                    filters(1);
                     break;
             }
         }
@@ -325,191 +332,15 @@ public class LoadingOrderReport extends AppCompatActivity {
         openPicDialog(pics, context);
     }
 
-//    void fillTable(List<Orders> orders) {
-//
-//        for (int k = 0; k < orders.size(); k++) {
-//            final int index = k;
-//            TableRow tableRow = new TableRow(this);
-//            for (int i = 0; i < 7; i++) {
-//                TextView textView = new TextView(this);
-//                textView.setBackgroundResource(R.color.light_orange);
-//                TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(0, 40, 1f);
-//                textViewParam.setMargins(0, 2, 2, 0);
-//                textView.setTextSize(15);
-//                textView.setTextColor(ContextCompat.getColor(this, R.color.gray_dark_one));
-//                textView.setLayoutParams(textViewParam);
-//                switch (i) {
-//                    case 0:
-//                        textView.setText(orders.get(k).getOrderNo());
-//                        break;
-//                    case 1:
-//                        textView.setText(orders.get(k).getPlacingNo());
-//                        break;
-//                    case 2:
-//                        textView.setText(orders.get(k).getContainerNo());
-//                        break;
-//                    case 3:
-//                        textView.setText(orders.get(k).getDateOfLoad());
-//                        break;
-//                    case 4:
-//                        textView.setText(orders.get(k).getDestination());
-//                        break;
-//                    case 5:
-//                        textView.setText("Preview");
-//                        textView.setTextColor(ContextCompat.getColor(this, R.color.preview));
-//                        textView.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//
-//                                bundleInfos = new ArrayList<>();
-//
-//                                for (int i = 0; i < bundles.size(); i++) {
-////                                    Log.e("ooo  " , ""+ orders.get(index).getOrderNo() + "  " + bundles.get(i).getBundleNo());
-//                                    if (orders.get(index).getOrderNo().equals(bundles.get(i).getOrderNo()) &&
-//                                            orders.get(index).getPlacingNo().equals(bundles.get(i).getPlacingNo()) &&
-//                                            orders.get(index).getContainerNo().equals(bundles.get(i).getContainerNo()) &&
-//                                            orders.get(index).getDateOfLoad().equals(bundles.get(i).getDateOfLoad())) {
-//
-//                                        bundleInfos.add(new BundleInfo(
-//                                                bundles.get(i).getThickness(),
-//                                                bundles.get(i).getWidth(),
-//                                                bundles.get(i).getLength(),
-//                                                bundles.get(i).getGrade(),
-//                                                bundles.get(i).getNoOfPieces(),
-//                                                bundles.get(i).getBundleNo(),
-//                                                bundles.get(i).getLocation(),
-//                                                bundles.get(i).getArea(),
-//                                                "",
-//                                                bundles.get(i).getPicture()));
-//                                    }
-//                                }
-//
-//                                Log.e("ooo  ", "" + bundleInfos.size());
-//                                adapter = new ItemsListAdapter2(LoadingOrderReport.this, bundleInfos);
-//                                listView.setAdapter(adapter);
-//                                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                                    @Override
-//                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                                        openLargePicDialog(StringToBitMap(bundleInfos.get(position).getPicture()));
-//                                    }
-//                                });
-//
-//                                try {
-//                                    Thread.sleep(300);
-//                                } catch (InterruptedException e) {
-//                                    e.printStackTrace();
-//                                }
-//
-//                                slideUp(linearLayout);
-//
-//                            }
-//                        });
-//                        break;
-//
-//                    case 6:
-//                        TableRow.LayoutParams param = new TableRow.LayoutParams(0, 40, 0.25f);
-//                        textViewParam.setMargins(0, 2, 2, 0);
-//                        textView.setLayoutParams(param);
-//
-//                        textView.setBackgroundDrawable(getResources().getDrawable(R.drawable.pic));
-//
-//                        textView.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//
-//                                Pictures pics = new Pictures();
-//                                for (int i = 0; i < pictures.size(); i++) {
-//                                    if (pictures.get(i).getOrderNo().equals(orders.get(index).getOrderNo())) {
-//                                        pics = pictures.get(i);
-//                                        break;
-//                                    }
-//                                }
-////                                openPicDialog(pics);
-//                            }
-//                        });
-//                        break;
-//
-//
-//                }
-//                tableRow.addView(textView);
-//
-//                tableRow.setOnLongClickListener(new View.OnLongClickListener() {
-//                    @Override
-//                    public boolean onLongClick(View v) {
-//
-//                        Dialog passwordDialog = new Dialog(LoadingOrderReport.this);
-//                        passwordDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//                        passwordDialog.setContentView(R.layout.password_dialog);
-//                        passwordDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//
-//                        TextInputEditText password = passwordDialog.findViewById(R.id.password_dialog_password);
-//                        TextView done = passwordDialog.findViewById(R.id.password_dialog_done);
-//
-//                        done.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//                                if (password.getText().toString().equals("301190")) {
-//                                    orderNo = orders.get(index).getOrderNo();
-//
-//                                    bundleInfos = new ArrayList<>();
-//
-//                                    for (int i = 0; i < bundles.size(); i++) {
-//                                        if (orders.get(index).getOrderNo().equals(bundles.get(i).getOrderNo()) &&
-//                                                orders.get(index).getPlacingNo().equals(bundles.get(i).getPlacingNo()) &&
-//                                                orders.get(index).getContainerNo().equals(bundles.get(i).getContainerNo()) &&
-//                                                orders.get(index).getDateOfLoad().equals(bundles.get(i).getDateOfLoad())) {
-//
-//                                            bundleInfos.add(new BundleInfo(
-//                                                    bundles.get(i).getThickness(),
-//                                                    bundles.get(i).getWidth(),
-//                                                    bundles.get(i).getLength(),
-//                                                    bundles.get(i).getGrade(),
-//                                                    bundles.get(i).getNoOfPieces(),
-//                                                    bundles.get(i).getBundleNo(),
-//                                                    bundles.get(i).getLocation(),
-//                                                    bundles.get(i).getArea(),
-//                                                    "",
-//                                                    ""));
-//                                        }
-//                                    }
-//                                    for (int i = 0; i < bundleInfos.size(); i++) {
-//                                        bundleNo.put(bundleInfos.get(i).getJSONObject());
-//                                    }
-//                                    new JSONTask2().execute();
-////                                    ordersTable.removeView(tableRow);
-//                                    passwordDialog.dismiss();
-//                                } else {
-//                                    Toast.makeText(LoadingOrderReport.this, "Not Authorized!", Toast.LENGTH_SHORT).show();
-//                                    password.setText("");
-//                                }
-//                            }
-//                        });
-//
-//                        passwordDialog.show();
-////                        AlertDialog.Builder builder = new AlertDialog.Builder(LoadingOrderReport.this);
-////                        builder.setMessage("Are you want delete this order ?");
-////                        builder.setTitle("Delete");
-////                        builder.setIcon(R.drawable.ic_warning_black_24dp);
-////                        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-////                            @Override
-////                            public void onClick(DialogInterface dialog, int which) {
-////
-////                                orderNo = orders.get(index).getOrderNo();
-////                                new JSONTask2().execute();
-////                                ordersTable.removeView(tableRow);
-////                            }
-////                        });
-////                        builder.show();
-//
-//
-//                        return false;
-//                    }
-//                });
-//            }
-////            ordersTable.addView(tableRow);
-//        }
-//
-//    }
+        void removeDuplicate(List<Orders> list) {
+        Log.e("duplicate1", "" + list.size());
+            Set<Orders> s= new HashSet<Orders>();
+            s.addAll(list);
+            list = new ArrayList<Orders>();
+            list.addAll(s);
+
+            Log.e("duplicate", "" + list.size());
+        }
 
     public void goToEditPage(Orders orders) {
 
@@ -702,7 +533,7 @@ public class LoadingOrderReport extends AppCompatActivity {
                     to.setText(sdf.format(myCalendar.getTime()));
 
                 if (!from.getText().toString().equals("") && !to.getText().toString().equals(""))
-                    filters();
+                    filters(0);
 
             }
 
@@ -768,30 +599,31 @@ public class LoadingOrderReport extends AppCompatActivity {
 
                 JSONObject parentObject = new JSONObject(finalJson);
 
-                try {
-                    JSONArray parentArrayOrders = parentObject.getJSONArray("ONLY_ORDER");
-                    orders.clear();
-                    for (int i = 0; i < parentArrayOrders.length(); i++) {
-                        JSONObject finalObject = parentArrayOrders.getJSONObject(i);
-
-                        Orders order = new Orders();
-                        order.setPlacingNo(finalObject.getString("PLACING_NO"));
-                        order.setOrderNo(finalObject.getString("ORDER_NO"));
-                        order.setContainerNo(finalObject.getString("CONTAINER_NO"));
-                        order.setDateOfLoad(finalObject.getString("DATE_OF_LOAD"));
-                        order.setDestination(finalObject.getString("DESTINATION"));
-                        order.setLocation(finalObject.getString("LOCATION"));
-
-                        orders.add(order);
-                    }
-
-                } catch (JSONException e) {
-                    Log.e("Import Data2", e.getMessage().toString());
-                }
+//                try {
+//                    JSONArray parentArrayOrders = parentObject.getJSONArray("ONLY_ORDER");
+//                    orders.clear();
+//                    for (int i = 0; i < parentArrayOrders.length(); i++) {
+//                        JSONObject finalObject = parentArrayOrders.getJSONObject(i);
+//
+//                        Orders order = new Orders();
+//                        order.setPlacingNo(finalObject.getString("PLACING_NO"));
+//                        order.setOrderNo(finalObject.getString("ORDER_NO"));
+//                        order.setContainerNo(finalObject.getString("CONTAINER_NO"));
+//                        order.setDateOfLoad(finalObject.getString("DATE_OF_LOAD"));
+//                        order.setDestination(finalObject.getString("DESTINATION"));
+//                        order.setLocation(finalObject.getString("LOCATION"));
+//
+//                        orders.add(order);
+//                    }
+//
+//                } catch (JSONException e) {
+//                    Log.e("Import Data2", e.getMessage().toString());
+//                }
 
                 try {
                     JSONArray parentArrayOrders = parentObject.getJSONArray("BUNDLE_ORDER");
                     bundles.clear();
+                    orders.clear();
 
                     for (int i = 0; i < parentArrayOrders.length(); i++) {
                         JSONObject finalObject = parentArrayOrders.getJSONObject(i);
@@ -820,7 +652,7 @@ public class LoadingOrderReport extends AppCompatActivity {
                                 InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC")).openStream();
                                 order.setPicBitmap(BitmapFactory.decodeStream(in));
                             }
-                        } catch (Exception e){
+                        } catch (Exception e) {
                             order.setPicture("null");
                         }
                        /* String pic = finalObject.getString("PART1") + finalObject.getString("PART2") +
@@ -833,11 +665,11 @@ public class LoadingOrderReport extends AppCompatActivity {
 
 
                         bundles.add(order);
+                        orders.add(order);
                     }
                 } catch (JSONException e) {
                     Log.e("Import Data1", e.getMessage().toString());
                 }
-
 
                 try {
                     JSONArray parentArrayOrders = parentObject.getJSONArray("BUNDLE_PIC");
@@ -913,8 +745,6 @@ public class LoadingOrderReport extends AppCompatActivity {
                 } catch (JSONException e) {
                     Log.e("Import Data1", e.getMessage().toString());
                 }
-
-
             } catch (MalformedURLException e) {
                 Log.e("Customer", "********ex1");
                 e.printStackTrace();
@@ -950,7 +780,8 @@ public class LoadingOrderReport extends AppCompatActivity {
             if (result != null) {
                 Log.e("result", "*****************" + orders.size());
                 rowsCount.setText("" + orders.size());
-                filters();
+                removeDuplicate(orders);
+                filters(0);
 //                adapter2 = new LoadingOrderReportAdapter(LoadingOrderReport.this, orders, bundles);
 //                list.setAdapter(adapter2);
 
@@ -1029,7 +860,7 @@ public class LoadingOrderReport extends AppCompatActivity {
             super.onPostExecute(s);
             if (s != null) {
                 if (s.contains("UPDATE_ORDER SUCCESS")) {
-                    new JSONTask3().execute();
+                    new JSONTask().execute();
 //                    adapter2.notifyDataSetChanged();
                 } else {
                     Toast.makeText(LoadingOrderReport.this, "Failed to export data!", Toast.LENGTH_SHORT).show();
@@ -1243,7 +1074,7 @@ public class LoadingOrderReport extends AppCompatActivity {
 
             if (result != null) {
                 Log.e("result", "*****************" + orders.size());
-                filters();
+                filters(0);
 //                adapter2 = new LoadingOrderReportAdapter(LoadingOrderReport.this, orders, bundles);
 //                list.setAdapter(adapter2);
 
@@ -1321,8 +1152,8 @@ public class LoadingOrderReport extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (s != null) {
-                if (s.contains("UPDATE_ORDER SUCCESS")) {
-                    new JSONTask3().execute();
+                if (s.contains("DELETE ORDER SUCCESS")) {
+                    new JSONTask().execute();
 //                    adapter2.notifyDataSetChanged();
                 } else {
                     Toast.makeText(LoadingOrderReport.this, "Failed to export data!", Toast.LENGTH_SHORT).show();
@@ -1375,47 +1206,48 @@ public class LoadingOrderReport extends AppCompatActivity {
         return d;
     }
 
-    public void filters() {
+    public void filters(int flag) {
 
         String fromDate = from.getText().toString().trim();
         String toDate = to.getText().toString();
         try {
 
             filtered.clear();
-
+            Log.e("followfilter", "" + orders.size()  + "   flag  " + flag);
             String localDate = "", localContainer = "", localPlacingNo = "", localOrderNo = "";
-            for (int m = 0; m < bundles.size(); m++) {
+            if (flag == 1) { // for bundle search
+                for (int m = 0; m < bundles.size(); m++) {
 //                    Log.e("compare333",bundles.get(m).getBundleNo().toLowerCase());
 //                    Log.e("compare334","" + bundles.get(m).getBundleNo().toLowerCase().contains(searchBundleNoString));
-                if (bundles.get(m).getBundleNo().toLowerCase().contains(searchBundleNoString) || searchBundleNoString.equals("")) {
-                    localDate = bundles.get(m).getDateOfLoad();
-                    localContainer = bundles.get(m).getContainerNo();
-                    localPlacingNo = bundles.get(m).getPlacingNo();
-                    localOrderNo = bundles.get(m).getOrderNo();
-                    for (int k = 0; k < orders.size(); k++) {
+                    if (bundles.get(m).getBundleNo().toLowerCase().contains(searchBundleNoString) || searchBundleNoString.equals("")) {
+                        localDate = bundles.get(m).getDateOfLoad();
+                        localContainer = bundles.get(m).getContainerNo();
+                        localPlacingNo = bundles.get(m).getPlacingNo();
+                        localOrderNo = bundles.get(m).getOrderNo();
+                        for (int k = 0; k < orders.size(); k++) {
 //                if (fromDate.equals("") || toDate.equals("")) {
 //                    if (loc.equals("") || loc.equals(orders.get(k).getLocation()))
 //                        filtered.add(orders.get(k));
 //                } else {
-                        if ((formatDate(orders.get(k).getDateOfLoad()).after(formatDate(fromDate))
-                                || formatDate(orders.get(k).getDateOfLoad()).equals(formatDate(fromDate)) || fromDate.equals("")) &&
-                                (formatDate(orders.get(k).getDateOfLoad()).before(formatDate(toDate))
-                                        || formatDate(orders.get(k).getDateOfLoad()).equals(formatDate(toDate)) || toDate.equals("")) &&
-                                (loc.equals("") || loc.equals(orders.get(k).getLocation())))
-                            if ((orders.get(k).getContainerNo().equals(localContainer) || localContainer.equals(""))
-                                    && (orders.get(k).getPlacingNo().equals(localPlacingNo) || localPlacingNo.equals(""))
-                                    && (orders.get(k).getOrderNo().equals(localOrderNo) || localOrderNo.equals(""))
-                                    && (orders.get(k).getDateOfLoad().equals(localDate) || localDate.equals(""))) {
+                            if ((formatDate(orders.get(k).getDateOfLoad()).after(formatDate(fromDate))
+                                    || formatDate(orders.get(k).getDateOfLoad()).equals(formatDate(fromDate)) || fromDate.equals("")) &&
+                                    (formatDate(orders.get(k).getDateOfLoad()).before(formatDate(toDate))
+                                            || formatDate(orders.get(k).getDateOfLoad()).equals(formatDate(toDate)) || toDate.equals("")) &&
+                                    (loc.equals("") || loc.equals(orders.get(k).getLocation())))
+                                if ((orders.get(k).getContainerNo().equals(localContainer) || localContainer.equals(""))
+                                        && (orders.get(k).getPlacingNo().equals(localPlacingNo) || localPlacingNo.equals(""))
+                                        && (orders.get(k).getOrderNo().equals(localOrderNo) || localOrderNo.equals(""))
+                                        && (orders.get(k).getDateOfLoad().equals(localDate) || localDate.equals(""))) {
 
-                                filtered.add(orders.get(k));
-                                break;
-                            }
+                                    filtered.add(orders.get(k));
+                                    break;
+                                }
 //            }
 //                }
-                    }
+                        }
 
+                    }
                 }
-            }
 //            for (int k = 0; k < orders.size(); k++) {
 ////                if (fromDate.equals("") || toDate.equals("")) {
 ////                    if (loc.equals("") || loc.equals(orders.get(k).getLocation()))
@@ -1434,13 +1266,28 @@ public class LoadingOrderReport extends AppCompatActivity {
 ////            }
 ////                }
 //            }
-            //Log.e("set 1", "" + filtered.size());
+                //Log.e("set 1", "" + filtered.size());
+            } else {
+                try {
+                    for (int k = 0; k < orders.size(); k++) {
 
+                        if ((formatDate(orders.get(k).getDateOfLoad()).after(formatDate(fromDate))
+                                || formatDate(orders.get(k).getDateOfLoad()).equals(formatDate(fromDate)) || fromDate.equals("")) &&
+                                (formatDate(orders.get(k).getDateOfLoad()).before(formatDate(toDate))
+                                        || formatDate(orders.get(k).getDateOfLoad()).equals(formatDate(toDate)) || toDate.equals("")) &&
+                                (loc.equals("") || loc.equals(orders.get(k).getLocation()))) {
+                            filtered.add(orders.get(k));
+                        }
+                    }
 
+                }catch (Exception e){
+                    Log.e("exception", e.getMessage());
+                }
+            }
             HashSet<Orders> listToSet = new HashSet<Orders>(filtered);
             filtered.clear();
             filtered.addAll(listToSet);
-            // Log.e("set", "" + filtered.size());
+            Log.e("set", "" + filtered.size());
             adapter2 = new LoadingOrderReportAdapter(LoadingOrderReport.this, filtered, bundles);
             list.setAdapter(adapter2);
 

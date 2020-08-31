@@ -29,10 +29,12 @@ import android.widget.Toast;
 import com.falconssoft.woodysystem.DatabaseHandler;
 import com.falconssoft.woodysystem.ExportToExcel;
 import com.falconssoft.woodysystem.R;
+import com.falconssoft.woodysystem.SpinnerCustomAdapter;
 import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.CustomerInfo;
 import com.falconssoft.woodysystem.models.PlannedPL;
 import com.falconssoft.woodysystem.models.Settings;
+import com.falconssoft.woodysystem.models.SpinnerModel;
 import com.falconssoft.woodysystem.models.SupplierInfo;
 import com.falconssoft.woodysystem.reports.InventoryReport;
 import com.itextpdf.text.BaseColor;
@@ -91,10 +93,8 @@ public class PlannedUnplanned extends AppCompatActivity implements AdapterView.O
 
     private PlannedUnPlannedAdapter adapter2;
 
-    TextView export;
-    private TextView thick, thicknessOrder, widthOrder, lengthOrder;
+    private TextView thick, thicknessOrder, widthOrder, lengthOrder, noBundles, totalCBM, export;
     private RecyclerView recycler;
-    private TextView noBundles, totalCBM;
     ;
     private TableLayout tableLayout, headerTableLayout;
     private TableRow tableRow;
@@ -102,29 +102,29 @@ public class PlannedUnplanned extends AppCompatActivity implements AdapterView.O
     private List<PlannedPL> plannedList = new ArrayList<>();
     private List<PlannedPL> unPlannedList = new ArrayList<>();
     private List<PlannedPL> PLListFiltered = new ArrayList<>();
+    private List<SpinnerModel> thicknessChecked = new ArrayList<>();
+    private List<SpinnerModel> lengthChecked = new ArrayList<>();
+    private List<SpinnerModel> widthChecked = new ArrayList<>();
 
     private ArrayList<String> gradeList = new ArrayList<>();
     private ArrayAdapter<String> gradeAdapter;
-    private Spinner gradeSpinner;
-    private String gradeText = "All";
 
     private ArrayList<String> typeList = new ArrayList<>();
     private ArrayAdapter<String> typeAdapter;
-    private Spinner typeSpinner, thicknessSpinner, widthSpinner, lengthSpinner;
-    private String typeText = "Planned";
+    private Spinner typeSpinner, thicknessSpinner, widthSpinner, lengthSpinner, gradeSpinner;
+    private String typeText = "Planned", gradeText = "All", today;
 
     private List<Double> doubleList;
 
-    SimpleDateFormat sdf;
-    String today;
+    private SimpleDateFormat sdf, dfReport;
 
     private List<String> thickness = new ArrayList<>();
     private List<String> length = new ArrayList<>();
     private List<String> width = new ArrayList<>();
 
-    private ArrayAdapter<String> thicknessAdapter;
-    private ArrayAdapter<String> widthAdapter;
-    private ArrayAdapter<String> lengthAdapter;
+    private SpinnerCustomAdapter thicknessAdapter;
+    private SpinnerCustomAdapter widthAdapter;
+    private SpinnerCustomAdapter lengthAdapter;
 
     private EditText fromLength, toLength, fromWidth, toWidth;
 
@@ -147,7 +147,7 @@ public class PlannedUnplanned extends AppCompatActivity implements AdapterView.O
         String myFormat = "dd/MM/yyyy";
         sdf = new SimpleDateFormat(myFormat, Locale.US);
         today = sdf.format(myCalendar.getTime());
-
+        dfReport = new SimpleDateFormat("yyyyMMdd_hhmmss");
 
         thicknessOrder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -205,7 +205,7 @@ public class PlannedUnplanned extends AppCompatActivity implements AdapterView.O
             public void onClick(View v) {
 
                 ExportToExcel obj = new ExportToExcel(PlannedUnplanned.this);
-                obj.exportPlannedUnplanned(PLListFiltered);
+                obj.exportPlannedUnplanned(PLListFiltered, dfReport.format(Calendar.getInstance().getTime()), today);
             }
         });
 
@@ -306,28 +306,25 @@ public class PlannedUnplanned extends AppCompatActivity implements AdapterView.O
 
         PLListFiltered.clear();
         for (int i = 0; i < PLList.size(); i++) {
-
-
+//
+//            if (thicknessField.equals("All") || thicknessField.equals(String.valueOf(PLList.get(i).getThickness())))
+//                if (widthField.equals("All") || widthField.equals(String.valueOf(PLList.get(i).getWidth())))
+//                    if (lengthField.equals("All") || lengthField.equals(String.valueOf(PLList.get(i).getLength())))
 //            if (PLList.get(i).getPackingList().startsWith(paclingList.getText().toString()) || paclingList.getText().toString().equals("")) {
 //                if (PLList.get(i).getDestination().startsWith(dest.getText().toString()) || dest.getText().toString().equals("")) {
 //                    if (PLList.get(i).getOrderNo().startsWith(orderNo.getText().toString()) || orderNo.getText().toString().equals("")) {
             if (fromLengthNo.equals("") || (PLList.get(i).getLength() >= Double.parseDouble(fromLengthNo)))
                 if (toLengthNo.equals("") || (PLList.get(i).getLength() <= Double.parseDouble(toLengthNo)))
                     if (fromWidthNo.equals("") || (PLList.get(i).getWidth() >= Double.parseDouble(fromWidthNo)))
-                        if (toWidthNo.equals("") || (PLList.get(i).getWidth() <= Double.parseDouble(toWidthNo))) {
-
-                            if (thicknessField.equals("All") || thicknessField.equals(String.valueOf(PLList.get(i).getThickness()))) {
-                                if (widthField.equals("All") || widthField.equals(String.valueOf(PLList.get(i).getWidth()))) {
-                                    if (lengthField.equals("All") || lengthField.equals(String.valueOf(PLList.get(i).getLength()))) {
+                        if (toWidthNo.equals("") || (PLList.get(i).getWidth() <= Double.parseDouble(toWidthNo)))
+                            if ((thicknessChecked.size() == 0) || checkIfItemChecked(thicknessChecked, String.valueOf(PLList.get(i).getThickness())))
+                                if ((widthChecked.size() == 0) || checkIfItemChecked(widthChecked, String.valueOf(PLList.get(i).getWidth())))
+                                    if ((lengthChecked.size() == 0) || checkIfItemChecked(lengthChecked, String.valueOf(PLList.get(i).getLength())))
                                         if (gradeText.equals("All") || PLList.get(i).getGrade().startsWith(gradeText)) {
-
 
                                             PLListFiltered.add(PLList.get(i));
                                         }
-                                    }
-                                }
-                            }
-                        }
+
         }
 
         adapter2 = new PlannedUnPlannedAdapter(this, PLListFiltered);
@@ -336,6 +333,50 @@ public class PlannedUnplanned extends AppCompatActivity implements AdapterView.O
         calculateTotal();
     }
 
+    boolean checkIfItemChecked(List<SpinnerModel> list, String value) {
+        for (int i = 0; i < list.size(); i++)
+            if (value.equals(list.get(i).getTitle()))
+                return true;
+
+        return false;
+    }
+
+    public void sendOtherLists(List<SpinnerModel> list, int flag) {
+        switch (flag) {
+            case 1://thickness
+                if (list != null || list.size() != 0) {
+                    thicknessChecked = new ArrayList<>();
+                    for (int i = 0; i < list.size(); i++)
+                        if (list.get(i).isChecked())
+                            thicknessChecked.add(list.get(i));
+                    Log.e("follow/", "size3/thicknessChecked/" + thicknessChecked.size());
+                    filters();
+                }
+                break;
+            case 2://width
+                if (list != null || list.size() != 0) {
+                    widthChecked = new ArrayList<>();
+                    for (int i = 0; i < list.size(); i++)
+                        if (list.get(i).isChecked())
+                            widthChecked.add(list.get(i));
+                    Log.e("follow/", "size3/widthChecked/" + widthChecked.size());
+                    filters();
+                }
+                break;
+            case 3://length
+                if (list != null || list.size() != 0) {
+                    lengthChecked = new ArrayList<>();
+                    for (int i = 0; i < list.size(); i++)
+                        if (list.get(i).isChecked())
+                            lengthChecked.add(list.get(i));
+                    Log.e("follow/", "size3/lengthChecked/" + lengthChecked.size());
+                    filters();
+                }
+                break;
+        }
+
+
+    }
 
     @Override
     public void onClick(View v) {
@@ -388,20 +429,51 @@ public class PlannedUnplanned extends AppCompatActivity implements AdapterView.O
         removeDuplicate(widthList);
         removeDuplicate(lengthList);
 
-        lengthList.add(0, "All");
-        lengthAdapter = new ArrayAdapter<>(this, R.layout.spinner_layout, lengthList);
-        lengthAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
+        List<SpinnerModel> thicknessCheckList = new ArrayList<>();
+        List<SpinnerModel> widthCheckList = new ArrayList<>();
+        List<SpinnerModel> lengthCheckList = new ArrayList<>();
+
+        for (int i = 0; i < lengthList.size(); i++) {
+            SpinnerModel spinnerModel = new SpinnerModel();
+            spinnerModel.setTitle(lengthList.get(i));
+            spinnerModel.setChecked(false);
+            lengthCheckList.add(spinnerModel);
+        }
+        lengthCheckList.add(0, new SpinnerModel("       ", false));
+        lengthAdapter = new SpinnerCustomAdapter(PlannedUnplanned.this, 0, lengthCheckList, 3, 2);
         lengthSpinner.setAdapter(lengthAdapter);
+//        lengthList.add(0, "All");
+//        lengthAdapter = new ArrayAdapter<>(this, R.layout.spinner_layout, lengthList);
+//        lengthAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
+//        lengthSpinner.setAdapter(lengthAdapter);
 
-        widthList.add(0, "All");
-        widthAdapter = new ArrayAdapter<>(this, R.layout.spinner_layout, widthList);
-        widthAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
+        for (int i = 0; i < widthList.size(); i++) {
+            SpinnerModel spinnerModel = new SpinnerModel();
+            spinnerModel.setTitle(widthList.get(i));
+            spinnerModel.setChecked(false);
+            widthCheckList.add(spinnerModel);
+        }
+        widthCheckList.add(0, new SpinnerModel("       ", false));
+        widthAdapter = new SpinnerCustomAdapter(PlannedUnplanned.this, 0, widthCheckList, 2, 2);
         widthSpinner.setAdapter(widthAdapter);
+//        widthList.add(0, "All");
+//        widthAdapter = new ArrayAdapter<>(this, R.layout.spinner_layout, widthList);
+//        widthAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
+//        widthSpinner.setAdapter(widthAdapter);
 
-        thicknessList.add(0, "All");
-        thicknessAdapter = new ArrayAdapter<>(this, R.layout.spinner_layout, thicknessList);
-        thicknessAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
+        for (int i = 0; i < thicknessList.size(); i++) {
+            SpinnerModel spinnerModel = new SpinnerModel();
+            spinnerModel.setTitle(thicknessList.get(i));
+            spinnerModel.setChecked(false);
+            thicknessCheckList.add(spinnerModel);
+        }
+        thicknessCheckList.add(0, new SpinnerModel("       ", false));
+        thicknessAdapter = new SpinnerCustomAdapter(PlannedUnplanned.this, 0, thicknessCheckList, 1, 2);
         thicknessSpinner.setAdapter(thicknessAdapter);
+//        thicknessList.add(0, "All");
+//        thicknessAdapter = new ArrayAdapter<>(this, R.layout.spinner_layout, thicknessList);
+//        thicknessAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
+//        thicknessSpinner.setAdapter(thicknessAdapter);
 
 
         gradeList.clear();

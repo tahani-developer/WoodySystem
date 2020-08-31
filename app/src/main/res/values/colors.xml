@@ -19,10 +19,11 @@
     <color name="orangeHover">#EC9568</color>
     <!--    F1712F-->
     <color name="alpha_black">#320C0C0C</color>
-    <color name="alpha_black_dark">#680C0C0C</color>
+    <color name="alpha_black_dark">#940C0C0C</color>
     <color name="alpha_white">#C1FAFAFA</color>
     <color name="wooden">#643F18</color>
     <color name="preview">#C24641</color>
     <color name="alpha_white2">#E2FFFEFE</color>
+    <color name="light_gray">#EFEBEB</color>
 
 </resources>

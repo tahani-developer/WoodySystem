@@ -230,9 +230,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="serif"
-                    android:text="@string/order_no_"
+                    android:text="@string/p_list"
                     android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -241,7 +241,7 @@
                     android:fontFamily="serif"
                     android:text="@string/placing_no_"
                     android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -250,7 +250,7 @@
                     android:fontFamily="serif"
                     android:text="@string/container_no_"
                     android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -259,7 +259,7 @@
                     android:fontFamily="serif"
                     android:text="@string/date_of_load"
                     android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -268,7 +268,7 @@
                     android:fontFamily="serif"
                     android:text="@string/destination"
                     android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -277,7 +277,7 @@
                     android:fontFamily="serif"
                     android:text="Bundles"
                     android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -286,7 +286,7 @@
                     android:fontFamily="serif"
                     android:text="Pic"
                     android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textSize="15sp" />
 
                 <ImageView
                     android:layout_width="wrap_content"

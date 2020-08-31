@@ -105,8 +105,8 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
     private RelativeLayout containerLayout;
     private SharedClass sharedClass;
 
-    SimpleDateFormat sdf;
-    String today;
+    private SimpleDateFormat sdf, dfReport;
+    private String today;
 
     private JSONArray plannedPLListJSON = new JSONArray();
 
@@ -132,7 +132,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
         String myFormat = "dd/MM/yyyy";
         sdf = new SimpleDateFormat(myFormat, Locale.US);
         today = sdf.format(myCalendar.getTime());
-
+        dfReport = new SimpleDateFormat("yyyyMMdd_hhmmss");
 
         progressDialog = new ProgressDialog(this, R.style.MyAlertDialogStyle);
         progressDialog.setMessage("Please Waiting...");
@@ -268,7 +268,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
                 break;
             case R.id.export:
                 ExportToExcel obj = new ExportToExcel(UnloadPackingList.this);
-                obj.exportUnloadPackingList(UPLListFiltered);
+                obj.exportUnloadPackingList(UPLListFiltered, searchCustomer.getText().toString(), searchSupplier.getText().toString(),  dfReport.format(Calendar.getInstance().getTime()), gradeText, today);
 
                 break;
 
@@ -321,7 +321,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
         for (int i = 0; i < PLList.size(); i++) {
 
             if (customerName.equals(PLList.get(i).getCustName()) || customerName.equals("All") || customerName.equals("")) {
-                if (supplierName.equals(PLList.get(i).getCustName()) || supplierName.equals("All") || supplierName.equals("")) {
+                if (supplierName.equals(PLList.get(i).getSupplier()) || supplierName.equals("All") || supplierName.equals("")) {
                     if (PLList.get(i).getPackingList().startsWith(paclingList.getText().toString()) || paclingList.getText().toString().equals("")) {
                         if (PLList.get(i).getDestination().startsWith(dest.getText().toString()) || dest.getText().toString().equals("")) {
                             if (PLList.get(i).getOrderNo().startsWith(orderNo.getText().toString()) || orderNo.getText().toString().equals("")) {

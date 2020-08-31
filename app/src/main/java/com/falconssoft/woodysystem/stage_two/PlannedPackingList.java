@@ -1,6 +1,9 @@
 package com.falconssoft.woodysystem.stage_two;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -62,6 +65,7 @@ import java.util.function.Supplier;
 
 public class PlannedPackingList extends AppCompatActivity implements View.OnClickListener {
 
+    private ProgressDialog progressDialog;
     private DatabaseHandler databaseHandler;
     private Calendar myCalendar;
     private Settings generalSettings;
@@ -122,6 +126,9 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
         PlannedPLList = new ArrayList<>();
         init();
 
+        progressDialog = new ProgressDialog(this, R.style.MyAlertDialogStyle);
+        progressDialog.setMessage("Please Waiting...");
+        progressDialog.setCanceledOnTouchOutside(false);
         databaseHandler = new DatabaseHandler(PlannedPackingList.this);
         myCalendar = Calendar.getInstance();
         generalSettings = new Settings();
@@ -187,18 +194,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                 addButtonMethod();
                 break;
             case R.id.check_button:
-                plannedPLListJSON = new JSONArray();
-                for (int i = 0; i < PlannedPLList.size(); i++) {
-                    for (int k = 0; k < PlannedPLList.get(i).getNoOfCopies(); k++) {
-                        plannedPLListJSON.put(PlannedPLList.get(i).getJSONObject());
-                    }
-                }
-
-                if (plannedPLListJSON.length() > 0) {
-                    new JSONTask2().execute();
-                    bundleInfosList.clear();
-                } else
-                    Toast.makeText(this, "Please add rows first!", Toast.LENGTH_SHORT).show();
+                checkBundlesExistence();
                 break;
             case R.id.save_button:
                 if (PlannedPLList.size() > 0)
@@ -236,6 +232,22 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
         }
     }
 
+    void checkBundlesExistence(){
+        plannedPLListJSON = new JSONArray();
+        for (int i = 0; i < PlannedPLList.size(); i++) {
+            for (int k = 0; k < PlannedPLList.get(i).getNoOfCopies(); k++) {
+                plannedPLListJSON.put(PlannedPLList.get(i).getJSONObject());
+            }
+        }
+
+        if (plannedPLListJSON.length() > 0) {
+            new JSONTask2().execute();
+            bundleInfosList.clear();
+        }
+//        else
+//            Toast.makeText(this, "Please add rows first!", Toast.LENGTH_SHORT).show();
+    }
+
     class watchTextChange implements TextWatcher {
 
         private View view;
@@ -266,6 +278,9 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                 PlannedPLList.add(oldList.get(i));
                 searchCustomer.setText(oldList.get(i).getCustName());
                 searchSupplier.setText(oldList.get(i).getSupplier());
+                customerName = searchCustomer.getText().toString();
+                customerNo = oldList.get(i).getCustNo();
+                supplierName = searchSupplier.getText().toString();
                 destination.setText(oldList.get(i).getDestination());
                 orderNo.setText(oldList.get(i).getOrderNo());
                 gradeSpinner.setSelection(gradeList.indexOf(oldList.get(i).getGrade()));
@@ -289,6 +304,8 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
         if (plannedPLListJSON.length() > 0)
             new JSONTask2().execute();
+
+        checkBundlesExistence();
     }
 
     public void filter(String charText) { // by Name
@@ -998,21 +1015,32 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
     public void deleteItemDialog(int index) {
 
-        plannedPLListJSONDELETE = new JSONArray();
-        for (int i = 0; i < PlannedPLList.get(index).getNoOfCopies(); i++) {
-            plannedPLListJSONDELETE.put(PlannedPLList.get(index).getJSONObject());
-        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Are you want delete selected bundles? ");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                plannedPLListJSONDELETE = new JSONArray();
+                for (int i = 0; i < PlannedPLList.get(index).getNoOfCopies(); i++) {
+                    plannedPLListJSONDELETE.put(PlannedPLList.get(index).getJSONObject());
+                }
 
-        ind = index;
-        if (PlannedPLList.get(index).getIsOld() == 1)
-            new JSONTask7().execute();
-        else {
+                ind = index;
+                if (PlannedPLList.get(index).getIsOld() == 1) {
+                    progressDialog.show();
+                    new JSONTask7().execute();
+                }
+                else {
 
-            PlannedPLList.remove(index);
-            adapter2.notifyDataSetChanged();
+                    PlannedPLList.remove(index);
+                    adapter2.notifyDataSetChanged();
 
-            calculateTotal();
-        }
+                    calculateTotal();
+                }
+            }
+        });
+
+        builder.show();
 
     }
 
@@ -1033,7 +1061,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
                 String copy = copies.getText().toString();
 
-                if (!TextUtils.isEmpty(copy)) {                // ***************** edit this
+                if (!TextUtils.isEmpty(copy) && Integer.parseInt(copy) > 0) {                // ***************** edit this
 
                     if (PlannedPLList.get(index).getExist().contains("Planned")) {
                         Log.e("****", "in");
@@ -1674,6 +1702,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                         oldList.add(planned);
 
                     }
+
                 } catch (JSONException e) {
                     Log.e("Import Data2", e.getMessage().toString());
                 }
@@ -1692,6 +1721,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
             if (s != null) {
 
                 if (oldList.size() > 0) {
+                    customerNo = oldList.get(0).getCustNo();
 
 
 //                    for (int i = 0; i < PLList.size(); i++) {
@@ -1757,12 +1787,13 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-
+            progressDialog.dismiss();
             if (s != null) {
                 if (s.contains("DELETE SUCCESS")) {
 
                     PlannedPLList.remove(ind);
                     adapter2.notifyDataSetChanged();
+                    new JSONTask6().execute();
 
                     calculateTotal();
 

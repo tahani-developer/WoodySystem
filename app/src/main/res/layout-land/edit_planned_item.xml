@@ -3,12 +3,13 @@
     android:layout_width="700dp"
     android:layout_height="390dp"
     android:background="@drawable/wooddecor"
-    android:paddingTop="20dp">
+    >
 
     <LinearLayout
         android:id="@+id/linear"
+        android:background="@color/alpha_black_dark"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_margin="5dp"
         android:orientation="vertical"
         android:paddingHorizontal="10dp"
@@ -25,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-
+                android:fontFamily="serif"
                 android:gravity="center"
                 android:text="@string/edit_item"
                 android:textColor="@color/orange"
@@ -73,7 +74,7 @@
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/cust"
-                        android:textSize="17sp" />
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/cust"
@@ -108,7 +109,7 @@
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/supplier_name"
-                        android:textSize="17sp" />
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/supplier"
@@ -143,7 +144,7 @@
                         android:layout_weight="1"
                         android:text="@string/p_list"
                         android:fontFamily="serif"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
 
                     <EditText
                         android:id="@+id/p_list"
@@ -156,7 +157,7 @@
                         android:enabled="false"
                         android:singleLine="true"
                         android:nextFocusDown="@id/destination"
-                        android:textSize="17sp"/>
+                        android:textSize="15sp"/>
                 </LinearLayout>
 
             </LinearLayout>
@@ -189,7 +190,7 @@
                         android:layout_weight="1"
                         android:fontFamily="serif"
                         android:text="@string/destination"
-                        android:textSize="17sp" />
+                        android:textSize="15sp" />
 
                     <EditText
                         android:id="@+id/destination"
@@ -201,7 +202,7 @@
                         android:singleLine="true"
                         android:ems="10"
                         android:nextFocusDown="@id/order_no"
-                        android:textSize="17sp"/>
+                        android:textSize="15sp"/>
 
                 </LinearLayout>
 
@@ -221,7 +222,7 @@
                         android:layout_weight="1"
                         android:fontFamily="serif"
                         android:text="@string/order_no"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
 
                     <EditText
                         android:id="@+id/order_no"
@@ -233,7 +234,7 @@
                         android:ems="10"
                         android:singleLine="true"
                         android:nextFocusDown="@id/thickness"
-                        android:textSize="17sp"/>
+                        android:textSize="15sp"/>
 
                 </LinearLayout>
 
@@ -255,7 +256,7 @@
                         android:fontFamily="serif"
                         android:layout_gravity="center_vertical"
                         android:text="@string/grade"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
 
                     <Spinner
                         android:id="@+id/grade"
@@ -295,7 +296,7 @@
                         android:layout_weight="1"
                         android:fontFamily="serif"
                         android:text="@string/thickness"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
 
                     <EditText
                         android:id="@+id/thickness"
@@ -305,6 +306,7 @@
                         android:layout_marginRight="10dp"
                         android:layout_weight="1"
                         android:ems="10"
+                        android:textSize="15sp"
                         android:inputType="numberDecimal"
                         android:nextFocusDown="@id/width" />
 
@@ -326,7 +328,7 @@
                         android:layout_weight="1"
                         android:text="@string/width"
                         android:fontFamily="serif"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
 
                     <EditText
                         android:id="@+id/width"
@@ -336,6 +338,7 @@
                         android:layout_marginRight="10dp"
                         android:layout_weight="1"
                         android:ems="10"
+                        android:textSize="15sp"
                         android:nextFocusDown="@id/length"
                         android:inputType="numberDecimal" />
                 </LinearLayout>
@@ -356,7 +359,7 @@
                         android:layout_weight="1"
                         android:fontFamily="serif"
                         android:text="@string/length"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
 
                     <EditText
                         android:id="@+id/length"
@@ -366,6 +369,7 @@
                         android:layout_marginRight="10dp"
                         android:layout_weight="1"
                         android:ems="10"
+                        android:textSize="15sp"
                         android:inputType="numberDecimal"
                         android:nextFocusDown="@id/pieces" />
 
@@ -385,7 +389,7 @@
                         android:layout_weight="1"
                         android:text="@string/no_pieces"
                         android:fontFamily="serif"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
 
                     <EditText
                         android:id="@+id/no_pieces"
@@ -395,6 +399,7 @@
                         android:layout_marginRight="10dp"
                         android:layout_weight="1"
                         android:ems="10"
+                        android:textSize="15sp"
                         android:inputType="numberDecimal"/>
                 </LinearLayout>
             </LinearLayout>

@@ -109,7 +109,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
     private Spinner gradeSpinner;
     private String gradeText = "All";
 
-    SimpleDateFormat sdf;
+    private SimpleDateFormat sdf, dfReport;
     String today;
 
     private JSONArray plannedPLListJSON = new JSONArray();
@@ -139,6 +139,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
         String myFormat = "dd/MM/yyyy";
         sdf = new SimpleDateFormat(myFormat, Locale.US);
         today = sdf.format(myCalendar.getTime());
+        dfReport = new SimpleDateFormat("yyyyMMdd_hhmmss");
 
         paclingList.requestFocus();
 
@@ -237,7 +238,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
 
                 recyclerView = searchDialog.findViewById(R.id.search_supplier_recyclerView);
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
-                adapter = new CustomerAdapter(2, this, customers);
+                adapter = new CustomerAdapter(3, this, customers);
                 recyclerView.setAdapter(adapter);
 
                 searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -274,7 +275,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.export:
                 ExportToExcel obj = new ExportToExcel(LoadPackingList.this);
-                obj.exportLoadPackingList(PLListFiltered);
+                obj.exportLoadPackingList(PLListFiltered, searchCustomer.getText().toString(), searchSupplier.getText().toString(),  dfReport.format(Calendar.getInstance().getTime()), gradeText, today);
 
                 break;
 
@@ -293,7 +294,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
 
         recyclerView2 = searchDialog2.findViewById(R.id.search_supplier_recyclerView);
         recyclerView2.setLayoutManager(new LinearLayoutManager(this));
-        adapter3 = new SupplierAdapter(2, this, suppliers);
+        adapter3 = new SupplierAdapter(3, this, suppliers);
         recyclerView2.setAdapter(adapter3);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -327,7 +328,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
         for (int i = 0; i < PLList.size(); i++) {
 
             if (customerName.equals(PLList.get(i).getCustName()) || customerName.equals("All") || customerName.equals("")) {
-                if (supplierName.equals(PLList.get(i).getCustName()) || supplierName.equals("All") || supplierName.equals("")) {
+                if (supplierName.equals(PLList.get(i).getSupplier()) || supplierName.equals("All") || supplierName.equals("")) {
                     if (PLList.get(i).getPackingList().startsWith(paclingList.getText().toString()) || paclingList.getText().toString().equals("")) {
                         if (PLList.get(i).getDestination().startsWith(dest.getText().toString()) || dest.getText().toString().equals("")) {
                             if (PLList.get(i).getOrderNo().startsWith(orderNo.getText().toString()) || orderNo.getText().toString().equals("")) {
@@ -361,7 +362,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
                 }
             }
         }
-        adapter = new CustomerAdapter(2, this, arraylist);
+        adapter = new CustomerAdapter(3, this, arraylist);
         recyclerView.setAdapter(adapter);
     }
 
@@ -377,7 +378,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
                 }
             }
         }
-        adapter3 = new SupplierAdapter(2, this, arraylist2);
+        adapter3 = new SupplierAdapter(3, this, arraylist2);
         recyclerView2.setAdapter(adapter3);
     }
 

@@ -63,6 +63,7 @@ import com.falconssoft.woodysystem.WoodPresenter;
 import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.Settings;
 import com.falconssoft.woodysystem.models.SpinnerModel;
+import com.falconssoft.woodysystem.stage_two.PlannedUnplanned;
 import com.falconssoft.woodysystem.stage_two.UnloadPackingList;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -172,6 +173,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private List<Double> doubleList;
     public static final String EDIT_BUNDLE = "EDIT_BUNDLE";
     public static final String EDIT_FLAG_BUNDLE = "EDIT_FLAG_BUNDLE";
+    private SimpleDateFormat df, dfReport;
     String DateString="";
 
     @Override
@@ -183,7 +185,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 //        searchViewTh = (SearchView) findViewById(R.id.mSearchTh);
 //        searchViewW = (SearchView) findViewById(R.id.mSearchW);
 //        searchViewL = (SearchView) findViewById(R.id.mSearchL);
-        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+         df = new SimpleDateFormat("dd/MM/yyyy");
         dateFrom.setText("1/12/2019");
         dateTo.setText(df.format(date));
         DateString=df.format(date);
@@ -200,7 +202,6 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         thicknessOrder.setOnClickListener(this);
         widthOrder.setOnClickListener(this);
         lengthOrder.setOnClickListener(this);
-        export.setOnClickListener(this);
         location.setOnItemSelectedListener(this);
         area.setOnItemSelectedListener(this);
         thicknessSpinner.setOnItemSelectedListener(this);
@@ -370,7 +371,6 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         grade = findViewById(R.id.inventory_report_grade);
 //        ordered = findViewById(R.id.inventory_report_ordered);
         textView = findViewById(R.id.inventory_report_tv);
-        export = findViewById(R.id.export);
         dateFrom = findViewById(R.id.inventory_report_from);
         dateTo = findViewById(R.id.inventory_report_to);
         noOfBundles = findViewById(R.id.inventory_report_no_bundles);
@@ -386,6 +386,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         toWidth = findViewById(R.id.inventory_report_toWidth);
         lengthSpinner = findViewById(R.id.inventory_report_length_spinner);
         widthSpinner = findViewById(R.id.inventory_report_width_spinner);
+        export = findViewById(R.id.inventory_report_export);
 
 //        fromThickness = findViewById(R.id.inventory_report_fromThick);
 //        toThickness = findViewById(R.id.inventory_report_toThick);
@@ -399,6 +400,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         searchSerial = findViewById(R.id.inventory_report_search_serial);
         searchSerialTool = findViewById(R.id.inventory_report_search_serial_tool);
 
+        export.setOnClickListener(this);
         searchSerialTool.setOnClickListener(this);
         searchPListTool.setOnClickListener(this);
         searchPListTextView.addTextChangedListener(new watchTextChange(searchPListTextView));
@@ -441,7 +443,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
             lengthCheckList.add(spinnerModel);
         }
         lengthCheckList.add(0, new SpinnerModel("       ", false));
-        lengthAdapter = new SpinnerCustomAdapter(InventoryReport.this, 0, lengthCheckList, 3);
+        lengthAdapter = new SpinnerCustomAdapter(InventoryReport.this, 0, lengthCheckList, 3, 1);
         lengthSpinner.setAdapter(lengthAdapter);
 
 //        widthList.add(0, "All");
@@ -455,7 +457,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
             widthCheckList.add(spinnerModel);
         }
         widthCheckList.add(0, new SpinnerModel("       ", false));
-        widthAdapter = new SpinnerCustomAdapter(InventoryReport.this, 0, widthCheckList, 2);
+        widthAdapter = new SpinnerCustomAdapter(InventoryReport.this, 0, widthCheckList, 2, 1);
         widthSpinner.setAdapter(widthAdapter);
 
 //        thicknessList.add(0, "All");
@@ -469,7 +471,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
             thicknessCheckList.add(spinnerModel);
         }
         thicknessCheckList.add(0, new SpinnerModel("       ", false));
-        thicknessAdapter = new SpinnerCustomAdapter(InventoryReport.this, 0, thicknessCheckList, 1);
+        thicknessAdapter = new SpinnerCustomAdapter(InventoryReport.this, 0, thicknessCheckList, 1, 1);
         thicknessSpinner.setAdapter(thicknessAdapter);
 
         locationList.add("All");
@@ -1174,6 +1176,11 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     public void onClick(View v) {
         int flag = 0;
         switch (v.getId()) {
+            case R.id.inventory_report_export:
+                dfReport = new SimpleDateFormat("yyyyMMdd_hhmmss");
+                ExportToExcel obj = new ExportToExcel(InventoryReport.this);
+                obj.exportInventoryReport(filtered,loc, areaField, gradeFeld,dateFrom.getText().toString(), dateTo.getText().toString(), dfReport.format(date));
+                break;
             case R.id.inventory_report_search_pList_tool:
                 if (searchPListTextView.getVisibility() == View.VISIBLE) {
                     searchPListTextView.setVisibility(View.GONE);
@@ -1278,11 +1285,6 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                     serialString = "All";
 
                 filters();
-
-                break;
-            case R.id.export:
-                ExportToExcel obj = new ExportToExcel(InventoryReport.this);
-                obj.exportInventoryReport(filtered);
 
                 break;
         }

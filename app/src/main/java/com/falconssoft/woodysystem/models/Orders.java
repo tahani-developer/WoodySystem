@@ -223,4 +223,22 @@ public class Orders implements Serializable {
         }
         return obj;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Orders)
+        {
+            Orders temp = (Orders) obj;
+            if(this.orderNo.equals(temp.orderNo))
+                return true;
+        }
+        return false;
+
+    }
+    @Override
+    public int hashCode() {
+        // TODO Auto-generated method stub
+
+        return (this.orderNo.hashCode());
+    }
 }

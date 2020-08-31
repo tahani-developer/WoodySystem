@@ -19,14 +19,17 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Suppli
 
     private PlannedPackingList plannedPL;
     private UnloadPackingList plannedPL2;
+    private LoadPackingList loadPackingList;
     private List<CustomerInfo> customerInfoList;
     private int flag;
 
     public CustomerAdapter(int flag, Context plannedPL, List<CustomerInfo> customerInfoList) {
         if (flag == 1)
             this.plannedPL = (PlannedPackingList) plannedPL;
-        else
+        else if (flag == 2)
             this.plannedPL2 = (UnloadPackingList) plannedPL;
+        else
+            this.loadPackingList = (LoadPackingList) plannedPL;
 
         this.flag = flag;
         this.customerInfoList = customerInfoList;
@@ -50,8 +53,11 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.Suppli
                 if (flag == 1)
                     plannedPL.getSearchCustomerInfo(customerInfoList.get(i).getCustName()
                             , customerInfoList.get(i).getCustNo());
-                else
+                else if(flag == 2)
                     plannedPL2.getSearchCustomerInfo(customerInfoList.get(i).getCustName()
+                            , customerInfoList.get(i).getCustNo());
+                else
+                    loadPackingList.getSearchCustomerInfo(customerInfoList.get(i).getCustName()
                             , customerInfoList.get(i).getCustNo());
             }
         });

@@ -29,12 +29,14 @@ public class ItemsListAdapter extends BaseAdapter {
     private static List<BundleInfo> itemsList;
     private static List<BundleInfo> selectedBundles ;
     static LoadingOrder obj = new LoadingOrder();
+    private boolean changeColor;
 
-    public ItemsListAdapter(Context context, List<BundleInfo> itemsList) {
+    public ItemsListAdapter(Context context, List<BundleInfo> itemsList, boolean changeColor) {
         this.context = context;
         this.mOriginalValues = itemsList;
         this.itemsList = itemsList;
         selectedBundles = new ArrayList<>();
+        this.changeColor = changeColor;
     }
 
     public ItemsListAdapter() {
@@ -62,7 +64,7 @@ public class ItemsListAdapter extends BaseAdapter {
 
     private class ViewHolder {
         CheckBox checkBox;
-        TextView th, w, l, grade, pcs, bundle, location, area;
+        TextView th, w, l, grade, pcs, bundle, location, area, packingList;
         LinearLayout linearLayout;
     }
 
@@ -82,6 +84,8 @@ public class ItemsListAdapter extends BaseAdapter {
         holder.bundle = (TextView) view.findViewById(R.id.bundle);
         holder.location = (TextView) view.findViewById(R.id.location);
         holder.area = (TextView) view.findViewById(R.id.area);
+        holder.packingList = (TextView) view.findViewById(R.id.loadingOrder_packingList);
+
 
         holder.th.setText("" + itemsList.get(i).getThickness());
         holder.w.setText("" + itemsList.get(i).getWidth());
@@ -91,9 +95,14 @@ public class ItemsListAdapter extends BaseAdapter {
         holder.bundle.setText("" + itemsList.get(i).getBundleNo());
         holder.location.setText("" + itemsList.get(i).getLocation());
         holder.area.setText("" + itemsList.get(i).getArea());
+        holder.packingList.setText("" + itemsList.get(i).getBackingList());
+
         holder.linearLayout= view.findViewById(R.id.linear);
         if (itemsList.get(i).getChecked())
             holder.checkBox.setChecked(true);
+
+        if (changeColor) // activated when remove barcode
+            itemsList.get(i).setFoucoseColor("0");
 
 
         if(itemsList.get(i).getFoucoseColor().equals("1")){

@@ -1,4 +1,8 @@
 apply plugin: 'com.android.application'
+//apply plugin: 'com.chrisney.enigma'
+//
+//enigma.enabled = true
+//enigma.injectFakeKeys = true
 
 android {
     compileSdkVersion 28
@@ -6,14 +10,22 @@ android {
         applicationId "com.falconssoft.woodysystem"
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 55
-        versionName "1.0"
+        versionCode 58
+        versionName "58.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            // Enables code shrinking, obfuscation, and optimization for only
+            // your project's release build type.
+            minifyEnabled true
+
+            // Enables resource shrinking, which is performed by the
+            // Android Gradle plugin.
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
         }
     }
     buildToolsVersion '28.0.3'

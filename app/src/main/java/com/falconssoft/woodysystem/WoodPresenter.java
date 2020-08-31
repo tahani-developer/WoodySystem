@@ -150,7 +150,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
         @Override
         public void onErrorResponse(VolleyError error) {
 //            getUsersData();
-            Log.e("presenter/users/err ", "" + settings.getIpAddress() + " *** " + urlUsers + " *** " + error);
+//            Log.e("presenter/users/err ", "" + settings.getIpAddress() + " *** " + urlUsers + " *** " + error);
             if (error instanceof NetworkError) {
             } else if (error instanceof ServerError) {
                 Log.e("presenter/users/err ", "0");
@@ -185,19 +185,19 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
 //                    response = response.substring(response.indexOf("{"));
                     response = new String(response.getBytes("ISO-8859-1"), "UTF-8");// cloud
                 }
-                Log.e("presenter/users/res ", "" + response);
+//                Log.e("presenter/users/res ", "" + response);
 
                 JSONObject object = new JSONObject(response);
-                Log.e("presenter:obj1", "" + object.toString());
+//                Log.e("presenter:obj1", "" + object.toString());
                 JSONArray array = object.getJSONArray("USERS");
-                Log.e("presenter:obj2", "" + array.toString());
+//                Log.e("presenter:obj2", "" + array.toString());
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject innerObject = array.getJSONObject(i);
                     String username = innerObject.getString("USER_NAME");
                     String password = innerObject.getString("PASSWORD");
 //                    Log.e("presenter:obj3 ", "" +username + password);
                     Users users = new Users(username, password);
-                    Log.e("presenter:obj4", "" + innerObject.getString("USER_NAME"));
+//                    Log.e("presenter:obj4", "" + innerObject.getString("USER_NAME"));
 
                     loginActivity.getUsersDataMethod(username, password);
                     SettingsFile.usersList.add(users);
