@@ -15,12 +15,10 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.Spinner;
@@ -30,7 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.falconssoft.woodysystem.DatabaseHandler;
-import com.falconssoft.woodysystem.ExportToExcel;
+import com.falconssoft.woodysystem.ExportToPDF;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.SharedClass;
 import com.falconssoft.woodysystem.models.CustomerInfo;
@@ -52,7 +50,6 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
@@ -60,7 +57,6 @@ import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -82,9 +78,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
     private RecyclerView recyclerView, recyclerView2;
     private RecyclerView recycler;
     private EditText paclingList, dest, orderNo;
-    private TextView searchCustomer, searchSupplier, noBundles, totalCBM, delete;
-
-    TextView export;
+    private TextView searchCustomer, searchSupplier, noBundles, totalCBM, delete, export;
 
     private TableLayout tableLayout, headerTableLayout;
     private TableRow tableRow;
@@ -107,10 +101,9 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
     private ArrayList<String> gradeList = new ArrayList<>();
     private ArrayAdapter<String> gradeAdapter;
     private Spinner gradeSpinner;
-    private String gradeText = "All";
+    private String gradeText = "All", today;
 
     private SimpleDateFormat sdf, dfReport;
-    String today;
 
     private JSONArray plannedPLListJSON = new JSONArray();
 
@@ -274,7 +267,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
 
                 break;
             case R.id.export:
-                ExportToExcel obj = new ExportToExcel(LoadPackingList.this);
+                ExportToPDF obj = new ExportToPDF(LoadPackingList.this);
                 obj.exportLoadPackingList(PLListFiltered, searchCustomer.getText().toString(), searchSupplier.getText().toString(),  dfReport.format(Calendar.getInstance().getTime()), gradeText, today);
 
                 break;
@@ -418,7 +411,8 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
             TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f);
             TableRow.LayoutParams textViewParam2 = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 0.45f);
             TableRow.LayoutParams textViewParam3 = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 0.7f);
-//            textViewParam.setMargins(1, 5, 1, 1);
+            textViewParam.setMargins(1, 5, 1, 1);
+            textView.setPadding(3,3,3,3);
             textView.setTextSize(15);
             textView.setTextColor(ContextCompat.getColor(this, R.color.white));
             textView.setLayoutParams(textViewParam);

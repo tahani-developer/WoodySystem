@@ -125,7 +125,7 @@ public class ItemsListAdapter extends BaseAdapter {
                 }
                 bundles.get(i).setFoucoseColor("0");
 
-                obj.notifyAdapter(itemsList.get(i) , context);
+                 obj.notifyAdapter(itemsList.get(i) , context);
             }
         });
 

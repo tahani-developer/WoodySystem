@@ -594,7 +594,7 @@ public class LoadingOrder2 extends AppCompatActivity {
         }
     }
 
-
+    // loading order // exchange different packing lists // hide missed bundles
     private class JSONTask extends AsyncTask<String, String, String> {
 
         @Override
@@ -668,6 +668,7 @@ public class LoadingOrder2 extends AppCompatActivity {
         }
     }
 
+    // get nu. of exists for each bundles i choosed from previous page
     private class JSONTask2 extends AsyncTask<String, String, String> {  // check
 
         @Override
@@ -770,6 +771,7 @@ public class LoadingOrder2 extends AppCompatActivity {
         }
     }
 
+    // check if loading (packing list) has same bundles of the alternative packing list
     private class JSONTask3 extends AsyncTask<String, String, String> {
 
         @Override
@@ -857,7 +859,8 @@ public class LoadingOrder2 extends AppCompatActivity {
                                 plannedList.get(i).getNoOfPieces() == missedBundles.get(k).getNoOfPieces() &&
                                 plannedList.get(i).getGrade().equals(missedBundles.get(k).getGrade())) {
 
-                            //Log.e("tag1***", " in ");
+                            //  if loading (packing list) has same bundles of the alternative
+                            // packing list it removed from list to make exchange in web service
                             missedBundles.remove(k);
                             jsonArrayMissedBundles.remove(k);
                             break;
@@ -879,6 +882,7 @@ public class LoadingOrder2 extends AppCompatActivity {
 
     void compare() {
 
+        // fill no of exist in choosed bundles
         for (int i = 0; i < bundles.size(); i++) {
             for (int k = 0; k < bundleInfosList.size(); k++) {
 

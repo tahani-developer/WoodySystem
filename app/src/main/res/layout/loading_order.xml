@@ -84,13 +84,14 @@
                     android:fontFamily="serif"
                     android:text="@string/thickness"
                     android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textSize="15sp" />
 
                 <EditText
                     android:id="@+id/mSearchTh"
                     android:layout_width="0dp"
-                    android:layout_height="35dp"
+                    android:layout_height="45dp"
                     android:fontFamily="serif"
+                    android:inputType="number"
                     android:layout_marginHorizontal="1dp"
                     android:layout_weight="5"
                     android:padding="5dp"
@@ -112,13 +113,14 @@
                     android:fontFamily="serif"
                     android:text="@string/width"
                     android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textSize="15sp" />
 
                 <EditText
                     android:id="@+id/mSearchW"
                     android:layout_width="0dp"
-                    android:layout_height="35dp"
+                    android:layout_height="45dp"
                     android:fontFamily="serif"
+                    android:inputType="number"
                     android:layout_marginHorizontal="5dp"
                     android:layout_weight="5"
                     android:padding="5dp"
@@ -142,13 +144,14 @@
                     android:fontFamily="serif"
                     android:text="@string/length"
                     android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textSize="15sp" />
 
                 <EditText
                     android:id="@+id/mSearchL"
                     android:layout_width="0dp"
-                    android:layout_height="35dp"
+                    android:layout_height="45dp"
                     android:fontFamily="serif"
+                    android:inputType="number"
                     android:layout_marginHorizontal="1dp"
                     android:layout_weight="5"
                     android:padding="5dp"
@@ -187,12 +190,20 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="vertical"
+            android:layout_marginVertical="10dp"
             app:layout_constraintBottom_toTopOf="@+id/li"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/loading_order_linear3"
+            app:layout_constraintTop_toBottomOf="@+id/loading_order_linear2"
             app:layout_constraintVertical_bias="0.0">
+
+            <GridView
+                android:id="@+id/items"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="5dp"
+                android:numColumns="1" />
 
             <ListView
                 android:id="@+id/verticalListView"
@@ -205,13 +216,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="220dp"
                 app:layout_constraintEnd_toEndOf="parent" />
-
-            <GridView
-                android:id="@+id/items"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="5dp"
-                android:numColumns="1" />
 
         </LinearLayout>
 

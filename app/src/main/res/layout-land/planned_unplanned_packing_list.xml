@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/wooddecor"
-    tools:context=".stage_one.AddNewRaw"
     tools:ignore="MissingDefaultResource">
 
     <LinearLayout
@@ -572,7 +571,7 @@
                         android:paddingRight="5dp"
                         android:text="@string/no_bundle"
                         android:textColor="@color/white"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/no_bundles"
@@ -606,7 +605,7 @@
                         android:paddingRight="5dp"
                         android:text="@string/cubic"
                         android:textColor="@color/white"
-                        android:textSize="18sp" />
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/total_cbm"
@@ -645,7 +644,7 @@
                     android:text="@string/export_to_excel"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textSize="15sp" />
 
             </LinearLayout>
 

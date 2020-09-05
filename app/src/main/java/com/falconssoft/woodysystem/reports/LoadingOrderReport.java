@@ -98,7 +98,7 @@ public class LoadingOrderReport extends AppCompatActivity {
     public static final String EDIT_LOADING_ORDER_FLAG = "EDIT_LOADING_ORDER_FLAG";
 
     private ProgressDialog progressDialog;
-    private TextView textView, rowsCount;
+    private TextView textView, rowsCount, search;
     private static LinearLayout linearLayout, headerLinear;
     private EditText from, to, searchBundleNo;
     private Button arrow;
@@ -154,8 +154,9 @@ public class LoadingOrderReport extends AppCompatActivity {
         from = (EditText) findViewById(R.id.Loding_Order_from);
         to = (EditText) findViewById(R.id.Loding_Order_to);
         searchBundleNo = findViewById(R.id.loadingOrder_report_search_bundleNo);
-        searchBundleNo.addTextChangedListener(new watchTextChange(searchBundleNo));
+//        searchBundleNo.addTextChangedListener(new watchTextChange(searchBundleNo));
         rowsCount = findViewById(R.id.loadingOrderReport_rows_count);
+        search = findViewById(R.id.loadingOrder_report_search);
 
         myFormat = "dd/MM/yyyy";
         sdf = new SimpleDateFormat(myFormat, Locale.US);
@@ -166,8 +167,8 @@ public class LoadingOrderReport extends AppCompatActivity {
         locationList.add("Kalinovka");
         locationList.add("Rudniya Store");
         locationList.add("Rudniya Sawmill");
-        locationAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, locationList);
-        locationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        locationAdapter = new ArrayAdapter<String>(this, R.layout.spinner_layout, locationList);
+        locationAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
         location.setAdapter(locationAdapter);
 
 //        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_to_right);
@@ -224,6 +225,20 @@ public class LoadingOrderReport extends AppCompatActivity {
                 new DatePickerDialog(LoadingOrderReport.this, openDatePickerDialog(1), myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (linearLayout.getVisibility() == View.VISIBLE)
+                    slideDown(linearLayout);
+
+                searchBundleNoString = searchBundleNo.getText().toString();//formatDecimalValue(String.valueOf(s));
+                if (!TextUtils.isEmpty(searchBundleNoString))
+                    filters(1);
+                else
+                    filters(2);
             }
         });
 //        fillTable(orders);
@@ -332,15 +347,15 @@ public class LoadingOrderReport extends AppCompatActivity {
         openPicDialog(pics, context);
     }
 
-        void removeDuplicate(List<Orders> list) {
+    void removeDuplicate(List<Orders> list) {
         Log.e("duplicate1", "" + list.size());
-            Set<Orders> s= new HashSet<Orders>();
-            s.addAll(list);
-            list = new ArrayList<Orders>();
-            list.addAll(s);
+        Set<Orders> s = new HashSet<Orders>();
+        s.addAll(list);
+        list = new ArrayList<Orders>();
+        list.addAll(s);
 
-            Log.e("duplicate", "" + list.size());
-        }
+        Log.e("duplicate", "" + list.size());
+    }
 
     public void goToEditPage(Orders orders) {
 
@@ -406,6 +421,117 @@ public class LoadingOrderReport extends AppCompatActivity {
 //        intent.putExtra(EDIT_BUNDLES , (Serializable) bundles);// too large data
 //        intent.putExtra(EDIT_LOADING_ORDER_FLAG, 20);
 //        startActivity(intent);
+    }
+
+    public void filters(int flag) {
+// for bundle search
+//        for (int m = 0; m < bundles.size(); m++) {
+////                    Log.e("compare333",bundles.get(m).getBundleNo().toLowerCase());
+////                    Log.e("compare334","" + bundles.get(m).getBundleNo().toLowerCase().contains(searchBundleNoString));
+//            if (bundles.get(m).getBundleNo().toLowerCase().contains(searchBundleNoString) || searchBundleNoString.equals("")) {
+//                localDate = bundles.get(m).getDateOfLoad();
+//                localContainer = bundles.get(m).getContainerNo();
+//                localPlacingNo = bundles.get(m).getPlacingNo();
+//                localOrderNo = bundles.get(m).getOrderNo();
+//                for (int k = 0; k < orders.size(); k++) {
+////                if (fromDate.equals("") || toDate.equals("")) {
+////                    if (loc.equals("") || loc.equals(orders.get(k).getLocation()))
+////                        filtered.add(orders.get(k));
+////                } else {
+//                    if ((formatDate(orders.get(k).getDateOfLoad()).after(formatDate(fromDate))
+//                            || formatDate(orders.get(k).getDateOfLoad()).equals(formatDate(fromDate)) || fromDate.equals("")) &&
+//                            (formatDate(orders.get(k).getDateOfLoad()).before(formatDate(toDate))
+//                                    || formatDate(orders.get(k).getDateOfLoad()).equals(formatDate(toDate)) || toDate.equals("")) &&
+//                            (loc.equals("") || loc.equals(orders.get(k).getLocation())))
+//                        if ((orders.get(k).getContainerNo().equals(localContainer) || localContainer.equals(""))
+//                                && (orders.get(k).getPlacingNo().equals(localPlacingNo) || localPlacingNo.equals(""))
+//                                && (orders.get(k).getOrderNo().equals(localOrderNo) || localOrderNo.equals(""))
+//                                && (orders.get(k).getDateOfLoad().equals(localDate) || localDate.equals(""))) {
+//
+//                            filtered.add(orders.get(k));
+//                            break;
+//                        }
+////            }
+////                }
+//                }
+//
+//            }
+//        }
+//            for (int k = 0; k < orders.size(); k++) {
+////                if (fromDate.equals("") || toDate.equals("")) {
+////                    if (loc.equals("") || loc.equals(orders.get(k).getLocation()))
+////                        filtered.add(orders.get(k));
+////                } else {
+//                if ((formatDate(orders.get(k).getDateOfLoad()).after(formatDate(fromDate))
+//                        || formatDate(orders.get(k).getDateOfLoad()).equals(formatDate(fromDate)) || fromDate.equals("")) &&
+//                        (formatDate(orders.get(k).getDateOfLoad()).before(formatDate(toDate))
+//                                || formatDate(orders.get(k).getDateOfLoad()).equals(formatDate(toDate)) || toDate.equals("")) &&
+//                        (loc.equals("") || loc.equals(orders.get(k).getLocation())))
+//                    if ((orders.get(k).getContainerNo().equals(localContainer) || localContainer.equals(""))
+//                            && (orders.get(k).getPlacingNo().equals(localPlacingNo) || localPlacingNo.equals(""))
+//                            && (orders.get(k).getOrderNo().equals(localOrderNo) || localOrderNo.equals("")))
+//                        filtered.add(orders.get(k));
+//
+////            }
+////                }
+//            }
+        //Log.e("set 1", "" + filtered.size());
+        String fromDate = from.getText().toString().trim();
+        String toDate = to.getText().toString();
+        try {
+
+            filtered.clear();
+            Log.e("followfilter", "" + orders.size() + "   flag  " + flag);
+            String localDate = "", localContainer = "", localPlacingNo = "", localOrderNo = "";
+            if (flag == 1) { // for bundle search
+                for (int m = 0; m < bundles.size(); m++) {
+                    if (bundles.get(m).getBundleNo().toLowerCase().contains(searchBundleNoString)) {
+                        if ((loc.equals("") || loc.equals(bundles.get(m).getLocation()))
+                                && (formatDate(bundles.get(m).getDateOfLoad()).after(formatDate(fromDate))
+                                || formatDate(bundles.get(m).getDateOfLoad()).equals(formatDate(fromDate)) || fromDate.equals("")) &&
+                                (formatDate(bundles.get(m).getDateOfLoad()).before(formatDate(toDate))
+                                        || formatDate(bundles.get(m).getDateOfLoad()).equals(formatDate(toDate)) || toDate.equals(""))
+                        ) {
+                            filtered.add(orders.get(m));
+
+                        }
+                    }
+                }
+                removeDuplicate(filtered);
+            } else if (flag == 0) { // when using loc or date filter
+                try {
+                    for (int k = 0; k < orders.size(); k++) {
+
+                        if ((formatDate(orders.get(k).getDateOfLoad()).after(formatDate(fromDate))
+                                || formatDate(orders.get(k).getDateOfLoad()).equals(formatDate(fromDate)) || fromDate.equals("")) &&
+                                (formatDate(orders.get(k).getDateOfLoad()).before(formatDate(toDate))
+                                        || formatDate(orders.get(k).getDateOfLoad()).equals(formatDate(toDate)) || toDate.equals("")) &&
+                                (loc.equals("") || loc.equals(orders.get(k).getLocation()))) {
+                            filtered.add(orders.get(k));
+                        }
+                    }
+
+                } catch (Exception e) {
+                    Log.e("exception", e.getMessage());
+                }
+            } else { // 2 get data without filter
+                filtered.addAll(orders);
+            }
+            HashSet<Orders> listToSet = new HashSet<Orders>(filtered);
+            filtered.clear();
+            filtered.addAll(listToSet);
+            Log.e("set", "" + filtered.size());
+            adapter2 = new LoadingOrderReportAdapter(LoadingOrderReport.this, filtered, bundles);
+            list.setAdapter(adapter2);
+
+//            ordersTable.removeAllViews();
+//            fillTable(filtered);
+
+        } catch (
+                ParseException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void deleteOrder(List<Orders> orders, int index) {
@@ -781,7 +907,7 @@ public class LoadingOrderReport extends AppCompatActivity {
                 Log.e("result", "*****************" + orders.size());
                 rowsCount.setText("" + orders.size());
                 removeDuplicate(orders);
-                filters(0);
+                filters(2);
 //                adapter2 = new LoadingOrderReportAdapter(LoadingOrderReport.this, orders, bundles);
 //                list.setAdapter(adapter2);
 
@@ -860,7 +986,7 @@ public class LoadingOrderReport extends AppCompatActivity {
             super.onPostExecute(s);
             if (s != null) {
                 if (s.contains("UPDATE_ORDER SUCCESS")) {
-                    new JSONTask().execute();
+                    new JSONTask3().execute();
 //                    adapter2.notifyDataSetChanged();
                 } else {
                     Toast.makeText(LoadingOrderReport.this, "Failed to export data!", Toast.LENGTH_SHORT).show();
@@ -909,29 +1035,30 @@ public class LoadingOrderReport extends AppCompatActivity {
 
                 JSONObject parentObject = new JSONObject(finalJson);
 
-                try {
-                    JSONArray parentArrayOrders = parentObject.getJSONArray("ONLY_ORDER");
-                    orders.clear();
-                    for (int i = 0; i < parentArrayOrders.length(); i++) {
-                        JSONObject finalObject = parentArrayOrders.getJSONObject(i);
-
-                        Orders order = new Orders();
-                        order.setPlacingNo(finalObject.getString("PLACING_NO"));
-                        order.setOrderNo(finalObject.getString("ORDER_NO"));
-                        order.setContainerNo(finalObject.getString("CONTAINER_NO"));
-                        order.setDateOfLoad(finalObject.getString("DATE_OF_LOAD"));
-                        order.setDestination(finalObject.getString("DESTINATION"));
-                        order.setLocation(finalObject.getString("LOCATION"));
-
-                        orders.add(order);
-                    }
-                } catch (JSONException e) {
-                    Log.e("Import Data2", e.getMessage().toString());
-                }
+//                try {
+//                    JSONArray parentArrayOrders = parentObject.getJSONArray("ONLY_ORDER");
+//                    orders.clear();
+//                    for (int i = 0; i < parentArrayOrders.length(); i++) {
+//                        JSONObject finalObject = parentArrayOrders.getJSONObject(i);
+//
+//                        Orders order = new Orders();
+//                        order.setPlacingNo(finalObject.getString("PLACING_NO"));
+//                        order.setOrderNo(finalObject.getString("ORDER_NO"));
+//                        order.setContainerNo(finalObject.getString("CONTAINER_NO"));
+//                        order.setDateOfLoad(finalObject.getString("DATE_OF_LOAD"));
+//                        order.setDestination(finalObject.getString("DESTINATION"));
+//                        order.setLocation(finalObject.getString("LOCATION"));
+//
+//                        orders.add(order);
+//                    }
+//                } catch (JSONException e) {
+//                    Log.e("Import Data2", e.getMessage().toString());
+//                }
 
                 try {
                     JSONArray parentArrayOrders = parentObject.getJSONArray("BUNDLE_ORDER");
                     bundles.clear();
+                    orders.clear();
 
                     for (int i = 0; i < parentArrayOrders.length(); i++) {
                         JSONObject finalObject = parentArrayOrders.getJSONObject(i);
@@ -952,13 +1079,17 @@ public class LoadingOrderReport extends AppCompatActivity {
                         order.setDestination(finalObject.getString("DESTINATION"));
                         order.setPicture(finalObject.getString("PIC"));
 
+                        try{
                         if (!order.getPicture().equals("null")) {
                             InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC")).openStream();
                             order.setPicBitmap(BitmapFactory.decodeStream(in));
                         }
-
+                        } catch (Exception e) {
+                            order.setPicture("null");
+                        }
 
                         bundles.add(order);
+                        orders.add(order);
                     }
                 } catch (JSONException e) {
                     Log.e("Import Data1", e.getMessage().toString());
@@ -1074,6 +1205,7 @@ public class LoadingOrderReport extends AppCompatActivity {
 
             if (result != null) {
                 Log.e("result", "*****************" + orders.size());
+                removeDuplicate(orders);
                 filters(0);
 //                adapter2 = new LoadingOrderReportAdapter(LoadingOrderReport.this, orders, bundles);
 //                list.setAdapter(adapter2);
@@ -1153,7 +1285,7 @@ public class LoadingOrderReport extends AppCompatActivity {
             super.onPostExecute(s);
             if (s != null) {
                 if (s.contains("DELETE ORDER SUCCESS")) {
-                    new JSONTask().execute();
+                    new JSONTask3().execute();
 //                    adapter2.notifyDataSetChanged();
                 } else {
                     Toast.makeText(LoadingOrderReport.this, "Failed to export data!", Toast.LENGTH_SHORT).show();
@@ -1204,101 +1336,6 @@ public class LoadingOrderReport extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         Date d = sdf.parse(date);
         return d;
-    }
-
-    public void filters(int flag) {
-
-        String fromDate = from.getText().toString().trim();
-        String toDate = to.getText().toString();
-        try {
-
-            filtered.clear();
-            Log.e("followfilter", "" + orders.size()  + "   flag  " + flag);
-            String localDate = "", localContainer = "", localPlacingNo = "", localOrderNo = "";
-            if (flag == 1) { // for bundle search
-                for (int m = 0; m < bundles.size(); m++) {
-//                    Log.e("compare333",bundles.get(m).getBundleNo().toLowerCase());
-//                    Log.e("compare334","" + bundles.get(m).getBundleNo().toLowerCase().contains(searchBundleNoString));
-                    if (bundles.get(m).getBundleNo().toLowerCase().contains(searchBundleNoString) || searchBundleNoString.equals("")) {
-                        localDate = bundles.get(m).getDateOfLoad();
-                        localContainer = bundles.get(m).getContainerNo();
-                        localPlacingNo = bundles.get(m).getPlacingNo();
-                        localOrderNo = bundles.get(m).getOrderNo();
-                        for (int k = 0; k < orders.size(); k++) {
-//                if (fromDate.equals("") || toDate.equals("")) {
-//                    if (loc.equals("") || loc.equals(orders.get(k).getLocation()))
-//                        filtered.add(orders.get(k));
-//                } else {
-                            if ((formatDate(orders.get(k).getDateOfLoad()).after(formatDate(fromDate))
-                                    || formatDate(orders.get(k).getDateOfLoad()).equals(formatDate(fromDate)) || fromDate.equals("")) &&
-                                    (formatDate(orders.get(k).getDateOfLoad()).before(formatDate(toDate))
-                                            || formatDate(orders.get(k).getDateOfLoad()).equals(formatDate(toDate)) || toDate.equals("")) &&
-                                    (loc.equals("") || loc.equals(orders.get(k).getLocation())))
-                                if ((orders.get(k).getContainerNo().equals(localContainer) || localContainer.equals(""))
-                                        && (orders.get(k).getPlacingNo().equals(localPlacingNo) || localPlacingNo.equals(""))
-                                        && (orders.get(k).getOrderNo().equals(localOrderNo) || localOrderNo.equals(""))
-                                        && (orders.get(k).getDateOfLoad().equals(localDate) || localDate.equals(""))) {
-
-                                    filtered.add(orders.get(k));
-                                    break;
-                                }
-//            }
-//                }
-                        }
-
-                    }
-                }
-//            for (int k = 0; k < orders.size(); k++) {
-////                if (fromDate.equals("") || toDate.equals("")) {
-////                    if (loc.equals("") || loc.equals(orders.get(k).getLocation()))
-////                        filtered.add(orders.get(k));
-////                } else {
-//                if ((formatDate(orders.get(k).getDateOfLoad()).after(formatDate(fromDate))
-//                        || formatDate(orders.get(k).getDateOfLoad()).equals(formatDate(fromDate)) || fromDate.equals("")) &&
-//                        (formatDate(orders.get(k).getDateOfLoad()).before(formatDate(toDate))
-//                                || formatDate(orders.get(k).getDateOfLoad()).equals(formatDate(toDate)) || toDate.equals("")) &&
-//                        (loc.equals("") || loc.equals(orders.get(k).getLocation())))
-//                    if ((orders.get(k).getContainerNo().equals(localContainer) || localContainer.equals(""))
-//                            && (orders.get(k).getPlacingNo().equals(localPlacingNo) || localPlacingNo.equals(""))
-//                            && (orders.get(k).getOrderNo().equals(localOrderNo) || localOrderNo.equals("")))
-//                        filtered.add(orders.get(k));
-//
-////            }
-////                }
-//            }
-                //Log.e("set 1", "" + filtered.size());
-            } else {
-                try {
-                    for (int k = 0; k < orders.size(); k++) {
-
-                        if ((formatDate(orders.get(k).getDateOfLoad()).after(formatDate(fromDate))
-                                || formatDate(orders.get(k).getDateOfLoad()).equals(formatDate(fromDate)) || fromDate.equals("")) &&
-                                (formatDate(orders.get(k).getDateOfLoad()).before(formatDate(toDate))
-                                        || formatDate(orders.get(k).getDateOfLoad()).equals(formatDate(toDate)) || toDate.equals("")) &&
-                                (loc.equals("") || loc.equals(orders.get(k).getLocation()))) {
-                            filtered.add(orders.get(k));
-                        }
-                    }
-
-                }catch (Exception e){
-                    Log.e("exception", e.getMessage());
-                }
-            }
-            HashSet<Orders> listToSet = new HashSet<Orders>(filtered);
-            filtered.clear();
-            filtered.addAll(listToSet);
-            Log.e("set", "" + filtered.size());
-            adapter2 = new LoadingOrderReportAdapter(LoadingOrderReport.this, filtered, bundles);
-            list.setAdapter(adapter2);
-
-//            ordersTable.removeAllViews();
-//            fillTable(filtered);
-
-        } catch (
-                ParseException e) {
-            e.printStackTrace();
-        }
-
     }
 
     public void onBackPressed() {
