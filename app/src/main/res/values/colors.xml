@@ -25,5 +25,6 @@
     <color name="preview">#C24641</color>
     <color name="alpha_white2">#E2FFFEFE</color>
     <color name="light_gray">#EFEBEB</color>
+    <color name="alpha_gray">#32FFFFFF</color>
 
 </resources>

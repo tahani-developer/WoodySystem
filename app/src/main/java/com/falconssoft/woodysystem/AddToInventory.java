@@ -1115,7 +1115,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 //        startActivity(intent);
         if (!TextUtils.isEmpty(flag) && flag.equals("1")) {
             LoadingOrder.bundles.addAll(bundleInfoList);
-            LoadingOrder.adapter.notifyDataSetChanged();
+            LoadingOrder.adapter.notifyDataSetChanged(); /////////////////// BaseAdapter.notifyDataSetChanged()' on a null object reference
         }
 
         if (edieFlag == 55) {
