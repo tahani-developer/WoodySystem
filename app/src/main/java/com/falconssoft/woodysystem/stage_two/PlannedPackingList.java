@@ -237,6 +237,9 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
         for (int i = 0; i < PlannedPLList.size(); i++) {
             for (int k = 0; k < PlannedPLList.get(i).getNoOfCopies(); k++) {
                 plannedPLListJSON.put(PlannedPLList.get(i).getJSONObject());
+                Log.e("monitor2" , "getNoOfCopies:"
+                        + PlannedPLList.get(i).getNoOfCopies() + ":getNoOfExixt:" + PlannedPLList.get(i).getNoOfExixt());
+
             }
         }
 
@@ -244,6 +247,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
             new JSONTask2().execute();
             bundleInfosList.clear();
         }
+
 //        else
 //            Toast.makeText(this, "Please add rows first!", Toast.LENGTH_SHORT).show();
     }
@@ -1086,8 +1090,10 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                         Log.e("****", "in");
                         if (Integer.parseInt(copy) <= (PlannedPLList.get(index).getNoOfExixt() + PlannedPLList.get(index).getNoOfCopies())) {
 
-                            PlannedPLList.get(index).setNoOfExixt((PlannedPLList.get(index).getNoOfExixt() + PlannedPLList.get(index).getNoOfCopies()) - Integer.parseInt(copy));
+                            PlannedPLList.get(index).setNoOfExixt(
+                                    (PlannedPLList.get(index).getNoOfExixt() + PlannedPLList.get(index).getNoOfCopies()) - Integer.parseInt(copy));
                             PlannedPLList.get(index).setNoOfCopies(Integer.parseInt(copy));
+                            Log.e("monitor" , "getNoOfCopies:" + PlannedPLList.get(index).getNoOfCopies() + ":getNoOfExixt:" + PlannedPLList.get(index).getNoOfExixt());
                             adapter2.notifyDataSetChanged();
                             calculateTotal();
 
