@@ -62,6 +62,7 @@ import java.util.Locale;
 
 public class UnloadPackingList extends AppCompatActivity implements View.OnClickListener {
 
+    //Planned Packing List Report
     private DatabaseHandler databaseHandler;
     private Calendar myCalendar;
     private Settings generalSettings;
@@ -370,8 +371,6 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
         recyclerView2.setAdapter(adapter3);
     }
 
-
-
     class watchTextChange implements TextWatcher {
 
         private View view;
@@ -478,8 +477,6 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
         filters();
     }
 
-    
-
     // ************************************** GET CUSTOMERS *******************************
     private class JSONTask extends AsyncTask<String, String, List<CustomerInfo>> {
 
@@ -574,7 +571,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
         }
     }  // import customers
 
-    // ************************************** SEARCH *******************************
+    // ************************************** GET DATA / SEARCH *******************************
     private class JSONTask2 extends AsyncTask<String, String, String> {  // check
 
         @Override
@@ -673,8 +670,8 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
                     PLList = clustering(PLList);
                     UPLListFiltered.addAll(PLList);
 
-                    if (headerTableLayout.getChildCount() == 0)
-                        addTableHeader(headerTableLayout);
+//                    if (headerTableLayout.getChildCount() == 0)
+//                        addTableHeader(headerTableLayout);
 
                     adapter2.notifyDataSetChanged();
 
@@ -862,6 +859,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
         }
     }
 
+    // ************************************** GET SUPPLIERS *******************************
     private class JSONTask4 extends AsyncTask<String, String, List<SupplierInfo>> {
 
         @Override
@@ -954,7 +952,6 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
             }
         }
     }  // import Suppliers
-
 
     void calculateTotal() {
         int sumOfBundles = 0;

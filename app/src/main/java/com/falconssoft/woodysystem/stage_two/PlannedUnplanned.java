@@ -50,6 +50,7 @@ import java.util.Set;
 
 public class PlannedUnplanned extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
+    //Planned Unplanned Report
     private DatabaseHandler databaseHandler;
     private Calendar myCalendar;
     private boolean mState = false;
