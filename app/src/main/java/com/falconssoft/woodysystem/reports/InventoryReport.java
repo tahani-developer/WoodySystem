@@ -1000,7 +1000,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 
                 if (!dateFrom.getText().toString().equals("") && !dateTo.getText().toString().equals("")) {
                     filters();
-                }  
+                }
             }
         };
         return date;
