@@ -10,7 +10,6 @@
         android:background="@color/alpha_black_dark"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="5dp"
         android:orientation="vertical"
         android:paddingHorizontal="10dp"
         android:paddingVertical="5dp">

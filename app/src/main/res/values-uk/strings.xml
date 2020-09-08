@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Деревна система</string>
-    <string name="version">Version 58.0</string>
 
     <string name="stage1">Прийняття та контроль якості</string>
     <string name="stage2">Этап 2</string>
@@ -78,7 +77,7 @@
     <string name="print_all">Печать все</string>
     <string name="delete_all">Видалити все</string>
     <string name="print">Печать</string>
-    <string name="serial">Serial</string>
+    <string name="serial">Серійний</string>
     <string name="serial_no">Серийный номер</string>
     <string name="delete">Видалити</string>
     <string name="hide">Прятать</string>
@@ -90,8 +89,20 @@
     <string name="search">Пошук ...</string>
     <string name="acceptance_info">Інформація про прийняття</string>
 <!--    <string name="acceptance_info">Acceptance Info</string>-->
-
     <string name="generate_barcode">Створення штрих-коду</string>
+
+    <string name="cust">Клієнт</string>
+    <string name="cust_no">Клієнт #</string>
+    <string name="new_cust">Новий клієнт</string>
+    <string name="find_cust">Знайти клієнта</string>
+    <string name="edit_item">Редагувати елемент</string>
+    <string name="edit_no_item">Редагувати кількість пакетів</string>
+    <string name="no_of_copy">Кількість копій</string>
+    <string name="closed_results">Закриті результати</string>
+    <string name="destination_">Dest</string>
+    <string name="comparable_results">Порівнянні результати :</string>
+    <string name="total_cbm">Total CBM</string>
+    <string name="planned_report">Planned Packing List Report</string>
 
     <string name="accept_raw">Прийняти рядок</string>
     <string name="name_of_supplier">Постачальник</string>
@@ -149,10 +160,18 @@
     <string name="t_l">T.L</string>
     <string name="choose_rows">Please Choose Rows First!</string>
     <string name="not_authorized">Not Authorized!</string>
-    <string name="loaded">Loaded</string>
-    <string name="unloaded">Unloaded</string>
+    <string name="loaded">Завантажений</string>
+    <string name="unloaded">Розвантажений</string>
     <string name="unloaded_successfully">Unloaded Successfully</string>
     <string name="f">F</string>
     <string name="loaded_packing_list_report">Loaded Packing List Report</string>
     <string name="planned_unplanned_inventory_report">Planned Unplanned Inventory Report</string>
+
+    <string name="acceptance_report">Acceptance Report</string>
+    <string name="truck">Вантажівка</string>
+    <string name="acceptor">Приймач</string>
+    <string name="ttn">TTN</string>
+    <string name="acceptance_loc">A.Location</string>
+    <string name="export_to_excel">Експорт у PDF</string>
+
 </resources>

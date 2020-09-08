@@ -30,7 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.falconssoft.woodysystem.DatabaseHandler;
-import com.falconssoft.woodysystem.ExportToExcel;
+import com.falconssoft.woodysystem.ExportToPDF;
 import com.falconssoft.woodysystem.HorizontalListView;
 import com.falconssoft.woodysystem.ItemsListAdapter4;
 import com.falconssoft.woodysystem.PicturesAdapter;
@@ -157,7 +157,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
         export.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ExportToExcel obj = new ExportToExcel(AcceptanceReport.this);
+                ExportToPDF obj = new ExportToPDF(AcceptanceReport.this);
                 obj.exportReportOne(details,filtered, truckString, loc, from.getText().toString(), to.getText().toString(), dfReport.format(myCalendar.getTime()));
 
             }

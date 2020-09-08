@@ -101,6 +101,7 @@ public class LoadingOrder2 extends AppCompatActivity {
     private Pictures picture;
     private DatabaseHandler databaseHandler;
     private List<BundleInfo> bundles;
+    private List<Orders> checkDuplicate = new ArrayList<>();
     private Calendar myCalendar;
     static int index = 0;
     ItemsListAdapter2 adapter;
@@ -301,71 +302,129 @@ public class LoadingOrder2 extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                if (generalSettings.getStore().equals("Amman")) {
+                    Log.e("location1", generalSettings.getStore());
+                    for (int i = 0; i < bundles.size(); i++) {
 
-                for (int i = 0; i < bundles.size(); i++) {
+                        order = new Orders(bundles.get(i).getThickness()
+                                , bundles.get(i).getWidth()
+                                , bundles.get(i).getLength()
+                                , bundles.get(i).getGrade()
+                                , bundles.get(i).getNoOfPieces()
+                                , bundles.get(i).getBundleNo()
+                                , bundles.get(i).getLocation()
+                                , bundles.get(i).getArea()
+                                , placingNo.getText().toString()
+                                , orderNo.getText().toString()
+                                , containerNo.getText().toString()
+                                , dateOfLoad.getText().toString()
+                                , destination.getText().toString()
+                                , bundles.get(i).getPicture()
+                                , bundles.get(i).getBackingList()
+                                , bundles.get(i).getCustomer());
 
-                    order = new Orders(bundles.get(i).getThickness()
-                            , bundles.get(i).getWidth()
-                            , bundles.get(i).getLength()
-                            , bundles.get(i).getGrade()
-                            , bundles.get(i).getNoOfPieces()
-                            , bundles.get(i).getBundleNo()
-                            , bundles.get(i).getLocation()
-                            , bundles.get(i).getArea()
-                            , placingNo.getText().toString()
-                            , orderNo.getText().toString()
-                            , containerNo.getText().toString()
-                            , dateOfLoad.getText().toString()
-                            , destination.getText().toString()
-                            , bundles.get(i).getPicture()
-                            , bundles.get(i).getBackingList()
-                            , bundles.get(i).getCustomer());
+//                        databaseHandler.addOrder(order);
+//                    Log.e("**********", "" + bundles.get(i).getPicture().length());
+                        jsonArrayOrders.put(order.getJSONObject());
+                    }
+
+                    picture = new Pictures(orderNo.getText().toString()
+                            , pics.get(0)
+                            , pics.get(1)
+                            , pics.get(2)
+                            , pics.get(3)
+                            , pics.get(4)
+                            , pics.get(5)
+                            , pics.get(6)
+                            , pics.get(7));
+
+                    jsonArrayPics.put(picture.getJSONObject());
+
+//                    databaseHandler.addPictures(picture);
+
+                    new JSONTask4().execute();
+//                    progressDialog.show();
+//                new JSONTask().execute();
+
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            searchBar.setText("2");
+                        }
+                    });
+//                finish();
+
+                } else {
+                    checkDuplicate = new ArrayList<>();
+                    for (int i = 0; i < bundles.size(); i++) {
+
+                        Log.e("location2", generalSettings.getStore());
+                        order = new Orders(bundles.get(i).getThickness()
+                                , bundles.get(i).getWidth()
+                                , bundles.get(i).getLength()
+                                , bundles.get(i).getGrade()
+                                , bundles.get(i).getNoOfPieces()
+                                , bundles.get(i).getBundleNo()
+                                , bundles.get(i).getLocation()
+                                , bundles.get(i).getArea()
+                                , placingNo.getText().toString()
+                                , orderNo.getText().toString()
+                                , containerNo.getText().toString()
+                                , dateOfLoad.getText().toString()
+                                , destination.getText().toString()
+                                , bundles.get(i).getPicture()
+                                , bundles.get(i).getBackingList()
+                                , bundles.get(i).getCustomer());
 
 
-                    databaseHandler.addOrder(order);
+                        // databaseHandler.addOrder(order);
 
 //                    Log.e("**********", "" + bundles.get(i).getPicture().length());
 
-                    jsonArrayOrders.put(order.getJSONObject());
+                        jsonArrayOrders.put(order.getJSONObject());
 
-                    // Log.e("getsamedata", "" + bundles.get(i).getNoOfExist());
-                    if (!order.getPackingList().equals(order.getOrderNo()) && !order.getPackingList().equals("null") && bundles.get(i).getNoOfExist() == 0) {
-                        // this case when i want to exchange my bundles with others but i don't have enough count
-                        missedBundles.add(order);
-                        jsonArrayMissedBundles.put(order.getJSONObject());
+
+                        // Log.e("getsamedata", "" + bundles.get(i).getNoOfExist());
+                        if (!order.getPackingList().equals(order.getOrderNo()) && !order.getPackingList().equals("null") && bundles.get(i).getNoOfExist() == 0) {
+                            // this case when i want to exchange my bundles with others but i don't have enough count
+                            missedBundles.add(order);
+                            jsonArrayMissedBundles.put(order.getJSONObject());
+                        } else {
+                            checkDuplicate.add(order);
+                        }
+
+                        // databaseHandler.updateTableBundles(bundles.get(i).getBundleNo());
                     }
+                    Log.e("loadingorder", "missedbundles" + missedBundles.size());
+                    picture = new Pictures(orderNo.getText().toString()
+                            , pics.get(0)
+                            , pics.get(1)
+                            , pics.get(2)
+                            , pics.get(3)
+                            , pics.get(4)
+                            , pics.get(5)
+                            , pics.get(6)
+                            , pics.get(7));
 
-                    databaseHandler.updateTableBundles(bundles.get(i).getBundleNo());
-                }
+                    jsonArrayPics.put(picture.getJSONObject());
 
-                picture = new Pictures(orderNo.getText().toString()
-                        , pics.get(0)
-                        , pics.get(1)
-                        , pics.get(2)
-                        , pics.get(3)
-                        , pics.get(4)
-                        , pics.get(5)
-                        , pics.get(6)
-                        , pics.get(7));
+                    databaseHandler.addPictures(picture);
 
-                jsonArrayPics.put(picture.getJSONObject());
-
-                databaseHandler.addPictures(picture);
-
-                new JSONTask3().execute();
+                    new JSONTask3().execute();
 //                new JSONTask().execute();
 
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        searchBar.setText("2");
-                    }
-                });
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            searchBar.setText("2");
+                        }
+                    });
 
-                finish();
+//                finish();
 
-                progressDialog.dismiss();
+                    progressDialog.dismiss();
 
+                }
             }
         }).start();
 
@@ -594,7 +653,7 @@ public class LoadingOrder2 extends AppCompatActivity {
         }
     }
 
-
+    // loading order // exchange different packing lists // hide missed bundles
     private class JSONTask extends AsyncTask<String, String, String> {
 
         @Override
@@ -613,12 +672,14 @@ public class LoadingOrder2 extends AppCompatActivity {
                 request.setURI(new URI("http://" + generalSettings.getIpAddress() + "/export.php"));
 
                 String newCust = "";
-                if(plannedList.size()>0)
+                if (plannedList.size() > 0)
                     newCust = plannedList.get(0).getCustName();
+
+                Log.e("loadingorder", " JSONTask " + jsonArrayOrders.length() + " missed: " + jsonArrayMissedBundles.length());
 
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
                 nameValuePairs.add(new BasicNameValuePair("BUNDLE_ORDERS", jsonArrayOrders.toString().trim()));
-                nameValuePairs.add(new BasicNameValuePair("NEW_CUST", "'"+ newCust + "'"));
+                nameValuePairs.add(new BasicNameValuePair("NEW_CUST", "'" + newCust + "'"));
                 nameValuePairs.add(new BasicNameValuePair("BUNDLE_PIC", jsonArrayPics.toString().trim()));
                 nameValuePairs.add(new BasicNameValuePair("MISSED_BUNDLES", jsonArrayMissedBundles.toString().trim()));
 
@@ -641,7 +702,7 @@ public class LoadingOrder2 extends AppCompatActivity {
                 in.close();
 
                 JsonResponse = sb.toString();
-                Log.e("tag", "" + JsonResponse);
+                Log.e("loadingorder", " JSONTask " + JsonResponse);
 
                 return JsonResponse;
 
@@ -655,9 +716,11 @@ public class LoadingOrder2 extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
 
+
             if (s != null) {
                 if (s.contains("BUNDLE_ORDER SUCCESS")) {
                     pics.clear();
+                    finish();
                     Log.e("tag", "****Success");
                 } else {
                     Log.e("tag", "****Failed to export data");
@@ -668,6 +731,7 @@ public class LoadingOrder2 extends AppCompatActivity {
         }
     }
 
+    // get nu. of exists for each bundles i choosed from previous page
     private class JSONTask2 extends AsyncTask<String, String, String> {  // check
 
         @Override
@@ -710,7 +774,7 @@ public class LoadingOrder2 extends AppCompatActivity {
                 in.close();
 
                 JsonResponse = sb.toString();
-                Log.e("tag", "" + JsonResponse);
+                Log.e("loadingorder", " JSONTask2 " + JsonResponse);
 
                 JSONObject object = new JSONObject(JsonResponse);
 
@@ -770,6 +834,7 @@ public class LoadingOrder2 extends AppCompatActivity {
         }
     }
 
+    // check if loading (packing list) has same bundles of the alternative packing list
     private class JSONTask3 extends AsyncTask<String, String, String> {
 
         @Override
@@ -808,7 +873,7 @@ public class LoadingOrder2 extends AppCompatActivity {
                 in.close();
 
                 JsonResponse = sb.toString();
-                Log.e("tag***", "  " + JsonResponse);
+                Log.e("loadingorder", " JSONTask3 " + JsonResponse);
 
                 JSONObject object = new JSONObject(JsonResponse);
                 JSONArray array = object.getJSONArray("PLANNED");
@@ -847,6 +912,17 @@ public class LoadingOrder2 extends AppCompatActivity {
             super.onPostExecute(s);
 
             if (s != null) {
+                // remove found bundles in jsonArrayOrders (all orders i choosed) from packing list (order no)
+                for (int m = 0; m < checkDuplicate.size(); m++)
+                    for (int n = 0; n < plannedList.size(); n++)
+                        if (checkDuplicate.get(m).getThickness() == plannedList.get(n).getThickness() &&
+                                checkDuplicate.get(m).getWidth() == plannedList.get(n).getWidth() &&
+                                checkDuplicate.get(m).getLength() == plannedList.get(n).getLength() &&
+                                checkDuplicate.get(m).getNoOfPieces() == plannedList.get(n).getNoOfPieces() &&
+                                checkDuplicate.get(m).getGrade().equals(plannedList.get(n).getGrade())) {
+                            plannedList.remove(n);
+                            break;
+                        }
 
                 for (int i = 0; i < plannedList.size(); i++) {
                     for (int k = 0; k < missedBundles.size(); k++) {
@@ -857,7 +933,8 @@ public class LoadingOrder2 extends AppCompatActivity {
                                 plannedList.get(i).getNoOfPieces() == missedBundles.get(k).getNoOfPieces() &&
                                 plannedList.get(i).getGrade().equals(missedBundles.get(k).getGrade())) {
 
-                            //Log.e("tag1***", " in ");
+                            //  if loading (packing list) has same bundles of the alternative
+                            // packing list it removed from list to make exchange in web service
                             missedBundles.remove(k);
                             jsonArrayMissedBundles.remove(k);
                             break;
@@ -866,7 +943,7 @@ public class LoadingOrder2 extends AppCompatActivity {
                     }
                 }
 
-                //Log.e("tag2***", "  " + missedBundles.size());
+                Log.e("loadingorder", "  afterremove" + missedBundles.size());
 
                 new JSONTask().execute();
 
@@ -876,9 +953,88 @@ public class LoadingOrder2 extends AppCompatActivity {
         }
     }
 
+    // send bundles for amman
+    private class JSONTask4 extends AsyncTask<String, String, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+
+                String JsonResponse = null;
+                HttpClient client = new DefaultHttpClient();
+                HttpPost request = new HttpPost();
+                request.setURI(new URI("http://" + generalSettings.getIpAddress() + "/export.php"));
+
+                String newCust = "";
+//                if(plannedList.size()>0)
+//                    newCust = plannedList.get(0).getCustName();
+
+                Log.e("loadingorder", " JSONTask " + jsonArrayOrders.length() + " missed: " + jsonArrayMissedBundles.length());
+
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+                nameValuePairs.add(new BasicNameValuePair("AMMAN_BUNDLE_ORDERS", jsonArrayOrders.toString().trim()));
+                nameValuePairs.add(new BasicNameValuePair("NEW_CUST", "'" + newCust + "'"));
+                nameValuePairs.add(new BasicNameValuePair("BUNDLE_PIC", jsonArrayPics.toString().trim()));
+                // nameValuePairs.add(new BasicNameValuePair("MISSED_BUNDLES", jsonArrayMissedBundles.toString().trim()));
+
+                //Log.e("tag", "" + jsonArrayPics.toString());
+
+                request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                HttpResponse response = client.execute(request);
+
+                BufferedReader in = new BufferedReader(new
+                        InputStreamReader(response.getEntity().getContent()));
+
+                StringBuffer sb = new StringBuffer("");
+                String line = "";
+
+                while ((line = in.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                in.close();
+
+                JsonResponse = sb.toString();
+                Log.e("ammanbundle_order", "" + JsonResponse);
+
+                return JsonResponse;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            Log.e("ammanbundle_order", "" + s);
+//            progressDialog.dismiss();
+            if (s != null) {
+                if (s.contains("AMMAN_BUNDLE_ORDER SUCCESS")) {
+                    pics.clear();
+                    finish();
+                    Log.e("tag", "****Success");
+                } else {
+                    Log.e("tag", "****Failed to export data");
+                }
+            } else {
+                Log.e("tag", "****Failed to export data Please check internet connection");
+            }
+        }
+    }
 
     void compare() {
 
+        // fill no of exist in choosed bundles
         for (int i = 0; i < bundles.size(); i++) {
             for (int k = 0; k < bundleInfosList.size(); k++) {
 
@@ -905,8 +1061,8 @@ public class LoadingOrder2 extends AppCompatActivity {
         List<BundleInfo> temp = new ArrayList(bundles);
         for (int i = 0; i < temp.size(); i++) {
 
-            if(temp.get(i).getNoOfExist() > 0) {
-                for (int k = i+1; k < bundles.size(); k++) {
+            if (temp.get(i).getNoOfExist() > 0) {
+                for (int k = i + 1; k < bundles.size(); k++) {
 
                     if (temp.get(i).getThickness() == bundles.get(k).getThickness() &&
                             temp.get(i).getWidth() == bundles.get(k).getWidth() &&
@@ -914,7 +1070,7 @@ public class LoadingOrder2 extends AppCompatActivity {
                             temp.get(i).getNoOfPieces() == bundles.get(k).getNoOfPieces() &&
                             temp.get(i).getGrade().equals(bundles.get(k).getGrade())) {
 
-                        if(bundles.get(k).getNoOfExist() > 0) {
+                        if (bundles.get(k).getNoOfExist() > 0) {
                             bundles.get(k).setNoOfExist(bundles.get(k).getNoOfExist() - 1);
                         }
 

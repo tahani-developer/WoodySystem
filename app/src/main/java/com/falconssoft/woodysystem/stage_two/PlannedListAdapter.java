@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,14 +36,14 @@ public class PlannedListAdapter extends RecyclerView.Adapter<PlannedListAdapter.
 //        if (PlannedPL.get(i).getHide() == 1) {
 //            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.planned_list_row2, viewGroup, false);
 //        } else {
-            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.planned_list_row, viewGroup, false);
+        view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.planned_list_row, viewGroup, false);
 //        }
         return new SuppliersViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull SuppliersViewHolder holder, int i) {
-
+        Log.e("save", "adapter" + PlannedPL.get(i).getNoOfCopies());
         holder.serial.setText("" + (i + 1));
         holder.cust.setText(PlannedPL.get(i).getCustName());
         holder.pl.setText(PlannedPL.get(i).getPackingList());
@@ -73,7 +74,7 @@ public class PlannedListAdapter extends RecyclerView.Adapter<PlannedListAdapter.
             holder.linEdit.setBackgroundColor(context.getResources().getColor(R.color.gray_un_editable));
             holder.linCopy.setBackgroundColor(context.getResources().getColor(R.color.gray_un_editable));
         } else {
-            holder.serial.setBackgroundColor(context.getResources().getColor(R.color.light_orange));
+//            holder.serial.setBackgroundColor(context.getResources().getColor(R.color.light_orange));
             holder.cust.setBackgroundColor(context.getResources().getColor(R.color.light_orange));
             holder.pl.setBackgroundColor(context.getResources().getColor(R.color.light_orange));
             holder.dest.setBackgroundColor(context.getResources().getColor(R.color.light_orange));
@@ -125,6 +126,7 @@ public class PlannedListAdapter extends RecyclerView.Adapter<PlannedListAdapter.
                 context.deleteItemDialog(index);
             }
         });
+
         holder.copy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,15 +135,14 @@ public class PlannedListAdapter extends RecyclerView.Adapter<PlannedListAdapter.
             }
         });
 
-
         holder.isExist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // if (PlannedPL.get(i).getExist().equals("Not Exist"))
-                context.closedResultsDialog(index);
+                if (PlannedPL.get(i).getHide() != 1)
+                    context.closedResultsDialog(index);
             }
         });
-
 
     }
 
@@ -153,7 +154,7 @@ public class PlannedListAdapter extends RecyclerView.Adapter<PlannedListAdapter.
     class SuppliersViewHolder extends RecyclerView.ViewHolder {
 
         TextView serial, cust, pl, dest, order, supplier, grade, thick, width, length, pieces, copies, isExist, edit, delete, copy;
-        LinearLayout linearLayout , linEdit , linCopy;
+        LinearLayout linearLayout, linEdit, linCopy;
 
         public SuppliersViewHolder(@NonNull View itemView) {
             super(itemView);

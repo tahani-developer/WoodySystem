@@ -32,9 +32,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.falconssoft.woodysystem.DatabaseHandler;
-import com.falconssoft.woodysystem.ExportToExcel;
+import com.falconssoft.woodysystem.ExportToPDF;
 import com.falconssoft.woodysystem.R;
-import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.NewRowInfo;
 import com.falconssoft.woodysystem.models.Settings;
 import com.falconssoft.woodysystem.stage_one.AddNewRaw;
@@ -63,11 +62,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 
 import static com.falconssoft.woodysystem.stage_one.AddNewRaw.serialBeforeUpdate;
@@ -256,7 +253,7 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
         export.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ExportToExcel obj = new ExportToExcel(AcceptanceInfoReport.this);
+                ExportToPDF obj = new ExportToPDF(AcceptanceInfoReport.this);
                 obj.exportReportTwo(filtered, fromDate.getText().toString(), toDate.getText().toString(), dfReport.format(calendar.getTime()));
 
             }

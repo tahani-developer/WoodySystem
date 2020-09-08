@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="700dp"
     android:layout_height="500dp"
     android:paddingTop="20dp">
@@ -29,7 +30,8 @@
                 android:gravity="center"
                 android:text="@string/closed_results"
                 android:textColor="#000000"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                app:fontFamily="serif" />
 
         </LinearLayout>
 
@@ -52,7 +54,8 @@
                     android:gravity="center"
                     android:text="@string/thickness"
                     android:textColor="@color/light_orange"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"
+                    app:fontFamily="serif" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -63,7 +66,8 @@
                     android:gravity="center"
                     android:text="@string/width"
                     android:textColor="@color/light_orange"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"
+                    app:fontFamily="serif" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -74,7 +78,8 @@
                     android:gravity="center"
                     android:text="@string/length"
                     android:textColor="@color/light_orange"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"
+                    app:fontFamily="serif" />
 
 
                 <TextView
@@ -86,7 +91,8 @@
                     android:gravity="center"
                     android:text="@string/no_pieces"
                     android:textColor="@color/light_orange"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"
+                    app:fontFamily="serif" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -95,10 +101,11 @@
                     android:layout_weight="1"
                     android:background="@color/orange"
                     android:gravity="center"
-                    android:visibility="invisible"
                     android:text="@string/grade"
                     android:textColor="@color/light_orange"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"
+                    android:visibility="invisible"
+                    app:fontFamily="serif" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -107,10 +114,11 @@
                     android:layout_weight="1"
                     android:background="@color/orange"
                     android:gravity="center"
-                    android:visibility="invisible"
                     android:text="@string/location"
                     android:textColor="@color/light_orange"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"
+                    android:visibility="invisible"
+                    app:fontFamily="serif" />
 
             </LinearLayout>
 
@@ -129,7 +137,8 @@
                     android:gravity="center"
                     android:text="0"
                     android:textColor="#000000"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    app:fontFamily="serif" />
 
                 <TextView
                     android:id="@+id/width"
@@ -141,7 +150,8 @@
                     android:gravity="center"
                     android:text="0"
                     android:textColor="#000000"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    app:fontFamily="serif" />
 
                 <TextView
                     android:id="@+id/length"
@@ -165,7 +175,8 @@
                     android:gravity="center"
                     android:text="0"
                     android:textColor="#000000"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    app:fontFamily="serif" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -174,10 +185,11 @@
                     android:layout_weight="1"
                     android:background="@color/orange"
                     android:gravity="center"
-                    android:visibility="invisible"
                     android:text="@string/grade"
                     android:textColor="@color/light_orange"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"
+                    android:visibility="invisible"
+                    app:fontFamily="serif" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -186,10 +198,11 @@
                     android:layout_weight="1"
                     android:background="@color/orange"
                     android:gravity="center"
-                    android:visibility="invisible"
                     android:text="@string/location"
                     android:textColor="@color/light_orange"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"
+                    android:visibility="invisible"
+                    app:fontFamily="serif" />
 
             </LinearLayout>
 
@@ -209,7 +222,8 @@
                 android:layout_height="40dp"
                 android:text="@string/comparable_results"
                 android:textColor="#000000"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                app:fontFamily="serif" />
 
             <TextView
                 android:id="@+id/save"
@@ -243,7 +257,8 @@
                 android:gravity="center"
                 android:text="@string/thickness"
                 android:textColor="@color/light_orange"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                app:fontFamily="serif" />
 
             <TextView
                 android:layout_width="0dp"
@@ -254,7 +269,8 @@
                 android:gravity="center"
                 android:text="@string/width"
                 android:textColor="@color/light_orange"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                app:fontFamily="serif" />
 
             <TextView
                 android:layout_width="0dp"
@@ -265,7 +281,8 @@
                 android:gravity="center"
                 android:text="@string/length"
                 android:textColor="@color/light_orange"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                app:fontFamily="serif" />
 
 
             <TextView
@@ -277,7 +294,8 @@
                 android:gravity="center"
                 android:text="@string/no_pieces"
                 android:textColor="@color/light_orange"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                app:fontFamily="serif" />
 
             <TextView
                 android:layout_width="0dp"
@@ -288,7 +306,8 @@
                 android:gravity="center"
                 android:text="@string/grade"
                 android:textColor="@color/light_orange"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                app:fontFamily="serif" />
 
             <TextView
                 android:layout_width="0dp"
@@ -299,7 +318,8 @@
                 android:gravity="center"
                 android:text="@string/location"
                 android:textColor="@color/light_orange"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                app:fontFamily="serif" />
 
         </LinearLayout>
 

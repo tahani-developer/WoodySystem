@@ -52,6 +52,7 @@
                 android:textColor="@color/orange"/>
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -119,6 +120,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:fontFamily="serif"
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:focusable="false"
@@ -154,6 +156,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:fontFamily="serif"
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:focusable="false"
@@ -178,7 +181,8 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0"
                     android:fontFamily="serif"
                     android:paddingTop="10dp"
                     android:paddingStart="10dp"
@@ -190,13 +194,21 @@
                     android:id="@+id/loadingOrder_report_search_bundleNo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:fontFamily="serif"
                     android:paddingStart="10dp"
                     android:paddingLeft="10dp"
                     android:paddingEnd="10dp"
                     android:paddingRight="10dp"
-                    android:drawableLeft="@drawable/ic_search_24dp"
                     android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/loadingOrder_report_search"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0"
+                    android:background="@drawable/ic_search_24dp" />
 
             </LinearLayout>
 
@@ -348,15 +360,17 @@
                     <TextView
                         android:text="@string/bundle_no"
                         android:textSize="15sp"
+                        android:fontFamily="serif"
                         android:layout_marginTop="5dp"
                         android:textColor="@color/orange"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1.5"/>
+                        android:layout_weight="2.5"/>
 
                     <TextView
                         android:text="@string/thickness"
                         android:textSize="15sp"
+                        android:fontFamily="serif"
                         android:layout_marginTop="5dp"
                         android:textColor="@color/orange"
                         android:layout_width="0dp"
@@ -366,6 +380,7 @@
                     <TextView
                         android:text="@string/width"
                         android:textSize="15sp"
+                        android:fontFamily="serif"
                         android:layout_marginTop="5dp"
                         android:textColor="@color/orange"
                         android:layout_width="0dp"
@@ -375,6 +390,7 @@
                     <TextView
                         android:text="@string/length"
                         android:textSize="15sp"
+                        android:fontFamily="serif"
                         android:layout_marginTop="5dp"
                         android:textColor="@color/orange"
                         android:layout_width="0dp"
@@ -384,6 +400,7 @@
                     <TextView
                         android:text="@string/grade"
                         android:textSize="15sp"
+                        android:fontFamily="serif"
                         android:layout_marginTop="5dp"
                         android:textColor="@color/orange"
                         android:layout_width="0dp"
@@ -393,6 +410,7 @@
                     <TextView
                         android:text="@string/no_of_pieces"
                         android:textSize="15sp"
+                        android:fontFamily="serif"
                         android:layout_marginTop="5dp"
                         android:textColor="@color/orange"
                         android:layout_width="0dp"
@@ -402,6 +420,7 @@
                     <TextView
                         android:text="@string/loc"
                         android:textSize="15sp"
+                        android:fontFamily="serif"
                         android:layout_marginTop="5dp"
                         android:textColor="@color/orange"
                         android:layout_width="0dp"
@@ -411,6 +430,7 @@
                     <TextView
                         android:text="@string/area"
                         android:textSize="15sp"
+                        android:fontFamily="serif"
                         android:layout_marginTop="5dp"
                         android:textColor="@color/orange"
                         android:layout_width="0dp"

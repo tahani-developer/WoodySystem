@@ -15,7 +15,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -29,16 +28,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.falconssoft.woodysystem.DatabaseHandler;
-import com.falconssoft.woodysystem.ExportToExcel;
+import com.falconssoft.woodysystem.ExportToPDF;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.SharedClass;
-import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.CustomerInfo;
 import com.falconssoft.woodysystem.models.PlannedPL;
 import com.falconssoft.woodysystem.models.Settings;
 import com.falconssoft.woodysystem.models.SupplierInfo;
-import com.falconssoft.woodysystem.reports.InventoryReport;
-import com.falconssoft.woodysystem.reports.InventoryReportAdapter;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -54,7 +50,6 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
@@ -67,6 +62,7 @@ import java.util.Locale;
 
 public class UnloadPackingList extends AppCompatActivity implements View.OnClickListener {
 
+    //Planned Packing List Report
     private DatabaseHandler databaseHandler;
     private Calendar myCalendar;
     private Settings generalSettings;
@@ -267,7 +263,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
 
                 break;
             case R.id.export:
-                ExportToExcel obj = new ExportToExcel(UnloadPackingList.this);
+                ExportToPDF obj = new ExportToPDF(UnloadPackingList.this);
                 obj.exportUnloadPackingList(UPLListFiltered, searchCustomer.getText().toString(), searchSupplier.getText().toString(),  dfReport.format(Calendar.getInstance().getTime()), gradeText, today);
 
                 break;
@@ -375,8 +371,6 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
         recyclerView2.setAdapter(adapter3);
     }
 
-
-
     class watchTextChange implements TextWatcher {
 
         private View view;
@@ -483,8 +477,6 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
         filters();
     }
 
-    
-
     // ************************************** GET CUSTOMERS *******************************
     private class JSONTask extends AsyncTask<String, String, List<CustomerInfo>> {
 
@@ -579,7 +571,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
         }
     }  // import customers
 
-    // ************************************** SEARCH *******************************
+    // ************************************** GET DATA / SEARCH *******************************
     private class JSONTask2 extends AsyncTask<String, String, String> {  // check
 
         @Override
@@ -678,8 +670,8 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
                     PLList = clustering(PLList);
                     UPLListFiltered.addAll(PLList);
 
-                    if (headerTableLayout.getChildCount() == 0)
-                        addTableHeader(headerTableLayout);
+//                    if (headerTableLayout.getChildCount() == 0)
+//                        addTableHeader(headerTableLayout);
 
                     adapter2.notifyDataSetChanged();
 
@@ -867,6 +859,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
         }
     }
 
+    // ************************************** GET SUPPLIERS *******************************
     private class JSONTask4 extends AsyncTask<String, String, List<SupplierInfo>> {
 
         @Override
@@ -959,7 +952,6 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
             }
         }
     }  // import Suppliers
-
 
     void calculateTotal() {
         int sumOfBundles = 0;

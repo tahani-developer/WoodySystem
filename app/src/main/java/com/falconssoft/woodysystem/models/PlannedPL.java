@@ -5,7 +5,7 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class PlannedPL {
+public class PlannedPL extends Throwable {
     private String custName;
     private String custNo;
     private String packingList;

@@ -1,12 +1,10 @@
 package com.falconssoft.woodysystem.reports;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -39,7 +37,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -56,15 +53,13 @@ import android.widget.Toast;
 
 import com.falconssoft.woodysystem.AddToInventory;
 import com.falconssoft.woodysystem.DatabaseHandler;
-import com.falconssoft.woodysystem.ExportToExcel;
+import com.falconssoft.woodysystem.ExportToPDF;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.SpinnerCustomAdapter;
 import com.falconssoft.woodysystem.WoodPresenter;
 import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.Settings;
 import com.falconssoft.woodysystem.models.SpinnerModel;
-import com.falconssoft.woodysystem.stage_two.PlannedUnplanned;
-import com.falconssoft.woodysystem.stage_two.UnloadPackingList;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -85,7 +80,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -97,7 +91,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.Serializable;
 import java.net.URI;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -107,7 +100,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -1178,7 +1170,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         switch (v.getId()) {
             case R.id.inventory_report_export:
                 dfReport = new SimpleDateFormat("yyyyMMdd_hhmmss");
-                ExportToExcel obj = new ExportToExcel(InventoryReport.this);
+                ExportToPDF obj = new ExportToPDF(InventoryReport.this);
                 obj.exportInventoryReport(filtered,loc, areaField, gradeFeld,dateFrom.getText().toString(), dateTo.getText().toString(), dfReport.format(date));
                 break;
             case R.id.inventory_report_search_pList_tool:

@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.SystemClock;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.content.ContextCompat;
@@ -23,6 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.falconssoft.woodysystem.models.Settings;
 import com.falconssoft.woodysystem.stage_one.AddNewRaw;
 import com.falconssoft.woodysystem.stage_one.StageOne;
 import com.falconssoft.woodysystem.stage_two.PlannedPackingList;
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView pictureOne, pictureTwo, pictureThree;
     private long mLastClickTime = 0, mLastClickTime3 = 0;
     private Dialog passwordDialog;
+    private Settings settings;
 
 //    private Animation animation;
 
@@ -45,10 +48,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        settings = new DatabaseHandler(this).getSettings();
         relativeLayout = (RelativeLayout) findViewById(R.id.relative);
         stage1 = (TextView) findViewById(R.id.s1);
         stage2 = (TextView) findViewById(R.id.s2);
         stage3 = (TextView) findViewById(R.id.s3);
+
+        if (settings.getStore().equals("Amman")){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                stage1.setBackground(getResources().getDrawable(R.drawable.frame_shape_unvisible));
+                stage2.setBackground(getResources().getDrawable(R.drawable.frame_shape_unvisible));
+            }
+            stage1.setEnabled(false);
+            stage1.setTextColor(getResources().getColor(R.color.white));
+            stage2.setEnabled(false);
+            stage2.setTextColor(getResources().getColor(R.color.white));
+
+        }
 //        passwordDialog = new Dialog(this);
 
         callAnimation();

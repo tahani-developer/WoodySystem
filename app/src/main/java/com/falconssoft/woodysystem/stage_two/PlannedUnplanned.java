@@ -1,12 +1,7 @@
 package com.falconssoft.woodysystem.stage_two;
 
-import android.app.Dialog;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,12 +9,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -27,28 +19,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.falconssoft.woodysystem.DatabaseHandler;
-import com.falconssoft.woodysystem.ExportToExcel;
+import com.falconssoft.woodysystem.ExportToPDF;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.SpinnerCustomAdapter;
-import com.falconssoft.woodysystem.models.BundleInfo;
-import com.falconssoft.woodysystem.models.CustomerInfo;
 import com.falconssoft.woodysystem.models.PlannedPL;
-import com.falconssoft.woodysystem.models.Settings;
 import com.falconssoft.woodysystem.models.SpinnerModel;
-import com.falconssoft.woodysystem.models.SupplierInfo;
-import com.falconssoft.woodysystem.reports.InventoryReport;
-import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.PageSize;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Phrase;
-import com.itextpdf.text.pdf.BaseFont;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -56,22 +31,13 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Serializable;
-import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URL;
-import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -82,10 +48,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import static com.itextpdf.text.Element.ALIGN_CENTER;
-
 public class PlannedUnplanned extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
+    //Planned Unplanned Report
     private DatabaseHandler databaseHandler;
     private Calendar myCalendar;
     private boolean mState = false;
@@ -204,7 +169,7 @@ public class PlannedUnplanned extends AppCompatActivity implements AdapterView.O
             @Override
             public void onClick(View v) {
 
-                ExportToExcel obj = new ExportToExcel(PlannedUnplanned.this);
+                ExportToPDF obj = new ExportToPDF(PlannedUnplanned.this);
                 obj.exportPlannedUnplanned(PLListFiltered, dfReport.format(Calendar.getInstance().getTime()), today);
             }
         });

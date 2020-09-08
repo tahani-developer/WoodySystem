@@ -16,67 +16,75 @@
 
         <TextView
             android:id="@+id/bundle"
-            android:textSize="15sp"
-            android:textColor="@color/orange"
             android:layout_width="0dp"
+            android:fontFamily="serif"
             android:layout_height="match_parent"
-            android:layout_weight="2"/>
+            android:layout_weight="2.5"
+            android:textColor="@color/orange"
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/th"
-            android:textSize="15sp"
-            android:textColor="@color/orange"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:textColor="@color/orange"
+            android:textSize="15sp"
+            app:fontFamily="serif" />
 
         <TextView
             android:id="@+id/w"
-            android:textSize="15sp"
-            android:textColor="@color/orange"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:textColor="@color/orange"
+            android:textSize="15sp"
+            app:fontFamily="serif" />
 
         <TextView
             android:id="@+id/l"
-            android:textSize="15sp"
-            android:textColor="@color/orange"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:textColor="@color/orange"
+            android:textSize="15sp"
+            app:fontFamily="serif" />
 
         <TextView
             android:id="@+id/grade"
-            android:textSize="15sp"
-            android:textColor="@color/orange"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:textColor="@color/orange"
+            android:textSize="15sp"
+            app:fontFamily="serif" />
 
         <TextView
             android:id="@+id/pcs"
-            android:textSize="15sp"
-            android:textColor="@color/orange"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:textColor="@color/orange"
+            android:textSize="15sp"
+            app:fontFamily="serif" />
 
         <TextView
             android:id="@+id/location"
-            android:textSize="15sp"
-            android:textColor="@color/orange"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:textColor="@color/orange"
+            android:textSize="15sp"
+            app:fontFamily="serif" />
 
         <TextView
             android:id="@+id/area"
-            android:textSize="15sp"
-            android:textColor="@color/orange"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:textColor="@color/orange"
+            android:textSize="15sp"
+            app:fontFamily="serif" />
 
 
 

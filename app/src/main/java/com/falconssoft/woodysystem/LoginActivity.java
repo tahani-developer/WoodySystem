@@ -83,7 +83,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         localStore = generalSettings.getStore();
 
 //        new JSONTask().execute();
-        woodPresenter = new WoodPresenter(this);
+        woodPresenter = new WoodPresenter(LoginActivity.this);
         woodPresenter.getUsersData(LoginActivity.this);
 
         Log.e("bool", "" + (!(localIpAddress == null)));
@@ -283,7 +283,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 Toast.makeText(LoginActivity.this, "Saved Successfully", Toast.LENGTH_SHORT).show();
 
                                 generalSettings = new DatabaseHandler(LoginActivity.this).getSettings();
-                                woodPresenter = new WoodPresenter(LoginActivity.this);
+//                                woodPresenter = new WoodPresenter(LoginActivity.this);
                                 woodPresenter.getUsersData(LoginActivity.this);
 //                                new JSONTask().execute();
                                 settingDialog.dismiss();
