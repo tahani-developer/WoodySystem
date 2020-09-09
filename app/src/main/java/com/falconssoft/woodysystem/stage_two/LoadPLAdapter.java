@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.models.PlannedPL;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class LoadPLAdapter extends RecyclerView.Adapter<LoadPLAdapter.SuppliersV
 
     private LoadPackingList plannedPL;
     private List<PlannedPL> PlannedPL;
+    private List<PlannedPL> PlannedPLOrder;
     private HashMap<String, List<PlannedPL>> bundleInfoList;
 
     public LoadPLAdapter(Context plannedPL, List<PlannedPL> PlannedPL, HashMap<String, List<PlannedPL>> bundleInfoList) {
@@ -29,6 +31,7 @@ public class LoadPLAdapter extends RecyclerView.Adapter<LoadPLAdapter.SuppliersV
         this.plannedPL = (LoadPackingList) plannedPL;
         this.PlannedPL = PlannedPL;
         this.bundleInfoList = bundleInfoList;
+        PlannedPLOrder=new ArrayList<>();
 
     }
 
@@ -56,6 +59,8 @@ public class LoadPLAdapter extends RecyclerView.Adapter<LoadPLAdapter.SuppliersV
 //        holder.length.setText("" + (int) PlannedPL.get(i).getLength());
 //        Log.e("bundleInfoList1", "getPackingList: " + PlannedPL.get(i).getPackingList());
 //        Log.e( "bundleInfoList2","getNoOfPieces: " + bundleInfoList.get(PlannedPL.get(i).getPackingList()).getNoOfPieces());
+        PlannedPLOrder.clear();
+        PlannedPLOrder.addAll(PlannedPL);
 
         if (bundleInfoList.containsKey(PlannedPL.get(i).getPackingList())) {
             List<PlannedPL> object = bundleInfoList.get(PlannedPL.get(i).getPackingList());
@@ -71,17 +76,27 @@ public class LoadPLAdapter extends RecyclerView.Adapter<LoadPLAdapter.SuppliersV
                 holder.pieces.setText("" + (int) totalPieces);//holder.pieces.setText("" + (int) PlannedPL.get(i).getNoOfPieces());
                 holder.copies.setText("" + totalCopies);//holder.copies.setText("" + PlannedPL.get(i).getNoOfCopies());
                 holder.cubic.setText("" + String.format("%.3f", (totalcubic)));//holder.cubic.setText("" + String.format("%.3f", (PlannedPL.get(i).getCubic() )));
+                PlannedPLOrder.get(i).setNoOfPieces(Double.parseDouble(holder.pieces.getText().toString()));
+                PlannedPLOrder.get(i).setCubic(Double.parseDouble(holder.cubic.getText().toString()));
+                PlannedPLOrder.get(i).setNoOfCopies(Integer.parseInt(holder.copies.getText().toString()));
+
 
             } else {
                 holder.pieces.setText("" + (int) bundleInfoList.get(PlannedPL.get(i).getPackingList()).get(0).getNoOfPieces());//holder.pieces.setText("" + (int) PlannedPL.get(i).getNoOfPieces());
                 holder.copies.setText("" + bundleInfoList.get(PlannedPL.get(i).getPackingList()).get(0).getNoOfCopies());//holder.copies.setText("" + PlannedPL.get(i).getNoOfCopies());
                 holder.cubic.setText("" + String.format("%.3f", (bundleInfoList.get(PlannedPL.get(i).getPackingList()).get(0).getCubic())));//holder.cubic.setText("" + String.format("%.3f", (PlannedPL.get(i).getCubic() )));
+                PlannedPLOrder.get(i).setNoOfPieces(Double.parseDouble(holder.pieces.getText().toString()));
+                PlannedPLOrder.get(i).setCubic(Double.parseDouble(holder.cubic.getText().toString()));
+                PlannedPLOrder.get(i).setNoOfCopies(Integer.parseInt(holder.copies.getText().toString()));
             }
 
         } else {
             holder.pieces.setText("" + (int) PlannedPL.get(i).getNoOfPieces());
             holder.copies.setText("" + PlannedPL.get(i).getNoOfCopies());
             holder.cubic.setText("" + String.format("%.3f", (PlannedPL.get(i).getCubic())));
+            PlannedPLOrder.get(i).setNoOfPieces(Double.parseDouble(holder.pieces.getText().toString()));
+            PlannedPLOrder.get(i).setCubic(Double.parseDouble(holder.cubic.getText().toString()));
+            PlannedPLOrder.get(i).setNoOfCopies(Integer.parseInt(holder.copies.getText().toString()));
         }
 
         if (PlannedPL.get(i).getIsChecked())
@@ -102,10 +117,14 @@ public class LoadPLAdapter extends RecyclerView.Adapter<LoadPLAdapter.SuppliersV
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                plannedPL.detailsDialog(PlannedPL.get(i).getPackingList(), bundleInfoList);
+                plannedPL.detailsDialog(PlannedPL.get(i).getPackingList(), bundleInfoList,PlannedPL.get(i).getDestination());
             }
         });
 
+    }
+
+    public List<PlannedPL> getListOrder(){
+        return PlannedPLOrder;
     }
 
     @Override

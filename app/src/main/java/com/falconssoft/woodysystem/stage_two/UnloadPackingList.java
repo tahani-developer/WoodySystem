@@ -57,6 +57,8 @@ import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -78,7 +80,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
     private RecyclerView recyclerView , recyclerView2;
     private RecyclerView recycler;
     private EditText paclingList , dest , orderNo;
-    private TextView searchCustomer, searchSupplier, noBundles, totalCBM, delete;
+    private TextView searchCustomer, searchSupplier, noBundles, totalCBM, delete,piecesOrder, cubicOrder, noBundlesOrder;
     ;
     private TableLayout tableLayout, headerTableLayout;
     private TableRow tableRow;
@@ -105,6 +107,8 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
     private String today;
 
     private JSONArray plannedPLListJSON = new JSONArray();
+    private int sortFlag = 0;
+    private boolean isPiecesAsc=true,isCubicAsc=true ,isNoBundelAsc=true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,6 +173,66 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
         searchCustomer.setOnClickListener(this);
         searchSupplier.setOnClickListener(this);
         export.setOnClickListener(this);
+
+        piecesOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sortFlag = 0;
+                if (isPiecesAsc) {
+                    isPiecesAsc = false;
+                    piecesOrder.setBackgroundResource(R.drawable.des);
+                    Collections.sort(UPLListFiltered, new SorterClass());
+                } else {
+                    isPiecesAsc = true;
+                    piecesOrder.setBackgroundResource(R.drawable.asc);
+                    Collections.sort(UPLListFiltered, Collections.reverseOrder(new SorterClass()));
+                }
+
+                Log.e("OrderPieces",""+UPLListFiltered.get(0).getNoOfPieces());
+
+                adapter2.notifyDataSetChanged();
+            }
+        });
+
+
+        cubicOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sortFlag = 1;
+                if (isCubicAsc) {
+                    isCubicAsc = false;
+                    cubicOrder.setBackgroundResource(R.drawable.des);
+                    Collections.sort(UPLListFiltered, new SorterClass());
+                } else {
+                    isCubicAsc = true;
+                    cubicOrder.setBackgroundResource(R.drawable.asc);
+                    Collections.sort(UPLListFiltered, Collections.reverseOrder(new SorterClass()));
+                }
+                Log.e("OrderCubic",""+UPLListFiltered.get(0).getCubic());
+
+                adapter2.notifyDataSetChanged();
+            }
+        });
+
+        noBundlesOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sortFlag = 2;
+                if (isNoBundelAsc) {
+                    isNoBundelAsc = false;
+                    noBundlesOrder.setBackgroundResource(R.drawable.des);
+                    Collections.sort(UPLListFiltered, new SorterClass());
+                } else {
+                    isNoBundelAsc = true;
+                    noBundlesOrder.setBackgroundResource(R.drawable.asc);
+                    Collections.sort(UPLListFiltered, Collections.reverseOrder(new SorterClass()));
+                }
+
+                Log.e("OrderBundle",""+UPLListFiltered.get(0).getNoOfCopies());
+
+                adapter2.notifyDataSetChanged();
+            }
+        });
 
         new JSONTask2().execute();
 
@@ -264,7 +328,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
                 break;
             case R.id.export:
                 ExportToPDF obj = new ExportToPDF(UnloadPackingList.this);
-                obj.exportUnloadPackingList(UPLListFiltered, searchCustomer.getText().toString(), searchSupplier.getText().toString(),  dfReport.format(Calendar.getInstance().getTime()), gradeText, today);
+                obj.exportUnloadPackingList(UPLListFiltered, searchCustomer.getText().toString(), searchSupplier.getText().toString(),  dfReport.format(Calendar.getInstance().getTime()), gradeText, today,noBundles.getText().toString(),totalCBM.getText().toString());
 
                 break;
 
@@ -987,6 +1051,53 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
         recycler.setLayoutManager(new LinearLayoutManager(this));
         adapter2 = new UnloadPLAdapter(this, UPLListFiltered);
         recycler.setAdapter(adapter2);
+        piecesOrder=findViewById(R.id.unload_planned_report_pieces_order);
+        cubicOrder=findViewById(R.id.unload_planned_report_cubic_order);
+        noBundlesOrder=findViewById(R.id.unload_planned_report_no_bundles_order);
+
+    }
+
+
+
+    class SorterClass implements Comparator<PlannedPL> {
+        @Override
+        public int compare(PlannedPL one, PlannedPL another) {
+            int returnVal = 0;
+            switch (sortFlag) {
+
+                case 0: // pieces
+                    if (one.getNoOfPieces() < another.getNoOfPieces()) {
+                        returnVal = -1;
+                    } else if (one.getNoOfPieces() > another.getNoOfPieces()) {
+                        returnVal = 1;
+                    } else if (one.getNoOfPieces() == another.getNoOfPieces()) {
+                        returnVal = 0;
+                    }
+                    break;
+
+                case 1: // cubic
+                    if (one.getCubic() < another.getCubic()) {
+                        returnVal = -1;
+                    } else if (one.getCubic() > another.getCubic()) {
+                        returnVal = 1;
+                    } else if (one.getCubic() == another.getCubic()) {
+                        returnVal = 0;
+                    }
+                    break;
+
+                case 2: // bundle
+                    if (one.getNoOfCopies() < another.getNoOfCopies()) {
+                        returnVal = -1;
+                    } else if (one.getNoOfCopies() > another.getNoOfCopies()) {
+                        returnVal = 1;
+                    } else if (one.getNoOfCopies() == another.getNoOfCopies()) {
+                        returnVal = 0;
+                    }
+                    break;
+
+            }
+            return returnVal;
+        }
 
     }
 }

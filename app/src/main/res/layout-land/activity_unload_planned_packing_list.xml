@@ -364,41 +364,134 @@
                 android:layout_marginEnd="1dp"
                 android:layout_marginRight="1dp"/>
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@color/orange"
-                android:fontFamily="serif"
-                android:text="@string/no_pieces"
-                android:textColor="@color/white"
-                android:textSize="15sp"
-                android:layout_marginEnd="1dp"
-                android:layout_marginRight="1dp" />
 
-            <TextView
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@color/orange"
-                android:fontFamily="serif"
-                android:text="@string/no_bundle"
-                android:textColor="@color/white"
-                android:textSize="15sp"
+                android:orientation="horizontal"
                 android:layout_marginEnd="1dp"
-                android:layout_marginRight="1dp" />
+                android:layout_marginRight="1dp">
 
-            <TextView
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:fontFamily="serif"
+                    android:text="@string/no_pieces"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/unload_planned_report_pieces_order"
+                    android:layout_width="0dp"
+                    android:layout_height="20dp"
+                    android:layout_weight="1"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="2dp"
+                    android:background="@drawable/asc"
+                    />
+
+
+            </LinearLayout>
+            <!--<TextView-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="1"-->
+                <!--android:background="@color/orange"-->
+                <!--android:fontFamily="serif"-->
+                <!--android:text="@string/no_pieces"-->
+                <!--android:textColor="@color/white"-->
+                <!--android:textSize="15sp"-->
+                <!--android:layout_marginEnd="1dp"-->
+                <!--android:layout_marginRight="1dp" />-->
+
+
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@color/orange"
-                android:fontFamily="serif"
-                android:text="@string/cubic"
-                android:textColor="@color/white"
-                android:textSize="15sp"
+                android:orientation="horizontal"
                 android:layout_marginEnd="1dp"
-                android:layout_marginRight="1dp"/>
+                android:layout_marginRight="1dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:fontFamily="serif"
+                    android:text="@string/no_bundle"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/unload_planned_report_no_bundles_order"
+                    android:layout_width="0dp"
+                    android:layout_height="20dp"
+                    android:layout_weight="1"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="2dp"
+                    android:background="@drawable/asc"
+                    />
+
+
+            </LinearLayout>
+            <!--<TextView-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="1"-->
+                <!--android:background="@color/orange"-->
+                <!--android:fontFamily="serif"-->
+                <!--android:text="@string/no_bundle"-->
+                <!--android:textColor="@color/white"-->
+                <!--android:textSize="15sp"-->
+                <!--android:layout_marginEnd="1dp"-->
+                <!--android:layout_marginRight="1dp" />-->
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/orange"
+                android:orientation="horizontal"
+                android:layout_marginEnd="1dp"
+                android:layout_marginRight="1dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:fontFamily="serif"
+                    android:text="@string/cubic"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/unload_planned_report_cubic_order"
+                    android:layout_width="0dp"
+                    android:layout_height="20dp"
+                    android:layout_weight="1"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="2dp"
+                    android:background="@drawable/asc"
+                    />
+
+
+            </LinearLayout>
+
+            <!--<TextView-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="1"-->
+                <!--android:background="@color/orange"-->
+                <!--android:fontFamily="serif"-->
+                <!--android:text="@string/cubic"-->
+                <!--android:textColor="@color/white"-->
+                <!--android:textSize="15sp"-->
+                <!--android:layout_marginEnd="1dp"-->
+                <!--android:layout_marginRight="1dp"/>-->
 
             <TextView
                 android:layout_width="0dp"

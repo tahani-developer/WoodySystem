@@ -25,7 +25,7 @@
                 android:text="KOSKISEN"
                 android:fontFamily="serif"
                 android:textColor="@color/black"
-                android:textSize="30sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/textView6"
@@ -97,7 +97,6 @@
                 android:layout_height="wrap_content"
                 android:text="PCS  "
                 android:fontFamily="serif"
-
                 android:textColor="@color/black"
                 android:textSize="25sp" />
 
@@ -114,9 +113,9 @@
                 android:id="@+id/textView18"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="70dp"
-                android:text="Grade"
+                android:layout_marginLeft="60dp"
                 android:fontFamily="serif"
+                android:text="Grade"
                 android:textColor="@color/black"
                 android:textSize="25sp" />
 

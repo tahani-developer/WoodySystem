@@ -58,7 +58,7 @@ public class PlannedUnplanned extends AppCompatActivity implements AdapterView.O
 
     private PlannedUnPlannedAdapter adapter2;
 
-    private TextView thick, thicknessOrder, widthOrder, lengthOrder, noBundles, totalCBM, export;
+    private TextView thick, thicknessOrder, widthOrder, lengthOrder,piecesOrder, cubicOrder, noBundlesOrder,noBundles, totalCBM, export;
     private RecyclerView recycler;
     ;
     private TableLayout tableLayout, headerTableLayout;
@@ -97,7 +97,7 @@ public class PlannedUnplanned extends AppCompatActivity implements AdapterView.O
     private String fromLengthNo = "", toLengthNo = "", fromWidthNo = "", toWidthNo = "";
 
     private int sortFlag = 0;
-    private boolean isThicknessAsc = true, isWidthAsc = true, isLengthAsc = true;
+    private boolean isThicknessAsc = true, isWidthAsc = true, isLengthAsc = true,isPiecesAsc=true,isCubicAsc=true ,isNoBundelAsc=true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,12 +165,65 @@ public class PlannedUnplanned extends AppCompatActivity implements AdapterView.O
             }
         });
 
+
+        piecesOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sortFlag = 3;
+                if (isPiecesAsc) {
+                    isPiecesAsc = false;
+                    piecesOrder.setBackgroundResource(R.drawable.des);
+                    Collections.sort(PLListFiltered, new SorterClass());
+                } else {
+                    isPiecesAsc = true;
+                    piecesOrder.setBackgroundResource(R.drawable.asc);
+                    Collections.sort(PLListFiltered, Collections.reverseOrder(new SorterClass()));
+                }
+                adapter2.notifyDataSetChanged();
+            }
+        });
+
+
+        cubicOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sortFlag = 4;
+                if (isCubicAsc) {
+                    isCubicAsc = false;
+                    cubicOrder.setBackgroundResource(R.drawable.des);
+                    Collections.sort(PLListFiltered, new SorterClass());
+                } else {
+                    isCubicAsc = true;
+                    cubicOrder.setBackgroundResource(R.drawable.asc);
+                    Collections.sort(PLListFiltered, Collections.reverseOrder(new SorterClass()));
+                }
+                adapter2.notifyDataSetChanged();
+            }
+        });
+
+        noBundlesOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sortFlag = 5;
+                if (isNoBundelAsc) {
+                    isNoBundelAsc = false;
+                    noBundlesOrder.setBackgroundResource(R.drawable.des);
+                    Collections.sort(PLListFiltered, new SorterClass());
+                } else {
+                    isNoBundelAsc = true;
+                    noBundlesOrder.setBackgroundResource(R.drawable.asc);
+                    Collections.sort(PLListFiltered, Collections.reverseOrder(new SorterClass()));
+                }
+                adapter2.notifyDataSetChanged();
+            }
+        });
+
         export.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 ExportToPDF obj = new ExportToPDF(PlannedUnplanned.this);
-                obj.exportPlannedUnplanned(PLListFiltered, dfReport.format(Calendar.getInstance().getTime()), today);
+                obj.exportPlannedUnplanned(PLListFiltered, dfReport.format(Calendar.getInstance().getTime()), today,noBundles.getText().toString(),totalCBM.getText().toString());
             }
         });
 
@@ -382,6 +435,37 @@ public class PlannedUnplanned extends AppCompatActivity implements AdapterView.O
                         returnVal = 0;
                     }
                     break;
+
+                case 3: // pieces
+                    if (one.getNoOfPieces() < another.getNoOfPieces()) {
+                        returnVal = -1;
+                    } else if (one.getNoOfPieces() > another.getNoOfPieces()) {
+                        returnVal = 1;
+                    } else if (one.getNoOfPieces() == another.getNoOfPieces()) {
+                        returnVal = 0;
+                    }
+                    break;
+
+                case 4: // cubic
+                    if (one.getCubic() < another.getCubic()) {
+                        returnVal = -1;
+                    } else if (one.getCubic() > another.getCubic()) {
+                        returnVal = 1;
+                    } else if (one.getCubic() == another.getCubic()) {
+                        returnVal = 0;
+                    }
+                    break;
+
+                case 5: // bundle
+                    if (one.getNoOfCopies() < another.getNoOfCopies()) {
+                        returnVal = -1;
+                    } else if (one.getNoOfCopies() > another.getNoOfCopies()) {
+                        returnVal = 1;
+                    } else if (one.getNoOfCopies() == another.getNoOfCopies()) {
+                        returnVal = 0;
+                    }
+                    break;
+
             }
             return returnVal;
         }
@@ -653,6 +737,10 @@ public class PlannedUnplanned extends AppCompatActivity implements AdapterView.O
         thicknessOrder = findViewById(R.id.inventory_report_thick_order);
         widthOrder = findViewById(R.id.inventory_report_width_order);
         lengthOrder = findViewById(R.id.inventory_report_length_order);
+        piecesOrder=findViewById(R.id.inventory_report_pieces_order);
+        cubicOrder=findViewById(R.id.inventory_report_cubic_order);
+        noBundlesOrder=findViewById(R.id.inventory_report_no_bundles_order);
+
         fromLength = findViewById(R.id.inventory_report_fromLength);
         toLength = findViewById(R.id.inventory_report_toLength);
         fromWidth = findViewById(R.id.inventory_report_fromWidth);
