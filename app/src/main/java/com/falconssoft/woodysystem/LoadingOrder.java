@@ -134,7 +134,7 @@ public class LoadingOrder extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                filter(0);
+                filter(1);
 //                ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, bundles, true);
 //                items.setAdapter(adapter);
 
@@ -349,18 +349,21 @@ public class LoadingOrder extends AppCompatActivity {
 
 
                     items.clearFocus();
-                    items.post(new Runnable() {
-                        @Override
-                        public void run() {
+//                    items.post(new Runnable() {
+//                        @Override
+//                        public void run() {
                             bundles.get(no).setFoucoseColor("1");
                             items.setAdapter(adapter);
+                            filter(0);
                             items.setSelection(no);
                             items.requestFocusFromTouch();
                             items.setSelection(no);
 
+//                    items.smoothScrollToPosition(no);
 
-                        }
-                    });
+//                        }
+//                    });
+
 
                     break;
                 }
