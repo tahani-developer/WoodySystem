@@ -77,6 +77,7 @@ public class LoadingOrder extends AppCompatActivity {
         deleteBarcode = (ImageButton) findViewById(R.id.deletebaarcode);
         listView2 = findViewById(R.id.verticalListView);
         listView = findViewById(R.id.listview);
+        adapter=new ItemsListAdapter();
 
         progressDialog = new ProgressDialog(this, R.style.MyAlertDialogStyle);
         progressDialog.setMessage("Please Waiting...");
@@ -308,7 +309,7 @@ public class LoadingOrder extends AppCompatActivity {
             }
 
         }
-        ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, tempList, false);
+         adapter = new ItemsListAdapter(LoadingOrder.this, tempList, false);
         items.setAdapter(adapter);
 //        return tempList;
     }
