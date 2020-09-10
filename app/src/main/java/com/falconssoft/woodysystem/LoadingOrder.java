@@ -77,6 +77,7 @@ public class LoadingOrder extends AppCompatActivity {
         deleteBarcode = (ImageButton) findViewById(R.id.deletebaarcode);
         listView2 = findViewById(R.id.verticalListView);
         listView = findViewById(R.id.listview);
+        adapter=new ItemsListAdapter();
 
         progressDialog = new ProgressDialog(this, R.style.MyAlertDialogStyle);
         progressDialog.setMessage("Please Waiting...");
@@ -134,7 +135,7 @@ public class LoadingOrder extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                filter(0);
+                filter(1);
 //                ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, bundles, true);
 //                items.setAdapter(adapter);
 
@@ -308,7 +309,7 @@ public class LoadingOrder extends AppCompatActivity {
             }
 
         }
-        ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, tempList, false);
+         adapter = new ItemsListAdapter(LoadingOrder.this, tempList, false);
         items.setAdapter(adapter);
 //        return tempList;
     }
@@ -349,18 +350,21 @@ public class LoadingOrder extends AppCompatActivity {
 
 
                     items.clearFocus();
-                    items.post(new Runnable() {
-                        @Override
-                        public void run() {
+//                    items.post(new Runnable() {
+//                        @Override
+//                        public void run() {
                             bundles.get(no).setFoucoseColor("1");
                             items.setAdapter(adapter);
+                            filter(0);
                             items.setSelection(no);
                             items.requestFocusFromTouch();
                             items.setSelection(no);
 
+//                    items.smoothScrollToPosition(no);
 
-                        }
-                    });
+//                        }
+//                    });
+
 
                     break;
                 }
