@@ -173,5 +173,6 @@
     <string name="ttn">TTN</string>
     <string name="acceptance_loc">A.Location</string>
     <string name="export_to_excel">Експорт у PDF</string>
+    <string name="edit_confirm_message">Are you want save the changes?</string>
 
 </resources>

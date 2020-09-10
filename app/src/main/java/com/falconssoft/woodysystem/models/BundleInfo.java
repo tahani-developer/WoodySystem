@@ -39,6 +39,7 @@ public class BundleInfo implements Serializable {
     private Bitmap picBitmap;
     private String customer="";
     private int noOfExist;
+    private int noOfCopies;
 
     public BundleInfo() {
     }
@@ -74,6 +75,14 @@ public class BundleInfo implements Serializable {
         this.backingList = backingList;
         this.ordered = ordered;
         this.customer = customer;
+    }
+
+    public int getNoOfCopies() {
+        return noOfCopies;
+    }
+
+    public void setNoOfCopies(int noOfCopies) {
+        this.noOfCopies = noOfCopies;
     }
 
     public String getCustomer() {

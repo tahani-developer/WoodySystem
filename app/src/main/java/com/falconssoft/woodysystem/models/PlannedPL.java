@@ -26,6 +26,7 @@ public class PlannedPL extends Throwable {
     private String grade;
     private int isOld;
     private int hide;
+    private  int index;
 
     public PlannedPL(String custName, String custNo, String packingList, String destination, String orderNo, double thickness, double width, double length, double noOfPieces, String date) {
         this.custName = custName;
@@ -202,6 +203,14 @@ public class PlannedPL extends Throwable {
 
     public void setHide(int hide) {
         this.hide = hide;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     public JSONObject getJSONObject() {
