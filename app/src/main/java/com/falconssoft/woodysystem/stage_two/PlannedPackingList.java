@@ -1129,53 +1129,60 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
         if (isCheckForAnyEdit || isUsedClosedResults || isCheckForCopiesEdit) {
             showSaveFirstDialog();
         } else {
-            Dialog dialog = new Dialog(PlannedPackingList.this);
-            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            dialog.setContentView(R.layout.no_of_copy_planned_item);
+            if (PlannedPLList.get(index).getExist().equals("Not Exist") && PlannedPLList.get(index).getIsOld() == 0) {
+                PlannedPLList.remove(index);
+                adapter2.notifyDataSetChanged();
+                calculateTotal();
+            } else {
 
-            EditText copies = dialog.findViewById(R.id.copies);
-            Button save = dialog.findViewById(R.id.save);
-            save.setText("Delete");
+                Dialog dialog = new Dialog(PlannedPackingList.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.no_of_copy_planned_item);
 
-            copies.setText("" + PlannedPLList.get(index).getNoOfCopies());
+                EditText copies = dialog.findViewById(R.id.copies);
+                Button save = dialog.findViewById(R.id.save);
+                save.setText("Delete");
 
-            save.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String copy = copies.getText().toString();
+                copies.setText("" + PlannedPLList.get(index).getNoOfCopies());
 
-                    if (!TextUtils.isEmpty(copy) && Integer.parseInt(copy) > 0) {
-                        if (Integer.parseInt(copy) <= PlannedPLList.get(index).getNoOfCopies()) {                // ***************** edit this
-                            plannedPLListJSONDELETE = new JSONArray();
-                            for (int i = 0; i < Integer.parseInt(copy); i++) {
-                                plannedPLListJSONDELETE.put(PlannedPLList.get(index).getJSONObject());
-                            }
+                save.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String copy = copies.getText().toString();
 
-                            ind = index;
-                            if (PlannedPLList.get(index).getIsOld() == 1) {
-                                progressDialog.show();
-                                new JSONTask7().execute();
+                        if (!TextUtils.isEmpty(copy) && Integer.parseInt(copy) > 0) {
+                            if (Integer.parseInt(copy) <= PlannedPLList.get(index).getNoOfCopies()) {                // ***************** edit this
+                                plannedPLListJSONDELETE = new JSONArray();
+                                for (int i = 0; i < Integer.parseInt(copy); i++) {
+                                    plannedPLListJSONDELETE.put(PlannedPLList.get(index).getJSONObject());
+                                }
+
+                                ind = index;
+                                if (PlannedPLList.get(index).getIsOld() == 1) {
+                                    progressDialog.show();
+                                    new JSONTask7().execute();
+                                } else {
+
+                                    PlannedPLList.remove(index);
+                                    adapter2.notifyDataSetChanged();
+
+                                    calculateTotal();
+                                }
+                                dialog.dismiss();
                             } else {
-
-                                PlannedPLList.remove(index);
-                                adapter2.notifyDataSetChanged();
-
-                                calculateTotal();
+                                if (PlannedPLList.get(index).getNoOfCopies() == 1)
+                                    copies.setError("There is " + PlannedPLList.get(index).getNoOfCopies() + " bundle!");
+                                else
+                                    copies.setError("There are " + PlannedPLList.get(index).getNoOfCopies() + " bundles!");
                             }
-                            dialog.dismiss();
                         } else {
-                            if (PlannedPLList.get(index).getNoOfCopies() == 1)
-                                copies.setError("There is " + PlannedPLList.get(index).getNoOfCopies() + " bundle!");
-                            else
-                                copies.setError("There are " + PlannedPLList.get(index).getNoOfCopies() + " bundles!");
+                            copies.setError("Please enter number of bundles!");
                         }
-                    } else {
-                        copies.setError("Please enter number of bundles!");
                     }
-                }
-            });
+                });
 
-            dialog.show();
+                dialog.show();
+            }
 
 //            AlertDialog.Builder builder = new AlertDialog.Builder(this);
 //            builder.setMessage("Are you want delete  (" + PlannedPLList.get(index).getNoOfCopies() + ")  of selected bundles? ");
