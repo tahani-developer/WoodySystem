@@ -130,7 +130,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private JSONArray jsonArrayBundles = new JSONArray();
     private WoodPresenter woodPresenter;
     private Animation animation;
-    private TextView textView, noOfBundles, noOfPieces, cubicField, deleteAll, dateFrom, dateTo, thicknessOrder, widthOrder, lengthOrder, searchPListTool, searchSerialTool , export;
+    private TextView textView, noOfBundles, noOfPieces, cubicField, deleteAll, dateFrom, dateTo, thicknessOrder, widthOrder, lengthOrder, searchPListTool, searchSerialTool, export;
     private Spinner location, area, ordered, pList, grade, thicknessSpinner, widthSpinner, lengthSpinner;
     private ArrayAdapter<String> locationAdapter;
     private ArrayAdapter<String> areaAdapter;
@@ -166,7 +166,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     public static final String EDIT_BUNDLE = "EDIT_BUNDLE";
     public static final String EDIT_FLAG_BUNDLE = "EDIT_FLAG_BUNDLE";
     private SimpleDateFormat df, dfReport;
-    String DateString="";
+    String DateString = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,10 +177,10 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 //        searchViewTh = (SearchView) findViewById(R.id.mSearchTh);
 //        searchViewW = (SearchView) findViewById(R.id.mSearchW);
 //        searchViewL = (SearchView) findViewById(R.id.mSearchL);
-         df = new SimpleDateFormat("dd/MM/yyyy");
+        df = new SimpleDateFormat("dd/MM/yyyy");
         dateFrom.setText("1/12/2019");
         dateTo.setText(df.format(date));
-        DateString=df.format(date);
+        DateString = df.format(date);
 
 //        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_to_right);
 //        textView.startAnimation(animation);
@@ -808,8 +808,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 
                                                     if ((thicknessChecked.size() == 0) || checkIfItemChecked(thicknessChecked, String.valueOf(dateFiltered.get(k).getThickness())))
                                                         if ((widthChecked.size() == 0) || checkIfItemChecked(widthChecked, String.valueOf(dateFiltered.get(k).getWidth())))
-                                                            if ((lengthChecked.size() == 0) || checkIfItemChecked(lengthChecked, String.valueOf(dateFiltered.get(k).getLength())))
-                                                            {
+                                                            if ((lengthChecked.size() == 0) || checkIfItemChecked(lengthChecked, String.valueOf(dateFiltered.get(k).getLength()))) {
 //                                            if (fromThicknessNo.equals("") || ((dateFiltered.get(k).getThickness() > Double.parseDouble(fromThicknessNo))
 //                                                    || dateFiltered.get(k).getThickness() == Double.parseDouble(fromThicknessNo)))
 //
@@ -1011,7 +1010,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.barcode_design);
-        TextView companyName, bundelNo, TLW, pcsNo, grade,DatePrint;
+        TextView companyName, bundelNo, TLW, pcsNo, grade, DatePrint;
 
         companyName = (TextView) dialog.findViewById(R.id.companyName);
         bundelNo = (TextView) dialog.findViewById(R.id.bundelNo);
@@ -1019,23 +1018,23 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         pcsNo = (TextView) dialog.findViewById(R.id.pcsNo);
         grade = (TextView) dialog.findViewById(R.id.grade);
         ImageView iv = (ImageView) dialog.findViewById(R.id.barcode);
-        DatePrint= dialog.findViewById(R.id.DatePrint);
+        DatePrint = dialog.findViewById(R.id.DatePrint);
 
-        DatePrint.setText(""+DateString);
+        DatePrint.setText("" + DateString);
         companyName.setText(generalSettings.getCompanyName().toUpperCase());
         bundelNo.setText(data);
 
-        String thicNoDot=thic.substring(0,thic.indexOf("."));
-        Log.e("thicNoDot",thicNoDot);
-        String widthNoDot=width.substring(0,width.indexOf("."));
-        Log.e("widthNoDot",widthNoDot);
-        String lengthNoDot=length.substring(0,length.indexOf("."));
-        Log.e("lengthNoDot",lengthNoDot);
+        String thicNoDot = thic.substring(0, thic.indexOf("."));
+        Log.e("thicNoDot", thicNoDot);
+        String widthNoDot = width.substring(0, width.indexOf("."));
+        Log.e("widthNoDot", widthNoDot);
+        String lengthNoDot = length.substring(0, length.indexOf("."));
+        Log.e("lengthNoDot", lengthNoDot);
         TLW.setText(thicNoDot + " X " + widthNoDot + " X " + lengthNoDot);
 
 
-        String pcsNoDot=pcs.substring(0,pcs.indexOf("."));
-        Log.e("pcsNoDot",pcsNoDot);
+        String pcsNoDot = pcs.substring(0, pcs.indexOf("."));
+        Log.e("pcsNoDot", pcsNoDot);
         pcsNo.setText(pcsNoDot);
 
         grade.setText(grades);
@@ -1171,7 +1170,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
             case R.id.inventory_report_export:
                 dfReport = new SimpleDateFormat("yyyyMMdd_hhmmss");
                 ExportToPDF obj = new ExportToPDF(InventoryReport.this);
-                obj.exportInventoryReport(filtered,loc, areaField, gradeFeld,dateFrom.getText().toString(), dateTo.getText().toString(), dfReport.format(date));
+                obj.exportInventoryReport(filtered, loc, areaField, gradeFeld, dateFrom.getText().toString(), dateTo.getText().toString(), dfReport.format(date));
                 break;
             case R.id.inventory_report_search_pList_tool:
                 if (searchPListTextView.getVisibility() == View.VISIBLE) {
