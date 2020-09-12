@@ -240,22 +240,25 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
     void checkBundlesExistence() {
         // if (!isUsedClosedResults) {
-        if (!isCheckForCopiesEdit) {
-            plannedPLListJSON = new JSONArray();
-            for (int i = 0; i < PlannedPLList.size(); i++) {
-                for (int k = 0; k < PlannedPLList.get(i).getNoOfCopies(); k++) {
-                    plannedPLListJSON.put(PlannedPLList.get(i).getJSONObject());
+        if (!isCheckForCopiesEdit)
+            if (!isUsedClosedResults) {
+                plannedPLListJSON = new JSONArray();
+                for (int i = 0; i < PlannedPLList.size(); i++) {
+                    for (int k = 0; k < PlannedPLList.get(i).getNoOfCopies(); k++) {
+                        plannedPLListJSON.put(PlannedPLList.get(i).getJSONObject());
 //                Log.e("monitor2", "getNoOfCopies:"
 //                        + PlannedPLList.get(i).getNoOfCopies() + ":getNoOfExixt:" + PlannedPLList.get(i).getNoOfExixt());
 
+                    }
                 }
-            }
 
-            if (plannedPLListJSON.length() > 0) {
-                new JSONTask2().execute();
-                bundleInfosList.clear();
-            }
-        } else
+                if (plannedPLListJSON.length() > 0) {
+                    new JSONTask2().execute();
+                    bundleInfosList.clear();
+                }
+            } else
+                showSaveFirstDialog();
+        else
             showSaveFirstDialog();
 
 //        } else {
