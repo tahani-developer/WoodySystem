@@ -531,7 +531,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                     } else {
                         searchCustomer.setError("Please Select First!");
                     }
-                }else
+                } else
                     showConfirmEditDialog();
             else
                 showConfirmEditDialog();
@@ -1144,7 +1144,8 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
         if (isCheckForAnyEdit || isUsedClosedResults || isCheckForCopiesEdit) {
             showSaveFirstDialog();
         } else {
-            if (PlannedPLList.get(index).getExist().equals("Not Exist") && PlannedPLList.get(index).getIsOld() == 0) {
+            if ((PlannedPLList.get(index).getExist().equals("Not Exist") || PlannedPLList.get(index).getExist().equals("null"))
+                    && PlannedPLList.get(index).getIsOld() == 0) {
                 PlannedPLList.remove(index);
                 adapter2.notifyDataSetChanged();
                 calculateTotal();
@@ -1258,8 +1259,9 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
             public void onClick(View v) {
                 String copy = copies.getText().toString();
 
-                if (!TextUtils.isEmpty(copy) && Integer.parseInt(copy) > 0) {                // ***************** edit this
-                    isCheckForCopiesEdit = true;
+                if (!TextUtils.isEmpty(copy) && Integer.parseInt(copy) > 0) {
+                    if (PlannedPLList.get(index).getIsOld() == 1)
+                        isCheckForCopiesEdit = true;
                     if (PlannedPLList.get(index).getExist().contains("Planned") || PlannedPLList.get(index).getExist().contains("Exist")) {
                         Log.e("****", "in");
                         if (Integer.parseInt(copy) <= (PlannedPLList.get(index).getNoOfExixt() + PlannedPLList.get(index).getNoOfCopies())) {
