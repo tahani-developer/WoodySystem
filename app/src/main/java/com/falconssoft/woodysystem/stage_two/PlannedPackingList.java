@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -85,7 +86,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
     private CustomerAdapter adapter;
     private SupplierAdapter adapter3;
     private PlannedListAdapter adapter2;
-    public static String customerName = "null", customerNo = "0", customerName2 = "null", customerNo2 = "0";
+    public static String customerName = "null", customerNo = "0", customerName2 = "null", customerNo2 = "0", selectedGrade = "";
     public static String supplierName = "", supplierNo = "", supplierName2 = "", supplierNo2 = "";
     private static List<CustomerInfo> customers;
     private List<CustomerInfo> arraylist;
@@ -107,8 +108,8 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
     private static String gradeText = "Fresh";
     //TableRow tableRowToBeEdit;
     int flagIsChanged = 0;
-    public static int noOfExist;
-    boolean check = false;
+    public static int noOfExist, noOfBundles;
+    boolean check = false, isCheckForCopiesEdit = false, isCheckForAnyEdit = false, isUsedClosedResults = false;
     int ind;
 
     public static List<PlannedPL> PlannedPLList = new ArrayList<>();
@@ -117,6 +118,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
     private List<BundleInfo> bundleInfosList2 = new ArrayList<>();
     private JSONArray plannedPLListJSON = new JSONArray();
     private JSONArray plannedPLListJSONDELETE = new JSONArray();
+    private List<PlannedPL> currentPackingListBundles = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -194,7 +196,11 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                 addButtonMethod();
                 break;
             case R.id.check_button:
-                checkBundlesExistence();
+//                isCheckForCopiesEdit = false;
+                if (isCheckForCopiesEdit) {
+                    saveButtonMethod();
+                } else
+                    checkBundlesExistence();
                 break;
             case R.id.save_button:
                 if (PlannedPLList.size() > 0)
@@ -233,12 +239,13 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
     }
 
     void checkBundlesExistence() {
+        // if (!isUsedClosedResults) {
         plannedPLListJSON = new JSONArray();
         for (int i = 0; i < PlannedPLList.size(); i++) {
             for (int k = 0; k < PlannedPLList.get(i).getNoOfCopies(); k++) {
                 plannedPLListJSON.put(PlannedPLList.get(i).getJSONObject());
-                Log.e("monitor2" , "getNoOfCopies:"
-                        + PlannedPLList.get(i).getNoOfCopies() + ":getNoOfExixt:" + PlannedPLList.get(i).getNoOfExixt());
+//                Log.e("monitor2", "getNoOfCopies:"
+//                        + PlannedPLList.get(i).getNoOfCopies() + ":getNoOfExixt:" + PlannedPLList.get(i).getNoOfExixt());
 
             }
         }
@@ -248,8 +255,9 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
             bundleInfosList.clear();
         }
 
-//        else
-//            Toast.makeText(this, "Please add rows first!", Toast.LENGTH_SHORT).show();
+//        } else {
+//            showSaveFirstDialog();
+//        }
     }
 
     class watchTextChange implements TextWatcher {
@@ -266,7 +274,18 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            getOldPList(paclingList.getText().toString());
+            currentPackingListBundles.clear();
+            if (!isCheckForAnyEdit)
+                if (!isUsedClosedResults)
+                    if (!isCheckForCopiesEdit)
+                        getOldPList(paclingList.getText().toString());
+                    else
+                        showConfirmEditDialog();
+                else
+                    showConfirmEditDialog();
+            else
+                showConfirmEditDialog();
+
         }
 
         @Override
@@ -275,11 +294,57 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
         }
     }
 
+    void showConfirmEditDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.edit_confirm_message);
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                saveButtonMethod();
+            }
+        });
+
+        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                new JSONTask6().execute();
+            }
+        });
+        builder.setCancelable(false);
+        builder.show();
+
+    }
+
     void getOldPList(String packingL) {
         PlannedPLList.clear();
         for (int i = 0; i < oldList.size(); i++) {
             if (packingL.equals(oldList.get(i).getPackingList())) {
-                PlannedPLList.add(oldList.get(i));
+                currentPackingListBundles.add(oldList.get(i));
+                oldList.get(i).setIndex(i);
+                PlannedPL mediator = new PlannedPL(); // this object to fill old and planned with index
+                mediator.setIndex(oldList.get(i).getIndex());
+                mediator.setNoOfCopies(oldList.get(i).getNoOfCopies());
+                mediator.setNoOfExixt(oldList.get(i).getNoOfExixt());
+                mediator.setLoaded(oldList.get(i).getLoaded());
+                mediator.setCustName(oldList.get(i).getCustName());
+                mediator.setCustNo(oldList.get(i).getCustNo());
+                mediator.setPackingList(oldList.get(i).getPackingList());
+                mediator.setDestination(oldList.get(i).getDestination());
+                mediator.setOrderNo(oldList.get(i).getOrderNo());
+                mediator.setSupplier(oldList.get(i).getSupplier());
+                mediator.setGrade(oldList.get(i).getGrade());
+                mediator.setNoOfPieces(oldList.get(i).getNoOfPieces());
+                mediator.setLength(oldList.get(i).getLength());
+                mediator.setWidth(oldList.get(i).getWidth());
+                mediator.setThickness(oldList.get(i).getThickness());
+                mediator.setDate(oldList.get(i).getDate());
+                mediator.setNoOfCopies(oldList.get(i).getNoOfCopies());
+                mediator.setLoaded(oldList.get(i).getLoaded());
+                mediator.setHide(oldList.get(i).getHide());
+                mediator.setExist(oldList.get(i).getExist());
+                mediator.setIsOld(oldList.get(i).getIsOld());
+                PlannedPLList.add(mediator);
+
                 searchCustomer.setText(oldList.get(i).getCustName());
                 searchSupplier.setText(oldList.get(i).getSupplier());
                 customerName = searchCustomer.getText().toString();
@@ -568,7 +633,8 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
     }
 
     void fillTableRow2() {
-
+        // fillTableRow2 => fill closed result table
+        // bundleInfosList2 => this list have closed results
         int index = -1;
         if (bundleInfosList2.get(0).getThickness() != Double.parseDouble(thickD.getText().toString())) {
             thickD.setTextColor(ContextCompat.getColor(this, R.color.preview));
@@ -651,6 +717,8 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                             thickD.setText("" + (int) bundleInfosList2.get(s).getThickness());
                             flagIsChanged = 1;
                             noOfExist = bundleInfosList2.get(s).getNoOfExist();
+                            //noOfBundles = bundleInfosList2.get(s).get();
+
                         }
                     }
                 });
@@ -826,12 +894,14 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
             public void onClick(View v) {
 
                 if (flagIsChanged == 1) {
+                    isUsedClosedResults = true;
                     PlannedPLList.get(index).setNoOfPieces(Double.parseDouble(piecesD.getText().toString()));
                     PlannedPLList.get(index).setLength(Double.parseDouble(lengthD.getText().toString()));
                     PlannedPLList.get(index).setWidth(Double.parseDouble(widthD.getText().toString()));
                     PlannedPLList.get(index).setThickness(Double.parseDouble(thickD.getText().toString()));
                     PlannedPLList.get(index).setExist("Exist");
-                    PlannedPLList.get(index).setNoOfExixt(noOfExist);
+                    PlannedPLList.get(index).setNoOfExixt(noOfExist - 1);// minus one because one for the copies
+                    PlannedPLList.get(index).setNoOfCopies(1);
                     adapter2.notifyDataSetChanged();
 
                     calculateTotal();
@@ -869,7 +939,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
         ArrayList<String> gradeList2 = new ArrayList<>();
         ArrayAdapter<String> gradeAdapter;
 
-        final String[] gradeText = {PlannedPLList.get(index).getGrade()};
+//        final String[] gradeText = {PlannedPLList.get(index).getGrade()};
         gradeList2.clear();
         gradeList2.add("Fresh");
         gradeList2.add("BS");
@@ -887,7 +957,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 //                switch (parent.getId()) {
 //                    case R.id.addNewRaw_grade:
-                gradeText[0] = parent.getItemAtPosition(position).toString();
+                selectedGrade = parent.getItemAtPosition(position).toString();
 //                        break;
 //                }
             }
@@ -898,6 +968,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
             }
         });
         gradeSpinner2.setSelection(gradeList.indexOf(PlannedPLList.get(index).getGrade()));
+        selectedGrade = gradeList.get(gradeList.indexOf(PlannedPLList.get(index).getGrade()));
         customerD.setText(PlannedPLList.get(index).getCustName());
         customerName2 = PlannedPLList.get(index).getCustName();
         supplierD.setText(PlannedPLList.get(index).getSupplier());
@@ -953,28 +1024,45 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                                     if (!TextUtils.isEmpty(widthL)) {
                                         if (!TextUtils.isEmpty(lengthL)) {
                                             if (!TextUtils.isEmpty(noOfPiecesL)) {
-                                                if (!TextUtils.isEmpty(gradeText[0])) {
-
+                                                if (!TextUtils.isEmpty(selectedGrade)) {
                                                     Log.e("save", "2");
                                                     BundleInfo bundleInfo = new BundleInfo();
                                                     bundleInfo.setNoOfPieces(Double.parseDouble(piecesD.getText().toString()));
                                                     bundleInfo.setLength(Double.parseDouble(lengthD.getText().toString()));
                                                     bundleInfo.setWidth(Double.parseDouble(widthD.getText().toString()));
                                                     bundleInfo.setThickness(Double.parseDouble(thickD.getText().toString()));
-                                                    bundleInfo.setGrade(gradeText[0]);
+                                                    bundleInfo.setGrade(selectedGrade);
                                                     int a = addedBefore(bundleInfo, index);
 
                                                     if (a != -1)
                                                         Toast.makeText(PlannedPackingList.this, "This item is added before ! Please change its copies", Toast.LENGTH_LONG).show();
                                                     else {
+                                                        isCheckForAnyEdit = true;
+                                                        String getGradeAsString = "" + selectedGrade;
+/*
+                                                        Log.e("comparePlannedPLList", "getNoOfPieces:" + PlannedPLList.get(index).getNoOfPieces()
+                                                                + "getLength:" + PlannedPLList.get(index).getLength()
+                                                                + "getWidth:" + PlannedPLList.get(index).getWidth()
+                                                                + "getThickness:" + PlannedPLList.get(index).getThickness()
+                                                                + "getGrade:" + PlannedPLList.get(index).getGrade());
 
+                                                        Log.e("comparedialog", "getNoOfPieces:" + Double.parseDouble(piecesD.getText().toString())
+                                                                + "getLength:" + Double.parseDouble(lengthD.getText().toString())
+                                                                + "getWidth:" + Double.parseDouble(widthD.getText().toString())
+                                                                + "getThickness:" + Double.parseDouble(thickD.getText().toString())
+                                                                + "getGrade:" + selectedGrade);
 
-                                                        Log.e("save", "3");
+                                                        Log.e("compareresult", "" + (PlannedPLList.get(index).getNoOfPieces() == Double.parseDouble(piecesD.getText().toString())));
+                                                        Log.e("compareresult", "" + (PlannedPLList.get(index).getLength() == Double.parseDouble(lengthD.getText().toString())));
+                                                        Log.e("compareresult", "" + (PlannedPLList.get(index).getWidth() == Double.parseDouble(widthD.getText().toString())));
+                                                        Log.e("compareresult", "" + (PlannedPLList.get(index).getThickness() == Double.parseDouble(thickD.getText().toString())));
+                                                        Log.e("compareresult", "" + (PlannedPLList.get(index).getGrade().equals(selectedGrade)));
+*/
                                                         if (PlannedPLList.get(index).getNoOfPieces() == Double.parseDouble(piecesD.getText().toString()) &&
                                                                 PlannedPLList.get(index).getLength() == Double.parseDouble(lengthD.getText().toString()) &&
                                                                 PlannedPLList.get(index).getWidth() == Double.parseDouble(widthD.getText().toString()) &&
                                                                 PlannedPLList.get(index).getThickness() == Double.parseDouble(thickD.getText().toString()) &&
-                                                                PlannedPLList.get(index).getGrade() == gradeText[0]) {
+                                                                PlannedPLList.get(index).getGrade().equals(getGradeAsString)) {
                                                             // do nothing
                                                             Log.e("save", "4");
                                                         } else {
@@ -991,18 +1079,17 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                                                         PlannedPLList.get(index).setPackingList(plD.getText().toString());
                                                         PlannedPLList.get(index).setDestination(destD.getText().toString());
                                                         PlannedPLList.get(index).setOrderNo(orderNoD.getText().toString());
-                                                        PlannedPLList.get(index).setGrade(gradeText[0]);
+                                                        PlannedPLList.get(index).setGrade(selectedGrade);
 
                                                         adapter2.notifyDataSetChanged();
 
                                                         //compare();
-                                                        Log.e("save", "6");
+                                                        Log.e("selectedGrade", selectedGrade);
                                                         calculateTotal();
 
                                                         dialog.dismiss();
                                                     }
                                                 }
-
                                             } else {
                                                 noOfPieces.setError("Required!");
                                             }
@@ -1039,32 +1126,105 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
     public void deleteItemDialog(int index) {
 
+        if (isCheckForAnyEdit || isUsedClosedResults || isCheckForCopiesEdit) {
+            showSaveFirstDialog();
+        } else {
+            if (PlannedPLList.get(index).getExist().equals("Not Exist") && PlannedPLList.get(index).getIsOld() == 0) {
+                PlannedPLList.remove(index);
+                adapter2.notifyDataSetChanged();
+                calculateTotal();
+            } else {
+
+                Dialog dialog = new Dialog(PlannedPackingList.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.no_of_copy_planned_item);
+
+                EditText copies = dialog.findViewById(R.id.copies);
+                Button save = dialog.findViewById(R.id.save);
+                save.setText("Delete");
+
+                copies.setText("" + PlannedPLList.get(index).getNoOfCopies());
+
+                save.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String copy = copies.getText().toString();
+
+                        if (!TextUtils.isEmpty(copy) && Integer.parseInt(copy) > 0) {
+                            if (Integer.parseInt(copy) <= PlannedPLList.get(index).getNoOfCopies()) {                // ***************** edit this
+                                plannedPLListJSONDELETE = new JSONArray();
+                                for (int i = 0; i < Integer.parseInt(copy); i++) {
+                                    plannedPLListJSONDELETE.put(PlannedPLList.get(index).getJSONObject());
+                                }
+
+                                ind = index;
+                                if (PlannedPLList.get(index).getIsOld() == 1) {
+                                    progressDialog.show();
+                                    new JSONTask7().execute();
+                                } else {
+
+                                    PlannedPLList.remove(index);
+                                    adapter2.notifyDataSetChanged();
+
+                                    calculateTotal();
+                                }
+                                dialog.dismiss();
+                            } else {
+                                if (PlannedPLList.get(index).getNoOfCopies() == 1)
+                                    copies.setError("There is " + PlannedPLList.get(index).getNoOfCopies() + " bundle!");
+                                else
+                                    copies.setError("There are " + PlannedPLList.get(index).getNoOfCopies() + " bundles!");
+                            }
+                        } else {
+                            copies.setError("Please enter number of bundles!");
+                        }
+                    }
+                });
+
+                dialog.show();
+            }
+
+//            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//            builder.setMessage("Are you want delete  (" + PlannedPLList.get(index).getNoOfCopies() + ")  of selected bundles? ");
+//            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    plannedPLListJSONDELETE = new JSONArray();
+//                    for (int i = 0; i < PlannedPLList.get(index).getNoOfCopies(); i++) {
+//                        plannedPLListJSONDELETE.put(PlannedPLList.get(index).getJSONObject());
+//                    }
+//
+//                    ind = index;
+//                    if (PlannedPLList.get(index).getIsOld() == 1) {
+//                        progressDialog.show();
+//                        new JSONTask7().execute();
+//                    } else {
+//
+//                        PlannedPLList.remove(index);
+//                        adapter2.notifyDataSetChanged();
+//
+//                        calculateTotal();
+//                    }
+//                }
+//            });
+//
+//            builder.show();
+        }
+
+    }
+
+    void showSaveFirstDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Are you want delete selected bundles? ");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setMessage("Please save the changes first!");
+        builder.setCancelable(false);
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                plannedPLListJSONDELETE = new JSONArray();
-                for (int i = 0; i < PlannedPLList.get(index).getNoOfCopies(); i++) {
-                    plannedPLListJSONDELETE.put(PlannedPLList.get(index).getJSONObject());
-                }
 
-                ind = index;
-                if (PlannedPLList.get(index).getIsOld() == 1) {
-                    progressDialog.show();
-                    new JSONTask7().execute();
-                } else {
-
-                    PlannedPLList.remove(index);
-                    adapter2.notifyDataSetChanged();
-
-                    calculateTotal();
-                }
             }
         });
 
         builder.show();
-
     }
 
     public void editNoOfItemsDialog(int index) {
@@ -1081,19 +1241,18 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 String copy = copies.getText().toString();
 
                 if (!TextUtils.isEmpty(copy) && Integer.parseInt(copy) > 0) {                // ***************** edit this
-
-                    if (PlannedPLList.get(index).getExist().contains("Planned")) {
+                    isCheckForCopiesEdit = true;
+                    if (PlannedPLList.get(index).getExist().contains("Planned") || PlannedPLList.get(index).getExist().contains("Exist")) {
                         Log.e("****", "in");
                         if (Integer.parseInt(copy) <= (PlannedPLList.get(index).getNoOfExixt() + PlannedPLList.get(index).getNoOfCopies())) {
 
                             PlannedPLList.get(index).setNoOfExixt(
                                     (PlannedPLList.get(index).getNoOfExixt() + PlannedPLList.get(index).getNoOfCopies()) - Integer.parseInt(copy));
                             PlannedPLList.get(index).setNoOfCopies(Integer.parseInt(copy));
-                            Log.e("monitor" , "getNoOfCopies:" + PlannedPLList.get(index).getNoOfCopies() + ":getNoOfExixt:" + PlannedPLList.get(index).getNoOfExixt());
+                            Log.e("monitor", "getNoOfCopies:" + PlannedPLList.get(index).getNoOfCopies() + ":getNoOfExixt:" + PlannedPLList.get(index).getNoOfExixt());
                             adapter2.notifyDataSetChanged();
                             calculateTotal();
 
@@ -1352,6 +1511,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                             //bundleInfo.setSerialNo(innerObject.getString("B_SERIAL"));
                             bundleInfo.setBackingList(innerObject.getString("BACKING_LIST"));
                             bundleInfo.setNoOfExist(innerObject.getInt("COUNT"));
+                            Log.e("monitor3", ":getNoOfExixt:" + innerObject.getInt("COUNT"));
 
                             bundleInfosList.add(bundleInfo);
 
@@ -1536,7 +1696,10 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                     check = false;
                     plannedPLListJSON = new JSONArray();
                     PlannedPLList.clear();
-                    paclingList.setText("");
+                    isCheckForAnyEdit = false;
+                    isUsedClosedResults = false;
+                    if (!isCheckForCopiesEdit)
+                        paclingList.setText("");
                     destination.setText("");
                     orderNo.setText("");
                     thickness.setText("");
@@ -1742,14 +1905,16 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-
+            currentPackingListBundles.clear();
             if (s != null) {
 
+                isCheckForCopiesEdit = false;
+                isCheckForAnyEdit = false;
+                isUsedClosedResults = false;
                 if (oldList.size() > 0) {
                     customerNo = oldList.get(0).getCustNo();
                     if (!TextUtils.isEmpty(paclingList.getText().toString()))
                         getOldPList(paclingList.getText().toString());
-
 
 //                    for (int i = 0; i < PLList.size(); i++) {
 //                        plannedPLListJSON.put(PLList.get(i).getJSONObject());
@@ -1848,7 +2013,20 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
         for (int i = 0; i < PlannedPLList.size(); i++) {
             if (!PlannedPLList.get(i).getExist().equals("Planned")) {
+
+               /* Log.e("comparePlannedPLList", "getNoOfPieces:" + PlannedPLList.get(i).getNoOfPieces()
+                        + "getLength:" + PlannedPLList.get(i).getLength()
+                        + "getWidth:" + PlannedPLList.get(i).getWidth()
+                        + "getThickness:" + PlannedPLList.get(i).getThickness()
+                        + "getGrade:" + PlannedPLList.get(i).getGrade());*/
+
                 for (int k = 0; k < bundleInfosList.size(); k++) {
+
+                   /* Log.e("comparebundleInfosList", "getNoOfPieces:" + bundleInfosList.get(k).getNoOfPieces()
+                            + "getLength:" + bundleInfosList.get(k).getLength()
+                            + "getWidth:" + bundleInfosList.get(k).getWidth()
+                            + "getThickness:" + bundleInfosList.get(k).getThickness()
+                            + "getGrade:" + bundleInfosList.get(k).getGrade());*/
 
                     if (PlannedPLList.get(i).getThickness() == bundleInfosList.get(k).getThickness() &&
                             PlannedPLList.get(i).getWidth() == bundleInfosList.get(k).getWidth() &&
@@ -1857,18 +2035,26 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                             PlannedPLList.get(i).getGrade().equals(bundleInfosList.get(k).getGrade())) {
 
                         PlannedPLList.get(i).setExist("Exist");
-                        PlannedPLList.get(i).setNoOfExixt(bundleInfosList.get(k).getNoOfExist());
+                        PlannedPLList.get(i).setNoOfExixt(bundleInfosList.get(k).getNoOfExist() - 1);
 
                         break;
                     } else {
-                        PlannedPLList.get(i).setExist("Not Exist");
-                        PlannedPLList.get(i).setNoOfExixt(0);
+                        if (checkInOldPackingList(PlannedPLList.get(i))) {
+                            PlannedPLList.get(i).setExist("Planned");
+                            PlannedPLList.get(i).setNoOfExixt(0);
+                            Log.e("checkdifference4", PlannedPLList.get(i).getExist());
+                            k = bundleInfosList.size();
+                        } else {
+                            PlannedPLList.get(i).setExist("Not Exist");
+                            PlannedPLList.get(i).setNoOfExixt(0);
+                            Log.e("checkdifference4", PlannedPLList.get(i).getExist());
+                        }
                     }
 
-                    Log.e("****out1", "***" + PlannedPLList.get(i).getThickness() + "==" + bundleInfosList.get(k).getThickness() + "&&" +
-                            PlannedPLList.get(i).getWidth() + "==" + bundleInfosList.get(k).getWidth() + "&&" +
-                            PlannedPLList.get(i).getLength() + "==" + bundleInfosList.get(k).getLength() + "&&" +
-                            PlannedPLList.get(i).getNoOfPieces() + "==" + bundleInfosList.get(k).getNoOfPieces());
+//                    Log.e("****out1", "***" + PlannedPLList.get(i).getThickness() + "==" + bundleInfosList.get(k).getThickness() + "&&" +
+//                            PlannedPLList.get(i).getWidth() + "==" + bundleInfosList.get(k).getWidth() + "&&" +
+//                            PlannedPLList.get(i).getLength() + "==" + bundleInfosList.get(k).getLength() + "&&" +
+//                            PlannedPLList.get(i).getNoOfPieces() + "==" + bundleInfosList.get(k).getNoOfPieces());
 
                 }
             } else {
@@ -1883,7 +2069,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                                 PlannedPLList.get(i).getGrade().equals(bundleInfosList.get(k).getGrade())) {
 
                             //PlannedPLList.get(i).setExist("Exist");
-                            PlannedPLList.get(i).setNoOfExixt(bundleInfosList.get(k).getNoOfExist());
+                            PlannedPLList.get(i).setNoOfExixt(bundleInfosList.get(k).getNoOfExist());//bundleInfosList.get(k).getNoOfExist() -
 
                             break;
                         } else {
@@ -1908,6 +2094,37 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
         adapter2.notifyDataSetChanged();
 
 
+    }
+
+    boolean checkInOldPackingList(PlannedPL raw) {
+//        for (int i = 0; i < oldList.size(); i++)
+//            if (raw.getThickness() == oldList.get(i).getThickness() &&
+//                    raw.getWidth() == oldList.get(i).getWidth() &&
+//                    raw.getLength() == oldList.get(i).getLength() &&
+//                    raw.getNoOfPieces() == oldList.get(i).getNoOfPieces() &&
+//                    raw.getGrade().equals(oldList.get(i).getGrade())) {
+//                return true;
+//            }
+
+
+//        for (int i = 0; i < oldList.size(); i++)
+
+        Log.e("comparePlannedPLList", "  Grade:" + raw.getGrade() + oldList.get(raw.getIndex()).getGrade()
+                + "  getNoOfPieces:" + (raw.getNoOfPieces() == oldList.get(raw.getIndex()).getNoOfPieces())
+                + "  getLength:" + (raw.getLength() == oldList.get(raw.getIndex()).getLength())
+                + "  getWidth:" + (raw.getWidth() == oldList.get(raw.getIndex()).getWidth())
+                + "  getThickness:" + (raw.getThickness() == oldList.get(raw.getIndex()).getThickness())
+                + "  getGrade:" + (raw.getGrade() == (oldList.get(raw.getIndex()).getGrade())));
+
+        if (raw.getThickness() == oldList.get(raw.getIndex()).getThickness() &&
+                raw.getWidth() == oldList.get(raw.getIndex()).getWidth() &&
+                raw.getLength() == oldList.get(raw.getIndex()).getLength() &&
+                raw.getNoOfPieces() == oldList.get(raw.getIndex()).getNoOfPieces() &&
+                raw.getGrade().equals(oldList.get(raw.getIndex()).getGrade())) {
+            return true;
+        }
+
+        return false;
     }
 
     void calculateTotal() {

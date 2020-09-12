@@ -173,5 +173,6 @@
     <string name="planned_unplanned_inventory_report">Planned Unplanned Inventory Report</string>
 
     <string name="export_to_excel">Export To PDF</string>
+    <string name="edit_confirm_message">Are you want save the changes first?</string>
 
 </resources>
