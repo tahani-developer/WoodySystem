@@ -844,6 +844,7 @@ public class LoadingOrder2 extends AppCompatActivity {
 
         }
 
+        @SuppressLint("WrongThread")
         @Override
         protected String doInBackground(String... params) {
             try {
