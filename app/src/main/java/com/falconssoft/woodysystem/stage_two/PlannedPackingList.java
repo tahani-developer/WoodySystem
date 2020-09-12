@@ -197,10 +197,10 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                 break;
             case R.id.check_button:
 //                isCheckForCopiesEdit = false;
-                if (isCheckForCopiesEdit) {
-                    saveButtonMethod();
-                } else
-                    checkBundlesExistence();
+//                if (isCheckForCopiesEdit) {
+//                    saveButtonMethod();
+//                } else
+                checkBundlesExistence();
                 break;
             case R.id.save_button:
                 if (PlannedPLList.size() > 0)
@@ -240,20 +240,23 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
     void checkBundlesExistence() {
         // if (!isUsedClosedResults) {
-        plannedPLListJSON = new JSONArray();
-        for (int i = 0; i < PlannedPLList.size(); i++) {
-            for (int k = 0; k < PlannedPLList.get(i).getNoOfCopies(); k++) {
-                plannedPLListJSON.put(PlannedPLList.get(i).getJSONObject());
+        if (!isCheckForCopiesEdit) {
+            plannedPLListJSON = new JSONArray();
+            for (int i = 0; i < PlannedPLList.size(); i++) {
+                for (int k = 0; k < PlannedPLList.get(i).getNoOfCopies(); k++) {
+                    plannedPLListJSON.put(PlannedPLList.get(i).getJSONObject());
 //                Log.e("monitor2", "getNoOfCopies:"
 //                        + PlannedPLList.get(i).getNoOfCopies() + ":getNoOfExixt:" + PlannedPLList.get(i).getNoOfExixt());
 
+                }
             }
-        }
 
-        if (plannedPLListJSON.length() > 0) {
-            new JSONTask2().execute();
-            bundleInfosList.clear();
-        }
+            if (plannedPLListJSON.length() > 0) {
+                new JSONTask2().execute();
+                bundleInfosList.clear();
+            }
+        } else
+            showSaveFirstDialog();
 
 //        } else {
 //            showSaveFirstDialog();
@@ -2035,7 +2038,8 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                             PlannedPLList.get(i).getGrade().equals(bundleInfosList.get(k).getGrade())) {
 
                         PlannedPLList.get(i).setExist("Exist");
-                        PlannedPLList.get(i).setNoOfExixt(bundleInfosList.get(k).getNoOfExist() - 1);
+                        if (checkInOldPackingList(PlannedPLList.get(i)))
+                            PlannedPLList.get(i).setNoOfExixt(bundleInfosList.get(k).getNoOfExist() - 1);
 
                         break;
                     } else {
@@ -2081,10 +2085,10 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                         PlannedPLList.get(i).setExist("Hide");
                     }
 
-                    Log.e("****out2", "***" + PlannedPLList.get(i).getThickness() + "==" + bundleInfosList.get(k).getThickness() + "&&" +
-                            PlannedPLList.get(i).getWidth() + "==" + bundleInfosList.get(k).getWidth() + "&&" +
-                            PlannedPLList.get(i).getLength() + "==" + bundleInfosList.get(k).getLength() + "&&" +
-                            PlannedPLList.get(i).getNoOfPieces() + "==" + bundleInfosList.get(k).getNoOfPieces());
+//                    Log.e("****out2", "***" + PlannedPLList.get(i).getThickness() + "==" + bundleInfosList.get(k).getThickness() + "&&" +
+//                            PlannedPLList.get(i).getWidth() + "==" + bundleInfosList.get(k).getWidth() + "&&" +
+//                            PlannedPLList.get(i).getLength() + "==" + bundleInfosList.get(k).getLength() + "&&" +
+//                            PlannedPLList.get(i).getNoOfPieces() + "==" + bundleInfosList.get(k).getNoOfPieces());
 
                 }
 

@@ -1248,6 +1248,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                     public void onClick(View v) {
                         if (password.getText().toString().equals("0100100")) {
                             bundleInfoForPrint.clear();
+                            jsonArrayBundles = new JSONArray();
 
                             InventoryReportAdapter obj = new InventoryReportAdapter();
                             List<BundleInfo> selected = obj.getSelectedItems();
