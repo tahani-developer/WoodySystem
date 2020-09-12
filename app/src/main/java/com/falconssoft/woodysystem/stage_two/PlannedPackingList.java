@@ -424,110 +424,119 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
         lengthLocal = length.getText().toString();
         noOfPiecesLocal = noOfPieces.getText().toString();
 
-        if (!TextUtils.isEmpty(customerName)) {
-            //if (!TextUtils.isEmpty(supplierName)) {
-            if (!TextUtils.isEmpty(packLiastLocal)) {
-                if (!TextUtils.isEmpty(destinationLocal)) {
-                    if (!TextUtils.isEmpty(orderNoLocal)) {
-                        if (!TextUtils.isEmpty(thicknessLocal)) {
-                            if (!TextUtils.isEmpty(widthLocal)) {
-                                if (!TextUtils.isEmpty(lengthLocal)) {
-                                    if (!TextUtils.isEmpty(noOfPiecesLocal)) {
-                                        if (!TextUtils.isEmpty(gradeText)) {
+        if (!isUsedClosedResults)
+            if (!isCheckForCopiesEdit)
+                if (!isCheckForAnyEdit) {
+                    if (!TextUtils.isEmpty(customerName)) {
+                        //if (!TextUtils.isEmpty(supplierName)) {
+                        if (!TextUtils.isEmpty(packLiastLocal)) {
+                            if (!TextUtils.isEmpty(destinationLocal)) {
+                                if (!TextUtils.isEmpty(orderNoLocal)) {
+                                    if (!TextUtils.isEmpty(thicknessLocal)) {
+                                        if (!TextUtils.isEmpty(widthLocal)) {
+                                            if (!TextUtils.isEmpty(lengthLocal)) {
+                                                if (!TextUtils.isEmpty(noOfPiecesLocal)) {
+                                                    if (!TextUtils.isEmpty(gradeText)) {
 
-                                            BundleInfo bundleInfo = new BundleInfo();
-                                            bundleInfo.setNoOfPieces(Double.parseDouble(noOfPiecesLocal));
-                                            bundleInfo.setLength(Double.parseDouble(lengthLocal));
-                                            bundleInfo.setWidth(Double.parseDouble(widthLocal));
-                                            bundleInfo.setThickness(Double.parseDouble(thicknessLocal));
-                                            bundleInfo.setGrade(gradeText);
-                                            int a = addedBefore(bundleInfo, -1);
+                                                        BundleInfo bundleInfo = new BundleInfo();
+                                                        bundleInfo.setNoOfPieces(Double.parseDouble(noOfPiecesLocal));
+                                                        bundleInfo.setLength(Double.parseDouble(lengthLocal));
+                                                        bundleInfo.setWidth(Double.parseDouble(widthLocal));
+                                                        bundleInfo.setThickness(Double.parseDouble(thicknessLocal));
+                                                        bundleInfo.setGrade(gradeText);
+                                                        int a = addedBefore(bundleInfo, -1);
 
-                                            if (a != -1)
-                                                Toast.makeText(PlannedPackingList.this, "This item is added before ! Please change its copies", Toast.LENGTH_LONG).show();
-                                            else {
-                                                searchCustomer.setError(null);
-                                                searchSupplier.setError(null);
-                                                paclingList.setError(null);
-                                                destination.setError(null);
-                                                orderNo.setError(null);
+                                                        if (a != -1)
+                                                            Toast.makeText(PlannedPackingList.this, "This item is added before ! Please change its copies", Toast.LENGTH_LONG).show();
+                                                        else {
+                                                            searchCustomer.setError(null);
+                                                            searchSupplier.setError(null);
+                                                            paclingList.setError(null);
+                                                            destination.setError(null);
+                                                            orderNo.setError(null);
 
-                                                thicknessLocal = formatDecimalValue(thicknessLocal);
-                                                widthLocal = formatDecimalValue(widthLocal);
-                                                lengthLocal = formatDecimalValue(lengthLocal);
-                                                noOfPiecesLocal = formatDecimalValue(noOfPiecesLocal);
+                                                            thicknessLocal = formatDecimalValue(thicknessLocal);
+                                                            widthLocal = formatDecimalValue(widthLocal);
+                                                            lengthLocal = formatDecimalValue(lengthLocal);
+                                                            noOfPiecesLocal = formatDecimalValue(noOfPiecesLocal);
 
-                                                thicknessLocal = isContainValueAfterDot(thicknessLocal);
-                                                widthLocal = isContainValueAfterDot(widthLocal);
-                                                lengthLocal = isContainValueAfterDot(lengthLocal);
-                                                noOfPiecesLocal = isContainValueAfterDot(noOfPiecesLocal);
+                                                            thicknessLocal = isContainValueAfterDot(thicknessLocal);
+                                                            widthLocal = isContainValueAfterDot(widthLocal);
+                                                            lengthLocal = isContainValueAfterDot(lengthLocal);
+                                                            noOfPiecesLocal = isContainValueAfterDot(noOfPiecesLocal);
 
 
-                                                PlannedPL packingList = new PlannedPL();
-                                                packingList.setDate(today);
-                                                packingList.setThickness(Double.parseDouble(thicknessLocal));
-                                                packingList.setWidth(Double.parseDouble(widthLocal));
-                                                packingList.setLength(Double.parseDouble(lengthLocal));
-                                                packingList.setNoOfPieces(Double.parseDouble(noOfPiecesLocal));
-                                                packingList.setCustName(customerName);
-                                                packingList.setSupplier(supplierName);
-                                                packingList.setCustNo(customerNo);
-                                                packingList.setPackingList(packLiastLocal);
-                                                packingList.setDestination(destinationLocal);
-                                                packingList.setOrderNo(orderNoLocal);
-                                                packingList.setGrade(gradeText);
-                                                packingList.setExist("null");
-                                                packingList.setNoOfCopies(1);
-                                                packingList.setLoaded(0);
-                                                packingList.setIsOld(0);
+                                                            PlannedPL packingList = new PlannedPL();
+                                                            packingList.setDate(today);
+                                                            packingList.setThickness(Double.parseDouble(thicknessLocal));
+                                                            packingList.setWidth(Double.parseDouble(widthLocal));
+                                                            packingList.setLength(Double.parseDouble(lengthLocal));
+                                                            packingList.setNoOfPieces(Double.parseDouble(noOfPiecesLocal));
+                                                            packingList.setCustName(customerName);
+                                                            packingList.setSupplier(supplierName);
+                                                            packingList.setCustNo(customerNo);
+                                                            packingList.setPackingList(packLiastLocal);
+                                                            packingList.setDestination(destinationLocal);
+                                                            packingList.setOrderNo(orderNoLocal);
+                                                            packingList.setGrade(gradeText);
+                                                            packingList.setExist("null");
+                                                            packingList.setNoOfCopies(1);
+                                                            packingList.setLoaded(0);
+                                                            packingList.setIsOld(0);
 
-                                                if (!(packingList == null)) {
-                                                    PlannedPLList.add(packingList);
+                                                            if (!(packingList == null)) {
+                                                                PlannedPLList.add(packingList);
+                                                            }
+
+                                                            if (headerTableLayout.getChildCount() == 0)
+                                                                addTableHeader(headerTableLayout);
+
+                                                            adapter2.notifyDataSetChanged();
+
+                                                            thickness.setText("");
+                                                            width.setText("");
+                                                            length.setText("");
+                                                            noOfPieces.setText("");
+
+                                                            thickness.requestFocus();
+
+                                                            calculateTotal();
+                                                        }
+
+                                                    }
+                                                } else {
+                                                    noOfPieces.setError("Required!");
                                                 }
-
-                                                if (headerTableLayout.getChildCount() == 0)
-                                                    addTableHeader(headerTableLayout);
-
-                                                adapter2.notifyDataSetChanged();
-
-                                                thickness.setText("");
-                                                width.setText("");
-                                                length.setText("");
-                                                noOfPieces.setText("");
-
-                                                thickness.requestFocus();
-
-                                                calculateTotal();
+                                            } else {
+                                                length.setError("Required!");
                                             }
-
+                                        } else {
+                                            width.setError("Required!");
                                         }
                                     } else {
-                                        noOfPieces.setError("Required!");
+                                        thickness.setError("Required!");
                                     }
                                 } else {
-                                    length.setError("Required!");
+                                    orderNo.setError("Required!");
                                 }
                             } else {
-                                width.setError("Required!");
+                                destination.setError("Required!");
                             }
                         } else {
-                            thickness.setError("Required!");
+                            paclingList.setError("Required!");
                         }
-                    } else {
-                        orderNo.setError("Required!");
-                    }
-                } else {
-                    destination.setError("Required!");
-                }
-            } else {
-                paclingList.setError("Required!");
-            }
 //            } else {
 //                searchSupplier.setError("Please Select First!");
 //            }
-        } else {
-            searchCustomer.setError("Please Select First!");
-        }
+                    } else {
+                        searchCustomer.setError("Please Select First!");
+                    }
+                }else
+                    showConfirmEditDialog();
+            else
+                showConfirmEditDialog();
+        else
+            showConfirmEditDialog();
 
 
     }
