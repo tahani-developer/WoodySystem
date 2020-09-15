@@ -1140,16 +1140,21 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
     }
 
     public void deleteItemDialog(int index) {
-
-        if (isCheckForAnyEdit || isUsedClosedResults || isCheckForCopiesEdit) {
+        if (PlannedPLList.get(index).getIsOld() == 0) {//(PlannedPLList.get(index).getExist().equals("Not Exist") || PlannedPLList.get(index).getExist().equals("null"))
+            //&&
+            PlannedPLList.remove(index);
+            adapter2.notifyDataSetChanged();
+            calculateTotal();
+        }
+        else if (isCheckForAnyEdit || isUsedClosedResults || isCheckForCopiesEdit) {
             showSaveFirstDialog();
         } else {
-            if ((PlannedPLList.get(index).getExist().equals("Not Exist") || PlannedPLList.get(index).getExist().equals("null"))
-                    && PlannedPLList.get(index).getIsOld() == 0) {
-                PlannedPLList.remove(index);
-                adapter2.notifyDataSetChanged();
-                calculateTotal();
-            } else {
+//            if (PlannedPLList.get(index).getIsOld() == 0) {//(PlannedPLList.get(index).getExist().equals("Not Exist") || PlannedPLList.get(index).getExist().equals("null"))
+//                    //&&
+//                PlannedPLList.remove(index);
+//                adapter2.notifyDataSetChanged();
+//                calculateTotal();
+//            } else {
 
                 Dialog dialog = new Dialog(PlannedPackingList.this);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -1198,7 +1203,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                 });
 
                 dialog.show();
-            }
+//            }
 
 //            AlertDialog.Builder builder = new AlertDialog.Builder(this);
 //            builder.setMessage("Are you want delete  (" + PlannedPLList.get(index).getNoOfCopies() + ")  of selected bundles? ");
@@ -1244,60 +1249,71 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
     }
 
     public void editNoOfItemsDialog(int index) {
-
-        Dialog dialog = new Dialog(PlannedPackingList.this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.no_of_copy_planned_item);
-
-        EditText copies = dialog.findViewById(R.id.copies);
-        Button save = dialog.findViewById(R.id.save);
-
-        copies.setText("" + PlannedPLList.get(index).getNoOfCopies());
-
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String copy = copies.getText().toString();
-
-                if (!TextUtils.isEmpty(copy) && Integer.parseInt(copy) > 0) {
-                    if (PlannedPLList.get(index).getIsOld() == 1)
-                        isCheckForCopiesEdit = true;
-                    if (PlannedPLList.get(index).getExist().contains("Planned") || PlannedPLList.get(index).getExist().contains("Exist")) {
-                        Log.e("****", "in");
-                        if (Integer.parseInt(copy) <= (PlannedPLList.get(index).getNoOfExixt() + PlannedPLList.get(index).getNoOfCopies())) {
-
-                            PlannedPLList.get(index).setNoOfExixt(
-                                    (PlannedPLList.get(index).getNoOfExixt() + PlannedPLList.get(index).getNoOfCopies()) - Integer.parseInt(copy));
-                            PlannedPLList.get(index).setNoOfCopies(Integer.parseInt(copy));
-                            Log.e("monitor", "getNoOfCopies:" + PlannedPLList.get(index).getNoOfCopies() + ":getNoOfExixt:" + PlannedPLList.get(index).getNoOfExixt());
-                            adapter2.notifyDataSetChanged();
-                            calculateTotal();
-
-                            dialog.dismiss();
-                        } else {
-                            copies.setError("Exist(" + (PlannedPLList.get(index).getNoOfExixt() + PlannedPLList.get(index).getNoOfCopies()) + ")!");
-                        }
-
-
-                    } else {
-                        if (Integer.parseInt(copy) <= PlannedPLList.get(index).getNoOfExixt()) {
-
-                            PlannedPLList.get(index).setNoOfCopies(Integer.parseInt(copy));
-                            adapter2.notifyDataSetChanged();
-                            calculateTotal();
-
-                            dialog.dismiss();
-                        } else {
-                            copies.setError("Exist(" + PlannedPLList.get(index).getNoOfExixt() + ")!");
-                        }
-                    }
-                } else {
-                    copies.setError("Please Enter No Of Copies!");
-                }
+        boolean notNew = true;
+        for (int m = 0; m < PlannedPLList.size(); m++)
+            if (PlannedPLList.get(m).getExist().equals("null")) {// prevent edit copies: if he added new bundle without
+                // check existences then edit copies to bundle in table the user will stuck
+                notNew = false;
+                showSaveFirstDialog();
+                break;
             }
-        });
 
-        dialog.show();
+        if (notNew) {
+            Dialog dialog = new Dialog(PlannedPackingList.this);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.no_of_copy_planned_item);
+
+            EditText copies = dialog.findViewById(R.id.copies);
+            Button save = dialog.findViewById(R.id.save);
+
+            copies.setText("" + PlannedPLList.get(index).getNoOfCopies());
+
+            save.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String copy = copies.getText().toString();
+
+                    if (!TextUtils.isEmpty(copy) && Integer.parseInt(copy) > 0) {
+                        if (PlannedPLList.get(index).getIsOld() == 1)
+                            isCheckForCopiesEdit = true;
+                        if (PlannedPLList.get(index).getExist().contains("Planned") || PlannedPLList.get(index).getExist().contains("Exist")) {
+                            Log.e("****", "in");
+                            if (Integer.parseInt(copy) <= (PlannedPLList.get(index).getNoOfExixt() + PlannedPLList.get(index).getNoOfCopies())) {
+
+                                PlannedPLList.get(index).setNoOfExixt(
+                                        (PlannedPLList.get(index).getNoOfExixt() + PlannedPLList.get(index).getNoOfCopies()) - Integer.parseInt(copy));
+                                PlannedPLList.get(index).setNoOfCopies(Integer.parseInt(copy));
+                                Log.e("monitor", "getNoOfCopies:" + PlannedPLList.get(index).getNoOfCopies() + ":getNoOfExixt:" + PlannedPLList.get(index).getNoOfExixt());
+                                adapter2.notifyDataSetChanged();
+                                calculateTotal();
+
+                                dialog.dismiss();
+                            } else {
+                                copies.setError("Exist(" + (PlannedPLList.get(index).getNoOfExixt() + PlannedPLList.get(index).getNoOfCopies()) + ")!");
+                            }
+
+
+                        } else {
+                            if (Integer.parseInt(copy) <= PlannedPLList.get(index).getNoOfExixt()) {
+
+                                PlannedPLList.get(index).setNoOfCopies(Integer.parseInt(copy));
+                                adapter2.notifyDataSetChanged();
+                                calculateTotal();
+
+                                dialog.dismiss();
+                            } else {
+                                copies.setError("Exist(" + PlannedPLList.get(index).getNoOfExixt() + ")!");
+                            }
+                        }
+                    } else {
+                        copies.setError("Please Enter No Of Copies!");
+                    }
+                }
+            });
+
+            dialog.show();
+        }
+
 
     }
 
@@ -2054,7 +2070,11 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                         PlannedPLList.get(i).setExist("Exist");
                         if (checkInOldPackingList(PlannedPLList.get(i)))
                             PlannedPLList.get(i).setNoOfExixt(bundleInfosList.get(k).getNoOfExist() - 1);
-
+                        else {// when adding new bundle and check  existence => i add copies 1 to prevent the error
+                            // in existence no. when he change copies before check
+                            PlannedPLList.get(i).setNoOfExixt(bundleInfosList.get(k).getNoOfExist());
+                            PlannedPLList.get(i).setNoOfCopies(1);
+                        }
                         break;
                     } else {
                         if (checkInOldPackingList(PlannedPLList.get(i))) {
