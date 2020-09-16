@@ -1145,8 +1145,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
             PlannedPLList.remove(index);
             adapter2.notifyDataSetChanged();
             calculateTotal();
-        }
-        else if (isCheckForAnyEdit || isUsedClosedResults || isCheckForCopiesEdit) {
+        } else if (isCheckForAnyEdit || isUsedClosedResults || isCheckForCopiesEdit) {
             showSaveFirstDialog();
         } else {
 //            if (PlannedPLList.get(index).getIsOld() == 0) {//(PlannedPLList.get(index).getExist().equals("Not Exist") || PlannedPLList.get(index).getExist().equals("null"))
@@ -1156,53 +1155,53 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 //                calculateTotal();
 //            } else {
 
-                Dialog dialog = new Dialog(PlannedPackingList.this);
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setContentView(R.layout.no_of_copy_planned_item);
+            Dialog dialog = new Dialog(PlannedPackingList.this);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.no_of_copy_planned_item);
 
-                EditText copies = dialog.findViewById(R.id.copies);
-                Button save = dialog.findViewById(R.id.save);
-                save.setText("Delete");
+            EditText copies = dialog.findViewById(R.id.copies);
+            Button save = dialog.findViewById(R.id.save);
+            save.setText("Delete");
 
-                copies.setText("" + PlannedPLList.get(index).getNoOfCopies());
+            copies.setText("" + PlannedPLList.get(index).getNoOfCopies());
 
-                save.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String copy = copies.getText().toString();
+            save.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String copy = copies.getText().toString();
 
-                        if (!TextUtils.isEmpty(copy) && Integer.parseInt(copy) > 0) {
-                            if (Integer.parseInt(copy) <= PlannedPLList.get(index).getNoOfCopies()) {                // ***************** edit this
-                                plannedPLListJSONDELETE = new JSONArray();
-                                for (int i = 0; i < Integer.parseInt(copy); i++) {
-                                    plannedPLListJSONDELETE.put(PlannedPLList.get(index).getJSONObject());
-                                }
-
-                                ind = index;
-                                if (PlannedPLList.get(index).getIsOld() == 1) {
-                                    progressDialog.show();
-                                    new JSONTask7().execute();
-                                } else {
-
-                                    PlannedPLList.remove(index);
-                                    adapter2.notifyDataSetChanged();
-
-                                    calculateTotal();
-                                }
-                                dialog.dismiss();
-                            } else {
-                                if (PlannedPLList.get(index).getNoOfCopies() == 1)
-                                    copies.setError("There is " + PlannedPLList.get(index).getNoOfCopies() + " bundle!");
-                                else
-                                    copies.setError("There are " + PlannedPLList.get(index).getNoOfCopies() + " bundles!");
+                    if (!TextUtils.isEmpty(copy) && Integer.parseInt(copy) > 0) {
+                        if (Integer.parseInt(copy) <= PlannedPLList.get(index).getNoOfCopies()) {                // ***************** edit this
+                            plannedPLListJSONDELETE = new JSONArray();
+                            for (int i = 0; i < Integer.parseInt(copy); i++) {
+                                plannedPLListJSONDELETE.put(PlannedPLList.get(index).getJSONObject());
                             }
-                        } else {
-                            copies.setError("Please enter number of bundles!");
-                        }
-                    }
-                });
 
-                dialog.show();
+                            ind = index;
+                            if (PlannedPLList.get(index).getIsOld() == 1) {
+                                progressDialog.show();
+                                new JSONTask7().execute();
+                            } else {
+
+                                PlannedPLList.remove(index);
+                                adapter2.notifyDataSetChanged();
+
+                                calculateTotal();
+                            }
+                            dialog.dismiss();
+                        } else {
+                            if (PlannedPLList.get(index).getNoOfCopies() == 1)
+                                copies.setError("There is " + PlannedPLList.get(index).getNoOfCopies() + " bundle!");
+                            else
+                                copies.setError("There are " + PlannedPLList.get(index).getNoOfCopies() + " bundles!");
+                        }
+                    } else {
+                        copies.setError("Please enter number of bundles!");
+                    }
+                }
+            });
+
+            dialog.show();
 //            }
 
 //            AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -2072,7 +2071,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                             PlannedPLList.get(i).setNoOfExixt(bundleInfosList.get(k).getNoOfExist() - 1);
                         else {// when adding new bundle and check  existence => i add copies 1 to prevent the error
                             // in existence no. when he change copies before check
-                            PlannedPLList.get(i).setNoOfExixt(bundleInfosList.get(k).getNoOfExist());
+                            PlannedPLList.get(i).setNoOfExixt(bundleInfosList.get(k).getNoOfExist() - 1);
                             PlannedPLList.get(i).setNoOfCopies(1);
                         }
                         break;
@@ -2081,7 +2080,8 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                             PlannedPLList.get(i).setExist("Planned");
                             PlannedPLList.get(i).setNoOfExixt(0);
                             Log.e("checkdifference4", PlannedPLList.get(i).getExist());
-                            k = bundleInfosList.size();
+                            //k = bundleInfosList.size();
+                            break;
                         } else {
                             PlannedPLList.get(i).setExist("Not Exist");
                             PlannedPLList.get(i).setNoOfExixt(0);
@@ -2135,17 +2135,6 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
     }
 
     boolean checkInOldPackingList(PlannedPL raw) {
-//        for (int i = 0; i < oldList.size(); i++)
-//            if (raw.getThickness() == oldList.get(i).getThickness() &&
-//                    raw.getWidth() == oldList.get(i).getWidth() &&
-//                    raw.getLength() == oldList.get(i).getLength() &&
-//                    raw.getNoOfPieces() == oldList.get(i).getNoOfPieces() &&
-//                    raw.getGrade().equals(oldList.get(i).getGrade())) {
-//                return true;
-//            }
-
-
-//        for (int i = 0; i < oldList.size(); i++)
 
         Log.e("comparePlannedPLList", "  Grade:" + raw.getGrade() + oldList.get(raw.getIndex()).getGrade()
                 + "  getNoOfPieces:" + (raw.getNoOfPieces() == oldList.get(raw.getIndex()).getNoOfPieces())
@@ -2153,14 +2142,17 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                 + "  getWidth:" + (raw.getWidth() == oldList.get(raw.getIndex()).getWidth())
                 + "  getThickness:" + (raw.getThickness() == oldList.get(raw.getIndex()).getThickness())
                 + "  getGrade:" + (raw.getGrade() == (oldList.get(raw.getIndex()).getGrade())));
+        // when i click on exist and choose one then return to the original it gave me it doesn't exist => so this to check if it exist
 
-        if (raw.getThickness() == oldList.get(raw.getIndex()).getThickness() &&
-                raw.getWidth() == oldList.get(raw.getIndex()).getWidth() &&
-                raw.getLength() == oldList.get(raw.getIndex()).getLength() &&
-                raw.getNoOfPieces() == oldList.get(raw.getIndex()).getNoOfPieces() &&
-                raw.getGrade().equals(oldList.get(raw.getIndex()).getGrade())) {
-            return true;
-        }
+        for (int i = 0; i < oldList.size(); i++)
+            if (paclingList.getText().toString().equals(oldList.get(i).getPackingList()))
+                if (raw.getThickness() == oldList.get(i).getThickness() &&
+                        raw.getWidth() == oldList.get(i).getWidth() &&
+                        raw.getLength() == oldList.get(i).getLength() &&
+                        raw.getNoOfPieces() == oldList.get(i).getNoOfPieces() &&
+                        raw.getGrade().equals(oldList.get(i).getGrade())) {
+                    return true;
+                }
 
         return false;
     }
