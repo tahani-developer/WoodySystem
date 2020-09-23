@@ -14,10 +14,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.falconssoft.woodysystem.models.BundleInfo;
-import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.NewRowInfo;
 import com.falconssoft.woodysystem.models.PlannedPL;
-import com.falconssoft.woodysystem.stage_two.PlannedUnplanned;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -121,7 +119,7 @@ public class ExportToPDF {
 
             doc.add(pdfPTableHeader);
             doc.add(pdfPTable);
-            Toast.makeText(context, context.getString(R.string.export_to_excel), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.export_to_pdf), Toast.LENGTH_LONG).show();
 
         } catch (DocumentException e) {
             e.printStackTrace();
@@ -204,7 +202,7 @@ public class ExportToPDF {
 
             doc.add(pdfPTableHeader);
             doc.add(pdfPTable);
-            Toast.makeText(context, context.getString(R.string.export_to_excel), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.export_to_pdf), Toast.LENGTH_LONG).show();
 
         } catch (DocumentException e) {
             e.printStackTrace();
@@ -267,7 +265,7 @@ public class ExportToPDF {
 
             doc.add(pdfPTableHeader);
             doc.add(pdfPTable);
-            Toast.makeText(context, context.getString(R.string.export_to_excel), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.export_to_pdf), Toast.LENGTH_LONG).show();
 
         } catch (DocumentException e) {
             e.printStackTrace();
@@ -335,7 +333,7 @@ public class ExportToPDF {
 
             doc.add(pdfPTableHeader);
             doc.add(pdfPTable);
-            Toast.makeText(context, context.getString(R.string.export_to_excel), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.export_to_pdf), Toast.LENGTH_LONG).show();
 
         } catch (DocumentException e) {
             e.printStackTrace();
@@ -413,7 +411,7 @@ public class ExportToPDF {
 
             doc.add(pdfPTableHeader);
             doc.add(pdfPTable);
-            Toast.makeText(context, context.getString(R.string.export_to_excel), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.export_to_pdf), Toast.LENGTH_LONG).show();
 
         } catch (DocumentException e) {
             e.printStackTrace();
@@ -491,7 +489,7 @@ public class ExportToPDF {
 
             doc.add(pdfPTableHeader);
             doc.add(pdfPTable);
-            Toast.makeText(context,context.getString(R.string.export_to_excel), Toast.LENGTH_LONG).show();
+            Toast.makeText(context,context.getString(R.string.export_to_pdf), Toast.LENGTH_LONG).show();
 
         } catch (DocumentException e) {
             e.printStackTrace();
@@ -543,7 +541,7 @@ public class ExportToPDF {
 
             doc.add(pdfPTableHeader);
             doc.add(pdfPTable);
-            Toast.makeText(context, context.getString(R.string.export_to_excel), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.export_to_pdf), Toast.LENGTH_LONG).show();
 
         } catch (DocumentException e) {
             e.printStackTrace();
@@ -632,7 +630,7 @@ public class ExportToPDF {
 
             doc.add(pdfPTableHeader);
             doc.add(pdfPTable);
-            Toast.makeText(context, context.getString(R.string.export_to_excel), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.export_to_pdf), Toast.LENGTH_LONG).show();
 
         } catch (DocumentException e) {
             e.printStackTrace();

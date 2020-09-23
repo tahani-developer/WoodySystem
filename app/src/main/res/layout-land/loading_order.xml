@@ -160,6 +160,40 @@
                     android:layout_height="35dp"
                     android:fontFamily="serif"
                     android:singleLine="true"
+                    android:nextFocusDown="@id/mSearchPieces"
+                    android:inputType="number"
+                    android:layout_marginVertical="5dp"
+                    android:layout_marginHorizontal="1dp"
+                    android:layout_weight="5"
+                    android:padding="5dp"
+                    app:defaultQueryHint="Srch L.." />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginRight="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/shape_with_corner">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/frame_shape"
+                    android:fontFamily="serif"
+                    android:text="@string/no_pieces"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+                <EditText
+                    android:id="@+id/mSearchPieces"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:fontFamily="serif"
+                    android:singleLine="true"
                     android:inputType="number"
                     android:layout_marginVertical="5dp"
                     android:layout_marginHorizontal="1dp"
@@ -172,7 +206,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.4"
+                android:layout_weight="1"
                 android:background="@drawable/shape_with_corner">
 
                 <Button

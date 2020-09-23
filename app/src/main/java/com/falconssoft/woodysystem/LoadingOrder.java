@@ -46,10 +46,10 @@ public class LoadingOrder extends AppCompatActivity {
     private ImageButton deleteBarcode;
     private GridView items;
     private Button done, barcode, addBundle;
-    private EditText searchViewTh, searchViewW, searchViewL;
+    private EditText searchViewTh, searchViewW, searchViewL, searchViewPices;
     private DatabaseHandler DHandler;
     public static List<BundleInfo> bundles, filteredList, selectedBundle;
-    private String f1 = "", f2 = "", f3 = "", barcodeValue = "", loc;
+    private String f1 = "", f2 = "", f3 = "", f4 = "", barcodeValue = "", loc;
     public static ItemsListAdapter adapter;
     private Activity activity;
     public static TextView searchBar;
@@ -71,13 +71,15 @@ public class LoadingOrder extends AppCompatActivity {
         searchViewTh = findViewById(R.id.mSearchTh);
         searchViewW = findViewById(R.id.mSearchW);
         searchViewL = findViewById(R.id.mSearchL);
+        searchViewPices = findViewById(R.id.mSearchPieces);
+
         done = (Button) findViewById(R.id.done);
         barcode = (Button) findViewById(R.id.barcode);
         addBundle = (Button) findViewById(R.id.add);
         deleteBarcode = (ImageButton) findViewById(R.id.deletebaarcode);
         listView2 = findViewById(R.id.verticalListView);
         listView = findViewById(R.id.listview);
-        adapter=new ItemsListAdapter();
+        adapter = new ItemsListAdapter();
 
         progressDialog = new ProgressDialog(this, R.style.MyAlertDialogStyle);
         progressDialog.setMessage("Please Waiting...");
@@ -290,6 +292,27 @@ public class LoadingOrder extends AppCompatActivity {
 //                return false;
 //            }
 //        });
+        searchViewPices.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                f4 = String.valueOf(s);
+                filter(1);
+//                filteredList = filter(bundles, f1, f2, f3);
+//                ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, filteredList, false);
+//                items.setAdapter(adapter);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
     }
 
     void filter(int flag) {
@@ -302,14 +325,15 @@ public class LoadingOrder extends AppCompatActivity {
                 if (
                         (("" + bundles.get(k).getThickness()).toUpperCase().startsWith(f1) || f1.equals("")) &&
                                 (("" + bundles.get(k).getWidth()).toUpperCase().startsWith(f2) || f2.equals("")) &&
-                                (("" + bundles.get(k).getLength()).toUpperCase().startsWith(f3) || f3.equals(""))) {
+                                (("" + bundles.get(k).getLength()).toUpperCase().startsWith(f3) || f3.equals("")) &&
+                                (("" + bundles.get(k).getNoOfPieces()).toUpperCase().startsWith(f4) || f4.equals(""))) {
                     bundles.get(k).setFoucoseColor("0");
                     tempList.add(bundles.get(k));
                 }
             }
 
         }
-         adapter = new ItemsListAdapter(LoadingOrder.this, tempList, false);
+        adapter = new ItemsListAdapter(LoadingOrder.this, tempList, false);
         items.setAdapter(adapter);
 //        return tempList;
     }
@@ -353,12 +377,12 @@ public class LoadingOrder extends AppCompatActivity {
 //                    items.post(new Runnable() {
 //                        @Override
 //                        public void run() {
-                            bundles.get(no).setFoucoseColor("1");
-                            items.setAdapter(adapter);
-                            filter(0);
-                            items.setSelection(no);
-                            items.requestFocusFromTouch();
-                            items.setSelection(no);
+                    bundles.get(no).setFoucoseColor("1");
+                    items.setAdapter(adapter);
+                    filter(0);
+                    items.setSelection(no);
+                    items.requestFocusFromTouch();
+                    items.setSelection(no);
 
 //                    items.smoothScrollToPosition(no);
 

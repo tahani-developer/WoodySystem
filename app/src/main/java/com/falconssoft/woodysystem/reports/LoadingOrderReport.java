@@ -50,6 +50,7 @@ import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.Orders;
 import com.falconssoft.woodysystem.models.Pictures;
 import com.falconssoft.woodysystem.models.Settings;
+import com.itextpdf.text.pdf.StringUtils;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -100,7 +101,7 @@ public class LoadingOrderReport extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private TextView textView, rowsCount, search;
     private static LinearLayout linearLayout, headerLinear;
-    private EditText from, to, searchBundleNo;
+    private EditText from, to, searchBundleNo, packingList, truckNo, containerNo;
     private Button arrow;
     //    private static HorizontalListView listView;
     private static ListView listView;
@@ -114,9 +115,8 @@ public class LoadingOrderReport extends AppCompatActivity {
     private Calendar myCalendar;
     Spinner location;
     private ArrayAdapter<String> locationAdapter;
-    private String loc = "", searchBundleNoString = "";
+    private String loc = "", searchBundleNoString = "", orderNo, myFormat, packingListText = "", truckNoText = "", containerNoText = "";
     private Settings generalSettings;
-    private String orderNo;
     private JSONArray bundleNo = new JSONArray();
     private JSONObject updateOrder = new JSONObject();
     private DatabaseHandler MHandler;
@@ -126,9 +126,7 @@ public class LoadingOrderReport extends AppCompatActivity {
     private int delteIndex = -1;
     private List<Orders> filtered;
 
-    String myFormat;
     SimpleDateFormat sdf;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,13 +148,16 @@ public class LoadingOrderReport extends AppCompatActivity {
         listView = findViewById(R.id.listview);
         linearLayout = findViewById(R.id.linearLayout);
         arrow = findViewById(R.id.arrow);
-        location = (Spinner) findViewById(R.id.Loding_Order_Location);
-        from = (EditText) findViewById(R.id.Loding_Order_from);
-        to = (EditText) findViewById(R.id.Loding_Order_to);
+        location = findViewById(R.id.Loding_Order_Location);
+        from = findViewById(R.id.Loding_Order_from);
+        to = findViewById(R.id.Loding_Order_to);
         searchBundleNo = findViewById(R.id.loadingOrder_report_search_bundleNo);
 //        searchBundleNo.addTextChangedListener(new watchTextChange(searchBundleNo));
         rowsCount = findViewById(R.id.loadingOrderReport_rows_count);
         search = findViewById(R.id.loadingOrder_report_search);
+        packingList = findViewById(R.id.loadingOrder_packingList);
+        truckNo = findViewById(R.id.loadingOrder_truckNo);
+        containerNo = findViewById(R.id.loadingOrder_containerNo);
 
         myFormat = "dd/MM/yyyy";
         sdf = new SimpleDateFormat(myFormat, Locale.US);
@@ -241,15 +242,20 @@ public class LoadingOrderReport extends AppCompatActivity {
                     filters(2);
             }
         });
+
+        packingList.addTextChangedListener(new WatchTextChange(packingList));
+        truckNo.addTextChangedListener(new WatchTextChange(truckNo));
+        containerNo.addTextChangedListener(new WatchTextChange(containerNo));
+
 //        fillTable(orders);
 
     }
 
-    class watchTextChange implements TextWatcher {
+    class WatchTextChange implements TextWatcher {
 
         private View view;
 
-        public watchTextChange(View view) {
+        public WatchTextChange(View view) {
             this.view = view;
         }
 
@@ -260,14 +266,36 @@ public class LoadingOrderReport extends AppCompatActivity {
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             switch (view.getId()) {
-                case R.id.loadingOrder_report_search_bundleNo:
-                    if (linearLayout.getVisibility() == View.VISIBLE)
-                        slideDown(linearLayout);
-
-                    searchBundleNoString = String.valueOf(s);//formatDecimalValue(String.valueOf(s));
-                    filters(1);
+                case R.id.loadingOrder_packingList:
+                    packingListText = packingList.getText().toString();
+                    if (packingList.getText().length() >= 2)
+                        filters(0);
+                    else
+                        filters(2);
+                    break;
+                case R.id.loadingOrder_truckNo:
+                    truckNoText = truckNo.getText().toString().toLowerCase();
+                    if (truckNo.getText().length() >= 2)
+                        filters(0);
+                    else
+                        filters(2);
+                    break;
+                case R.id.loadingOrder_containerNo:
+                    containerNoText = containerNo.getText().toString().toLowerCase();
+                    if (containerNo.getText().length() >= 2)
+                        filters(0);
+                    else
+                        filters(2);
                     break;
             }
+
+//                case R.id.loadingOrder_report_search_bundleNo:
+//                    if (linearLayout.getVisibility() == View.VISIBLE)
+//                        slideDown(linearLayout);
+//
+//                    searchBundleNoString = String.valueOf(s);//formatDecimalValue(String.valueOf(s));
+//                    filters(1);
+//                    break;
         }
 
         @Override
@@ -501,14 +529,19 @@ public class LoadingOrderReport extends AppCompatActivity {
             } else if (flag == 0) { // when using loc or date filter
                 try {
                     for (int k = 0; k < orders.size(); k++) {
+                        Log.e("followbug", "" + packingListText + "   getOrderNo  " + orders.get(k).getContainerNo().toLowerCase()
+                                + "    " + (packingListText.contains(orders.get(k).getOrderNo())));
 
-                        if ((formatDate(orders.get(k).getDateOfLoad()).after(formatDate(fromDate))
-                                || formatDate(orders.get(k).getDateOfLoad()).equals(formatDate(fromDate)) || fromDate.equals("")) &&
-                                (formatDate(orders.get(k).getDateOfLoad()).before(formatDate(toDate))
-                                        || formatDate(orders.get(k).getDateOfLoad()).equals(formatDate(toDate)) || toDate.equals("")) &&
-                                (loc.equals("") || loc.equals(orders.get(k).getLocation()))) {
-                            filtered.add(orders.get(k));
-                        }
+                        if (orders.get(k).getOrderNo().contains(packingListText) || packingListText.equals(""))
+                            if (orders.get(k).getPlacingNo().toLowerCase().contains(truckNoText) || truckNoText.equals(""))
+                                if (orders.get(k).getContainerNo().toLowerCase().contains(containerNoText) || containerNoText.equals(""))
+                                    if ((formatDate(orders.get(k).getDateOfLoad()).after(formatDate(fromDate))
+                                            || formatDate(orders.get(k).getDateOfLoad()).equals(formatDate(fromDate)) || fromDate.equals("")) &&
+                                            (formatDate(orders.get(k).getDateOfLoad()).before(formatDate(toDate))
+                                                    || formatDate(orders.get(k).getDateOfLoad()).equals(formatDate(toDate)) || toDate.equals("")) &&
+                                            (loc.equals("") || loc.equals(orders.get(k).getLocation()))) {
+                                        filtered.add(orders.get(k));
+                                    }
                     }
 
                 } catch (Exception e) {
@@ -1079,11 +1112,11 @@ public class LoadingOrderReport extends AppCompatActivity {
                         order.setDestination(finalObject.getString("DESTINATION"));
                         order.setPicture(finalObject.getString("PIC"));
 
-                        try{
-                        if (!order.getPicture().equals("null")) {
-                            InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC")).openStream();
-                            order.setPicBitmap(BitmapFactory.decodeStream(in));
-                        }
+                        try {
+                            if (!order.getPicture().equals("null")) {
+                                InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC")).openStream();
+                                order.setPicBitmap(BitmapFactory.decodeStream(in));
+                            }
                         } catch (Exception e) {
                             order.setPicture("null");
                         }

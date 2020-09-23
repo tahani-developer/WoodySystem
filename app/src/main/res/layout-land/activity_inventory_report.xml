@@ -937,7 +937,7 @@
                 android:paddingLeft="10dp"
                 android:paddingEnd="10dp"
                 android:paddingRight="10dp"
-                android:text="@string/export_to_excel"
+                android:text="@string/export_to_pdf"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="15sp" />

@@ -1,12 +1,16 @@
 package com.falconssoft.woodysystem.stage_two;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -83,7 +87,8 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
     private RecyclerView recyclerView, recyclerView2;
     private RecyclerView recycler;
     private EditText paclingList, dest, orderNo;
-    private TextView searchCustomer, searchSupplier, noBundles, totalCBM, delete, export,piecesOrder, cubicOrder, noBundlesOrder;
+    private TextView searchCustomer, searchSupplier, noBundles, totalCBM, delete, export,piecesOrder, cubicOrder
+            , noBundlesOrder, exportToExcel;
 
     private TableLayout tableLayout, headerTableLayout;
     private TableRow tableRow;
@@ -181,7 +186,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
         searchCustomer.setOnClickListener(this);
         searchSupplier.setOnClickListener(this);
         export.setOnClickListener(this);
-
+        exportToExcel.setOnClickListener(this);
 
         piecesOrder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -347,8 +352,32 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
                 obj.exportLoadPackingList(PLListFiltered, searchCustomer.getText().toString(), searchSupplier.getText().toString(), dfReport.format(Calendar.getInstance().getTime()), gradeText, today,noBundles.getText().toString(),totalCBM.getText().toString());
 
                 break;
+            case R.id.planned_reportOne_exportToExcel:
+                exportToExcel();
+                break;
 
         }
+    }
+
+    private void exportToExcel() {
+//        // excel
+//        implementation 'org.apache.poi:poi:3.12'
+//        implementation 'org.apache.poi:poi-ooxml:3.12'
+//        implementation 'com.fasterxml:aalto-xml:1.0.0'
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+//                != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions((Activity) this,
+//                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
+//
+//            return;
+//        }
+//        Sheet sheet = new XSSFWorkbook().createSheet("Planned_Packing_List_Report");//Creating a sheet
+//        for(int  i=0; i<yourArraylist.size(); i++){
+//
+//            Row row = sheet.createRow(i);
+//            row.createCell(CELL_INDEX_0).setCellValue(VALUE_YOU_WANT_TO_KEEP_ON_1ST_COLUMN);
+//            row.createCell(CELL_INDEX_1).setCellValue(VALUE_YOU_WANT_TO_KEEP_ON_2ND_COLUMN);
+//        }
     }
 
     void suppliersDialog() {
@@ -1203,7 +1232,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
         dest = findViewById(R.id.destination);
         orderNo = findViewById(R.id.order_no);
         containerLayout = findViewById(R.id.unloadBackingList_coordinator);
-
+        exportToExcel = findViewById(R.id.planned_reportOne_exportToExcel);
         export = findViewById(R.id.export);
         tableLayout = findViewById(R.id.addNewRaw_table);
         headerTableLayout = findViewById(R.id.addNewRaw_table_header);

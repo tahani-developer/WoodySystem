@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Wood System</string>
-    <string name="version">Version 58.0.3</string>
+    <string name="version">Version 58.0.5</string>
 
     <string name="stage1">Acceptance &amp; Quality Control</string>
     <string name="stage2">Stage 2</string>
@@ -172,7 +172,8 @@
     <string name="loaded_packing_list_report">Loaded Packing List Report</string>
     <string name="planned_unplanned_inventory_report">Planned Unplanned Inventory Report</string>
 
-    <string name="export_to_excel">Export To PDF</string>
+    <string name="export_to_pdf">Export To PDF</string>
     <string name="edit_confirm_message">Are you want save the changes first?</string>
+    <string name="export_to_excel">Export To Excel</string>
 
 </resources>

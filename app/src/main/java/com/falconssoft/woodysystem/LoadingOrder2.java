@@ -91,6 +91,12 @@ import static com.falconssoft.woodysystem.SettingsFile.senderPassword;
 
 public class LoadingOrder2 extends AppCompatActivity {
 
+    /**
+     * loading order is just for whose has packing list.
+     * the customer can't take bundles with other specifications(L,W,P,T) until he planned another bundles match the specifications
+     * the customer can't take bundles with count not match his packing list count
+     * */
+
     HorizontalListView listView;
     ListView listView2;
     private EditText placingNo, orderNo, containerNo, dateOfLoad, destination;
@@ -384,12 +390,13 @@ public class LoadingOrder2 extends AppCompatActivity {
                         jsonArrayOrders.put(order.getJSONObject());
 
 
-                        // Log.e("getsamedata", "" + bundles.get(i).getNoOfExist());
                         if (!order.getPackingList().equals(order.getOrderNo()) && !order.getPackingList().equals("null") && bundles.get(i).getNoOfExist() == 0) {
                             // this case when i want to exchange my bundles with others but i don't have enough count
+                            Log.e("loadingorder", "missedBundles " + order.getPackingList() + order.getOrderNo() + bundles.get(i).getNoOfExist());
                             missedBundles.add(order);
                             jsonArrayMissedBundles.put(order.getJSONObject());
                         } else {
+                            Log.e("loadingorder", "checkDuplicate " + order.getPackingList() + order.getOrderNo() + bundles.get(i).getNoOfExist());
                             checkDuplicate.add(order);
                         }
 
@@ -702,7 +709,7 @@ public class LoadingOrder2 extends AppCompatActivity {
                 in.close();
 
                 JsonResponse = sb.toString();
-                Log.e("loadingorder", " JSONTask " + JsonResponse);
+                Log.e("loadingorder", " JSONTaskmonitor " + JsonResponse);
 
                 return JsonResponse;
 
@@ -924,6 +931,7 @@ public class LoadingOrder2 extends AppCompatActivity {
                             plannedList.remove(n);
                             break;
                         }
+                Log.e("loadingorder", "plannedList " + plannedList.size());
 
                 for (int i = 0; i < plannedList.size(); i++) {
                     for (int k = 0; k < missedBundles.size(); k++) {
@@ -943,8 +951,9 @@ public class LoadingOrder2 extends AppCompatActivity {
 
                     }
                 }
+                Log.e("loadingorder", "  missedBundles" + missedBundles.size());
 
-                Log.e("loadingorder", "  afterremove" + missedBundles.size());
+//                Log.e("loadingorder", "  afterremove" + missedBundles.size());
 
                 new JSONTask().execute();
 

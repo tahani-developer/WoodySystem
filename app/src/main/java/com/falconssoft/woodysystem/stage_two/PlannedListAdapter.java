@@ -127,13 +127,13 @@ public class PlannedListAdapter extends RecyclerView.Adapter<PlannedListAdapter.
             }
         });
 
-        holder.copy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (PlannedPL.get(i).getHide() != 1)
-                    context.editNoOfItemsDialog(index);
-            }
-        });
+//        holder.copy.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (PlannedPL.get(i).getHide() != 1)
+//                    context.editNoOfItemsDialog(index);
+//            }
+//        });
 
         holder.isExist.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,7 +175,7 @@ public class PlannedListAdapter extends RecyclerView.Adapter<PlannedListAdapter.
             isExist = itemView.findViewById(R.id.is_exist);
             edit = itemView.findViewById(R.id.edit);
             delete = itemView.findViewById(R.id.delete);
-            copy = itemView.findViewById(R.id.copy);
+//            copy = itemView.findViewById(R.id.copy);
             linEdit = itemView.findViewById(R.id.lin_edit);
             linCopy = itemView.findViewById(R.id.lin_copy);
         }
