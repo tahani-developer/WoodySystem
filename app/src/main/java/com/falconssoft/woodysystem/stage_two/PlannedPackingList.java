@@ -2173,6 +2173,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
             }
         }
 
+        calculateTotal();
         adapter2.notifyDataSetChanged();
 
 
