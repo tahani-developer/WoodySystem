@@ -58,9 +58,10 @@ public class PlannedUnplanned extends AppCompatActivity implements AdapterView.O
 
     private PlannedUnPlannedAdapter adapter2;
 
-    private TextView thick, thicknessOrder, widthOrder, lengthOrder,piecesOrder, cubicOrder, noBundlesOrder,noBundles, totalCBM, export;
+    private TextView thick, thicknessOrder, widthOrder, lengthOrder, piecesOrder, cubicOrder, noBundlesOrder, noBundles, totalCBM, export
+            , resetWidthList, resetLengthList, resetThicknessList;
     private RecyclerView recycler;
-    ;
+
     private TableLayout tableLayout, headerTableLayout;
     private TableRow tableRow;
     private List<PlannedPL> PLList = new ArrayList<>();
@@ -70,6 +71,10 @@ public class PlannedUnplanned extends AppCompatActivity implements AdapterView.O
     private List<SpinnerModel> thicknessChecked = new ArrayList<>();
     private List<SpinnerModel> lengthChecked = new ArrayList<>();
     private List<SpinnerModel> widthChecked = new ArrayList<>();
+
+    private List<String> thicknessList= new ArrayList<>();
+    private List<String> widthList= new ArrayList<>();
+    private List<String> lengthList= new ArrayList<>();
 
     private ArrayList<String> gradeList = new ArrayList<>();
     private ArrayAdapter<String> gradeAdapter;
@@ -97,7 +102,7 @@ public class PlannedUnplanned extends AppCompatActivity implements AdapterView.O
     private String fromLengthNo = "", toLengthNo = "", fromWidthNo = "", toWidthNo = "";
 
     private int sortFlag = 0;
-    private boolean isThicknessAsc = true, isWidthAsc = true, isLengthAsc = true,isPiecesAsc=true,isCubicAsc=true ,isNoBundelAsc=true;
+    private boolean isThicknessAsc = true, isWidthAsc = true, isLengthAsc = true, isPiecesAsc = true, isCubicAsc = true, isNoBundelAsc = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -223,7 +228,7 @@ public class PlannedUnplanned extends AppCompatActivity implements AdapterView.O
             public void onClick(View v) {
 
                 ExportToPDF obj = new ExportToPDF(PlannedUnplanned.this);
-                obj.exportPlannedUnplanned(PLListFiltered, dfReport.format(Calendar.getInstance().getTime()), today,noBundles.getText().toString(),totalCBM.getText().toString());
+                obj.exportPlannedUnplanned(PLListFiltered, dfReport.format(Calendar.getInstance().getTime()), today, noBundles.getText().toString(), totalCBM.getText().toString());
             }
         });
 
@@ -398,6 +403,50 @@ public class PlannedUnplanned extends AppCompatActivity implements AdapterView.O
 
     @Override
     public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.planned_unplanned_reset_thickness:
+                thicknessChecked = new ArrayList<>();
+                List<SpinnerModel> thicknessCheckList = new ArrayList<>();
+                for (int i = 0; i < thicknessList.size(); i++) {
+                    SpinnerModel spinnerModel = new SpinnerModel();
+                    spinnerModel.setTitle(thicknessList.get(i));
+                    spinnerModel.setChecked(false);
+                    thicknessCheckList.add(spinnerModel);
+                }
+                thicknessCheckList.add(0, new SpinnerModel("       ", false));
+                thicknessAdapter = new SpinnerCustomAdapter(PlannedUnplanned.this, 0, thicknessCheckList, 1, 2);
+                thicknessSpinner.setAdapter(thicknessAdapter);
+                filters();
+                break;
+            case R.id.planned_unplanned_reset_width:
+                widthChecked = new ArrayList<>();
+                List<SpinnerModel> widthCheckList = new ArrayList<>();
+                for (int i = 0; i < widthList.size(); i++) {
+                    SpinnerModel spinnerModel = new SpinnerModel();
+                    spinnerModel.setTitle(widthList.get(i));
+                    spinnerModel.setChecked(false);
+                    widthCheckList.add(spinnerModel);
+                }
+                widthCheckList.add(0, new SpinnerModel("       ", false));
+                widthAdapter = new SpinnerCustomAdapter(PlannedUnplanned.this, 0, widthCheckList, 2, 2);
+                widthSpinner.setAdapter(widthAdapter);
+                filters();
+                break;
+            case R.id.planned_unplanned_reset_length:
+                lengthChecked = new ArrayList<>();
+                List<SpinnerModel> lengthCheckList = new ArrayList<>();
+                for (int i = 0; i < lengthList.size(); i++) {
+                    SpinnerModel spinnerModel = new SpinnerModel();
+                    spinnerModel.setTitle(lengthList.get(i));
+                    spinnerModel.setChecked(false);
+                    lengthCheckList.add(spinnerModel);
+                }
+                lengthCheckList.add(0, new SpinnerModel("       ", false));
+                lengthAdapter = new SpinnerCustomAdapter(PlannedUnplanned.this, 0, lengthCheckList, 3, 2);
+                lengthSpinner.setAdapter(lengthAdapter);
+                filters();
+                break;
+        }
 
     }
 
@@ -487,6 +536,7 @@ public class PlannedUnplanned extends AppCompatActivity implements AdapterView.O
             spinnerModel.setTitle(lengthList.get(i));
             spinnerModel.setChecked(false);
             lengthCheckList.add(spinnerModel);
+            this.lengthList.add(lengthList.get(i));
         }
         lengthCheckList.add(0, new SpinnerModel("       ", false));
         lengthAdapter = new SpinnerCustomAdapter(PlannedUnplanned.this, 0, lengthCheckList, 3, 2);
@@ -501,6 +551,7 @@ public class PlannedUnplanned extends AppCompatActivity implements AdapterView.O
             spinnerModel.setTitle(widthList.get(i));
             spinnerModel.setChecked(false);
             widthCheckList.add(spinnerModel);
+            this.widthList.add(widthList.get(i));
         }
         widthCheckList.add(0, new SpinnerModel("       ", false));
         widthAdapter = new SpinnerCustomAdapter(PlannedUnplanned.this, 0, widthCheckList, 2, 2);
@@ -515,6 +566,7 @@ public class PlannedUnplanned extends AppCompatActivity implements AdapterView.O
             spinnerModel.setTitle(thicknessList.get(i));
             spinnerModel.setChecked(false);
             thicknessCheckList.add(spinnerModel);
+            this.thicknessList.add(thicknessList.get(i));
         }
         thicknessCheckList.add(0, new SpinnerModel("       ", false));
         thicknessAdapter = new SpinnerCustomAdapter(PlannedUnplanned.this, 0, thicknessCheckList, 1, 2);
@@ -733,13 +785,16 @@ public class PlannedUnplanned extends AppCompatActivity implements AdapterView.O
         thicknessSpinner = findViewById(R.id.inventory_report_thick_spinner);
         lengthSpinner = findViewById(R.id.inventory_report_length_spinner);
         widthSpinner = findViewById(R.id.inventory_report_width_spinner);
+        resetThicknessList = findViewById(R.id.planned_unplanned_reset_thickness);
+        resetWidthList = findViewById(R.id.planned_unplanned_reset_width);
+        resetLengthList = findViewById(R.id.planned_unplanned_reset_length);
 
         thicknessOrder = findViewById(R.id.inventory_report_thick_order);
         widthOrder = findViewById(R.id.inventory_report_width_order);
         lengthOrder = findViewById(R.id.inventory_report_length_order);
-        piecesOrder=findViewById(R.id.inventory_report_pieces_order);
-        cubicOrder=findViewById(R.id.inventory_report_cubic_order);
-        noBundlesOrder=findViewById(R.id.inventory_report_no_bundles_order);
+        piecesOrder = findViewById(R.id.inventory_report_pieces_order);
+        cubicOrder = findViewById(R.id.inventory_report_cubic_order);
+        noBundlesOrder = findViewById(R.id.inventory_report_no_bundles_order);
 
         fromLength = findViewById(R.id.inventory_report_fromLength);
         toLength = findViewById(R.id.inventory_report_toLength);
@@ -752,6 +807,9 @@ public class PlannedUnplanned extends AppCompatActivity implements AdapterView.O
         adapter2 = new PlannedUnPlannedAdapter(this, PLListFiltered);
         recycler.setAdapter(adapter2);
 
+        resetThicknessList.setOnClickListener(this);
+        resetWidthList.setOnClickListener(this);
+        resetLengthList.setOnClickListener(this);
 
         fromLength.addTextChangedListener(new watchTextChange(fromLength));
         toLength.addTextChangedListener(new watchTextChange(toLength));

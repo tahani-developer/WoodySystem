@@ -64,14 +64,14 @@ public class ItemsListAdapter5 extends BaseAdapter {
         final ViewHolder holder = new ViewHolder();
         view = View.inflate(context, R.layout.item_row5, null);
 
-        holder.th = (TextView) view.findViewById(R.id.th);
-        holder.w = (TextView) view.findViewById(R.id.w);
-        holder.l = (TextView) view.findViewById(R.id.l);
-        holder.grade = (TextView) view.findViewById(R.id.grade);
-        holder.pcs = (TextView) view.findViewById(R.id.pcs);
-        holder.bundle = (TextView) view.findViewById(R.id.bundle);
-        holder.location = (TextView) view.findViewById(R.id.location);
-        holder.area = (TextView) view.findViewById(R.id.area);
+        holder.th =  view.findViewById(R.id.th);
+        holder.w =  view.findViewById(R.id.w);
+        holder.l =  view.findViewById(R.id.l);
+        holder.grade =  view.findViewById(R.id.grade);
+        holder.pcs =  view.findViewById(R.id.pcs);
+        holder.bundle =  view.findViewById(R.id.bundle);
+        holder.location =  view.findViewById(R.id.location);
+        holder.area =  view.findViewById(R.id.area);
 
         holder.th.setText("" + (int)itemsList.get(i).getThickness());
         holder.w.setText("" + (int)itemsList.get(i).getWidth());

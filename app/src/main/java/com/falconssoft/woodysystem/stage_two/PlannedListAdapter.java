@@ -56,6 +56,10 @@ public class PlannedListAdapter extends RecyclerView.Adapter<PlannedListAdapter.
         holder.length.setText("" + (int) PlannedPL.get(i).getLength());
         holder.pieces.setText("" + (int) PlannedPL.get(i).getNoOfPieces());
         holder.copies.setText("" + PlannedPL.get(i).getNoOfCopies());
+        double totalCubic = 0;
+        totalCubic = (PlannedPL.get(i).getThickness() * PlannedPL.get(i).getWidth() * PlannedPL.get(i).getLength() * PlannedPL.get(i).getNoOfPieces() * PlannedPL.get(i).getNoOfCopies());
+        holder.cubic.setText("" + String.format("%.3f", (totalCubic / 1000000000)));
+
 
         if (PlannedPL.get(i).getHide() == 1) {
             holder.serial.setBackgroundColor(context.getResources().getColor(R.color.gray_un_editable));
@@ -73,6 +77,8 @@ public class PlannedListAdapter extends RecyclerView.Adapter<PlannedListAdapter.
             holder.isExist.setBackgroundColor(context.getResources().getColor(R.color.gray_un_editable));
             holder.linEdit.setBackgroundColor(context.getResources().getColor(R.color.gray_un_editable));
             holder.linCopy.setBackgroundColor(context.getResources().getColor(R.color.gray_un_editable));
+            holder.cubic.setBackgroundColor(context.getResources().getColor(R.color.gray_un_editable));
+
         } else {
 //            holder.serial.setBackgroundColor(context.getResources().getColor(R.color.light_orange));
             holder.cust.setBackgroundColor(context.getResources().getColor(R.color.light_orange));
@@ -89,6 +95,8 @@ public class PlannedListAdapter extends RecyclerView.Adapter<PlannedListAdapter.
             holder.isExist.setBackgroundColor(context.getResources().getColor(R.color.light_orange));
             holder.linEdit.setBackgroundColor(context.getResources().getColor(R.color.light_orange));
             holder.linCopy.setBackgroundColor(context.getResources().getColor(R.color.light_orange));
+            holder.cubic.setBackgroundColor(context.getResources().getColor(R.color.light_orange));
+
         }
 
         if (PlannedPL.get(i).getExist().equals("Exist")) {
@@ -153,7 +161,7 @@ public class PlannedListAdapter extends RecyclerView.Adapter<PlannedListAdapter.
 
     class SuppliersViewHolder extends RecyclerView.ViewHolder {
 
-        TextView serial, cust, pl, dest, order, supplier, grade, thick, width, length, pieces, copies, isExist, edit, delete, copy;
+        TextView serial, cust, pl, dest, order, supplier, grade, thick, width, length, pieces, copies, isExist, edit, delete, cubic,copy;
         LinearLayout linearLayout, linEdit, linCopy;
 
         public SuppliersViewHolder(@NonNull View itemView) {
@@ -178,6 +186,8 @@ public class PlannedListAdapter extends RecyclerView.Adapter<PlannedListAdapter.
 //            copy = itemView.findViewById(R.id.copy);
             linEdit = itemView.findViewById(R.id.lin_edit);
             linCopy = itemView.findViewById(R.id.lin_copy);
+            cubic = itemView.findViewById(R.id.cubic);
+
         }
     }
 }

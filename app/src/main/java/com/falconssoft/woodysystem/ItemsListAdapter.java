@@ -17,17 +17,20 @@ import android.widget.TextView;
 import com.falconssoft.woodysystem.models.BundleInfo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.falconssoft.woodysystem.LoadingOrder.bundles;
 import static com.falconssoft.woodysystem.LoadingOrder.filteredList;
+import static com.falconssoft.woodysystem.LoadingOrder.motherList;
 
 public class ItemsListAdapter extends BaseAdapter {
 
     private Context context;
     private List<BundleInfo> mOriginalValues;
     private static List<BundleInfo> itemsList;
-    private static List<BundleInfo> selectedBundles ;
+    private static List<BundleInfo> selectedBundles;
     static LoadingOrder obj = new LoadingOrder();
     private boolean changeColor;
 
@@ -75,16 +78,16 @@ public class ItemsListAdapter extends BaseAdapter {
         final ViewHolder holder = new ViewHolder();
         view = View.inflate(context, R.layout.item_row, null);
 
-        holder.checkBox = (CheckBox) view.findViewById(R.id.checkbox);
-        holder.th = (TextView) view.findViewById(R.id.th);
-        holder.w = (TextView) view.findViewById(R.id.w);
-        holder.l = (TextView) view.findViewById(R.id.l);
-        holder.grade = (TextView) view.findViewById(R.id.grade);
-        holder.pcs = (TextView) view.findViewById(R.id.pcs);
-        holder.bundle = (TextView) view.findViewById(R.id.bundle);
-        holder.location = (TextView) view.findViewById(R.id.location);
-        holder.area = (TextView) view.findViewById(R.id.area);
-        holder.packingList = (TextView) view.findViewById(R.id.loadingOrder_packingList);
+        holder.checkBox = view.findViewById(R.id.checkbox);
+        holder.th = view.findViewById(R.id.th);
+        holder.w = view.findViewById(R.id.w);
+        holder.l = view.findViewById(R.id.l);
+        holder.grade = view.findViewById(R.id.grade);
+        holder.pcs = view.findViewById(R.id.pcs);
+        holder.bundle = view.findViewById(R.id.bundle);
+        holder.location = view.findViewById(R.id.location);
+        holder.area = view.findViewById(R.id.area);
+        holder.packingList = view.findViewById(R.id.loadingOrder_packingList);
 
 
         holder.th.setText("" + itemsList.get(i).getThickness());
@@ -97,7 +100,7 @@ public class ItemsListAdapter extends BaseAdapter {
         holder.area.setText("" + itemsList.get(i).getArea());
         holder.packingList.setText("" + itemsList.get(i).getBackingList());
 
-        holder.linearLayout= view.findViewById(R.id.linear);
+        holder.linearLayout = view.findViewById(R.id.linear);
         if (itemsList.get(i).getChecked())
             holder.checkBox.setChecked(true);
 
@@ -105,9 +108,9 @@ public class ItemsListAdapter extends BaseAdapter {
             itemsList.get(i).setFoucoseColor("0");
 
 
-        if(itemsList.get(i).getFoucoseColor().equals("1")){
+        if (itemsList.get(i).getFoucoseColor().equals("1")) {
             holder.linearLayout.setBackgroundColor(context.getResources().getColor(R.color.alpha_black));
-        }else  if(itemsList.get(i).getFoucoseColor().equals("0")){
+        } else if (itemsList.get(i).getFoucoseColor().equals("0")) {
             holder.linearLayout.setBackground(context.getResources().getDrawable(R.drawable.border_background));
 
         }
@@ -117,15 +120,22 @@ public class ItemsListAdapter extends BaseAdapter {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     itemsList.get(i).setChecked(true);
+                    motherList.get(itemsList.get(i).getBundleNo());
+                    BundleInfo info = itemsList.get(i);
+                    info.setChecked(true);
+                    motherList.put(itemsList.get(i).getBundleNo(), info);
                     holder.linearLayout.setBackground(context.getResources().getDrawable(R.drawable.border_background));
-                }
-                else {
+                } else {
                     itemsList.get(i).setChecked(false);
+                    motherList.get(itemsList.get(i).getBundleNo());
+                    BundleInfo info = itemsList.get(i);
+                    info.setChecked(false);
+                    motherList.put(itemsList.get(i).getBundleNo(), info);
                     holder.linearLayout.setBackground(context.getResources().getDrawable(R.drawable.border_background));
                 }
                 bundles.get(i).setFoucoseColor("0");
 
-                 obj.notifyAdapter(itemsList.get(i) , context);
+                obj.notifyAdapter(itemsList.get(i), context);
             }
         });
 
@@ -135,9 +145,11 @@ public class ItemsListAdapter extends BaseAdapter {
     public List<BundleInfo> getSelectedItems() {
 
         selectedBundles.clear();
-        for(int i = 0 ; i< itemsList.size() ; i++)
-            if(itemsList.get(i).getChecked())
-                selectedBundles.add(itemsList.get(i));
+        for (Map.Entry entry : motherList.entrySet()) {
+            BundleInfo info = (BundleInfo) entry.getValue();
+            if (info.getChecked())
+                selectedBundles.add(info);
+        }
 
         return selectedBundles;
     }

@@ -32,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.falconssoft.woodysystem.DatabaseHandler;
+import com.falconssoft.woodysystem.ExportToExcel;
 import com.falconssoft.woodysystem.ExportToPDF;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.SharedClass;
@@ -69,7 +70,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class LoadPackingList extends AppCompatActivity implements View.OnClickListener {
-
+    //report2
     //Load Packing List Report
     private DatabaseHandler databaseHandler;
     private Calendar myCalendar;
@@ -353,31 +354,10 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
 
                 break;
             case R.id.planned_reportOne_exportToExcel:
-                exportToExcel();
+                //ExportToExcel.getInstance().createExcelFile(this, "loaded_packing_list_report.xls",4 ,UPLListFiltered);
                 break;
 
         }
-    }
-
-    private void exportToExcel() {
-//        // excel
-//        implementation 'org.apache.poi:poi:3.12'
-//        implementation 'org.apache.poi:poi-ooxml:3.12'
-//        implementation 'com.fasterxml:aalto-xml:1.0.0'
-//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-//                != PackageManager.PERMISSION_GRANTED) {
-//            ActivityCompat.requestPermissions((Activity) this,
-//                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
-//
-//            return;
-//        }
-//        Sheet sheet = new XSSFWorkbook().createSheet("Planned_Packing_List_Report");//Creating a sheet
-//        for(int  i=0; i<yourArraylist.size(); i++){
-//
-//            Row row = sheet.createRow(i);
-//            row.createCell(CELL_INDEX_0).setCellValue(VALUE_YOU_WANT_TO_KEEP_ON_1ST_COLUMN);
-//            row.createCell(CELL_INDEX_1).setCellValue(VALUE_YOU_WANT_TO_KEEP_ON_2ND_COLUMN);
-//        }
     }
 
     void suppliersDialog() {

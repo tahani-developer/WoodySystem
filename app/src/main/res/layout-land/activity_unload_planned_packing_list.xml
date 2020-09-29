@@ -669,6 +669,24 @@
                     android:textSize="15sp" />
 
                 <TextView
+                    android:id="@+id/stage2_report1_exportToExcel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginEnd="7dp"
+                    android:layout_marginRight="7dp"
+                    android:background="@drawable/frame_shape"
+                    android:fontFamily="serif"
+                    android:paddingStart="10dp"
+                    android:paddingLeft="10dp"
+                    android:paddingEnd="10dp"
+                    android:paddingRight="10dp"
+                    android:text="@string/export_to_excel"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+                <TextView
                     android:id="@+id/export"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"

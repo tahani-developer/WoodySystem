@@ -259,21 +259,22 @@
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_marginRight="5dp"
                 android:layout_marginEnd="5dp"
                 android:layout_weight="0.8"
                 android:background="@drawable/shape_with_corner"
                 android:orientation="horizontal"
-                android:visibility="visible"
-                android:paddingVertical="10dp">
+                android:visibility="visible">
 
                 <TextView
+                    android:id="@+id/inventory_report_thick_reset"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:fontFamily="serif"
                     android:paddingLeft="5dp"
+                    android:paddingVertical="10dp"
                     android:text="@string/thickness"
                     android:textSize="15sp" />
 
@@ -328,9 +329,18 @@
                 android:layout_height="45dp"
                 android:layout_marginRight="5dp"
                 android:layout_marginEnd="5dp"
-                android:layout_weight="1"
+                android:layout_weight="1.0"
                 android:background="@drawable/shape_with_corner"
                 android:gravity="center">
+
+                <TextView
+                    android:id="@+id/inventory_report_width_reset"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0"
+                    android:fontFamily="serif"
+                    android:text="@string/width"
+                    android:textSize="13sp" />
 
                 <EditText
                     android:id="@+id/inventory_report_fromWidth"
@@ -354,31 +364,12 @@
                     android:textColor="@color/white"
                     android:textSize="18sp" />
 
-                <LinearLayout
-                    android:layout_weight="0.5"
+                <Spinner
+                    android:id="@+id/inventory_report_width_spinner"
+                    android:background="@color/orange"
+                    android:layout_weight="1"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:background="@color/orange">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1.2"
-                        android:background="@drawable/frame_shape"
-                        android:fontFamily="serif"
-                        android:text="@string/width"
-                        android:textColor="@color/white"
-                        android:textSize="13sp" />
-
-                    <Spinner
-                        android:id="@+id/inventory_report_width_spinner"
-                        android:background="@color/orange"
-                        android:layout_weight="2"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp" />
-
-                </LinearLayout>
+                    android:layout_height="match_parent" />
 
                 <EditText
                     android:id="@+id/inventory_report_toWidth"
@@ -402,6 +393,15 @@
                 android:background="@drawable/shape_with_corner"
                 android:gravity="center">
 
+                <TextView
+                    android:id="@+id/inventory_report_length_reset"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0"
+                    android:fontFamily="serif"
+                    android:text="@string/length"
+                    android:textSize="13sp" />
+
                 <EditText
                     android:id="@+id/inventory_report_fromLength"
                     android:layout_width="0dp"
@@ -424,31 +424,12 @@
                     android:textColor="@color/white"
                     android:textSize="18sp" />
 
-                <LinearLayout
-                    android:layout_weight="0.5"
+                <Spinner
+                    android:id="@+id/inventory_report_length_spinner"
+                    android:background="@color/orange"
+                    android:layout_weight="1"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:background="@color/orange">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1.2"
-                        android:background="@drawable/frame_shape"
-                        android:fontFamily="serif"
-                        android:text="@string/length"
-                        android:textColor="@color/white"
-                        android:textSize="13sp" />
-
-                    <Spinner
-                        android:id="@+id/inventory_report_length_spinner"
-                        android:background="@color/orange"
-                        android:layout_weight="2"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp" />
-
-                </LinearLayout>
+                    android:layout_height="match_parent" />
 
                 <EditText
                     android:id="@+id/inventory_report_toLength"

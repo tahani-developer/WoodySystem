@@ -248,17 +248,10 @@
             app:layout_constraintTop_toBottomOf="@+id/loading_order_linear22"
             app:layout_constraintVertical_bias="0.0">
 
-            <GridView
-                android:id="@+id/items"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="5dp"
-                android:numColumns="1" />
-
             <ListView
                 android:id="@+id/verticalListView"
                 android:layout_width="300dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:visibility="gone" />
 
             <com.falconssoft.woodysystem.HorizontalListView
@@ -267,6 +260,12 @@
                 android:layout_height="220dp"
                 app:layout_constraintEnd_toEndOf="parent" />
 
+            <GridView
+                android:id="@+id/items"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="5dp"
+                android:numColumns="1" />
         </LinearLayout>
 
         <LinearLayout

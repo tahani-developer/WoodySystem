@@ -122,15 +122,22 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private List<String> orderedList = new ArrayList<>();
     private List<String> plList = new ArrayList<>();
     private List<String> gradeList = new ArrayList<>();
+    private List<String> thicknessList= new ArrayList<>();
+    private List<String> widthList= new ArrayList<>();
+    private List<String> lengthList= new ArrayList<>();
+
     private List<BundleInfo> bundlesForDelete = new ArrayList<>();
     private List<BundleInfo> dateFiltered, filtered;
     private List<SpinnerModel> thicknessChecked = new ArrayList<>();
+//    private List<SpinnerModel> widthCheckList = new ArrayList<>();
+//    private List<SpinnerModel> lengthCheckList = new ArrayList<>();
     private List<SpinnerModel> lengthChecked = new ArrayList<>();
     private List<SpinnerModel> widthChecked = new ArrayList<>();
     private JSONArray jsonArrayBundles = new JSONArray();
     private WoodPresenter woodPresenter;
     private Animation animation;
-    private TextView textView, noOfBundles, noOfPieces, cubicField, deleteAll, dateFrom, dateTo, thicknessOrder, widthOrder, lengthOrder, searchPListTool, searchSerialTool, export;
+    private TextView textView, noOfBundles, noOfPieces, cubicField, deleteAll, dateFrom, dateTo, thicknessOrder, widthOrder
+            , lengthOrder, searchPListTool, searchSerialTool, export, resetThicknessList, resetWidthList, resetLengthList;
     private Spinner location, area, ordered, pList, grade, thicknessSpinner, widthSpinner, lengthSpinner;
     private ArrayAdapter<String> locationAdapter;
     private ArrayAdapter<String> areaAdapter;
@@ -379,6 +386,9 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         lengthSpinner = findViewById(R.id.inventory_report_length_spinner);
         widthSpinner = findViewById(R.id.inventory_report_width_spinner);
         export = findViewById(R.id.inventory_report_export);
+        resetThicknessList = findViewById(R.id.inventory_report_thick_reset);
+        resetWidthList = findViewById(R.id.inventory_report_width_reset);
+        resetLengthList = findViewById(R.id.inventory_report_length_reset);
 
 //        fromThickness = findViewById(R.id.inventory_report_fromThick);
 //        toThickness = findViewById(R.id.inventory_report_toThick);
@@ -392,6 +402,9 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         searchSerial = findViewById(R.id.inventory_report_search_serial);
         searchSerialTool = findViewById(R.id.inventory_report_search_serial_tool);
 
+        resetThicknessList.setOnClickListener(this);
+        resetWidthList.setOnClickListener(this);
+        resetLengthList.setOnClickListener(this);
         export.setOnClickListener(this);
         searchSerialTool.setOnClickListener(this);
         searchPListTool.setOnClickListener(this);
@@ -461,6 +474,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
             spinnerModel.setTitle(thicknessList.get(i));
             spinnerModel.setChecked(false);
             thicknessCheckList.add(spinnerModel);
+            this.thicknessList.add(thicknessList.get(i));
         }
         thicknessCheckList.add(0, new SpinnerModel("       ", false));
         thicknessAdapter = new SpinnerCustomAdapter(InventoryReport.this, 0, thicknessCheckList, 1, 1);
@@ -1167,6 +1181,48 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     public void onClick(View v) {
         int flag = 0;
         switch (v.getId()) {
+            case R.id.inventory_report_width_reset:
+                widthChecked = new ArrayList<>();
+                List<SpinnerModel> widthCheckList = new ArrayList<>();
+                for (int i = 0; i < widthList.size(); i++) {
+                    SpinnerModel spinnerModel = new SpinnerModel();
+                    spinnerModel.setTitle(widthList.get(i));
+                    spinnerModel.setChecked(false);
+                    widthCheckList.add(spinnerModel);
+                }
+                widthCheckList.add(0, new SpinnerModel("       ", false));
+                widthAdapter = new SpinnerCustomAdapter(InventoryReport.this, 0, widthCheckList, 2, 1);
+                widthSpinner.setAdapter(widthAdapter);
+                filters();
+                break;
+            case R.id.inventory_report_length_reset:
+                lengthChecked = new ArrayList<>();
+                List<SpinnerModel> lengthCheckList = new ArrayList<>();
+                for (int i = 0; i < lengthList.size(); i++) {
+                    SpinnerModel spinnerModel = new SpinnerModel();
+                    spinnerModel.setTitle(lengthList.get(i));
+                    spinnerModel.setChecked(false);
+                    lengthCheckList.add(spinnerModel);
+                }
+                lengthCheckList.add(0, new SpinnerModel("       ", false));
+                lengthAdapter = new SpinnerCustomAdapter(InventoryReport.this, 0, lengthCheckList, 3, 1);
+                lengthSpinner.setAdapter(lengthAdapter);
+                filters();
+                break;
+            case R.id.inventory_report_thick_reset:
+                thicknessChecked = new ArrayList<>();
+                List<SpinnerModel> thicknessCheckList = new ArrayList<>();
+                for (int i = 0; i < thicknessList.size(); i++) {
+                    SpinnerModel spinnerModel = new SpinnerModel();
+                    spinnerModel.setTitle(thicknessList.get(i));
+                    spinnerModel.setChecked(false);
+                    thicknessCheckList.add(spinnerModel);
+                }
+                thicknessCheckList.add(0, new SpinnerModel("       ", false));
+                thicknessAdapter = new SpinnerCustomAdapter(InventoryReport.this, 0, thicknessCheckList, 1, 1);
+                thicknessSpinner.setAdapter(thicknessAdapter);
+                filters();
+                break;
             case R.id.inventory_report_export:
                 dfReport = new SimpleDateFormat("yyyyMMdd_hhmmss");
                 ExportToPDF obj = new ExportToPDF(InventoryReport.this);

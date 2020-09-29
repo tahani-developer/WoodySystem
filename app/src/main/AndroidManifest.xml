@@ -54,11 +54,8 @@
         <activity
             android:name=".reports.InventoryReport"
             android:screenOrientation="sensorLandscape"
-            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden" >
+            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden" />
 
-
-
-        </activity>
 
         <activity
             android:name=".reports.AcceptanceReport"
@@ -89,7 +86,7 @@
         <activity
             android:name=".stage_two.PlannedPackingList"
             android:screenOrientation="sensorLandscape"
-            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden"></activity>
+            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden"/>
         <activity android:name=".stage_two.AddNewCustomer" />
         <activity
             android:name=".Stage3"

@@ -600,7 +600,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
     void addTableHeader(TableLayout tableLayout) {
         TableRow tableRow = new TableRow(this);
-        for (int i = 0; i < 15; i++) {
+        for (int i = 0; i < 16; i++) {
             TextView textView = new TextView(this);
             textView.setBackgroundResource(R.color.orange);
             TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f);
@@ -624,6 +624,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                     break;
                 case 3:
                     textView.setText("Dest");
+                    textView.setLayoutParams(textViewParam3);
                     break;
                 case 4:
                     textView.setText("Order #");
@@ -654,7 +655,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                     textView.setLayoutParams(textViewParam3);
                     break;
                 case 11:
-                    textView.setText("#Bundl");
+                    textView.setText("Bundles");
                     textView.setLayoutParams(textViewParam3);
                     break;
                 case 12:
@@ -663,9 +664,13 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                     break;
                 case 13:
                     textView.setLayoutParams(textViewParam2);
-                    textView.setText("E");
+                    textView.setText("Cubic");
                     break;
                 case 14:
+                    textView.setLayoutParams(textViewParam2);
+                    textView.setText("E");
+                    break;
+                case 15:
                     textView.setLayoutParams(textViewParam2);
                     textView.setText("D");
                     break;
@@ -2209,7 +2214,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                     PlannedPLList.get(i).getNoOfPieces() == tempForCheck.getNoOfPieces() &&
                     PlannedPLList.get(i).getGrade().equals(tempForCheck.getGrade())) {
 
-                if (!checkInOldPackingList(PlannedPLList.get(i))) {
+                if (!checkInOldPackingList(PlannedPLList.get(i))) {// new row
 //                        if (PlannedPLList.get(i).getThickness() == bundleInfosList.get(0).getThickness() &&
 //                                PlannedPLList.get(i).getWidth() == bundleInfosList.get(0).getWidth() &&
 //                                PlannedPLList.get(i).getLength() == bundleInfosList.get(0).getLength() &&
@@ -2224,7 +2229,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                             PlannedPLList.get(i).setNoOfExixt(bundleInfosList.get(0).getNoOfExist() - 1);
                         } else {// when editing new row
                             PlannedPLList.get(i).setExist("Exist");
-                            if ((bundleInfosList.get(0).getNoOfExist() - PlannedPLList.get(i).getNoOfCopies()) > 0) // to avoid minus response because this take the copies beafore edit
+                            if ((bundleInfosList.get(0).getNoOfExist() - PlannedPLList.get(i).getNoOfCopies()) >= 0) // to avoid minus response because this take the copies beafore edit
                                 PlannedPLList.get(i).setNoOfExixt(bundleInfosList.get(0).getNoOfExist() - PlannedPLList.get(i).getNoOfCopies());
                             else {
                                 PlannedPLList.get(i).setNoOfExixt(bundleInfosList.get(0).getNoOfExist() - 1);

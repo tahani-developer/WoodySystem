@@ -1,13 +1,20 @@
 package com.falconssoft.woodysystem.stage_two;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,7 +34,9 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.falconssoft.woodysystem.BuildConfig;
 import com.falconssoft.woodysystem.DatabaseHandler;
+import com.falconssoft.woodysystem.ExportToExcel;
 import com.falconssoft.woodysystem.ExportToPDF;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.SharedClass;
@@ -48,6 +57,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
@@ -62,13 +72,20 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
-public class UnloadPackingList extends AppCompatActivity implements View.OnClickListener {
+import jxl.Workbook;
+import jxl.write.Label;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
+import jxl.write.WriteException;
+import jxl.write.biff.RowsExceededException;
 
+public class UnloadPackingList extends AppCompatActivity implements View.OnClickListener {
+    //report1
     //Planned Packing List Report
     private DatabaseHandler databaseHandler;
     private Calendar myCalendar;
     private Settings generalSettings;
-    private Dialog searchDialog , searchDialog2;
+    private Dialog searchDialog, searchDialog2;
 
     public static int flag2;
     private boolean mState = false;
@@ -77,10 +94,11 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
     private UnloadPLAdapter adapter2;
     private SupplierAdapter adapter3;
 
-    private RecyclerView recyclerView , recyclerView2;
+    private RecyclerView recyclerView, recyclerView2;
     private RecyclerView recycler;
-    private EditText paclingList , dest , orderNo;
-    private TextView searchCustomer, searchSupplier, noBundles, totalCBM, delete,piecesOrder, cubicOrder, noBundlesOrder;
+    private EditText paclingList, dest, orderNo;
+    private TextView searchCustomer, searchSupplier, noBundles, totalCBM, delete, piecesOrder
+            , cubicOrder, noBundlesOrder, exportToExcel;
     ;
     private TableLayout tableLayout, headerTableLayout;
     private TableRow tableRow;
@@ -108,12 +126,15 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
 
     private JSONArray plannedPLListJSON = new JSONArray();
     private int sortFlag = 0;
-    private boolean isPiecesAsc=true,isCubicAsc=true ,isNoBundelAsc=true;
+    private boolean isPiecesAsc = true, isCubicAsc = true, isNoBundelAsc = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_unload_planned_packing_list);
+
+//        System.setProperty("org.apache.poi.javax.xml.stream.XMLOutputFactory", "com.fasterxml.aalto.stax.OutputFactoryImpl");
+//        System.setProperty("org.apache.poi.javax.xml.stream.XMLEventFactory", "com.fasterxml.aalto.stax.EventFactoryImpl");
 
         init();
 
@@ -173,6 +194,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
         searchCustomer.setOnClickListener(this);
         searchSupplier.setOnClickListener(this);
         export.setOnClickListener(this);
+        exportToExcel.setOnClickListener(this);
 
         piecesOrder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -188,7 +210,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
                     Collections.sort(UPLListFiltered, Collections.reverseOrder(new SorterClass()));
                 }
 
-                Log.e("OrderPieces",""+UPLListFiltered.get(0).getNoOfPieces());
+                Log.e("OrderPieces", "" + UPLListFiltered.get(0).getNoOfPieces());
 
                 adapter2.notifyDataSetChanged();
             }
@@ -208,7 +230,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
                     cubicOrder.setBackgroundResource(R.drawable.asc);
                     Collections.sort(UPLListFiltered, Collections.reverseOrder(new SorterClass()));
                 }
-                Log.e("OrderCubic",""+UPLListFiltered.get(0).getCubic());
+                Log.e("OrderCubic", "" + UPLListFiltered.get(0).getCubic());
 
                 adapter2.notifyDataSetChanged();
             }
@@ -228,7 +250,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
                     Collections.sort(UPLListFiltered, Collections.reverseOrder(new SorterClass()));
                 }
 
-                Log.e("OrderBundle",""+UPLListFiltered.get(0).getNoOfCopies());
+                Log.e("OrderBundle", "" + UPLListFiltered.get(0).getNoOfCopies());
 
                 adapter2.notifyDataSetChanged();
             }
@@ -249,32 +271,35 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
 //                } else
 //                    Toast.makeText(this, "Please select customer and packing list first!", Toast.LENGTH_SHORT).show();
 //                break;
+            case R.id.stage2_report1_exportToExcel:
+                ExportToExcel.getInstance().createExcelFile(this, "planned_packing_list_report.xls",2 ,UPLListFiltered);
+                break;
             case R.id.delete:
                 // if (plannedPLListJSON.length() > 0)
-                if (UPLListFiltered.size()>0){
-                Dialog passwordDialog = new Dialog(this);
-                passwordDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                passwordDialog.setContentView(R.layout.password_dialog);
-                passwordDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                if (UPLListFiltered.size() > 0) {
+                    Dialog passwordDialog = new Dialog(this);
+                    passwordDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    passwordDialog.setContentView(R.layout.password_dialog);
+                    passwordDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-                TextInputEditText password = passwordDialog.findViewById(R.id.password_dialog_password);
-                TextView done = passwordDialog.findViewById(R.id.password_dialog_done);
-                done.setText(R.string.loaded);
+                    TextInputEditText password = passwordDialog.findViewById(R.id.password_dialog_password);
+                    TextView done = passwordDialog.findViewById(R.id.password_dialog_done);
+                    done.setText(R.string.loaded);
 
-                done.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (password.getText().toString().equals("0200200")) {
-                            progressDialog.show();
-                            new JSONTask3().execute();
-                            passwordDialog.dismiss();
-                        } else {
-                            sharedClass.showSnackbar(containerLayout, getString(R.string.not_authorized), false);
-                            password.setText("");
+                    done.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (password.getText().toString().equals("0200200")) {
+                                progressDialog.show();
+                                new JSONTask3().execute();
+                                passwordDialog.dismiss();
+                            } else {
+                                sharedClass.showSnackbar(containerLayout, getString(R.string.not_authorized), false);
+                                password.setText("");
+                            }
                         }
-                    }
-                });
-                passwordDialog.show();
+                    });
+                    passwordDialog.show();
                 }
                 break;
             case R.id.cust:
@@ -328,7 +353,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
                 break;
             case R.id.export:
                 ExportToPDF obj = new ExportToPDF(UnloadPackingList.this);
-                obj.exportUnloadPackingList(UPLListFiltered, searchCustomer.getText().toString(), searchSupplier.getText().toString(),  dfReport.format(Calendar.getInstance().getTime()), gradeText, today,noBundles.getText().toString(),totalCBM.getText().toString());
+                obj.exportUnloadPackingList(UPLListFiltered, searchCustomer.getText().toString(), searchSupplier.getText().toString(), dfReport.format(Calendar.getInstance().getTime()), gradeText, today, noBundles.getText().toString(), totalCBM.getText().toString());
 
                 break;
 
@@ -451,7 +476,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
         public void onTextChanged(CharSequence s, int start, int before, int count) {
 //            switch (view.getId()) {
 //                case R.id.p_list:
-                    filters();
+            filters();
 //                    break;
 //            }
         }
@@ -1038,6 +1063,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
         dest = findViewById(R.id.destination);
         orderNo = findViewById(R.id.order_no);
         export = findViewById(R.id.export);
+        exportToExcel = findViewById(R.id.stage2_report1_exportToExcel);
 
         tableLayout = findViewById(R.id.addNewRaw_table);
         headerTableLayout = findViewById(R.id.addNewRaw_table_header);
@@ -1051,12 +1077,11 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
         recycler.setLayoutManager(new LinearLayoutManager(this));
         adapter2 = new UnloadPLAdapter(this, UPLListFiltered);
         recycler.setAdapter(adapter2);
-        piecesOrder=findViewById(R.id.unload_planned_report_pieces_order);
-        cubicOrder=findViewById(R.id.unload_planned_report_cubic_order);
-        noBundlesOrder=findViewById(R.id.unload_planned_report_no_bundles_order);
+        piecesOrder = findViewById(R.id.unload_planned_report_pieces_order);
+        cubicOrder = findViewById(R.id.unload_planned_report_cubic_order);
+        noBundlesOrder = findViewById(R.id.unload_planned_report_no_bundles_order);
 
     }
-
 
 
     class SorterClass implements Comparator<PlannedPL> {

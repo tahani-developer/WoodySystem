@@ -4,12 +4,9 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -19,7 +16,6 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,11 +30,11 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class LoadingOrder extends AppCompatActivity {
@@ -50,14 +46,15 @@ public class LoadingOrder extends AppCompatActivity {
     private DatabaseHandler DHandler;
     public static List<BundleInfo> bundles, filteredList, selectedBundle;
     private String f1 = "", f2 = "", f3 = "", f4 = "", barcodeValue = "", loc;
-    public static ItemsListAdapter adapter;
+    public static ItemsListAdapter adapter; // original list
     private Activity activity;
     public static TextView searchBar;
     private int no = 0;
+    public static HashMap<String, BundleInfo> motherList = new HashMap<>();
 
     static ListView listView2;
     static HorizontalListView listView;
-    private ItemsListAdapter5 adapter2;
+    private ItemsListAdapter5 adapter2;// choosed bundles
     private final String STATE_VISIBILITY = "state-visibility";
     private boolean mState = false;
     private ProgressDialog progressDialog;
@@ -67,16 +64,16 @@ public class LoadingOrder extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.loading_order);
 
-        items = (GridView) findViewById(R.id.items);
+        items = findViewById(R.id.items);
         searchViewTh = findViewById(R.id.mSearchTh);
         searchViewW = findViewById(R.id.mSearchW);
         searchViewL = findViewById(R.id.mSearchL);
         searchViewPices = findViewById(R.id.mSearchPieces);
 
-        done = (Button) findViewById(R.id.done);
-        barcode = (Button) findViewById(R.id.barcode);
-        addBundle = (Button) findViewById(R.id.add);
-        deleteBarcode = (ImageButton) findViewById(R.id.deletebaarcode);
+        done =  findViewById(R.id.done);
+        barcode =  findViewById(R.id.barcode);
+        addBundle =  findViewById(R.id.add);
+        deleteBarcode =  findViewById(R.id.deletebaarcode);
         listView2 = findViewById(R.id.verticalListView);
         listView = findViewById(R.id.listview);
         adapter = new ItemsListAdapter();
@@ -476,6 +473,7 @@ public class LoadingOrder extends AppCompatActivity {
 
                 try {
                     JSONArray parentArrayOrders = parentObject.getJSONArray("BUNDLE_INFO");
+                    motherList = new HashMap<>();
 
                     for (int i = 0; i < parentArrayOrders.length(); i++) {
                         JSONObject innerObject = parentArrayOrders.getJSONObject(i);
@@ -501,6 +499,7 @@ public class LoadingOrder extends AppCompatActivity {
                             bundleInfo.setFoucoseColor("0");
 
                             bundles.add(bundleInfo);
+                            motherList.put(innerObject.getString("BUNDLE_NO"), bundleInfo);
                         }
                     }
                 } catch (JSONException e) {
