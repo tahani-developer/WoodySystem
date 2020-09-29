@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.falconssoft.woodysystem.DatabaseHandler;
+import com.falconssoft.woodysystem.ExportToExcel;
 import com.falconssoft.woodysystem.ExportToPDF;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.SpinnerCustomAdapter;
@@ -59,7 +60,7 @@ public class PlannedUnplanned extends AppCompatActivity implements AdapterView.O
     private PlannedUnPlannedAdapter adapter2;
 
     private TextView thick, thicknessOrder, widthOrder, lengthOrder, piecesOrder, cubicOrder, noBundlesOrder, noBundles, totalCBM, export
-            , resetWidthList, resetLengthList, resetThicknessList;
+            , resetWidthList, resetLengthList, resetThicknessList ,plannedUnPlannedExcel;
     private RecyclerView recycler;
 
     private TableLayout tableLayout, headerTableLayout;
@@ -446,6 +447,12 @@ public class PlannedUnplanned extends AppCompatActivity implements AdapterView.O
                 lengthSpinner.setAdapter(lengthAdapter);
                 filters();
                 break;
+
+
+            case R.id.planned_unPlanned_reportOne_exportToExcel:
+                ExportToExcel.getInstance().createExcelFile(this, "Planned_UnPlanned_report.xls",4 ,PLListFiltered,null);
+                break;
+
         }
 
     }
@@ -788,6 +795,7 @@ public class PlannedUnplanned extends AppCompatActivity implements AdapterView.O
         resetThicknessList = findViewById(R.id.planned_unplanned_reset_thickness);
         resetWidthList = findViewById(R.id.planned_unplanned_reset_width);
         resetLengthList = findViewById(R.id.planned_unplanned_reset_length);
+        plannedUnPlannedExcel=findViewById(R.id.planned_unPlanned_reportOne_exportToExcel);
 
         thicknessOrder = findViewById(R.id.inventory_report_thick_order);
         widthOrder = findViewById(R.id.inventory_report_width_order);
@@ -810,6 +818,7 @@ public class PlannedUnplanned extends AppCompatActivity implements AdapterView.O
         resetThicknessList.setOnClickListener(this);
         resetWidthList.setOnClickListener(this);
         resetLengthList.setOnClickListener(this);
+        plannedUnPlannedExcel.setOnClickListener(this);
 
         fromLength.addTextChangedListener(new watchTextChange(fromLength));
         toLength.addTextChangedListener(new watchTextChange(toLength));

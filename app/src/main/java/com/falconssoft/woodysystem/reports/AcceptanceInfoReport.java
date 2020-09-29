@@ -32,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.falconssoft.woodysystem.DatabaseHandler;
+import com.falconssoft.woodysystem.ExportToExcel;
 import com.falconssoft.woodysystem.ExportToPDF;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.models.NewRowInfo;
@@ -97,7 +98,7 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
     public static final String EDIT_LIST = "EDIT_LIST";
     public static final String EDIT_RAW = "EDIT_RAW";
     public static final String EDIT_FLAG = "EDIT_FLAG";
-    private Button export;
+    private Button export ,exportToExcel;
     private SimpleDateFormat dateFormat, dfReport;
 
     private ProgressDialog progressDialog;
@@ -134,6 +135,7 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
         delete = findViewById(R.id.acceptanceInfo_report_delete);
         containerLayout = findViewById(R.id.acceptanceInfo_report_containerLayout);
         export = findViewById(R.id.acceptanceInfo_report_export);
+        exportToExcel = findViewById(R.id.acceptanceInfo_report_exportExcl);
 
         fromThickness = findViewById(R.id.acceptanceInfo_report_fromThick);
         toThickness = findViewById(R.id.acceptanceInfo_report_toThick);
@@ -265,6 +267,15 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
         toWidth.addTextChangedListener(new watchTextChange(toWidth));
         fromThickness.addTextChangedListener(new watchTextChange(fromThickness));
         toThickness.addTextChangedListener(new watchTextChange(toThickness));
+
+        exportToExcel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                ExportToExcel.getInstance().createExcelFile(AcceptanceInfoReport.this, "Acceptance_Info_Report.xls",5 ,filtered ,null);
+
+            }
+        });
 
     }
 

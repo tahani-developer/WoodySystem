@@ -53,6 +53,7 @@ import android.widget.Toast;
 
 import com.falconssoft.woodysystem.AddToInventory;
 import com.falconssoft.woodysystem.DatabaseHandler;
+import com.falconssoft.woodysystem.ExportToExcel;
 import com.falconssoft.woodysystem.ExportToPDF;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.SpinnerCustomAdapter;
@@ -137,7 +138,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     private WoodPresenter woodPresenter;
     private Animation animation;
     private TextView textView, noOfBundles, noOfPieces, cubicField, deleteAll, dateFrom, dateTo, thicknessOrder, widthOrder
-            , lengthOrder, searchPListTool, searchSerialTool, export, resetThicknessList, resetWidthList, resetLengthList;
+            , lengthOrder, searchPListTool, searchSerialTool, export,exportToExcel, resetThicknessList, resetWidthList, resetLengthList;
     private Spinner location, area, ordered, pList, grade, thicknessSpinner, widthSpinner, lengthSpinner;
     private ArrayAdapter<String> locationAdapter;
     private ArrayAdapter<String> areaAdapter;
@@ -386,6 +387,8 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         lengthSpinner = findViewById(R.id.inventory_report_length_spinner);
         widthSpinner = findViewById(R.id.inventory_report_width_spinner);
         export = findViewById(R.id.inventory_report_export);
+        exportToExcel = findViewById(R.id.inventory_report_exportToExcel);
+
         resetThicknessList = findViewById(R.id.inventory_report_thick_reset);
         resetWidthList = findViewById(R.id.inventory_report_width_reset);
         resetLengthList = findViewById(R.id.inventory_report_length_reset);
@@ -406,6 +409,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         resetWidthList.setOnClickListener(this);
         resetLengthList.setOnClickListener(this);
         export.setOnClickListener(this);
+        exportToExcel.setOnClickListener(this);
         searchSerialTool.setOnClickListener(this);
         searchPListTool.setOnClickListener(this);
         searchPListTextView.addTextChangedListener(new watchTextChange(searchPListTextView));
@@ -1334,6 +1338,10 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
 
                 filters();
 
+                break;
+
+            case R.id.inventory_report_exportToExcel:
+                ExportToExcel.getInstance().createExcelFile(InventoryReport.this, "Acceptance_Report.xls",7 ,filtered ,null);
                 break;
         }
 

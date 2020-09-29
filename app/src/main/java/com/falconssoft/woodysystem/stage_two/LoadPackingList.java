@@ -354,7 +354,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
 
                 break;
             case R.id.planned_reportOne_exportToExcel:
-                //ExportToExcel.getInstance().createExcelFile(this, "loaded_packing_list_report.xls",4 ,UPLListFiltered);
+                ExportToExcel.getInstance().createExcelFile(this, "loaded_packing_list_report.xls",3 ,PLListFiltered,null);
                 break;
 
         }
