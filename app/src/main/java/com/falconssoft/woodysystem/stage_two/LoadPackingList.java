@@ -70,7 +70,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class LoadPackingList extends AppCompatActivity implements View.OnClickListener {
-    //report2
+    // report 2
     //Load Packing List Report
     private DatabaseHandler databaseHandler;
     private Calendar myCalendar;
@@ -88,8 +88,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
     private RecyclerView recyclerView, recyclerView2;
     private RecyclerView recycler;
     private EditText paclingList, dest, orderNo;
-    private TextView searchCustomer, searchSupplier, noBundles, totalCBM, delete, export,piecesOrder, cubicOrder
-            , noBundlesOrder, exportToExcel;
+    private TextView searchCustomer, searchSupplier, noBundles, totalCBM, delete, export, piecesOrder, cubicOrder, noBundlesOrder, exportToExcel;
 
     private TableLayout tableLayout, headerTableLayout;
     private TableRow tableRow;
@@ -119,7 +118,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
 
     private SimpleDateFormat sdf, dfReport;
     private int sortFlag = 0;
-    private boolean isPiecesAsc=true,isCubicAsc=true ,isNoBundelAsc=true;
+    private boolean isPiecesAsc = true, isCubicAsc = true, isNoBundelAsc = true;
 
 
     private JSONArray plannedPLListJSON = new JSONArray();
@@ -193,7 +192,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onClick(View v) {
                 sortFlag = 0;
-                PLListOrder= adapter2.getListOrder();
+                PLListOrder = adapter2.getListOrder();
                 if (isPiecesAsc) {
                     isPiecesAsc = false;
                     piecesOrder.setBackgroundResource(R.drawable.des);
@@ -204,10 +203,11 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
                     Collections.sort(PLListOrder, Collections.reverseOrder(new SorterClass()));
                 }
 
-                Log.e("OrderPieces",""+PLListOrder.get(0).getNoOfPieces());
+                Log.e("OrderPieces", "" + PLListOrder.get(0).getNoOfPieces());
 
                 adapter2 = new LoadPLAdapter(LoadPackingList.this, PLListOrder, bundleInfoList);
-                recycler.setAdapter(adapter2);            }
+                recycler.setAdapter(adapter2);
+            }
         });
 
 
@@ -215,7 +215,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onClick(View v) {
                 sortFlag = 1;
-                PLListOrder= adapter2.getListOrder();
+                PLListOrder = adapter2.getListOrder();
                 if (isCubicAsc) {
                     isCubicAsc = false;
                     cubicOrder.setBackgroundResource(R.drawable.des);
@@ -225,17 +225,18 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
                     cubicOrder.setBackgroundResource(R.drawable.asc);
                     Collections.sort(PLListOrder, Collections.reverseOrder(new SorterClass()));
                 }
-                Log.e("OrderCubic",""+PLListOrder.get(0).getCubic());
+                Log.e("OrderCubic", "" + PLListOrder.get(0).getCubic());
 
                 adapter2 = new LoadPLAdapter(LoadPackingList.this, PLListOrder, bundleInfoList);
-                recycler.setAdapter(adapter2);            }
+                recycler.setAdapter(adapter2);
+            }
         });
 
         noBundlesOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sortFlag = 2;
-                PLListOrder= adapter2.getListOrder();
+                PLListOrder = adapter2.getListOrder();
                 if (isNoBundelAsc) {
                     isNoBundelAsc = false;
                     noBundlesOrder.setBackgroundResource(R.drawable.des);
@@ -246,10 +247,11 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
                     Collections.sort(PLListOrder, Collections.reverseOrder(new SorterClass()));
                 }
 
-                Log.e("OrderBundle",""+PLListOrder.get(0).getNoOfCopies());
+                Log.e("OrderBundle", "" + PLListOrder.get(0).getNoOfCopies());
 
                 adapter2 = new LoadPLAdapter(LoadPackingList.this, PLListOrder, bundleInfoList);
-                recycler.setAdapter(adapter2);            }
+                recycler.setAdapter(adapter2);
+            }
         });
 
 
@@ -350,7 +352,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.export:
                 ExportToPDF obj = new ExportToPDF(LoadPackingList.this);
-                obj.exportLoadPackingList(PLListFiltered, searchCustomer.getText().toString(), searchSupplier.getText().toString(), dfReport.format(Calendar.getInstance().getTime()), gradeText, today,noBundles.getText().toString(),totalCBM.getText().toString());
+                obj.exportLoadPackingList(PLListFiltered, searchCustomer.getText().toString(), searchSupplier.getText().toString(), dfReport.format(Calendar.getInstance().getTime()), gradeText, today, noBundles.getText().toString(), totalCBM.getText().toString());
 
                 break;
             case R.id.planned_reportOne_exportToExcel:
@@ -663,7 +665,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
         }
     }  // import customers
 
-    // ************************************** SEARCH *******************************
+    // ************************************** get data/SEARCH *******************************
     private class JSONTask2 extends AsyncTask<String, String, String> {  // check
         List<PlannedPL> PlandTemp;
 
@@ -909,7 +911,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
 
     }
 
-    public void detailsDialog(String pl, HashMap<String, List<PlannedPL>> bundleInfoList,String destination) {
+    public void detailsDialog(String pl, HashMap<String, List<PlannedPL>> bundleInfoList, String destination) {
 
         Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -919,7 +921,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
         SearchView searchView = dialog.findViewById(R.id.search_supplier_searchView);
         TextView close = dialog.findViewById(R.id.search_supplier_close);
         TextView plist = dialog.findViewById(R.id.pl);
-        TextView exportToPdf= dialog.findViewById(R.id.export);
+        TextView exportToPdf = dialog.findViewById(R.id.export);
 
         plist.setText("Packing List : " + pl);
 
@@ -944,9 +946,9 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
         exportToPdf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(LoadPackingList.this, "export"+pl, Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoadPackingList.this, "export" + pl, Toast.LENGTH_SHORT).show();
 
-                if(temp.size()!=0) {
+                if (temp.size() != 0) {
                     ExportToPDF exportToPDF = new ExportToPDF(LoadPackingList.this);
                     exportToPDF.exportLoadPackingListChild(temp, pl, destination, dfReport.format(Calendar.getInstance().getTime()), "kd");
                 }
@@ -1193,11 +1195,11 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
     void calculateTotal() {
         int sumOfBundles = 0;
         double totalCbm = 0;
-        for (int i = 0; i < PLListFiltered.size(); i++) {
-            sumOfBundles += PLListFiltered.get(i).getNoOfCopies();
-            //totalCbm += (PLListFiltered.get(i).getThickness() * PLListFiltered.get(i).getWidth() * PLListFiltered.get(i).getLength() * PLListFiltered.get(i).getNoOfPieces() * PLListFiltered.get(i).getNoOfCopies());
-            totalCbm += PLListFiltered.get(i).getCubic();
-        }
+        for (int i = 0; i < PLListFiltered.size(); i++){
+                sumOfBundles += PLListFiltered.get(i).getNoOfCopies();
+                totalCbm += PLListFiltered.get(i).getCubic();
+                //totalCbm += (PLListFiltered.get(i).getThickness() * PLListFiltered.get(i).getWidth() * PLListFiltered.get(i).getLength() * PLListFiltered.get(i).getNoOfPieces() * PLListFiltered.get(i).getNoOfCopies());
+            }
 
         noBundles.setText("" + sumOfBundles);
         totalCBM.setText("" + String.format("%.3f", (totalCbm)));
@@ -1234,9 +1236,9 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
         TextView title = findViewById(R.id.inventory_report_tv);
         title.setText("Loaded Packing List Report");
 
-        piecesOrder=findViewById(R.id.load_planned_report_pieces_order);
-        cubicOrder=findViewById(R.id.load_planned_report_cubic_order);
-        noBundlesOrder=findViewById(R.id.load_planned_report_no_bundles_order);
+        piecesOrder = findViewById(R.id.load_planned_report_pieces_order);
+        cubicOrder = findViewById(R.id.load_planned_report_cubic_order);
+        noBundlesOrder = findViewById(R.id.load_planned_report_no_bundles_order);
 
     }
 

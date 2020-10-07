@@ -27,6 +27,8 @@ public class PlannedPL extends Throwable {
     private int isOld;
     private int hide;
     private  int index;
+    private  String serial;
+
 
     public PlannedPL(String custName, String custNo, String packingList, String destination, String orderNo, double thickness, double width, double length, double noOfPieces, String date) {
         this.custName = custName;
@@ -43,6 +45,14 @@ public class PlannedPL extends Throwable {
 
     public PlannedPL() {
 
+    }
+
+    public String getSerial() {
+        return serial;
+    }
+
+    public void setSerial(String serial) {
+        this.serial = serial;
     }
 
     public String getCustName() {

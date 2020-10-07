@@ -30,7 +30,7 @@ public class ItemsListAdapter extends BaseAdapter {
     private Context context;
     private List<BundleInfo> mOriginalValues;
     private static List<BundleInfo> itemsList;
-    private static List<BundleInfo> selectedBundles;
+    static List<BundleInfo> selectedBundles;
     static LoadingOrder obj = new LoadingOrder();
     private boolean changeColor;
 
@@ -38,7 +38,7 @@ public class ItemsListAdapter extends BaseAdapter {
         this.context = context;
         this.mOriginalValues = itemsList;
         this.itemsList = itemsList;
-        selectedBundles = new ArrayList<>();
+//        selectedBundles = new ArrayList<>();
         this.changeColor = changeColor;
     }
 
@@ -120,17 +120,26 @@ public class ItemsListAdapter extends BaseAdapter {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     itemsList.get(i).setChecked(true);
-                    motherList.get(itemsList.get(i).getBundleNo());
-                    BundleInfo info = itemsList.get(i);
-                    info.setChecked(true);
-                    motherList.put(itemsList.get(i).getBundleNo(), info);
+                    bundles.get(itemsList.get(i).getIndex()).setChecked(true);
+//                    motherList.get(itemsList.get(i).getBundleNo());
+//                    BundleInfo info = itemsList.get(i);
+//                    info.setChecked(true);
+//                    motherList.put(itemsList.get(i).getBundleNo(), itemsList.get(i));
+                    Log.e("checkIfChecked","true: " +itemsList.get(i).getIndex() + "***"
+                            +  itemsList.get(i).getSerialNo() + "   " +  bundles.get(itemsList.get(i).getIndex()).getSerialNo()
+                    + " ********** " + bundles.get(itemsList.get(i).getIndex()).getIndex());
+
                     holder.linearLayout.setBackground(context.getResources().getDrawable(R.drawable.border_background));
                 } else {
                     itemsList.get(i).setChecked(false);
-                    motherList.get(itemsList.get(i).getBundleNo());
-                    BundleInfo info = itemsList.get(i);
-                    info.setChecked(false);
-                    motherList.put(itemsList.get(i).getBundleNo(), info);
+                    bundles.get(itemsList.get(i).getIndex()).setChecked(false);
+                    Log.e("checkIfChecked","false: " +itemsList.get(i).getIndex() + "***"+ itemsList.get(i).getSerialNo()
+                            + "   " +  bundles.get(itemsList.get(i).getIndex()).getSerialNo()
+                            + " ********** " + bundles.get(itemsList.get(i).getIndex()).getIndex());
+//                    motherList.get(itemsList.get(i).getBundleNo());
+//                    BundleInfo info = itemsList.get(i);
+//                    info.setChecked(false);
+//                    motherList.put(itemsList.get(i).getBundleNo(), info);
                     holder.linearLayout.setBackground(context.getResources().getDrawable(R.drawable.border_background));
                 }
                 bundles.get(i).setFoucoseColor("0");
@@ -145,11 +154,21 @@ public class ItemsListAdapter extends BaseAdapter {
     public List<BundleInfo> getSelectedItems() {
 
         selectedBundles.clear();
-        for (Map.Entry entry : motherList.entrySet()) {
-            BundleInfo info = (BundleInfo) entry.getValue();
-            if (info.getChecked())
-                selectedBundles.add(info);
-        }
+        Log.e("now", "itemsList " + bundles.size());
+        for (int i = 0; i < bundles.size(); i++)
+            if (bundles.get(i).getChecked()){
+                Log.e("nowSelected", bundles.get(i).getSerialNo());
+                selectedBundles.add(bundles.get(i));
+            }
+//        selectedBundles.clear();
+//        Log.e("nowMap", "" + motherList.size());
+//        for (Map.Entry entry : motherList.entrySet()) {
+//            BundleInfo info = (BundleInfo) entry.getValue();
+//            if (info.getChecked()){
+//                Log.e("nowSelected", info.getSerialNo());
+//                selectedBundles.add(info);
+//            }
+//        }
 
         return selectedBundles;
     }

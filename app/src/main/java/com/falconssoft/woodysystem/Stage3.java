@@ -28,6 +28,7 @@ public class Stage3 extends AppCompatActivity implements View.OnClickListener {
 //    private List<String> list = new ArrayList<>();
     private Settings settings;
     private long mLastClickTime = 0,mLastClickTime2 = 0, mLastClickTime3 = 0;
+    public static int flagOpenJ=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +77,7 @@ public class Stage3 extends AppCompatActivity implements View.OnClickListener {
                 if (SystemClock.elapsedRealtime() - mLastClickTime2 < 1000) {
                     break;
                 }
+                flagOpenJ=0;
                 mLastClickTime2 = SystemClock.elapsedRealtime();
                 Intent intent2 = new Intent(this, LoadingOrder.class);
                 startActivity(intent2);

@@ -10,11 +10,11 @@ import java.io.Serializable;
 
 public class Orders implements Serializable {
 
-    private Double thickness;
-    private Double length;
-    private Double width;
+    private double thickness;
+    private double length;
+    private double width;
     private String grade;
-    private Double noOfPieces;
+    private double noOfPieces;
     private String bundleNo;
     private String location;
     private String area;
@@ -28,6 +28,11 @@ public class Orders implements Serializable {
     private Bitmap picBitmap;
     private String packingList;
     private String customer;
+    private String newCustomer;
+    private int serial;
+    private int newSerial;// when swapping two rows in loading order
+    private boolean isRemove;// to remove list
+
 
     public Orders() {
     }
@@ -52,6 +57,38 @@ public class Orders implements Serializable {
         this.customer = customer;
     }
 
+    public boolean isRemove() {
+        return isRemove;
+    }
+
+    public void setRemove(boolean remove) {
+        isRemove = remove;
+    }
+
+    public String getNewCustomer() {
+        return newCustomer;
+    }
+
+    public void setNewCustomer(String newCustomer) {
+        this.newCustomer = newCustomer;
+    }
+
+    public int getNewSerial() {
+        return newSerial;
+    }
+
+    public void setNewSerial(int newSerial) {
+        this.newSerial = newSerial;
+    }
+
+    public int getSerial() {
+        return serial;
+    }
+
+    public void setSerial(int serial) {
+        this.serial = serial;
+    }
+
     public boolean isChecked() {
         return checked;
     }
@@ -60,27 +97,27 @@ public class Orders implements Serializable {
         this.checked = checked;
     }
 
-    public Double getThickness() {
+    public double getThickness() {
         return thickness;
     }
 
-    public void setThickness(Double thickness) {
+    public void setThickness(double thickness) {
         this.thickness = thickness;
     }
 
-    public Double getLength() {
+    public double getLength() {
         return length;
     }
 
-    public void setLength(Double length) {
+    public void setLength(double length) {
         this.length = length;
     }
 
-    public Double getWidth() {
+    public double getWidth() {
         return width;
     }
 
-    public void setWidth(Double width) {
+    public void setWidth(double width) {
         this.width = width;
     }
 
@@ -92,11 +129,11 @@ public class Orders implements Serializable {
         this.grade = grade;
     }
 
-    public Double getNoOfPieces() {
+    public double getNoOfPieces() {
         return noOfPieces;
     }
 
-    public void setNoOfPieces(Double noOfPieces) {
+    public void setNoOfPieces(double noOfPieces) {
         this.noOfPieces = noOfPieces;
     }
 
@@ -215,6 +252,38 @@ public class Orders implements Serializable {
             obj.put("DESTINATION", "'" +destination+ "'");
             obj.put("PIC", "'" +picture+ "'");
             obj.put("PACKING_LIST", "'" +packingList+ "'");
+            obj.put("CUSTOMER", "'" +customer+ "'");
+            obj.put("SERIAL", "'" +serial+ "'");
+            obj.put("NEW_SERIAL", "'" +newSerial+ "'");
+            obj.put("NEW_CUSTOMER", "'" +newCustomer+ "'");
+
+
+        } catch (JSONException e) {
+            Log.e("Tag" , "JSONException");
+        }
+        return obj;
+    }
+
+    public JSONObject getJSONObjectBundleInfo() {
+        JSONObject obj = new JSONObject();
+
+        try {
+            obj.put("THICKNESS", "'" + thickness + "'");
+            obj.put("WIDTH", "'" +width+ "'");
+            obj.put("LENGTH", "'" +length+ "'");
+            obj.put("GRADE", "'" +grade+ "'");
+            obj.put("PIECES","'" + noOfPieces+ "'");
+            obj.put("BUNDLE_NO", "'" +bundleNo+ "'");
+            obj.put("LOCATION", "'" +location+ "'");
+            obj.put("AREA", "'" +area+ "'");
+//            obj.put("PLACING_NO", "'" +placingNo+ "'");
+//            obj.put("ORDER_NO", "'" +orderNo+ "'");
+//            obj.put("CONTAINER_NO", "'" +containerNo+ "'");
+//            obj.put("DATE_OF_LOAD", "'" +dateOfLoad+ "'");
+//            obj.put("DESTINATION", "'" +destination+ "'");
+//            obj.put("PIC", "'" +picture+ "'");
+            obj.put("B_SERIAL", "'" +serial+ "'");
+            obj.put("CUSTOMER", "'" +customer+ "'");
             obj.put("CUSTOMER", "'" +customer+ "'");
 
 

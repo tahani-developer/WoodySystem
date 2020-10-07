@@ -40,6 +40,7 @@ public class BundleInfo implements Serializable {
     private String customer="";
     private int noOfExist;
     private int noOfCopies;
+    private int index;
 
     public BundleInfo() {
     }
@@ -75,6 +76,14 @@ public class BundleInfo implements Serializable {
         this.backingList = backingList;
         this.ordered = ordered;
         this.customer = customer;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     public int getNoOfCopies() {

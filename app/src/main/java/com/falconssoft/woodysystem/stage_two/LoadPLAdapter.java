@@ -26,7 +26,8 @@ public class LoadPLAdapter extends RecyclerView.Adapter<LoadPLAdapter.SuppliersV
     private List<PlannedPL> PlannedPLOrder;
     private HashMap<String, List<PlannedPL>> bundleInfoList;
 
-    public LoadPLAdapter(Context plannedPL, List<PlannedPL> PlannedPL, HashMap<String, List<PlannedPL>> bundleInfoList) {
+    public
+    LoadPLAdapter(Context plannedPL, List<PlannedPL> PlannedPL, HashMap<String, List<PlannedPL>> bundleInfoList) {
 
         this.plannedPL = (LoadPackingList) plannedPL;
         this.PlannedPL = PlannedPL;

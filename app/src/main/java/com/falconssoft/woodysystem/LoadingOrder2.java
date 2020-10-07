@@ -88,6 +88,7 @@ import static com.falconssoft.woodysystem.SettingsFile.emailTitle;
 import static com.falconssoft.woodysystem.SettingsFile.recipientName;
 import static com.falconssoft.woodysystem.SettingsFile.senderName;
 import static com.falconssoft.woodysystem.SettingsFile.senderPassword;
+import static com.falconssoft.woodysystem.Stage3.flagOpenJ;
 
 public class LoadingOrder2 extends AppCompatActivity {
 
@@ -95,7 +96,7 @@ public class LoadingOrder2 extends AppCompatActivity {
      * loading order is just for whose has packing list.
      * the customer can't take bundles with other specifications(L,W,P,T) until he planned another bundles match the specifications
      * the customer can't take bundles with count not match his packing list count
-     * */
+     */
 
     HorizontalListView listView;
     ListView listView2;
@@ -108,6 +109,9 @@ public class LoadingOrder2 extends AppCompatActivity {
     private DatabaseHandler databaseHandler;
     private List<BundleInfo> bundles;
     private List<Orders> checkDuplicate = new ArrayList<>();
+    private List<Orders> originalList = new ArrayList<>();
+    private List<Orders> checkedBundleList = new ArrayList<>();
+    private List<Orders> unMatchedList = new ArrayList<>();
     private Calendar myCalendar;
     static int index = 0;
     ItemsListAdapter2 adapter;
@@ -128,6 +132,8 @@ public class LoadingOrder2 extends AppCompatActivity {
 //    private boolean checkImageExist = false;
 
     JSONArray jsonArrayOrders;
+    JSONArray jsonArrayUnmatchedList;
+
     JSONArray jsonArrayMissedBundles;
     JSONArray jsonArrayPics;
 
@@ -152,7 +158,7 @@ public class LoadingOrder2 extends AppCompatActivity {
         generalSettings = new Settings();
         generalSettings = databaseHandler.getSettings();
         jsonArrayMissedBundles = new JSONArray();
-        jsonArrayOrders = new JSONArray();
+//        jsonArrayOrders = new JSONArray();
         jsonArrayPics = new JSONArray();
 
         Drawable myDrawable = getResources().getDrawable(R.drawable.pic);
@@ -281,7 +287,7 @@ public class LoadingOrder2 extends AppCompatActivity {
                             if (!TextUtils.isEmpty(dateOfLoad.getText().toString())) {
                                 if (!TextUtils.isEmpty(destination.getText().toString())) {
 
-                                    Toast.makeText(LoadingOrder2.this, "Saved Successfully", Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(LoadingOrder2.this, "Saved Successfully", Toast.LENGTH_SHORT).show();
                                     sendBundle();
 
                                 } else {
@@ -305,135 +311,145 @@ public class LoadingOrder2 extends AppCompatActivity {
 
     public void sendBundle() {
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (generalSettings.getStore().equals("Amman")) {
-                    Log.e("location1", generalSettings.getStore());
-                    for (int i = 0; i < bundles.size(); i++) {
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//            }
+//        }).start();
 
-                        order = new Orders(bundles.get(i).getThickness()
-                                , bundles.get(i).getWidth()
-                                , bundles.get(i).getLength()
-                                , bundles.get(i).getGrade()
-                                , bundles.get(i).getNoOfPieces()
-                                , bundles.get(i).getBundleNo()
-                                , bundles.get(i).getLocation()
-                                , bundles.get(i).getArea()
-                                , placingNo.getText().toString()
-                                , orderNo.getText().toString()
-                                , containerNo.getText().toString()
-                                , dateOfLoad.getText().toString()
-                                , destination.getText().toString()
-                                , bundles.get(i).getPicture()
-                                , bundles.get(i).getBackingList()
-                                , bundles.get(i).getCustomer());
+        if (generalSettings.getStore().equals("Amman")) {
+            Log.e("location1", generalSettings.getStore());
+            jsonArrayOrders = new JSONArray();
+            for (int i = 0; i < bundles.size(); i++) {
+
+                order = new Orders(bundles.get(i).getThickness()
+                        , bundles.get(i).getWidth()
+                        , bundles.get(i).getLength()
+                        , bundles.get(i).getGrade()
+                        , bundles.get(i).getNoOfPieces()
+                        , bundles.get(i).getBundleNo()
+                        , bundles.get(i).getLocation()
+                        , bundles.get(i).getArea()
+                        , placingNo.getText().toString()
+                        , orderNo.getText().toString()
+                        , containerNo.getText().toString()
+                        , dateOfLoad.getText().toString()
+                        , destination.getText().toString()
+                        , bundles.get(i).getPicture()
+                        , bundles.get(i).getBackingList()
+                        , bundles.get(i).getCustomer());
 
 //                        databaseHandler.addOrder(order);
 //                    Log.e("**********", "" + bundles.get(i).getPicture().length());
-                        jsonArrayOrders.put(order.getJSONObject());
-                    }
+                jsonArrayOrders.put(order.getJSONObject());
+            }
 
-                    picture = new Pictures(orderNo.getText().toString()
-                            , pics.get(0)
-                            , pics.get(1)
-                            , pics.get(2)
-                            , pics.get(3)
-                            , pics.get(4)
-                            , pics.get(5)
-                            , pics.get(6)
-                            , pics.get(7));
+            picture = new Pictures(orderNo.getText().toString()
+                    , pics.get(0)
+                    , pics.get(1)
+                    , pics.get(2)
+                    , pics.get(3)
+                    , pics.get(4)
+                    , pics.get(5)
+                    , pics.get(6)
+                    , pics.get(7));
 
-                    jsonArrayPics.put(picture.getJSONObject());
+            jsonArrayPics.put(picture.getJSONObject());
 
 //                    databaseHandler.addPictures(picture);
 
-                    new JSONTask4().execute();
+            new JSONTask4().execute();
 //                    progressDialog.show();
 //                new JSONTask().execute();
 
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            searchBar.setText("2");
-                        }
-                    });
+//            new Handler(Looper.getMainLooper()).post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    searchBar.setText("2");
+//                }
+//            });
 //                finish();
 
-                } else {
-                    checkDuplicate = new ArrayList<>();
-                    for (int i = 0; i < bundles.size(); i++) {
+        } else {
+            //checkDuplicate = new ArrayList<>();
+            checkedBundleList = new ArrayList<>();
+            for (int i = 0; i < bundles.size(); i++) {
 
-                        Log.e("location2", generalSettings.getStore());
-                        order = new Orders(bundles.get(i).getThickness()
-                                , bundles.get(i).getWidth()
-                                , bundles.get(i).getLength()
-                                , bundles.get(i).getGrade()
-                                , bundles.get(i).getNoOfPieces()
-                                , bundles.get(i).getBundleNo()
-                                , bundles.get(i).getLocation()
-                                , bundles.get(i).getArea()
-                                , placingNo.getText().toString()
-                                , orderNo.getText().toString()
-                                , containerNo.getText().toString()
-                                , dateOfLoad.getText().toString()
-                                , destination.getText().toString()
-                                , bundles.get(i).getPicture()
-                                , bundles.get(i).getBackingList()
-                                , bundles.get(i).getCustomer());
+                Log.e("location2", generalSettings.getStore());
+                if (TextUtils.isEmpty(bundles.get(i).getPicture()))
+                    bundles.get(i).setPicture("null");
+                order = new Orders(bundles.get(i).getThickness()
+                        , bundles.get(i).getWidth()
+                        , bundles.get(i).getLength()
+                        , bundles.get(i).getGrade()
+                        , bundles.get(i).getNoOfPieces()
+                        , bundles.get(i).getBundleNo()
+                        , bundles.get(i).getLocation()
+                        , bundles.get(i).getArea()
+                        , placingNo.getText().toString()
+                        , orderNo.getText().toString()
+                        , containerNo.getText().toString()
+                        , dateOfLoad.getText().toString()
+                        , destination.getText().toString()
+                        , bundles.get(i).getPicture()
+                        , bundles.get(i).getBackingList()
+                        , bundles.get(i).getCustomer());
+                Log.e("followpic" , bundles.get(i).getPicture());
+
+                order.setSerial(Integer.parseInt(bundles.get(i).getSerialNo()));
+                checkedBundleList.add(order);
+                checkedBundleList.get(i).setRemove(false);
+
+                // databaseHandler.addOrder(order);
+
+                Log.e("loadingorder", "" + i + bundles.get(i).getBackingList() + " orderNo " + orderNo.getText().toString());
+
+//                        jsonArrayOrders.put(order.getJSONObject());
 
 
-                        // databaseHandler.addOrder(order);
+//                        if (!order.getPackingList().equals(order.getOrderNo()) && !order.getPackingList().equals("null") && bundles.get(i).getNoOfExist() == 0) {
+//                            // this case when i want to exchange my bundles with others but i don't have enough count
+//                            Log.e("loadingorder", "missedBundles " + order.getPackingList() + order.getOrderNo() + bundles.get(i).getNoOfExist());
+//                            missedBundles.add(order);
+//                            jsonArrayMissedBundles.put(order.getJSONObject());
+//                        } else {
+//                            Log.e("loadingorder", "checkDuplicate " + order.getPackingList() + order.getOrderNo() + bundles.get(i).getNoOfExist());
+//                            checkDuplicate.add(order);
+//                        }
 
-//                    Log.e("**********", "" + bundles.get(i).getPicture().length());
+                // databaseHandler.updateTableBundles(bundles.get(i).getBundleNo());
+            }
+//                    Log.e("loadingorder", "missedbundles" + missedBundles.size());
+            picture = new Pictures(orderNo.getText().toString()
+                    , pics.get(0)
+                    , pics.get(1)
+                    , pics.get(2)
+                    , pics.get(3)
+                    , pics.get(4)
+                    , pics.get(5)
+                    , pics.get(6)
+                    , pics.get(7));
 
-                        jsonArrayOrders.put(order.getJSONObject());
+            jsonArrayPics.put(picture.getJSONObject());
 
+            databaseHandler.addPictures(picture);
 
-                        if (!order.getPackingList().equals(order.getOrderNo()) && !order.getPackingList().equals("null") && bundles.get(i).getNoOfExist() == 0) {
-                            // this case when i want to exchange my bundles with others but i don't have enough count
-                            Log.e("loadingorder", "missedBundles " + order.getPackingList() + order.getOrderNo() + bundles.get(i).getNoOfExist());
-                            missedBundles.add(order);
-                            jsonArrayMissedBundles.put(order.getJSONObject());
-                        } else {
-                            Log.e("loadingorder", "checkDuplicate " + order.getPackingList() + order.getOrderNo() + bundles.get(i).getNoOfExist());
-                            checkDuplicate.add(order);
-                        }
-
-                        // databaseHandler.updateTableBundles(bundles.get(i).getBundleNo());
-                    }
-                    Log.e("loadingorder", "missedbundles" + missedBundles.size());
-                    picture = new Pictures(orderNo.getText().toString()
-                            , pics.get(0)
-                            , pics.get(1)
-                            , pics.get(2)
-                            , pics.get(3)
-                            , pics.get(4)
-                            , pics.get(5)
-                            , pics.get(6)
-                            , pics.get(7));
-
-                    jsonArrayPics.put(picture.getJSONObject());
-
-                    databaseHandler.addPictures(picture);
-
-                    new JSONTask3().execute();
+            new JSONTask3().execute();
 //                new JSONTask().execute();
 
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            searchBar.setText("2");
-                        }
-                    });
+//            new Handler(Looper.getMainLooper()).post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    searchBar.setText("2");
+//                }
+//            });
 
 //                finish();
 
-                    progressDialog.dismiss();
+            progressDialog.dismiss();
 
-                }
-            }
-        }).start();
+        }
 
     }
 
@@ -682,13 +698,15 @@ public class LoadingOrder2 extends AppCompatActivity {
                 if (plannedList.size() > 0)
                     newCust = plannedList.get(0).getCustName();
 
-                Log.e("loadingorder", " JSONTask " + jsonArrayOrders.length() + " missed: " + jsonArrayMissedBundles.length());
+                Log.e("loadingorder", " JSONTask " + jsonArrayOrders.length());//+ " missed: " + jsonArrayMissedBundles.length());
 
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-                nameValuePairs.add(new BasicNameValuePair("BUNDLE_ORDERS", jsonArrayOrders.toString().trim()));
-                nameValuePairs.add(new BasicNameValuePair("NEW_CUST", "'" + newCust + "'"));
+                nameValuePairs.add(new BasicNameValuePair("ORIGINAL_LIST", jsonArrayOrders.toString().trim()));
+                nameValuePairs.add(new BasicNameValuePair("UN_FOUND_LIST", jsonArrayUnmatchedList.toString().trim()));
+//                nameValuePairs.add(new BasicNameValuePair("NEW_CUST", "'" + newCust + "'"));
                 nameValuePairs.add(new BasicNameValuePair("BUNDLE_PIC", jsonArrayPics.toString().trim()));
-                nameValuePairs.add(new BasicNameValuePair("MISSED_BUNDLES", jsonArrayMissedBundles.toString().trim()));
+//                nameValuePairs.add(new BasicNameValuePair("BUNDLE_ORDERS", jsonArrayOrders.toString().trim()));
+//                nameValuePairs.add(new BasicNameValuePair("MISSED_BUNDLES", jsonArrayMissedBundles.toString().trim()));
 
                 //Log.e("tag", "" + jsonArrayPics.toString());
 
@@ -711,6 +729,8 @@ public class LoadingOrder2 extends AppCompatActivity {
                 JsonResponse = sb.toString();
                 Log.e("loadingorder", " JSONTaskmonitor " + JsonResponse);
 
+                Log.v("loadingorder", " JSONTaskmonitor " + JsonResponse);
+
                 return JsonResponse;
 
             } catch (Exception e) {
@@ -723,11 +743,14 @@ public class LoadingOrder2 extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
 
-
             if (s != null) {
-                if (s.contains("BUNDLE_ORDER SUCCESS")) {
+                if (s.contains("EXCHANGE_BUNDLE SUCCESS")) {//if (s.contains("BUNDLE_ORDER SUCCESS")) {
                     pics.clear();
-                    finish();
+                    flagOpenJ = 0;
+//                    finish();
+                    Intent intent = new Intent(LoadingOrder2.this, LoadingOrder.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
                     Log.e("tag", "****Success");
                 } else {
                     Log.e("tag", "****Failed to export data");
@@ -854,14 +877,14 @@ public class LoadingOrder2 extends AppCompatActivity {
         @SuppressLint("WrongThread")
         @Override
         protected String doInBackground(String... params) {
+            String JsonResponse = null;
             try {
-                String JsonResponse = null;
                 HttpClient client = new DefaultHttpClient();
                 HttpPost request = new HttpPost();
                 request.setURI(new URI("http://" + databaseHandler.getSettings().getIpAddress() + "/export.php"));
 
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-                nameValuePairs.add(new BasicNameValuePair("GET_PLANNED", orderNo.getText().toString()));
+                nameValuePairs.add(new BasicNameValuePair("GET_PLANNED_BUNDLE_INFO", orderNo.getText().toString()));//GET_PLANNED
 
 //                Log.e("tagPlanned", " COMPARE_CONTENT " +plannedPLJObject.toString());
                 request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
@@ -887,78 +910,193 @@ public class LoadingOrder2 extends AppCompatActivity {
                 JSONArray array = object.getJSONArray("PLANNED");
 
                 plannedList.clear();
+                originalList.clear();
                 for (int i = 0; i < array.length(); i++) {
 
                     JSONObject innerObject = array.getJSONObject(i);
+//                    order = new Orders(bundles.get(i).getThickness()
+//                            , bundles.get(i).getWidth()
+//                            , bundles.get(i).getLength()
+//                            , bundles.get(i).getGrade()
+//                            , bundles.get(i).getNoOfPieces()
+//                            , bundles.get(i).getBundleNo()
+//                            , bundles.get(i).getLocation()
+//                            , bundles.get(i).getArea()
+//                            , placingNo.getText().toString()
+//                            , orderNo.getText().toString()
+//                            , containerNo.getText().toString()
+//                            , dateOfLoad.getText().toString()
+//                            , destination.getText().toString()
+//                            , bundles.get(i).getPicture()
+//                            , bundles.get(i).getBackingList()
+//                            , bundles.get(i).getCustomer());
+                    Orders orders = new Orders();
+                    orders.setThickness(innerObject.getDouble("THICKNESS"));// check double
+                    orders.setWidth(innerObject.getDouble("WIDTH"));
+                    orders.setLength(innerObject.getDouble("LENGTH"));
+                    orders.setGrade(innerObject.getString("GRADE"));
+                    orders.setNoOfPieces(innerObject.getDouble("PIECES"));
 
-                    PlannedPL pl = new PlannedPL();
-                    pl.setThickness(innerObject.getInt("THICKNESS"));
-                    pl.setWidth(innerObject.getDouble("WIDTH"));
-                    pl.setLength(innerObject.getDouble("LENGTH"));
-                    pl.setGrade(innerObject.getString("GRADE"));
-                    pl.setNoOfPieces(innerObject.getDouble("PIECES"));
-                    pl.setPackingList(innerObject.getString("PACKING_LIST"));
-                    pl.setCustName(innerObject.getString("CUST_NAME"));
+                    orders.setBundleNo(innerObject.getString("BUNDLE_NO"));
+                    orders.setLocation(innerObject.getString("LOCATION"));
+                    orders.setArea(innerObject.getString("AREA"));
+                    orders.setOrderNo(orderNo.getText().toString());
+                    orders.setContainerNo(containerNo.getText().toString());
+                    orders.setDateOfLoad(dateOfLoad.getText().toString());
+                    orders.setDestination(destination.getText().toString());
+//                    orders.setPicture(innerObject.getDouble("PIECES"));
+                    orders.setPackingList(innerObject.getString("BACKING_LIST"));
+                    orders.setCustomer(innerObject.getString("CUSTOMER"));
+                    orders.setSerial(innerObject.getInt("B_SERIAL"));
+                    orders.setRemove(false);
 
-                    plannedList.add(pl);
+                    originalList.add(orders);
+                    Log.e("order", "" + orders.getSerial());
+                    Log.e("originalListSize", "" + originalList.size());
+//                    PlannedPL pl = new PlannedPL();
+//                    pl.setThickness(innerObject.getInt("THICKNESS"));
+//                    pl.setWidth(innerObject.getDouble("WIDTH"));
+//                    pl.setLength(innerObject.getDouble("LENGTH"));
+//                    pl.setGrade(innerObject.getString("GRADE"));
+//                    pl.setNoOfPieces(innerObject.getDouble("PIECES"));
+//                    pl.setPackingList(innerObject.getString("BACKING_LIST"));
+//                    pl.setCustName(innerObject.getString("CUSTOMER"));
+//                    pl.setSerial(innerObject.getString("B_SERIAL"));
+
+//                    plannedList.add(pl);
+//                    jsonArrayMissedBundles.put(pl.getJSONObject());
 
                 }
 
                 //Log.e("****", "" + plannedList.size());
 
-                return JsonResponse;
+//                return JsonResponse;
 
             } catch (Exception e) {
                 e.printStackTrace();
-                return null;
+//                return null;
             }
+            return JsonResponse;
         }
 
         @SuppressLint("NewApi")
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-
+            Log.e("jsontask", s);
             if (s != null) {
                 // remove found bundles in jsonArrayOrders (all orders i choosed) from packing list (order no)
-                for (int m = 0; m < checkDuplicate.size(); m++)
-                    for (int n = 0; n < plannedList.size(); n++)
-                        if (checkDuplicate.get(m).getThickness() == plannedList.get(n).getThickness() &&
-                                checkDuplicate.get(m).getWidth() == plannedList.get(n).getWidth() &&
-                                checkDuplicate.get(m).getLength() == plannedList.get(n).getLength() &&
-                                checkDuplicate.get(m).getNoOfPieces() == plannedList.get(n).getNoOfPieces() &&
-                                checkDuplicate.get(m).getGrade().equals(plannedList.get(n).getGrade())) {
-                            plannedList.remove(n);
-                            break;
-                        }
-                Log.e("loadingorder", "plannedList " + plannedList.size());
-
-                for (int i = 0; i < plannedList.size(); i++) {
-                    for (int k = 0; k < missedBundles.size(); k++) {
-
-                        if (plannedList.get(i).getThickness() == missedBundles.get(k).getThickness() &&
-                                plannedList.get(i).getWidth() == missedBundles.get(k).getWidth() &&
-                                plannedList.get(i).getLength() == missedBundles.get(k).getLength() &&
-                                plannedList.get(i).getNoOfPieces() == missedBundles.get(k).getNoOfPieces() &&
-                                plannedList.get(i).getGrade().equals(missedBundles.get(k).getGrade())) {
-
-                            //  if loading (packing list) has same bundles of the alternative
-                            // packing list it removed from list to make exchange in web service
-                            missedBundles.remove(k);
-                            jsonArrayMissedBundles.remove(k);
-                            break;
-                        }
-
-                    }
-                }
-                Log.e("loadingorder", "  missedBundles" + missedBundles.size());
+//                for (int m = 0; m < checkDuplicate.size(); m++)
+//                    for (int n = 0; n < plannedList.size(); n++)
+//                        if (checkDuplicate.get(m).getThickness() == plannedList.get(n).getThickness() &&
+//                                checkDuplicate.get(m).getWidth() == plannedList.get(n).getWidth() &&
+//                                checkDuplicate.get(m).getLength() == plannedList.get(n).getLength() &&
+//                                checkDuplicate.get(m).getNoOfPieces() == plannedList.get(n).getNoOfPieces() &&
+//                                checkDuplicate.get(m).getGrade().equals(plannedList.get(n).getGrade())) {
+//                            plannedList.remove(n);
+//                            break;
+//                        }
+//                Log.e("loadingorder", "plannedList " + plannedList.size());
+//
+//                for (int i = 0; i < plannedList.size(); i++) {
+//                    for (int k = 0; k < missedBundles.size(); k++) {
+//
+//                        if (plannedList.get(i).getThickness() == missedBundles.get(k).getThickness() &&
+//                                plannedList.get(i).getWidth() == missedBundles.get(k).getWidth() &&
+//                                plannedList.get(i).getLength() == missedBundles.get(k).getLength() &&
+//                                plannedList.get(i).getNoOfPieces() == missedBundles.get(k).getNoOfPieces() &&
+//                                plannedList.get(i).getGrade().equals(missedBundles.get(k).getGrade())) {
+//
+//                            //  if loading (packing list) has same bundles of the alternative
+//                            // packing list it removed from list to make exchange in web service
+//                            missedBundles.remove(k);
+//                            jsonArrayMissedBundles.remove(k);
+//                            break;
+//                        }
+//
+//                    }
+//                }
+//                Log.e("loadingorder", "  missedBundles" + missedBundles.size());
 
 //                Log.e("loadingorder", "  afterremove" + missedBundles.size());
 
-                new JSONTask().execute();
+                if (s.contains("PackingListDoesNotExist")) {
+                    Toast.makeText(LoadingOrder2.this, "Packing list doesn't exist in the inventory!", Toast.LENGTH_SHORT).show();
 
+                } else {
+                    jsonArrayUnmatchedList = new JSONArray();
+                    jsonArrayOrders = new JSONArray();
+                    Log.e("originalListSize", "" + originalList.size());
+                    if (originalList.size() != 0) {
+                        for (int m = 0; m < originalList.size(); m++) {
+                            for (int r = 0; r < checkedBundleList.size(); r++) {
+                                if (originalList.get(m).getSerial() == checkedBundleList.get(r).getSerial()) {
+                                    Log.e("loadingorder", " index " + m + "  " + r);
+                                    originalList.get(m).setRemove(true);
+                                    checkedBundleList.get(r).setRemove(true);
+                                }
+
+                            }
+
+                        }
+
+                        for (int k = 0; k < checkedBundleList.size(); k++) {
+                            boolean found = false;
+                            int newSerial = 0;
+                            String newCustomer = "";
+                            for (int i = 0; i < originalList.size(); i++) {
+                                if (!originalList.get(i).isRemove() && !checkedBundleList.get(k).isRemove()) {
+
+                                    Log.e("loadingorder", "  or " + originalList.get(i).getSerial() + "chec " + checkedBundleList.get(k).getSerial());
+                                    Log.e("loadingorder", originalList.get(i).getThickness() + "==" + checkedBundleList.get(k).getThickness() + "  \n  "
+                                            + originalList.get(i).getWidth() + "==" + checkedBundleList.get(k).getWidth() + " \n " +
+                                            "   \n" + originalList.get(i).getLength() + "==" + checkedBundleList.get(k).getLength() + "   \n" +
+                                            "   \n" + originalList.get(i).getNoOfPieces() + "==" + checkedBundleList.get(k).getNoOfPieces() + "   \n" +
+                                            "   \n" + originalList.get(i).getGrade() + "==" + checkedBundleList.get(k).getGrade() + "   \n");
+
+                                    if (originalList.get(i).getThickness() == checkedBundleList.get(k).getThickness())
+                                        if (originalList.get(i).getWidth() == checkedBundleList.get(k).getWidth())
+                                            if (originalList.get(i).getLength() == checkedBundleList.get(k).getLength())
+                                                if (originalList.get(i).getNoOfPieces() == checkedBundleList.get(k).getNoOfPieces())
+                                                    if (originalList.get(i).getGrade().equals(checkedBundleList.get(k).getGrade())) {
+                                                        newSerial = originalList.get(i).getSerial();
+                                                        newCustomer = originalList.get(i).getCustomer();
+
+                                                        found = true;
+                                                        originalList.get(i).setRemove(true);
+                                                        checkedBundleList.get(k).setRemove(true);
+                                                        break;
+                                                    } else {
+                                                        found = false;
+                                                    }
+                                } else {
+                                    if (originalList.get(i).getSerial() == checkedBundleList.get(k).getSerial()) {
+
+                                        Log.e("loadingorder", " news " + originalList.get(i).getSerial() + " cheq  " + checkedBundleList.get(k).getSerial());
+                                        newSerial = originalList.get(i).getSerial();
+                                        newCustomer = originalList.get(i).getCustomer();
+                                        found = true;
+                                        break;
+                                    }
+
+                                }
+                            }
+                            if (found) {
+                                checkedBundleList.get(k).setNewSerial(newSerial);
+                                checkedBundleList.get(k).setNewCustomer(newCustomer);
+                                Log.e("loadingorderTex", "oldSerial:" + checkedBundleList.get(k).getSerial() + " newSerial: " + checkedBundleList.get(k).getNewSerial());
+                                jsonArrayOrders.put(checkedBundleList.get(k).getJSONObject());
+                            } else {
+                                Log.e("loadingorder", "UnmatchedList oldSerial:" + checkedBundleList.get(k).getSerial() + " newSerial: " + checkedBundleList.get(k).getNewSerial());
+                                checkedBundleList.get(k).setNewCustomer(originalList.get(0).getCustomer());
+                                jsonArrayUnmatchedList.put(checkedBundleList.get(k).getJSONObject());
+                            }
+                        }
+                        new JSONTask().execute();
+                    }
+                }
             } else {
-                //Toast.makeText(PlannedPackingList.this, "No internet connection!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoadingOrder2.this, "Check internet connection!", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -1031,7 +1169,10 @@ public class LoadingOrder2 extends AppCompatActivity {
             if (s != null) {
                 if (s.contains("AMMAN_BUNDLE_ORDER SUCCESS")) {
                     pics.clear();
-                    finish();
+                    flagOpenJ=0;
+                    Intent intent = new Intent(LoadingOrder2.this, LoadingOrder.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
                     Log.e("tag", "****Success");
                 } else {
                     Log.e("tag", "****Failed to export data");

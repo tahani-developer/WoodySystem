@@ -37,6 +37,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.falconssoft.woodysystem.ItemsListAdapter.selectedBundles;
+import static com.falconssoft.woodysystem.Stage3.flagOpenJ;
+
 public class LoadingOrder extends AppCompatActivity {
 
     private ImageButton deleteBarcode;
@@ -44,7 +47,7 @@ public class LoadingOrder extends AppCompatActivity {
     private Button done, barcode, addBundle;
     private EditText searchViewTh, searchViewW, searchViewL, searchViewPices;
     private DatabaseHandler DHandler;
-    public static List<BundleInfo> bundles, filteredList, selectedBundle;
+    public static List<BundleInfo> bundles, filteredList;//, selectedBundle;
     private String f1 = "", f2 = "", f3 = "", f4 = "", barcodeValue = "", loc;
     public static ItemsListAdapter adapter; // original list
     private Activity activity;
@@ -58,11 +61,14 @@ public class LoadingOrder extends AppCompatActivity {
     private final String STATE_VISIBILITY = "state-visibility";
     private boolean mState = false;
     private ProgressDialog progressDialog;
+    private List<BundleInfo> tempList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.loading_order);
+
+        Log.e("oncreate", "test");
 
         items = findViewById(R.id.items);
         searchViewTh = findViewById(R.id.mSearchTh);
@@ -70,10 +76,10 @@ public class LoadingOrder extends AppCompatActivity {
         searchViewL = findViewById(R.id.mSearchL);
         searchViewPices = findViewById(R.id.mSearchPieces);
 
-        done =  findViewById(R.id.done);
-        barcode =  findViewById(R.id.barcode);
-        addBundle =  findViewById(R.id.add);
-        deleteBarcode =  findViewById(R.id.deletebaarcode);
+        done = findViewById(R.id.done);
+        barcode = findViewById(R.id.barcode);
+        addBundle = findViewById(R.id.add);
+        deleteBarcode = findViewById(R.id.deletebaarcode);
         listView2 = findViewById(R.id.verticalListView);
         listView = findViewById(R.id.listview);
         adapter = new ItemsListAdapter();
@@ -86,11 +92,17 @@ public class LoadingOrder extends AppCompatActivity {
 //        bundles = DHandler.getBundleInfo();
         searchBar = findViewById(R.id.searchBar);
 
-        bundles = new ArrayList<>();
-        selectedBundle = new ArrayList<>();
+
+        selectedBundles = new ArrayList<>();
 
 
-        new JSONTask().execute();
+        if (flagOpenJ == 0) {
+            bundles = new ArrayList<>();
+            new JSONTask().execute();
+            flagOpenJ = 1;
+        } else {
+            filter();
+        }
 
         filteredList = new ArrayList<>();
 
@@ -134,7 +146,7 @@ public class LoadingOrder extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                filter(1);
+                filter();
 //                ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, bundles, true);
 //                items.setAdapter(adapter);
 
@@ -160,7 +172,7 @@ public class LoadingOrder extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 f1 = String.valueOf(s);
-                filter(1);
+                filter();
 //                filteredList = filter(bundles, f1, f2, f3);
 //                ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, filteredList, false);
 //                items.setAdapter(adapter);
@@ -223,7 +235,7 @@ public class LoadingOrder extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 f2 = String.valueOf(s);
-                filter(1);
+                filter();
 //                filteredList = filter(bundles, f1, f2, f3);
 //                ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, filteredList, false);
 //                items.setAdapter(adapter);
@@ -261,7 +273,7 @@ public class LoadingOrder extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 f3 = String.valueOf(s);
-                filter(1);
+                filter();
 //                filteredList = filter(bundles, f1, f2, f3);
 //                ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, filteredList, false);
 //                items.setAdapter(adapter);
@@ -298,7 +310,7 @@ public class LoadingOrder extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 f4 = String.valueOf(s);
-                filter(1);
+                filter();
 //                filteredList = filter(bundles, f1, f2, f3);
 //                ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, filteredList, false);
 //                items.setAdapter(adapter);
@@ -312,36 +324,41 @@ public class LoadingOrder extends AppCompatActivity {
 
     }
 
-    void filter(int flag) {
-        List<BundleInfo> tempList = new ArrayList<>();
-        if (flag == 0) {
-            tempList.addAll(bundles);
-        } else {
+    void filter() {
+        tempList.clear();
+//        if (flag == 0) {
+////            tempList.addAll(bundles);
+//            adapter = new ItemsListAdapter(LoadingOrder.this, bundles, false);
+//            items.setAdapter(adapter);
+//        } else {
 
-            for (int k = 0; k < bundles.size(); k++) {
-                if (
-                        (("" + bundles.get(k).getThickness()).toUpperCase().startsWith(f1) || f1.equals("")) &&
-                                (("" + bundles.get(k).getWidth()).toUpperCase().startsWith(f2) || f2.equals("")) &&
-                                (("" + bundles.get(k).getLength()).toUpperCase().startsWith(f3) || f3.equals("")) &&
-                                (("" + bundles.get(k).getNoOfPieces()).toUpperCase().startsWith(f4) || f4.equals(""))) {
-                    bundles.get(k).setFoucoseColor("0");
-                    tempList.add(bundles.get(k));
-                }
+        for (int k = 0; k < bundles.size(); k++) {
+            bundles.get(k).setIndex(k);
+            if (
+                    (("" + bundles.get(k).getThickness()).toUpperCase().startsWith(f1) || f1.equals("")) &&
+                            (("" + bundles.get(k).getWidth()).toUpperCase().startsWith(f2) || f2.equals("")) &&
+                            (("" + bundles.get(k).getLength()).toUpperCase().startsWith(f3) || f3.equals("")) &&
+                            (("" + bundles.get(k).getNoOfPieces()).toUpperCase().startsWith(f4) || f4.equals(""))) {
+                bundles.get(k).setFoucoseColor("0");
+                tempList.add(bundles.get(k));
             }
-
         }
+
+
         adapter = new ItemsListAdapter(LoadingOrder.this, tempList, false);
         items.setAdapter(adapter);
+
 //        return tempList;
     }
 
     boolean listContainsItems() {
-        ItemsListAdapter obj = new ItemsListAdapter();
-        List<BundleInfo> bundles = obj.getSelectedItems();
-
+//        ItemsListAdapter obj = new ItemsListAdapter();
+//        List<BundleInfo> bundles = adapter.getSelectedItems();
+        selectedBundles = adapter.getSelectedItems();
+        Log.e("nowSize", "" + selectedBundles.size());
         boolean test = false;
-        for (int i = 0; i < bundles.size(); i++) {
-            if (bundles.get(i).getChecked()) {
+        for (int i = 0; i < selectedBundles.size(); i++) {
+            if (selectedBundles.get(i).getChecked()) {
                 test = true;
                 break;
             }
@@ -376,7 +393,7 @@ public class LoadingOrder extends AppCompatActivity {
 //                        public void run() {
                     bundles.get(no).setFoucoseColor("1");
                     items.setAdapter(adapter);
-                    filter(0);
+                    filter();
                     items.setSelection(no);
                     items.requestFocusFromTouch();
                     items.setSelection(no);
@@ -392,7 +409,7 @@ public class LoadingOrder extends AppCompatActivity {
             }
 
         } else {
-            filter(0);
+            filter();
 //            ItemsListAdapter adapter = new ItemsListAdapter(LoadingOrder.this, bundles, false);
 //            items.setAdapter(adapter);
         }
@@ -432,6 +449,7 @@ public class LoadingOrder extends AppCompatActivity {
 //        super.onBackPressed();
 //        Intent intent = new Intent(LoadingOrder.this, Stage3.class);
 //        startActivity(intent);
+        flagOpenJ = 0;
         finish();
     }
 
@@ -495,8 +513,10 @@ public class LoadingOrder extends AppCompatActivity {
                             bundleInfo.setAddingDate(innerObject.getString("BUNDLE_DATE"));
                             bundleInfo.setBackingList(innerObject.getString("BACKING_LIST"));
                             bundleInfo.setCustomer(innerObject.getString("CUSTOMER"));
+                            bundleInfo.setSerialNo(innerObject.getString("B_SERIAL"));
                             bundleInfo.setChecked(false);
                             bundleInfo.setFoucoseColor("0");
+//                            bundleInfo.setIndex(i);
 
                             bundles.add(bundleInfo);
                             motherList.put(innerObject.getString("BUNDLE_NO"), bundleInfo);
@@ -541,11 +561,11 @@ public class LoadingOrder extends AppCompatActivity {
             progressDialog.dismiss();
             if (result != null) {
                 Log.e("result", "*****************" + result.size());
-                filter(0);
+                filter();
 //                adapter = new ItemsListAdapter(LoadingOrder.this, bundles, false);
 //                items.setAdapter(adapter);
 
-                adapter2 = new ItemsListAdapter5(LoadingOrder.this, selectedBundle);
+                adapter2 = new ItemsListAdapter5(LoadingOrder.this, selectedBundles);
                 listView2.setAdapter(adapter2);
                 listView.setAdapter(adapter2);
 
@@ -567,17 +587,18 @@ public class LoadingOrder extends AppCompatActivity {
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
 
         // Restore state members from saved instance
-        mState = savedInstanceState.getBoolean(STATE_VISIBILITY);
+//        mState = savedInstanceState.getBoolean(STATE_VISIBILITY);
 
-        ItemsListAdapter obj = new ItemsListAdapter();
-        bundles = obj.getSelectedItems();
-        filter(0);
+//        ItemsListAdapter obj = new ItemsListAdapter();
+//        bundles = obj.getSelectedItems();
+        filter();
 //        adapter = new ItemsListAdapter(LoadingOrder.this, bundles, false);
 //        items.setAdapter(adapter);
 
 
-        selectedBundle = obj.getSelectedItems();
-        adapter2 = new ItemsListAdapter5(LoadingOrder.this, selectedBundle);
+        selectedBundles = adapter.getSelectedItems();
+        Log.e("now", "onRestoreInstanceState: " + selectedBundles.size());
+        adapter2 = new ItemsListAdapter5(LoadingOrder.this, selectedBundles);
         listView2.setAdapter(adapter2);
         listView.setAdapter(adapter2);
 
@@ -599,8 +620,8 @@ public class LoadingOrder extends AppCompatActivity {
 //        }
 
         ItemsListAdapter obj = new ItemsListAdapter();
-        selectedBundle = obj.getSelectedItems();
-        adapter2 = new ItemsListAdapter5(context, selectedBundle);
+        selectedBundles = obj.getSelectedItems();
+        adapter2 = new ItemsListAdapter5(context, selectedBundles);
         listView2.setAdapter(adapter2);
         listView.setAdapter(adapter2);
 
