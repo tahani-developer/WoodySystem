@@ -256,7 +256,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
 //                    Toast.makeText(this, "Please select customer and packing list first!", Toast.LENGTH_SHORT).show();
 //                break;
             case R.id.stage2_report1_exportToExcel:
-                ExportToExcel.getInstance().createExcelFile(this, "planned_packing_list_report.xls",2 ,UPLListFiltered);
+                ExportToExcel.getInstance().createExcelFile(this, "planned_packing_list_report.xls",2 ,UPLListFiltered,null);
                 break;
             case R.id.delete:
                 // if (plannedPLListJSON.length() > 0)

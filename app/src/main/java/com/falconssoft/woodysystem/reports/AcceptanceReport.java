@@ -30,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.falconssoft.woodysystem.DatabaseHandler;
+import com.falconssoft.woodysystem.ExportToExcel;
 import com.falconssoft.woodysystem.ExportToPDF;
 import com.falconssoft.woodysystem.HorizontalListView;
 import com.falconssoft.woodysystem.ItemsListAdapter4;
@@ -77,7 +78,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
     private TextView textView, count;
     private static LinearLayout linearLayout;
     private EditText from, to;
-    private Button arrow, export;
+    private Button arrow, export ,exportToExcel;
     private static ListView listView;
     private static List<NewRowInfo> master, details;
     private static List<Pictures> pictures;
@@ -139,6 +140,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
         acceptorSpinner = findViewById(R.id.acceptanceInfoReport_acceptor);
         ttnSpinner = findViewById(R.id.acceptanceInfoReport_ttn);
         export = findViewById(R.id.acceptance_report_export);
+        exportToExcel=findViewById(R.id.acceptance_report_export_Excel);
 
         myFormat = "dd/MM/yyyy";
         sdf = new SimpleDateFormat(myFormat, Locale.US);
@@ -162,6 +164,16 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
 
             }
         });
+
+        exportToExcel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                ExportToExcel.getInstance().createExcelFile(AcceptanceReport.this, "Acceptance_Report.xls",6 ,filtered ,details);
+
+            }
+        });
+
         arrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
