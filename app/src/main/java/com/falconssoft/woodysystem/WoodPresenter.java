@@ -185,7 +185,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
 //                    response = response.substring(response.indexOf("{"));
                     response = new String(response.getBytes("ISO-8859-1"), "UTF-8");// cloud
                 }
-//                Log.e("presenter/users/res ", "" + response);
+                Log.e("presenter/users/res ", "" + response);
 
                 JSONObject object = new JSONObject(response);
 //                Log.e("presenter:obj1", "" + object.toString());
@@ -270,11 +270,13 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                         bundleInfo.setArea(innerObject.getString("AREA"));
                         bundleInfo.setBarcode(innerObject.getString("BARCODE"));
                         bundleInfo.setOrdered(innerObject.getInt("ORDERED"));
-//                    bundleInfo.setPicture(innerObject.getString("PIC"));
+                        bundleInfo.setDescription(innerObject.getString("DESCRIPTION"));
                         bundleInfo.setAddingDate(innerObject.getString("BUNDLE_DATE"));
                         bundleInfo.setSerialNo(innerObject.getString("B_SERIAL"));
                         bundleInfo.setBackingList(innerObject.getString("BACKING_LIST"));
-                        Log.e("presenter:bun3 ", "" + bundleInfo.getBackingList());
+                        bundleInfo.setCustomer(innerObject.getString("CUSTOMER"));
+
+//                        Log.e("presenter:bun3 ", "" + bundleInfo.getBackingList());
 
                         bundleInfoServer2.add(bundleInfo);
                         bundleInfoServer.add(bundleInfo);

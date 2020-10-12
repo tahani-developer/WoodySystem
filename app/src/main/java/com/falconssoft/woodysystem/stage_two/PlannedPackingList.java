@@ -1787,6 +1787,8 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
                     Toast.makeText(PlannedPackingList.this, "Saved!", Toast.LENGTH_SHORT).show();
                     Log.e("tag", "PLANNED_PACKING_LIST SUCCESS");
+                } else if (s.contains("PLANNED_PACKING_LIST ORDERED")) {
+                    Toast.makeText(PlannedPackingList.this, "This bundle is already ordered!", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(PlannedPackingList.this, "Failed to export data!", Toast.LENGTH_SHORT).show();
                     Log.e("tag", "Failed to export data!");

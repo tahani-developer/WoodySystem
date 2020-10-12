@@ -90,7 +90,7 @@ public class InventoryReportAdapter extends BaseAdapter {
         holder.location.setText("" + itemsList.get(i).getLocation());
         holder.area.setText("" + itemsList.get(i).getArea());
         holder.pL.setText("" + itemsList.get(i).getBackingList());
-        Log.e("adapter", "" + itemsList.get(i).getBackingList());
+//        Log.e("adapter", "" + itemsList.get(i).getBackingList());
 
         if (itemsList.get(i).getChecked())
             holder.checkBox.setChecked(true);

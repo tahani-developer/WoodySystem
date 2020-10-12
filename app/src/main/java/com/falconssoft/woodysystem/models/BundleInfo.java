@@ -298,7 +298,7 @@ public class BundleInfo implements Serializable {
             obj.put("USER_NO", "'" + userNo + "'");
             obj.put("IS_PRINTED", "'" + isPrinted + "'");
             obj.put("BACKING_LIST", "'" + backingList + "'");
-//            obj.put("CUSTOMER", "'" + customer + "'");
+            obj.put("CUSTOMER", "'" + customer + "'");
 
         } catch (JSONException e) {
             Log.e("Tag", "JSONException");

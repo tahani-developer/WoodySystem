@@ -89,6 +89,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
     private RelativeLayout coordinatorLayout;
     private String flag = "0";
     private int edieFlag;
+    private BundleInfo editPlannedAndBundleInfo;
 //    private List<TableRow> tableRowList = new ArrayList<>();
 
     @Override
@@ -201,9 +202,20 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                     bundleInfoList.add(newBundle);
 //                                    Log.e("date is", generateDate);
 
-                                    if (edieFlag == 55)
-                                        new JSONTask4().execute();
-                                    else {
+                                    if (edieFlag == 55){
+                                        locationText = editPlannedAndBundleInfo.getLocation();
+                                        chooseSpinnersContent();
+                                        bundleNoString = "" + gradeString
+                                                + locationString
+                                                + thicknessText
+                                                + "." + widthText
+                                                + "." + lengthText
+                                                + "." + noOfPiecesText
+                                                + "." + serialNoText;
+                                        newBundle.setBundleNo(bundleNoString);
+
+                                        new JSONTask5().execute();
+                                    } else {
                                         TableRow tableRow = new TableRow(this);
                                         editTableRow(tableRow, bundleNoString, lengthText, widthText, thicknessText
                                                 , noOfPiecesText, generalSettings.getStore());
@@ -249,23 +261,23 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         edieFlag = getIntent().getIntExtra(EDIT_FLAG_BUNDLE, 0);
         if (edieFlag == 55) {
             Bundle bundle = getIntent().getExtras();
-            BundleInfo bundleInfo = (BundleInfo) bundle.getSerializable(EDIT_BUNDLE);
+             editPlannedAndBundleInfo = (BundleInfo) bundle.getSerializable(EDIT_BUNDLE);
 
-            oldBundleNoString = bundleInfo.getBundleNo();
-            thickness.setText("" + bundleInfo.getThickness());
-            width.setText("" + bundleInfo.getWidth());
-            length.setText("" + bundleInfo.getLength());
-            noOfPieces.setText("" + bundleInfo.getNoOfPieces());
-            serialNo.setText(bundleInfo.getSerialNo());
+            oldBundleNoString = editPlannedAndBundleInfo.getBundleNo();
+            thickness.setText("" + editPlannedAndBundleInfo.getThickness());
+            width.setText("" + editPlannedAndBundleInfo.getWidth());
+            length.setText("" + editPlannedAndBundleInfo.getLength());
+            noOfPieces.setText("" + editPlannedAndBundleInfo.getNoOfPieces());
+            serialNo.setText(editPlannedAndBundleInfo.getSerialNo());
             serialNo.setEnabled(false);
 
-            int position = gradeAdapter.getPosition(bundleInfo.getGrade());
+            int position = gradeAdapter.getPosition(editPlannedAndBundleInfo.getGrade());
             gradeSpinner.setSelection(position);
 
-            int position2 = areaAdapter.getPosition(bundleInfo.getArea());
+            int position2 = areaAdapter.getPosition(editPlannedAndBundleInfo.getArea());
             areaSpinner.setSelection(position2);
 
-            int position3 = descriptionaAdapter.getPosition(bundleInfo.getDescription());
+            int position3 = descriptionaAdapter.getPosition(editPlannedAndBundleInfo.getDescription());
             descriptionSpinner.setSelection(position3);
 
         }
@@ -665,6 +677,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                 break;
             case "Second Sort":
                 gradeString = "SS";
+                break;
             case "KD Reject":
                 gradeString = "KDREJ";
                 break;
@@ -974,6 +987,134 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
                 nameValuePairs.add(new BasicNameValuePair("UPDATE_BUNDLE", "1"));
                 nameValuePairs.add(new BasicNameValuePair("BUNDLE_NO", oldBundleNoString)); // the old bundle number
+                nameValuePairs.add(new BasicNameValuePair("OBJECT_INFO", newBundle.getJSONObject().toString())); // the updated bundle info
+
+                request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                HttpResponse response = client.execute(request);
+
+                BufferedReader in = new BufferedReader(new
+                        InputStreamReader(response.getEntity().getContent()));
+
+                StringBuffer sb = new StringBuffer("");
+                String line = "";
+
+                while ((line = in.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                in.close();
+
+                JsonResponse = sb.toString();
+                Log.e("tag", "" + JsonResponse);
+
+                return JsonResponse;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (s != null) {
+                if (s.contains("UPDATE BUNDLE SUCCESS")) {
+
+                    if (edieFlag == 55) {
+                        Intent intent = new Intent(AddToInventory.this, InventoryReport.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        oldBundleNoString = newBundle.getBundleNo();
+                        gradeText = "Fresh";
+                        areaText = "Zone 1";
+                        descriptionText = "Ukrainian Wood";
+                        setSpinnerSelectionPosition(gradeSpinner2, areaSpinner2, descriptionSpinner2, gradeText, areaText, descriptionText);
+                        setSpinnerSelectionPosition(gradeSpinner, areaSpinner, descriptionSpinner, gradeText, areaText, descriptionText);
+                        dialog.dismiss();
+                        snackbar = Snackbar.make(coordinatorLayout, Html.fromHtml("<font color=\"#3167F0\">Updated Successfully</font>"), Snackbar.LENGTH_SHORT);//Updated Successfully
+                        View snackbarLayout = snackbar.getView();
+                        TextView textViewSnackbar = (TextView) snackbarLayout.findViewById(android.support.design.R.id.snackbar_text);
+                        textViewSnackbar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check_24dp, 0, 0, 0);
+//                    textView.setCompoundDrawablePadding(10);//getResources().getDimensionPixelOffset(R.dimen.snackbar_icon_padding
+                        snackbar.show();
+//                    Log.e("addNewToInventory", "" + "   " + "      " + publicTableRow.getTag().toString());
+                        for (int i = 0; i < 9; i++) {
+                            TextView textView = (TextView) publicTableRow.getChildAt(i);
+                            switch (i) {
+                                case 0:
+                                    textView.setText(newBundle.getBundleNo());
+                                    break;
+                                case 1:
+                                    textView.setText(isContainValueAfterDot("" + newBundle.getThickness()));
+                                    break;
+                                case 2:
+                                    textView.setText(isContainValueAfterDot("" + newBundle.getWidth()));
+                                    break;
+                                case 3:
+                                    textView.setText(isContainValueAfterDot("" + newBundle.getLength()));
+                                    break;
+                                case 4:
+                                    textView.setText(isContainValueAfterDot("" + newBundle.getNoOfPieces()));
+                                    break;
+                                case 5:
+                                    textView.setText("" + newBundle.getGrade());
+                                    break;
+                                case 6:
+                                    textView.setText("" + newBundle.getLocation());
+                                    break;
+                                case 7:
+                                    textView.setText("" + newBundle.getArea());
+                                    break;
+                                case 8:
+                                    textView.setText("" + newBundle.getDescription());
+                                    break;
+                            }
+                        }
+                        areaSpinner.setSelection(0);
+                        gradeSpinner.setSelection(0);
+                        descriptionSpinner.setSelection(0);
+
+                        Log.e("tag", "updated bundle raw/Success");
+                    }
+                } else {
+                    Log.e("tag", "updated bundle raw/Failed to export data");
+                }
+            } else {
+                Log.e("tag", "updated bundle raw/Failed to export data Please check internet connection");
+            }
+        }
+    }
+
+    // ******************************************** UPDATE BUNDLE FOR INVENTORY REPORT ***************************************************
+    private class JSONTask5 extends AsyncTask<String, String, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                String JsonResponse = null;
+                HttpClient client = new DefaultHttpClient();
+                HttpPost request = new HttpPost();
+                request.setURI(new URI("http://" + generalSettings.getIpAddress() + "/export.php"));//import 10.0.0.214
+                Log.e("showjson", editPlannedAndBundleInfo.getJSONObject().toString());
+                Log.e("newBundle", newBundle.getJSONObject().toString());
+                JSONArray jsonArray = new JSONArray();
+                jsonArray.put(editPlannedAndBundleInfo.getJSONObject());
+
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+//                nameValuePairs.add(new BasicNameValuePair("UPDATE_BUNDLE", "1"));
+//                nameValuePairs.add(new BasicNameValuePair("BUNDLE_NO", oldBundleNoString)); // the old bundle number
+                nameValuePairs.add(new BasicNameValuePair("UPDATE_BUNDLE_AND_PLANNED", "1"));
+                nameValuePairs.add(new BasicNameValuePair("BUNDLE_NO", jsonArray.toString().trim())); // the old bundle number
                 nameValuePairs.add(new BasicNameValuePair("OBJECT_INFO", newBundle.getJSONObject().toString())); // the updated bundle info
 
                 request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
