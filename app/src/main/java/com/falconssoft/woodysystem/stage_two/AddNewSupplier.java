@@ -78,7 +78,16 @@ public class AddNewSupplier extends AppCompatActivity {
 
                     jsonArray = new JSONArray();
                     SupplierInfo supplierInfo = new SupplierInfo();
-                    supplierInfo.setSupplierNo("" + (suppliers.size() + 1));
+                    try {
+                        int max = Integer.parseInt(suppliers.get(0).getSupplierNo());
+                        for (int i = 1; i < suppliers.size(); i++)
+                            if (Integer.parseInt(suppliers.get(i).getSupplierNo()) > max)
+                                max = Integer.parseInt(suppliers.get(i).getSupplierNo());
+                        supplierInfo.setSupplierNo("" + (max + 1));
+                    } catch (Exception e) {
+                        supplierInfo.setSupplierNo("" + (suppliers.size() + 1));
+                    }
+//                    supplierInfo.setSupplierNo("" + (suppliers.size() + 1));
                     supplierInfo.setSupplierName(supName.getText().toString());
 
                     suppliers.add(supplierInfo);

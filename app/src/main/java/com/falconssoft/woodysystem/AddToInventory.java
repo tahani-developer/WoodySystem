@@ -576,6 +576,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                                     , packingListText
                                                     , 0
                                                     );//presenter.getSerialNo());//SettingsFile.serialNumber
+                                            bundleInfoList.clear();
+                                            bundleInfoList.add(newBundle);
 
 //                                            publicTableRow = tableRow1;
                                             new JSONTask4().execute();

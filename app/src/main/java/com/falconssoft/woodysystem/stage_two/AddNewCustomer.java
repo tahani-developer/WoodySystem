@@ -80,7 +80,16 @@ public class AddNewCustomer extends AppCompatActivity {
 
                     jsonArray = new JSONArray();
                     CustomerInfo customerInfo = new CustomerInfo();
-                    customerInfo.setCustNo("" + (customers.size() + 1));
+                    try {
+                        int max = Integer.parseInt(customers.get(0).getCustNo());
+                        for (int i = 1; i < customers.size(); i++)
+                            if (Integer.parseInt(customers.get(i).getCustNo()) > max)
+                                max = Integer.parseInt(customers.get(i).getCustNo());
+                        customerInfo.setCustNo("" + (max + 1));
+                    } catch (Exception e) {
+                        customerInfo.setCustNo("" + (customers.size() + 1));
+                    }
+//                    customerInfo.setCustNo("" + (customers.size() + 1));
                     customerInfo.setCustName(custName.getText().toString());
 
                     customers.add(customerInfo);

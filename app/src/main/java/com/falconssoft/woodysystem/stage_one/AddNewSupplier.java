@@ -47,13 +47,15 @@ public class AddNewSupplier extends AppCompatActivity {
     private DatabaseHandler DHandler;
     private RecyclerView recyclerView;
     private AddSupplierAdapter adapter;
-    public static final String BACK_FLAG="BACK_FLAG";
-//    private TableLayout tableLayout;
+    public static final String BACK_FLAG = "BACK_FLAG";
+    //    private TableLayout tableLayout;
     private EditText supName;
     private TextView add;
     private List<SupplierInfo> suppliers;
     private JSONArray jsonArray;
-
+    private int i;
+    private static String supNameDel = "12";
+    private static String supNoDel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +73,7 @@ public class AddNewSupplier extends AppCompatActivity {
         new JSONTask().execute();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new AddSupplierAdapter(suppliers);
+        adapter = new AddSupplierAdapter(AddNewSupplier.this, suppliers);
         recyclerView.setAdapter(adapter);
 
         add.setOnClickListener(new View.OnClickListener() {
@@ -81,7 +83,16 @@ public class AddNewSupplier extends AppCompatActivity {
 
                     jsonArray = new JSONArray();
                     SupplierInfo supplierInfo = new SupplierInfo();
-                    supplierInfo.setSupplierNo("" + (suppliers.size() + 1));
+                    try {
+                        int max = Integer.parseInt(suppliers.get(0).getSupplierNo());
+                        for (int i = 1; i < suppliers.size(); i++)
+                            if (Integer.parseInt(suppliers.get(i).getSupplierNo()) > max)
+                                max = Integer.parseInt(suppliers.get(i).getSupplierNo());
+                        supplierInfo.setSupplierNo("" + (max + 1));
+                    } catch (Exception e) {
+                        supplierInfo.setSupplierNo("" + (suppliers.size() + 1));
+                    }
+//                    supplierInfo.setSupplierNo("" + (suppliers.size() + 1));
                     supplierInfo.setSupplierName(supName.getText().toString());
 
                     suppliers.add(supplierInfo);
@@ -93,6 +104,14 @@ public class AddNewSupplier extends AppCompatActivity {
 
     }
 
+    void deleteSupplier(int index) {
+        i = index;
+        supNameDel = suppliers.get(index).getSupplierName();
+        Log.e("****", supNameDel);
+        supNoDel = suppliers.get(index).getSupplierNo();
+        new JSONTask3().execute();
+    }
+
 //    @Override
 //    public void onBackPressed() {
 ////        super.onBackPressed();
@@ -101,6 +120,7 @@ public class AddNewSupplier extends AppCompatActivity {
 //        finish();
 //    }
 
+    // *************************************** GET SUPPLIERS ***************************************
     private class JSONTask extends AsyncTask<String, String, List<SupplierInfo>> {
 
         @Override
@@ -194,6 +214,7 @@ public class AddNewSupplier extends AppCompatActivity {
         }
     }
 
+    // *************************************** ADD SUPPLIERS ***************************************
     private class JSONTask2 extends AsyncTask<String, String, String> {
 
         @Override
@@ -257,6 +278,80 @@ public class AddNewSupplier extends AppCompatActivity {
                 }
             } else {
                 Log.e("tag", "****Failed to export data Please check internet connection");
+            }
+        }
+    }
+
+    // *************************************** DELETE SUPPLIER ***************************************
+    private class JSONTask3 extends AsyncTask<String, String, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //showDialog();
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                String JsonResponse = null;
+                HttpClient client = new DefaultHttpClient();
+                HttpPost request = new HttpPost();
+                request.setURI(new URI("http://" + DHandler.getSettings().getIpAddress() + "/export.php"));
+
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+                nameValuePairs.add(new BasicNameValuePair("DELETE_SUPPLIERS", "1"));
+                nameValuePairs.add(new BasicNameValuePair("DELETE_SUPPLIER_NAME", supNameDel));
+                nameValuePairs.add(new BasicNameValuePair("DELETE_SUPPLIER_NO", supNoDel));
+                Log.e("****in", supNameDel);
+                request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                HttpResponse response = client.execute(request);
+
+                BufferedReader in = new BufferedReader(new
+                        InputStreamReader(response.getEntity().getContent()));
+
+                StringBuffer sb = new StringBuffer("");
+                String line = "";
+
+                while ((line = in.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                in.close();
+
+                JsonResponse = sb.toString();
+                Log.e("tag", "" + JsonResponse);
+
+                return JsonResponse;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            if (s != null) {
+                if (s.contains("DELETE_SUPPLIER SUCCESS")) {
+
+                    suppliers.remove(i);
+                    adapter.notifyDataSetChanged();
+
+
+                    Toast.makeText(AddNewSupplier.this, "Supplier Deleted!", Toast.LENGTH_SHORT).show();
+                    Log.e("tag", "DELETE_SUPPLIER SUCCESS");
+                } else {
+                    Toast.makeText(AddNewSupplier.this, "Failed to export data!", Toast.LENGTH_SHORT).show();
+                    Log.e("tag", "Failed to export data!");
+                }
+
+            } else {
+                Toast.makeText(AddNewSupplier.this, "No internet connection!", Toast.LENGTH_SHORT).show();
             }
         }
     }
