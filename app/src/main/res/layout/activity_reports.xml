@@ -7,21 +7,23 @@
     android:background="@drawable/w10"
     tools:context=".ReportsActivity">
 
-    <android.support.constraint.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         android:background="@color/alpha_black_dark">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".2"/>
 
         <TextView
             android:visibility="gone"
             android:id="@+id/reports_bundles"
-            android:layout_width="0dp"
-            android:layout_height="200dp"
-            android:layout_marginStart="@dimen/reports_p_margin_start"
-            android:layout_marginLeft="@dimen/reports_p_margin_start"
-            android:layout_marginTop="@dimen/reports_p_margin_top"
-            android:layout_marginEnd="@dimen/reports_p_margin_end"
-            android:layout_marginRight="@dimen/reports_p_margin_end"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:drawableTop="@drawable/reports"
             android:fontFamily="serif"
             android:paddingTop="10dp"
@@ -33,45 +35,43 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".2"/>
+
         <TextView
             android:id="@+id/reports_orders"
-            android:layout_width="0dp"
-            android:layout_height="200dp"
-            android:layout_marginTop="@dimen/reports_p_margin_top"
-            android:layout_marginStart="@dimen/reports_p_margin_start"
-            android:layout_marginLeft="@dimen/reports_p_margin_start"
-            android:layout_marginEnd="@dimen/reports_p_margin_end"
-            android:layout_marginRight="@dimen/reports_p_margin_end"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".8"
             android:drawableTop="@drawable/reports"
             android:fontFamily="serif"
             android:paddingTop="10dp"
             android:text="@string/loading_order_report"
             android:textColor="@color/white"
-            android:textSize="22sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textSize="22sp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".5"/>
 
         <TextView
             android:id="@+id/reports_inventory"
-            android:layout_width="0dp"
-            android:layout_height="200dp"
-            android:layout_marginTop="@dimen/reports_p_margin2_top"
-            android:layout_marginStart="@dimen/reports_p_margin_start"
-            android:layout_marginLeft="@dimen/reports_p_margin_start"
-            android:layout_marginEnd="@dimen/reports_p_margin_end"
-            android:layout_marginRight="@dimen/reports_p_margin_end"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".8"
             android:drawableTop="@drawable/reports"
             android:fontFamily="serif"
             android:paddingTop="10dp"
             android:text="@string/inventory_report"
             android:textColor="@color/white"
-            android:textSize="22sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.02"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/reports_orders" />
+            android:textSize="22sp"/>
 
-    </android.support.constraint.ConstraintLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+    </LinearLayout>
 </FrameLayout>

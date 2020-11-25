@@ -1,29 +1,84 @@
 package com.falconssoft.woodysystem.models;
 
+import com.google.gson.annotations.SerializedName;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class NewRowInfo implements Serializable {
 
+    @SerializedName("RAW_INFO_MASTER")
+    private List<NewRowInfo> master;
+
+    @SerializedName("RAW_INFO_MIX")
+    private List<NewRowInfo> details;
+
+    @SerializedName("LOCATION_LIST")
+    private List<NewRowInfo> locationList;// locationOfAcceptance
+
+//    @SerializedName("CUBIC_LIST")
+//    private List<NewRowInfo> cubicList;// serial and cubic
+
+    @SerializedName("DETAILS_LIST")
+    private List<NewRowInfo> detailsList;// get details based on serial
+
+    @SerializedName("SUPLIER")
     private String supplierName;
+
+    @SerializedName("THICKNESS")
     private double thickness;
+
+    @SerializedName("WIDTH")
     private double width;
+
+    @SerializedName("LENGTH")
     private double length;
+
+    @SerializedName("PIECES")
     private double noOfPieces;
+
+    @SerializedName("REJ")
     private double noOfRejected;
+
+    @SerializedName("NO_BUNDLES")
     private double noOfBundles;
+
+    @SerializedName("GRADE")
     private String grade;
+
     private boolean checked;
+
+    @SerializedName("SERIAL")
     private String serial;
 
+    @SerializedName("CUBIC")
+    private double cubic;
+
+    @SerializedName("TOTAL")
+    private double totalCubic;// this used to get cubic summation without using any filter
+
+    @SerializedName("TRUCK_NO")
     private String truckNo;
+
+    @SerializedName("DATE_OF_ACCEPTANCE")
     private String date;
+
+    @SerializedName("NAME_OF_ACCEPTER")
     private String acceptedPersonName;
+
+    @SerializedName("LOCATION_OF_ACCEPTANCE")
     private String locationOfAcceptance;
+
+    @SerializedName("TTN_NO")
     private String ttnNo;
+
+    @SerializedName("REJECTED")
     private String totalRejectedNo;
+
+    @SerializedName("NET_BUNDLES")
     private String netBundles;
 
     public NewRowInfo() {
@@ -41,6 +96,54 @@ public class NewRowInfo implements Serializable {
         this.truckNo = truckNo;
         this.serial = serial;
 
+    }
+
+    public double getTotalCubic() {
+        return totalCubic;
+    }
+
+    public void setTotalCubic(double totalCubic) {
+        this.totalCubic = totalCubic;
+    }
+
+    public List<NewRowInfo> getDetailsList() {
+        return detailsList;
+    }
+
+    public void setDetailsList(List<NewRowInfo> detailsList) {
+        this.detailsList = detailsList;
+    }
+
+    public List<NewRowInfo> getLocationList() {
+        return locationList;
+    }
+
+    public void setLocationList(List<NewRowInfo> locationList) {
+        this.locationList = locationList;
+    }
+
+    public List<NewRowInfo> getMaster() {
+        return master;
+    }
+
+    public void setMaster(List<NewRowInfo> master) {
+        this.master = master;
+    }
+
+    public List<NewRowInfo> getDetails() {
+        return details;
+    }
+
+    public void setDetails(List<NewRowInfo> details) {
+        this.details = details;
+    }
+
+    public double getCubic() {
+        return cubic;
+    }
+
+    public void setCubic(double cubic) {
+        this.cubic = cubic;
     }
 
     public String getSerial() {

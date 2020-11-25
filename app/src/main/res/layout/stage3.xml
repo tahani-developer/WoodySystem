@@ -1,121 +1,225 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/w10"
+    android:orientation="vertical"
     tools:context=".Stage3">
 
-    <android.support.constraint.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <TextView
         android:background="@color/alpha_black_dark"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.431">
+        android:text="@string/stage3"
+        android:textColor="@color/orange"
+        android:fontFamily="serif"
+        android:padding="10dp"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.2"/>
+
+    <LinearLayout
+        android:background="@color/alpha_black_dark"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="9">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".5"
+            />
 
         <LinearLayout
-            android:id="@+id/stage3_enter_inventory"
-            android:layout_width="@dimen/stage3_views"
-            android:layout_height="@dimen/stage3_views2"
-            android:layout_marginTop="@dimen/stage3_p_margin_top"
-            android:background="@drawable/frame_shape"
-            android:gravity="center"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="120dp"
-                android:layout_height="100dp"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/wbundlereal"
-                android:scaleType="fitCenter" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight=".1"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="10dp"
-                android:fontFamily="serif"
-                android:gravity="center_horizontal"
-                android:lineSpacingExtra="15dp"
-                android:text="@string/enter_inventory"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
+            <LinearLayout
+                android:id="@+id/stage3_enter_inventory"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@drawable/alpha_frame"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1.7"
+                    android:layout_marginVertical="10dp"
+                    android:src="@drawable/barcode_icon"
+                    android:scaleType="fitCenter" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:fontFamily="serif"
+                    android:gravity="center"
+                    android:background="@drawable/border_frame"
+                    android:text="@string/enter_barcode"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight=".1"/>
+
+            <LinearLayout
+                android:id="@+id/stage3_loading_order"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@drawable/alpha_frame"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1.7"
+                    android:layout_marginVertical="20dp"
+                    android:src="@drawable/container1"
+                    android:scaleType="fitCenter" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:fontFamily="serif"
+                    android:gravity="center"
+                    android:background="@drawable/border_frame"
+                    android:text="@string/loading_order"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight=".1"/>
+
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/stage3_reports"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@drawable/frame_shape"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/stage3_loading_order">
+
+                <ImageView
+                    android:layout_width="150dp"
+                    android:layout_height="130dp"
+                    android:layout_marginTop="2dp"
+                    android:background="@drawable/real_report"
+                    android:scaleType="fitCenter" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="10dp"
+                    android:fontFamily="serif"
+                    android:gravity="center_horizontal"
+                    android:lineSpacingExtra="15dp"
+                    android:text="@string/reports"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/reports_orders"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@drawable/alpha_frame"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1.7"
+                    android:layout_marginVertical="20dp"
+                    android:src="@drawable/containerreport"
+                    android:scaleType="fitCenter" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:fontFamily="serif"
+                    android:gravity="center"
+                    android:background="@drawable/border_frame"
+                    android:text="@string/loading_order_report"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight=".1"/>
+
+            <LinearLayout
+                android:id="@+id/reports_inventory"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@drawable/alpha_frame"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1.7"
+                    android:layout_marginVertical="20dp"
+                    android:src="@drawable/inventoryreport"
+                    android:scaleType="fitCenter" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:fontFamily="serif"
+                    android:gravity="center"
+                    android:background="@drawable/border_frame"
+                    android:text="@string/inventory_report"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight=".5"/>
+
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/stage3_loading_order"
-            android:layout_width="@dimen/stage3_views"
-            android:layout_height="@dimen/stage3_views2"
-            android:layout_marginTop="@dimen/stage3_p_margin2_top"
-            android:background="@drawable/border_background"
-            android:gravity="center"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/stage3_enter_inventory">
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".5"
+            />
+    </LinearLayout>
 
-            <ImageView
-                android:layout_width="180dp"
-                android:layout_height="110dp"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/container3"
-                android:scaleType="fitCenter" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="10dp"
-                android:fontFamily="serif"
-                android:gravity="center_horizontal"
-                android:lineSpacingExtra="15dp"
-                android:text="@string/loading_order"
-                android:textColor="@color/orange"
-                android:textSize="20sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/stage3_reports"
-            android:layout_width="@dimen/stage3_views"
-            android:layout_height="@dimen/stage3_views2"
-            android:layout_marginTop="@dimen/stage3_p_margin2_top"
-            android:background="@drawable/frame_shape"
-            android:gravity="center"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/stage3_loading_order">
-
-            <ImageView
-                android:layout_width="150dp"
-                android:layout_height="130dp"
-                android:layout_marginTop="2dp"
-                android:background="@drawable/real_report"
-                android:scaleType="fitCenter" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="10dp"
-                android:fontFamily="serif"
-                android:gravity="center_horizontal"
-                android:lineSpacingExtra="15dp"
-                android:text="@string/reports"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
-        </LinearLayout>
-
-    </android.support.constraint.ConstraintLayout>
-
-
-</FrameLayout>
+</LinearLayout>

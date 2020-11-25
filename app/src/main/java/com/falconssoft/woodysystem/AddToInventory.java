@@ -31,8 +31,10 @@ import android.widget.Toast;
 
 import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.NewRowInfo;
+import com.falconssoft.woodysystem.models.Orders;
 import com.falconssoft.woodysystem.models.Settings;
 import com.falconssoft.woodysystem.reports.InventoryReport;
+import com.google.gson.Gson;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -42,11 +44,17 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -74,7 +82,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
     private List<String> areaList = new ArrayList<>();
     private List<String> descriptionList = new ArrayList<>();
     private ArrayAdapter<String> gradeAdapter, areaAdapter, descriptionaAdapter;//, locationAdapter
-    private String gradeText = "Fresh", areaText = "Zone 1", descriptionText = "Ukrainian Wood", locationText;//, locationText = "Loc 1" ===> used for fill from adapter
+    private String gradeText = "KD", areaText = "Zone 1", descriptionText = "Ukrainian Wood", locationText;//, locationText = "Loc 1" ===> used for fill from adapter
     private JSONArray jsonArrayBundles;
     private boolean mState = false;
     private final String STATE_VISIBILITY = "state-visibility";
@@ -87,7 +95,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
     private Dialog dialog;
     private String takeThick, takeWidth, takeLength, takeNoOfPieces; // used in choose action dialog
     private RelativeLayout coordinatorLayout;
-    private String flag = "0";
+    private String flag = "0", maxSerial = "";
     private int edieFlag;
     private BundleInfo editPlannedAndBundleInfo;
 //    private List<TableRow> tableRowList = new ArrayList<>();
@@ -134,6 +142,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         textView.startAnimation(animation);
 
         checkIfEditItem();
+        new JSONTask3().execute();
     }
 
     @Override
@@ -622,12 +631,12 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         areaList.clear();
         descriptionList.clear();
 
+        gradeList.add("KD");
         gradeList.add("Fresh");
         gradeList.add("BS");
         gradeList.add("Reject");
-        gradeList.add("KD");
-        gradeList.add("KD Blue Stain");
-        gradeList.add("KD Reject");
+        gradeList.add("S4S");
+        gradeList.add("AST");
         gradeList.add("Second Sort");
         gradeAdapter = new ArrayAdapter<String>(this, R.layout.spinner_layout, gradeList);
         gradeAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
@@ -682,6 +691,12 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                 break;
             case "KD Reject":
                 gradeString = "KDREJ";
+                break;
+            case "S4S":
+                gradeString = "S4S";
+                break;
+            case "AST":
+                gradeString = "AST";
                 break;
         }
 
@@ -874,7 +889,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 //                    areaSpinner.setSelection(0);
 //                    gradeSpinner.setSelection(0);
 //                    descriptionSpinner.setSelection(0);
-                    gradeText = "Fresh";
+                    gradeText = "KD";
                     areaText = "Zone 1";
                     descriptionText = "Ukrainian Wood";
 
@@ -969,6 +984,82 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    // ******************************************** max serial ***************************************************
+    private class JSONTask3 extends AsyncTask<String, String, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            URLConnection connection = null;
+            BufferedReader reader = null;
+
+            try {
+//                http://10.0.0.22/woody/import.php?FLAG=2
+                URL url = new URL("http://" + generalSettings.getIpAddress() + "/import.php?FLAG=14&LOCATION=" + generalSettings.getStore());
+
+                URLConnection conn = url.openConnection();
+                conn.setDoOutput(true);
+
+                reader = new BufferedReader(new
+                        InputStreamReader(conn.getInputStream()));
+
+                StringBuilder sb = new StringBuilder();
+                String line = null;
+
+                // Read Server Response
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                String finalJson = sb.toString();
+                Log.e("JSONTask3", finalJson);
+
+                JSONObject object = new JSONObject(finalJson);
+                maxSerial = object.getJSONArray("MAX_SERIAL").getJSONObject(0).getString("MAX");
+                Log.e("JSONTask3 ", "maxSerial:" + maxSerial);
+
+            } catch (MalformedURLException e) {
+                Log.e("Customer", "********ex1");
+                e.printStackTrace();
+            } catch (IOException e) {
+                Log.e("Customer", e.getMessage().toString());
+                e.printStackTrace();
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } finally {
+                Log.e("Customer", "********finally");
+                if (connection != null) {
+                    Log.e("Customer", "********ex4");
+                    // connection.disconnect();
+                }
+                try {
+                    if (reader != null) {
+                        reader.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return maxSerial;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (s == null)
+                Log.e("tag", "JSONTask3/Failed to export data Please check internet connection");
+            else
+                serialNo.setText(maxSerial);
+
+        }
+    }
+
     // ******************************************** UPDATE BUNDLE ***************************************************
     private class JSONTask4 extends AsyncTask<String, String, String> {
 
@@ -1031,7 +1122,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                         finish();
                     } else {
                         oldBundleNoString = newBundle.getBundleNo();
-                        gradeText = "Fresh";
+                        gradeText = "KD";
                         areaText = "Zone 1";
                         descriptionText = "Ukrainian Wood";
                         setSpinnerSelectionPosition(gradeSpinner2, areaSpinner2, descriptionSpinner2, gradeText, areaText, descriptionText);
@@ -1159,7 +1250,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                         finish();
                     } else {
                         oldBundleNoString = newBundle.getBundleNo();
-                        gradeText = "Fresh";
+                        gradeText = "KD";
                         areaText = "Zone 1";
                         descriptionText = "Ukrainian Wood";
                         setSpinnerSelectionPosition(gradeSpinner2, areaSpinner2, descriptionSpinner2, gradeText, areaText, descriptionText);

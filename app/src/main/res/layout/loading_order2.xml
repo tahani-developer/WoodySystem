@@ -23,25 +23,16 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight=".8"
         android:orientation="horizontal"
-        android:layout_marginTop="@dimen/loadingOrder2_p_margin_top"
-        android:paddingBottom="@dimen/loadingOrder2_p_padding_bottom"
+        android:paddingHorizontal="20dp"
         >
         <TextView
             android:id="@+id/loading_order_textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="30dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"
-            android:drawableStart="@drawable/axe"
-            android:drawableLeft="@drawable/axe"
-            android:drawablePadding="10dp"
-            android:gravity="start"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|start"
             android:text="@string/loading_order"
             android:fontFamily="serif"
             android:textColor="@color/orange"
@@ -53,27 +44,26 @@
 
     </LinearLayout>
 
-
     <com.falconssoft.woodysystem.HorizontalListView
         android:id="@+id/listview"
-        android:layout_width="fill_parent"
-        android:layout_height="310dp" />
-
-    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp"
+        android:layout_weight="4" />
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:paddingHorizontal="50dp">
 
         <LinearLayout
             android:id="@+id/addToInventory_linear_one"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginEnd="50dp"
-            android:layout_marginRight="50dp"
             android:padding="5dp"
-            android:background="@drawable/shape_with_corner"            android:orientation="horizontal"
+            android:background="@drawable/alpha_frame"
+            android:orientation="horizontal"
             tools:ignore="MissingConstraints">
 
             <TextView
@@ -86,6 +76,7 @@
                 android:fontFamily="serif"
                 android:gravity="start"
                 android:text="@string/placing_no"
+                android:textColor="@color/white"
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -95,12 +86,13 @@
                 android:id="@+id/placing_no"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
                 android:layout_weight="2"
-                android:singleLine="true"
+                android:ems="10"
                 android:fontFamily="serif"
                 android:nextFocusDown="@id/order_no"
-                android:layout_marginTop="5dp"
-                android:ems="10"/>
+                android:singleLine="true"
+                android:textColor="@color/white" />
 
         </LinearLayout>
 
@@ -109,12 +101,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
-            android:layout_marginStart="50dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginEnd="50dp"
-            android:layout_marginRight="50dp"
             android:padding="5dp"
-            android:background="@drawable/shape_with_corner"            android:orientation="horizontal"
+            android:background="@drawable/alpha_frame"            android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_one">
 
             <TextView
@@ -127,6 +115,7 @@
                 android:fontFamily="serif"
                 android:gravity="start"
                 android:text="@string/packing_list"
+                android:textColor="@color/white"
                 android:textSize="15sp"
                 android:theme="@style/AppTheme"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -138,10 +127,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:singleLine="true"
+                android:ems="10"
                 android:fontFamily="serif"
                 android:nextFocusDown="@id/container_no"
-                android:ems="10" />
+                android:singleLine="true"
+                android:textColor="@color/white" />
 
         </LinearLayout>
 
@@ -150,12 +140,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
-            android:layout_marginStart="50dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginEnd="50dp"
-            android:layout_marginRight="50dp"
             android:padding="5dp"
-            android:background="@drawable/shape_with_corner"            android:orientation="horizontal"
+            android:background="@drawable/alpha_frame"
+            android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_two"
             >
 
@@ -169,6 +156,7 @@
                 android:fontFamily="serif"
                 android:gravity="start"
                 android:text="@string/container_no"
+                android:textColor="@color/white"
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -179,10 +167,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:singleLine="true"
+                android:ems="10"
                 android:fontFamily="serif"
                 android:nextFocusDown="@id/destination"
-                android:ems="10" />
+                android:singleLine="true"
+                android:textColor="@color/white" />
 
         </LinearLayout>
 
@@ -191,12 +180,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
-            android:layout_marginStart="50dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginEnd="50dp"
-            android:layout_marginRight="50dp"
             android:padding="5dp"
-            android:background="@drawable/shape_with_corner"
+            android:background="@drawable/alpha_frame"
             android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_nine"
             >
@@ -211,6 +196,7 @@
                 android:fontFamily="serif"
                 android:gravity="start"
                 android:text="@string/date_of_load"
+                android:textColor="@color/white"
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -221,11 +207,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:singleLine="true"
-                android:fontFamily="serif"
                 android:ems="10"
                 android:focusable="false"
-                android:inputType="text" />
+                android:fontFamily="serif"
+                android:inputType="text"
+                android:singleLine="true"
+                android:textColor="@color/white" />
 
         </LinearLayout>
 
@@ -234,14 +221,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
-            android:layout_marginStart="50dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginEnd="50dp"
-            android:layout_marginRight="50dp"
-            android:background="@drawable/shape_with_corner"
+            android:background="@drawable/alpha_frame"
             android:orientation="horizontal"
             android:padding="5dp"
-            app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_three"
             tools:layout_editor_absoluteX="50dp">
 
             <TextView
@@ -254,6 +236,7 @@
                 android:fontFamily="serif"
                 android:gravity="start"
                 android:text="@string/destination"
+                android:textColor="@color/white"
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -266,16 +249,18 @@
                 android:layout_weight="2"
                 android:ems="10"
                 android:fontFamily="serif"
-                android:inputType="text" />
+                android:inputType="text"
+                android:textColor="@color/white" />
 
         </LinearLayout>
 
-    </android.support.constraint.ConstraintLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="10dp"
         android:gravity="center">
 
         <ImageView
@@ -356,10 +341,12 @@
 
         <Button
             android:id="@+id/done"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".7"
+            android:layout_marginHorizontal="100dp"
             android:layout_gravity="center"
-            android:layout_marginTop="30dp"
+            android:layout_marginVertical="30dp"
             android:background="@drawable/frame_shape"
             android:fontFamily="serif"
             android:text="@string/done"

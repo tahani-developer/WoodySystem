@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@drawable/wooddecor"
     tools:context=".ReportsActivity">
 
-    <android.support.constraint.ConstraintLayout
+    <View
+        android:background="@color/alpha_black_dark"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:orientation="horizontal"
         android:background="@color/alpha_black_dark">
 
         <TextView
@@ -29,13 +38,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".5"/>
+
         <TextView
             android:id="@+id/reports_orders"
             android:layout_width="0dp"
-            android:layout_height="260dp"
-            android:layout_marginStart="@dimen/reports_margin_start"
-            android:layout_marginLeft="@dimen/reports_margin_start"
-            android:layout_marginTop="@dimen/reports_margin_top"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
             android:drawableTop="@drawable/reports"
             android:fontFamily="serif"
             android:paddingTop="10dp"
@@ -45,15 +57,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".5"/>
+
         <TextView
             android:id="@+id/reports_inventory"
-            android:layout_width="220dp"
-            android:layout_height="260dp"
-            android:layout_marginStart="@dimen/reports_margin2_start"
-            android:layout_marginLeft="@dimen/reports_margin2_start"
-            android:layout_marginTop="@dimen/reports_margin_top"
-            android:layout_marginEnd="@dimen/reports_margin_end"
-            android:layout_marginRight="@dimen/reports_margin_end"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
             android:drawableTop="@drawable/reports"
             android:fontFamily="serif"
             android:paddingTop="10dp"
@@ -65,5 +78,15 @@
             app:layout_constraintStart_toEndOf="@+id/reports_orders"
             app:layout_constraintTop_toTopOf="parent" />
 
-    </android.support.constraint.ConstraintLayout>
-</FrameLayout>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".5"/>
+    </LinearLayout>
+
+    <View
+        android:background="@color/alpha_black_dark"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+</LinearLayout>

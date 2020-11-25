@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -55,7 +56,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText username, password, ipAddress, companyName;
     private TextView aboutDevelopers, saveSettings;
     private Button login;
-    private ImageView logoImage, settings;
+    private ImageView  settings;//logoImage
     private DatabaseHandler databaseHandler;
     private final int IMAGE_CODE = 5;
     private Animation animation;
@@ -97,14 +98,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 //        }
         username = findViewById(R.id.login_username);
         password = findViewById(R.id.login_password);
-        logoImage = findViewById(R.id.login_logo);
+//        logoImage = findViewById(R.id.login_logo);
         login = findViewById(R.id.login_login_btn);
         settings = findViewById(R.id.login_settings);
         linearLayout = findViewById(R.id.login_linearLayout);
         aboutDevelopers = findViewById(R.id.login_about_developers);
 
         login.setOnClickListener(this);
-        logoImage.setOnClickListener(this);
+//        logoImage.setOnClickListener(this);
         settings.setOnClickListener(this);
         aboutDevelopers.setOnClickListener(this);
 
@@ -225,13 +226,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 localIpAddress = generalSettings.getIpAddress();
                 localStore = generalSettings.getStore();
 
+//                Window window = settingDialog.getWindow();
+//                window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
                 storesList.clear();
                 storesList.add("Amman");
                 storesList.add("Kalinovka");
                 storesList.add("Rudniya Store");
                 storesList.add("Rudniya Sawmill");
-                storesAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, storesList);
-                storesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                storesAdapter = new ArrayAdapter<String>(this, R.layout.spinner_layout_two, storesList);
+                storesAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
                 storesSpinner.setAdapter(storesAdapter);
 //                if (!(localIpAddress == null) && (!(localCompanyName == null))) {
 //                    if ((!localIpAddress.equals("")) && (!localCompanyName.equals(""))) {
@@ -307,19 +311,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            Uri selectedImage = data.getData();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
-                logoImage.setImageBitmap(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (resultCode == Activity.RESULT_OK) {
+//            Uri selectedImage = data.getData();
+//            try {
+//                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
+//                logoImage.setImageBitmap(bitmap);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 
     private class JSONTask extends AsyncTask<String, String, List<Orders>> {
 

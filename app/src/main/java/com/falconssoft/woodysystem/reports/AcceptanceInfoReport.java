@@ -3,6 +3,7 @@ package com.falconssoft.woodysystem.reports;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ComponentCallbacks2;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -38,6 +39,7 @@ import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.models.NewRowInfo;
 import com.falconssoft.woodysystem.models.Settings;
 import com.falconssoft.woodysystem.stage_one.AddNewRaw;
+import com.google.gson.Gson;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -71,7 +73,7 @@ import java.util.Set;
 import static com.falconssoft.woodysystem.stage_one.AddNewRaw.serialBeforeUpdate;
 import static com.falconssoft.woodysystem.stage_one.AddNewRaw.truckNoBeforeUpdate;
 
-public class AcceptanceInfoReport extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class AcceptanceInfoReport extends AppCompatActivity implements AdapterView.OnItemSelectedListener, ComponentCallbacks2 {
 
     private Settings generalSettings;
     private DatabaseHandler databaseHandler;
@@ -161,6 +163,8 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
         adapter = new AcceptanceInfoReportAdapter(AcceptanceInfoReport.this, details);
         progressDialog.show();
         new JSONTask().execute();
+        new JSONTask2().execute();
+
         new JSONTask1().execute();
 
         fromDate.setOnClickListener(new View.OnClickListener() {
@@ -618,7 +622,7 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
     }
 
     // **************************** GET DATA  ****************************
-    private class JSONTask extends AsyncTask<String, String, List<NewRowInfo>> {
+    private class JSONTask2 extends AsyncTask<String, String, List<NewRowInfo>> {
 
         @Override
         protected void onPreExecute() {
@@ -660,40 +664,44 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
                 try {
                     JSONArray parentArray = parentObject.getJSONArray("RAW_INFO_MASTER");
                     master.clear();
-                    ttnList.clear();
-                    acceptorList.clear();
-                    truckList.clear();
-                    accLocationList.clear();
+//                    ttnList.clear();
+//                    acceptorList.clear();
+//                    truckList.clear();
+//                    accLocationList.clear();
 
-                    for (int i = 0; i < parentArray.length(); i++) {
-                        JSONObject finalObject = parentArray.getJSONObject(i);
+                    Gson gson = new Gson();
+                    NewRowInfo list = gson.fromJson(finalJson, NewRowInfo.class);
+                    master.addAll(list.getMaster());
 
-                        NewRowInfo newRowInfo = new NewRowInfo();
-                        newRowInfo.setTruckNo(finalObject.getString("TRUCK_NO"));
-                        newRowInfo.setDate(finalObject.getString("DATE_OF_ACCEPTANCE"));
-                        newRowInfo.setAcceptedPersonName(finalObject.getString("NAME_OF_ACCEPTER"));
-                        newRowInfo.setLocationOfAcceptance(finalObject.getString("LOCATION_OF_ACCEPTANCE"));
-                        newRowInfo.setTtnNo(finalObject.getString("TTN_NO"));
-                        newRowInfo.setTotalRejectedNo(finalObject.getString("REJECTED"));
-                        newRowInfo.setSerial(finalObject.getString("SERIAL"));
-
-                        master.add(newRowInfo);
-                        ttnList.add(finalObject.getString("TTN_NO"));
-                        acceptorList.add(finalObject.getString("NAME_OF_ACCEPTER"));
-                        truckList.add(finalObject.getString("TRUCK_NO"));
-                        accLocationList.add(finalObject.getString("LOCATION_OF_ACCEPTANCE"));
-
-                    }
-
-                    removeDuplicate(ttnList);
-                    removeDuplicate(acceptorList);
-                    removeDuplicate(truckList);
-                    removeDuplicate(accLocationList);
-
-                    ttnList.add(0, "All");
-                    acceptorList.add(0, "All");
-                    truckList.add(0, "All");
-                    accLocationList.add(0, "All");
+//                    for (int i = 0; i < parentArray.length(); i++) {
+//                        JSONObject finalObject = parentArray.getJSONObject(i);
+//
+//                        NewRowInfo newRowInfo = new NewRowInfo();
+//                        newRowInfo.setTruckNo(finalObject.getString("TRUCK_NO"));
+//                        newRowInfo.setDate(finalObject.getString("DATE_OF_ACCEPTANCE"));
+//                        newRowInfo.setAcceptedPersonName(finalObject.getString("NAME_OF_ACCEPTER"));
+//                        newRowInfo.setLocationOfAcceptance(finalObject.getString("LOCATION_OF_ACCEPTANCE"));
+//                        newRowInfo.setTtnNo(finalObject.getString("TTN_NO"));
+//                        newRowInfo.setTotalRejectedNo(finalObject.getString("REJECTED"));
+//                        newRowInfo.setSerial(finalObject.getString("SERIAL"));
+//
+//                        master.add(newRowInfo);
+//                        ttnList.add(finalObject.getString("TTN_NO"));
+//                        acceptorList.add(finalObject.getString("NAME_OF_ACCEPTER"));
+//                        truckList.add(finalObject.getString("TRUCK_NO"));
+//                        accLocationList.add(finalObject.getString("LOCATION_OF_ACCEPTANCE"));
+//
+//                    }
+//
+//                    removeDuplicate(ttnList);
+//                    removeDuplicate(acceptorList);
+//                    removeDuplicate(truckList);
+//                    removeDuplicate(accLocationList);
+//
+//                    ttnList.add(0, "All");
+//                    acceptorList.add(0, "All");
+//                    truckList.add(0, "All");
+//                    accLocationList.add(0, "All");
                 } catch (JSONException e) {
                     Log.e("Import Data1", e.getMessage());
                 }
@@ -705,31 +713,35 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
                     noOfPiecesSum = 0;
                     cubicSum = 0;
                     Log.e("mix length", "" + parentArray.length());
-                    for (int i = 0; i < parentArray.length(); i++) {
-                        JSONObject finalObject = parentArray.getJSONObject(i);
+                    Gson gson = new Gson();
+                    NewRowInfo list = gson.fromJson(finalJson, NewRowInfo.class);
+                    details.addAll(list.getDetails());
 
-                        NewRowInfo newRowInfo = new NewRowInfo();
-                        truckNoLocal = finalObject.getString("TRUCK_NO");
-                        newRowInfo.setSupplierName(finalObject.getString("SUPLIER"));
-                        newRowInfo.setTruckNo(truckNoLocal);
-                        newRowInfo.setThickness(finalObject.getInt("THICKNESS"));
-                        newRowInfo.setWidth(finalObject.getInt("WIDTH"));
-                        newRowInfo.setLength(finalObject.getInt("LENGTH"));
-                        newRowInfo.setNoOfRejected(Double.parseDouble(finalObject.getString("REJ")));
-                        newRowInfo.setNoOfBundles(finalObject.getInt("NO_BUNDLES"));
-                        newRowInfo.setGrade(finalObject.getString("GRADE"));
-                        newRowInfo.setNoOfPieces(finalObject.getInt("PIECES"));
-                        newRowInfo.setDate(finalObject.getString("DATE_OF_ACCEPTANCE"));
-                        newRowInfo.setAcceptedPersonName(finalObject.getString("NAME_OF_ACCEPTER"));
-                        newRowInfo.setLocationOfAcceptance(finalObject.getString("LOCATION_OF_ACCEPTANCE"));
-                        newRowInfo.setTtnNo(finalObject.getString("TTN_NO"));
-                        newRowInfo.setSerial(finalObject.getString("SERIAL"));
+//                    for (int i = 0; i < parentArray.length(); i++) {
+//                        JSONObject finalObject = parentArray.getJSONObject(i);
 
-                        noOfPiecesSum += (newRowInfo.getNoOfPieces() * newRowInfo.getNoOfBundles());
-                        cubicSum += (newRowInfo.getLength() * newRowInfo.getWidth() * newRowInfo.getThickness() * newRowInfo.getNoOfPieces() * newRowInfo.getNoOfBundles());
+//                        NewRowInfo newRowInfo = new NewRowInfo();
+//                        truckNoLocal = finalObject.getString("TRUCK_NO");
+//                        newRowInfo.setSupplierName(finalObject.getString("SUPLIER"));
+//                        newRowInfo.setTruckNo(truckNoLocal);
+//                        newRowInfo.setThickness(finalObject.getInt("THICKNESS"));
+//                        newRowInfo.setWidth(finalObject.getInt("WIDTH"));
+//                        newRowInfo.setLength(finalObject.getInt("LENGTH"));
+//                        newRowInfo.setNoOfRejected(Double.parseDouble(finalObject.getString("REJ")));
+//                        newRowInfo.setNoOfBundles(finalObject.getInt("NO_BUNDLES"));
+//                        newRowInfo.setGrade(finalObject.getString("GRADE"));
+//                        newRowInfo.setNoOfPieces(finalObject.getInt("PIECES"));
+//                        newRowInfo.setDate(finalObject.getString("DATE_OF_ACCEPTANCE"));
+//                        newRowInfo.setAcceptedPersonName(finalObject.getString("NAME_OF_ACCEPTER"));
+//                        newRowInfo.setLocationOfAcceptance(finalObject.getString("LOCATION_OF_ACCEPTANCE"));
+//                        newRowInfo.setTtnNo(finalObject.getString("TTN_NO"));
+//                        newRowInfo.setSerial(finalObject.getString("SERIAL"));
 
-                        details.add(newRowInfo);
-                    }
+//                        noOfPiecesSum += (finalObject.getInt("PIECES") * finalObject.getInt("NO_BUNDLES"));
+//                        cubicSum += (finalObject.getInt("LENGTH") * finalObject.getInt("WIDTH") * finalObject.getInt("THICKNESS") * finalObject.getInt("PIECES") * finalObject.getInt("NO_BUNDLES"));
+
+//                        details.add(newRowInfo);
+//                    }
                 } catch (JSONException e) {
                     Log.e("Import Data2", e.getMessage().toString());
                 }
@@ -769,11 +781,188 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
             progressDialog.dismiss();
             if (result != null) {
                 Log.e("infoReport", "/GET/" + details.size());
-                filters();
+                adapter = new AcceptanceInfoReportAdapter(AcceptanceInfoReport.this, details);
+                listView.setAdapter(adapter);
+//                filters();
 //                adapter = new AcceptanceInfoReportAdapter(AcceptanceInfoReport.this, details);
 //                listView.setAdapter(adapter);
 
                 bundleNo.setText("" + details.size());
+//                if (details.size() == 0){
+//                    cubic.setText("0");
+//                    noOfPieces.setText("0");
+//                }else {
+//                    cubic.setText("" + String.format("%.3f", (cubicSum / 1000000000)));
+//                    noOfPieces.setText("" + String.format("%.3f", (noOfPiecesSum)));
+//                }
+
+            } else {
+                Toast.makeText(AcceptanceInfoReport.this, "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    // **************************** GET DATA  ****************************
+    private class JSONTask extends AsyncTask<String, String, List<NewRowInfo>> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+//            details.clear();
+//            adapter = new AcceptanceInfoReportAdapter(AcceptanceInfoReport.this, details);
+//            listView.setAdapter(adapter);
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        @Override
+        protected List<NewRowInfo> doInBackground(String... params) {
+            URLConnection connection = null;
+            BufferedReader reader = null;
+
+            try {
+//                http://10.0.0.214/woody/import.php?FLAG=5//   http://5.189.130.98:8085/import.php?FLAG=5
+                URL url = new URL("http://" + generalSettings.getIpAddress() + "/import.php?FLAG=5");
+
+                URLConnection conn = url.openConnection();
+                conn.setDoOutput(true);
+
+                reader = new BufferedReader(new
+                        InputStreamReader(conn.getInputStream()));
+
+                StringBuilder sb = new StringBuilder();
+                String line = null;
+
+                // Read Server Response
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                String finalJson = sb.toString();
+                Log.e("finalJson*********", finalJson);
+
+                JSONObject parentObject = new JSONObject(finalJson);
+
+                try {
+                    JSONArray parentArray = parentObject.getJSONArray("RAW_INFO_MASTER");
+//                    master.clear();
+                    ttnList.clear();
+                    acceptorList.clear();
+                    truckList.clear();
+                    accLocationList.clear();
+
+                    for (int i = 0; i < parentArray.length(); i++) {
+                        JSONObject finalObject = parentArray.getJSONObject(i);
+
+//                        NewRowInfo newRowInfo = new NewRowInfo();
+//                        newRowInfo.setTruckNo(finalObject.getString("TRUCK_NO"));
+//                        newRowInfo.setDate(finalObject.getString("DATE_OF_ACCEPTANCE"));
+//                        newRowInfo.setAcceptedPersonName(finalObject.getString("NAME_OF_ACCEPTER"));
+//                        newRowInfo.setLocationOfAcceptance(finalObject.getString("LOCATION_OF_ACCEPTANCE"));
+//                        newRowInfo.setTtnNo(finalObject.getString("TTN_NO"));
+//                        newRowInfo.setTotalRejectedNo(finalObject.getString("REJECTED"));
+//                        newRowInfo.setSerial(finalObject.getString("SERIAL"));
+//
+//                        master.add(newRowInfo);
+                        ttnList.add(finalObject.getString("TTN_NO"));
+                        acceptorList.add(finalObject.getString("NAME_OF_ACCEPTER"));
+                        truckList.add(finalObject.getString("TRUCK_NO"));
+                        accLocationList.add(finalObject.getString("LOCATION_OF_ACCEPTANCE"));
+
+                    }
+
+                    removeDuplicate(ttnList);
+                    removeDuplicate(acceptorList);
+                    removeDuplicate(truckList);
+                    removeDuplicate(accLocationList);
+
+                    ttnList.add(0, "All");
+                    acceptorList.add(0, "All");
+                    truckList.add(0, "All");
+                    accLocationList.add(0, "All");
+                } catch (JSONException e) {
+                    Log.e("Import Data1", e.getMessage());
+                }
+
+
+                try {
+                    JSONArray parentArray = parentObject.getJSONArray("RAW_INFO_MIX");
+//                    details.clear();
+                    String truckNoLocal = "";
+                    noOfPiecesSum = 0;
+                    cubicSum = 0;
+                    Log.e("mix length", "" + parentArray.length());
+                    for (int i = 0; i < parentArray.length(); i++) {
+                        JSONObject finalObject = parentArray.getJSONObject(i);
+
+//                        NewRowInfo newRowInfo = new NewRowInfo();
+//                        truckNoLocal = finalObject.getString("TRUCK_NO");
+//                        newRowInfo.setSupplierName(finalObject.getString("SUPLIER"));
+//                        newRowInfo.setTruckNo(truckNoLocal);
+//                        newRowInfo.setThickness(finalObject.getInt("THICKNESS"));
+//                        newRowInfo.setWidth(finalObject.getInt("WIDTH"));
+//                        newRowInfo.setLength(finalObject.getInt("LENGTH"));
+//                        newRowInfo.setNoOfRejected(Double.parseDouble(finalObject.getString("REJ")));
+//                        newRowInfo.setNoOfBundles(finalObject.getInt("NO_BUNDLES"));
+//                        newRowInfo.setGrade(finalObject.getString("GRADE"));
+//                        newRowInfo.setNoOfPieces(finalObject.getInt("PIECES"));
+//                        newRowInfo.setDate(finalObject.getString("DATE_OF_ACCEPTANCE"));
+//                        newRowInfo.setAcceptedPersonName(finalObject.getString("NAME_OF_ACCEPTER"));
+//                        newRowInfo.setLocationOfAcceptance(finalObject.getString("LOCATION_OF_ACCEPTANCE"));
+//                        newRowInfo.setTtnNo(finalObject.getString("TTN_NO"));
+//                        newRowInfo.setSerial(finalObject.getString("SERIAL"));
+
+                        noOfPiecesSum += (finalObject.getInt("PIECES") * finalObject.getInt("NO_BUNDLES"));
+                        cubicSum += (finalObject.getInt("LENGTH") * finalObject.getInt("WIDTH") * finalObject.getInt("THICKNESS") * finalObject.getInt("PIECES") * finalObject.getInt("NO_BUNDLES"));
+
+//                        noOfPiecesSum += (newRowInfo.getNoOfPieces() * newRowInfo.getNoOfBundles());
+//                        cubicSum += (newRowInfo.getLength() * newRowInfo.getWidth() * newRowInfo.getThickness() * newRowInfo.getNoOfPieces() * newRowInfo.getNoOfBundles());
+
+//                        details.add(newRowInfo);
+                    }
+                } catch (JSONException e) {
+                    Log.e("Import Data2", e.getMessage().toString());
+                }
+
+
+            } catch (MalformedURLException e) {
+                Log.e("Customer", "********ex1");
+                e.printStackTrace();
+            } catch (IOException e) {
+                Log.e("Customer", e.getMessage().toString());
+                e.printStackTrace();
+
+            } catch (JSONException e) {
+                Log.e("Customer", "********ex3  " + e.toString());
+                e.printStackTrace();
+            } finally {
+                Log.e("Customer", "********finally");
+                if (connection != null) {
+                    Log.e("Customer", "********ex4");
+                    // connection.disconnect();
+                }
+                try {
+                    if (reader != null) {
+                        reader.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(final List<NewRowInfo> result) {
+            super.onPostExecute(result);
+//            progressDialog.dismiss();
+//            if (result != null) {
+//                Log.e("infoReport", "/GET/" + details.size());
+              //  filters();
+//                adapter = new AcceptanceInfoReportAdapter(AcceptanceInfoReport.this, details);
+//                listView.setAdapter(adapter);
+
+//                bundleNo.setText("" + details.size());
                 if (details.size() == 0){
                     cubic.setText("0");
                     noOfPieces.setText("0");
@@ -782,9 +971,9 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
                     noOfPieces.setText("" + String.format("%.3f", (noOfPiecesSum)));
                 }
 
-            } else {
-                Toast.makeText(AcceptanceInfoReport.this, "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();
-            }
+//            } else {
+//                Toast.makeText(AcceptanceInfoReport.this, "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();
+//            }
         }
     }
 
@@ -1013,7 +1202,7 @@ public class AcceptanceInfoReport extends AppCompatActivity implements AdapterVi
                     selected.clear();
 
                     progressDialog.show();
-                    new JSONTask().execute();
+                    new JSONTask2().execute();
                 } else {
                     Toast.makeText(AcceptanceInfoReport.this, "Failed to export data!", Toast.LENGTH_SHORT).show();
                 }

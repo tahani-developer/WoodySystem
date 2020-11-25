@@ -62,7 +62,7 @@
                 android:layout_marginRight="5dp"
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/shape_with_corner"
+                android:background="@drawable/alpha_frame"
                 android:orientation="horizontal"
                 android:paddingVertical="10dp"
                 >
@@ -73,6 +73,7 @@
                     android:fontFamily="serif"
                     android:paddingLeft="5dp"
                     android:text="@string/loc"
+                    android:textColor="@color/white"
                     android:textSize="15sp" />
 
                 <Spinner
@@ -90,7 +91,7 @@
                 android:layout_marginRight="5dp"
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/shape_with_corner"
+                android:background="@drawable/alpha_frame"
                 android:orientation="horizontal"
                 android:paddingVertical="10dp">
 
@@ -100,6 +101,7 @@
                     android:fontFamily="serif"
                     android:paddingLeft="5dp"
                     android:text="@string/area"
+                    android:textColor="@color/white"
                     android:textSize="15sp" />
 
                 <Spinner
@@ -117,7 +119,7 @@
                 android:layout_marginRight="5dp"
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/shape_with_corner"
+                android:background="@drawable/alpha_frame"
                 android:orientation="horizontal"
                 android:paddingVertical="10dp"
                 android:paddingEnd="5dp"
@@ -130,6 +132,7 @@
                     android:paddingStart="10dp"
                     android:paddingLeft="10dp"
                     android:text="@string/grade"
+                    android:textColor="@color/white"
                     android:textSize="15sp" />
 
                 <Spinner
@@ -147,7 +150,7 @@
                 android:layout_marginRight="5dp"
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/shape_with_corner"
+                android:background="@drawable/alpha_frame"
                 android:orientation="horizontal"
                 android:paddingVertical="10dp"
                 android:paddingEnd="5dp"
@@ -160,14 +163,15 @@
                     android:paddingStart="10dp"
                     android:paddingLeft="10dp"
                     android:text="@string/from"
+                    android:textColor="@color/white"
                     android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/inventory_report_from"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    />
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
 
             </LinearLayout>
 
@@ -179,7 +183,7 @@
                 android:layout_marginRight="5dp"
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/shape_with_corner"
+                android:background="@drawable/alpha_frame"
                 android:orientation="horizontal"
                 android:paddingVertical="10dp"
                 android:paddingEnd="5dp"
@@ -192,12 +196,14 @@
                     android:paddingStart="10dp"
                     android:paddingLeft="10dp"
                     android:text="@string/to"
+                    android:textColor="@color/white"
                     android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/inventory_report_to"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/white"
                     android:textSize="15sp" />
 
             </LinearLayout>
@@ -223,18 +229,19 @@
                 android:layout_marginRight="5dp"
                 android:layout_marginEnd="5dp"
                 android:layout_weight="0.3"
-                android:background="@drawable/shape_with_corner"
+                android:background="@drawable/alpha_frame"
                 android:orientation="horizontal"
                 android:paddingEnd="5dp"
                 android:paddingRight="5dp">
 
                 <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:fontFamily="serif"
-                android:paddingLeft="10dp"
-                android:text="@string/serial"
-                android:textSize="15sp" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="serif"
+                    android:paddingLeft="10dp"
+                    android:text="@string/serial"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
 
                 <EditText
                     android:id="@+id/inventory_report_search_serial"
@@ -242,9 +249,10 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:fontFamily="serif"
-                    android:paddingTop="10dp"
                     android:paddingStart="10dp"
                     android:paddingLeft="10dp"
+                    android:paddingTop="10dp"
+                    android:textColor="@color/white"
                     android:textSize="15sp" />
 
                 <TextView
@@ -264,7 +272,7 @@
                 android:layout_marginRight="5dp"
                 android:layout_marginEnd="5dp"
                 android:layout_weight="0.8"
-                android:background="@drawable/shape_with_corner"
+                android:background="@drawable/alpha_frame"
                 android:orientation="horizontal"
                 android:visibility="visible">
 
@@ -273,9 +281,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:fontFamily="serif"
-                    android:paddingLeft="5dp"
                     android:paddingVertical="10dp"
+                    android:paddingLeft="5dp"
                     android:text="@string/thickness"
+                    android:textColor="@color/white"
                     android:textSize="15sp" />
 
                 <Spinner
@@ -292,7 +301,7 @@
                 android:layout_marginRight="5dp"
                 android:layout_weight="1"
                 android:visibility="gone"
-                android:background="@drawable/shape_with_corner"
+                android:background="@drawable/alpha_frame"
                 android:gravity="center">
 
                 <EditText
@@ -330,7 +339,7 @@
                 android:layout_marginRight="5dp"
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1.0"
-                android:background="@drawable/shape_with_corner"
+                android:background="@drawable/alpha_frame"
                 android:gravity="center">
 
                 <TextView
@@ -340,6 +349,7 @@
                     android:layout_weight="0"
                     android:fontFamily="serif"
                     android:text="@string/width"
+                    android:textColor="@color/white"
                     android:textSize="13sp" />
 
                 <EditText
@@ -349,9 +359,11 @@
                     android:layout_weight="1"
                     android:fontFamily="serif"
                     android:gravity="center"
+                    android:hint="@string/f"
                     android:inputType="number"
-                    android:textSize="15sp"
-                    android:hint="@string/f"/>
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="15sp" />
 
                 <TextView
                     android:visibility="gone"
@@ -378,9 +390,11 @@
                     android:layout_weight="1"
                     android:fontFamily="serif"
                     android:gravity="center"
+                    android:hint="@string/to"
                     android:inputType="number"
-                    android:textSize="15sp"
-                    android:hint="@string/to"/>
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="15sp" />
 
             </LinearLayout>
 
@@ -390,7 +404,7 @@
                 android:layout_marginRight="5dp"
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/shape_with_corner"
+                android:background="@drawable/alpha_frame"
                 android:gravity="center">
 
                 <TextView
@@ -400,6 +414,7 @@
                     android:layout_weight="0"
                     android:fontFamily="serif"
                     android:text="@string/length"
+                    android:textColor="@color/white"
                     android:textSize="13sp" />
 
                 <EditText
@@ -407,11 +422,13 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:inputType="number"
-                    android:gravity="center"
                     android:fontFamily="serif"
-                    android:textSize="15sp"
-                    android:hint="@string/f"/>
+                    android:gravity="center"
+                    android:hint="@string/f"
+                    android:inputType="number"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="15sp" />
 
                 <TextView
                     android:visibility="gone"
@@ -438,9 +455,11 @@
                     android:layout_weight="1"
                     android:fontFamily="serif"
                     android:gravity="center"
+                    android:hint="@string/to"
                     android:inputType="number"
-                    android:textSize="15sp"
-                    android:hint="@string/to"/>
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textSize="15sp" />
 
 
             </LinearLayout>
@@ -453,19 +472,20 @@
                 android:layout_marginRight="5dp"
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/shape_with_corner"
+                android:gravity="center_vertical"
+                android:background="@drawable/alpha_frame"
                 android:orientation="horizontal"
                 android:paddingEnd="5dp"
                 android:paddingRight="5dp">
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:fontFamily="serif"
-                    android:paddingTop="10dp"
                     android:paddingStart="10dp"
                     android:paddingLeft="10dp"
                     android:text="@string/p_list"
+                    android:textColor="@color/white"
                     android:textSize="15sp" />
 
                 <Spinner
@@ -483,6 +503,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="serif"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
                     android:hint="@string/search"
                     android:visibility="gone"
                     android:minWidth="150dp"
@@ -756,7 +778,7 @@
                 android:layout_gravity="center"
                 android:layout_marginEnd="7dp"
                 android:layout_marginRight="7dp"
-                android:background="@drawable/border_background"
+                android:background="@drawable/alpha_frame"
                 android:orientation="horizontal"
                 android:paddingEnd="5dp"
                 android:paddingRight="5dp">
@@ -791,7 +813,7 @@
                 android:layout_gravity="center"
                 android:layout_marginEnd="7dp"
                 android:layout_marginRight="7dp"
-                android:background="@drawable/border_background"
+                android:background="@drawable/alpha_frame"
                 android:orientation="horizontal"
                 android:paddingEnd="5dp"
                 android:paddingRight="5dp">
@@ -826,7 +848,7 @@
                 android:layout_gravity="center"
                 android:layout_marginEnd="7dp"
                 android:layout_marginRight="7dp"
-                android:background="@drawable/border_background"
+                android:background="@drawable/alpha_frame"
                 android:orientation="horizontal"
                 android:paddingEnd="5dp"
                 android:paddingRight="5dp">

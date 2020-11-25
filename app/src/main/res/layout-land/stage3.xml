@@ -1,95 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@drawable/wooddecor"
     tools:context=".Stage3">
 
+    <TextView
+        android:background="@color/alpha_black_dark"
+        android:text="@string/stage3"
+        android:textColor="@color/orange"
+        android:fontFamily="serif"
+        android:padding="10dp"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.2"/>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
         android:orientation="horizontal"
-        android:background="@color/alpha_black_dark"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.431">
+        android:background="@color/alpha_black_dark">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"/>
 
         <LinearLayout
             android:id="@+id/stage3_enter_inventory"
-            android:layout_width="@dimen/stage3_views_land"
-            android:layout_height="@dimen/stage3_views2_land"
-            android:layout_marginStart="@dimen/stage3_margin1_start"
-            android:layout_marginLeft="@dimen/stage3_margin1_start"
-            android:layout_marginTop="@dimen/stage3_margin_top"
-            android:background="@drawable/frame_shape"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:background="@drawable/alpha_frame"
             android:gravity="center"
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="120dp"
-                android:layout_height="90dp"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/wbundlereal"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1.7"
+                android:layout_marginVertical="20dp"
+                android:src="@drawable/barcode_icon"
                 android:scaleType="fitCenter" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:fontFamily="serif"
-                android:gravity="center_horizontal"
-                android:lineSpacingExtra="15dp"
-                android:text="@string/enter_inventory"
+                android:gravity="center"
+                android:background="@drawable/border_frame"
+                android:text="@string/enter_barcode"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
         </LinearLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".3"/>
 
         <LinearLayout
             android:id="@+id/stage3_loading_order"
-            android:layout_width="@dimen/stage3_views_land"
-            android:layout_height="@dimen/stage3_views2_land"
-            android:layout_marginStart="@dimen/stage3_margin2_start"
-            android:layout_marginLeft="@dimen/stage3_margin2_start"
-            android:layout_marginTop="@dimen/stage3_margin_top"
-            android:background="@drawable/border_background"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:background="@drawable/alpha_frame"
             android:gravity="center"
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="150dp"
-                android:layout_height="110dp"
-                android:layout_marginTop="3dp"
-                android:background="@drawable/container3"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1.7"
+                android:layout_marginVertical="20dp"
+                android:src="@drawable/container1"
                 android:scaleType="fitCenter" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:fontFamily="serif"
-                android:gravity="center_horizontal"
-                android:lineSpacingExtra="15dp"
+                android:gravity="center"
+                android:background="@drawable/border_frame"
                 android:text="@string/loading_order"
-                android:textColor="@color/orange"
-                android:textSize="20sp" />
+                android:textColor="@color/white"
+                android:textSize="18sp" />
         </LinearLayout>
 
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".3"
+        android:background="@color/alpha_black_dark"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:orientation="horizontal"
+        android:background="@color/alpha_black_dark">
         <LinearLayout
+            android:visibility="gone"
             android:id="@+id/stage3_reports"
-            android:layout_width="@dimen/stage3_views_land"
-            android:layout_height="@dimen/stage3_views2_land"
-            android:layout_marginStart="@dimen/stage3_margin2_start"
-            android:layout_marginLeft="@dimen/stage3_margin2_start"
-            android:layout_marginTop="@dimen/stage3_margin_top"
-            android:layout_marginEnd="@dimen/stage3_margin_end"
-            android:layout_marginRight="@dimen/stage3_margin_end"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
             android:background="@drawable/frame_shape"
             android:gravity="center"
             android:orientation="vertical">
@@ -114,6 +144,84 @@
                 android:textSize="20sp" />
         </LinearLayout>
 
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"/>
+
+        <LinearLayout
+            android:id="@+id/reports_orders"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:background="@drawable/alpha_frame"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1.7"
+                android:layout_marginVertical="20dp"
+                android:src="@drawable/containerreport"
+                android:scaleType="fitCenter" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:gravity="center"
+                android:background="@drawable/border_frame"
+                android:text="@string/loading_order_report"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".3"/>
+
+        <LinearLayout
+            android:id="@+id/reports_inventory"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:background="@drawable/alpha_frame"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1.7"
+                android:layout_marginVertical="20dp"
+                android:src="@drawable/inventoryreport"
+                android:scaleType="fitCenter" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:gravity="center"
+                android:background="@drawable/border_frame"
+                android:text="@string/inventory_report"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"/>
+
     </LinearLayout>
 
-</android.support.constraint.ConstraintLayout>
+    <View
+        android:background="@color/alpha_black_dark"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".6"/>
+</LinearLayout>

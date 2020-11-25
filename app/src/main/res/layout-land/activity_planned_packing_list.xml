@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/wooddecor"
-    tools:context=".stage_one.AddNewRaw">
+    tools:context=".stage_one.AddNewRaw"
+    tools:ignore="MissingDefaultResource">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -40,7 +41,7 @@
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:layout_weight="1"
-                    android:background="@drawable/shape_with_corner"
+                    android:background="@drawable/alpha_frame"
                     android:orientation="horizontal"
                     android:padding="5dp">
 
@@ -52,6 +53,7 @@
                         android:fontFamily="serif"
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
+                        android:textColor="@color/white"
                         android:text="@string/cust"
                         android:textSize="15sp" />
 
@@ -65,6 +67,8 @@
                         android:layout_marginRight="5dp"
                         android:layout_weight="10"
                         android:gravity="start|left"
+                        android:textColorHint="@color/white"
+                        android:textColor="@color/white"
                         android:hint="@string/search"
                         android:textSize="15sp" />
 
@@ -89,7 +93,7 @@
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:layout_weight="1"
-                    android:background="@drawable/shape_with_corner"
+                    android:background="@drawable/alpha_frame"
                     android:orientation="horizontal"
                     android:padding="5dp">
 
@@ -101,6 +105,7 @@
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/supplier_name"
+                        android:textColor="@color/white"
                         android:textSize="15sp" />
 
                     <TextView
@@ -113,6 +118,8 @@
                         android:layout_marginRight="5dp"
                         android:layout_weight="10"
                         android:gravity="start|left"
+                        android:textColorHint="@color/white"
+                        android:textColor="@color/white"
                         android:hint="@string/search"
                         android:textSize="12sp" />
 
@@ -139,29 +146,29 @@
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:layout_weight="1"
-                    android:background="@drawable/shape_with_corner"
+                    android:background="@drawable/alpha_frame"
                     android:orientation="horizontal"
                     android:padding="5dp">
 
                     <TextView
                         android:id="@+id/textView2"
-                        android:layout_width="150dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:fontFamily="serif"
                         android:text="@string/p_list"
+                        android:textColor="@color/white"
                         android:textSize="15sp" />
 
                     <EditText
                         android:id="@+id/p_list"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp"
                         android:layout_weight="1"
                         android:ems="10"
+                        android:gravity="center"
                         android:nextFocusDown="@id/destination"
                         android:singleLine="true"
+                        android:textColor="@color/white"
                         android:textSize="15sp" />
                 </LinearLayout>
 
@@ -172,29 +179,29 @@
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:layout_weight="1"
-                    android:background="@drawable/shape_with_corner"
+                    android:background="@drawable/alpha_frame"
                     android:orientation="horizontal"
                     android:padding="5dp">
 
                     <TextView
                         android:id="@+id/textView1"
-                        android:layout_width="150dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:fontFamily="serif"
                         android:text="@string/destination"
+                        android:textColor="@color/white"
                         android:textSize="15sp" />
 
                     <EditText
                         android:id="@+id/destination"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:ems="10"
+                        android:gravity="center"
                         android:nextFocusDown="@id/order_no"
                         android:singleLine="true"
+                        android:textColor="@color/white"
                         android:textSize="15sp" />
 
                 </LinearLayout>
@@ -203,28 +210,28 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@drawable/shape_with_corner"
+                    android:background="@drawable/alpha_frame"
                     android:orientation="horizontal"
                     android:padding="5dp">
 
                     <TextView
-                        android:layout_width="150dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:fontFamily="serif"
                         android:text="@string/order_no"
+                        android:textColor="@color/white"
                         android:textSize="15sp" />
 
                     <EditText
                         android:id="@+id/order_no"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:ems="10"
+                        android:gravity="center"
                         android:nextFocusDown="@id/thickness"
                         android:singleLine="true"
+                        android:textColor="@color/white"
                         android:textSize="15sp" />
 
                 </LinearLayout>
@@ -244,30 +251,31 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:gravity="center_vertical"
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:layout_weight="1"
-                    android:background="@drawable/shape_with_corner"
+                    android:background="@drawable/alpha_frame"
                     android:orientation="horizontal"
                     android:padding="5dp">
 
-
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:fontFamily="serif"
                         android:layout_gravity="center_vertical"
                         android:text="@string/grade"
+                        android:textColor="@color/white"
                         android:textSize="15sp" />
 
                     <Spinner
                         android:id="@+id/grade"
                         android:layout_width="0dp"
-                        android:layout_height="45dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="1" />
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        />
 
                 </LinearLayout>
 
@@ -277,28 +285,28 @@
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:layout_weight="1"
-                    android:background="@drawable/shape_with_corner"
+                    android:background="@drawable/alpha_frame"
                     android:orientation="horizontal"
                     android:padding="5dp">
 
                     <TextView
-                        android:layout_width="150dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:fontFamily="serif"
                         android:text="@string/thickness"
+                        android:textColor="@color/white"
                         android:textSize="15sp" />
 
                     <EditText
                         android:id="@+id/thickness"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:ems="10"
+                        android:gravity="center"
                         android:inputType="numberDecimal"
                         android:nextFocusDown="@id/width"
+                        android:textColor="@color/white"
                         android:textSize="15sp" />
 
                 </LinearLayout>
@@ -309,28 +317,28 @@
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:layout_weight="1"
-                    android:background="@drawable/shape_with_corner"
+                    android:background="@drawable/alpha_frame"
                     android:orientation="horizontal"
                     android:padding="5dp">
 
                     <TextView
-                        android:layout_width="150dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:fontFamily="serif"
+                        android:textColor="@color/white"
                         android:text="@string/width"
                         android:textSize="15sp" />
 
                     <EditText
                         android:id="@+id/width"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:ems="10"
+                        android:gravity="center"
                         android:inputType="numberDecimal"
                         android:nextFocusDown="@id/length"
+                        android:textColor="@color/white"
                         android:textSize="15sp" />
                 </LinearLayout>
 
@@ -340,28 +348,28 @@
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:layout_weight="1"
-                    android:background="@drawable/shape_with_corner"
+                    android:background="@drawable/alpha_frame"
                     android:orientation="horizontal"
                     android:padding="5dp">
 
                     <TextView
-                        android:layout_width="150dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:fontFamily="serif"
                         android:text="@string/length"
+                        android:textColor="@color/white"
                         android:textSize="15sp" />
 
                     <EditText
                         android:id="@+id/length"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:ems="10"
+                        android:gravity="center"
                         android:inputType="numberDecimal"
                         android:nextFocusDown="@id/pieces"
+                        android:textColor="@color/white"
                         android:textSize="15sp" />
 
                 </LinearLayout>
@@ -370,27 +378,27 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@drawable/shape_with_corner"
+                    android:background="@drawable/alpha_frame"
                     android:orientation="horizontal"
                     android:padding="5dp">
 
                     <TextView
-                        android:layout_width="150dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:fontFamily="serif"
                         android:text="@string/no_pieces"
+                        android:textColor="@color/white"
                         android:textSize="15sp" />
 
                     <EditText
                         android:id="@+id/pieces"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:ems="10"
+                        android:gravity="center"
                         android:inputType="numberDecimal"
+                        android:textColor="@color/white"
                         android:textSize="15sp" />
                 </LinearLayout>
             </LinearLayout>
@@ -475,7 +483,7 @@
                     android:layout_gravity="center"
                     android:layout_marginEnd="7dp"
                     android:layout_marginRight="7dp"
-                    android:background="@drawable/border_background"
+                    android:background="@drawable/alpha_frame"
                     android:orientation="horizontal"
                     android:paddingEnd="5dp"
                     android:paddingRight="5dp">
@@ -509,7 +517,7 @@
                     android:layout_gravity="center"
                     android:layout_marginEnd="7dp"
                     android:layout_marginRight="7dp"
-                    android:background="@drawable/border_background"
+                    android:background="@drawable/alpha_frame"
                     android:orientation="horizontal"
                     android:paddingEnd="5dp"
                     android:paddingRight="5dp">

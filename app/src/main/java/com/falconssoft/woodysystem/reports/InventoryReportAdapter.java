@@ -113,17 +113,17 @@ public class InventoryReportAdapter extends BaseAdapter {
             }
         });
 
-        view.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
+//        view.setOnLongClickListener(new View.OnLongClickListener() {
+//            @Override
+//            public boolean onLongClick(View view) {
 //                Log.e("show plist", ""  +itemsList.get(i).getBackingList().equals(null) + itemsList.get(i).getBackingList().equals("null"));
 //                if (itemsList.get(i).getBackingList().equals("null"))
-                    inventoryReport.addBackingList(itemsList, i);
+//                    inventoryReport.addBackingList(itemsList, i);
 //                else
 //                    inventoryReport.showPasswordDialog(itemsList, i);
-                    return false;
-                }
-            });
+//                    return false;
+//                }
+//            });
 
         return view;
         }

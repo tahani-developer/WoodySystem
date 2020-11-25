@@ -37,7 +37,7 @@
                 android:layout_weight="9"
                 android:fontFamily="serif"
                 android:gravity="start|center_vertical"
-                android:text="@string/acceptance_info"
+                android:text="@string/accepted_truck_report"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
 
@@ -72,7 +72,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginRight="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/shape_with_corner"
+                android:background="@drawable/alpha_frame"
                 android:orientation="horizontal"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp">
@@ -83,6 +83,7 @@
                     android:fontFamily="serif"
                     android:paddingLeft="5dp"
                     android:text="@string/location"
+                    android:textColor="@color/white"
                     android:textSize="15sp" />
 
                 <Spinner
@@ -101,7 +102,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginRight="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/shape_with_corner"
+                android:background="@drawable/alpha_frame"
                 android:orientation="horizontal">
 
                 <TextView
@@ -113,6 +114,7 @@
                     android:paddingStart="10dp"
                     android:paddingLeft="10dp"
                     android:text="@string/from"
+                    android:textColor="@color/white"
                     android:textSize="15sp" />
 
                 <EditText
@@ -124,6 +126,7 @@
                     android:focusable="false"
                     android:fontFamily="serif"
                     android:gravity="center"
+                    android:textColor="@color/white"
                     android:textSize="15sp" />
 
 
@@ -134,7 +137,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:background="@drawable/shape_with_corner"
+                android:background="@drawable/alpha_frame"
                 android:orientation="horizontal">
 
                 <TextView
@@ -146,6 +149,7 @@
                     android:paddingStart="10dp"
                     android:paddingLeft="10dp"
                     android:text="@string/to"
+                    android:textColor="@color/white"
                     android:textSize="15sp" />
 
                 <EditText
@@ -157,6 +161,7 @@
                     android:focusable="false"
                     android:fontFamily="serif"
                     android:gravity="center"
+                    android:textColor="@color/white"
                     android:textSize="15sp" />
 
 
@@ -184,10 +189,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
                 android:layout_marginEnd="5dp"
-                android:background="@drawable/shape_with_corner"
+                android:background="@drawable/alpha_frame"
                 android:orientation="horizontal"
                 android:layout_marginRight="5dp">
 
@@ -197,12 +200,15 @@
                     android:fontFamily="serif"
                     android:paddingLeft="5dp"
                     android:text="@string/truck"
+                    android:textColor="@color/white"
                     android:textSize="15sp" />
 
-                <Spinner
+                <EditText
                     android:id="@+id/acceptanceInfoReport_truckNo"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textColor="@color/white" />
 
             </LinearLayout>
 
@@ -213,9 +219,7 @@
                 android:layout_weight="1"
                 android:layout_marginEnd="5dp"
                 android:layout_marginRight="5dp"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:background="@drawable/shape_with_corner"
+                android:background="@drawable/alpha_frame"
                 android:orientation="horizontal"
                 >
 
@@ -225,12 +229,15 @@
                     android:fontFamily="serif"
                     android:paddingLeft="5dp"
                     android:text="@string/acceptor"
+                    android:textColor="@color/white"
                     android:textSize="15sp" />
 
-                <Spinner
+                <EditText
                     android:id="@+id/acceptanceInfoReport_acceptor"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textColor="@color/white" />
 
 
             </LinearLayout>
@@ -240,9 +247,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:background="@drawable/shape_with_corner"
+                android:background="@drawable/alpha_frame"
                 android:orientation="horizontal"
                 >
 
@@ -252,12 +257,15 @@
                     android:fontFamily="serif"
                     android:paddingLeft="5dp"
                     android:text="@string/ttn"
+                    android:textColor="@color/white"
                     android:textSize="15sp" />
 
-                <Spinner
+                <EditText
                     android:id="@+id/acceptanceInfoReport_ttn"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textColor="@color/white" />
 
             </LinearLayout>
 
@@ -273,82 +281,101 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/acceptanceInfo_report_linear2">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:fontFamily="serif"
-                    android:gravity="center"
-                    android:text="@string/placing_no_"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:gravity="center"
+                android:text="@string/serial"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:fontFamily="serif"
-                    android:text="@string/supplier_name"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:gravity="center"
+                android:text="@string/placing_no_"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:fontFamily="serif"
-                    android:gravity="center"
-                    android:text="@string/ttn_no"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:text="@string/supplier_name"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:fontFamily="serif"
-                    android:text="@string/date_of_acceptance"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:gravity="center"
+                android:text="@string/ttn_no"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:fontFamily="serif"
-                    android:text="@string/no_bundle"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:text="@string/date"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:fontFamily="serif"
-                    android:gravity="center"
-                    android:text="@string/rejected_pieces"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:text="@string/no_bundle"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
 
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:gravity="center"
+                android:text="@string/rejected_pieces"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:fontFamily="serif"
-                    android:gravity="center"
-                    android:text="Preview"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:gravity="center"
+                android:text="@string/cubic"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:padding="10dp"
-                    android:layout_marginHorizontal="5dp"
-                    android:background="@drawable/ic_edit_24dp"
-                    />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:gravity="center"
+                android:text="Preview"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="10dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/ic_edit_24dp"
+                />
 
         </TableRow>
 
@@ -377,19 +404,53 @@
             app:layout_constraintBottom_toBottomOf="parent"
             >
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_weight="2"
+                android:layout_gravity="center"
+                android:background="@drawable/alpha_frame"
+                android:orientation="horizontal"
+                android:paddingEnd="5dp"
+                android:paddingRight="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/frame_shape"
+                    android:paddingStart="5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingEnd="5dp"
+                    android:paddingRight="5dp"
+                    android:text="@string/cubic"
+                    android:fontFamily="serif"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/truck_report_cubic"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:textColor="@color/orange"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5"/>
 
             <Button
                 android:id="@+id/acceptance_report_export"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginHorizontal="5dp"
                 android:background="@drawable/frame_shape"
                 android:text="@string/export_to_pdf"
                 android:fontFamily="serif"
                 android:padding="10dp"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:paddingRight="10dp"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="15sp" />
@@ -398,14 +459,10 @@
                 android:id="@+id/acceptance_report_export_Excel"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:layout_marginRight="5dp"
                 android:background="@drawable/frame_shape"
                 android:text="@string/export_to_excel"
                 android:fontFamily="serif"
                 android:padding="10dp"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:paddingRight="10dp"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="15sp" />
@@ -497,7 +554,7 @@
                         android:layout_weight="1"/>
 
                     <TextView
-                        android:text="@string/grade"
+                        android:text="@string/no_of_pieces"
                         android:textSize="15sp"
                         android:fontFamily="serif"
                         android:layout_marginTop="5dp"
@@ -507,7 +564,17 @@
                         android:layout_weight="1"/>
 
                     <TextView
-                        android:text="@string/no_of_pieces"
+                        android:text="@string/cubic"
+                        android:textSize="15sp"
+                        android:fontFamily="serif"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/orange"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:text="@string/grade"
                         android:textSize="15sp"
                         android:fontFamily="serif"
                         android:layout_marginTop="5dp"

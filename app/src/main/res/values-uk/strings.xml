@@ -175,5 +175,9 @@
     <string name="export_to_pdf">Експорт у PDF</string>
     <string name="edit_confirm_message">Are you want save the changes first?</string>
     <string name="export_to_excel">Export To Excel</string>
+    <string name="truck_acceptance">Truck Acceptance</string>
+    <string name="accepted_truck_report">Accepted Truck Report</string>
+    <string name="enter_barcode">Enter Barcode</string>
+    <string name="planned_packing_list">Planned packing list</string>
 
 </resources>

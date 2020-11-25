@@ -515,8 +515,10 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         gradeList.add("BS");
         gradeList.add("Reject");
         gradeList.add("KD");
-        gradeList.add("KD Blue Stain");
+        gradeList.add("S4S");
+        gradeList.add("AST");
         gradeList.add("KD Reject");
+        gradeList.add("KD Blue Stain");
         gradeList.add("Second Sort");
         gradeAdapter = new ArrayAdapter<String>(this, R.layout.spinner_layout, gradeList);
         gradeAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);

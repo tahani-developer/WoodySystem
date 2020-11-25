@@ -4,14 +4,12 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -22,35 +20,29 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.falconssoft.woodysystem.DatabaseHandler;
-import com.falconssoft.woodysystem.EditLoadingReport;
+import com.falconssoft.woodysystem.ExportToPDF;
 import com.falconssoft.woodysystem.HorizontalListView;
-import com.falconssoft.woodysystem.ItemsListAdapter2;
 import com.falconssoft.woodysystem.PicturesAdapter;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.Orders;
 import com.falconssoft.woodysystem.models.Pictures;
 import com.falconssoft.woodysystem.models.Settings;
-import com.itextpdf.text.pdf.StringUtils;
+import com.google.gson.Gson;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -65,9 +57,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
@@ -76,19 +66,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
-public class LoadingOrderReport extends AppCompatActivity {
+public class LoadingOrderReport extends AppCompatActivity implements View.OnClickListener {
 
 
 //    android:hardwareAccelerated="false"
@@ -99,7 +83,7 @@ public class LoadingOrderReport extends AppCompatActivity {
     public static final String EDIT_LOADING_ORDER_FLAG = "EDIT_LOADING_ORDER_FLAG";
 
     private ProgressDialog progressDialog;
-    private TextView textView, rowsCount, search;
+    private TextView textView, rowsCount, search, exportToExcel;
     private static LinearLayout linearLayout, headerLinear;
     private EditText from, to, searchBundleNo, packingList, truckNo, containerNo;
     private Button arrow;
@@ -125,6 +109,7 @@ public class LoadingOrderReport extends AppCompatActivity {
     static Dialog dialog, updateDialog;
     private int delteIndex = -1;
     private List<Orders> filtered;
+    private Context previewLinearContext;
 
     SimpleDateFormat sdf;
 
@@ -158,6 +143,7 @@ public class LoadingOrderReport extends AppCompatActivity {
         packingList = findViewById(R.id.loadingOrder_packingList);
         truckNo = findViewById(R.id.loadingOrder_truckNo);
         containerNo = findViewById(R.id.loadingOrder_containerNo);
+        exportToExcel = findViewById(R.id.loading_order_report_pdf);
 
         myFormat = "dd/MM/yyyy";
         sdf = new SimpleDateFormat(myFormat, Locale.US);
@@ -182,14 +168,6 @@ public class LoadingOrderReport extends AppCompatActivity {
         adapter2 = new LoadingOrderReportAdapter(LoadingOrderReport.this, new ArrayList<>(), new ArrayList<>());
         list.setAdapter(adapter2);
 
-
-        arrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                slideDown(linearLayout);
-            }
-        });
-
         new JSONTask().execute();
 
         location.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -209,39 +187,11 @@ public class LoadingOrderReport extends AppCompatActivity {
         from.setText("1/12/2019");
         to.setText(sdf.format(myCalendar.getTime()));
 
-        from.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                new DatePickerDialog(LoadingOrderReport.this, openDatePickerDialog(0), myCalendar
-                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-            }
-        });
-
-        to.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                new DatePickerDialog(LoadingOrderReport.this, openDatePickerDialog(1), myCalendar
-                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-            }
-        });
-
-        search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (linearLayout.getVisibility() == View.VISIBLE)
-                    slideDown(linearLayout);
-
-                searchBundleNoString = searchBundleNo.getText().toString();//formatDecimalValue(String.valueOf(s));
-                if (!TextUtils.isEmpty(searchBundleNoString))
-                    filters(1);
-                else
-                    filters(2);
-            }
-        });
+        from.setOnClickListener(this);
+        to.setOnClickListener(this);
+        search.setOnClickListener(this);
+        arrow.setOnClickListener(this);
+        exportToExcel.setOnClickListener(this);
 
         packingList.addTextChangedListener(new WatchTextChange(packingList));
         truckNo.addTextChangedListener(new WatchTextChange(truckNo));
@@ -249,6 +199,45 @@ public class LoadingOrderReport extends AppCompatActivity {
 
 //        fillTable(orders);
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.loading_order_report_pdf: {
+                SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd_hhmmss");
+                Calendar calendar = Calendar.getInstance();
+                new ExportToPDF(this).exportLoadingOrderReport(bundles, format.format(calendar.getTime()));
+            }
+            break;
+            case R.id.loadingOrder_report_search: {
+
+                if (linearLayout.getVisibility() == View.VISIBLE)
+                    slideDown(linearLayout);
+
+                searchBundleNoString = searchBundleNo.getText().toString();//formatDecimalValue(String.valueOf(s));
+                if (!TextUtils.isEmpty(searchBundleNoString))
+                    filters(1);
+//                else
+//                    filters(2);
+            }
+            break;
+            case R.id.Loding_Order_to: {
+                new DatePickerDialog(LoadingOrderReport.this, openDatePickerDialog(1), myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+            break;
+            case R.id.Loding_Order_from: {
+                new DatePickerDialog(LoadingOrderReport.this, openDatePickerDialog(0), myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+            break;
+            case R.id.arrow:
+                slideDown(linearLayout);
+                break;
+        }
     }
 
     class WatchTextChange implements TextWatcher {
@@ -268,24 +257,24 @@ public class LoadingOrderReport extends AppCompatActivity {
             switch (view.getId()) {
                 case R.id.loadingOrder_packingList:
                     packingListText = packingList.getText().toString();
-                    if (packingList.getText().length() >= 2)
-                        filters(0);
-                    else
-                        filters(2);
+//                    if (packingList.getText().length() >= 2)
+                    filters(0);
+//                    else
+//                        filters(2);
                     break;
                 case R.id.loadingOrder_truckNo:
                     truckNoText = truckNo.getText().toString().toLowerCase();
-                    if (truckNo.getText().length() >= 2)
-                        filters(0);
-                    else
-                        filters(2);
+//                    if (truckNo.getText().length() >= 2)
+                    filters(0);
+//                    else
+//                        filters(2);
                     break;
                 case R.id.loadingOrder_containerNo:
                     containerNoText = containerNo.getText().toString().toLowerCase();
-                    if (containerNo.getText().length() >= 2)
-                        filters(0);
-                    else
-                        filters(2);
+//                    if (containerNo.getText().length() >= 2)
+                    filters(0);
+//                    else
+//                        filters(2);
                     break;
             }
 
@@ -306,6 +295,7 @@ public class LoadingOrderReport extends AppCompatActivity {
 
     public void previewLinear(int index, Context Context, List<Orders> ordersList) {
 
+        previewLinearContext = Context;
         Log.d("ooo  ", "orders " + orders.get(index).getOrderNo() + "  " + orders.get(index).getPlacingNo()
                 + "  " + orders.get(index).getContainerNo() + "  " + orders.get(index).getDateOfLoad());
 
@@ -344,7 +334,8 @@ public class LoadingOrderReport extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                openLargePicDialog(bundleInfos.get(position).getPicBitmap(), Context);
+                new BitmapImage().execute(bundleInfos.get(position).getPicture());
+//                openLargePicDialog(bundleInfos.get(position).getPicBitmap(), Context);
             }
         });
 
@@ -358,21 +349,58 @@ public class LoadingOrderReport extends AppCompatActivity {
 
     }
 
-    public void previewPics(int index, Context context) {
+    private class BitmapImage extends AsyncTask<String, String, String> {
+        Settings generalSettings = new DatabaseHandler(previewLinearContext).getSettings();
+
+        @Override
+        protected String doInBackground(String... strings) {
+            Bitmap bitmap = null;
+            try {
+                Log.e("fromclass", generalSettings.getIpAddress() + strings[0]);
+                if (!strings[0].equals("null")) {
+                    URL url = new URL("http://" + generalSettings.getIpAddress() + "/" + strings[0]);
+                    bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+
+                    Bitmap finalBitmap = bitmap;
+                    LoadingOrderReport.this.runOnUiThread(new Runnable() {
+                        public void run() {
+                            openLargePicDialog(finalBitmap);
+                        }
+                    });
+
+                }
+            } catch (Exception e) {
+                Log.e("fromclass", "exception: " + e.getMessage());
+                return "exception";
+            }
+            return "null";// BitmapFactory.decodeStream(in);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            Log.e("fromclass", "exception: " + s);
+            if (s.contains("exception"))
+                Toast.makeText(previewLinearContext, "No image found!", Toast.LENGTH_SHORT).show();
+
+        }
+    }
+
+    public void previewPics(Orders index, Context context) {
+        previewLinearContext = context;
         Pictures pics = new Pictures();
         Log.e("kk", "" + pictures.size());
         for (int i = 0; i < pictures.size(); i++) {
 
-            Log.e("kk", "" + pictures.get(i).getOrderNo() + "=" + orders.get(index).getOrderNo());
-            if (pictures.get(i).getOrderNo().equals(orders.get(index).getOrderNo())) {
+            Log.e("kk", "" + pictures.get(i).getOrderNo() + "=" + index.getOrderNo());
+            if (pictures.get(i).getOrderNo().equals(index.getOrderNo())) {
                 pics = pictures.get(i);
 
                 break;
             }
         }
 
-
-        openPicDialog(pics, context);
+        new BitmapImage2().execute(pics);
+//        openPicDialog(pics);
     }
 
     void removeDuplicate(List<Orders> list) {
@@ -393,13 +421,17 @@ public class LoadingOrderReport extends AppCompatActivity {
         updateDialog.setCancelable(false);
         updateDialog.setContentView(R.layout.edit_loading_report_dialog);
 
-        EditText orderNo = updateDialog.findViewById(R.id.editLoadingOrder_orderNo);
+        TextView orderNo = updateDialog.findViewById(R.id.editLoadingOrder_orderNo);
         TextView truckNo = updateDialog.findViewById(R.id.editLoadingOrder_truckNo);
         EditText containerNo = updateDialog.findViewById(R.id.editLoadingOrder_containerNo);
         EditText destenation = updateDialog.findViewById(R.id.editLoadingOrder_destination);
         TextView update = updateDialog.findViewById(R.id.editLoadingOrder_update);
         TextView cancel = updateDialog.findViewById(R.id.editLoadingOrder_cancel);
+
+        orderNo.setText(orders.getOrderNo());
         truckNo.setText(orders.getPlacingNo());
+        containerNo.setText(orders.getContainerNo());
+        destenation.setText(orders.getDestination());
 
         update.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -508,10 +540,11 @@ public class LoadingOrderReport extends AppCompatActivity {
         String toDate = to.getText().toString();
         try {
 
-            filtered.clear();
+//            filtered.clear();
             Log.e("followfilter", "" + orders.size() + "   flag  " + flag);
             String localDate = "", localContainer = "", localPlacingNo = "", localOrderNo = "";
             if (flag == 1) { // for bundle search
+                filtered.clear();
                 for (int m = 0; m < bundles.size(); m++) {
                     if (bundles.get(m).getBundleNo().toLowerCase().contains(searchBundleNoString)) {
                         if ((loc.equals("") || loc.equals(bundles.get(m).getLocation()))
@@ -527,6 +560,7 @@ public class LoadingOrderReport extends AppCompatActivity {
                 }
                 removeDuplicate(filtered);
             } else if (flag == 0) { // when using loc or date filter
+                filtered.clear();
                 try {
                     for (int k = 0; k < orders.size(); k++) {
                         Log.e("followbug", "" + packingListText + "   getOrderNo  " + orders.get(k).getContainerNo().toLowerCase()
@@ -547,9 +581,10 @@ public class LoadingOrderReport extends AppCompatActivity {
                 } catch (Exception e) {
                     Log.e("exception", e.getMessage());
                 }
-            } else { // 2 get data without filter
-                filtered.addAll(orders);
             }
+//            else { // 2 get data without filter
+////                filtered.addAll(orders);
+//            }
             HashSet<Orders> listToSet = new HashSet<Orders>(filtered);
             filtered.clear();
             filtered.addAll(listToSet);
@@ -632,8 +667,8 @@ public class LoadingOrderReport extends AppCompatActivity {
         passwordDialog.show();
     }
 
-    public void openLargePicDialog(Bitmap picts, Context context) {
-        Dialog dialog = new Dialog(context);
+    public void openLargePicDialog(Bitmap picts) {
+        Dialog dialog = new Dialog(previewLinearContext);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.pic_dialog2);
@@ -646,8 +681,8 @@ public class LoadingOrderReport extends AppCompatActivity {
 
     }
 
-    public void openPicDialog(Pictures picts, Context context) {
-        dialog = new Dialog(context);
+    public void openPicDialog(Pictures picts) {
+        dialog = new Dialog(previewLinearContext);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.pic_dialog);
@@ -668,11 +703,149 @@ public class LoadingOrderReport extends AppCompatActivity {
         pics.add(picts.getPic88());
 
 
-        PicturesAdapter adapter = new PicturesAdapter(context, pics);
+        PicturesAdapter adapter = new PicturesAdapter(previewLinearContext, pics);
         listView.setAdapter(adapter);
 
         dialog.show();
 
+    }
+
+    private class BitmapImage2 extends AsyncTask<Pictures, String, String> {
+        Settings generalSettings = new DatabaseHandler(previewLinearContext).getSettings();
+
+        @Override
+        protected String doInBackground(Pictures... pictures) {
+
+            try {
+                Log.e("fromclass2", generalSettings.getIpAddress()
+                        + pictures[0].getPic1() + "*"
+                        + pictures[0].getPic2() + "*"
+                        + pictures[0].getPic3() + "*"
+                        + pictures[0].getPic4() + "*"
+                        + pictures[0].getPic5() + "*"
+                        + pictures[0].getPic6() + "*"
+                        + pictures[0].getPic7() + "*"
+                        + pictures[0].getPic8() + "*"
+                        + (pictures[0].getPic11()));
+
+                if (!pictures[0].equals("null")) {
+                    for (int i = 0; i < 8; i++) {
+                        Bitmap bitmap = null;
+                        URL url;
+                        switch (i) {
+                            case 0:
+                                if (pictures[0].getPic1() != null) {//http://192.168.2.17:8088/woody/images/2342_img_1.png
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getPic1());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        pictures[0].setPic11(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic11(bitmap);
+                                    }
+                                }
+                                break;
+                            case 1:
+                                if (pictures[0].getPic2() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getPic2());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        pictures[0].setPic22(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic22(bitmap);
+                                    }
+                                }
+                                break;
+                            case 2:
+                                if (pictures[0].getPic3() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getPic3());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        pictures[0].setPic33(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic33(bitmap);
+                                    }
+                                }
+                                break;
+                            case 3:
+                                if (pictures[0].getPic4() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getPic4());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        pictures[0].setPic44(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic44(bitmap);
+                                    }
+                                }
+                                break;
+                            case 4:
+                                if (pictures[0].getPic5() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getPic5());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        pictures[0].setPic55(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic55(bitmap);
+                                    }
+                                }
+                                break;
+                            case 5:
+                                if (pictures[0].getPic6() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getPic6());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        pictures[0].setPic66(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic66(bitmap);
+                                    }
+                                }
+                                break;
+                            case 6:
+                                if (pictures[0].getPic7() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getPic7());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        pictures[0].setPic77(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic77(bitmap);
+                                    }
+                                }
+                                break;
+                            case 7:
+                                if (pictures[0].getPic8() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getPic8());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        pictures[0].setPic88(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic88(bitmap);
+                                    }
+                                }
+                                break;
+                        }
+                    }
+
+//                    Bitmap finalBitmap = bitmap;
+                    LoadingOrderReport.this.runOnUiThread(new Runnable() {
+                        public void run() {
+                            openPicDialog(pictures[0]);
+                        }
+                    });
+
+                }
+            } catch (Exception e) {
+                Log.e("fromclass2", "exception:doInBackground " + e.getMessage());
+                return "exception";
+            }
+            return "null";// BitmapFactory.decodeStream(in);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            Log.e("fromclass2", "exception:onPostExecute: " + s);
+            if (s.contains("exception"))
+                Toast.makeText(previewLinearContext, "No image found!", Toast.LENGTH_SHORT).show();
+
+        }
     }
 
     public DatePickerDialog.OnDateSetListener openDatePickerDialog(final int flag) {
@@ -736,7 +909,7 @@ public class LoadingOrderReport extends AppCompatActivity {
             BufferedReader reader = null;
 
             try {
-//                http://10.0.0.214/woody/import.php?FLAG=2
+//                http://192.168.2.17:8088/woody/import.php?FLAG=2
                 URL url = new URL("http://" + generalSettings.getIpAddress() + "/import.php?FLAG=2");
 
                 URLConnection conn = url.openConnection();
@@ -756,7 +929,7 @@ public class LoadingOrderReport extends AppCompatActivity {
                 String finalJson = sb.toString();
                 Log.e("finalJson*********", finalJson);
 
-                JSONObject parentObject = new JSONObject(finalJson);
+//                JSONObject parentObject = new JSONObject(finalJson);
 
 //                try {
 //                    JSONArray parentArrayOrders = parentObject.getJSONArray("ONLY_ORDER");
@@ -779,41 +952,49 @@ public class LoadingOrderReport extends AppCompatActivity {
 //                    Log.e("Import Data2", e.getMessage().toString());
 //                }
 
-                try {
-                    JSONArray parentArrayOrders = parentObject.getJSONArray("BUNDLE_ORDER");
-                    bundles.clear();
-                    orders.clear();
+//                try {
+//                    JSONArray parentArrayOrders = parentObject.getJSONArray("BUNDLE_ORDER");
+                bundles.clear();
+                orders.clear();
+                pictures.clear();
+                Gson gson = new Gson();
+                Orders list = gson.fromJson(finalJson, Orders.class);
+                Log.e("jsonsize ", "" + list.getBUNDLE_ORDER().size());
+                bundles.addAll(list.getBUNDLE_ORDER());
+                orders.addAll(list.getBUNDLE_ORDER());
+                filtered.addAll(list.getBUNDLE_ORDER());
+                pictures.addAll(list.getBUNDLE_PIC());
 
-                    for (int i = 0; i < parentArrayOrders.length(); i++) {
-                        JSONObject finalObject = parentArrayOrders.getJSONObject(i);
-
-                        Orders order = new Orders();
-                        order.setThickness(finalObject.getDouble("THICKNESS"));
-                        order.setWidth(finalObject.getDouble("WIDTH"));
-                        order.setLength(finalObject.getDouble("LENGTH"));
-                        order.setGrade(finalObject.getString("GRADE"));
-                        order.setNoOfPieces(finalObject.getDouble("PIECES"));
-                        order.setBundleNo(finalObject.getString("BUNDLE_NO"));
-                        order.setLocation(finalObject.getString("LOCATION"));
-                        order.setArea(finalObject.getString("AREA"));
-                        order.setPlacingNo(finalObject.getString("PLACING_NO"));
-                        order.setOrderNo(finalObject.getString("ORDER_NO"));
-                        order.setContainerNo(finalObject.getString("CONTAINER_NO"));
-                        order.setDateOfLoad(finalObject.getString("DATE_OF_LOAD"));
-                        order.setDestination(finalObject.getString("DESTINATION"));
-                        order.setPicture(finalObject.getString("PIC"));
-
-
-                        try {
-
-
-                            if (!order.getPicture().equals("null")) {
-                                InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC")).openStream();
-                                order.setPicBitmap(BitmapFactory.decodeStream(in));
-                            }
-                        } catch (Exception e) {
-                            order.setPicture("null");
-                        }
+//                    for (int i = 0; i < parentArrayOrders.length(); i++) {
+//                        JSONObject finalObject = parentArrayOrders.getJSONObject(i);
+//
+//                        Orders order = new Orders();
+//                        order.setThickness(finalObject.getDouble("THICKNESS"));
+//                        order.setWidth(finalObject.getDouble("WIDTH"));
+//                        order.setLength(finalObject.getDouble("LENGTH"));
+//                        order.setGrade(finalObject.getString("GRADE"));
+//                        order.setNoOfPieces(finalObject.getDouble("PIECES"));
+//                        order.setBundleNo(finalObject.getString("BUNDLE_NO"));
+//                        order.setLocation(finalObject.getString("LOCATION"));
+//                        order.setArea(finalObject.getString("AREA"));
+//                        order.setPlacingNo(finalObject.getString("PLACING_NO"));
+//                        order.setOrderNo(finalObject.getString("ORDER_NO"));
+//                        order.setContainerNo(finalObject.getString("CONTAINER_NO"));
+//                        order.setDateOfLoad(finalObject.getString("DATE_OF_LOAD"));
+//                        order.setDestination(finalObject.getString("DESTINATION"));
+//                        order.setPicture(finalObject.getString("PIC"));
+//
+//
+//                        try {
+//
+//
+//                            if (!order.getPicture().equals("null")) {
+//                                InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC")).openStream();
+//                                order.setPicBitmap(BitmapFactory.decodeStream(in));
+//                            }
+//                        } catch (Exception e) {
+//                            order.setPicture("null");
+//                        }
                        /* String pic = finalObject.getString("PART1") + finalObject.getString("PART2") +
                                 finalObject.getString("PART3") + finalObject.getString("PART4") +
                                 finalObject.getString("PART5") + finalObject.getString("PART6") +
@@ -823,87 +1004,87 @@ public class LoadingOrderReport extends AppCompatActivity {
 */
 
 
-                        bundles.add(order);
-                        orders.add(order);
-                    }
-                } catch (JSONException e) {
-                    Log.e("Import Data1", e.getMessage().toString());
-                }
+//                        bundles.add(order);
+//                        orders.add(order);
+//                    }
+//                } catch (JSONException e) {
+//                    Log.e("Import Data1", e.getMessage().toString());
+//                }
 
-                try {
-                    JSONArray parentArrayOrders = parentObject.getJSONArray("BUNDLE_PIC");
-                    pictures.clear();
-                    for (int i = 0; i < parentArrayOrders.length(); i++) {
-                        JSONObject finalObject = parentArrayOrders.getJSONObject(i);
-
-                        Pictures picture = new Pictures();
-                        picture.setOrderNo(finalObject.getString("ORDER_NO"));
-                        picture.setPic1(finalObject.getString("PIC1"));
-                        picture.setPic2(finalObject.getString("PIC2"));
-                        picture.setPic3(finalObject.getString("PIC3"));
-                        picture.setPic4(finalObject.getString("PIC4"));
-                        picture.setPic5(finalObject.getString("PIC5"));
-                        picture.setPic6(finalObject.getString("PIC6"));
-                        picture.setPic7(finalObject.getString("PIC7"));
-                        picture.setPic8(finalObject.getString("PIC8"));
-
-//                        String[] rowPics = new String[8];
+//                try {
+//                    JSONArray parentArrayOrders = parentObject.getJSONArray("BUNDLE_PIC");
+//                    pictures.clear();
+//                    for (int i = 0; i < parentArrayOrders.length(); i++) {
+//                        JSONObject finalObject = parentArrayOrders.getJSONObject(i);
 //
-//                        for (int k = 1; k <= 8; k++) {
-//                            String pic = finalObject.getString("PIC" + k + "PART1") + finalObject.getString("PIC" + k + "PART2") +
-//                                    finalObject.getString("PIC" + k + "PART3") + finalObject.getString("PIC" + k + "PART4") +
-//                                    finalObject.getString("PIC" + k + "PART5") + finalObject.getString("PIC" + k + "PART6") +
-//                                    finalObject.getString("PIC" + k + "PART7") + finalObject.getString("PIC" + k + "PART8");
+//                        Pictures picture = new Pictures();
+//                        picture.setOrderNo(finalObject.getString("ORDER_NO"));
+//                        picture.setPic1(finalObject.getString("PIC1"));
+//                        picture.setPic2(finalObject.getString("PIC2"));
+//                        picture.setPic3(finalObject.getString("PIC3"));
+//                        picture.setPic4(finalObject.getString("PIC4"));
+//                        picture.setPic5(finalObject.getString("PIC5"));
+//                        picture.setPic6(finalObject.getString("PIC6"));
+//                        picture.setPic7(finalObject.getString("PIC7"));
+//                        picture.setPic8(finalObject.getString("PIC8"));
 //
-//                            pic = pic.replaceAll("null", "");
-//                            rowPics[k - 1] = pic;
+////                        String[] rowPics = new String[8];
+////
+////                        for (int k = 1; k <= 8; k++) {
+////                            String pic = finalObject.getString("PIC" + k + "PART1") + finalObject.getString("PIC" + k + "PART2") +
+////                                    finalObject.getString("PIC" + k + "PART3") + finalObject.getString("PIC" + k + "PART4") +
+////                                    finalObject.getString("PIC" + k + "PART5") + finalObject.getString("PIC" + k + "PART6") +
+////                                    finalObject.getString("PIC" + k + "PART7") + finalObject.getString("PIC" + k + "PART8");
+////
+////                            pic = pic.replaceAll("null", "");
+////                            rowPics[k - 1] = pic;
+////                        }
+//                        //InputStream in ;
+//                        if (!picture.getPic1().equals("null")) {
+//                            InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC1")).openStream();
+//                            picture.setPic11(BitmapFactory.decodeStream(in));
 //                        }
-                        //InputStream in ;
-                        if (!picture.getPic1().equals("null")) {
-                            InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC1")).openStream();
-                            picture.setPic11(BitmapFactory.decodeStream(in));
-                        }
-
-                        if (!picture.getPic2().equals("null")) {
-                            InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC2")).openStream();
-                            picture.setPic22(BitmapFactory.decodeStream(in));
-                        }
-
-                        if (!picture.getPic3().equals("null")) {
-                            InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC3")).openStream();
-                            picture.setPic33(BitmapFactory.decodeStream(in));
-                        }
-
-                        if (!picture.getPic4().equals("null")) {
-                            InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC4")).openStream();
-                            picture.setPic44(BitmapFactory.decodeStream(in));
-                        }
-
-                        if (!picture.getPic5().equals("null")) {
-                            InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC5")).openStream();
-                            picture.setPic55(BitmapFactory.decodeStream(in));
-                        }
-
-                        if (!picture.getPic6().equals("null")) {
-                            InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC6")).openStream();
-                            picture.setPic66(BitmapFactory.decodeStream(in));
-                        }
-
-                        if (!picture.getPic7().equals("null")) {
-                            InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC7")).openStream();
-                            picture.setPic77(BitmapFactory.decodeStream(in));
-                        }
-
-                        if (!picture.getPic8().equals("null")) {
-                            InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC8")).openStream();
-                            picture.setPic88(BitmapFactory.decodeStream(in));
-                        }
-                        pictures.add(picture);
-                        Log.e("Ii", "" + pictures.size());
-                    }
-                } catch (JSONException e) {
-                    Log.e("Import Data1", e.getMessage().toString());
-                }
+//
+//                        if (!picture.getPic2().equals("null")) {
+//                            InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC2")).openStream();
+//                            picture.setPic22(BitmapFactory.decodeStream(in));
+//                        }
+//
+//                        if (!picture.getPic3().equals("null")) {
+//                            InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC3")).openStream();
+//                            picture.setPic33(BitmapFactory.decodeStream(in));
+//                        }
+//
+//                        if (!picture.getPic4().equals("null")) {
+//                            InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC4")).openStream();
+//                            picture.setPic44(BitmapFactory.decodeStream(in));
+//                        }
+//
+//                        if (!picture.getPic5().equals("null")) {
+//                            InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC5")).openStream();
+//                            picture.setPic55(BitmapFactory.decodeStream(in));
+//                        }
+//
+//                        if (!picture.getPic6().equals("null")) {
+//                            InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC6")).openStream();
+//                            picture.setPic66(BitmapFactory.decodeStream(in));
+//                        }
+//
+//                        if (!picture.getPic7().equals("null")) {
+//                            InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC7")).openStream();
+//                            picture.setPic77(BitmapFactory.decodeStream(in));
+//                        }
+//
+//                        if (!picture.getPic8().equals("null")) {
+//                            InputStream in = new java.net.URL("http://" + generalSettings.getIpAddress() + "/" + finalObject.getString("PIC8")).openStream();
+//                            picture.setPic88(BitmapFactory.decodeStream(in));
+//                        }
+//                        pictures.add(picture);
+//                        Log.e("Ii", "" + pictures.size());
+//                    }
+//                } catch (JSONException e) {
+//                    Log.e("Import Data1", e.getMessage().toString());
+//                }
             } catch (MalformedURLException e) {
                 Log.e("Customer", "********ex1");
                 e.printStackTrace();
@@ -911,10 +1092,12 @@ public class LoadingOrderReport extends AppCompatActivity {
                 Log.e("Customer", e.getMessage().toString());
                 e.printStackTrace();
 
-            } catch (JSONException e) {
-                Log.e("Customer", "********ex3  " + e.toString());
-                e.printStackTrace();
-            } finally {
+            }
+//            catch (JSONException e) {
+//                Log.e("Customer", "********ex3  " + e.toString());
+//                e.printStackTrace();
+//            }
+            finally {
                 Log.e("Customer", "********finally");
                 if (connection != null) {
                     Log.e("Customer", "********ex4");
@@ -1088,11 +1271,20 @@ public class LoadingOrderReport extends AppCompatActivity {
 //                    Log.e("Import Data2", e.getMessage().toString());
 //                }
 
-                try {
-                    JSONArray parentArrayOrders = parentObject.getJSONArray("BUNDLE_ORDER");
-                    bundles.clear();
-                    orders.clear();
+//                try {
+//                    JSONArray parentArrayOrders = parentObject.getJSONArray("BUNDLE_ORDER");
 
+                bundles.clear();
+                orders.clear();
+                pictures.clear();
+                Gson gson = new Gson();
+                Orders list = gson.fromJson(finalJson, Orders.class);
+                Log.e("jsonsize ", "" + list.getBUNDLE_ORDER().size());
+                bundles.addAll(list.getBUNDLE_ORDER());
+                orders.addAll(list.getBUNDLE_ORDER());
+                pictures.addAll(list.getBUNDLE_PIC());
+
+/*
                     for (int i = 0; i < parentArrayOrders.length(); i++) {
                         JSONObject finalObject = parentArrayOrders.getJSONObject(i);
 
@@ -1121,14 +1313,14 @@ public class LoadingOrderReport extends AppCompatActivity {
                             order.setPicture("null");
                         }
 
-                        bundles.add(order);
-                        orders.add(order);
-                    }
-                } catch (JSONException e) {
-                    Log.e("Import Data1", e.getMessage().toString());
-                }
+//                        bundles.add(order);
+//                        orders.add(order);
+                    }*/
+//                } catch (JSONException e) {
+//                    Log.e("Import Data1", e.getMessage().toString());
+//                }
 
-
+/*
                 try {
                     JSONArray parentArrayOrders = parentObject.getJSONArray("BUNDLE_PIC");
                     pictures.clear();
@@ -1203,7 +1395,7 @@ public class LoadingOrderReport extends AppCompatActivity {
                     Log.e("Import Data1", e.getMessage().toString());
                 }
 
-
+*/
             } catch (MalformedURLException e) {
                 Log.e("Customer", "********ex1");
                 e.printStackTrace();

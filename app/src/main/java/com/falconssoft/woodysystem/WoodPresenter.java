@@ -33,7 +33,7 @@ import java.util.List;
 import static com.falconssoft.woodysystem.reports.InventoryReport.bundleInfoServer;
 import static com.falconssoft.woodysystem.reports.InventoryReport.bundleInfoServer2;
 
-public class WoodPresenter implements Response.ErrorListener, Response.Listener<String> {
+public class WoodPresenter {
 
     private Context context;
     private Settings settings;
@@ -75,70 +75,12 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
         databaseHandler = new DatabaseHandler(context);
     }
 
-
-    //---------------------------------------- Get Serial No -----------------------------------------
-
-    public void getsuppliersInfo() {
-        settings = databaseHandler.getSettings();
-        urlGetSuppliers = "http://" + settings.getIpAddress() + "/import.php?FLAG=1";//http://5.189.130.98:8085/import.php?FLAG=1
-//        Log.e("presenter:ipImport ", "" + SettingsFile.ipAddress);
-//        Log.e("presenter:urlImport ", "" + urlImport);
-        suppliersJsonObjectRequest = new StringRequest(Request.Method.GET, urlGetSuppliers, this, this);
-        requestQueue.add(suppliersJsonObjectRequest);
-    }
-
-    @Override
-    public void onErrorResponse(VolleyError error) {
-        Log.e("presenter/import/err ", "" + error);
-//        setSerialNo("");
-//        SettingsFile.serialNumber = "";
-    }
-
-    @Override
-    public void onResponse(String response) {
-        try {
-//            settings = databaseHandler.getSettings();
-//            switch (settings.getStore()){
-//                case "Amman":
-//                    presenter.getImportData();
-//                    break;
-//                case "Kalinovka":
-//                    presenter.getImportData();
-//                    break;
-//                case "Rudniya Store":
-//                    presenter.getImportData();
-//                    break;
-//                case "Rudniya Sawmill":
-//                    presenter.getImportData();
-//                    break;
-//            }
-            if (response.indexOf("{") == 3)
-                response = new String(response.getBytes("ISO-8859-1"), "UTF-8");
-//                response = response.substring(response.indexOf("{"));
-            Log.e("presenter: import ", "" + response);
-            JSONObject object = new JSONObject(response);
-            Log.e("presenter1: import ", "" + response);
-            JSONArray object2 = object.getJSONArray("Bundles");
-            Log.e("presenter2: import ", "" + object2);
-
-            Log.e("presenter4: import ", "" + response.length());//SettingsFile.serialNumber
-//                SettingsFile.serialNumber = "1";
-        } catch (JSONException e) {
-            e.printStackTrace();
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-    }
-
     //------------------------------------------- Get Users ----------------------------------------
 
     void getUsersData(LoginActivity loginActivity) {
         this.loginActivity = loginActivity;
         settings = databaseHandler.getSettings();
-        urlUsers = "http://" + settings.getIpAddress() + "/import.php?FLAG=0";//http://10.0.0.214/woody/import.php?FLAG=0
+        urlUsers = "http://" + settings.getIpAddress() + "/import.php?FLAG=0";//http://192.168.2.17:8088/woody/import.php?FLAG=0
 //        Log.e("presenter/urlUsers ", "" + urlUsers);
 //        Log.e("presenter:ipUsers ", "" + SettingsFile.ipAddress);
         usersJsonObjectRequest = new StringRequest(Request.Method.GET, urlUsers, new UsersResponseClass(), new UsersResponseClass());
@@ -187,7 +129,11 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
                 }
                 Log.e("presenter/users/res ", "" + response);
 
-                JSONObject object = new JSONObject(response);
+                if (response.contains("the password will expire within 7 days"))
+                    Toast.makeText(context, "the password will expire within 7 days!", Toast.LENGTH_SHORT).show();
+
+                JSONObject object = new JSONObject(response.substring(response.indexOf("{")));
+
 //                Log.e("presenter:obj1", "" + object.toString());
                 JSONArray array = object.getJSONArray("USERS");
 //                Log.e("presenter:obj2", "" + array.toString());
@@ -289,7 +235,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
 //                Log.e("bundleInfoServer", "/size/" + bundleInfoServer.size());
                 inventoryReport.filters();
                 inventoryReport.fillSpinnerAdapter(thickness, width, length);
-                showLog("Get Inventory Report Data", "thickness size" , "" + thickness.size());
+                showLog("Get Inventory Report Data", "thickness size", "" + thickness.size());
 
 //                inventoryReport.fillTable(bundleInfoServer);
 ////                Log.e("presenter3: import ", "" + SettingsFile.serialNumber);
@@ -390,7 +336,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
     //-------------------------------------------- update p.list from inventory report Data------------------------------------------/
 
     public void updatePackingList(InventoryReport inventoryReport, String bundleNumber, String packingList,
-                                  String location, double width,  double length,  double pieces,  double thickness, String oldBackingList) {
+                                  String location, double width, double length, double pieces, double thickness, String oldBackingList) {
         settings = databaseHandler.getSettings();
         this.inventoryReport = inventoryReport;
 //export.php?ADD_PACKING_LIST=1&BUNDLE_NO='" + bundleNo + "'&PACKING_LIST='" + packingList + "'");
@@ -512,7 +458,7 @@ public class WoodPresenter implements Response.ErrorListener, Response.Listener<
 //                Log.e("bundleInfoServer", "/size/" + bundleInfoServer.size());
                 inventoryReport.filters();
 //                inventoryReport.fillSpinnerAdapter(thickness);
-                showLog("Get Inventory Report Data", "thickness size" , "" + thickness.size());
+                showLog("Get Inventory Report Data", "thickness size", "" + thickness.size());
 
 //                inventoryReport.fillTable(bundleInfoServer);
 ////                Log.e("presenter3: import ", "" + SettingsFile.serialNumber);

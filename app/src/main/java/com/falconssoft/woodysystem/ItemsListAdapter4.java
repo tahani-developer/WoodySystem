@@ -18,10 +18,6 @@ import com.falconssoft.woodysystem.models.NewRowInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by mohd darras on 15/04/2018.
- */
-
 public class ItemsListAdapter4 extends BaseAdapter {
 
     private Context context;
@@ -57,7 +53,7 @@ public class ItemsListAdapter4 extends BaseAdapter {
     }
 
     private class ViewHolder {
-        TextView th, w, l, grade, pcs, bundle, rejected, supplier;
+        TextView th, w, l, grade, pcs, bundle, rejected, supplier, cubic;
         ImageView image;
     }
 
@@ -68,24 +64,26 @@ public class ItemsListAdapter4 extends BaseAdapter {
         final ViewHolder holder = new ViewHolder();
         view = View.inflate(context, R.layout.item_row4, null);
 
-        holder.th = (TextView) view.findViewById(R.id.th);
-        holder.w = (TextView) view.findViewById(R.id.w);
-        holder.l = (TextView) view.findViewById(R.id.l);
-        holder.grade = (TextView) view.findViewById(R.id.grade);
-        holder.pcs = (TextView) view.findViewById(R.id.pcs);
-        holder.bundle = (TextView) view.findViewById(R.id.bundles);
-        holder.rejected = (TextView) view.findViewById(R.id.rej);
-        holder.supplier = (TextView) view.findViewById(R.id.supplier);
-        holder.image = (ImageView) view.findViewById(R.id.image);
+        holder.th = view.findViewById(R.id.th);
+        holder.w = view.findViewById(R.id.w);
+        holder.l = view.findViewById(R.id.l);
+        holder.grade = view.findViewById(R.id.grade);
+        holder.pcs = view.findViewById(R.id.pcs);
+        holder.bundle = view.findViewById(R.id.bundles);
+        holder.rejected = view.findViewById(R.id.rej);
+        holder.supplier = view.findViewById(R.id.supplier);
+        holder.image = view.findViewById(R.id.image);
+        holder.cubic = view.findViewById(R.id.item_row4_cubic);
 
         holder.th.setText("" + (int) itemsList.get(i).getThickness());
-        holder.w.setText("" +  (int) itemsList.get(i).getWidth());
-        holder.l.setText("" + (int)  itemsList.get(i).getLength());
+        holder.w.setText("" + (int) itemsList.get(i).getWidth());
+        holder.l.setText("" + (int) itemsList.get(i).getLength());
         holder.grade.setText("" + itemsList.get(i).getGrade());
         holder.pcs.setText("" + (int) itemsList.get(i).getNoOfPieces());
-        holder.bundle.setText("" +  (int) itemsList.get(i).getNoOfBundles());
-        holder.rejected.setText("" +  (int) itemsList.get(i).getNoOfRejected());
+        holder.bundle.setText("" + (int) itemsList.get(i).getNoOfBundles());
+        holder.rejected.setText("" + (int) itemsList.get(i).getNoOfRejected());
         holder.supplier.setText("" + itemsList.get(i).getSupplierName());
+        holder.cubic.setText("" + itemsList.get(i).getCubic());
 
 //        if (itemsList.get(i).getPicture() == null) {
 //            holder.image.setImageDrawable(context.getDrawable(R.drawable.pic));

@@ -13,6 +13,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 
 import com.falconssoft.woodysystem.models.Settings;
+import com.falconssoft.woodysystem.reports.InventoryReport;
+import com.falconssoft.woodysystem.reports.LoadingOrderReport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +23,7 @@ import java.util.regex.Pattern;
 
 public class Stage3 extends AppCompatActivity implements View.OnClickListener {
 
-    private LinearLayout enterInventory, loadingOrder, reports;
+    private LinearLayout enterInventory, loadingOrder,  ordersReport, inventoryReport,reports;
     private Animation animation;
     private WoodPresenter presenter;
     private DatabaseHandler databaseHandler;
@@ -40,6 +42,11 @@ public class Stage3 extends AppCompatActivity implements View.OnClickListener {
         enterInventory = findViewById(R.id.stage3_enter_inventory);
         loadingOrder = findViewById(R.id.stage3_loading_order);
         reports = findViewById(R.id.stage3_reports);
+        ordersReport = findViewById(R.id.reports_orders);
+        inventoryReport = findViewById(R.id.reports_inventory);
+
+        ordersReport.setOnClickListener(this);
+        inventoryReport.setOnClickListener(this);
 
         enterInventory.setOnClickListener(this);
         loadingOrder.setOnClickListener(this);
@@ -50,7 +57,11 @@ public class Stage3 extends AppCompatActivity implements View.OnClickListener {
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
         loadingOrder.setAnimation(animation);
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
-        reports.setAnimation(animation);
+        ordersReport.setAnimation(animation);
+        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
+        inventoryReport.setAnimation(animation);
+//        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
+//        reports.setAnimation(animation);
 
 //        list = databaseHandler.getBundleNo();
 //        for (int i =0; i< list.size();i++){
@@ -89,6 +100,16 @@ public class Stage3 extends AppCompatActivity implements View.OnClickListener {
                 mLastClickTime3 = SystemClock.elapsedRealtime();
                 Intent intent3 = new Intent(this, ReportsActivity.class);
                 startActivity(intent3);
+                break;
+            case R.id.reports_orders:
+                Intent intent22=new Intent(this, LoadingOrderReport.class);
+                startActivity(intent22);
+//                setSlideAnimation();
+                break;
+            case R.id.reports_inventory:
+                Intent intent33=new Intent(this, InventoryReport.class);
+                startActivity(intent33);
+//                setSlideAnimation();
                 break;
         }
     }

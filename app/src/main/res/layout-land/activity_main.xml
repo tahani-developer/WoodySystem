@@ -8,66 +8,79 @@
     android:background="@drawable/wooddecor"
     tools:context=".MainActivity">
 
-    <RelativeLayout
-        android:id="@+id/relative"
+    <View
+        android:background="@color/alpha_black_dark"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:orientation="horizontal"
         android:background="@color/alpha_black_dark"
         >
 
-            <TextView
-                android:id="@+id/s2"
-                android:layout_width="@dimen/main_views2_land"
-                android:layout_height="@dimen/main_views3_land"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="@dimen/main_margin2_all"
-                android:layout_marginLeft="@dimen/main_margin2_all"
-                android:layout_marginEnd="@dimen/main_margin2_all"
-                android:layout_marginRight="@dimen/main_margin2_all"
-                android:layout_marginBottom="@dimen/main_margin1_bottom"
-                android:layout_toStartOf="@+id/s3"
-                android:layout_toLeftOf="@+id/s3"
-                android:layout_toEndOf="@+id/s1"
-                android:layout_toRightOf="@+id/s1"
-                android:background="@drawable/frame_shape"
-                android:fontFamily="serif"
-                android:text="Packing List"
-                android:textColor="@color/white"
-                android:textSize="25sp" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".5"/>
 
-            <TextView
-                android:id="@+id/s3"
-                android:layout_width="@dimen/main_views_land"
-                android:layout_height="@dimen/main_views_land"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginEnd="@dimen/main_margin1_start"
-                android:layout_marginRight="@dimen/main_margin1_start"
-                android:layout_marginBottom="@dimen/main_margin1_bottom"
-                android:background="@drawable/border_background"
-                android:fontFamily="serif"
-                android:text="@string/stage3"
-                android:textColor="@color/orange"
-                android:textSize="20sp" />
+        <TextView
+            android:id="@+id/s1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:background="@drawable/border_background"
+            android:fontFamily="serif"
+            android:text="@string/stage1"
+            android:textColor="@color/orange"
+            android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/s1"
-                android:layout_width="@dimen/main_views_land"
-                android:layout_height="@dimen/main_views_land"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="@dimen/main_margin1_start"
-                android:layout_marginLeft="@dimen/main_margin1_start"
-                android:layout_marginBottom="@dimen/main_margin1_bottom"
-                android:background="@drawable/border_background"
-                android:fontFamily="serif"
-                android:text="@string/stage1"
-                android:textColor="@color/orange"
-                android:textSize="20sp" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".5"/>
 
-    </RelativeLayout>
+        <TextView
+            android:id="@+id/s2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:background="@drawable/frame_shape"
+            android:fontFamily="serif"
+            android:text="Packing List"
+            android:textColor="@color/white"
+            android:textSize="25sp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".5"/>
+
+        <TextView
+            android:id="@+id/s3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:background="@drawable/border_background"
+            android:fontFamily="serif"
+            android:text="@string/stage3"
+            android:textColor="@color/orange"
+            android:textSize="20sp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".5"/>
+
+    </LinearLayout>
+
+    <View
+        android:background="@color/alpha_black_dark"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 
 </LinearLayout>

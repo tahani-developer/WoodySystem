@@ -3,19 +3,48 @@ package com.falconssoft.woodysystem.models;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import com.google.gson.annotations.SerializedName;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Pictures {
 
+    //     picture.setOrderNo(finalObject.getString("ORDER_NO"));
+//                        picture.setPic1(finalObject.getString("PIC1"));
+//                        picture.setPic2(finalObject.getString("PIC2"));
+//                        picture.setPic3(finalObject.getString("PIC3"));
+//                        picture.setPic4(finalObject.getString("PIC4"));
+//                        picture.setPic5(finalObject.getString("PIC5"));
+//                        picture.setPic6(finalObject.getString("PIC6"));
+//                        picture.setPic7(finalObject.getString("PIC7"));
+//                        picture.setPic8(finalObject.getString("PIC8"));
+
+    @SerializedName("ORDER_NO")
     String orderNo;
+
+    @SerializedName("PIC1")
     String pic1;
+
+    @SerializedName("PIC2")
     String pic2;
+
+    @SerializedName("PIC3")
     String pic3;
+
+    @SerializedName("PIC4")
     String pic4;
+
+    @SerializedName("PIC5")
     String pic5;
+
+    @SerializedName("PIC6")
     String pic6;
+
+    @SerializedName("PIC7")
     String pic7;
+
+    @SerializedName("PIC8")
     String pic8;
 
     Bitmap pic11;

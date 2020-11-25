@@ -1,31 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/w10"
     tools:context=".stage_two.StageTwo">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <TextView
         android:background="@color/alpha_black_dark"
-        android:orientation="vertical"
-        android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0">
+        android:text="@string/packing_list"
+        android:textColor="@color/orange"
+        android:fontFamily="serif"
+        android:padding="10dp"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.2"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="9">
+
+        <View
+            android:background="@color/alpha_black_dark"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".5"
+            />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:background="@color/alpha_black_dark"
+            android:orientation="vertical"
+            android:gravity="center">
 
             <LinearLayout
                 android:id="@+id/stage2_planned_packingList"
-                android:layout_width="@dimen/stage3_views"
-                android:layout_height="@dimen/stage3_views2"
-                android:layout_marginTop="@dimen/stage3_p_margin_top"
-                android:background="@drawable/frame_shape"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:background="@drawable/alpha_frame"
                 android:gravity="center"
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -33,29 +54,36 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
-                    android:layout_width="90dp"
-                    android:layout_height="90dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@drawable/ic_post_add"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1.7"
+                    android:layout_marginVertical="20dp"
+                    android:src="@drawable/planned_packing_list"
                     android:scaleType="fitCenter" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_margin="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
                     android:fontFamily="serif"
-                    android:gravity="center_horizontal"
-                    android:text="Planned packing list"
+                    android:gravity="center"
+                    android:background="@drawable/border_frame"
+                    android:text="@string/planned_packing_list"
                     android:textColor="@color/white"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
             </LinearLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight=".2"/>
+
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/stage2_reports"
-                android:layout_width="@dimen/stage3_views"
-                android:layout_height="@dimen/stage3_views2"
-                android:layout_marginTop="@dimen/stage3_p_margin2_top"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
                 android:background="@drawable/border_background"
                 android:gravity="center"
                 android:orientation="vertical"
@@ -64,7 +92,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/stage3_enter_inventory">
 
 
-            <ImageView
+                <ImageView
                     android:layout_width="130dp"
                     android:layout_height="90dp"
                     android:layout_marginTop="5dp"
@@ -83,7 +111,129 @@
                     android:textSize="20sp" />
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/stage2_unload_packingList"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:background="@drawable/alpha_frame"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/stage3_enter_inventory">
+
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1.7"
+                    android:layout_marginVertical="20dp"
+                    android:src="@drawable/pplreport"
+                    android:scaleType="fitCenter" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:fontFamily="serif"
+                    android:gravity="center"
+                    android:background="@drawable/border_frame"
+                    android:text="@string/planned_report"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight=".2"/>
+
+            <LinearLayout
+                android:id="@+id/stage2_loaded_packingList"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:background="@drawable/alpha_frame"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/stage3_enter_inventory">
+
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1.7"
+                    android:layout_marginVertical="20dp"
+                    android:src="@drawable/load_packing_report1"
+                    android:scaleType="fitCenter" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:fontFamily="serif"
+                    android:gravity="center"
+                    android:background="@drawable/border_frame"
+                    android:text="@string/loaded_packing_list_report"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight=".2"/>
+
+            <LinearLayout
+                android:id="@+id/stage2_planned_unplanned_packingList"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:background="@drawable/alpha_frame"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/stage3_enter_inventory">
+
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1.7"
+                    android:layout_marginVertical="20dp"
+                    android:src="@drawable/punpreport"
+                    android:scaleType="fitCenter" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:fontFamily="serif"
+                    android:gravity="center"
+                    android:background="@drawable/border_frame"
+                    android:text="@string/planned_unplanned_inventory_report"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight=".5"/>
+
         </LinearLayout>
 
+        <View
+            android:background="@color/alpha_black_dark"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".5"
+            />
+    </LinearLayout>
 
-</android.support.constraint.ConstraintLayout>
+
+</LinearLayout>

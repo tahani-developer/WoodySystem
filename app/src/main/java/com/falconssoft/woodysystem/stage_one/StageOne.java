@@ -25,12 +25,12 @@ public class StageOne extends AppCompatActivity implements View.OnClickListener 
         addRaw = findViewById(R.id.stage1_new_raw);
 //        acceptInfo = findViewById(R.id.stage1_accept_info);
         report1 = findViewById(R.id.stage1_accept_info);
-        generateBarcode = findViewById(R.id.stage1_generate_barcode);
+//        generateBarcode = findViewById(R.id.stage1_generate_barcode);
         report2 = findViewById(R.id.stage1_reports);
 
         addRaw.setOnClickListener(this);
         report1.setOnClickListener(this);
-        generateBarcode.setOnClickListener(this);
+//        generateBarcode.setOnClickListener(this);
         report2.setOnClickListener(this);
 
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
@@ -39,8 +39,8 @@ public class StageOne extends AppCompatActivity implements View.OnClickListener 
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
         report1.setAnimation(animation);
 
-        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
-        generateBarcode.setAnimation(animation);
+//        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
+//        generateBarcode.setAnimation(animation);
 
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
         report2.setAnimation(animation);

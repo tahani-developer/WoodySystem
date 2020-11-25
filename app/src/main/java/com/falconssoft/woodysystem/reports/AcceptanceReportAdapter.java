@@ -24,10 +24,8 @@ public class AcceptanceReportAdapter extends BaseAdapter {
 
     public AcceptanceReportAdapter(AcceptanceReport context, List<NewRowInfo> itemsList, List<NewRowInfo> bundles) {
         this.context = context;
-//        this.mOriginalValues = itemsList;
         this.itemsList = itemsList;
         this.bundles = bundles;
-//        selectedBundles = new ArrayList<>();
     }
 
     public AcceptanceReportAdapter() {
@@ -56,7 +54,7 @@ public class AcceptanceReportAdapter extends BaseAdapter {
     private class ViewHolder {
         ImageView pic;
         Button preview;
-        TextView truckNo, acceptor, ttn, netBundle, date, noOfBundles, rejected;
+        TextView truckNo, acceptor, ttn, netBundle, date, noOfBundles, rejected, cubic, serial;
         ImageView edit;
     }
 
@@ -68,16 +66,18 @@ public class AcceptanceReportAdapter extends BaseAdapter {
 
 //        holder.pic = (ImageView) view.findViewById(R.id.pic);
 //        holder.netBundle = (TextView) view.findViewById(R.id.net);
-        holder.preview = (Button) view.findViewById(R.id.preview);
-        holder.truckNo = (TextView) view.findViewById(R.id.truck_no);
-        holder.acceptor = (TextView) view.findViewById(R.id.name_of_person_to_accept); //supplier after edit not acceptor
-        holder.date = (TextView) view.findViewById(R.id.date_of_acceptance);
-        holder.ttn = (TextView) view.findViewById(R.id.ttn_no);
-        holder.noOfBundles = (TextView) view.findViewById(R.id.noOfBundles_acceptance);
-        holder.rejected = (TextView) view.findViewById(R.id.rejected_pieces);
+        holder.preview = view.findViewById(R.id.preview);
+        holder.truckNo = view.findViewById(R.id.truck_no);
+        holder.acceptor = view.findViewById(R.id.name_of_person_to_accept); //supplier after edit not acceptor
+        holder.date = view.findViewById(R.id.date_of_acceptance);
+        holder.ttn = view.findViewById(R.id.ttn_no);
+        holder.noOfBundles = view.findViewById(R.id.noOfBundles_acceptance);
+        holder.rejected = view.findViewById(R.id.rejected_pieces);
         holder.edit = view.findViewById(R.id.acceptanceReport_edit);
+        holder.cubic = view.findViewById(R.id.truck_report_cubic);
+        holder.serial = view.findViewById(R.id.truck_report_serial);
 
-
+        holder.serial.setText(itemsList.get(i).getSerial());
         holder.truckNo.setText(itemsList.get(i).getTruckNo());
         holder.acceptor.setText(findSupplier(itemsList.get(i)));//itemsList.get(i).getAcceptedPersonName());
         holder.date.setText(itemsList.get(i).getDate());
@@ -85,7 +85,7 @@ public class AcceptanceReportAdapter extends BaseAdapter {
 //        holder.netBundle.setText( itemsList.get(i).getNetBundles());
         holder.noOfBundles.setText("" + itemsList.get(i).getNetBundles());
         holder.rejected.setText(itemsList.get(i).getTotalRejectedNo());
-
+        holder.cubic.setText("" + itemsList.get(i).getCubic());
         AcceptanceReport obj = new AcceptanceReport();
 
         holder.edit.setOnClickListener(new View.OnClickListener() {
@@ -99,7 +99,7 @@ public class AcceptanceReportAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
 
-                obj.previewLinear(itemsList.get(i), context, bundles);
+                obj.previewLinear(itemsList.get(i).getSerial(), context);
 
             }
         });
@@ -115,4 +115,5 @@ public class AcceptanceReportAdapter extends BaseAdapter {
 
         return "----";
     }
+
 }

@@ -1,125 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/wooddecor"
+    android:orientation="vertical"
     tools:context=".stage_one.StageOne">
+
+    <TextView
+        android:background="@color/alpha_black_dark"
+        android:text="@string/stage1"
+        android:textColor="@color/orange"
+        android:fontFamily="serif"
+        android:padding="10dp"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.2"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
         android:orientation="horizontal"
-        android:background="@color/alpha_black_dark"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.431">
+        android:background="@color/alpha_black_dark">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
 
         <LinearLayout
             android:id="@+id/stage1_new_raw"
-            android:layout_width="@dimen/stage3_views_land"
-            android:layout_height="@dimen/stage3_views2_land"
-            android:layout_marginStart="@dimen/stage1_margin1_start"
-            android:layout_marginLeft="@dimen/stage1_margin1_start"
-            android:layout_marginTop="@dimen/stage1_margin_top"
-            android:background="@drawable/frame_shape"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:background="@drawable/alpha_frame"
             android:gravity="center"
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="130dp"
-                android:layout_height="100dp"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/wbundlereal"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1.7"
+                android:layout_marginVertical="20dp"
+                android:src="@drawable/truckk"
                 android:scaleType="fitCenter" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@drawable/border_frame"
                 android:fontFamily="serif"
-                android:gravity="center_horizontal"
-                android:text="@string/enter_inventory"
+                android:gravity="center"
+                android:text="@string/truck_acceptance"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:textStyle="bold"
+                android:textSize="18sp" />
         </LinearLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".7"/>
 
         <LinearLayout
             android:id="@+id/stage1_accept_info"
-            android:layout_width="@dimen/stage3_views_land"
-            android:layout_height="@dimen/stage3_views2_land"
-            android:layout_marginStart="@dimen/stage1_margin2_start"
-            android:layout_marginLeft="@dimen/stage1_margin2_start"
-            android:layout_marginTop="@dimen/stage1_margin_top"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
             android:visibility="visible"
-            android:background="@drawable/border_background"
+            android:background="@drawable/alpha_frame"
             android:gravity="center"
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="110dp"
-                android:layout_height="110dp"
-                android:layout_marginTop="3dp"
-                android:background="@drawable/real_report2"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1.7"
+                android:layout_marginVertical="20dp"
+                android:src="@drawable/truck_report"
                 android:scaleType="fitCenter" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@drawable/border_frame"
                 android:fontFamily="serif"
-                android:gravity="center_horizontal"
-                android:text="Report 1"
-                android:textColor="@color/orange"
-                android:textSize="20sp" />
+                android:gravity="center"
+                android:text="@string/accepted_truck_report"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="18sp" />
         </LinearLayout>
 
         <LinearLayout
             android:visibility="gone"
-            android:id="@+id/stage1_generate_barcode"
-            android:layout_width="@dimen/stage3_views_land"
-            android:layout_height="@dimen/stage3_views2_land"
-            android:layout_marginStart="@dimen/stage1_margin2_start"
-            android:layout_marginLeft="@dimen/stage1_margin2_start"
-            android:layout_marginTop="@dimen/stage1_margin_top"
-            android:background="@drawable/border_background"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="130dp"
-                android:layout_height="80dp"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/barcode"
-                android:scaleType="fitCenter" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="10dp"
-                android:gravity="center_horizontal"
-                android:text="@string/generate_barcode"
-                android:fontFamily="serif"
-                android:textColor="@color/orange"
-                android:textSize="20sp" />
-        </LinearLayout>
-
-        <LinearLayout
             android:id="@+id/stage1_reports"
-            android:layout_width="@dimen/stage3_views_land"
-            android:layout_height="@dimen/stage3_views2_land"
-            android:layout_marginStart="@dimen/stage1_margin2_start"
-            android:layout_marginLeft="@dimen/stage1_margin2_start"
-            android:layout_marginTop="@dimen/stage1_margin_top"
-            android:layout_marginEnd="@dimen/stage1_margin_end"
-            android:layout_marginRight="@dimen/stage1_margin_end"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
             android:background="@drawable/frame_shape"
             android:gravity="center"
             android:orientation="vertical">
@@ -143,6 +127,17 @@
                 android:textSize="20sp" />
         </LinearLayout>
 
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
     </LinearLayout>
 
-</android.support.constraint.ConstraintLayout>
+    <View
+        android:background="@color/alpha_black_dark"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+</LinearLayout>

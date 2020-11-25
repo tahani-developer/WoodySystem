@@ -3,26 +3,62 @@ package com.falconssoft.woodysystem.models;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import com.google.gson.annotations.SerializedName;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Orders implements Serializable {
 
+    @SerializedName("BUNDLE_ORDER")
+    private List<Orders> BUNDLE_ORDER;
+
+    @SerializedName("BUNDLE_PIC")
+    private List<Pictures> BUNDLE_PIC;
+
+    @SerializedName("THICKNESS")
     private double thickness;
+
+    @SerializedName("LENGTH")
     private double length;
+
+    @SerializedName("WIDTH")
     private double width;
+
+    @SerializedName("GRADE")
     private String grade;
+
+    @SerializedName("PIECES")
     private double noOfPieces;
+
+    @SerializedName("BUNDLE_NO")
     private String bundleNo;
+
+    @SerializedName("LOCATION")
     private String location;
+
+    @SerializedName("AREA")
     private String area;
+
+    @SerializedName("PLACING_NO")
     private String placingNo;
+
+    @SerializedName("ORDER_NO")
     private String orderNo;
+
+    @SerializedName("CONTAINER_NO")
     private String containerNo;
+
+    @SerializedName("DATE_OF_LOAD")
     private String dateOfLoad;
+
+    @SerializedName("DESTINATION")
     private String destination;
+
+    @SerializedName("PIC")
     private String picture;
     private boolean checked;
     private Bitmap picBitmap;
@@ -55,6 +91,22 @@ public class Orders implements Serializable {
         this.picture = picture;
         this.packingList = packingList;
         this.customer = customer;
+    }
+
+    public List<Orders> getBUNDLE_ORDER() {
+        return BUNDLE_ORDER;
+    }
+
+    public void setBUNDLE_ORDER(List<Orders> BUNDLE_ORDER) {
+        this.BUNDLE_ORDER = BUNDLE_ORDER;
+    }
+
+    public List<Pictures> getBUNDLE_PIC() {
+        return BUNDLE_PIC;
+    }
+
+    public void setBUNDLE_PIC(List<Pictures> BUNDLE_PIC) {
+        this.BUNDLE_PIC = BUNDLE_PIC;
     }
 
     public boolean isRemove() {

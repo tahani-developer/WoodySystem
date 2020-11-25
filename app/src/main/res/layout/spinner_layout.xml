@@ -9,6 +9,7 @@
     style="?android:attr/spinnerItemStyle"
     android:singleLine="true"
     android:fontFamily="serif"
+    android:textColor="@color/white"
     android:textSize="15sp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"

@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Wood System</string>
-    <string name="version">Version 1.6.5</string>
+    <string name="version">Version 1.6.6</string>
 <!--    <string name="version">Version 58.0.6</string>-->
 
     <string name="stage1">Acceptance &amp; Quality Control</string>
@@ -109,7 +109,7 @@
     <string name="truck_no">Truck No</string>
     <string name="date_of_acceptance">Acceptance Date</string>
     <string name="name_of_person_to_accept">Acceptor Name</string>
-    <string name="location_of_acceptance">Acceptance Loc</string>
+    <string name="location_of_acceptance">Acc Loc</string>
     <string name="ttn_no">TTN NO</string>
     <string name="rejection_list">Rejection List</string>
     <string name="new_supplier">New Supplier</string>
@@ -176,5 +176,9 @@
     <string name="export_to_pdf">Export To PDF</string>
     <string name="edit_confirm_message">Are you want save the changes first?</string>
     <string name="export_to_excel">Export To Excel</string>
+    <string name="truck_acceptance">Truck Acceptance</string>
+    <string name="accepted_truck_report">Accepted Truck Report</string>
+    <string name="enter_barcode">Enter Barcode</string>
+    <string name="planned_packing_list">Planned packing list</string>
 
 </resources>

@@ -32,7 +32,7 @@
             android:fontFamily="serif"
             android:text="@string/serial"
             android:textColor="@color/gray_dark_one"
-            android:textSize="15sp" />
+            android:textSize="13sp" />
 
         <TextView
             android:id="@+id/bundle"

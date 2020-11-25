@@ -1,26 +1,16 @@
 package com.falconssoft.woodysystem.reports;
 
-import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.falconssoft.woodysystem.EditLoadingReport;
 import com.falconssoft.woodysystem.R;
-import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.Orders;
-import com.falconssoft.woodysystem.models.Pictures;
-import com.falconssoft.woodysystem.reports.LoadingOrderReport;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class LoadingOrderReportAdapter extends BaseAdapter {
@@ -136,7 +126,7 @@ public class LoadingOrderReportAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
 
-                obj.previewPics(i, context);
+                obj.previewPics(itemsList.get(i), context);
             }
         });
 

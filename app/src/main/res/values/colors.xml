@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#5F5C5C</color>
 
 
@@ -19,12 +19,17 @@
     <color name="orangeHover">#EC9568</color>
     <!--    F1712F-->
     <color name="alpha_black">#320C0C0C</color>
-    <color name="alpha_black_dark">#940C0C0C</color>
+    <color name="alpha_black_dark">#C30C0C0C</color>
     <color name="alpha_white">#C1FAFAFA</color>
     <color name="wooden">#643F18</color>
     <color name="preview">#C24641</color>
     <color name="alpha_white2">#E2FFFEFE</color>
     <color name="light_gray">#EFEBEB</color>
     <color name="alpha_gray">#32FFFFFF</color>
+    <color name="alpha_white3">#28FAFAFA</color>
+    <color name="oranges">#90FF7500</color>
+    <color name="alpha_black_dark2">#920C0C0C</color>
+    <color name="alpha_white4">#1DFAFAFA</color>
+
 
 </resources>

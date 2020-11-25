@@ -14,9 +14,23 @@
         app:layout_constraintTop_toBottomOf="@+id/inventory_report_linear3">
 
         <TextView
+            android:id="@+id/truck_report_serial"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fontFamily="serif"
+            android:background="@color/light_orange"
+            android:layout_marginTop="2dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:text="@string/serial_no"
+            android:textColor="@color/gray_dark_one"
+            android:textSize="15sp" />
+
+        <TextView
             android:id="@+id/truck_no"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:fontFamily="serif"
             android:background="@color/light_orange"
@@ -30,21 +44,21 @@
         <TextView
             android:id="@+id/name_of_person_to_accept"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:fontFamily="serif"
             android:background="@color/light_orange"
             android:layout_marginTop="2dp"
             android:layout_marginStart="2dp"
             android:layout_marginLeft="2dp"
-            android:text="@string/name_of_person_to_accept"
+            android:text="@string/supplier_name"
             android:textColor="@color/gray_dark_one"
             android:textSize="15sp" />
 
         <TextView
             android:id="@+id/ttn_no"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:fontFamily="serif"
             android:background="@color/light_orange"
@@ -58,7 +72,7 @@
         <TextView
             android:id="@+id/date_of_acceptance"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:fontFamily="serif"
             android:background="@color/light_orange"
@@ -72,7 +86,7 @@
         <TextView
             android:id="@+id/noOfBundles_acceptance"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:fontFamily="serif"
             android:background="@color/light_orange"
@@ -87,7 +101,7 @@
         <TextView
             android:id="@+id/rejected_pieces"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:fontFamily="serif"
             android:background="@color/light_orange"
@@ -99,10 +113,25 @@
             android:textSize="15sp"
             />
 
+        <TextView
+            android:id="@+id/truck_report_cubic"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fontFamily="serif"
+            android:background="@color/light_orange"
+            android:layout_marginTop="2dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:text="@string/cubic"
+            android:textColor="@color/gray_dark_one"
+            android:textSize="15sp"
+            />
+
         <Button
             android:id="@+id/preview"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:fontFamily="serif"
             android:layout_marginTop="2dp"

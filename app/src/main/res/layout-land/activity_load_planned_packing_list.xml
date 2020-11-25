@@ -34,7 +34,7 @@
                 android:paddingVertical="5dp"
                 android:fontFamily="serif"
                 android:gravity="start|left"
-                android:text="@string/planned_report"
+                android:text="@string/loaded_packing_list_report"
                 android:textColor="@color/white"
                 android:textSize="17sp" />
 
@@ -65,7 +65,7 @@
                     android:layout_marginRight="5dp"
                     android:paddingVertical="5dp"
                     android:layout_weight="1"
-                    android:background="@drawable/shape_with_corner"
+                    android:background="@drawable/alpha_frame"
                     android:orientation="horizontal"
                     >
 
@@ -78,18 +78,21 @@
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/cust"
+                        android:textColor="@color/white"
                         android:textSize="17sp" />
 
                     <TextView
                         android:id="@+id/cust"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:textSize="15sp"
                         android:layout_marginHorizontal="5dp"
                         android:layout_weight="10"
                         android:fontFamily="serif"
                         android:gravity="start|left|center_vertical"
-                        android:hint="@string/search" />
+                        android:hint="@string/search"
+                        android:textColor="@color/white"
+                        android:textColorHint="@color/white"
+                        android:textSize="15sp" />
 
 
                 </LinearLayout>
@@ -100,7 +103,7 @@
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:layout_weight="1"
-                    android:background="@drawable/shape_with_corner"
+                    android:background="@drawable/alpha_frame"
                     android:orientation="horizontal"
                     >
 
@@ -112,18 +115,21 @@
                         android:paddingTop="10dp"
                         android:paddingBottom="10dp"
                         android:text="@string/supplier_name"
+                        android:textColor="@color/white"
                         android:textSize="17sp" />
 
                     <TextView
                         android:id="@+id/sup"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:textSize="15sp"
-                        android:fontFamily="serif"
                         android:layout_marginHorizontal="5dp"
                         android:layout_weight="10"
+                        android:fontFamily="serif"
                         android:gravity="start|left|center_vertical"
-                        android:hint="@string/search" />
+                        android:hint="@string/search"
+                        android:textColor="@color/white"
+                        android:textColorHint="@color/white"
+                        android:textSize="15sp" />
 
 
                 </LinearLayout>
@@ -133,7 +139,7 @@
                     android:layout_height="match_parent"
 
                     android:layout_weight="1"
-                    android:background="@drawable/shape_with_corner"
+                    android:background="@drawable/alpha_frame"
                     android:orientation="horizontal"
                     android:padding="5dp">
 
@@ -141,10 +147,11 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
                         android:layout_weight="1"
                         android:fontFamily="serif"
-                        android:layout_gravity="center_vertical"
                         android:text="@string/grade"
+                        android:textColor="@color/white"
                         android:textSize="18sp" />
 
                     <Spinner
@@ -177,7 +184,7 @@
                     android:layout_weight="1"
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
-                    android:background="@drawable/shape_with_corner"
+                    android:background="@drawable/alpha_frame"
                     android:orientation="horizontal"
                     android:padding="3dp"
                     >
@@ -187,8 +194,9 @@
                         android:layout_width="150dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:text="@string/p_list"
                         android:fontFamily="serif"
+                        android:text="@string/p_list"
+                        android:textColor="@color/white"
                         android:textSize="17sp" />
 
                     <EditText
@@ -198,10 +206,11 @@
                         android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_weight="2"
-                        android:textSize="15sp"
                         android:ems="10"
+                        android:nextFocusDown="@id/destination"
                         android:singleLine="true"
-                        android:nextFocusDown="@id/destination" />
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -210,7 +219,7 @@
                     android:layout_weight="1"
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
-                    android:background="@drawable/shape_with_corner"
+                    android:background="@drawable/alpha_frame"
                     android:orientation="horizontal"
                    >
 
@@ -218,8 +227,9 @@
                         android:layout_width="150dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:text="@string/destination"
                         android:fontFamily="serif"
+                        android:text="@string/destination"
+                        android:textColor="@color/white"
                         android:textSize="17sp" />
 
                     <EditText
@@ -229,17 +239,18 @@
                         android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_weight="2"
-                        android:textSize="15sp"
                         android:ems="10"
+                        android:nextFocusDown="@id/destination"
                         android:singleLine="true"
-                        android:nextFocusDown="@id/destination" />
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@drawable/shape_with_corner"
+                    android:background="@drawable/alpha_frame"
                     android:orientation="horizontal"
                    >
 
@@ -247,8 +258,9 @@
                         android:layout_width="150dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:text="@string/order_no"
                         android:fontFamily="serif"
+                        android:text="@string/order_no"
+                        android:textColor="@color/white"
                         android:textSize="17sp" />
 
                     <EditText
@@ -258,10 +270,11 @@
                         android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_weight="2"
-                        android:textSize="15sp"
                         android:ems="10"
+                        android:nextFocusDown="@id/destination"
                         android:singleLine="true"
-                        android:nextFocusDown="@id/destination" />
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -575,7 +588,7 @@
                     android:layout_gravity="center"
                     android:layout_marginEnd="7dp"
                     android:layout_marginRight="7dp"
-                    android:background="@drawable/border_background"
+                    android:background="@drawable/alpha_frame"
                     android:orientation="horizontal"
                     android:paddingEnd="5dp"
                     android:paddingRight="5dp">
@@ -609,7 +622,7 @@
                     android:layout_gravity="center"
                     android:layout_marginEnd="7dp"
                     android:layout_marginRight="7dp"
-                    android:background="@drawable/border_background"
+                    android:background="@drawable/alpha_frame"
                     android:orientation="horizontal"
                     android:paddingEnd="5dp"
                     android:paddingRight="5dp">
@@ -688,7 +701,7 @@
                 <TextView
                     android:id="@+id/planned_reportOne_exportToExcel"
                     android:layout_width="wrap_content"
-                    android:layout_height="40dp"
+                    android:layout_height="match_parent"
                     android:layout_marginTop="1dp"
                     android:layout_marginEnd="7dp"
                     android:layout_marginRight="7dp"

@@ -1005,7 +1005,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
         gradeList2.add("KD Reject");
         gradeList2.add("Second Sort");
 
-        gradeAdapter = new ArrayAdapter<String>(this, R.layout.spinner_layout, gradeList2);
+        gradeAdapter = new ArrayAdapter<String>(this, R.layout.spinner_layout_two, gradeList2);
         gradeAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
         gradeSpinner2.setAdapter(gradeAdapter);
         gradeSpinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

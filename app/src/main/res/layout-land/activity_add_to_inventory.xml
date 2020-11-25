@@ -42,7 +42,7 @@
                 android:id="@+id/addToInventory_add_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:background="@drawable/border_frame"
+                android:background="@drawable/alpha_frame"
                 android:drawableStart="@drawable/ic_add_white_32dp"
                 android:drawableLeft="@drawable/ic_add_white_32dp"
                 android:layout_margin="5dp"
@@ -78,7 +78,7 @@
                     android:layout_marginEnd="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_weight="1"
-                    android:background="@drawable/shape_with_corner"
+                    android:background="@drawable/alpha_frame"
                     android:orientation="horizontal"
                     >
 
@@ -87,9 +87,10 @@
                         android:layout_width="150dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:textSize="15sp"
                         android:fontFamily="serif"
-                        android:text="@string/serial_no" />
+                        android:text="@string/serial_no"
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
 
                     <EditText
                         android:id="@+id/addToInventory_serial_no"
@@ -97,11 +98,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
-                        android:nextFocusDown="@id/addToInventory_thickness"
                         android:layout_weight="2"
                         android:ems="10"
                         android:inputType="number"
-                        />
+                        android:nextFocusDown="@id/addToInventory_thickness"
+                        android:textColor="@color/white" />
 
                 </LinearLayout>
 
@@ -113,7 +114,7 @@
                     android:layout_marginEnd="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_weight="1"
-                    android:background="@drawable/shape_with_corner"
+                    android:background="@drawable/alpha_frame"
                     android:orientation="horizontal"
                    >
 
@@ -122,9 +123,10 @@
                         android:layout_width="150dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:textSize="15sp"
                         android:fontFamily="serif"
-                        android:text="@string/thickness" />
+                        android:text="@string/thickness"
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
 
                     <EditText
                         android:id="@+id/addToInventory_thickness"
@@ -132,10 +134,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
-                        android:nextFocusDown="@id/addToInventory_width"
                         android:layout_weight="2"
                         android:ems="10"
-                        android:inputType="numberDecimal" />
+                        android:inputType="numberDecimal"
+                        android:nextFocusDown="@id/addToInventory_width"
+                        android:textColor="@color/white" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -146,7 +149,7 @@
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_weight="1"
-                    android:background="@drawable/shape_with_corner"
+                    android:background="@drawable/alpha_frame"
                     android:orientation="horizontal"
                     >
 
@@ -155,9 +158,10 @@
                         android:layout_width="150dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:textSize="15sp"
                         android:fontFamily="serif"
-                        android:text="@string/width" />
+                        android:text="@string/width"
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
 
                     <EditText
                         android:id="@+id/addToInventory_width"
@@ -166,9 +170,10 @@
                         android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_weight="2"
-                        android:nextFocusDown="@id/addToInventory_length"
                         android:ems="10"
-                        android:inputType="numberDecimal" />
+                        android:inputType="numberDecimal"
+                        android:nextFocusDown="@id/addToInventory_length"
+                        android:textColor="@color/white" />
 
                 </LinearLayout>
 
@@ -178,7 +183,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_weight="1"
-                    android:background="@drawable/shape_with_corner"
+                    android:background="@drawable/alpha_frame"
                     android:orientation="horizontal"
                     >
 
@@ -187,9 +192,10 @@
                         android:layout_width="150dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:text="@string/length"
-                        android:textSize="15sp"
                         android:fontFamily="serif"
+                        android:text="@string/length"
+                        android:textColor="@color/white"
+                        android:textSize="15sp"
                         android:theme="@style/AppTheme" />
 
                     <EditText
@@ -199,9 +205,10 @@
                         android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_weight="2"
-                        android:nextFocusDown="@id/addToInventory_no_of_pieces"
                         android:ems="10"
-                        android:inputType="numberDecimal" />
+                        android:inputType="numberDecimal"
+                        android:nextFocusDown="@id/addToInventory_no_of_pieces"
+                        android:textColor="@color/white" />
 
                 </LinearLayout>
 
@@ -224,7 +231,7 @@
                     android:layout_marginEnd="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_weight="1"
-                    android:background="@drawable/shape_with_corner"
+                    android:background="@drawable/alpha_frame"
                     android:orientation="horizontal"
                     >
 
@@ -233,9 +240,10 @@
                         android:layout_width="150dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:textSize="15sp"
                         android:fontFamily="serif"
-                        android:text="@string/no_of_pieces" />
+                        android:text="@string/no_of_pieces"
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
 
                     <EditText
                         android:id="@+id/addToInventory_no_of_pieces"
@@ -246,7 +254,8 @@
                         android:layout_weight="2"
                         android:ems="10"
                         android:imeOptions="actionDone"
-                        android:inputType="numberDecimal" />
+                        android:inputType="numberDecimal"
+                        android:textColor="@color/white" />
 
                 </LinearLayout>
 
@@ -257,7 +266,7 @@
                     android:layout_marginEnd="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_weight="1"
-                    android:background="@drawable/shape_with_corner"
+                    android:background="@drawable/alpha_frame"
                     android:orientation="horizontal"
                     >
 
@@ -265,12 +274,13 @@
                         android:id="@+id/textView4"
                         android:layout_width="40dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
-                        android:textSize="15sp"
+                        android:layout_weight="1"
                         android:fontFamily="serif"
-                        android:text="@string/grade" />
+                        android:text="@string/grade"
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
 
                     <Spinner
                         android:id="@+id/addToInventory_grade"
@@ -291,7 +301,7 @@
                     android:layout_weight="1"
                     android:layout_marginEnd="10dp"
                     android:layout_marginRight="10dp"
-                    android:background="@drawable/shape_with_corner"
+                    android:background="@drawable/alpha_frame"
                     android:orientation="horizontal"
                     >
 
@@ -299,12 +309,13 @@
                         android:id="@+id/textView8"
                         android:layout_width="40dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
-                        android:textSize="15sp"
+                        android:layout_weight="1"
                         android:fontFamily="serif"
-                        android:text="@string/area" />
+                        android:text="@string/area"
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
 
                     <Spinner
                         android:id="@+id/addToInventory_area"
@@ -323,7 +334,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@drawable/shape_with_corner"
+                    android:background="@drawable/alpha_frame"
                     android:orientation="horizontal"
                     >
 
@@ -334,9 +345,10 @@
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
                         android:layout_weight="1"
+                        android:fontFamily="serif"
                         android:text="@string/details"
-                        android:textSize="15sp"
-                        android:fontFamily="serif" />
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
 
                     <Spinner
                         android:id="@+id/addToInventory_description"
