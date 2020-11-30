@@ -658,6 +658,7 @@ public class LoadingOrder2 extends AppCompatActivity {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] arr = baos.toByteArray();
             String result = Base64.encodeToString(arr, Base64.DEFAULT);
+            Log.e("follow1", result);
             return result;
         }
 
@@ -709,6 +710,7 @@ public class LoadingOrder2 extends AppCompatActivity {
 //                nameValuePairs.add(new BasicNameValuePair("MISSED_BUNDLES", jsonArrayMissedBundles.toString().trim()));
 
                 //Log.e("tag", "" + jsonArrayPics.toString());
+                Log.e("jsonArrayPics", "" + jsonArrayPics.toString());
 
                 request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 

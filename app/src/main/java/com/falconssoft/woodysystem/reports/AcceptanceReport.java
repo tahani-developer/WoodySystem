@@ -42,6 +42,7 @@ import com.falconssoft.woodysystem.models.NewRowInfo;
 import com.falconssoft.woodysystem.models.Pictures;
 import com.falconssoft.woodysystem.models.Settings;
 import com.falconssoft.woodysystem.stage_one.AddNewRaw;
+import com.falconssoft.woodysystem.stage_one.EditPage;
 import com.google.gson.Gson;
 
 import org.apache.http.HttpResponse;
@@ -57,6 +58,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.net.MalformedURLException;
@@ -77,7 +79,7 @@ import java.util.Set;
 
 import static com.falconssoft.woodysystem.reports.AcceptanceInfoReport.EDIT_FLAG;
 
-public class AcceptanceReport extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class AcceptanceReport extends AppCompatActivity implements AdapterView.OnItemSelectedListener, Serializable {
     // truck Report
 
     private TextView textView, count, totalCubic;
@@ -96,10 +98,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
     private ArrayAdapter<String> locationAdapter, truckAdapter, acceptorAdapter, ttnAdapter;
     private String loc = "All", truckString = "", acceptorString = "", ttnString = "";
     private Settings generalSettings;
-    private String orderNo;
-    private JSONArray bundleNo = new JSONArray();
     private DatabaseHandler MHandler;
-    List<NewRowInfo> rawInfos;
     static Dialog dialog;
     private List<String> locationList;//, truckList, acceptorList, ttnList;
     String myFormat;
@@ -111,8 +110,9 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
     public static final String EDIT_LIST2 = "EDIT_LIST";
     public static final String EDIT_RAW2 = "EDIT_RAW";
     public double sum = 0;
-    private Context previewContext;
+    private Context previewContext, previewLinearContext;
     private String previewSerial;
+    NewRowInfo newRowInfoPic;
 
     //    public static final String EDIT_FLAG2= "EDIT_FLAG";
     @Override
@@ -233,30 +233,13 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
     }
 
     public void goToEditPage(NewRowInfo newRowInfo) {
-        List<NewRowInfo> list = new ArrayList<>();
-        for (int i = 0; i < details.size(); i++)
-            if (details.get(i).getTruckNo().equals(newRowInfo.getTruckNo())
-                    && details.get(i).getSerial().equals(newRowInfo.getSerial())
-            )
-                list.add(details.get(i));
-
-//        if (!(details.get(i).getThickness() == newRowInfo.getThickness()
-//                && details.get(i).getLength() == newRowInfo.getLength()
-//                && details.get(i).getWidth() == newRowInfo.getWidth()
-//                && details.get(i).getNoOfPieces() == newRowInfo.getNoOfPieces()
-//                && details.get(i).getGrade() == newRowInfo.getGrade()
-//                && details.get(i).getNoOfRejected() == newRowInfo.getNoOfRejected()
-//                && details.get(i).getNoOfBundles() == newRowInfo.getNoOfBundles()
-//                && details.get(i).getSupplierName() == newRowInfo.getSupplierName())
-//        )
-        Intent intent = new Intent(AcceptanceReport.this, AddNewRaw.class);
+        Intent intent = new Intent(AcceptanceReport.this, EditPage.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable(EDIT_RAW2, newRowInfo);
 //        bundle.putParcelable(EDIT_LIST, list);
         intent.putExtras(bundle);
         intent.putExtra(EDIT_FLAG, 11);
-        intent.putExtra(EDIT_LIST2, (Serializable) list);
-        //todo remove
+//        intent.putExtra(EDIT_LIST2, (Serializable) list);
         Log.e("look", "" + details.get(0).getTruckNo());
         startActivity(intent);
 
@@ -369,63 +352,6 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
 
     }
 
-    void removeDuplicate(List<String> list) {
-        Set<String> set = new HashSet<>(list);
-        list.clear();
-        list.addAll(set);
-    }
-
-    public void previewPics(int index, Context context) {
-        Pictures pics = new Pictures();
-        for (int i = 0; i < pictures.size(); i++) {
-//            if (pictures.get(i).getOrderNo().equals(orders.get(index).getOrderNo())) {
-//                pics = pictures.get(i);
-//                break;
-//            }
-        }
-        openPicDialog(pics, context);
-    }
-
-    public void openLargePicDialog(Bitmap picts, Context context) {
-        Dialog dialog = new Dialog(context);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(false);
-        dialog.setContentView(R.layout.pic_dialog2);
-        dialog.setCanceledOnTouchOutside(true);
-
-        ImageView imageView = dialog.findViewById(R.id.main_pic);
-        imageView.setImageBitmap(picts);
-
-        dialog.show();
-
-    }
-
-    public void openPicDialog(Pictures picts, Context context) {
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(false);
-        dialog.setContentView(R.layout.pic_dialog);
-        dialog.setCanceledOnTouchOutside(true);
-
-
-        HorizontalListView listView = dialog.findViewById(R.id.listview);
-
-        ArrayList<Bitmap> pics = new ArrayList<>();
-        pics.add(StringToBitMap(picts.getPic1()));
-        pics.add(StringToBitMap(picts.getPic2()));
-        pics.add(StringToBitMap(picts.getPic3()));
-        pics.add(StringToBitMap(picts.getPic4()));
-        pics.add(StringToBitMap(picts.getPic5()));
-        pics.add(StringToBitMap(picts.getPic6()));
-        pics.add(StringToBitMap(picts.getPic7()));
-        pics.add(StringToBitMap(picts.getPic8()));
-
-        PicturesAdapter adapter = new PicturesAdapter(context, pics);
-        listView.setAdapter(adapter);
-
-        dialog.show();
-
-    }
-
     public DatePickerDialog.OnDateSetListener openDatePickerDialog(final int flag) {
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -449,80 +375,6 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
 
         };
         return date;
-    }
-
-    public Bitmap StringToBitMap(String image) {
-        try {
-            byte[] encodeByte = Base64.decode(image, Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-            return bitmap;
-        } catch (Exception e) {
-            e.getMessage();
-            return null;
-        }
-    }
-
-    private class JSONTask2 extends AsyncTask<String, String, String> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            try {
-                String JsonResponse = null;
-                HttpClient client = new DefaultHttpClient();
-                HttpPost request = new HttpPost();
-                request.setURI(new URI("http://" + generalSettings.getIpAddress() + "/export.php"));//import 10.0.0.214
-
-                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-                nameValuePairs.add(new BasicNameValuePair("DELETE_ORDER", "1"));
-                nameValuePairs.add(new BasicNameValuePair("ORDER_NO", orderNo));
-                nameValuePairs.add(new BasicNameValuePair("BUNDLE_NO", bundleNo.toString()));
-
-                request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-
-                HttpResponse response = client.execute(request);
-
-                BufferedReader in = new BufferedReader(new
-                        InputStreamReader(response.getEntity().getContent()));
-
-                StringBuffer sb = new StringBuffer("");
-                String line = "";
-
-                while ((line = in.readLine()) != null) {
-                    sb.append(line);
-                }
-
-                in.close();
-
-                JsonResponse = sb.toString();
-                Log.e("tag", "" + JsonResponse);
-
-                return JsonResponse;
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            if (s != null) {
-                if (s.contains("DELETE ORDER SUCCESS")) {
-                    MHandler.deleteOrder(orderNo);
-                } else {
-                    Toast.makeText(AcceptanceReport.this, "Failed to export data!", Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                Toast.makeText(AcceptanceReport.this, "No internet connection!", Toast.LENGTH_SHORT).show();
-            }
-        }
     }
 
     public void slideUp(View view) {
@@ -586,12 +438,181 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
             count.setText("" + filtered.size());
             adapter2 = new AcceptanceReportAdapter(AcceptanceReport.this, filtered, details);
             list.setAdapter(adapter2);
-            totalCubic.setText("" + String.format("%.3f",sum));
+            totalCubic.setText("" + String.format("%.3f", sum));
 
 
         } catch (ParseException e) {
             e.printStackTrace();
         }
+    }
+
+    public void previewPics2(NewRowInfo info, Context context) {
+        previewLinearContext = context;
+        new BitmapImage2().execute(info);
+    }
+
+    private class BitmapImage2 extends AsyncTask<NewRowInfo, String, NewRowInfo> {
+        Settings generalSettings = new DatabaseHandler(previewLinearContext).getSettings();
+
+        @Override
+        protected NewRowInfo doInBackground(NewRowInfo... pictures) {
+
+            newRowInfoPic = pictures[0];
+            URL url;
+            Bitmap bitmap;
+            try {
+                if (!newRowInfoPic.equals("null")) {
+                    for (int i = 0; i < 8; i++) {
+
+                        switch (i) {
+                            case 0:
+                                if (pictures[0].getImageOne() != null) {//http://192.168.2.17:8088/woody/images/2342_img_1.png
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImageOne());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic11(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic11(bitmap);
+                                    }
+                                }
+                                break;
+                            case 1:
+                                if (pictures[0].getImageTwo() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImageTwo());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic22(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic22(bitmap);
+                                    }
+                                }
+                                break;
+                            case 2:
+                                if (pictures[0].getImageThree() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImageThree());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic33(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic33(bitmap);
+                                    }
+                                }
+                                break;
+                            case 3:
+                                if (pictures[0].getImageFour() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImageFour());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic44(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic44(bitmap);
+                                    }
+                                }
+                                break;
+                            case 4:
+                                if (pictures[0].getImageFive() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImageFive());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic55(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic55(bitmap);
+                                    }
+                                }
+                                break;
+                            case 5:
+                                if (pictures[0].getImageSix() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImageSix());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic66(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic66(bitmap);
+                                    }
+                                }
+                                break;
+                            case 6:
+                                if (pictures[0].getImageSeven() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImageSeven());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic77(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic77(bitmap);
+                                    }
+                                }
+                                break;
+                            case 7:
+                                if (pictures[0].getImageEight() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImageEight());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic88(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic88(bitmap);
+                                    }
+                                }
+                                break;
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                Log.e("fromclass2", "exception:doInBackground " + e.getMessage());
+                return null;
+            }
+            return newRowInfoPic;// BitmapFactory.decodeStream(in);
+        }
+
+        @Override
+        protected void onPostExecute(NewRowInfo pictures) {
+            Log.e("fromclass2", "exception:onPostExecute: " + pictures.getImageOne());
+            if (pictures == null)
+                Toast.makeText(previewLinearContext, "No image found!", Toast.LENGTH_SHORT).show();
+            else
+                openPicDialog2(pictures);
+
+        }
+    }
+
+    public void openPicDialog2(NewRowInfo picts) {
+        dialog = new Dialog(previewLinearContext);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setContentView(R.layout.pic_dialog);
+        HorizontalListView listView = dialog.findViewById(R.id.listview);
+        ImageView close = dialog.findViewById(R.id.picDialog_close);
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                newRowInfoPic.setPic11(null);
+                newRowInfoPic.setPic22(null);
+                newRowInfoPic.setPic33(null);
+                newRowInfoPic.setPic44(null);
+                newRowInfoPic.setPic55(null);
+                newRowInfoPic.setPic66(null);
+                newRowInfoPic.setPic77(null);
+                newRowInfoPic.setPic88(null);
+                dialog.dismiss();
+            }
+        });
+
+        ArrayList<Bitmap> pics = new ArrayList<>();
+        pics.add(picts.getPic11());
+        pics.add(picts.getPic22());
+        pics.add(picts.getPic33());
+        pics.add(picts.getPic44());
+        pics.add(picts.getPic55());
+        pics.add(picts.getPic66());
+        pics.add(picts.getPic77());
+        pics.add(picts.getPic88());
+
+
+        PicturesAdapter adapter = new PicturesAdapter(previewLinearContext, pics);
+        listView.setAdapter(adapter);
+
+        dialog.show();
+
     }
 
     public void onBackPressed() {
@@ -631,7 +652,9 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
 
                 // Read Server Response
                 while ((line = reader.readLine()) != null) {
+                    try{
                     sb.append(line);
+                    }catch (Exception e){}
                 }
 
                 String finalJson = sb.toString();

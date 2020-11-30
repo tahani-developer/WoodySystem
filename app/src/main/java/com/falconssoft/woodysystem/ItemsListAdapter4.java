@@ -1,18 +1,13 @@
 package com.falconssoft.woodysystem;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import android.util.Base64;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.NewRowInfo;
 
 import java.util.ArrayList;
@@ -54,7 +49,6 @@ public class ItemsListAdapter4 extends BaseAdapter {
 
     private class ViewHolder {
         TextView th, w, l, grade, pcs, bundle, rejected, supplier, cubic;
-        ImageView image;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -72,7 +66,6 @@ public class ItemsListAdapter4 extends BaseAdapter {
         holder.bundle = view.findViewById(R.id.bundles);
         holder.rejected = view.findViewById(R.id.rej);
         holder.supplier = view.findViewById(R.id.supplier);
-        holder.image = view.findViewById(R.id.image);
         holder.cubic = view.findViewById(R.id.item_row4_cubic);
 
         holder.th.setText("" + (int) itemsList.get(i).getThickness());
@@ -93,18 +86,6 @@ public class ItemsListAdapter4 extends BaseAdapter {
 //
 //        }
         return view;
-    }
-
-
-    public Bitmap StringToBitMap(String image) {
-        try {
-            byte[] encodeByte = Base64.decode(image, Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-            return bitmap;
-        } catch (Exception e) {
-            e.getMessage();
-            return null;
-        }
     }
 
 }

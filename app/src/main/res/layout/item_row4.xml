@@ -144,21 +144,6 @@
             android:textSize="15sp"
             />
 
-        <ImageView
-            android:id="@+id/image"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="0.25"
-            android:fontFamily="serif"
-            android:background="@drawable/pic"
-            android:layout_marginTop="2dp"
-            android:layout_marginStart="2dp"
-            android:layout_marginLeft="2dp"
-            android:text="@string/p_list"
-            android:textColor="@color/gray_dark_one"
-            android:textSize="15sp" />
-
-
     </TableRow>
 
     <!--    <RelativeLayout-->

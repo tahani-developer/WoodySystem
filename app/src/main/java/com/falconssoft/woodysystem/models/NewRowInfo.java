@@ -1,5 +1,7 @@
 package com.falconssoft.woodysystem.models;
 
+import android.graphics.Bitmap;
+
 import com.google.gson.annotations.SerializedName;
 
 import org.json.JSONException;
@@ -81,6 +83,39 @@ public class NewRowInfo implements Serializable {
     @SerializedName("NET_BUNDLES")
     private String netBundles;
 
+    @SerializedName("PIC1")
+    private String imageOne;
+
+    @SerializedName("PIC2")
+    private String imageTwo;
+
+    @SerializedName("PIC3")
+    private String imageThree;
+
+    @SerializedName("PIC4")
+    private String imageFour;
+
+    @SerializedName("PIC5")
+    private String imageFive;
+
+    @SerializedName("PIC6")
+    private String imageSix;
+
+    @SerializedName("PIC7")
+    private String imageSeven;
+
+    @SerializedName("PIC8")
+    private String imageEight;
+
+    private Bitmap pic11;
+    private Bitmap pic22;
+    private Bitmap pic33;
+    private Bitmap pic44;
+    private Bitmap pic55;
+    private Bitmap pic66;
+    private Bitmap pic77;
+    private Bitmap pic88;
+
     public NewRowInfo() {
     }
 
@@ -96,6 +131,70 @@ public class NewRowInfo implements Serializable {
         this.truckNo = truckNo;
         this.serial = serial;
 
+    }
+
+    public Bitmap getPic11() {
+        return pic11;
+    }
+
+    public void setPic11(Bitmap pic11) {
+        this.pic11 = pic11;
+    }
+
+    public Bitmap getPic22() {
+        return pic22;
+    }
+
+    public void setPic22(Bitmap pic22) {
+        this.pic22 = pic22;
+    }
+
+    public Bitmap getPic33() {
+        return pic33;
+    }
+
+    public void setPic33(Bitmap pic33) {
+        this.pic33 = pic33;
+    }
+
+    public Bitmap getPic44() {
+        return pic44;
+    }
+
+    public void setPic44(Bitmap pic44) {
+        this.pic44 = pic44;
+    }
+
+    public Bitmap getPic55() {
+        return pic55;
+    }
+
+    public void setPic55(Bitmap pic55) {
+        this.pic55 = pic55;
+    }
+
+    public Bitmap getPic66() {
+        return pic66;
+    }
+
+    public void setPic66(Bitmap pic66) {
+        this.pic66 = pic66;
+    }
+
+    public Bitmap getPic77() {
+        return pic77;
+    }
+
+    public void setPic77(Bitmap pic77) {
+        this.pic77 = pic77;
+    }
+
+    public Bitmap getPic88() {
+        return pic88;
+    }
+
+    public void setPic88(Bitmap pic88) {
+        this.pic88 = pic88;
     }
 
     public double getTotalCubic() {
@@ -282,6 +381,74 @@ public class NewRowInfo implements Serializable {
         this.netBundles = netBundles;
     }
 
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public String getImageOne() {
+        return imageOne;
+    }
+
+    public void setImageOne(String imageOne) {
+        this.imageOne = imageOne;
+    }
+
+    public String getImageTwo() {
+        return imageTwo;
+    }
+
+    public void setImageTwo(String imageTwo) {
+        this.imageTwo = imageTwo;
+    }
+
+    public String getImageThree() {
+        return imageThree;
+    }
+
+    public void setImageThree(String imageThree) {
+        this.imageThree = imageThree;
+    }
+
+    public String getImageFour() {
+        return imageFour;
+    }
+
+    public void setImageFour(String imageFour) {
+        this.imageFour = imageFour;
+    }
+
+    public String getImageFive() {
+        return imageFive;
+    }
+
+    public void setImageFive(String imageFive) {
+        this.imageFive = imageFive;
+    }
+
+    public String getImageSix() {
+        return imageSix;
+    }
+
+    public void setImageSix(String imageSix) {
+        this.imageSix = imageSix;
+    }
+
+    public String getImageSeven() {
+        return imageSeven;
+    }
+
+    public void setImageSeven(String imageSeven) {
+        this.imageSeven = imageSeven;
+    }
+
+    public String getImageEight() {
+        return imageEight;
+    }
+
+    public void setImageEight(String imageEight) {
+        this.imageEight = imageEight;
+    }
+
     public JSONObject getJsonData() {
 
         JSONObject jsonObject = new JSONObject();
@@ -322,6 +489,15 @@ public class NewRowInfo implements Serializable {
             jsonObject.put("REJECTED", "'" + totalRejectedNo + "'");
             jsonObject.put("SERIAL", "'" + serial + "'");
             jsonObject.put("NO_BUNDLES", "'" + netBundles + "'");
+
+            jsonObject.put("PIC1", "'" +imageOne+ "'");
+            jsonObject.put("PIC2", "'" +imageTwo+ "'");
+            jsonObject.put("PIC3", "'" +imageThree+ "'");
+            jsonObject.put("PIC4","'" + imageFour+ "'");
+            jsonObject.put("PIC5", "'" +imageFive+ "'");
+            jsonObject.put("PIC6", "'" +imageSix+ "'");
+            jsonObject.put("PIC7", "'" +imageSeven+ "'");
+            jsonObject.put("PIC8", "'" +imageEight+ "'");
 
         } catch (JSONException e) {
             e.printStackTrace();

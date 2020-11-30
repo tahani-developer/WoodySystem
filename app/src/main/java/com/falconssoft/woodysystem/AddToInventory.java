@@ -142,7 +142,6 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         textView.startAnimation(animation);
 
         checkIfEditItem();
-        new JSONTask3().execute();
     }
 
     @Override
@@ -211,7 +210,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                     bundleInfoList.add(newBundle);
 //                                    Log.e("date is", generateDate);
 
-                                    if (edieFlag == 55){
+                                    if (edieFlag == 55) {
                                         locationText = editPlannedAndBundleInfo.getLocation();
                                         chooseSpinnersContent();
                                         bundleNoString = "" + gradeString
@@ -270,7 +269,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
         edieFlag = getIntent().getIntExtra(EDIT_FLAG_BUNDLE, 0);
         if (edieFlag == 55) {
             Bundle bundle = getIntent().getExtras();
-             editPlannedAndBundleInfo = (BundleInfo) bundle.getSerializable(EDIT_BUNDLE);
+            editPlannedAndBundleInfo = (BundleInfo) bundle.getSerializable(EDIT_BUNDLE);
 
             oldBundleNoString = editPlannedAndBundleInfo.getBundleNo();
             thickness.setText("" + editPlannedAndBundleInfo.getThickness());
@@ -289,7 +288,8 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
             int position3 = descriptionaAdapter.getPosition(editPlannedAndBundleInfo.getDescription());
             descriptionSpinner.setSelection(position3);
 
-        }
+        } else
+            new JSONTask3().execute();
     }
 
 
@@ -584,7 +584,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                                                     , generalSettings.getUserNo()
                                                     , packingListText
                                                     , 0
-                                                    );//presenter.getSerialNo());//SettingsFile.serialNumber
+                                            );//presenter.getSerialNo());//SettingsFile.serialNumber
                                             bundleInfoList.clear();
                                             bundleInfoList.add(newBundle);
 

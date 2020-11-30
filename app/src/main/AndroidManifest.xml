@@ -12,17 +12,10 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.falconssoft.woodysystem.provider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
-        </provider>
+        <activity android:name=".stage_one.EditPage"></activity>
 
-        <activity android:name=".stage_two.StageTwoReports"></activity>
+        <activity android:name=".stage_two.StageTwoReports" />
+
         <activity
             android:name=".LoginActivity"
             android:windowSoftInputMode="stateAlwaysHidden">
@@ -31,9 +24,8 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-        <activity android:name=".stage_two.StageTwo"/>
+        <activity android:name=".stage_two.StageTwo" />
         <activity android:name=".stage_two.AddNewSupplier" />
         <activity
             android:name=".reports.AcceptanceInfoReport"
@@ -43,14 +35,12 @@
         <activity android:name=".stage_one.StageOne" />
         <activity
             android:name=".stage_one.AddNewRaw"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity android:name=".stage_one.AcceptRow" />
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:screenOrientation="sensorLandscape"/>
         <activity
             android:name=".reports.InventoryReport"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="adjustNothing|stateAlwaysHidden" />
-
-
         <activity
             android:name=".reports.AcceptanceReport"
             android:screenOrientation="sensorLandscape"
@@ -80,15 +70,14 @@
         <activity
             android:name=".stage_two.PlannedPackingList"
             android:screenOrientation="sensorLandscape"
-            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden"/>
+            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden" />
         <activity android:name=".stage_two.AddNewCustomer" />
         <activity
             android:name=".Stage3"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".LoadingOrder"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
-            />
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
         <activity
             android:name=".LoadingOrder2"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
@@ -98,6 +87,15 @@
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".MainActivity" />
         <activity android:name=".QrReader" />
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.falconssoft.woodysystem.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
 
         <uses-library
             android:name="org.apache.http.legacy"
@@ -124,9 +122,9 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+
     <uses-permission
         android:name="android.permission.CONNECTIVITY_INTERNAL"
         tools:ignore="ProtectedPermissions" />
-
 
 </manifest>

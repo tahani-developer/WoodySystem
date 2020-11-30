@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.falconssoft.woodysystem.models.BundleInfo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,10 +22,6 @@ public class PicturesAdapter extends BaseAdapter {
     public PicturesAdapter(Context context, List<Bitmap> itemsList) {
         this.context = context;
         this.itemsList = itemsList;
-    }
-
-    public PicturesAdapter() {
-
     }
 
     public void setItemsList(List<Bitmap> itemsList) {
