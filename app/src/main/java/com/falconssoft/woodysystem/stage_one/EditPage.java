@@ -142,7 +142,7 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
     private RecyclerView rowsRecyclerView;
     private EditPageAdapter editPageAdapter;
 
-    private NewRowInfo  imagesRowInfo;
+    private NewRowInfo imagesRowInfo;
     private String oldTruck = "", editSerial = "";// for edit
     private Dialog dialog;
 
@@ -388,7 +388,7 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
         }
     }
 
-    public void deleteRaw(int index){
+    public void deleteRaw(int index) {
         AlertDialog.Builder builder = new AlertDialog.Builder(EditPage.this);
         builder.setMessage("Are you want delete this row?");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -397,6 +397,15 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
 //                            tableLayout.removeAllViews();
                 editList.remove(index);
                 editPageAdapter.notifyDataSetChanged();
+
+                netRejectedString = 0;
+                netBundlesString = 0;
+                for (int n = 0; n < editList.size(); n++) {
+                    netRejectedString += editList.get(n).getNoOfRejected();
+                    netBundlesString += editList.get(n).getNoOfBundles();
+                }
+                totalRejected.setText("" + netRejectedString);
+                totalBundles.setText("" + netBundlesString);
             }
         });
         builder.show();
@@ -757,7 +766,7 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
                             masterData = newRowList.get(0).getJsonDataMaster();
 //                                Log.e("newRowList", "" + newRowList.get(0).getTruckNo());
 
-                                new JSONTask2().execute();// update
+                            new JSONTask2().execute();// update
 
                         } else {
                             acceptanceDate.setError("Required!");
@@ -1474,7 +1483,7 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
                 }
 
                 String finalJson = sb.toString();
-                Log.e("JSONTask3", url +" : " + finalJson);
+                Log.e("JSONTask3", url + " : " + finalJson);
 
                 editList.clear();
                 Gson gson = new Gson();

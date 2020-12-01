@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.v4.content.FileProvider;
+import android.widget.Toast;
 
 import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.NewRowInfo;
@@ -93,7 +94,11 @@ public class ExportToExcel {
         Uri uri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".provider", path);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intent.setDataAndType(uri, "application/vnd.ms-excel");//intent.setDataAndType(Uri.fromFile(path), "application/pdf");
+        try{
         context.startActivity(intent);
+        }catch (Exception e){
+            Toast.makeText(context, "Excel program needed!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     // 0

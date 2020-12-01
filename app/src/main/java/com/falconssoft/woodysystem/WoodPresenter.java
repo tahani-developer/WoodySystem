@@ -19,6 +19,7 @@ import com.android.volley.toolbox.Volley;
 import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.Settings;
 import com.falconssoft.woodysystem.models.Users;
+import com.falconssoft.woodysystem.reports.AcceptanceReport;
 import com.falconssoft.woodysystem.reports.BundlesReport;
 import com.falconssoft.woodysystem.reports.InventoryReport;
 
@@ -56,12 +57,13 @@ public class WoodPresenter {
     private StringRequest packingListJsonObjectRequest;
     private String urlPackingList;
 
-    private StringRequest suppliersJsonObjectRequest;
-    private String urlGetSuppliers;
+    private StringRequest truckReportJsonObjectRequest;
+    private String urlTruckReport;
 
     private LoginActivity loginActivity;
     private InventoryReport inventoryReport;//= new InventoryReport();
     private BundlesReport bundlesReport;
+    private AcceptanceReport acceptanceReport;
 
     private static String serialNo;
     private static List<BundleInfo> bundleReportList = new ArrayList<>();

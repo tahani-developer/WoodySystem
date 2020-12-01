@@ -122,6 +122,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
 
         progressDialog = new ProgressDialog(this, R.style.MyAlertDialogStyle);
         progressDialog.setMessage("Please Waiting...");
+        progressDialog.setCanceledOnTouchOutside(false);
 
         MHandler = new DatabaseHandler(AcceptanceReport.this);
         generalSettings = MHandler.getSettings();
@@ -625,7 +626,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
 
         @Override
         protected void onPreExecute() {
-            super.onPreExecute();
+//            super.onPreExecute();
             progressDialog.show();
 
         }
@@ -647,7 +648,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
                 reader = new BufferedReader(new
                         InputStreamReader(conn.getInputStream()));
 
-                StringBuilder sb = new StringBuilder();
+                StringBuffer sb = new StringBuffer();
                 String line = null;
 
                 // Read Server Response
@@ -827,7 +828,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
             detailsListBasedOnSerial = new ArrayList<>();
 
             try {
-                // http://192.168.2.17:8088/woody/import.php?FLAG=5
+                // http://192.168.2.17/woody/import.php?FLAG=6&SERIAL=
                 // http://5.189.130.98:8085/import.php?FLAG=5
 
                 URL url = new URL("http://" + new DatabaseHandler(previewContext).getSettings().getIpAddress() + "/import.php?FLAG=6&SERIAL=" + previewSerial);
