@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -41,28 +40,14 @@ import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.models.NewRowInfo;
 import com.falconssoft.woodysystem.models.Pictures;
 import com.falconssoft.woodysystem.models.Settings;
-import com.falconssoft.woodysystem.stage_one.AddNewRaw;
 import com.falconssoft.woodysystem.stage_one.EditPage;
 import com.google.gson.Gson;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.ParseException;
@@ -70,12 +55,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
 
 import static com.falconssoft.woodysystem.reports.AcceptanceInfoReport.EDIT_FLAG;
 
@@ -637,7 +618,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
             BufferedReader reader = null;
 
             try {
-                // http://192.168.2.17:8088/woody/import.php?FLAG=5
+                // http://192.168.2.17:8088/woody/import.php?FLAG=55
                 // http://5.189.130.98:8085/import.php?FLAG=5
 
                 URL url = new URL("http://" + generalSettings.getIpAddress() + "/import.php?FLAG=55");

@@ -93,13 +93,12 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
     private static List<SupplierInfo> suppliers;
     private List<SupplierInfo> arraylist2;
     private JSONObject plannedPLJObject;
-    TextView customerD, supplierD;
     private RecyclerView recycler;
 
     TableLayout tableLayout2;
     private String custLocal, packLiastLocal, destinationLocal, orderNoLocal, thicknessLocal, widthLocal, lengthLocal, noOfPiecesLocal;
     private String custL, packLiastL, destinationL, orderNoL, thicknessL, widthL, lengthL, noOfPiecesL, noOfBundlesL;
-    TextView piecesD, lengthD, widthD, thickD;
+    private TextView piecesD, lengthD, widthD, thickD, customerD, supplierD, total, totalCustomers;
     SimpleDateFormat sdf;
     String today;
     private ArrayList<String> gradeList = new ArrayList<>();
@@ -843,6 +842,8 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
         SearchView searchView = searchDialog.findViewById(R.id.search_supplier_searchView);
         TextView close = searchDialog.findViewById(R.id.search_supplier_close);
+        totalCustomers = searchDialog.findViewById(R.id.total_customers);
+//        totalCustomers.setText("" + customers.size());
 
         recyclerView = searchDialog.findViewById(R.id.search_supplier_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -883,7 +884,9 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
         SearchView searchView = searchDialog2.findViewById(R.id.search_supplier_searchView);
         TextView close = searchDialog2.findViewById(R.id.search_supplier_close);
+        total = searchDialog2.findViewById(R.id.total_suppliers);
 
+//        total.setText("" + suppliers.size());
         recyclerView = searchDialog2.findViewById(R.id.search_supplier_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter3 = new SupplierAdapter(1, this, suppliers);
@@ -1501,6 +1504,9 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
             if (result != null) {
                 Log.e("result", "*****************" + result.size());
+
+                if (totalCustomers != null)
+                    totalCustomers.setText("" + customers.size());
                 adapter.notifyDataSetChanged();
             } else {
                 Toast.makeText(PlannedPackingList.this, "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();
@@ -1887,6 +1893,8 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
             if (result != null) {
                 Log.e("result", "*****************" + result.size());
+                if (total != null)
+                    total.setText("" + suppliers.size());
                 adapter3.notifyDataSetChanged();
             } else {
                 Toast.makeText(PlannedPackingList.this, "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();

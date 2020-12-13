@@ -85,7 +85,7 @@ public class LoadingOrderReport extends AppCompatActivity implements View.OnClic
     private ProgressDialog progressDialog;
     private TextView textView, rowsCount, search, exportToExcel;
     private static LinearLayout linearLayout, headerLinear;
-    private EditText from, to, searchBundleNo, packingList, truckNo, containerNo;
+    private EditText from, to, searchBundleNo, packingList, truckNo, containerNo, destination;
     private Button arrow;
     //    private static HorizontalListView listView;
     private static ListView listView;
@@ -99,7 +99,7 @@ public class LoadingOrderReport extends AppCompatActivity implements View.OnClic
     private Calendar myCalendar;
     Spinner location;
     private ArrayAdapter<String> locationAdapter;
-    private String loc = "", searchBundleNoString = "", orderNo, myFormat, packingListText = "", truckNoText = "", containerNoText = "";
+    private String loc = "", searchBundleNoString = "", orderNo, myFormat, packingListText = "", truckNoText = "", containerNoText = "", destinationText = "";
     private Settings generalSettings;
     private JSONArray bundleNo = new JSONArray();
     private JSONObject updateOrder = new JSONObject();
@@ -144,6 +144,7 @@ public class LoadingOrderReport extends AppCompatActivity implements View.OnClic
         truckNo = findViewById(R.id.loadingOrder_truckNo);
         containerNo = findViewById(R.id.loadingOrder_containerNo);
         exportToExcel = findViewById(R.id.loading_order_report_pdf);
+        destination = findViewById(R.id.loadingOrder_destination);
 
         myFormat = "dd/MM/yyyy";
         sdf = new SimpleDateFormat(myFormat, Locale.US);
@@ -196,6 +197,7 @@ public class LoadingOrderReport extends AppCompatActivity implements View.OnClic
         packingList.addTextChangedListener(new WatchTextChange(packingList));
         truckNo.addTextChangedListener(new WatchTextChange(truckNo));
         containerNo.addTextChangedListener(new WatchTextChange(containerNo));
+        destination.addTextChangedListener(new WatchTextChange(destination));
 
 //        fillTable(orders);
 
@@ -207,7 +209,10 @@ public class LoadingOrderReport extends AppCompatActivity implements View.OnClic
             case R.id.loading_order_report_pdf: {
                 SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd_hhmmss");
                 Calendar calendar = Calendar.getInstance();
-                new ExportToPDF(this).exportLoadingOrderReport(bundles, format.format(calendar.getTime()));
+                if (filtered != null && filtered.size() > 0)
+                    new ExportToPDF(this).exportLoadingOrderReport(filtered, format.format(calendar.getTime()));
+                else
+                    Toast.makeText(previewLinearContext, "Empty list", Toast.LENGTH_SHORT).show();
             }
             break;
             case R.id.loadingOrder_report_search: {
@@ -275,6 +280,11 @@ public class LoadingOrderReport extends AppCompatActivity implements View.OnClic
                     filters(0);
 //                    else
 //                        filters(2);
+                    break;
+                case R.id.loadingOrder_destination:
+                    destinationText = destination.getText().toString().toLowerCase();
+//                    if (containerNo.getText().length() >= 2)
+                    filters(0);
                     break;
             }
 
@@ -569,13 +579,14 @@ public class LoadingOrderReport extends AppCompatActivity implements View.OnClic
                         if (orders.get(k).getOrderNo().contains(packingListText) || packingListText.equals(""))
                             if (orders.get(k).getPlacingNo().toLowerCase().contains(truckNoText) || truckNoText.equals(""))
                                 if (orders.get(k).getContainerNo().toLowerCase().contains(containerNoText) || containerNoText.equals(""))
-                                    if ((formatDate(orders.get(k).getDateOfLoad()).after(formatDate(fromDate))
-                                            || formatDate(orders.get(k).getDateOfLoad()).equals(formatDate(fromDate)) || fromDate.equals("")) &&
-                                            (formatDate(orders.get(k).getDateOfLoad()).before(formatDate(toDate))
-                                                    || formatDate(orders.get(k).getDateOfLoad()).equals(formatDate(toDate)) || toDate.equals("")) &&
-                                            (loc.equals("") || loc.equals(orders.get(k).getLocation()))) {
-                                        filtered.add(orders.get(k));
-                                    }
+                                    if (orders.get(k).getDestination().toLowerCase().contains(destinationText) || destinationText.equals(""))
+                                        if ((formatDate(orders.get(k).getDateOfLoad()).after(formatDate(fromDate))
+                                                || formatDate(orders.get(k).getDateOfLoad()).equals(formatDate(fromDate)) || fromDate.equals("")) &&
+                                                (formatDate(orders.get(k).getDateOfLoad()).before(formatDate(toDate))
+                                                        || formatDate(orders.get(k).getDateOfLoad()).equals(formatDate(toDate)) || toDate.equals("")) &&
+                                                (loc.equals("") || loc.equals(orders.get(k).getLocation()))) {
+                                            filtered.add(orders.get(k));
+                                        }
                     }
 
                 } catch (Exception e) {
@@ -591,6 +602,7 @@ public class LoadingOrderReport extends AppCompatActivity implements View.OnClic
             Log.e("set", "" + filtered.size());
             adapter2 = new LoadingOrderReportAdapter(LoadingOrderReport.this, filtered, bundles);
             list.setAdapter(adapter2);
+            rowsCount.setText("" + filtered.size());
 
 //            ordersTable.removeAllViews();
 //            fillTable(filtered);
@@ -686,11 +698,18 @@ public class LoadingOrderReport extends AppCompatActivity implements View.OnClic
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.pic_dialog);
-        dialog.setCanceledOnTouchOutside(true);
+        dialog.setCanceledOnTouchOutside(false);
 
 
         HorizontalListView listView = dialog.findViewById(R.id.listview);
+        ImageView close = dialog.findViewById(R.id.picDialog_close);
 
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
 
         ArrayList<Bitmap> pics = new ArrayList<>();
         pics.add(picts.getPic11());

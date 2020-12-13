@@ -88,7 +88,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
     private RecyclerView recyclerView, recyclerView2;
     private RecyclerView recycler;
     private EditText paclingList, dest, orderNo;
-    private TextView searchCustomer, searchSupplier, noBundles, totalCBM, delete, export, piecesOrder, cubicOrder, noBundlesOrder, exportToExcel;
+    private TextView searchCustomer, searchSupplier, noBundles, totalCBM, delete, export, piecesOrder, cubicOrder, noBundlesOrder, exportToExcel, total, totalCustomers;
 
     private TableLayout tableLayout, headerTableLayout;
     private TableRow tableRow;
@@ -312,6 +312,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
 
                 SearchView searchView = searchDialog.findViewById(R.id.search_supplier_searchView);
                 TextView close = searchDialog.findViewById(R.id.search_supplier_close);
+                totalCustomers = searchDialog.findViewById(R.id.total_customers);
 
                 recyclerView = searchDialog.findViewById(R.id.search_supplier_recyclerView);
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -356,7 +357,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
 
                 break;
             case R.id.planned_reportOne_exportToExcel:
-                ExportToExcel.getInstance().createExcelFile(this, "loaded_packing_list_report.xls",3 ,PLListFiltered,null);
+                ExportToExcel.getInstance().createExcelFile(this, "loaded_packing_list_report.xls", 3, PLListFiltered, null);
                 break;
 
         }
@@ -371,6 +372,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
 
         SearchView searchView = searchDialog2.findViewById(R.id.search_supplier_searchView);
         TextView close = searchDialog2.findViewById(R.id.search_supplier_close);
+        total = searchDialog2.findViewById(R.id.total_suppliers);
 
         recyclerView2 = searchDialog2.findViewById(R.id.search_supplier_recyclerView);
         recyclerView2.setLayoutManager(new LinearLayoutManager(this));
@@ -658,6 +660,8 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
 
             if (result != null) {
                 Log.e("result", "*****************" + result.size());
+                if (totalCustomers != null)
+                    totalCustomers.setText("" + customers.size());
                 adapter.notifyDataSetChanged();
             } else {
                 Toast.makeText(LoadPackingList.this, "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();
@@ -1098,6 +1102,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+    // ********************************* get Suppliers ***************************
     private class JSONTask4 extends AsyncTask<String, String, List<SupplierInfo>> {
 
         @Override
@@ -1184,6 +1189,8 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
 
             if (result != null) {
                 Log.e("result", "*****************" + result.size());
+                if (total != null)
+                    total.setText("" + suppliers.size());
                 adapter3.notifyDataSetChanged();
             } else {
                 Toast.makeText(LoadPackingList.this, "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();
@@ -1195,11 +1202,11 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
     void calculateTotal() {
         int sumOfBundles = 0;
         double totalCbm = 0;
-        for (int i = 0; i < PLListFiltered.size(); i++){
-                sumOfBundles += PLListFiltered.get(i).getNoOfCopies();
-                totalCbm += PLListFiltered.get(i).getCubic();
-                //totalCbm += (PLListFiltered.get(i).getThickness() * PLListFiltered.get(i).getWidth() * PLListFiltered.get(i).getLength() * PLListFiltered.get(i).getNoOfPieces() * PLListFiltered.get(i).getNoOfCopies());
-            }
+        for (int i = 0; i < PLListFiltered.size(); i++) {
+            sumOfBundles += PLListFiltered.get(i).getNoOfCopies();
+            totalCbm += PLListFiltered.get(i).getCubic();
+            //totalCbm += (PLListFiltered.get(i).getThickness() * PLListFiltered.get(i).getWidth() * PLListFiltered.get(i).getLength() * PLListFiltered.get(i).getNoOfPieces() * PLListFiltered.get(i).getNoOfCopies());
+        }
 
         noBundles.setText("" + sumOfBundles);
         totalCBM.setText("" + String.format("%.3f", (totalCbm)));

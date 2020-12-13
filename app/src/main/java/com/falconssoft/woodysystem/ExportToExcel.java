@@ -376,8 +376,8 @@ public class ExportToExcel {
                     sheet.addCell(new Label(2, i + 2, ""+findSupplier(listRow,list.get(i))));
                     sheet.addCell(new Label(3, i + 2, ""+list.get(i).getTtnNo()));
                     sheet.addCell(new Label(5, i + 2, ""+list.get(i).getDate()));
-                    sheet.addCell(new Label(6, i + 2,""+ list.get(i).getNoOfBundles()));
-                    sheet.addCell(new Label(8, i + 2, ""+list.get(i).getNoOfRejected()));
+                    sheet.addCell(new Label(6, i + 2,""+ list.get(i).getNetBundles()));
+                    sheet.addCell(new Label(8, i + 2, ""+list.get(i).getTotalRejectedNo()));
 
                     sheet.mergeCells(0,i + 2, 1, i + 2);// col , row, to col , to row
                     sheet.mergeCells(3,i + 2, 4, i + 2);// col , row, to col , to row

@@ -51,6 +51,7 @@
         android:orientation="horizontal">
 
         <TextView
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="1dp"
@@ -70,6 +71,18 @@
             android:layout_weight="4"
             android:background="@color/orange"
             android:text="@string/cust"
+            android:textSize="18sp"
+            android:padding="5dp"
+            android:textColor="@color/white"
+            app:fontFamily="serif" />
+
+        <TextView
+            android:id="@+id/total_customers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:background="@color/orange"
             android:textSize="18sp"
             android:padding="5dp"
             android:textColor="@color/white"

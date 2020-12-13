@@ -1156,7 +1156,7 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
     void showSnackbar(String text, boolean showImage) {
         snackbar = Snackbar.make(coordinatorLayout, Html.fromHtml("<font color=\"#3167F0\">" + text + "</font>"), Snackbar.LENGTH_SHORT);//Updated Successfully
         View snackbarLayout = snackbar.getView();
-        TextView textViewSnackbar = (TextView) snackbarLayout.findViewById(android.support.design.R.id.snackbar_text);
+        TextView textViewSnackbar = (TextView) snackbarLayout.findViewById(R.id.snackbar_text);
         if (showImage)
             textViewSnackbar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check_24dp, 0, 0, 0);
         snackbar.show();

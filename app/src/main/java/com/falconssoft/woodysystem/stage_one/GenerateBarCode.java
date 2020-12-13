@@ -248,12 +248,12 @@ public class GenerateBarCode extends AppCompatActivity {
 //        for (int i = 0; i < presenter.getBundleReportList().size(); i++)
 //            bundleInfos.add(presenter.getBundleReportList().get(i));
 
-        for(int i=0;i<5;i++){
+        for (int i = 0; i < 5; i++) {
 
             BundleInfo bundleInfo = new BundleInfo();
-            if(i==4){
+            if (i == 4) {
                 bundleInfo.setThickness(38.124);//38.124
-            }else{
+            } else {
                 bundleInfo.setThickness(38.0);
             }
 
@@ -261,7 +261,7 @@ public class GenerateBarCode extends AppCompatActivity {
             bundleInfo.setLength(547.0);
             bundleInfo.setGrade("Fresh");
             bundleInfo.setNoOfPieces(100.0);
-            bundleInfo.setBundleNo("FRAmm38.100.547.100."+(9+i));
+            bundleInfo.setBundleNo("FRAmm38.100.547.100." + (9 + i));
             bundleInfo.setLocation("Amman");
             bundleInfo.setArea("Zone1");
             bundleInfo.setBarcode("");
@@ -269,7 +269,7 @@ public class GenerateBarCode extends AppCompatActivity {
 //                      bundleInfo.setPicture(innerObject.getString("PIC"));
             bundleInfo.setAddingDate("");
             bundleInfo.setUserNo("");
-            bundleInfo.setSerialNo((9+i)+"");
+            bundleInfo.setSerialNo((9 + i) + "");
             bundleInfos.add(bundleInfo);
         }
 
@@ -585,10 +585,10 @@ public class GenerateBarCode extends AppCompatActivity {
 
             //Step 4 Add content
             int ispage = 0;
-            for (int i = 0; i < bundleInfoForPrint.size(); i+=2) {
+            for (int i = 0; i < bundleInfoForPrint.size(); i += 2) {
                 if (bundleInfoForPrint.get(i).getIsPrinted() != 1) {
                     Bitmap bitmap = writeBarcode(String.valueOf(bundleInfoForPrint.get(i).getBundleNo()), String.valueOf(bundleInfoForPrint.get(i).getLength()), String.valueOf(bundleInfoForPrint.get(i).getWidth()),
-                            String.valueOf(bundleInfoForPrint.get(i).getThickness()), String.valueOf(bundleInfoForPrint.get(i).getGrade()), String.valueOf(bundleInfoForPrint.get(i).getNoOfPieces()),"Supplier Name", String.valueOf(bundleInfoForPrint.get(i).getNoOfPieces()));
+                            String.valueOf(bundleInfoForPrint.get(i).getThickness()), String.valueOf(bundleInfoForPrint.get(i).getGrade()), String.valueOf(bundleInfoForPrint.get(i).getNoOfPieces()), "Supplier Name", String.valueOf(bundleInfoForPrint.get(i).getNoOfPieces()));
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
                     Image signature;
@@ -596,23 +596,23 @@ public class GenerateBarCode extends AppCompatActivity {
                     signature.setAbsolutePosition(20f, 450f);
                     signature.scalePercent(120f);
                     signature.setRotationDegrees(90f);
-            signature.setRotation(0f);
-            signature.setPaddingTop(10);
+                    signature.setRotation(0f);
+                    signature.setPaddingTop(10);
                     document.add(signature);
 
-                    if ((i + 1)< bundleInfoForPrint.size()){
-                        Bitmap bitmap2 = writeBarcode(String.valueOf(bundleInfoForPrint.get(i+1).getBundleNo()), String.valueOf(bundleInfoForPrint.get(i+1).getLength()), String.valueOf(bundleInfoForPrint.get(i+1).getWidth()),
-                                String.valueOf(bundleInfoForPrint.get(i+1).getThickness()), String.valueOf(bundleInfoForPrint.get(i+1).getGrade()), String.valueOf(bundleInfoForPrint.get(i+1).getNoOfPieces()),"Supplier Name", String.valueOf(bundleInfoForPrint.get(i+1).getNoOfPieces()));
-                    ByteArrayOutputStream stream2 = new ByteArrayOutputStream();
-                    bitmap2.compress(Bitmap.CompressFormat.PNG, 100, stream2);
-                    Image signature2;
-                    signature2 = Image.getInstance(stream2.toByteArray());
-                    signature2.setAbsolutePosition(20f, 0f);
-                    signature2.scalePercent(120f);
+                    if ((i + 1) < bundleInfoForPrint.size()) {
+                        Bitmap bitmap2 = writeBarcode(String.valueOf(bundleInfoForPrint.get(i + 1).getBundleNo()), String.valueOf(bundleInfoForPrint.get(i + 1).getLength()), String.valueOf(bundleInfoForPrint.get(i + 1).getWidth()),
+                                String.valueOf(bundleInfoForPrint.get(i + 1).getThickness()), String.valueOf(bundleInfoForPrint.get(i + 1).getGrade()), String.valueOf(bundleInfoForPrint.get(i + 1).getNoOfPieces()), "Supplier Name", String.valueOf(bundleInfoForPrint.get(i + 1).getNoOfPieces()));
+                        ByteArrayOutputStream stream2 = new ByteArrayOutputStream();
+                        bitmap2.compress(Bitmap.CompressFormat.PNG, 100, stream2);
+                        Image signature2;
+                        signature2 = Image.getInstance(stream2.toByteArray());
+                        signature2.setAbsolutePosition(20f, 0f);
+                        signature2.scalePercent(120f);
 //                    signature2.setRotationDegrees(90f);
                         signature2.setPaddingTop(10);
-                    document.add(signature2);
-                }
+                        document.add(signature2);
+                    }
                     document.newPage();
                     ispage = 1;
                 }
@@ -647,14 +647,14 @@ public class GenerateBarCode extends AppCompatActivity {
 //        printManager.print(jobName, pda, attrib);
 //    }
 
-    public Bitmap writeBarcode(String data, String length, String width, String thic, String grades, String pcs,String SuplierName,String serialNo) {
+    public Bitmap writeBarcode(String data, String length, String width, String thic, String grades, String pcs, String SuplierName, String serialNo) {
         final Dialog dialog = new Dialog(GenerateBarCode.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.barcode_design_stage_one);
-        TextView companyName, bundelNo, TLW, pcsNo, grade,RejectNo;
+        TextView companyName, bundelNo, TLW, pcsNo, grade, RejectNo;
 
-        RejectNo= (TextView) dialog.findViewById(R.id.RejectNo);
+        RejectNo = (TextView) dialog.findViewById(R.id.RejectNo);
         companyName = (TextView) dialog.findViewById(R.id.companyName);
         bundelNo = (TextView) dialog.findViewById(R.id.bundelNo);
         TLW = (TextView) dialog.findViewById(R.id.TLW);
@@ -668,12 +668,12 @@ public class GenerateBarCode extends AppCompatActivity {
         pcsNo.setText(pcs);
         grade.setText(grades);
 
-        String thic2=isContenValueAfterDot(thic);
-        String width2=isContenValueAfterDot(width);
-        String length2=isContenValueAfterDot(length);
+        String thic2 = isContenValueAfterDot(thic);
+        String width2 = isContenValueAfterDot(width);
+        String length2 = isContenValueAfterDot(length);
 
 
-        RejectNo.setText(thic2 + "." + width2 + "." + length2+"."+pcs+"."+serialNo);
+        RejectNo.setText(thic2 + "." + width2 + "." + length2 + "." + pcs + "." + serialNo);
 
         LinearLayout linearView = (LinearLayout) dialog.findViewById(R.id.design);
 
@@ -710,17 +710,17 @@ public class GenerateBarCode extends AppCompatActivity {
 
     }
 
-    String isContenValueAfterDot(String string){
+    String isContenValueAfterDot(String string) {
 
-        String isConten="";
-        String afterDot=string.substring(string.indexOf(".")+1,string.length());
-        Log.e("afterDot",""+afterDot+"      "+string);
-        if(!(Integer.parseInt(afterDot)>0)){
-            isConten=string.substring(0,string.indexOf("."));
-        }else{
-            isConten=string;
+        String isConten = "";
+        String afterDot = string.substring(string.indexOf(".") + 1, string.length());
+        Log.e("afterDot", "" + afterDot + "      " + string);
+        if (!(Integer.parseInt(afterDot) > 0)) {
+            isConten = string.substring(0, string.indexOf("."));
+        } else {
+            isConten = string;
         }
-        Log.e("afterDotreturn",""+afterDot+"      "+isConten);
+        Log.e("afterDotreturn", "" + afterDot + "      " + isConten);
 
         return isConten;
 

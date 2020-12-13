@@ -27,8 +27,8 @@ import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextUtils;
@@ -517,8 +517,8 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
         gradeList.add("KD");
         gradeList.add("S4S");
         gradeList.add("AST");
-        gradeList.add("KD Reject");
-        gradeList.add("KD Blue Stain");
+//        gradeList.add("KD Reject");
+//        gradeList.add("KD Blue Stain");
         gradeList.add("Second Sort");
         gradeAdapter = new ArrayAdapter<String>(this, R.layout.spinner_layout, gradeList);
         gradeAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
@@ -979,7 +979,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
     public void updatedPackingList() {
         snackbar = Snackbar.make(containerLayout, Html.fromHtml("<font color=\"#3167F0\">Updated Successfully</font>"), Snackbar.LENGTH_SHORT);
         View snackbarLayout = snackbar.getView();
-        TextView textViewSnackbar = (TextView) snackbarLayout.findViewById(android.support.design.R.id.snackbar_text);
+        TextView textViewSnackbar = (TextView) snackbarLayout.findViewById(R.id.snackbar_text);
         textViewSnackbar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check_24dp, 0, 0, 0);
 //                    textView.setCompoundDrawablePadding(10);//getResources().getDimensionPixelOffset(R.dimen.snackbar_icon_padding
         snackbar.show();
@@ -1588,7 +1588,7 @@ public class InventoryReport extends AppCompatActivity implements AdapterView.On
                     }
                     snackbar = Snackbar.make(containerLayout, Html.fromHtml("<font color=\"#3167F0\">Deleted Successfully</font>"), Snackbar.LENGTH_SHORT);
                     View snackbarLayout = snackbar.getView();
-                    TextView textViewSnackbar = (TextView) snackbarLayout.findViewById(android.support.design.R.id.snackbar_text);
+                    TextView textViewSnackbar = (TextView) snackbarLayout.findViewById(R.id.snackbar_text);
                     textViewSnackbar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check_24dp, 0, 0, 0);
 //                    textView.setCompoundDrawablePadding(10);//getResources().getDimensionPixelOffset(R.dimen.snackbar_icon_padding
                     snackbar.show();

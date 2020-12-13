@@ -82,8 +82,8 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
     private RecyclerView recycler;
     private EditText paclingList, dest, orderNo;
     private TextView searchCustomer, searchSupplier, noBundles, totalCBM, delete, piecesOrder
-            , cubicOrder, noBundlesOrder, exportToExcel;
-    ;
+            , cubicOrder, noBundlesOrder, exportToExcel, total, totalCustomers;
+
     private TableLayout tableLayout, headerTableLayout;
     private TableRow tableRow;
     private CustomerAdapter adapter;
@@ -297,6 +297,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
 
                 SearchView searchView = searchDialog.findViewById(R.id.search_supplier_searchView);
                 TextView close = searchDialog.findViewById(R.id.search_supplier_close);
+                totalCustomers = searchDialog.findViewById(R.id.total_customers);
 
                 recyclerView = searchDialog.findViewById(R.id.search_supplier_recyclerView);
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -353,6 +354,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
 
         SearchView searchView = searchDialog2.findViewById(R.id.search_supplier_searchView);
         TextView close = searchDialog2.findViewById(R.id.search_supplier_close);
+        total = searchDialog2.findViewById(R.id.total_suppliers);
 
         recyclerView2 = searchDialog2.findViewById(R.id.search_supplier_recyclerView);
         recyclerView2.setLayoutManager(new LinearLayoutManager(this));
@@ -637,6 +639,8 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
 
             if (result != null) {
                 Log.e("result", "*****************" + result.size());
+                if (totalCustomers != null)
+                    totalCustomers.setText("" + customers.size());
                 adapter.notifyDataSetChanged();
             } else {
                 Toast.makeText(UnloadPackingList.this, "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();
@@ -1019,6 +1023,8 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
 
             if (result != null) {
                 Log.e("result", "*****************" + result.size());
+                if (total != null)
+                    total.setText("" + suppliers.size());
                 adapter3.notifyDataSetChanged();
             } else {
                 Toast.makeText(UnloadPackingList.this, "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();

@@ -121,11 +121,10 @@
             android:padding="5dp"
             android:background="@color/light_orange"
             android:src="@drawable/ic_edit_24dp"
-            android:tint="@color/orange"
             android:layout_marginTop="2dp"
             android:layout_marginStart="2dp"
             android:layout_marginLeft="2dp"
-            />
+            app:tint="@color/orange" />
 
     </TableRow>
 

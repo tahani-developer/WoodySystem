@@ -894,7 +894,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
                     descriptionText = "Ukrainian Wood";
 
                     setSpinnerSelectionPosition(gradeSpinner, areaSpinner, descriptionSpinner, gradeText, areaText, descriptionText);
-
+                    new JSONTask3().execute();
                     Log.e("tag", "****Success");
                 } else {
 //                    presenter.setSerialNo("");

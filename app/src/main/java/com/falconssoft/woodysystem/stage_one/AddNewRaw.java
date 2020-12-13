@@ -97,7 +97,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     private Settings generalSettings;
     private WoodPresenter presenter;
     private ImageView image1, image2, image3, image4, image5, image6, image7, image8;
-    private TextView addNewSupplier, searchSupplier, addButton, acceptRowButton, mainInfoButton, acceptanceDate, addPicture, totalRejected, totalBundles;
+    private TextView addNewSupplier, searchSupplier, addButton, acceptRowButton, mainInfoButton, acceptanceDate, addPicture, totalRejected, totalBundles, total;
     private EditText thickness, width, length, noOfPieces, noOfBundles, noOfRejected, truckNo, acceptor, ttnNo;
     private Spinner gradeSpinner, acceptanceLocation;
     private ArrayList<String> gradeList = new ArrayList<>();
@@ -492,6 +492,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
                 SearchView searchView = searchDialog.findViewById(R.id.search_supplier_searchView);
                 TextView close = searchDialog.findViewById(R.id.search_supplier_close);
+                total = searchDialog.findViewById(R.id.total_suppliers);
 
                 recyclerView = searchDialog.findViewById(R.id.search_supplier_recyclerView);
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -1213,7 +1214,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     void showSnackbar(String text, boolean showImage) {
         snackbar = Snackbar.make(coordinatorLayout, Html.fromHtml("<font color=\"#3167F0\">" + text + "</font>"), Snackbar.LENGTH_SHORT);//Updated Successfully
         View snackbarLayout = snackbar.getView();
-        TextView textViewSnackbar = (TextView) snackbarLayout.findViewById(android.support.design.R.id.snackbar_text);
+        TextView textViewSnackbar = (TextView) snackbarLayout.findViewById(R.id.snackbar_text);
         if (showImage)
             textViewSnackbar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check_24dp, 0, 0, 0);
         snackbar.show();
@@ -1438,6 +1439,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
             if (result != null) {
                 Log.e("result", "*****************" + result.size());
+                total.setText("" + suppliers.size());
                 adapter.notifyDataSetChanged();
 
             } else {
