@@ -12,9 +12,11 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
@@ -137,6 +139,10 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
     private NewRowInfo oldNewRowInfo, updatedNewRowInfo;
     private String oldTruck = "", editSerial = "";// for edit
+    Bitmap serverPicBitmap;
+    String mCameraFileName, path;
+    ImageView imageView;
+    Uri image;
 
     private String thicknessLocal, widthLocal, lengthLocal, noOfPiecesLocal, noOfRejectedLocal, noOfBundlesLocal;
 
@@ -933,7 +939,123 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
             isEditImage = false;
         }
+
+//        if (requestCode == 2) {
+//            if (data != null) {
+//                image = data.getData();
+////                CheckPic.setImageURI(image);
+////                CheckPic.setVisibility(View.VISIBLE);
+//            }
+//            if (image == null && mCameraFileName != null) {
+//                image = Uri.fromFile(new File(mCameraFileName));
+//                path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/in.png";
+//                serverPicBitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory().getAbsolutePath() + "/in.png");
+////                CheckPic.setImageBitmap(serverPicBitmap);
+////                serverPic = bitMapToString(serverPicBitmap);
+//                deleteFiles(path);
+////                CheckPicText.setError(null);
+//            }
+//            File file = new File(mCameraFileName);
+//            if (!file.exists()) {
+//                file.mkdir();
+//                path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/in.png";
+//                serverPicBitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory().getAbsolutePath() + "/in.png");
+////                CheckPic.setImageBitmap(serverPicBitmap);
+////                serverPic = bitMapToString(serverPicBitmap);
+//                deleteFiles(path);
+////                    Bitmap bitmap1 = StringToBitMap(serverPic);
+////                    showImageOfCheck(bitmap1);
+//            } else {
+//
+//                path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/in.png";
+////                BitmapFactory.Options options = new BitmapFactory.Options();
+////                options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+////                serverPicBitmap = BitmapFactory.decodeFile(path, options);
+//                serverPicBitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory().getAbsolutePath() + "/in.png");
+////                CheckPic.setImageBitmap(serverPicBitmap);
+////                serverPic = bitMapToString(serverPicBitmap);
+//                deleteFiles(path);
+////                Bitmap bitmap1 = StringToBitMap(serverPic);
+////                showImageOfCheck(bitmap1);
+//
+//            }
+//
+//            int check;
+//            if (!isEditImage) {
+//                imageNo++;
+//                check = imageNo;
+//            } else {
+//                check = editImageNo;
+//            }
+//
+////            Log.e("checkvalue", "" + check);
+//            if (data != null) {
+//                switch (check) {
+//                    case 1:
+//                        image1.setVisibility(View.VISIBLE);
+//                        image1.setImageBitmap(serverPicBitmap);
+//                        imagesList.add(0, bitMapToString(serverPicBitmap));
+//                        break;
+//                    case 2:
+//                        image2.setVisibility(View.VISIBLE);
+//                        image2.setImageBitmap(serverPicBitmap);
+//                        imagesList.add(1, bitMapToString(serverPicBitmap));
+//                        break;
+//                    case 3:
+//                        image3.setVisibility(View.VISIBLE);
+//                        image3.setImageBitmap(serverPicBitmap);
+//                        imagesList.add(2, bitMapToString(serverPicBitmap));
+//                        break;
+//                    case 4:
+//                        image4.setVisibility(View.VISIBLE);
+//                        image4.setImageBitmap(serverPicBitmap);
+//                        imagesList.add(3, bitMapToString(serverPicBitmap));
+//                        break;
+//                    case 5:
+//                        image5.setVisibility(View.VISIBLE);
+//                        image5.setImageBitmap(serverPicBitmap);
+//                        imagesList.add(4, bitMapToString(serverPicBitmap));
+//                        break;
+//                    case 6:
+//                        image6.setVisibility(View.VISIBLE);
+//                        image6.setImageBitmap(serverPicBitmap);
+//                        imagesList.add(5, bitMapToString(serverPicBitmap));
+//                        break;
+//                    case 7:
+//                        image7.setVisibility(View.VISIBLE);
+//                        image7.setImageBitmap(serverPicBitmap);
+//                        imagesList.add(6, bitMapToString(serverPicBitmap));
+//                        break;
+//                    case 8:
+//                        image8.setVisibility(View.VISIBLE);
+//                        image8.setImageBitmap(serverPicBitmap);
+//                        imagesList.add(7, bitMapToString(serverPicBitmap));
+//                        break;
+//
+//                }
+//            }
+//
+//
+//
+//
+//        }
+
         isCamera = true;
+    }
+
+    public void deleteFiles(String path) {
+        File file = new File(path);
+
+        if (file.exists()) {
+            String deleteCmd = "rm -r " + path;
+            Runtime runtime = Runtime.getRuntime();
+            try {
+                runtime.exec(deleteCmd);
+            } catch (IOException e) {
+
+            }
+        }
+
     }
 
     public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {

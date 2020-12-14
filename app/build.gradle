@@ -10,8 +10,8 @@ android {
         applicationId "com.falconssoft.woodysystem"
         minSdkVersion 15
         targetSdkVersion 29
-        versionCode 69
-        versionName "1.6.8"
+        versionCode 70
+        versionName "1.6.9"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -73,7 +73,7 @@ dependencies {
     implementation "android.arch.paging:runtime:$paging_version"
 
     implementation 'com.google.code.gson:gson:2.8.6'
-
+    implementation 'com.github.chrisbanes:PhotoView:2.0.0'
 //    implementation 'org.apache.poi:poi:3.12'
 //    implementation 'org.apache.poi:poi-ooxml:3.12'
 //    implementation 'com.fasterxml:aalto-xml:1.0.0'

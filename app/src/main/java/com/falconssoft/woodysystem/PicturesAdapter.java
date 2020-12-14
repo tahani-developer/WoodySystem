@@ -2,25 +2,29 @@ package com.falconssoft.woodysystem;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 
-import com.falconssoft.woodysystem.models.BundleInfo;
+import com.falconssoft.woodysystem.reports.AcceptanceReport;
+import com.falconssoft.woodysystem.reports.LoadingOrderReport;
+import com.github.chrisbanes.photoview.PhotoView;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 public class PicturesAdapter extends BaseAdapter {
 
-    private Context context;
+    //    private Context context;
     private static List<Bitmap> itemsList;
+    private LoadingOrderReport loadingOrderReport;
+    private AcceptanceReport acceptanceReport;
 
-    public PicturesAdapter(Context context, List<Bitmap> itemsList) {
-        this.context = context;
+    public PicturesAdapter(List<Bitmap> itemsList, LoadingOrderReport loadingOrderReport, AcceptanceReport acceptanceReport) {
+        this.loadingOrderReport = loadingOrderReport;
+        this.acceptanceReport = acceptanceReport;
         this.itemsList = itemsList;
     }
 
@@ -44,18 +48,32 @@ public class PicturesAdapter extends BaseAdapter {
     }
 
     private class ViewHolder {
-        ImageView pic;
+        PhotoView pic;
+        LinearLayout linearLayout;
     }
 
     @Override
     public View getView(final int i, View view, ViewGroup viewGroup) {
 
         final ViewHolder holder = new ViewHolder();
-        view = View.inflate(context, R.layout.pic_row, null);
+        view = View.inflate(viewGroup.getContext(), R.layout.pic_row, null);
 
         holder.pic = view.findViewById(R.id.pic);
         if (itemsList.get(i) != null)
             holder.pic.setImageBitmap(itemsList.get(i));
+
+        holder.pic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e("bitmap", "3");
+
+//                if (acceptanceReport == null)
+//                    loadingOrderReport.zoomImage(itemsList.get(i));
+//                else
+                loadingOrderReport.zoomImage(itemsList.get(i));
+            }
+        });
+
 
         return view;
     }

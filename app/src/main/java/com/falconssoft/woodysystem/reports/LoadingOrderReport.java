@@ -42,6 +42,7 @@ import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.Orders;
 import com.falconssoft.woodysystem.models.Pictures;
 import com.falconssoft.woodysystem.models.Settings;
+import com.github.chrisbanes.photoview.PhotoView;
 import com.google.gson.Gson;
 
 import org.apache.http.HttpResponse;
@@ -110,7 +111,7 @@ public class LoadingOrderReport extends AppCompatActivity implements View.OnClic
     private int delteIndex = -1;
     private List<Orders> filtered;
     private Context previewLinearContext;
-
+    PhotoView bigImage;
     SimpleDateFormat sdf;
 
     @Override
@@ -721,11 +722,18 @@ public class LoadingOrderReport extends AppCompatActivity implements View.OnClic
         pics.add(picts.getPic77());
         pics.add(picts.getPic88());
 
+        Log.e("bitmap", "1");
 
-        PicturesAdapter adapter = new PicturesAdapter(previewLinearContext, pics);
+        PicturesAdapter adapter = new PicturesAdapter(pics, this, null);
         listView.setAdapter(adapter);
 
         dialog.show();
+
+    }
+
+    public void zoomImage(Bitmap image) {
+        bigImage.setImageBitmap(image);
+        Log.e("bitmap", "7894561230");
 
     }
 

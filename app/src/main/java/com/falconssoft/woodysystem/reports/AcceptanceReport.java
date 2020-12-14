@@ -590,7 +590,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
         pics.add(picts.getPic88());
 
 
-        PicturesAdapter adapter = new PicturesAdapter(previewLinearContext, pics);
+        PicturesAdapter adapter = new PicturesAdapter(pics,null, this);
         listView.setAdapter(adapter);
 
         dialog.show();
