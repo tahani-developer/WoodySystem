@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,11 +13,15 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
@@ -79,10 +84,12 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -126,6 +133,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     private Calendar myCalendar;
     private int imageNo = 0, editImageNo = 0;
     private List<String> imagesList = new ArrayList<>();
+    private List<Bitmap> bitmapImagesList = new ArrayList<>();
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -139,12 +147,14 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
     private NewRowInfo oldNewRowInfo, updatedNewRowInfo;
     private String oldTruck = "", editSerial = "";// for edit
-    Bitmap serverPicBitmap;
-    String mCameraFileName, path;
-    ImageView imageView;
-    Uri image;
-
+    //    Bitmap serverPicBitmap;
+    private String mCameraFileName, path;
+    //    ImageView imageView;
+    private Uri image;
+    private Process process;
+    private Bitmap bitmap;
     private String thicknessLocal, widthLocal, lengthLocal, noOfPiecesLocal, noOfRejectedLocal, noOfBundlesLocal;
+    private Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -261,10 +271,19 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         imagesList.add(6, null);
         imagesList.add(7, null);
 
+        bitmapImagesList.add(0, null);
+        bitmapImagesList.add(1, null);
+        bitmapImagesList.add(2, null);
+        bitmapImagesList.add(3, null);
+        bitmapImagesList.add(4, null);
+        bitmapImagesList.add(5, null);
+        bitmapImagesList.add(6, null);
+        bitmapImagesList.add(7, null);
         checkIfEditItem();
 
-        progressDialog = new ProgressDialog(this);
+        progressDialog = new ProgressDialog(this, R.style.MyAlertDialogStyle);
         progressDialog.setMessage("Please Waiting...");
+        progressDialog.setCanceledOnTouchOutside(false);
 
     }
 
@@ -480,6 +499,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                 break;
             case R.id.addNewRaw_add_photo:
                 openCamera();
+//                cameraIntent();
                 break;
             case R.id.addNewRaw_add_supplier:
                 Intent intent = new Intent(AddNewRaw.this, AddNewSupplier.class);
@@ -502,7 +522,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
                 recyclerView = searchDialog.findViewById(R.id.search_supplier_recyclerView);
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
-                adapter = new SuppliersAdapter(this, suppliers, null);
+                adapter = new SuppliersAdapter(this, suppliers, null, null);
                 recyclerView.setAdapter(adapter);
 
                 searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -531,41 +551,49 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
             case R.id.addNewRaw_image1:
                 isEditImage = true;
                 editImageNo = 1;
+//                cameraIntent();
                 openCamera();
                 break;
             case R.id.addNewRaw_image2:
                 isEditImage = true;
                 editImageNo = 2;
+//                cameraIntent();
                 openCamera();
                 break;
             case R.id.addNewRaw_image3:
                 isEditImage = true;
                 editImageNo = 3;
+//                cameraIntent();
                 openCamera();
                 break;
             case R.id.addNewRaw_image4:
                 isEditImage = true;
                 editImageNo = 4;
+//                cameraIntent();
                 openCamera();
                 break;
             case R.id.addNewRaw_image5:
                 isEditImage = true;
                 editImageNo = 5;
+//                cameraIntent();
                 openCamera();
                 break;
             case R.id.addNewRaw_image6:
                 isEditImage = true;
                 editImageNo = 6;
+//                cameraIntent();
                 openCamera();
                 break;
             case R.id.addNewRaw_image7:
                 isEditImage = true;
                 editImageNo = 7;
+//                cameraIntent();
                 openCamera();
                 break;
             case R.id.addNewRaw_image8:
                 isEditImage = true;
                 editImageNo = 8;
+//                cameraIntent();
                 openCamera();
                 break;
         }
@@ -584,7 +612,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                 }
             }
         }
-        adapter = new SuppliersAdapter(this, arraylist, null);
+        adapter = new SuppliersAdapter(this, arraylist, null, null);
         recyclerView.setAdapter(adapter);
     }
 
@@ -807,33 +835,108 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     }
 
     void fillImage(NewRowInfo image) {
-        for (int i = 0; i < imagesList.size(); i++)
+        for (int i = 0; i < 8; i++)
             switch (i) {
                 case 0:
-                    image.setImageOne(imagesList.get(i));
+                    Bitmap bitmap = null;
+                    if (image1.getVisibility() == View.VISIBLE) {
+                        BitmapDrawable drawable = (BitmapDrawable) image1.getDrawable();
+                        bitmap = drawable.getBitmap();
+                        image.setImageOne(bitMapToString(bitmap));
+                    } else
+                        image.setImageOne(null);
                     break;
                 case 1:
-                    image.setImageTwo(imagesList.get(i));
+                    Bitmap bitmap2 = null;
+                    if (image2.getVisibility() == View.VISIBLE) {
+                        BitmapDrawable drawable = (BitmapDrawable) image2.getDrawable();
+                        bitmap2 = drawable.getBitmap();
+                        image.setImageTwo(bitMapToString(bitmap2));
+                    } else
+                        image.setImageTwo(null);
                     break;
                 case 2:
-                    image.setImageThree(imagesList.get(i));
+                    Bitmap bitmap3 = null;
+                    if (image3.getVisibility() == View.VISIBLE) {
+                        BitmapDrawable drawable = (BitmapDrawable) image3.getDrawable();
+                        bitmap3 = drawable.getBitmap();
+                        image.setImageThree(bitMapToString(bitmap3));
+                    } else
+                        image.setImageThree(null);
                     break;
                 case 3:
-                    image.setImageFour(imagesList.get(i));
+                    Bitmap bitmap4 = null;
+                    if (image4.getVisibility() == View.VISIBLE) {
+                        BitmapDrawable drawable = (BitmapDrawable) image4.getDrawable();
+                        bitmap4 = drawable.getBitmap();
+                        image.setImageFour(bitMapToString(bitmap4));
+                    } else
+                        image.setImageFour(null);
                     break;
                 case 4:
-                    image.setImageFive(imagesList.get(i));
+                    Bitmap bitmap5 = null;
+                    if (image5.getVisibility() == View.VISIBLE) {
+                        BitmapDrawable drawable = (BitmapDrawable) image5.getDrawable();
+                        bitmap5 = drawable.getBitmap();
+                        image.setImageFive(bitMapToString(bitmap5));
+                    } else
+                        image.setImageFive(null);
                     break;
                 case 5:
-                    image.setImageSix(imagesList.get(i));
+                    Bitmap bitmap6 = null;
+                    if (image6.getVisibility() == View.VISIBLE) {
+                        BitmapDrawable drawable = (BitmapDrawable) image6.getDrawable();
+                        bitmap6 = drawable.getBitmap();
+                        image.setImageSix(bitMapToString(bitmap6));
+                    } else
+                        image.setImageSix(null);
                     break;
                 case 6:
-                    image.setImageSeven(imagesList.get(i));
+                    Bitmap bitmap7 = null;
+                    if (image7.getVisibility() == View.VISIBLE) {
+                        BitmapDrawable drawable = (BitmapDrawable) image7.getDrawable();
+                        bitmap7 = drawable.getBitmap();
+                        image.setImageSeven(bitMapToString(bitmap7));
+                    } else
+                        image.setImageSeven(null);
                     break;
                 case 7:
-                    image.setImageEight(imagesList.get(i));
+                    Bitmap bitmap8 = null;
+                    if (image8.getVisibility() == View.VISIBLE) {
+                        BitmapDrawable drawable = (BitmapDrawable) image8.getDrawable();
+                        bitmap8 = drawable.getBitmap();
+                        image.setImageEight(bitMapToString(bitmap8));
+                    } else
+                        image.setImageEight(null);
                     break;
             }
+//        for (int i = 0; i < imagesList.size(); i++)
+//            switch (i) {
+//                case 0:
+//                    image.setImageOne(imagesList.get(i));
+//                    break;
+//                case 1:
+//                    image.setImageTwo(imagesList.get(i));
+//                    break;
+//                case 2:
+//                    image.setImageThree(imagesList.get(i));
+//                    break;
+//                case 3:
+//                    image.setImageFour(imagesList.get(i));
+//                    break;
+//                case 4:
+//                    image.setImageFive(imagesList.get(i));
+//                    break;
+//                case 5:
+//                    image.setImageSix(imagesList.get(i));
+//                    break;
+//                case 6:
+//                    image.setImageSeven(imagesList.get(i));
+//                    break;
+//                case 7:
+//                    image.setImageEight(imagesList.get(i));
+//                    break;
+//            }
         Log.e("showimages", " 1: " +
                 image.getImageOne() + " 2: " +
                 image.getImageTwo() + " 3: " +
@@ -849,18 +952,40 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void openCamera() {
-        if (imageNo < 8) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+        if (imageNo < 6) {
+            if ((ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+                    && (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
             } else {
-                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cameraIntent, 1888);
+                ContentValues values = new ContentValues();
+                values.put(MediaStore.Images.Media.TITLE, "NewPicture");
+                values.put(MediaStore.Images.Media.DESCRIPTION, "FromyourCamera");
+                imageUri = getContentResolver().insert(
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                startActivityForResult(intent, 18);
+//                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+//                startActivityForResult(cameraIntent, 18);
 //            imageNo = i;
             }
             isCamera = false;
         } else {
             showSnackbar("Reached maximum size of images!", false);
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == 100)
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                    != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+                return;
+
+        openCamera();
+
     }
 
     @Override
@@ -876,11 +1001,22 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
             );
         }
 
-        if (requestCode == 1888 && resultCode == RESULT_OK) {
-            Bundle intent = data.getExtras();
-            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+        if (requestCode == 18 && resultCode == RESULT_OK) {
+            Bitmap thumbnail = null;
+//            try {
+//                thumbnail = MediaStore.Images.Media.getBitmap(
+//                        getContentResolver(), imageUri);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            image1.setImageBitmap(thumbnail);
+//            imagesList.add(0, bitMapToString(thumbnail));
+//            imageurl = getRealPathFromURI(imageUri);
+
+//            Bundle intent = data.getExtras();
+//            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
 //            bitmap = getResizedBitmap(bitmap, 100, 100);
-            File pictureFile;
+//            File pictureFile;
 
             int check;
             if (!isEditImage) {
@@ -891,156 +1027,147 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
             }
 
 //            Log.e("checkvalue", "" + check);
-            if (intent != null) {
-                switch (check) {
-                    case 1:
-                        image1.setVisibility(View.VISIBLE);
-                        image1.setImageBitmap(bitmap);
-                        imagesList.add(0, bitMapToString(bitmap));
-                        break;
-                    case 2:
-                        image2.setVisibility(View.VISIBLE);
-                        image2.setImageBitmap(bitmap);
-                        imagesList.add(1, bitMapToString(bitmap));
-                        break;
-                    case 3:
-                        image3.setVisibility(View.VISIBLE);
-                        image3.setImageBitmap(bitmap);
-                        imagesList.add(2, bitMapToString(bitmap));
-                        break;
-                    case 4:
-                        image4.setVisibility(View.VISIBLE);
-                        image4.setImageBitmap(bitmap);
-                        imagesList.add(3, bitMapToString(bitmap));
-                        break;
-                    case 5:
-                        image5.setVisibility(View.VISIBLE);
-                        image5.setImageBitmap(bitmap);
-                        imagesList.add(4, bitMapToString(bitmap));
-                        break;
-                    case 6:
-                        image6.setVisibility(View.VISIBLE);
-                        image6.setImageBitmap(bitmap);
-                        imagesList.add(5, bitMapToString(bitmap));
-                        break;
-                    case 7:
-                        image7.setVisibility(View.VISIBLE);
-                        image7.setImageBitmap(bitmap);
-                        imagesList.add(6, bitMapToString(bitmap));
-                        break;
-                    case 8:
-                        image8.setVisibility(View.VISIBLE);
-                        image8.setImageBitmap(bitmap);
-                        imagesList.add(7, bitMapToString(bitmap));
-                        break;
+//            if (data != null) {
+            switch (check) {
+                case 1:
+                    Log.e("checkvalue1", "" + check);
+                    image1.setVisibility(View.VISIBLE);
+//                    convertToURI(data, image1, check);
+//                    image1.setImageBitmap(bitmap);
+                    try {
+                        thumbnail = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-                }
+                    image1.setImageBitmap(thumbnail);
+//                    imagesList.add(0, bitMapToString(thumbnail));
+                    break;
+                case 2:
+                    image2.setVisibility(View.VISIBLE);
+                    try {
+                        thumbnail = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    image2.setImageBitmap(thumbnail);
+//                    imagesList.add(1, bitMapToString(thumbnail));
+                    break;
+                case 3:
+                    image3.setVisibility(View.VISIBLE);
+                    try {
+                        thumbnail = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    image3.setImageBitmap(thumbnail);
+//                    imagesList.add(2, bitMapToString(thumbnail));
+                    break;
+                case 4:
+                    image4.setVisibility(View.VISIBLE);
+                    try {
+                        thumbnail = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    image4.setImageBitmap(thumbnail);
+//                    imagesList.add(3, bitMapToString(bitmap));
+                    break;
+                case 5:
+                    image5.setVisibility(View.VISIBLE);
+                    try {
+                        thumbnail = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    image5.setImageBitmap(thumbnail);
+//                    imagesList.add(4, bitMapToString(bitmap));
+                    break;
+                case 6:
+                    image6.setVisibility(View.VISIBLE);
+                    try {
+                        thumbnail = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    image6.setImageBitmap(thumbnail);
+//                    imagesList.add(5, bitMapToString(bitmap));
+                    break;
+                case 7:
+                    image7.setVisibility(View.VISIBLE);
+                    try {
+                        thumbnail = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    image7.setImageBitmap(thumbnail);
+//                    imagesList.add(6, bitMapToString(bitmap));
+                    break;
+                case 8:
+                    image8.setVisibility(View.VISIBLE);
+                    try {
+                        thumbnail = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    image8.setImageBitmap(thumbnail);
+//                    imagesList.add(7, bitMapToString(bitmap));
+                    break;
+
+//                }
             }
 
             isEditImage = false;
         }
 
-//        if (requestCode == 2) {
-//            if (data != null) {
-//                image = data.getData();
-////                CheckPic.setImageURI(image);
-////                CheckPic.setVisibility(View.VISIBLE);
-//            }
-//            if (image == null && mCameraFileName != null) {
-//                image = Uri.fromFile(new File(mCameraFileName));
-//                path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/in.png";
-//                serverPicBitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory().getAbsolutePath() + "/in.png");
-////                CheckPic.setImageBitmap(serverPicBitmap);
-////                serverPic = bitMapToString(serverPicBitmap);
-//                deleteFiles(path);
-////                CheckPicText.setError(null);
-//            }
-//            File file = new File(mCameraFileName);
-//            if (!file.exists()) {
-//                file.mkdir();
-//                path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/in.png";
-//                serverPicBitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory().getAbsolutePath() + "/in.png");
-////                CheckPic.setImageBitmap(serverPicBitmap);
-////                serverPic = bitMapToString(serverPicBitmap);
-//                deleteFiles(path);
-////                    Bitmap bitmap1 = StringToBitMap(serverPic);
-////                    showImageOfCheck(bitmap1);
-//            } else {
-//
-//                path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/in.png";
-////                BitmapFactory.Options options = new BitmapFactory.Options();
-////                options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-////                serverPicBitmap = BitmapFactory.decodeFile(path, options);
-//                serverPicBitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory().getAbsolutePath() + "/in.png");
-////                CheckPic.setImageBitmap(serverPicBitmap);
-////                serverPic = bitMapToString(serverPicBitmap);
-//                deleteFiles(path);
-////                Bitmap bitmap1 = StringToBitMap(serverPic);
-////                showImageOfCheck(bitmap1);
-//
-//            }
-//
-//            int check;
-//            if (!isEditImage) {
-//                imageNo++;
-//                check = imageNo;
-//            } else {
-//                check = editImageNo;
-//            }
-//
-////            Log.e("checkvalue", "" + check);
-//            if (data != null) {
-//                switch (check) {
-//                    case 1:
-//                        image1.setVisibility(View.VISIBLE);
-//                        image1.setImageBitmap(serverPicBitmap);
-//                        imagesList.add(0, bitMapToString(serverPicBitmap));
-//                        break;
-//                    case 2:
-//                        image2.setVisibility(View.VISIBLE);
-//                        image2.setImageBitmap(serverPicBitmap);
-//                        imagesList.add(1, bitMapToString(serverPicBitmap));
-//                        break;
-//                    case 3:
-//                        image3.setVisibility(View.VISIBLE);
-//                        image3.setImageBitmap(serverPicBitmap);
-//                        imagesList.add(2, bitMapToString(serverPicBitmap));
-//                        break;
-//                    case 4:
-//                        image4.setVisibility(View.VISIBLE);
-//                        image4.setImageBitmap(serverPicBitmap);
-//                        imagesList.add(3, bitMapToString(serverPicBitmap));
-//                        break;
-//                    case 5:
-//                        image5.setVisibility(View.VISIBLE);
-//                        image5.setImageBitmap(serverPicBitmap);
-//                        imagesList.add(4, bitMapToString(serverPicBitmap));
-//                        break;
-//                    case 6:
-//                        image6.setVisibility(View.VISIBLE);
-//                        image6.setImageBitmap(serverPicBitmap);
-//                        imagesList.add(5, bitMapToString(serverPicBitmap));
-//                        break;
-//                    case 7:
-//                        image7.setVisibility(View.VISIBLE);
-//                        image7.setImageBitmap(serverPicBitmap);
-//                        imagesList.add(6, bitMapToString(serverPicBitmap));
-//                        break;
-//                    case 8:
-//                        image8.setVisibility(View.VISIBLE);
-//                        image8.setImageBitmap(serverPicBitmap);
-//                        imagesList.add(7, bitMapToString(serverPicBitmap));
-//                        break;
-//
-//                }
-//            }
-//
-//
-//
-//
-//        }
 
         isCamera = true;
+    }
+
+    void convertToURI(Intent data, ImageView viewImage, int i) {
+        Log.e("indexxx", "" + i + " / " + viewImage.getId());
+//        if (data != null) {
+//            image = data.getData();
+//            viewImage.setImageURI(image);
+//        }
+//        if (image == null && mCameraFileName != null) {
+//            image = Uri.fromFile(new File(mCameraFileName));
+//            path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/in" + imageNo + ".png";
+//            bitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory().getAbsolutePath() + "/in" + imageNo + ".png");
+//            viewImage.setImageBitmap(bitmap);
+//            imagesList.add(i, bitMapToString(bitmap));
+////            deleteFiles(path);
+//        }
+        File file = new File(mCameraFileName);
+        if (!file.exists()) {
+            file.mkdir();
+            path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/in" + imageNo + ".png";
+            Log.e("InventoryDBFolder1", "" + path);
+            bitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory().getAbsolutePath() + "/in" + imageNo + ".png");
+            viewImage.setImageBitmap(bitmap);
+//            bitmapImagesList.add(i, bitmap);
+            imagesList.add(i, bitMapToString(bitmap));
+//            imagesList.add(i, "bitMapToString(bitmap)");
+//            deleteFiles(path);
+        } else {
+
+            path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/in" + imageNo + ".png";
+            Log.e("InventoryDBFolder2", "" + path);
+            bitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory().getAbsolutePath() + "/in" + imageNo + ".png");
+            viewImage.setImageBitmap(bitmap);
+            imagesList.add(i, bitMapToString(bitmap));
+//            bitmapImagesList.add(i, bitmap);// bitMapToString(bitmap)
+//            deleteFiles(path);
+
+        }
     }
 
     public void deleteFiles(String path) {
@@ -1048,33 +1175,42 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
         if (file.exists()) {
             String deleteCmd = "rm -r " + path;
-            Runtime runtime = Runtime.getRuntime();
+//            Runtime runtime = Runtime.getRuntime();
             try {
-                runtime.exec(deleteCmd);
+                process = Runtime.getRuntime().exec(deleteCmd);
+
+//                runtime.exec(deleteCmd);
             } catch (IOException e) {
 
             }
         }
-
+        process.destroy();
     }
 
-    public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
-        if (bm != null) {
-            int width = bm.getWidth();
-            int height = bm.getHeight();
-            float scaleWidth = ((float) newWidth) / width;
-            float scaleHeight = ((float) newHeight) / height;
-            // CREATE A MATRIX FOR THE MANIPULATION
-            Matrix matrix = new Matrix();
-            // RESIZE THE BIT MAP
-            matrix.postScale(scaleWidth, scaleHeight);
+    private void cameraIntent() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
+        } else {
+            if (imageNo < 8) {
+                isCamera = false;
+                StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+                StrictMode.setVmPolicy(builder.build());
+                Intent intent = new Intent();
+                intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
 
-            // "RECREATE" THE NEW BITMAP
-            Bitmap resizedBitmap = Bitmap.createBitmap(
-                    bm, 0, 0, width, height, matrix, false);
-            return resizedBitmap;
+                String newPicFile = "in" + (imageNo + 1) + ".png";
+                String outPath = Environment.getExternalStorageDirectory() + File.separator + newPicFile;
+                Log.e("InventoryDBFolder", "" + outPath);
+                File outFile = new File(outPath);
+                path = outPath;
+                mCameraFileName = outFile.toString();
+                Uri outuri = Uri.fromFile(outFile);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, outuri);
+                startActivityForResult(intent, imageNo);
+            } else {
+                showSnackbar("Reached maximum size of images!", false);
+            }
         }
-        return null;
     }
 
     public String bitMapToString(Bitmap bitmap) {
@@ -1088,7 +1224,6 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
         return "";
     }
-
 
     public Bitmap stringToBitMap(String image) {
         try {
@@ -1358,6 +1493,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         }
         outState.putSerializable("list", (Serializable) imagesList);
         outState.putSerializable("rows_list", (Serializable) newRowList);
+//        outState.putSerializable("bitmap_image", (Serializable) bitmapImagesList);
 
 //        Log.e("size b", "" + imagesList.size());
 
@@ -1372,6 +1508,9 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         thickness.requestFocus();
 //        linearLayoutView.setVisibility(mState ? View.VISIBLE : View.GONE);
 //        presenter.getImportData();
+//        bitmapImagesList.clear();
+//        bitmapImagesList.addAll((Collection<? extends Bitmap>) savedInstanceState.getSerializable("bitmap_image"));
+
         imagesList.clear();
         imagesList.addAll((Collection<? extends String>) savedInstanceState.getSerializable("list"));
 
@@ -1652,6 +1791,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     tableLayout.removeAllViews();
                     newRowList.clear();
                     imagesList.clear();
+//                    bitmapImagesList.clear();
                     imageNo = 0;
                     image1.setVisibility(View.INVISIBLE);
                     image2.setVisibility(View.INVISIBLE);

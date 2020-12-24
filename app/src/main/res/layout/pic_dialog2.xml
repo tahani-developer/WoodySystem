@@ -15,12 +15,12 @@
         android:gravity="center"
         android:padding="10dp">
 
-        <ImageView
+        <com.github.chrisbanes.photoview.PhotoView
             android:id="@+id/main_pic"
             android:layout_width="400dp"
             android:layout_height="400dp"
             android:layout_margin="10dp"
-            app:srcCompat="@drawable/pic"
+            android:src="@drawable/pic"
             android:background="@drawable/border_background"/>
 
 

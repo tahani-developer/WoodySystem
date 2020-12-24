@@ -72,17 +72,18 @@
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/alpha_frame">
 
                 <TextView
+                    android:id="@+id/loading_order_thick_reset"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/frame_shape"
                     android:fontFamily="serif"
-                    android:text="@string/thickness"
+                    android:text="T"
                     android:textColor="@color/white"
                     android:textSize="15sp" />
 
@@ -90,30 +91,38 @@
                     android:id="@+id/mSearchTh"
                     android:layout_width="0dp"
                     android:layout_height="45dp"
+                    android:layout_weight="5"
+                    android:layout_marginHorizontal="1dp"
                     android:fontFamily="serif"
                     android:inputType="number"
-                    android:textColor="@color/white"
                     android:nextFocusDown="@id/mSearchW"
-                    android:layout_marginHorizontal="1dp"
-                    android:layout_weight="5"
                     android:padding="5dp"
+                    android:textColor="@color/white"
                     app:defaultQueryHint="Srch Th.." />
+
+                <Spinner
+                    android:id="@+id/loading_order_thick_spinner"
+                    android:background="@drawable/frame_shape"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:layout_marginHorizontal="10dp"
                 android:background="@drawable/alpha_frame">
 
                 <TextView
+                    android:id="@+id/loading_order_width_reset"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/frame_shape"
                     android:fontFamily="serif"
-                    android:text="@string/width"
+                    android:text="@string/w"
                     android:textColor="@color/white"
                     android:textSize="15sp" />
 
@@ -121,14 +130,21 @@
                     android:id="@+id/mSearchW"
                     android:layout_width="0dp"
                     android:layout_height="45dp"
+                    android:layout_weight="5"
                     android:fontFamily="serif"
                     android:inputType="number"
                     android:textColor="@color/white"
                     android:nextFocusDown="@id/mSearchL"
                     android:layout_marginHorizontal="5dp"
-                    android:layout_weight="5"
                     android:padding="5dp"
                     app:defaultQueryHint="Srch W.." />
+
+                <Spinner
+                    android:id="@+id/loading_order_width_spinner"
+                    android:background="@drawable/frame_shape"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent" />
 
             </LinearLayout>
 
@@ -139,12 +155,13 @@
                 android:background="@drawable/alpha_frame">
 
                 <TextView
+                    android:id="@+id/loading_order_length_reset"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/frame_shape"
                     android:fontFamily="serif"
-                    android:text="@string/length"
+                    android:text="@string/l"
                     android:textColor="@color/white"
                     android:textSize="15sp" />
 
@@ -152,15 +169,21 @@
                     android:id="@+id/mSearchL"
                     android:layout_width="0dp"
                     android:layout_height="45dp"
+                    android:layout_weight="5"
                     android:fontFamily="serif"
                     android:inputType="number"
                     android:textColor="@color/white"
                     android:nextFocusDown="@id/mSearchPieces"
                     android:layout_marginHorizontal="1dp"
-                    android:layout_weight="5"
                     android:padding="5dp"
                     app:defaultQueryHint="Srch L.." />
 
+                <Spinner
+                    android:id="@+id/loading_order_length_spinner"
+                    android:background="@drawable/frame_shape"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent" />
             </LinearLayout>
         </LinearLayout>
 
@@ -192,7 +215,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/frame_shape"
                     android:fontFamily="serif"
-                    android:text="@string/no_pieces"
+                    android:text="@string/no_of_pieces"
                     android:textColor="@color/white"
                     android:textSize="15sp" />
 

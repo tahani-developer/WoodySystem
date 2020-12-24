@@ -121,6 +121,7 @@ public class LoadingOrderReport extends AppCompatActivity implements View.OnClic
 
         progressDialog = new ProgressDialog(this, R.style.MyAlertDialogStyle);
         progressDialog.setMessage("Please Waiting...");
+        progressDialog.setCanceledOnTouchOutside(false);
         MHandler = new DatabaseHandler(LoadingOrderReport.this);
         generalSettings = new DatabaseHandler(this).getSettings();
         orders = new ArrayList<>();
@@ -211,7 +212,7 @@ public class LoadingOrderReport extends AppCompatActivity implements View.OnClic
                 SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd_hhmmss");
                 Calendar calendar = Calendar.getInstance();
                 if (filtered != null && filtered.size() > 0)
-                    new ExportToPDF(this).exportLoadingOrderReport(filtered, format.format(calendar.getTime()));
+                    new ExportToPDF(this).exportLoadingOrderReport(filtered, format.format(calendar.getTime()), from.getText().toString(), to.getText().toString());
                 else
                     Toast.makeText(previewLinearContext, "Empty list", Toast.LENGTH_SHORT).show();
             }
@@ -304,24 +305,25 @@ public class LoadingOrderReport extends AppCompatActivity implements View.OnClic
         }
     }
 
-    public void previewLinear(int index, Context Context, List<Orders> ordersList) {
+    public void previewLinear(Orders index, Context Context, List<Orders> ordersList) {
 
         previewLinearContext = Context;
-        Log.d("ooo  ", "orders " + orders.get(index).getOrderNo() + "  " + orders.get(index).getPlacingNo()
-                + "  " + orders.get(index).getContainerNo() + "  " + orders.get(index).getDateOfLoad());
+        Log.e("ooo  ", "orders " + index.getOrderNo() + "  " + index.getPlacingNo()
+                + "  " + index.getContainerNo() + "  " + index.getDateOfLoad());
 
         bundleInfos = new ArrayList<>();
         for (int i = 0; i < bundles.size(); i++) {
-            Log.d("ooo  ", "bundles " + i + " :   " + bundles.get(i).getOrderNo() + "  " + bundles.get(i).getPlacingNo()
-                    + "  " + bundles.get(i).getContainerNo() + "  " + bundles.get(i).getDateOfLoad());
+//            Log.d("ooo  ", "bundles " + i + " :   " + bundles.get(i).getOrderNo() + "  " + bundles.get(i).getPlacingNo()
+//                    + "  " + bundles.get(i).getContainerNo() + "  " + bundles.get(i).getDateOfLoad());
 //            if (orders.get(index).getOrderNo().equals(bundles.get(i).getOrderNo()) &&
 //                    orders.get(index).getPlacingNo().equals(bundles.get(i).getPlacingNo()) &&
 //                    orders.get(index).getContainerNo().equals(bundles.get(i).getContainerNo()) &&
 //                    orders.get(index).getDateOfLoad().equals(bundles.get(i).getDateOfLoad())) {
-            if (ordersList.get(index).getOrderNo().equals(bundles.get(i).getOrderNo()) &&
-                    ordersList.get(index).getPlacingNo().equals(bundles.get(i).getPlacingNo()) &&
-                    ordersList.get(index).getContainerNo().equals(bundles.get(i).getContainerNo()) &&
-                    ordersList.get(index).getDateOfLoad().equals(bundles.get(i).getDateOfLoad())) {
+            if (index.getOrderNo().equals(bundles.get(i).getOrderNo())) {
+//                &&
+//                    index.getPlacingNo().equals(bundles.get(i).getPlacingNo()) &&
+//                    index.getContainerNo().equals(bundles.get(i).getContainerNo()) &&
+//                    index.getDateOfLoad().equals(bundles.get(i).getDateOfLoad())) {
 
                 bundleInfos.add(new BundleInfo(
                         bundles.get(i).getThickness(),
@@ -492,6 +494,45 @@ public class LoadingOrderReport extends AppCompatActivity implements View.OnClic
 //        intent.putExtra(EDIT_BUNDLES , (Serializable) bundles);// too large data
 //        intent.putExtra(EDIT_LOADING_ORDER_FLAG, 20);
 //        startActivity(intent);
+    }
+
+    public void goToPDF(int index, List<Orders> ordersList) {
+
+        bundleInfos = new ArrayList<>();
+        for (int i = 0; i < bundles.size(); i++) {
+            Log.d("ooo  ", "bundles " + i + " :   " + bundles.get(i).getOrderNo() + "  " + bundles.get(i).getPlacingNo()
+                    + "  " + bundles.get(i).getContainerNo() + "  " + bundles.get(i).getDateOfLoad());
+//            if (orders.get(index).getOrderNo().equals(bundles.get(i).getOrderNo()) &&
+//                    orders.get(index).getPlacingNo().equals(bundles.get(i).getPlacingNo()) &&
+//                    orders.get(index).getContainerNo().equals(bundles.get(i).getContainerNo()) &&
+//                    orders.get(index).getDateOfLoad().equals(bundles.get(i).getDateOfLoad())) {
+            if (ordersList.get(index).getOrderNo().equals(bundles.get(i).getOrderNo()) &&
+                    ordersList.get(index).getPlacingNo().equals(bundles.get(i).getPlacingNo()) &&
+                    ordersList.get(index).getContainerNo().equals(bundles.get(i).getContainerNo()) &&
+                    ordersList.get(index).getDateOfLoad().equals(bundles.get(i).getDateOfLoad())) {
+
+                bundleInfos.add(new BundleInfo(
+                        bundles.get(i).getThickness(),
+                        bundles.get(i).getWidth(),
+                        bundles.get(i).getLength(),
+                        bundles.get(i).getGrade(),
+                        bundles.get(i).getNoOfPieces(),
+                        bundles.get(i).getBundleNo(),
+                        bundles.get(i).getLocation(),
+                        bundles.get(i).getArea(),
+                        "",
+                        bundles.get(i).getPicture(),
+                        bundles.get(i).getPicBitmap()));
+            }
+        }
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd_hhmmss");
+        Calendar calendar = Calendar.getInstance();
+        if (bundleInfos != null && bundleInfos.size() > 0)
+            new ExportToPDF(this).exportLoadingOrderReportRow(bundleInfos, format.format(calendar.getTime()), ordersList.get(0));
+        else
+            Toast.makeText(previewLinearContext, "Empty list", Toast.LENGTH_SHORT).show();
+
     }
 
     public void filters(int flag) {
@@ -687,7 +728,7 @@ public class LoadingOrderReport extends AppCompatActivity implements View.OnClic
         dialog.setContentView(R.layout.pic_dialog2);
         dialog.setCanceledOnTouchOutside(true);
 
-        ImageView imageView = dialog.findViewById(R.id.main_pic);
+        PhotoView imageView = dialog.findViewById(R.id.main_pic);
         imageView.setImageBitmap(picts);
 
         dialog.show();
@@ -702,8 +743,9 @@ public class LoadingOrderReport extends AppCompatActivity implements View.OnClic
         dialog.setCanceledOnTouchOutside(false);
 
 
-        HorizontalListView listView = dialog.findViewById(R.id.listview);
+        ListView listView = dialog.findViewById(R.id.listview);
         ImageView close = dialog.findViewById(R.id.picDialog_close);
+        PhotoView photoView = dialog.findViewById(R.id.pic_dialog_image);
 
         close.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -722,10 +764,20 @@ public class LoadingOrderReport extends AppCompatActivity implements View.OnClic
         pics.add(picts.getPic77());
         pics.add(picts.getPic88());
 
-        Log.e("bitmap", "1");
 
         PicturesAdapter adapter = new PicturesAdapter(pics, this, null);
         listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.e("bitmap", "" + (Bitmap) adapter.getItem(i));
+                if (pics.get(i) == null)
+                    photoView.setImageResource(R.drawable.pic);
+                else
+                    photoView.setImageBitmap(pics.get(i));
+            }
+        });
 
         dialog.show();
 

@@ -10,6 +10,8 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -26,6 +28,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,11 +40,20 @@ import com.falconssoft.woodysystem.HorizontalListView;
 import com.falconssoft.woodysystem.ItemsListAdapter4;
 import com.falconssoft.woodysystem.PicturesAdapter;
 import com.falconssoft.woodysystem.R;
+import com.falconssoft.woodysystem.WoodPresenter;
 import com.falconssoft.woodysystem.models.NewRowInfo;
 import com.falconssoft.woodysystem.models.Pictures;
 import com.falconssoft.woodysystem.models.Settings;
+import com.falconssoft.woodysystem.models.SupplierInfo;
+import com.falconssoft.woodysystem.stage_one.AddNewRaw;
 import com.falconssoft.woodysystem.stage_one.EditPage;
+import com.falconssoft.woodysystem.stage_one.SuppliersAdapter;
+import com.github.chrisbanes.photoview.PhotoView;
 import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -60,10 +72,10 @@ import java.util.Locale;
 
 import static com.falconssoft.woodysystem.reports.AcceptanceInfoReport.EDIT_FLAG;
 
-public class AcceptanceReport extends AppCompatActivity implements AdapterView.OnItemSelectedListener, Serializable {
+public class AcceptanceReport extends AppCompatActivity implements AdapterView.OnItemSelectedListener, Serializable, View.OnClickListener {
     // truck Report
 
-    private TextView textView, count, totalCubic;
+    private TextView textView, count, totalCubic, supplier, total;
     private static LinearLayout linearLayout;
     private EditText from, to, truckEditText, acceptorEditText, ttnEditText;
     private Button arrow, export, exportToExcel;
@@ -94,6 +106,12 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
     private Context previewContext, previewLinearContext;
     private String previewSerial;
     NewRowInfo newRowInfoPic;
+    private Dialog searchDialog;
+    private RecyclerView recyclerView;
+    private SuppliersAdapter suppliersAdapter;
+    private List<SupplierInfo> suppliers = new ArrayList<>();
+    public static String supplierName = "";
+    private List<SupplierInfo> arraylist = new ArrayList<>();
 
     //    public static final String EDIT_FLAG2= "EDIT_FLAG";
     @Override
@@ -120,15 +138,16 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
         listView = findViewById(R.id.listview);
         linearLayout = findViewById(R.id.linearLayout);
         arrow = findViewById(R.id.arrow);
-        location = (Spinner) findViewById(R.id.Loding_Order_Location);
-        from = (EditText) findViewById(R.id.Loding_Order_from);
-        to = (EditText) findViewById(R.id.Loding_Order_to);
+        location = findViewById(R.id.Loding_Order_Location);
+        from = findViewById(R.id.Loding_Order_from);
+        to = findViewById(R.id.Loding_Order_to);
         truckEditText = findViewById(R.id.acceptanceInfoReport_truckNo);
         acceptorEditText = findViewById(R.id.acceptanceInfoReport_acceptor);
         ttnEditText = findViewById(R.id.acceptanceInfoReport_ttn);
         export = findViewById(R.id.acceptance_report_export);
         exportToExcel = findViewById(R.id.acceptance_report_export_Excel);
         totalCubic = findViewById(R.id.truck_report_cubic);
+        supplier = findViewById(R.id.truck_report_supplier);
 
         myFormat = "dd/MM/yyyy";
         sdf = new SimpleDateFormat(myFormat, Locale.US);
@@ -143,33 +162,8 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
         adapter2 = new AcceptanceReportAdapter(AcceptanceReport.this, new ArrayList<>(), new ArrayList<>());
         list.setAdapter(adapter2);
 
-
-        export.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ExportToPDF obj = new ExportToPDF(AcceptanceReport.this);
-                obj.exportReportOne(details, filtered, truckString, loc, from.getText().toString(), to.getText().toString(), dfReport.format(myCalendar.getTime()));
-
-            }
-        });
-
-        exportToExcel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                ExportToExcel.getInstance().createExcelFile(AcceptanceReport.this, "Acceptance_Report.xls", 6, filtered, details);
-
-            }
-        });
-
-        arrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                slideDown(linearLayout);
-            }
-        });
-
         new JSONTask().execute();
+        new JSONTask1().execute();
 
         location.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -187,31 +181,82 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
 
         from.setText("1/12/2019");
         to.setText(sdf.format(myCalendar.getTime()));
-
-        from.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                new DatePickerDialog(AcceptanceReport.this, openDatePickerDialog(0), myCalendar
-                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-            }
-        });
-
-        to.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                new DatePickerDialog(AcceptanceReport.this, openDatePickerDialog(1), myCalendar
-                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-            }
-        });
-
         truckEditText.addTextChangedListener(new WatchTextChange(truckEditText));
         ttnEditText.addTextChangedListener(new WatchTextChange(ttnEditText));
         acceptorEditText.addTextChangedListener(new WatchTextChange(acceptorEditText));
 
+        supplier.setOnClickListener(this);
+        export.setOnClickListener(this);
+        exportToExcel.setOnClickListener(this);
+        arrow.setOnClickListener(this);
+        from.setOnClickListener(this);
+        to.setOnClickListener(this);
+
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.truck_report_supplier:
+//                suppliers.clear();
+
+                searchDialog = new Dialog(this);
+                searchDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                searchDialog.setContentView(R.layout.search_supplier_dialog);
+                searchDialog.setCancelable(false);
+
+                SearchView searchView = searchDialog.findViewById(R.id.search_supplier_searchView);
+                TextView close = searchDialog.findViewById(R.id.search_supplier_close);
+                total = searchDialog.findViewById(R.id.total_suppliers);
+                total.setText("" + suppliers.size());
+
+                recyclerView = searchDialog.findViewById(R.id.search_supplier_recyclerView);
+                recyclerView.setLayoutManager(new LinearLayoutManager(this));
+                suppliersAdapter = new SuppliersAdapter(null, suppliers, null, this);
+                recyclerView.setAdapter(suppliersAdapter);
+
+                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        filter(newText);
+                        return false;
+                    }
+                });
+
+                close.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        searchDialog.dismiss();
+                    }
+                });
+                searchDialog.show();
+                break;
+            case R.id.acceptance_report_export:
+                ExportToPDF obj = new ExportToPDF(AcceptanceReport.this);
+                obj.exportReportOne(details, filtered, truckString, loc, from.getText().toString(), to.getText().toString(), dfReport.format(myCalendar.getTime()));
+                break;
+            case R.id.acceptance_report_export_Excel:
+                ExportToExcel.getInstance().createExcelFile(AcceptanceReport.this, "Acceptance_Report.xls", 6, filtered, details);
+                break;
+            case R.id.arrow:
+                slideDown(linearLayout);
+                break;
+            case R.id.Loding_Order_from:
+                new DatePickerDialog(AcceptanceReport.this, openDatePickerDialog(0), myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                break;
+            case R.id.Loding_Order_to:
+                new DatePickerDialog(AcceptanceReport.this, openDatePickerDialog(1), myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                break;
+        }
     }
 
     public void goToEditPage(NewRowInfo newRowInfo) {
@@ -227,6 +272,14 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
 
     }
 
+    public void getSearchSupplierInfo(String supplierNameLocal, String supplierNoLocal) {
+        supplierName = supplierNameLocal;
+        supplier.setText(supplierName);
+        searchDialog.dismiss();
+        new JSONTaskSupplierSearch().execute();
+        progressDialog.show();
+    }
+
     void fillSpinnerAdapter() {
 
         locationAdapter = new ArrayAdapter<String>(this, R.layout.spinner_layout, locationList);
@@ -234,6 +287,23 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
         location.setAdapter(locationAdapter);
         location.setOnItemSelectedListener(this);
 
+    }
+
+    public void filter(String charText) { // by Name
+        charText = charText.toLowerCase(Locale.getDefault());
+        arraylist.clear();
+        if (charText.length() == 0) {
+            arraylist.addAll(suppliers);
+        } else {
+            for (SupplierInfo supplierInfo : suppliers) {//for (SupplierInfo supplierInfo : arraylist){
+                if (supplierInfo.getSupplierName().toLowerCase(Locale.getDefault()).contains(charText)) {
+                    arraylist.add(supplierInfo);
+                }
+            }
+        }
+        total.setText("" + arraylist.size());
+        suppliersAdapter = new SuppliersAdapter(null, arraylist, null, this);
+        recyclerView.setAdapter(suppliersAdapter);
     }
 
     @Override
@@ -431,6 +501,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
     public void previewPics2(NewRowInfo info, Context context) {
         previewLinearContext = context;
         new BitmapImage2().execute(info);
+        progressDialog.show();
     }
 
     private class BitmapImage2 extends AsyncTask<NewRowInfo, String, NewRowInfo> {
@@ -444,7 +515,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
             Bitmap bitmap;
             try {
                 if (!newRowInfoPic.equals("null")) {
-                    for (int i = 0; i < 8; i++) {
+                    for (int i = 0; i < 6; i++) {
 
                         switch (i) {
                             case 0:
@@ -547,6 +618,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
 
         @Override
         protected void onPostExecute(NewRowInfo pictures) {
+            progressDialog.dismiss();
             Log.e("fromclass2", "exception:onPostExecute: " + pictures.getImageOne());
             if (pictures == null)
                 Toast.makeText(previewLinearContext, "No image found!", Toast.LENGTH_SHORT).show();
@@ -562,8 +634,10 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
 //        dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
         dialog.setContentView(R.layout.pic_dialog);
-        HorizontalListView listView = dialog.findViewById(R.id.listview);
+        ListView listView = dialog.findViewById(R.id.listview);
         ImageView close = dialog.findViewById(R.id.picDialog_close);
+        PhotoView photoView = dialog.findViewById(R.id.pic_dialog_image);
+
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -586,12 +660,23 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
         pics.add(picts.getPic44());
         pics.add(picts.getPic55());
         pics.add(picts.getPic66());
-        pics.add(picts.getPic77());
-        pics.add(picts.getPic88());
+//        pics.add(picts.getPic77());
+//        pics.add(picts.getPic88());
 
 
-        PicturesAdapter adapter = new PicturesAdapter(pics,null, this);
+        PicturesAdapter adapter = new PicturesAdapter(pics, null, this);
         listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                Log.e("bitmap", "" + (Bitmap) adapter.getItem(i));
+                if (pics.get(i) == null)
+                    photoView.setImageResource(R.drawable.pic);
+                else
+                    photoView.setImageBitmap(pics.get(i));
+            }
+        });
 
         dialog.show();
 
@@ -600,6 +685,28 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
     public void onBackPressed() {
         super.onBackPressed();
         finish();
+    }
+
+    public void fillData(NewRowInfo info) {
+        master.clear();
+        details.clear();
+        locationList.clear();
+
+        for (int i = 0; i < info.getLocationList().size(); i++)
+            locationList.add(info.getLocationList().get(i).getLocationOfAcceptance());
+        locationList.add(0, "All");
+
+        rowsCount = master.size();
+        count.setText("" + rowsCount);
+        if (master.size() > 0)
+            totalCubic.setText("" + master.get(0).getTotalCubic());
+        else
+            totalCubic.setText("0.000");
+
+        fillSpinnerAdapter();
+        adapter2 = new AcceptanceReportAdapter(AcceptanceReport.this, master, details);
+        list.setAdapter(adapter2);
+        progressDialog.dismiss();
     }
 
     // ******************************************** GET DATA *****************************************
@@ -634,18 +741,15 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
 
                 // Read Server Response
                 while ((line = reader.readLine()) != null) {
-                    try{
-                    sb.append(line);
-                    }catch (Exception e){}
+                    try {
+                        sb.append(line);
+                    } catch (Exception e) {
+                    }
                 }
 
                 String finalJson = sb.toString();
                 Log.e("finalJson*********", finalJson);
 
-//                JSONObject parentObject = new JSONObject(finalJson);
-
-//                try {
-//                    JSONArray parentArray = parentObject.getJSONArray("RAW_INFO_MASTER");
                 master.clear();
                 details.clear();
                 locationList.clear();
@@ -658,87 +762,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
                 for (int i = 0; i < list.getLocationList().size(); i++)
                     locationList.add(list.getLocationList().get(i).getLocationOfAcceptance());
                 locationList.add(0, "All");
-
-//                    ttnList.clear();
-//                    acceptorList.clear();
-//                    truckList.clear();
-//                    locationList.clear();
-//                    for (int i = 0; i < parentArray.length(); i++) {
-//                        JSONObject finalObject = parentArray.getJSONObject(i);
-//
-//                        NewRowInfo newRowInfo = new NewRowInfo();
-//                        newRowInfo.setTruckNo(finalObject.getString("TRUCK_NO"));
-//                        newRowInfo.setDate(finalObject.getString("DATE_OF_ACCEPTANCE"));
-//                        newRowInfo.setAcceptedPersonName(finalObject.getString("NAME_OF_ACCEPTER"));
-//                        newRowInfo.setLocationOfAcceptance(finalObject.getString("LOCATION_OF_ACCEPTANCE"));
-//                        newRowInfo.setTtnNo(finalObject.getString("TTN_NO"));
-//                        newRowInfo.setTotalRejectedNo(finalObject.getString("REJECTED"));
-//                        newRowInfo.setSerial(finalObject.getString("SERIAL"));
-//                        newRowInfo.setNetBundles(finalObject.getString("NET_BUNDLES"));
-//
-//                        // todo remove log
-//                        Log.e("showdatamaster", finalObject.getString("TRUCK_NO") + finalObject.getString("SERIAL"));
-//
-//                        master.add(newRowInfo);
-//                        ttnList.add(finalObject.getString("TTN_NO"));
-//                        acceptorList.add(finalObject.getString("NAME_OF_ACCEPTER"));
-//                        truckList.add(finalObject.getString("TRUCK_NO"));
-//                        locationList.add(finalObject.getString("LOCATION_OF_ACCEPTANCE"));
-
-//                    }
-
-//                    removeDuplicate(ttnList);
-//                    removeDuplicate(acceptorList);
-//                    removeDuplicate(truckList);
-//                    removeDuplicate(locationList);
-
-//                    ttnList.add(0, "All");
-//                    acceptorList.add(0, "All");
-//                    truckList.add(0, "All");
-//                    locationList.add(0, "All");
                 rowsCount = master.size();
-//
-//                } catch (JSONException e) {
-//                    Log.e("Import Data1", e.getMessage());
-//                }
-
-//                try {
-//                    JSONArray parentArray = parentObject.getJSONArray("RAW_INFO_DETAILS");//RAW_INFO_DETAILS
-//                    details.clear();
-//                    for (int i = 0; i < parentArray.length(); i++) {
-//                        JSONObject finalObject = parentArray.getJSONObject(i);
-//
-//                        NewRowInfo newRowInfo = new NewRowInfo();
-//                        newRowInfo.setSupplierName(finalObject.getString("SUPLIER"));
-//                        newRowInfo.setTruckNo(finalObject.getString("TRUCK_NO"));
-//                        newRowInfo.setThickness(finalObject.getInt("THICKNESS"));
-//                        newRowInfo.setWidth(finalObject.getInt("WIDTH"));
-//                        newRowInfo.setLength(finalObject.getInt("LENGTH"));
-//                        newRowInfo.setNoOfPieces(finalObject.getInt("PIECES"));
-//                        newRowInfo.setNoOfRejected(finalObject.getInt("REJECTED"));//REJ
-//                        newRowInfo.setNoOfBundles(finalObject.getInt("NO_BUNDLES"));
-//                        newRowInfo.setGrade(finalObject.getString("GRADE"));
-////                      newRowInfo.setTtnNo(finalObject.getString("TTN_NO"));
-//                        newRowInfo.setSerial(finalObject.getString("SERIAL"));
-//                        newRowInfo.setLocationOfAcceptance(finalObject.getString("LOCATION_OF_ACCEPTANCE"));
-
-                // todo remove log
-//                        Log.e("showdatamix", finalObject.getString("TRUCK_NO") + finalObject.getString("SERIAL"));
-//                        String pic = finalObject.getString("PART1") + finalObject.getString("PART2") +
-//                                finalObject.getString("PART3") + finalObject.getString("PART4") +
-//                                finalObject.getString("PART5") + finalObject.getString("PART6") +
-//                                finalObject.getString("PART7") + finalObject.getString("PART8");
-//
-//                        pic = pic.replaceAll("null", "");
-//
-//                        newRowInfo.setPicture(pic);
-
-//                        details.add(newRowInfo);
-//                    }
-//                } catch (JSONException e) {
-//                    Log.e("Import Data2", e.getMessage().toString());
-//                }
-
 
             } catch (MalformedURLException e) {
                 Log.e("Customer", "********ex1");
@@ -747,12 +771,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
                 Log.e("Customer", e.getMessage().toString());
                 e.printStackTrace();
 
-            }
-//            catch (JSONException e) {
-//                Log.e("Customer", "********ex3  " + e.toString());
-//                e.printStackTrace();
-//            }
-            finally {
+            } finally {
                 Log.e("Customer", "********finally");
                 if (connection != null) {
                     Log.e("Customer", "********ex4");
@@ -874,6 +893,198 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
 //                Toast.makeText(AcceptanceReport.this, "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();
             }
 //            progressDialog.dismiss();
+        }
+    }
+
+    // *************************************** GET SUPPLIERS ***************************************
+    private class JSONTask1 extends AsyncTask<String, String, List<SupplierInfo>> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected List<SupplierInfo> doInBackground(String... params) {
+            URLConnection connection = null;
+            BufferedReader reader = null;
+
+            try {
+                URL url = new URL("http://" + generalSettings.getIpAddress() + "/import.php?FLAG=4");
+
+                URLConnection conn = url.openConnection();
+                conn.setDoOutput(true);
+
+                reader = new BufferedReader(new
+                        InputStreamReader(conn.getInputStream()));
+
+                StringBuilder sb = new StringBuilder();
+                String line = null;
+
+                // Read Server Response
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                String finalJson = sb.toString();
+                Log.e("finalJson*********", finalJson);
+
+                JSONObject parentObject = new JSONObject(finalJson);
+
+                try {
+                    JSONArray parentArrayOrders = parentObject.getJSONArray("SUPPLIERS");
+
+                    for (int i = 0; i < parentArrayOrders.length(); i++) {
+                        JSONObject innerObject = parentArrayOrders.getJSONObject(i);
+
+                        SupplierInfo supplier = new SupplierInfo();
+                        supplier.setSupplierNo(innerObject.getString("SUPPLIER_NO"));
+                        supplier.setSupplierName(innerObject.getString("SUPPLIER_NAME"));
+
+                        suppliers.add(supplier);
+                        arraylist.add(supplier);
+
+                    }
+                    suppliers.add(0, new SupplierInfo("-1", "All"));
+                    arraylist.add(0, new SupplierInfo("-1", "All"));
+                } catch (JSONException e) {
+                    Log.e("Import Data2", e.getMessage().toString());
+                }
+
+            } catch (MalformedURLException e) {
+                Log.e("Customer", "********ex1");
+                e.printStackTrace();
+            } catch (IOException e) {
+                Log.e("Customer", e.getMessage().toString());
+                e.printStackTrace();
+
+            } catch (JSONException e) {
+                Log.e("Customer", "********ex3  " + e.toString());
+                e.printStackTrace();
+            } finally {
+                Log.e("Customer", "********finally");
+                if (connection != null) {
+                    Log.e("Customer", "********ex4");
+                    // connection.disconnect();
+                }
+                try {
+                    if (reader != null) {
+                        reader.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return suppliers;
+        }
+
+
+        @Override
+        protected void onPostExecute(final List<SupplierInfo> result) {
+            super.onPostExecute(result);
+
+            if (result != null) {
+                Log.e("result", "*****************" + result.size());
+                adapter.notifyDataSetChanged();
+
+            } else {
+                Toast.makeText(AcceptanceReport.this, "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    // ******************************************** Supplier Search *****************************************
+    private class JSONTaskSupplierSearch extends AsyncTask<String, String, List<NewRowInfo>> {
+
+        @Override
+        protected void onPreExecute() {
+//            super.onPreExecute();
+            progressDialog.show();
+
+        }
+
+        @Override
+        protected List<NewRowInfo> doInBackground(String... params) {
+            URLConnection connection = null;
+            BufferedReader reader = null;
+
+            try {
+                // http://10.0.0.175/woody/import.php?FLAG=16&SUPPLIER_SEARCH=
+                // http://5.189.130.98:8085/import.php?FLAG=16&SUPPLIER_SEARCH=
+
+                URL url = new URL("http://" + generalSettings.getIpAddress() + "/import.php?FLAG=16&SUPPLIER_SEARCH='" + supplierName + "'");
+
+                URLConnection conn = url.openConnection();
+                conn.setDoOutput(true);
+
+                reader = new BufferedReader(new
+                        InputStreamReader(conn.getInputStream()));
+
+                StringBuffer sb = new StringBuffer();
+                String line = null;
+
+                // Read Server Response
+                while ((line = reader.readLine()) != null) {
+                    try {
+                        sb.append(line);
+                    } catch (Exception e) {
+                    }
+                }
+
+                String finalJson = sb.toString();
+                Log.e("finalJson*********", finalJson);
+
+                master.clear();
+                if (!finalJson.equals("[]")) {
+                    Gson gson = new Gson();
+                    NewRowInfo list = gson.fromJson(finalJson, NewRowInfo.class);
+                    master.addAll(list.getMaster());
+                    rowsCount = master.size();
+                }
+
+            } catch (MalformedURLException e) {
+                Log.e("Customer", "********ex1");
+                e.printStackTrace();
+            } catch (IOException e) {
+                Log.e("Customer", e.getMessage().toString());
+                e.printStackTrace();
+
+            } finally {
+                Log.e("Customer", "********finally");
+                if (connection != null) {
+                    Log.e("Customer", "********ex4");
+                    // connection.disconnect();
+                }
+                try {
+                    if (reader != null) {
+                        reader.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return master;
+        }
+
+
+        @Override
+        protected void onPostExecute(final List<NewRowInfo> result) {
+            super.onPostExecute(result);
+            progressDialog.dismiss();
+
+            if (result != null) {
+                count.setText("" + rowsCount);
+                if (master.size() > 0)
+                    totalCubic.setText("" + master.get(0).getTotalCubic());
+                else
+                    totalCubic.setText("0.000");
+
+                filters();
+
+            } else {
+                Toast.makeText(AcceptanceReport.this, "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();
+            }
+            progressDialog.dismiss();
         }
     }
 }

@@ -81,8 +81,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
     private RecyclerView recyclerView, recyclerView2;
     private RecyclerView recycler;
     private EditText paclingList, dest, orderNo;
-    private TextView searchCustomer, searchSupplier, noBundles, totalCBM, delete, piecesOrder
-            , cubicOrder, noBundlesOrder, exportToExcel, total, totalCustomers;
+    private TextView searchCustomer, searchSupplier, noBundles, totalCBM, delete, piecesOrder, cubicOrder, noBundlesOrder, exportToExcel, total, totalCustomers;
 
     private TableLayout tableLayout, headerTableLayout;
     private TableRow tableRow;
@@ -141,6 +140,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
 
         progressDialog = new ProgressDialog(this, R.style.MyAlertDialogStyle);
         progressDialog.setMessage("Please Waiting...");
+        progressDialog.setCanceledOnTouchOutside(false);
 
         paclingList.requestFocus();
 
@@ -241,6 +241,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
         });
 
         new JSONTask2().execute();
+        progressDialog.show();
 
     }
 
@@ -256,7 +257,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
 //                    Toast.makeText(this, "Please select customer and packing list first!", Toast.LENGTH_SHORT).show();
 //                break;
             case R.id.stage2_report1_exportToExcel:
-                ExportToExcel.getInstance().createExcelFile(this, "planned_packing_list_report.xls",2 ,UPLListFiltered,null);
+                ExportToExcel.getInstance().createExcelFile(this, "planned_packing_list_report.xls", 2, UPLListFiltered, null);
                 break;
             case R.id.delete:
                 // if (plannedPLListJSON.length() > 0)
@@ -739,7 +740,7 @@ public class UnloadPackingList extends AppCompatActivity implements View.OnClick
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-
+            progressDialog.dismiss();
             if (s != null) {
 
                 if (PLList.size() > 0) {

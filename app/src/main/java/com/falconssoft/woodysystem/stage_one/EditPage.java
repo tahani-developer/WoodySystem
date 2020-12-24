@@ -487,7 +487,7 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
 
                 recyclerView = searchDialog.findViewById(R.id.search_supplier_recyclerView);
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
-                adapter = new SuppliersAdapter(null, suppliers, this);
+                adapter = new SuppliersAdapter(null, suppliers, this, null);
                 recyclerView.setAdapter(adapter);
 
                 searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -569,7 +569,7 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
                 }
             }
         }
-        adapter = new SuppliersAdapter(null, suppliers, this);
+        adapter = new SuppliersAdapter(null, suppliers, this, null);
         recyclerView.setAdapter(adapter);
     }
 

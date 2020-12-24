@@ -87,10 +87,9 @@
             app:fontFamily="serif" />
 
 
-
         <ImageView
             android:id="@+id/image"
-            android:layout_width="30dp"
+            android:layout_width="25dp"
             android:layout_height="30dp"
             android:layout_alignBottom="@+id/linear"
             android:layout_alignParentEnd="true"

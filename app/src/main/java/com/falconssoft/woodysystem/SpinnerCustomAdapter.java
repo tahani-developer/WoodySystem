@@ -24,6 +24,7 @@ public class SpinnerCustomAdapter extends ArrayAdapter<SpinnerModel> {
     private List<SpinnerModel> list;
     private InventoryReport inventoryReport;
     private PlannedUnplanned plannedUnplanned;
+    private LoadingOrder loadingOrder;
     private boolean isFromView = false;
     private int flag, page;
 
@@ -35,8 +36,10 @@ public class SpinnerCustomAdapter extends ArrayAdapter<SpinnerModel> {
         this.page = page;
         if (page == 1)
             this.inventoryReport = (InventoryReport) context;
-        else // 2
+        else if (page == 2)// 2
             this.plannedUnplanned = (PlannedUnplanned) context;
+        else // 3
+            this.loadingOrder = (LoadingOrder) context;
 
 //        this.myAdapter = this;
     }
@@ -58,8 +61,10 @@ public class SpinnerCustomAdapter extends ArrayAdapter<SpinnerModel> {
         if (convertView == null) {
             if (page == 1)
                 convertView = LayoutInflater.from(inventoryReport).inflate(R.layout.spinner_with_checkbox, null);
-            else
+            else if (page == 2)
                 convertView = LayoutInflater.from(plannedUnplanned).inflate(R.layout.spinner_with_checkbox, null);
+            else
+                convertView = LayoutInflater.from(loadingOrder).inflate(R.layout.spinner_with_checkbox, null);
 
             holder = new SpinnerViewHolder();
             holder.title = convertView.findViewById(R.id.spinner_checkbox_title);
@@ -92,9 +97,10 @@ public class SpinnerCustomAdapter extends ArrayAdapter<SpinnerModel> {
                     list.get(position).setChecked(isChecked);
                     if (page == 1)
                         inventoryReport.sendOtherLists(list, flag);
-                    else
+                    else if (page == 2)
                         plannedUnplanned.sendOtherLists(list, flag);
-
+                    else
+                        loadingOrder.sendOtherLists(list, flag);
                     Log.e("spinneradapter", list.get(position).getTitle() + list.get(position).isChecked());
                 }
             }

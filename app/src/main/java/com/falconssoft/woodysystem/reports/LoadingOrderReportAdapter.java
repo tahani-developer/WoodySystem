@@ -55,7 +55,7 @@ public class LoadingOrderReportAdapter extends BaseAdapter {
     private class ViewHolder {
         ImageView pic;
         Button bundleNo;
-        TextView orderNo, truckNo, containerNo, date, destination;
+        TextView orderNo, truckNo, containerNo, date, destination, pdf;
         ImageView edit;
     }
 
@@ -73,6 +73,7 @@ public class LoadingOrderReportAdapter extends BaseAdapter {
         holder.bundleNo = (Button) view.findViewById(R.id.bundleNo);
         holder.pic = (ImageView) view.findViewById(R.id.pic);
         holder.edit = view.findViewById(R.id.loading_order_raw_edit);
+        holder.pdf = view.findViewById(R.id.loading_order_raw_pdf);
 
         holder.orderNo.setText(itemsList.get(i).getOrderNo());
         holder.truckNo.setText(itemsList.get(i).getPlacingNo());
@@ -81,6 +82,15 @@ public class LoadingOrderReportAdapter extends BaseAdapter {
         holder.destination.setText(itemsList.get(i).getDestination());
 
         LoadingOrderReport obj = new LoadingOrderReport();
+
+        holder.pdf.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                context.goToPDF(i, itemsList);
+                Log.e("showwwwwwwwwwww1", itemsList.get(i).getPlacingNo());
+
+            }
+        });
 
         holder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,29 +105,7 @@ public class LoadingOrderReportAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
 
-//                ArrayList<BundleInfo> bundleInfos = new ArrayList<>();
-//
-//                for (int k = 0; k < bundles.size(); k++) {
-////                                    Log.e("ooo  " , ""+ orders.get(index).getOrderNo() + "  " + bundles.get(i).getBundleNo());
-//                    if (itemsList.get(i).getOrderNo().equals(bundles.get(k).getOrderNo()) &&
-//                            itemsList.get(i).getPlacingNo().equals(bundles.get(k).getPlacingNo()) &&
-//                            itemsList.get(i).getContainerNo().equals(bundles.get(k).getContainerNo()) &&
-//                            itemsList.get(i).getDateOfLoad().equals(bundles.get(k).getDateOfLoad())) {
-//
-//                        bundleInfos.add(new BundleInfo(
-//                                bundles.get(k).getThickness(),
-//                                bundles.get(k).getWidth(),
-//                                bundles.get(k).getLength(),
-//                                bundles.get(k).getGrade(),
-//                                bundles.get(k).getNoOfPieces(),
-//                                bundles.get(k).getBundleNo(),
-//                                bundles.get(k).getLocation(),
-//                                bundles.get(k).getArea(),
-//                                "",
-//                                bundles.get(k).getPicture()));
-//                    }
-//                }
-                obj.previewLinear(i, context, itemsList);
+                obj.previewLinear(itemsList.get(i), context, itemsList);
 
             }
         });

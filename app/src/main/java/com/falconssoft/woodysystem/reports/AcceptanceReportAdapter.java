@@ -96,6 +96,7 @@ public class AcceptanceReportAdapter extends BaseAdapter {
                 context.goToEditPage(itemsList.get(i));
             }
         });
+
         holder.preview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

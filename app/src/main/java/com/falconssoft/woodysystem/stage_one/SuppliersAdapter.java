@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.models.SupplierInfo;
+import com.falconssoft.woodysystem.reports.AcceptanceReport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +22,14 @@ public class SuppliersAdapter extends RecyclerView.Adapter<SuppliersAdapter.Supp
     private AddNewRaw addNewRaw;
     private List<SupplierInfo> supplierInfoList;
     private EditPage editPage;
+    private AcceptanceReport truckReport;
 
-    public SuppliersAdapter(AddNewRaw addNewRaw, List<SupplierInfo> supplierInfoList, EditPage editPage) {
+    public SuppliersAdapter(AddNewRaw addNewRaw, List<SupplierInfo> supplierInfoList, EditPage editPage, AcceptanceReport truckReport) {
         this.addNewRaw = addNewRaw;
         this.supplierInfoList = supplierInfoList;
         this.editPage = editPage;
+        this.truckReport = truckReport;
+
     }
 
     @NonNull
@@ -44,11 +48,14 @@ public class SuppliersAdapter extends RecyclerView.Adapter<SuppliersAdapter.Supp
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (editPage == null)
+                if (addNewRaw != null)
                     addNewRaw.getSearchSupplierInfo(supplierInfoList.get(i).getSupplierName()
                             , supplierInfoList.get(i).getSupplierNo());
-                else
+                else if (editPage != null)
                     editPage.getSearchSupplierInfo(supplierInfoList.get(i).getSupplierName()
+                            , supplierInfoList.get(i).getSupplierNo());
+                else
+                    truckReport.getSearchSupplierInfo(supplierInfoList.get(i).getSupplierName()
                             , supplierInfoList.get(i).getSupplierNo());
             }
         });

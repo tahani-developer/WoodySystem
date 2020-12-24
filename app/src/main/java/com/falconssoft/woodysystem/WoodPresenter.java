@@ -17,11 +17,13 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.falconssoft.woodysystem.models.BundleInfo;
+import com.falconssoft.woodysystem.models.NewRowInfo;
 import com.falconssoft.woodysystem.models.Settings;
 import com.falconssoft.woodysystem.models.Users;
 import com.falconssoft.woodysystem.reports.AcceptanceReport;
 import com.falconssoft.woodysystem.reports.BundlesReport;
 import com.falconssoft.woodysystem.reports.InventoryReport;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,24 +48,24 @@ public class WoodPresenter {
 
 //    private StringRequest jsonObjectRequest;
 //    private String urlImport;
+//
+//    private StringRequest usersJsonObjectRequest;
+//    private String urlUsers;
 
-    private StringRequest usersJsonObjectRequest;
-    private String urlUsers;
+//    private StringRequest bundlesJsonObjectRequest;
+//    private StringRequest printBarcodeObjectRequest; // first report
+//    private String urlBundles;
 
-    private StringRequest bundlesJsonObjectRequest;
-    private StringRequest printBarcodeObjectRequest; // first report
-    private String urlBundles;
-
-    private StringRequest packingListJsonObjectRequest;
-    private String urlPackingList;
-
-    private StringRequest truckReportJsonObjectRequest;
-    private String urlTruckReport;
+    private StringRequest stringRequest;
+    //    private String urlPackingList;
+//
+//    private StringRequest truckReportJsonObjectRequest;
+    private String url;
 
     private LoginActivity loginActivity;
     private InventoryReport inventoryReport;//= new InventoryReport();
     private BundlesReport bundlesReport;
-    private AcceptanceReport acceptanceReport;
+    private AcceptanceReport truckReport;
 
     private static String serialNo;
     private static List<BundleInfo> bundleReportList = new ArrayList<>();
@@ -82,11 +84,11 @@ public class WoodPresenter {
     void getUsersData(LoginActivity loginActivity) {
         this.loginActivity = loginActivity;
         settings = databaseHandler.getSettings();
-        urlUsers = "http://" + settings.getIpAddress() + "/import.php?FLAG=0";//http://192.168.2.17:8088/woody/import.php?FLAG=0
+        url = "http://" + settings.getIpAddress() + "/import.php?FLAG=0";//http://192.168.2.17:8088/woody/import.php?FLAG=0
 //        Log.e("presenter/urlUsers ", "" + urlUsers);
 //        Log.e("presenter:ipUsers ", "" + SettingsFile.ipAddress);
-        usersJsonObjectRequest = new StringRequest(Request.Method.GET, urlUsers, new UsersResponseClass(), new UsersResponseClass());
-        requestQueue.add(usersJsonObjectRequest);
+        stringRequest = new StringRequest(Request.Method.GET, url, new UsersResponseClass(), new UsersResponseClass());
+        requestQueue.add(stringRequest);
     }
 
     class UsersResponseClass implements Response.Listener<String>, Response.ErrorListener {
@@ -170,11 +172,11 @@ public class WoodPresenter {
         this.inventoryReport = inventoryReport;
         inventoryReport.showProgressDialog();
 
-        urlBundles = "http://" + settings.getIpAddress() + "/import.php?FLAG=3";//http://5.189.130.98:8085/import.php?FLAG=3
+        url = "http://" + settings.getIpAddress() + "/import.php?FLAG=3";//http://5.189.130.98:8085/import.php?FLAG=3
 //        Log.e("presenter/urlUsers ", "" + urlUsers);
 //        Log.e("presenter:ipUsers ", "" + SettingsFile.ipAddress);
-        bundlesJsonObjectRequest = new StringRequest(Request.Method.GET, urlBundles, new BundlesResponseClass(), new BundlesResponseClass());
-        requestQueue.add(bundlesJsonObjectRequest);
+        stringRequest = new StringRequest(Request.Method.GET, url, new BundlesResponseClass(), new BundlesResponseClass());
+        requestQueue.add(stringRequest);
     }
 
     class BundlesResponseClass implements Response.Listener<String>, Response.ErrorListener {
@@ -260,11 +262,10 @@ public class WoodPresenter {
         settings = databaseHandler.getSettings();
         this.bundlesReport = bundlesReport;
 
-        urlBundles = "http://" + settings.getIpAddress() + "/import.php?FLAG=3";//http://5.189.130.98:8085/import.php?FLAG=3
-//        Log.e("presenter/urlUsers ", "" + urlUsers);
-//        Log.e("presenter:ipUsers ", "" + SettingsFile.ipAddress);
-        printBarcodeObjectRequest = new StringRequest(Request.Method.GET, urlBundles, new PrintBarcodeResponseClass(), new PrintBarcodeResponseClass());
-        requestQueue.add(printBarcodeObjectRequest);
+        url = "http://" + settings.getIpAddress() + "/import.php?FLAG=3";//http://5.189.130.98:8085/import.php?FLAG=3
+
+        stringRequest = new StringRequest(Request.Method.GET, url, new PrintBarcodeResponseClass(), new PrintBarcodeResponseClass());
+        requestQueue.add(stringRequest);
     }
 
     class PrintBarcodeResponseClass implements Response.Listener<String>, Response.ErrorListener {
@@ -342,7 +343,7 @@ public class WoodPresenter {
         settings = databaseHandler.getSettings();
         this.inventoryReport = inventoryReport;
 //export.php?ADD_PACKING_LIST=1&BUNDLE_NO='" + bundleNo + "'&PACKING_LIST='" + packingList + "'");
-        urlPackingList = "http://" + settings.getIpAddress() + "/export.php?ADD_PACKING_LIST=1&BUNDLE_NO=\"" + bundleNumber + "\""
+        url = "http://" + settings.getIpAddress() + "/export.php?ADD_PACKING_LIST=1&BUNDLE_NO=\"" + bundleNumber + "\""
                 + "&PACKING_LIST=\"" + packingList + "\""
                 + "&OLD_PACKING_LIST=\"" + oldBackingList + "\""
                 + "&LOCATION=\"" + location + "\""
@@ -352,8 +353,8 @@ public class WoodPresenter {
                 + "&THICKNESS=\"" + thickness + "\"";//http://5.189.130.98:8085/import.php?FLAG=3
 //        Log.e("presenter/ ", "urlPackingList " + urlPackingList);
 
-        packingListJsonObjectRequest = new StringRequest(Request.Method.GET, urlPackingList, new UpdatePackingListClass(), new UpdatePackingListClass());
-        requestQueue.add(packingListJsonObjectRequest);
+        stringRequest = new StringRequest(Request.Method.GET, url, new UpdatePackingListClass(), new UpdatePackingListClass());
+        requestQueue.add(stringRequest);
     }
 
     class UpdatePackingListClass implements Response.Listener<String>, Response.ErrorListener {
@@ -401,11 +402,11 @@ public class WoodPresenter {
         this.inventoryReport = inventoryReport;
         inventoryReport.showProgressDialog();
 
-        urlBundles = "http://" + settings.getIpAddress() + "/import.php?FLAG=3";//http://5.189.130.98:8085/import.php?FLAG=3
+        url = "http://" + settings.getIpAddress() + "/import.php?FLAG=3";//http://5.189.130.98:8085/import.php?FLAG=3
 //        Log.e("presenter/urlUsers ", "" + urlUsers);
 //        Log.e("presenter:ipUsers ", "" + SettingsFile.ipAddress);
-        bundlesJsonObjectRequest = new StringRequest(Request.Method.GET, urlBundles, new UpdatedBundlesResponseClass(), new UpdatedBundlesResponseClass());
-        requestQueue.add(bundlesJsonObjectRequest);
+        stringRequest = new StringRequest(Request.Method.GET, url, new UpdatedBundlesResponseClass(), new UpdatedBundlesResponseClass());
+        requestQueue.add(stringRequest);
     }
 
     class UpdatedBundlesResponseClass implements Response.Listener<String>, Response.ErrorListener {
@@ -477,7 +478,48 @@ public class WoodPresenter {
         }
     }
 
-    //----------------------------------------------------------------------------------------/
+    //-------------------------------------------- Get truck report Data -----------------------------------------/
+
+    public void getTruckReportData(AcceptanceReport truckReport) {
+        settings = databaseHandler.getSettings();
+        this.truckReport = truckReport;
+
+        url = "http://" + settings.getIpAddress() + "/import.php?FLAG=55";//http://5.189.130.98:8085/import.php?FLAG=55
+//        Log.e("presenter/urlUsers ", "" + urlUsers);
+//        Log.e("presenter:ipUsers ", "" + SettingsFile.ipAddress);
+        stringRequest = new StringRequest(Request.Method.GET, url, new TruckReportClass(), new TruckReportClass());
+        requestQueue.add(stringRequest);
+    }
+
+    class TruckReportClass implements Response.Listener<String>, Response.ErrorListener {
+
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            Log.e("presenter/truckReport ", "/err" + error);
+            inventoryReport.hideProgressDialog();
+        }
+
+        @Override
+        public void onResponse(String response) {
+            try {
+                if (response.indexOf("{") == 3)
+                    response = new String(response.getBytes("ISO-8859-1"), "UTF-8");
+                Log.e("presenter/truckReport ", response);
+
+                if (response != null) {
+                    Gson gson = new Gson();
+                    NewRowInfo list = gson.fromJson(response, NewRowInfo.class);
+                    truckReport.fillData(list);
+                } else
+                    Toast.makeText(context, "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();
+
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //-------------------------------------------------------------------------------------/
 
     void showLog(String method, String key, String value) {
         Log.e("presenter", method + "/" + key + "/" + value);

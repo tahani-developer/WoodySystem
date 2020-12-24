@@ -8,6 +8,7 @@ import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -23,6 +24,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
@@ -90,7 +92,7 @@ import static com.falconssoft.woodysystem.SettingsFile.senderName;
 import static com.falconssoft.woodysystem.SettingsFile.senderPassword;
 import static com.falconssoft.woodysystem.Stage3.flagOpenJ;
 
-public class LoadingOrder2 extends AppCompatActivity {
+public class LoadingOrder2 extends AppCompatActivity implements View.OnClickListener {
 
     /**
      * loading order is just for whose has packing list.
@@ -178,7 +180,6 @@ public class LoadingOrder2 extends AppCompatActivity {
 
         new JSONTask2().execute();
 
-
         adapter = new ItemsListAdapter2(LoadingOrder2.this, bundles);
         listView.setAdapter(adapter);
         listView2.setAdapter(adapter);
@@ -199,70 +200,14 @@ public class LoadingOrder2 extends AppCompatActivity {
             }
         });
 
-        img1.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.M)
-            @Override
-            public void onClick(View v) {
-                openCamera(-1);
-                imageNo = 1;
-            }
-        });
-        img2.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.M)
-            @Override
-            public void onClick(View v) {
-                openCamera(-1);
-                imageNo = 2;
-            }
-        });
-        img3.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.M)
-            @Override
-            public void onClick(View v) {
-                openCamera(-1);
-                imageNo = 3;
-            }
-        });
-        img4.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.M)
-            @Override
-            public void onClick(View v) {
-                openCamera(-1);
-                imageNo = 4;
-            }
-        });
-        img5.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.M)
-            @Override
-            public void onClick(View v) {
-                openCamera(-1);
-                imageNo = 5;
-            }
-        });
-        img6.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.M)
-            @Override
-            public void onClick(View v) {
-                openCamera(-1);
-                imageNo = 6;
-            }
-        });
-        img7.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.M)
-            @Override
-            public void onClick(View v) {
-                openCamera(-1);
-                imageNo = 7;
-            }
-        });
-        img8.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.M)
-            @Override
-            public void onClick(View v) {
-                openCamera(-1);
-                imageNo = 8;
-            }
-        });
+        img1.setOnClickListener(this);
+        img2.setOnClickListener(this);
+        img3.setOnClickListener(this);
+        img4.setOnClickListener(this);
+        img5.setOnClickListener(this);
+        img6.setOnClickListener(this);
+        img7.setOnClickListener(this);
+        img8.setOnClickListener(this);
 
         myCalendar = Calendar.getInstance();
 
@@ -309,14 +254,48 @@ public class LoadingOrder2 extends AppCompatActivity {
         });
     }
 
-    public void sendBundle() {
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.image1:
+                openCamera(-1);
+                imageNo = 1;
+                break;
+            case R.id.image2:
+                openCamera(-1);
+                imageNo = 2;
+                break;
+            case R.id.image3:
+                openCamera(-1);
+                imageNo = 3;
+                break;
+            case R.id.image4:
+                openCamera(-1);
+                imageNo = 4;
+                break;
+            case R.id.image5:
+                openCamera(-1);
+                imageNo = 5;
+                break;
+            case R.id.image6:
+                openCamera(-1);
+                imageNo = 6;
+                break;
+            case R.id.image7:
+                openCamera(-1);
+                imageNo = 7;
+                break;
+            case R.id.image8:
+                openCamera(-1);
+                imageNo = 8;
+                break;
 
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//
-//            }
-//        }).start();
+        }
+
+    }
+
+    public void sendBundle() {
 
         if (generalSettings.getStore().equals("Amman")) {
             Log.e("location1", generalSettings.getStore());
@@ -357,20 +336,7 @@ public class LoadingOrder2 extends AppCompatActivity {
 
             jsonArrayPics.put(picture.getJSONObject());
 
-//                    databaseHandler.addPictures(picture);
-
             new JSONTask4().execute();
-//                    progressDialog.show();
-//                new JSONTask().execute();
-
-//            new Handler(Looper.getMainLooper()).post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    searchBar.setText("2");
-//                }
-//            });
-//                finish();
-
         } else {
             //checkDuplicate = new ArrayList<>();
             checkedBundleList = new ArrayList<>();
@@ -395,7 +361,7 @@ public class LoadingOrder2 extends AppCompatActivity {
                         , bundles.get(i).getPicture()
                         , bundles.get(i).getBackingList()
                         , bundles.get(i).getCustomer());
-                Log.e("followpic" , bundles.get(i).getPicture());
+                Log.e("followpic", bundles.get(i).getPicture());
 
                 order.setSerial(Integer.parseInt(bundles.get(i).getSerialNo()));
                 checkedBundleList.add(order);
@@ -453,7 +419,6 @@ public class LoadingOrder2 extends AppCompatActivity {
 
     }
 
-
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void openCamera(int i) {
 //        checkImageExist = true;
@@ -489,7 +454,7 @@ public class LoadingOrder2 extends AppCompatActivity {
             if (extras != null) {
 //                Bitmap pic = extras.getParcelable("data");
                 if (index != -1) {
-                    bundles.get(index).setPicture(BitMapToString(thumbnail));
+                    bundles.get(index).setPicture(bitMapToString(thumbnail));
                     String root9 = Environment.getExternalStorageDirectory().getAbsolutePath();
                     picture = new File(root9, "bundleImage" + index + ".png");
                     adapter.notifyDataSetChanged();
@@ -497,38 +462,38 @@ public class LoadingOrder2 extends AppCompatActivity {
                     switch (imageNo) {
                         case 1:
                             img1.setImageBitmap(thumbnail);
-                            pics.set(0, BitMapToString(thumbnail));
+                            pics.set(0, bitMapToString(thumbnail));
                             break;
                         case 2:
                             img2.setImageBitmap(thumbnail);
-                            pics.set(1, BitMapToString(thumbnail));
+                            pics.set(1, bitMapToString(thumbnail));
                             break;
                         case 3:
                             img3.setImageBitmap(thumbnail);
-                            pics.set(2, BitMapToString(thumbnail));
+                            pics.set(2, bitMapToString(thumbnail));
                             break;
                         case 4:
                             img4.setImageBitmap(thumbnail);
-                            pics.set(3, BitMapToString(thumbnail));
+                            pics.set(3, bitMapToString(thumbnail));
                             break;
                         case 5:
                             img5.setImageBitmap(thumbnail);
-                            pics.set(4, BitMapToString(thumbnail));
+                            pics.set(4, bitMapToString(thumbnail));
                             break;
                         case 6:
                             img6.setImageBitmap(thumbnail);
-                            pics.set(5, BitMapToString(thumbnail));
+                            pics.set(5, bitMapToString(thumbnail));
                             break;
                         case 7:
                             img7.setImageBitmap(thumbnail);
-                            pics.set(6, BitMapToString(thumbnail));
+                            pics.set(6, bitMapToString(thumbnail));
                             break;
                         case 8:
                             img8.setImageBitmap(thumbnail);
-                            pics.set(7, BitMapToString(thumbnail));
+                            pics.set(7, bitMapToString(thumbnail));
                             break;
 
-                    }
+                }
 
                 }
             }
@@ -611,6 +576,7 @@ public class LoadingOrder2 extends AppCompatActivity {
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Please Waiting...");
+        progressDialog.setCanceledOnTouchOutside(false);
 
         img1 = findViewById(R.id.image1);
         img2 = findViewById(R.id.image2);
@@ -652,7 +618,7 @@ public class LoadingOrder2 extends AppCompatActivity {
         return null;
     }
 
-    public String BitMapToString(Bitmap bitmap) {
+    public String bitMapToString(Bitmap bitmap) {
         if (bitmap != null) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
@@ -1171,7 +1137,7 @@ public class LoadingOrder2 extends AppCompatActivity {
             if (s != null) {
                 if (s.contains("AMMAN_BUNDLE_ORDER SUCCESS")) {
                     pics.clear();
-                    flagOpenJ=0;
+                    flagOpenJ = 0;
                     Intent intent = new Intent(LoadingOrder2.this, LoadingOrder.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);

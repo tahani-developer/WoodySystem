@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TableRow
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inventory_report_linear3">
-
+        android:layout_height="match_parent"
+        android:minHeight="40dp"
+        android:layout_marginTop="5dp">
 
         <TextView
             android:id="@+id/supplier"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="match_parent"
             android:layout_weight="1.5"
             android:fontFamily="serif"
             android:background="@color/light_orange"
@@ -30,7 +27,7 @@
         <TextView
             android:id="@+id/th"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:fontFamily="serif"
             android:background="@color/light_orange"
@@ -44,7 +41,7 @@
         <TextView
             android:id="@+id/w"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:fontFamily="serif"
             android:background="@color/light_orange"
@@ -58,7 +55,7 @@
         <TextView
             android:id="@+id/l"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:fontFamily="serif"
             android:background="@color/light_orange"
@@ -72,7 +69,7 @@
         <TextView
             android:id="@+id/pcs"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:fontFamily="serif"
             android:background="@color/light_orange"
@@ -87,7 +84,7 @@
         <TextView
             android:id="@+id/item_row4_cubic"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:fontFamily="serif"
             android:background="@color/light_orange"
@@ -102,7 +99,7 @@
         <TextView
             android:id="@+id/grade"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:fontFamily="serif"
             android:background="@color/light_orange"
@@ -117,7 +114,7 @@
         <TextView
             android:id="@+id/rej"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:fontFamily="serif"
             android:background="@color/light_orange"
@@ -132,7 +129,7 @@
         <TextView
             android:id="@+id/bundles"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:fontFamily="serif"
             android:background="@color/light_orange"

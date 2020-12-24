@@ -67,11 +67,11 @@ public class ExportToPDF {
         this.context = context;
     }
 
-    public void exportPlannedUnplanned(List<PlannedPL> list, String headerDate, String date,String bundle, String cubic) {
+    public void exportPlannedUnplanned(List<PlannedPL> list, String headerDate, String date, String bundle, String cubic) {
         PdfPTable pdfPTable = new PdfPTable(7);
         PdfPTable pdfPTableHeader = new PdfPTable(7);
 
-        createPDF("Planned Unplanned Inventory Report"+ headerDate + "_.pdf");
+        createPDF("Planned Unplanned Inventory Report" + headerDate + "_.pdf");
         pdfPTable.setWidthPercentage(100f);
         pdfPTableHeader.setWidthPercentage(100f);
         pdfPTableHeader.setSpacingAfter(20);
@@ -92,10 +92,10 @@ public class ExportToPDF {
 
         pdfPTable.setHeaderRows(1);
         for (int i = 0; i < list.size(); i++) {
-            insertCell(pdfPTable, String.valueOf(list.get(i).getThickness()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
-            insertCell(pdfPTable, String.valueOf(list.get(i).getWidth()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
-            insertCell(pdfPTable, String.valueOf(list.get(i).getLength()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
-            insertCell(pdfPTable, String.valueOf(list.get(i).getNoOfPieces()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf((int) list.get(i).getThickness()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf((int) list.get(i).getWidth()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf((int) list.get(i).getLength()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf((int) list.get(i).getNoOfPieces()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
             insertCell(pdfPTable, String.valueOf(list.get(i).getGrade()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
             insertCell(pdfPTable, String.valueOf(list.get(i).getNoOfCopies()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
             insertCell(pdfPTable, String.valueOf(String.format("%.3f", (list.get(i).getCubic()))), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
@@ -103,8 +103,8 @@ public class ExportToPDF {
         }
 
         insertCell(pdfPTable, "Total", Element.ALIGN_RIGHT, 5, arabicFont, BaseColor.BLACK);
-        insertCell(pdfPTable, ""+bundle, Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
-        insertCell(pdfPTable,""+cubic, Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, "" + bundle, Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, "" + cubic, Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
 
 
         insertCell(pdfPTableHeader, "Planned Unplanned Inventory Report", Element.ALIGN_CENTER, 7, arabicFontHeader, BaseColor.WHITE);
@@ -147,7 +147,7 @@ public class ExportToPDF {
 
     }
 
-    public void exportUnloadPackingList(List<PlannedPL> list, String customer, String supplier, String headerDate, String grade, String date,String bundle,String cubic) {
+    public void exportUnloadPackingList(List<PlannedPL> list, String customer, String supplier, String headerDate, String grade, String date, String bundle, String cubic) {
         PdfPTable pdfPTable = new PdfPTable(12);
         PdfPTable pdfPTableHeader = new PdfPTable(12);
 
@@ -162,9 +162,9 @@ public class ExportToPDF {
         insertCell(pdfPTable, "#", ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
         insertCell(pdfPTable, context.getString(R.string.cust), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
         insertCell(pdfPTable, "PL#", ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
-        insertCell(pdfPTable, context.getString(R.string.destination), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.destination), ALIGN_CENTER, 2, arabicFont, BaseColor.BLACK);
         insertCell(pdfPTable, context.getString(R.string.order_no), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
-        insertCell(pdfPTable, context.getString(R.string.supplier_name), ALIGN_CENTER, 3, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.supplier_name), ALIGN_CENTER, 2, arabicFont, BaseColor.BLACK);
         insertCell(pdfPTable, context.getString(R.string.grade), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
         insertCell(pdfPTable, context.getString(R.string.no_of_pieces), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
         insertCell(pdfPTable, context.getString(R.string.no_bundle), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
@@ -175,19 +175,19 @@ public class ExportToPDF {
             insertCell(pdfPTable, "" + (i + 1), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
             insertCell(pdfPTable, String.valueOf(list.get(i).getCustName()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
             insertCell(pdfPTable, String.valueOf(list.get(i).getPackingList()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
-            insertCell(pdfPTable, String.valueOf(list.get(i).getDestination()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getDestination()), Element.ALIGN_CENTER, 2, arabicFont, BaseColor.BLACK);
             insertCell(pdfPTable, String.valueOf(list.get(i).getOrderNo()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
-            insertCell(pdfPTable, String.valueOf(list.get(i).getSupplier()), Element.ALIGN_CENTER, 3, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getSupplier()), Element.ALIGN_CENTER, 2, arabicFont, BaseColor.BLACK);
             insertCell(pdfPTable, String.valueOf(list.get(i).getGrade()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
-            insertCell(pdfPTable, String.valueOf(list.get(i).getNoOfPieces()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf((int) list.get(i).getNoOfPieces()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
             insertCell(pdfPTable, String.valueOf(list.get(i).getNoOfCopies()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
             insertCell(pdfPTable, String.format("%.3f", (list.get(i).getCubic())), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
 
         }
 
         insertCell(pdfPTable, "Total", Element.ALIGN_RIGHT, 10, arabicFont, BaseColor.BLACK);
-        insertCell(pdfPTable, ""+bundle, Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
-        insertCell(pdfPTable,""+cubic, Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, "" + bundle, Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, "" + cubic, Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
 
         insertCell(pdfPTableHeader, "Planned Packing List Report", Element.ALIGN_CENTER, 12, arabicFontHeader, BaseColor.WHITE);
         insertCell(pdfPTableHeader, context.getString(R.string.date) + ": " + date, Element.ALIGN_RIGHT, 6, arabicFontHeader, BaseColor.WHITE);
@@ -211,7 +211,7 @@ public class ExportToPDF {
 
     }
 
-    public void exportLoadPackingList(List<PlannedPL> list, String customer, String supplier, String headerDate, String grade, String date,String bundle,String cubic) {
+    public void exportLoadPackingList(List<PlannedPL> list, String customer, String supplier, String headerDate, String grade, String date, String bundle, String cubic) {
         PdfPTable pdfPTable = new PdfPTable(10);
         PdfPTable pdfPTableHeader = new PdfPTable(10);
 
@@ -243,15 +243,15 @@ public class ExportToPDF {
             insertCell(pdfPTable, String.valueOf(list.get(i).getOrderNo()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
             insertCell(pdfPTable, String.valueOf(list.get(i).getSupplier()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
             insertCell(pdfPTable, String.valueOf(list.get(i).getGrade()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
-            insertCell(pdfPTable, String.valueOf(list.get(i).getNoOfPieces()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf((int) list.get(i).getNoOfPieces()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
             insertCell(pdfPTable, String.valueOf(list.get(i).getNoOfCopies()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
             insertCell(pdfPTable, String.format("%.3f", (list.get(i).getCubic())), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
 
         }
 
         insertCell(pdfPTable, "Total", Element.ALIGN_RIGHT, 8, arabicFont, BaseColor.BLACK);
-        insertCell(pdfPTable, ""+bundle, Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
-        insertCell(pdfPTable,""+cubic, Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, "" + bundle, Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, "" + cubic, Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
 
         insertCell(pdfPTableHeader, "Loaded Packing List Report", Element.ALIGN_CENTER, 12, arabicFontHeader, BaseColor.WHITE);
         insertCell(pdfPTableHeader, context.getString(R.string.date) + ": " + date, Element.ALIGN_RIGHT, 6, arabicFontHeader, BaseColor.WHITE);
@@ -306,10 +306,10 @@ public class ExportToPDF {
 
             insertCell(pdfPTable, String.valueOf(list.get(i).getSerialNo()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
             insertCell(pdfPTable, String.valueOf(list.get(i).getBundleNo()), Element.ALIGN_CENTER, 4, arabicFont, BaseColor.BLACK);
-            insertCell(pdfPTable, String.valueOf((int)list.get(i).getThickness()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
-            insertCell(pdfPTable, String.valueOf((int)list.get(i).getWidth()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf((int) list.get(i).getThickness()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf((int) list.get(i).getWidth()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
             insertCell(pdfPTable, String.valueOf((int) list.get(i).getLength()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
-            insertCell(pdfPTable, String.valueOf((int)list.get(i).getNoOfPieces()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf((int) list.get(i).getNoOfPieces()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
             insertCell(pdfPTable, String.valueOf(list.get(i).getGrade()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
             insertCell(pdfPTable, String.valueOf(list.get(i).getLocation()), Element.ALIGN_CENTER, 2, arabicFont, BaseColor.BLACK);
             insertCell(pdfPTable, String.valueOf(list.get(i).getArea()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
@@ -361,7 +361,7 @@ public class ExportToPDF {
 
     }
 
-    public void exportReportOne(List<NewRowInfo> bundles ,List<NewRowInfo> list, String truck, String location, String fromDate, String toDate, String headerDate) {
+    public void exportReportOne(List<NewRowInfo> bundles, List<NewRowInfo> list, String truck, String location, String fromDate, String toDate, String headerDate) {
         PdfPTable pdfPTable = new PdfPTable(10);
         PdfPTable pdfPTableHeader = new PdfPTable(10);
 
@@ -377,9 +377,9 @@ public class ExportToPDF {
 //        directionOfHeader = Element.ALIGN_RIGHT;
 
         insertCell(pdfPTable, context.getString(R.string.truck), ALIGN_CENTER, 2, arabicFont, BaseColor.BLACK);
-        insertCell(pdfPTable, context.getString(R.string.supplier_name), ALIGN_CENTER, 4, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.supplier_name), ALIGN_CENTER, 3, arabicFont, BaseColor.BLACK);
         insertCell(pdfPTable, context.getString(R.string.ttn), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
-        insertCell(pdfPTable, context.getString(R.string.date_of_acceptance), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.date_of_acceptance), ALIGN_CENTER, 2, arabicFont, BaseColor.BLACK);
         insertCell(pdfPTable, context.getString(R.string.no_bundle), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
         insertCell(pdfPTable, context.getString(R.string.rejected_pieces), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
 
@@ -387,9 +387,9 @@ public class ExportToPDF {
         for (int i = 0; i < list.size(); i++) {
 
             insertCell(pdfPTable, String.valueOf(list.get(i).getTruckNo()), Element.ALIGN_CENTER, 2, arabicFont, BaseColor.BLACK);
-            insertCell(pdfPTable, String.valueOf(findSupplier(bundles, list.get(i))), Element.ALIGN_CENTER, 4, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(findSupplier(bundles, list.get(i))), Element.ALIGN_CENTER, 3, arabicFont, BaseColor.BLACK);
             insertCell(pdfPTable, String.valueOf(list.get(i).getTtnNo()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
-            insertCell(pdfPTable, String.valueOf(list.get(i).getDate()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getDate()), Element.ALIGN_CENTER, 2, arabicFont, BaseColor.BLACK);
             insertCell(pdfPTable, String.valueOf(list.get(i).getNetBundles()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
             insertCell(pdfPTable, String.valueOf(list.get(i).getTotalRejectedNo()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
 
@@ -398,7 +398,7 @@ public class ExportToPDF {
 
         }
 
-        insertCell(pdfPTableHeader, "Report One", Element.ALIGN_CENTER, 10, arabicFontHeader, BaseColor.WHITE);
+        insertCell(pdfPTableHeader, "Accepted Truck Report", Element.ALIGN_CENTER, 10, arabicFontHeader, BaseColor.WHITE);
         insertCell(pdfPTableHeader, context.getString(R.string.location) + ": " + location, Element.ALIGN_RIGHT, 5, arabicFontHeader, BaseColor.WHITE);
         insertCell(pdfPTableHeader, context.getString(R.string.from) + ": " + fromDate, Element.ALIGN_LEFT, 5, arabicFontHeader, BaseColor.WHITE);
         insertCell(pdfPTableHeader, context.getString(R.string.truck_no) + ": " + truck, Element.ALIGN_RIGHT, 5, arabicFont, BaseColor.WHITE);
@@ -468,8 +468,8 @@ public class ExportToPDF {
             insertCell(pdfPTable, String.valueOf(list.get(i).getSupplierName()), Element.ALIGN_CENTER, 3, arabicFont, BaseColor.BLACK);
             insertCell(pdfPTable, String.valueOf(list.get(i).getTtnNo()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
             insertCell(pdfPTable, String.valueOf(list.get(i).getDate()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
-            insertCell(pdfPTable, String.valueOf(list.get(i).getNoOfBundles()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
-            insertCell(pdfPTable, String.valueOf(list.get(i).getNoOfRejected()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf((int) list.get(i).getNoOfBundles()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf((int) list.get(i).getNoOfRejected()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
 
 //            double cubic = (list.get(i).getLength() * list.get(i).getWidth() * list.get(i).getThickness() * list.get(i).getNoOfPieces());
 //            insertCell(pdfPTable, String.valueOf(String.format("%.3f", cubic / 1000000000)), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
@@ -477,7 +477,7 @@ public class ExportToPDF {
         }
 
         insertCell(pdfPTableHeader, "Report Two", Element.ALIGN_CENTER, 9, arabicFontHeader, BaseColor.WHITE);
-//        insertCell(pdfPTableHeader, context.getString(R.string.location) + ": " + location, Element.ALIGN_RIGHT, 5, arabicFontHeader, BaseColor.WHITE);
+        insertCell(pdfPTableHeader, "", Element.ALIGN_CENTER, 9, arabicFontHeader, BaseColor.WHITE);
         insertCell(pdfPTableHeader, context.getString(R.string.from) + ": " + fromDate, Element.ALIGN_RIGHT, 4, arabicFontHeader, BaseColor.WHITE);
         insertCell(pdfPTableHeader, context.getString(R.string.to) + ": " + toDate, Element.ALIGN_LEFT, 5, arabicFont, BaseColor.WHITE);
 //        insertCell(pdfPTableHeader, context.getString(R.string.truck_no) + ": " + truck, Element.ALIGN_RIGHT, 5, arabicFont, BaseColor.WHITE);
@@ -488,7 +488,7 @@ public class ExportToPDF {
 
             doc.add(pdfPTableHeader);
             doc.add(pdfPTable);
-            Toast.makeText(context,context.getString(R.string.export_to_pdf), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.export_to_pdf), Toast.LENGTH_LONG).show();
 
         } catch (DocumentException e) {
             e.printStackTrace();
@@ -498,11 +498,11 @@ public class ExportToPDF {
 
     }
 
-    public void exportLoadingOrderReport(List<Orders> list, String date) {
+    public void exportLoadingOrderReport(List<Orders> list, String date, String fromDate, String toDate) {
         PdfPTable pdfPTable = new PdfPTable(14);
         PdfPTable pdfPTableHeader = new PdfPTable(14);
 
-        createPDF("Loading Order Report" +  date +  "_.pdf");
+        createPDF("Loading Order Report" + date + "_.pdf");
         pdfPTable.setWidthPercentage(100f);
         pdfPTableHeader.setWidthPercentage(100f);
         pdfPTableHeader.setSpacingAfter(20);
@@ -524,10 +524,10 @@ public class ExportToPDF {
         pdfPTable.setHeaderRows(1);
         for (int i = 0; i < list.size(); i++) {
             insertCell(pdfPTable, String.valueOf(list.get(i).getOrderNo()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
-            insertCell(pdfPTable, String.valueOf(list.get(i).getThickness()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
-            insertCell(pdfPTable, String.valueOf(list.get(i).getWidth()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
-            insertCell(pdfPTable, String.valueOf(list.get(i).getLength()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
-            insertCell(pdfPTable, String.valueOf(list.get(i).getNoOfPieces()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf((int) list.get(i).getThickness()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf((int) list.get(i).getWidth()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf((int) list.get(i).getLength()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf((int) list.get(i).getNoOfPieces()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
             insertCell(pdfPTable, String.valueOf(list.get(i).getGrade()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
             insertCell(pdfPTable, String.valueOf(list.get(i).getPlacingNo()), Element.ALIGN_CENTER, 2, arabicFont, BaseColor.BLACK);
             insertCell(pdfPTable, String.valueOf(list.get(i).getContainerNo()), Element.ALIGN_CENTER, 2, arabicFont, BaseColor.BLACK);
@@ -535,6 +535,94 @@ public class ExportToPDF {
             insertCell(pdfPTable, String.valueOf(list.get(i).getDestination()), Element.ALIGN_CENTER, 2, arabicFont, BaseColor.BLACK);
 
         }
+
+        insertCell(pdfPTableHeader, "Loading Order Report", Element.ALIGN_CENTER, 14, arabicFontHeader, BaseColor.WHITE);
+        insertCell(pdfPTableHeader, "", Element.ALIGN_CENTER, 14, arabicFontHeader, BaseColor.WHITE);
+
+        insertCell(pdfPTableHeader, context.getString(R.string.from) + ": " + fromDate, Element.ALIGN_RIGHT, 7, arabicFont, BaseColor.WHITE);
+        insertCell(pdfPTableHeader, context.getString(R.string.to) + ": " + toDate, Element.ALIGN_LEFT, 7, arabicFont, BaseColor.WHITE);
+
+        try {
+            doc.add(pdfPTableHeader);
+            doc.add(pdfPTable);
+            Toast.makeText(context, context.getString(R.string.export_to_pdf), Toast.LENGTH_LONG).show();
+
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+        endDocPdf();
+
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (context.checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+                    && (context.checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)) {
+                showPdf(pdfFileName);
+                Log.v("", "Permission is granted");
+            } else {
+
+                Log.v("", "Permission is revoked");
+                ActivityCompat.requestPermissions(
+                        (Activity) context,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
+                        1);
+            }
+        } else { // permission is automatically granted on sdk<23 upon
+            // installation
+            showPdf(pdfFileName);
+            Log.v("", "Permission is granted");
+        }
+//        showPdf(pdfFileName);
+
+    }
+
+    public void exportLoadingOrderReportRow(List<BundleInfo> list, String date, Orders header) {
+        PdfPTable pdfPTable = new PdfPTable(10);
+        PdfPTable pdfPTableHeader = new PdfPTable(10);
+
+        createPDF("Loading Order Report" + date + "_.pdf");
+        pdfPTable.setWidthPercentage(100f);
+        pdfPTableHeader.setWidthPercentage(100f);
+        pdfPTableHeader.setSpacingAfter(20);
+
+        pdfPTable.setRunDirection(PdfWriter.RUN_DIRECTION_LTR);
+        pdfPTableHeader.setRunDirection(PdfWriter.RUN_DIRECTION_LTR);
+
+        insertCell(pdfPTable, context.getString(R.string.bundle_no), ALIGN_CENTER, 3, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, "Thick", ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.width), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.length), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, "Pieces", ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.grade), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.loc), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.area), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+//        insertCell(pdfPTable, context.getString(R.string.date_of_load), ALIGN_CENTER, 2, arabicFont, BaseColor.BLACK);
+//        insertCell(pdfPTable, context.getString(R.string.destination_), ALIGN_CENTER, 2, arabicFont, BaseColor.BLACK);
+
+        pdfPTable.setHeaderRows(1);
+        for (int i = 0; i < list.size(); i++) {
+            insertCell(pdfPTable, String.valueOf(list.get(i).getBundleNo()), Element.ALIGN_CENTER, 3, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf((int) list.get(i).getThickness()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf((int) list.get(i).getWidth()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf((int) list.get(i).getLength()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf((int) list.get(i).getNoOfPieces()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getGrade()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getLocation()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getArea()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+//            insertCell(pdfPTable, String.valueOf(list.get(i).getDateOfLoad()), Element.ALIGN_CENTER, 2, arabicFont, BaseColor.BLACK);
+//            insertCell(pdfPTable, String.valueOf(list.get(i).getDestination()), Element.ALIGN_CENTER, 2, arabicFont, BaseColor.BLACK);
+
+        }
+
+        insertCell(pdfPTableHeader, "Loading Order Report", Element.ALIGN_CENTER, 10, arabicFontHeader, BaseColor.WHITE);
+        insertCell(pdfPTableHeader, "", Element.ALIGN_CENTER, 10, arabicFontHeader, BaseColor.WHITE);
+
+        insertCell(pdfPTableHeader, context.getString(R.string.packing_list) + ": " + header.getPackingList(), Element.ALIGN_RIGHT, 5, arabicFont, BaseColor.WHITE);
+        insertCell(pdfPTableHeader, context.getString(R.string.date_of_load) + ": " + header.getDateOfLoad(), Element.ALIGN_LEFT, 5, arabicFontHeader, BaseColor.WHITE);
+        insertCell(pdfPTableHeader, context.getString(R.string.container_no) + ": " + header.getContainerNo(), Element.ALIGN_RIGHT, 5, arabicFont, BaseColor.WHITE);
+        insertCell(pdfPTableHeader, context.getString(R.string.truck_no) + ": " + header.getPlacingNo(), Element.ALIGN_LEFT, 5, arabicFontHeader, BaseColor.WHITE);
+        insertCell(pdfPTableHeader, context.getString(R.string.destination_) + ": " + header.getDestination(), Element.ALIGN_RIGHT, 5, arabicFontHeader, BaseColor.WHITE);
+        insertCell(pdfPTableHeader, context.getString(R.string.bundles) + ": " + list.size(), Element.ALIGN_LEFT, 5, arabicFontHeader, BaseColor.WHITE);
+
+        insertCell(pdfPTableHeader, "", directionOfHeader, 1, arabicFontHeader, BaseColor.WHITE);
 
         try {
 
@@ -581,7 +669,7 @@ public class ExportToPDF {
         pdfPTable.setRunDirection(PdfWriter.RUN_DIRECTION_LTR);
         pdfPTableHeader.setRunDirection(PdfWriter.RUN_DIRECTION_LTR);
 
-        insertCell(pdfPTable, "\n\n\n   Pine Sawn timber  \n\n Grad "+ grade +"  Moisture  16%-18% \n\n\n", ALIGN_CENTER, 8, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, "\n\n\n   Pine Sawn timber  \n\n Grad " + grade + "  Moisture  16%-18% \n\n\n", ALIGN_CENTER, 8, arabicFont, BaseColor.BLACK);
 
         insertCell(pdfPTable, "N\nn/n", ALIGN_CENTER, 2, arabicFont, BaseColor.BLACK);
         insertCell(pdfPTable, "the number of packets", ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
@@ -593,22 +681,22 @@ public class ExportToPDF {
 
 
         pdfPTable.setHeaderRows(1);
-        int totalBundle=0;
-        double totalCubic=0;
+        int totalBundle = 0;
+        double totalCubic = 0;
 
         for (int i = 0; i < list.size(); i++) {
             insertCell(pdfPTable, "" + (i + 1), Element.ALIGN_CENTER, 2, arabicFont, BaseColor.BLACK);
             insertCell(pdfPTable, String.valueOf(list.get(i).getNoOfCopies()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
-            insertCell(pdfPTable, String.valueOf(list.get(i).getThickness()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
-            insertCell(pdfPTable, String.valueOf(list.get(i).getWidth()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
-            insertCell(pdfPTable, String.valueOf(list.get(i).getLength()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
-            insertCell(pdfPTable, String.valueOf(list.get(i).getNoOfPieces()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf((int) list.get(i).getThickness()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf((int) list.get(i).getWidth()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf((int) list.get(i).getLength()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf((int) list.get(i).getNoOfPieces()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
             insertCell(pdfPTable, String.format("%.3f", (list.get(i).getCubic())), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
-            totalBundle+=list.get(i).getNoOfCopies();
-            totalCubic+=list.get(i).getCubic();
+            totalBundle += list.get(i).getNoOfCopies();
+            totalCubic += list.get(i).getCubic();
         }
 
-        insertCell(pdfPTable, "Total" , Element.ALIGN_CENTER, 2, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, "Total", Element.ALIGN_CENTER, 2, arabicFont, BaseColor.BLACK);
         insertCell(pdfPTable, String.valueOf(totalBundle), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
         insertCell(pdfPTable, "", Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
         insertCell(pdfPTable, "", Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
@@ -617,11 +705,9 @@ public class ExportToPDF {
         insertCell(pdfPTable, String.format("%.3f", (totalCubic)), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
 
 
-
-
-        insertCell(pdfPTableHeader, "Packing List : "+pl, Element.ALIGN_RIGHT, 8, arabicFontHeader, BaseColor.WHITE);
+        insertCell(pdfPTableHeader, "Packing List : " + pl, Element.ALIGN_RIGHT, 8, arabicFontHeader, BaseColor.WHITE);
         insertCell(pdfPTableHeader, "", Element.ALIGN_RIGHT, 8, arabicFontHeader, BaseColor.WHITE);
-        insertCell(pdfPTableHeader, "Destination  : "+ destination, Element.ALIGN_RIGHT, 8, arabicFontHeader, BaseColor.WHITE);
+        insertCell(pdfPTableHeader, "Destination  : " + destination, Element.ALIGN_RIGHT, 8, arabicFontHeader, BaseColor.WHITE);
         insertCell(pdfPTableHeader, "", Element.ALIGN_RIGHT, 8, arabicFont, BaseColor.WHITE);
 //        insertCell(pdfPTableHeader, context.getString(R.string.cust) + ": " + customer, Element.ALIGN_LEFT, 6, arabicFont, BaseColor.WHITE);
         insertCell(pdfPTableHeader, "", Element.ALIGN_RIGHT, 8, arabicFontHeader, BaseColor.WHITE);

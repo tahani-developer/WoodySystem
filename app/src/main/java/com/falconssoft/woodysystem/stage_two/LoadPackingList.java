@@ -142,6 +142,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
 
         progressDialog = new ProgressDialog(this, R.style.MyAlertDialogStyle);
         progressDialog.setMessage("Please Waiting...");
+        progressDialog.setCanceledOnTouchOutside(false);
 
         myCalendar = Calendar.getInstance();
 
@@ -256,6 +257,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
 
 
         new JSONTask2().execute();
+        progressDialog.show();
 
     }
 
@@ -844,6 +846,7 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+            progressDialog.dismiss();
             if (s != null) {
 
                 if (PLList.size() > 0) {

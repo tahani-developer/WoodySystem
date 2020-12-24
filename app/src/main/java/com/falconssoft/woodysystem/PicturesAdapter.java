@@ -48,7 +48,7 @@ public class PicturesAdapter extends BaseAdapter {
     }
 
     private class ViewHolder {
-        PhotoView pic;
+        ImageView pic;
         LinearLayout linearLayout;
     }
 
@@ -62,17 +62,17 @@ public class PicturesAdapter extends BaseAdapter {
         if (itemsList.get(i) != null)
             holder.pic.setImageBitmap(itemsList.get(i));
 
-        holder.pic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.e("bitmap", "3");
-
-//                if (acceptanceReport == null)
-//                    loadingOrderReport.zoomImage(itemsList.get(i));
-//                else
-                loadingOrderReport.zoomImage(itemsList.get(i));
-            }
-        });
+//        holder.pic.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Log.e("bitmap", "3");
+//
+////                if (acceptanceReport == null)
+////                    loadingOrderReport.zoomImage(itemsList.get(i));
+////                else
+//                loadingOrderReport.zoomImage(itemsList.get(i));
+//            }
+//        });
 
 
         return view;
