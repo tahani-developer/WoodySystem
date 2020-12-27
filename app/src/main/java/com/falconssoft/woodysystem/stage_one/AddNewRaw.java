@@ -750,15 +750,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         String truckNoLocal = truckNo.getText().toString();
         String acceptorLocal = acceptor.getText().toString();
         String ttnNoLocal = ttnNo.getText().toString();
-//        String totalBundelsLocal = totalBundles.getText().toString();
         String acceptanceDateLocal = acceptanceDate.getText().toString();
-//        String locationLocal = acceptanceLocation.getText().toString();
-//        String totalRejectedLocal = totalRejected.getText().toString();
-
-//        Log.e("newRowList", " size" + newRowList.size());
-
-        //                        if (!TextUtils.isEmpty(totalBundelsLocal) && (!checkValidData(totalBundelsLocal)))
-//        if (!TextUtils.isEmpty(totalRejectedLocal) && (!checkValidData(totalRejectedLocal)))
 
         if (edieFlag == 11 && editList.size() > 0)
             newRowList = editList;
@@ -769,6 +761,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                 if (!TextUtils.isEmpty(acceptorLocal))
                     if (!TextUtils.isEmpty(ttnNoLocal))
                         if (!TextUtils.isEmpty(acceptanceDateLocal)) {
+                            doneAcceptRow.setEnabled(false);
                             truckNo.setError(null);
                             ttnNo.setError(null);
                             acceptor.setError(null);
@@ -799,21 +792,6 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                             fillImage(newRowList.get(0));
                             masterData = new JSONObject();
                             masterData = newRowList.get(0).getJsonDataMaster();
-//                                Log.e("newRowList", "" + newRowList.get(0).getTruckNo());
-
-//                            if (edieFlag == 10 || edieFlag == 11) {
-////                                    Log.e("edit", "" + edieFlag);
-////                                    Log.e("addNewRow44/", "update" + masterData.toString().trim());
-////                                    for (int i = 0; i < jsonArray.length(); i++) {
-////                                        try {
-////                                            Log.e("addNewRow55/", "update" + jsonArray.get(i).toString().trim());
-////                                        } catch (JSONException e) {
-////                                            e.printStackTrace();
-////                                        }
-////                                    }
-//                                new JSONTask2().execute();// update
-//                            } else {
-//                                    Log.e("edit", "" + edieFlag);
 
                             new JSONTask1().execute();// save
 //                            }

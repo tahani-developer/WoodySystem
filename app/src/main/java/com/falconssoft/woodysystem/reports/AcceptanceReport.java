@@ -99,7 +99,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
     private ProgressDialog progressDialog;
     private int rowsCount = 0;
     private List<NewRowInfo> filtered, detailsListBasedOnSerial;
-    public static String truckNoBeforeUpdate2 = "";
+    public static String truckNoBeforeUpdate2 = "", date_from = "", date_to = "";
     public static final String EDIT_LIST2 = "EDIT_LIST";
     public static final String EDIT_RAW2 = "EDIT_RAW";
     public double sum = 0;
@@ -110,7 +110,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
     private RecyclerView recyclerView;
     private SuppliersAdapter suppliersAdapter;
     private List<SupplierInfo> suppliers = new ArrayList<>();
-    public static String supplierName = "";
+    public static String supplierName = "All";
     private List<SupplierInfo> arraylist = new ArrayList<>();
 
     //    public static final String EDIT_FLAG2= "EDIT_FLAG";
@@ -162,9 +162,6 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
         adapter2 = new AcceptanceReportAdapter(AcceptanceReport.this, new ArrayList<>(), new ArrayList<>());
         list.setAdapter(adapter2);
 
-        new JSONTask().execute();
-        new JSONTask1().execute();
-
         location.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -179,8 +176,10 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
 
         myCalendar = Calendar.getInstance();
 
-        from.setText("1/12/2019");
+        from.setText(sdf.format(myCalendar.getTime()));//"1/12/2019"
         to.setText(sdf.format(myCalendar.getTime()));
+        date_from = sdf.format(myCalendar.getTime());
+        date_to = sdf.format(myCalendar.getTime());
         truckEditText.addTextChangedListener(new WatchTextChange(truckEditText));
         ttnEditText.addTextChangedListener(new WatchTextChange(ttnEditText));
         acceptorEditText.addTextChangedListener(new WatchTextChange(acceptorEditText));
@@ -191,6 +190,9 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
         arrow.setOnClickListener(this);
         from.setOnClickListener(this);
         to.setOnClickListener(this);
+
+        new JSONTask().execute();
+        new JSONTask1().execute();
 
     }
 
@@ -276,7 +278,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
         supplierName = supplierNameLocal;
         supplier.setText(supplierName);
         searchDialog.dismiss();
-        new JSONTaskSupplierSearch().execute();
+        new JSONTask().execute();
         progressDialog.show();
     }
 
@@ -420,8 +422,11 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
                 else
                     to.setText(sdf.format(myCalendar.getTime()));
 
-                if (!from.getText().toString().equals("") && !to.getText().toString().equals(""))
-                    filters();
+//                if (!from.getText().toString().equals("") && !to.getText().toString().equals(""))
+//                    filters();
+                date_from = from.getText().toString();
+                date_to = to.getText().toString();
+                new JSONTask().execute();
 
             }
 
@@ -728,7 +733,8 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
                 // http://192.168.2.17:8088/woody/import.php?FLAG=55
                 // http://5.189.130.98:8085/import.php?FLAG=5
 
-                URL url = new URL("http://" + generalSettings.getIpAddress() + "/import.php?FLAG=55");
+                URL url = new URL("http://" + generalSettings.getIpAddress() + "/import.php?FLAG=55&DATE_FROM="
+                        + date_from + "&DATE_TO=" + date_to + "&SUPPLIER_SEARCH='" + supplierName + "'");
 
                 URLConnection conn = url.openConnection();
                 conn.setDoOutput(true);
@@ -748,7 +754,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
                 }
 
                 String finalJson = sb.toString();
-                Log.e("finalJson*********", finalJson);
+                Log.e("finalJson*********", url + "***" + finalJson);
 
                 master.clear();
                 details.clear();
@@ -756,8 +762,10 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
 //                cubicList.clear();
                 Gson gson = new Gson();
                 NewRowInfo list = gson.fromJson(finalJson, NewRowInfo.class);
-                master.addAll(list.getMaster());
-                details.addAll(list.getDetails());
+                if (!(list.getMaster() == null)) {
+                    master.addAll(list.getMaster());
+                    details.addAll(list.getDetails());
+                }
 //                cubicList.addAll(list.getCubicList());
                 for (int i = 0; i < list.getLocationList().size(); i++)
                     locationList.add(list.getLocationList().get(i).getLocationOfAcceptance());
@@ -993,99 +1001,5 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
         }
     }
 
-    // ******************************************** Supplier Search *****************************************
-    private class JSONTaskSupplierSearch extends AsyncTask<String, String, List<NewRowInfo>> {
-
-        @Override
-        protected void onPreExecute() {
-//            super.onPreExecute();
-            progressDialog.show();
-
-        }
-
-        @Override
-        protected List<NewRowInfo> doInBackground(String... params) {
-            URLConnection connection = null;
-            BufferedReader reader = null;
-
-            try {
-                // http://10.0.0.175/woody/import.php?FLAG=16&SUPPLIER_SEARCH=
-                // http://5.189.130.98:8085/import.php?FLAG=16&SUPPLIER_SEARCH=
-
-                URL url = new URL("http://" + generalSettings.getIpAddress() + "/import.php?FLAG=16&SUPPLIER_SEARCH='" + supplierName + "'");
-
-                URLConnection conn = url.openConnection();
-                conn.setDoOutput(true);
-
-                reader = new BufferedReader(new
-                        InputStreamReader(conn.getInputStream()));
-
-                StringBuffer sb = new StringBuffer();
-                String line = null;
-
-                // Read Server Response
-                while ((line = reader.readLine()) != null) {
-                    try {
-                        sb.append(line);
-                    } catch (Exception e) {
-                    }
-                }
-
-                String finalJson = sb.toString();
-                Log.e("finalJson*********", finalJson);
-
-                master.clear();
-                if (!finalJson.equals("[]")) {
-                    Gson gson = new Gson();
-                    NewRowInfo list = gson.fromJson(finalJson, NewRowInfo.class);
-                    master.addAll(list.getMaster());
-                    rowsCount = master.size();
-                }
-
-            } catch (MalformedURLException e) {
-                Log.e("Customer", "********ex1");
-                e.printStackTrace();
-            } catch (IOException e) {
-                Log.e("Customer", e.getMessage().toString());
-                e.printStackTrace();
-
-            } finally {
-                Log.e("Customer", "********finally");
-                if (connection != null) {
-                    Log.e("Customer", "********ex4");
-                    // connection.disconnect();
-                }
-                try {
-                    if (reader != null) {
-                        reader.close();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            return master;
-        }
-
-
-        @Override
-        protected void onPostExecute(final List<NewRowInfo> result) {
-            super.onPostExecute(result);
-            progressDialog.dismiss();
-
-            if (result != null) {
-                count.setText("" + rowsCount);
-                if (master.size() > 0)
-                    totalCubic.setText("" + master.get(0).getTotalCubic());
-                else
-                    totalCubic.setText("0.000");
-
-                filters();
-
-            } else {
-                Toast.makeText(AcceptanceReport.this, "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();
-            }
-            progressDialog.dismiss();
-        }
-    }
 }
 
