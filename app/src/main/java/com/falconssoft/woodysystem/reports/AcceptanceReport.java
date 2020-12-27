@@ -279,7 +279,6 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
         supplier.setText(supplierName);
         searchDialog.dismiss();
         new JSONTask().execute();
-        progressDialog.show();
     }
 
     void fillSpinnerAdapter() {
@@ -411,7 +410,6 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
 
-                // TODO Auto-generated method stub
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, month);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
