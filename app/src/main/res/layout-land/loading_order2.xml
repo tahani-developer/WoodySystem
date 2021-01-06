@@ -41,17 +41,24 @@
 
             <TextView
                 android:id="@+id/loading_order_textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:gravity="start"
                 android:text="@string/loading_order"
                 android:textColor="@color/orange"
                 android:fontFamily="serif"
-                android:textSize="@dimen/loadingOrder2_text_size"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textSize="@dimen/loadingOrder2_text_size" />
+
+            <TextView
+                android:id="@+id/loading_order_count"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:text="0"
+                android:textColor="@color/white"
+                android:fontFamily="serif"
+                android:textSize="20sp"
+                 />
 
         </LinearLayout>
 

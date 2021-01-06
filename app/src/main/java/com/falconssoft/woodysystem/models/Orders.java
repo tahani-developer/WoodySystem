@@ -68,12 +68,12 @@ public class Orders implements Serializable {
     private int serial;
     private int newSerial;// when swapping two rows in loading order
     private boolean isRemove;// to remove list
-
+    private String locationOfExchangeBundle;// used in loading Order just to know original location for bundle before exchanging
 
     public Orders() {
     }
 
-    public Orders(Double thickness,  Double width ,Double length, String grade, Double noOfPieces, String bundleNo, String location, String area
+    public Orders(Double thickness, Double width, Double length, String grade, Double noOfPieces, String bundleNo, String location, String area
             , String placingNo, String orderNo, String containerNo, String dateOfLoad, String destination, String picture, String packingList, String customer) {
         this.thickness = thickness;
         this.length = length;
@@ -91,6 +91,14 @@ public class Orders implements Serializable {
         this.picture = picture;
         this.packingList = packingList;
         this.customer = customer;
+    }
+
+    public String getLocationOfExchangeBundle() {
+        return locationOfExchangeBundle;
+    }
+
+    public void setLocationOfExchangeBundle(String locationOfExchangeBundle) {
+        this.locationOfExchangeBundle = locationOfExchangeBundle;
     }
 
     public List<Orders> getBUNDLE_ORDER() {
@@ -290,28 +298,32 @@ public class Orders implements Serializable {
 
         try {
             obj.put("THICKNESS", "'" + thickness + "'");
-            obj.put("WIDTH", "'" +width+ "'");
-            obj.put("LENGTH", "'" +length+ "'");
-            obj.put("GRADE", "'" +grade+ "'");
-            obj.put("PIECES","'" + noOfPieces+ "'");
-            obj.put("BUNDLE_NO", "'" +bundleNo+ "'");
-            obj.put("LOCATION", "'" +location+ "'");
-            obj.put("AREA", "'" +area+ "'");
-            obj.put("PLACING_NO", "'" +placingNo+ "'");
-            obj.put("ORDER_NO", "'" +orderNo+ "'");
-            obj.put("CONTAINER_NO", "'" +containerNo+ "'");
-            obj.put("DATE_OF_LOAD", "'" +dateOfLoad+ "'");
-            obj.put("DESTINATION", "'" +destination+ "'");
-            obj.put("PIC", "'" +picture+ "'");
-            obj.put("PACKING_LIST", "'" +packingList+ "'");
-            obj.put("CUSTOMER", "'" +customer+ "'");
-            obj.put("SERIAL", "'" +serial+ "'");
-            obj.put("NEW_SERIAL", "'" +newSerial+ "'");
-            obj.put("NEW_CUSTOMER", "'" +newCustomer+ "'");
+            obj.put("WIDTH", "'" + width + "'");
+            obj.put("LENGTH", "'" + length + "'");
+            obj.put("GRADE", "'" + grade + "'");
+            obj.put("PIECES", "'" + noOfPieces + "'");
+            obj.put("BUNDLE_NO", "'" + bundleNo + "'");
+            obj.put("LOCATION", "'" + location + "'");
+            obj.put("AREA", "'" + area + "'");
+            obj.put("PLACING_NO", "'" + placingNo + "'");
+            obj.put("ORDER_NO", "'" + orderNo + "'");
+            obj.put("CONTAINER_NO", "'" + containerNo + "'");
+            obj.put("DATE_OF_LOAD", "'" + dateOfLoad + "'");
+            obj.put("DESTINATION", "'" + destination + "'");
+            obj.put("PIC", "'" + picture + "'");
+            obj.put("PACKING_LIST", "'" + packingList + "'");
+            obj.put("CUSTOMER", "'" + customer + "'");
+            obj.put("SERIAL", "'" + serial + "'");
+            obj.put("NEW_SERIAL", "'" + newSerial + "'");
+            obj.put("NEW_CUSTOMER", "'" + newCustomer + "'");
+//            if (locationOfExchangeBundle.equals(null))
+//                obj.put("LOCATION_EXCHANGE", "'" + location + "'");
+//            else
+            obj.put("LOCATION_EXCHANGE", "'" + locationOfExchangeBundle + "'");
 
 
         } catch (JSONException e) {
-            Log.e("Tag" , "JSONException");
+            Log.e("Tag", "JSONException");
         }
         return obj;
     }
@@ -321,41 +333,41 @@ public class Orders implements Serializable {
 
         try {
             obj.put("THICKNESS", "'" + thickness + "'");
-            obj.put("WIDTH", "'" +width+ "'");
-            obj.put("LENGTH", "'" +length+ "'");
-            obj.put("GRADE", "'" +grade+ "'");
-            obj.put("PIECES","'" + noOfPieces+ "'");
-            obj.put("BUNDLE_NO", "'" +bundleNo+ "'");
-            obj.put("LOCATION", "'" +location+ "'");
-            obj.put("AREA", "'" +area+ "'");
+            obj.put("WIDTH", "'" + width + "'");
+            obj.put("LENGTH", "'" + length + "'");
+            obj.put("GRADE", "'" + grade + "'");
+            obj.put("PIECES", "'" + noOfPieces + "'");
+            obj.put("BUNDLE_NO", "'" + bundleNo + "'");
+            obj.put("LOCATION", "'" + location + "'");
+            obj.put("AREA", "'" + area + "'");
 //            obj.put("PLACING_NO", "'" +placingNo+ "'");
 //            obj.put("ORDER_NO", "'" +orderNo+ "'");
 //            obj.put("CONTAINER_NO", "'" +containerNo+ "'");
 //            obj.put("DATE_OF_LOAD", "'" +dateOfLoad+ "'");
 //            obj.put("DESTINATION", "'" +destination+ "'");
 //            obj.put("PIC", "'" +picture+ "'");
-            obj.put("B_SERIAL", "'" +serial+ "'");
-            obj.put("CUSTOMER", "'" +customer+ "'");
-            obj.put("CUSTOMER", "'" +customer+ "'");
+            obj.put("B_SERIAL", "'" + serial + "'");
+            obj.put("CUSTOMER", "'" + customer + "'");
+            obj.put("CUSTOMER", "'" + customer + "'");
 
 
         } catch (JSONException e) {
-            Log.e("Tag" , "JSONException");
+            Log.e("Tag", "JSONException");
         }
         return obj;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof Orders)
-        {
+        if (obj instanceof Orders) {
             Orders temp = (Orders) obj;
-            if(this.orderNo.equals(temp.orderNo))
+            if (this.orderNo.equals(temp.orderNo))
                 return true;
         }
         return false;
 
     }
+
     @Override
     public int hashCode() {
         // TODO Auto-generated method stub

@@ -105,7 +105,7 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
     private EditText placingNo, orderNo, containerNo, dateOfLoad, destination;
     private ImageView img1, img2, img3, img4, img5, img6, img7, img8;
     private Button done;
-    private TextView textView;
+    private TextView textView, count;
     private Orders order;
     private Pictures picture;
     private DatabaseHandler databaseHandler;
@@ -183,6 +183,11 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
         adapter = new ItemsListAdapter2(LoadingOrder2.this, bundles);
         listView.setAdapter(adapter);
         listView2.setAdapter(adapter);
+        try{
+        count.setText("" + bundles.size());
+        }catch (Exception e){
+            count.setText("0");
+        }
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)
@@ -318,6 +323,7 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
                         , bundles.get(i).getPicture()
                         , bundles.get(i).getBackingList()
                         , bundles.get(i).getCustomer());
+                order.setLocationOfExchangeBundle(bundles.get(i).getLocation());
 
 //                        databaseHandler.addOrder(order);
 //                    Log.e("**********", "" + bundles.get(i).getPicture().length());
@@ -361,7 +367,8 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
                         , bundles.get(i).getPicture()
                         , bundles.get(i).getBackingList()
                         , bundles.get(i).getCustomer());
-                Log.e("followpic", bundles.get(i).getPicture());
+                order.setLocationOfExchangeBundle(bundles.get(i).getLocation());
+                Log.e("followloc", bundles.get(i).getLocation());
 
                 order.setSerial(Integer.parseInt(bundles.get(i).getSerialNo()));
                 checkedBundleList.add(order);
@@ -493,7 +500,7 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
                             pics.set(7, bitMapToString(thumbnail));
                             break;
 
-                }
+                    }
 
                 }
             }
@@ -573,6 +580,7 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
         destination = findViewById(R.id.destination);
         done = findViewById(R.id.done);
         textView = findViewById(R.id.loading_order_textView);
+        count = findViewById(R.id.loading_order_count);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Please Waiting...");
@@ -643,7 +651,7 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    // loading order // exchange different packing lists // hide missed bundles
+    // 2 => loading order // exchange different packing lists // hide missed bundles
     private class JSONTask extends AsyncTask<String, String, String> {
 
         @Override
@@ -832,7 +840,7 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    // check if loading (packing list) has same bundles of the alternative packing list
+    // 1=> check if loading (packing list) has same bundles of the alternative packing list
     private class JSONTask3 extends AsyncTask<String, String, String> {
 
         @Override
@@ -917,9 +925,10 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
                     orders.setCustomer(innerObject.getString("CUSTOMER"));
                     orders.setSerial(innerObject.getInt("B_SERIAL"));
                     orders.setRemove(false);
+                    orders.setLocationOfExchangeBundle(innerObject.getString("LOCATION"));
 
                     originalList.add(orders);
-                    Log.e("order", "" + orders.getSerial());
+                    Log.e("orderlocation", "" + orders.getLocation());
                     Log.e("originalListSize", "" + originalList.size());
 //                    PlannedPL pl = new PlannedPL();
 //                    pl.setThickness(innerObject.getInt("THICKNESS"));
@@ -1011,7 +1020,7 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
                         for (int k = 0; k < checkedBundleList.size(); k++) {
                             boolean found = false;
                             int newSerial = 0;
-                            String newCustomer = "";
+                            String newCustomer = "", originalLocation = "";
                             for (int i = 0; i < originalList.size(); i++) {
                                 if (!originalList.get(i).isRemove() && !checkedBundleList.get(k).isRemove()) {
 
@@ -1029,6 +1038,7 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
                                                     if (originalList.get(i).getGrade().equals(checkedBundleList.get(k).getGrade())) {
                                                         newSerial = originalList.get(i).getSerial();
                                                         newCustomer = originalList.get(i).getCustomer();
+                                                        originalLocation = originalList.get(i).getLocation();
 
                                                         found = true;
                                                         originalList.get(i).setRemove(true);
@@ -1043,6 +1053,7 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
                                         Log.e("loadingorder", " news " + originalList.get(i).getSerial() + " cheq  " + checkedBundleList.get(k).getSerial());
                                         newSerial = originalList.get(i).getSerial();
                                         newCustomer = originalList.get(i).getCustomer();
+                                        originalLocation = originalList.get(i).getLocation();
                                         found = true;
                                         break;
                                     }
@@ -1052,8 +1063,9 @@ public class LoadingOrder2 extends AppCompatActivity implements View.OnClickList
                             if (found) {
                                 checkedBundleList.get(k).setNewSerial(newSerial);
                                 checkedBundleList.get(k).setNewCustomer(newCustomer);
+                                checkedBundleList.get(k).setLocationOfExchangeBundle(originalLocation);
                                 Log.e("loadingorderTex", "oldSerial:" + checkedBundleList.get(k).getSerial() + " newSerial: " + checkedBundleList.get(k).getNewSerial());
-                                jsonArrayOrders.put(checkedBundleList.get(k).getJSONObject());
+                                jsonArrayOrders.put(checkedBundleList.get(k).getJSONObject());// filled if packinglist have original packinglist or same specifications to exchange
                             } else {
                                 Log.e("loadingorder", "UnmatchedList oldSerial:" + checkedBundleList.get(k).getSerial() + " newSerial: " + checkedBundleList.get(k).getNewSerial());
                                 checkedBundleList.get(k).setNewCustomer(originalList.get(0).getCustomer());
