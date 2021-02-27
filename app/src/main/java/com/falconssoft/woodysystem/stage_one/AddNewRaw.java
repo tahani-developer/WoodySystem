@@ -1785,6 +1785,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
                     acceptRowButton.setBackgroundResource(R.drawable.frame_shape_2);
                     mainInfoButton.setBackgroundResource(R.drawable.frame_shape_3);
+                    doneAcceptRow.setEnabled(true);
                     Log.e("tag", "save Success");
                 } else {
                     Log.e("tag", "****Failed to export data");
