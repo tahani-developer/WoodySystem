@@ -153,16 +153,29 @@ public class LoadPackingList extends AppCompatActivity implements View.OnClickLi
 
         paclingList.requestFocus();
 
+//        gradeList.clear();
+//        gradeList.add("All");
+//        gradeList.add("Fresh");
+//        gradeList.add("KD");
+//        gradeList.add("Blue Stain");
+//        gradeList.add("KD Blue Stain");
+//        gradeList.add("AST");
+//        gradeList.add("AST Blue Stain");
+//        gradeList.add("Second Sort");
+//        gradeList.add("Reject");
+
+
         gradeList.clear();
         gradeList.add("All");
         gradeList.add("Fresh");
-        gradeList.add("KD");
-        gradeList.add("Blue Stain");
-        gradeList.add("KD Blue Stain");
-        gradeList.add("AST");
-        gradeList.add("AST Blue Stain");
-        gradeList.add("Second Sort");
+        gradeList.add("BS");
         gradeList.add("Reject");
+        gradeList.add("KD");
+        gradeList.add("S4S");
+        gradeList.add("AST");
+//        gradeList.add("KD Reject");
+//        gradeList.add("KD Blue Stain");
+        gradeList.add("Second Sort");
         gradeAdapter = new ArrayAdapter<String>(this, R.layout.spinner_layout, gradeList);
         gradeAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
         gradeSpinner.setAdapter(gradeAdapter);
