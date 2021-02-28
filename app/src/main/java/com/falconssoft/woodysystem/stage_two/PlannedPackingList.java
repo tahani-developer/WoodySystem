@@ -149,12 +149,23 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 
         paclingList.requestFocus();
 
+//        gradeList.add("Fresh");
+//        gradeList.add("BS");
+//        gradeList.add("Reject");
+//        gradeList.add("KD");
+//        gradeList.add("KD Blue Stain");
+//        gradeList.add("KD Reject");
+//        gradeList.add("Second Sort");
+
+        gradeList.add("All");
         gradeList.add("Fresh");
         gradeList.add("BS");
         gradeList.add("Reject");
         gradeList.add("KD");
-        gradeList.add("KD Blue Stain");
-        gradeList.add("KD Reject");
+        gradeList.add("S4S");
+        gradeList.add("AST");
+//        gradeList.add("KD Reject");
+//        gradeList.add("KD Blue Stain");
         gradeList.add("Second Sort");
         gradeAdapter = new ArrayAdapter<String>(this, R.layout.spinner_layout, gradeList);
         gradeAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
