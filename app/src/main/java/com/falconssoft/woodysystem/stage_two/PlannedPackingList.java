@@ -157,7 +157,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
 //        gradeList.add("KD Reject");
 //        gradeList.add("Second Sort");
 
-        gradeList.add("All");
+        //gradeList.add("All");
         gradeList.add("Fresh");
         gradeList.add("BS");
         gradeList.add("Reject");
