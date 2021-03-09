@@ -116,6 +116,8 @@ public class NewRowInfo implements Serializable {
     private Bitmap pic77;
     private Bitmap pic88;
 
+    private int remove;
+
     public NewRowInfo() {
     }
 
@@ -447,6 +449,14 @@ public class NewRowInfo implements Serializable {
 
     public void setImageEight(String imageEight) {
         this.imageEight = imageEight;
+    }
+
+    public int getRemove() {
+        return remove;
+    }
+
+    public void setRemove(int remove) {
+        this.remove = remove;
     }
 
     public JSONObject getJsonData() {

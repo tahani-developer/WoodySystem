@@ -62,6 +62,7 @@ import com.falconssoft.woodysystem.models.Settings;
 import com.falconssoft.woodysystem.models.SupplierInfo;
 import com.falconssoft.woodysystem.reports.AcceptanceInfoReport;
 import com.falconssoft.woodysystem.reports.AcceptanceReport;
+import com.falconssoft.woodysystem.reports.BundlesReport;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -155,6 +156,9 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     private Bitmap bitmap;
     private String thicknessLocal, widthLocal, lengthLocal, noOfPiecesLocal, noOfRejectedLocal, noOfBundlesLocal;
     private Uri imageUri;
+    int id=0;
+    int update=0,index=0;
+    TableRow tableRowEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -495,7 +499,12 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                 totalBundles.setText("" + netBundlesString);
                 break;
             case R.id.addNewRaw_add_button:
-                addButtonMethod();
+                if(update==0){
+                    addButtonMethod();
+
+                }else if(update==1){
+                    updateFlag();
+                }
                 break;
             case R.id.addNewRaw_add_photo:
                 openCamera();
@@ -597,6 +606,25 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                 openCamera();
                 break;
         }
+
+    }
+
+    void updateFlag(){
+        newRowList.remove(index);
+        //newRowList.get(index).setRemove(1);
+        tableLayout.removeViewAt(index);
+        //tableLayout.setFocusable(newRowList.size());
+        addButtonMethod();
+        update=0;
+
+        for(int i=0;i<tableLayout.getChildCount();i++){
+
+            TableRow tableRow= (TableRow) tableLayout.getChildAt(i);
+            tableRow.setTag(i);
+        }
+
+        Log.e("aaaa", " "+newRowList.size());
+
 
     }
 
@@ -745,7 +773,74 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
             searchSupplier.setError("Please Select First!");
         }
     }
+    void idInAcceptanceNew() {
+        id = newRowList.size();
+        tableRow.setTag(id);
+    }
+    void editRowInAcceptanceNew(){
+        tableRow.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
 
+                update=1;
+                tableRowEdit= (TableRow) v;
+                index=(Integer) v.getTag();
+                fillDialog(newRowList.get((Integer) v.getTag()));
+                Log.e("acceptance",""+v.getTag());
+
+                return false;
+            }
+        });
+    }
+
+    void fillDialog (NewRowInfo newRowInfo){
+
+        thickness.setText(""+(int)newRowInfo.getThickness());
+        width.setText(""+(int)newRowInfo.getWidth());
+        length.setText(""+(int)newRowInfo.getLength());
+        noOfPieces.setText(""+(int)newRowInfo.getNoOfPieces());
+        noOfRejected.setText(""+(int)newRowInfo.getNoOfRejected());
+        noOfBundles.setText(""+(int)newRowInfo.getNoOfBundles());
+        searchSupplier.setText(newRowInfo.getSupplierName());
+        supplierName=newRowInfo.getSupplierName();
+        try {
+            gradeSpinner.setSelection(getGrade(newRowInfo.getGrade()));
+        }catch (Exception e){
+            Log.e("grade","Ex:Grade Error");
+        }
+
+        try {
+
+        }catch (Exception e){
+            Log.e("grade","Ex:Grade Error");
+        }
+
+    }
+
+//    void EditDialog(){
+//        final Dialog dialog = new Dialog(AddNewRaw.this);
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        dialog.setCancelable(true);
+//        dialog.setContentView(R.layout.edite_dialog);
+//
+//        EditText
+//
+//        dialog.show();
+//    }
+
+    int getGrade(String grade){
+        int position=-1;
+
+        for(int i=0;i<gradeList.size();i++){
+
+            if(gradeList.get(i).equals(grade)){
+                position=i;
+                break;
+            }
+        }
+
+        return position;
+    }
     void doneButtonMethod() {
         String truckNoLocal = truckNo.getText().toString();
         String acceptorLocal = acceptor.getText().toString();
@@ -808,7 +903,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                 truckNo.setError("Required");
             }
         } else {
-            Toast.makeText(this, "Please add rows firs!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please add rows first!", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -1412,6 +1507,8 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     break;
             }
 //            tableRow.addView(textView);
+            idInAcceptanceNew();
+            editRowInAcceptanceNew();
         }
 
     }
