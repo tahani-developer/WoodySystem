@@ -85,7 +85,7 @@ public class WoodPresenter {
         this.loginActivity = loginActivity;
         settings = databaseHandler.getSettings();
         url = "http://" + settings.getIpAddress() + "/import.php?FLAG=0";//http://192.168.2.17:8088/woody/import.php?FLAG=0
-//        Log.e("presenter/urlUsers ", "" + urlUsers);
+        Log.e("presenter/urlUsers ", "" + url);
 //        Log.e("presenter:ipUsers ", "" + SettingsFile.ipAddress);
         stringRequest = new StringRequest(Request.Method.GET, url, new UsersResponseClass(), new UsersResponseClass());
         requestQueue.add(stringRequest);
@@ -147,14 +147,14 @@ public class WoodPresenter {
                     String password = innerObject.getString("PASSWORD");
 //                    Log.e("presenter:obj3 ", "" +username + password);
                     Users users = new Users(username, password);
-//                    Log.e("presenter:obj4", "" + innerObject.getString("USER_NAME"));
+                    Log.e("presenter:obj4", "" + innerObject.getString("USER_NAME"));
 
                     loginActivity.getUsersDataMethod(username, password);
                     SettingsFile.usersList.add(users);
                     databaseHandler.addNewUser(users);
                 }
 //                Log.e("presenter3: import ", "" + SettingsFile.serialNumber);
-
+//
             } catch (JSONException e) {
                 e.printStackTrace();
 //            } catch (UnsupportedEncodingException e) {

@@ -179,6 +179,6 @@
     <string name="truck_acceptance">Truck Acceptance</string>
     <string name="accepted_truck_report">Accepted Truck Report</string>
     <string name="enter_barcode">Enter Barcode</string>
-    <string name="planned_packing_list">Planned packing list</string>
+    <string name="planned_packing_list">Add New packing list</string>
 
 </resources>
