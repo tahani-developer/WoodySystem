@@ -1015,8 +1015,10 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
         gradeList2.add("BS");
         gradeList2.add("Reject");
         gradeList2.add("KD");
-        gradeList2.add("KD Blue Stain");
-        gradeList2.add("KD Reject");
+        gradeList2.add("S4S");
+        gradeList2.add("AST");
+//        gradeList2.add("KD Reject");
+//        gradeList2.add("KD Blue Stain");
         gradeList2.add("Second Sort");
 
         gradeAdapter = new ArrayAdapter<String>(this, R.layout.spinner_layout_two, gradeList2);
@@ -1154,7 +1156,14 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                                                                 PlannedPLList.get(index).setDestination(destD.getText().toString());
                                                                 PlannedPLList.get(index).setOrderNo(orderNoD.getText().toString());
                                                                 PlannedPLList.get(index).setGrade(selectedGrade);
+
+
+
                                                                 PlannedPLList.get(index).setNoOfCopies(Integer.parseInt(noOfBundlesD.getText().toString()));
+
+
+
+
 
                                                                 adapter2.notifyDataSetChanged();
                                                                 checkOneBundleExistence(PlannedPLList.get(index));
