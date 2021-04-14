@@ -48,7 +48,7 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 public class MyServices extends Service {
     private static final String TAG = "BackgroundUpdateServiceS";
     int i = 0;
-    private DatabaseHandler DHandler;
+    private DatabaseHandler DHandler=new DatabaseHandler(MyServices.this);
     Timer T;
     public static int approveAdmin = -1;
     String userNo = "0";
@@ -59,11 +59,19 @@ public class MyServices extends Service {
         return null;
     }
 
+    @SuppressLint("LongLogTag")
     @Override
     public void onCreate() {
         super.onCreate();
 //
         DHandler=new DatabaseHandler(MyServices.this);
+        try {
+            ipAddress = DHandler.getSettings().getIpAddress();
+            Log.e(TAG,"onCreate Setting in dataBase"+ipAddress+"   ");
+
+        }catch (Exception e){
+            Log.e(TAG,"onCreate no Setting in dataBase"+ipAddress+"   ");
+        }
 //        userNo= db.getAllUserNo();
 //        if (settings.size() != 0) {
 //            approveAdmin= settings.get(0).getApproveAdmin();
