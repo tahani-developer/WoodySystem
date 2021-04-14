@@ -99,6 +99,13 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
+        <service android:name=".MyServices"
+            android:foregroundServiceType="location"
+            android:enabled="true"
+            android:process=":MyServicesSalesMan"
+            android:finishOnTaskLaunch="true"
+            android:stopWithTask="false"/>
+
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />

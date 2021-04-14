@@ -168,8 +168,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 //                    i = usersList.size();
                     databaseHandler.updateSettingsUserNo(usernameText);
 //                                    databaseHandler.addSettingsUserNo(usernameText);
+                    startService(new Intent(LoginActivity.this, MyServices.class));
                     Intent intent2 = new Intent(this, MainActivity.class);
                     startActivity(intent2);
+
                 }
 
                 if (!found) {
