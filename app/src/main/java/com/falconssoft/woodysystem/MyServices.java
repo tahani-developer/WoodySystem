@@ -35,10 +35,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.NetworkInterface;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -132,7 +134,7 @@ public class MyServices extends Service {
 
 
             }
-        }, 10, 10000);
+        }, 10, 900000);
     }
 
     @SuppressLint("LongLogTag")
@@ -206,7 +208,7 @@ public class MyServices extends Service {
 //                }
 
 //
-                URL url = new URL("http://" + ipAddress.trim() + "/import.php?FLAG=17");
+                URL url = new URL("http://" + ipAddress.trim() + "/import.php?FLAG=17&MA="+getMacAddr());
 
                 Log.e("urlString = ",""+url.toString());
 
@@ -265,5 +267,36 @@ public class MyServices extends Service {
             }
 
         }
+    }
+
+    @SuppressLint("LongLogTag")
+    public static String getMacAddr() {
+        try {
+            List<NetworkInterface> all = Collections.list(NetworkInterface.getNetworkInterfaces());
+            for (NetworkInterface nif : all) {
+                if (!nif.getName().equalsIgnoreCase("wlan0")) continue;
+
+                byte[] macBytes = nif.getHardwareAddress();
+                if (macBytes == null) {
+                    return "";
+                }
+
+                StringBuilder res1 = new StringBuilder();
+                for (byte b : macBytes) {
+                    res1.append(Integer.toHexString(b & 0xFF) + ":");
+                }
+
+                if (res1.length() > 0) {
+                    res1.deleteCharAt(res1.length() - 1);
+                }
+                Log.e(TAG,"mac "+res1.toString());
+                return res1.toString();
+            }
+        } catch (Exception ex) {
+
+            Log.e("ExceptionMac",""+ex.toString());
+
+        }
+        return "02:00:00:00:00:00";
     }
 }
