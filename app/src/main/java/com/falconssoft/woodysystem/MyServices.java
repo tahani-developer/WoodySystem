@@ -134,7 +134,7 @@ public class MyServices extends Service {
 
 
             }
-        }, 10, 900000);
+        }, 10, 300000);
     }
 
     @SuppressLint("LongLogTag")
