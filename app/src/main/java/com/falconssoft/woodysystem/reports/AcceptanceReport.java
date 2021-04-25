@@ -518,7 +518,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
             Bitmap bitmap;
             try {
                 if (!newRowInfoPic.equals("null")) {
-                    for (int i = 0; i < 6; i++) {
+                    for (int i = 0; i < 15; i++) {
 
                         switch (i) {
                             case 0:
@@ -609,6 +609,93 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
                                     }
                                 }
                                 break;
+
+                            case 8:
+                                if (pictures[0].getImage9() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImage9());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic99(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic88(bitmap);
+                                    }
+                                }
+                                break;
+
+
+
+                            case 9:
+                                if (pictures[0].getImage10() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImage10());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic1010(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic88(bitmap);
+                                    }
+                                }
+                                break;
+
+                            case 10:
+                                if (pictures[0].getImage11() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImage11());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic1111(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic88(bitmap);
+                                    }
+                                }
+                                break;
+
+                            case 11:
+                                if (pictures[0].getImage12() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImage12());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic1212(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic88(bitmap);
+                                    }
+                                }
+                                break;
+
+                            case 12:
+                                if (pictures[0].getImage13() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImage13());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic1313(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic88(bitmap);
+                                    }
+                                }
+                                break;
+
+                            case 13:
+                                if (pictures[0].getImage14() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImage14());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic1414(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic88(bitmap);
+                                    }
+                                }
+                                break;
+
+                            case 14:
+
+                                if (pictures[0].getImage15() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImage15());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic1515(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic88(bitmap);
+                                    }
+                                }
+                                break;
                         }
                     }
                 }
@@ -652,6 +739,15 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
                 newRowInfoPic.setPic66(null);
                 newRowInfoPic.setPic77(null);
                 newRowInfoPic.setPic88(null);
+
+                newRowInfoPic.setPic99(null);
+                newRowInfoPic.setPic1010(null);
+                newRowInfoPic.setPic1111(null);
+                newRowInfoPic.setPic1212(null);
+                newRowInfoPic.setPic1313(null);
+                newRowInfoPic.setPic1414(null);
+                newRowInfoPic.setPic1515(null);
+
                 dialog.dismiss();
             }
         });
@@ -663,9 +759,16 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
         pics.add(picts.getPic44());
         pics.add(picts.getPic55());
         pics.add(picts.getPic66());
-//        pics.add(picts.getPic77());
-//        pics.add(picts.getPic88());
+        pics.add(picts.getPic77());
+        pics.add(picts.getPic88());
 
+        pics.add(picts.getPic99());
+        pics.add(picts.getPic1010());
+        pics.add(picts.getPic1111());
+        pics.add(picts.getPic1212());
+        pics.add(picts.getPic1313());
+        pics.add(picts.getPic1414());
+        pics.add(picts.getPic1515());
 
         PicturesAdapter adapter = new PicturesAdapter(pics, null, this);
         listView.setAdapter(adapter);

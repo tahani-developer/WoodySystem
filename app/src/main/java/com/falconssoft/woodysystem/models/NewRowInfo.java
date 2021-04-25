@@ -107,6 +107,28 @@ public class NewRowInfo implements Serializable {
     @SerializedName("PIC8")
     private String imageEight;
 
+
+    @SerializedName("PIC9")
+    private String image9;
+
+    @SerializedName("PIC10")
+    private String image10;
+
+    @SerializedName("PIC11")
+    private String image11;
+
+    @SerializedName("PIC12")
+    private String image12;
+
+    @SerializedName("PIC13")
+    private String image13;
+
+    @SerializedName("PIC14")
+    private String image14;
+
+    @SerializedName("PIC15")
+    private String image15;
+
     private Bitmap pic11;
     private Bitmap pic22;
     private Bitmap pic33;
@@ -115,6 +137,14 @@ public class NewRowInfo implements Serializable {
     private Bitmap pic66;
     private Bitmap pic77;
     private Bitmap pic88;
+
+    private Bitmap pic99;
+    private Bitmap pic1010;
+    private Bitmap pic1111;
+    private Bitmap pic1212;
+    private Bitmap pic1313;
+    private Bitmap pic1414;
+    private Bitmap pic1515;
 
     private int remove;
 
@@ -451,6 +481,118 @@ public class NewRowInfo implements Serializable {
         this.imageEight = imageEight;
     }
 
+    public String getImage9() {
+        return image9;
+    }
+
+    public void setImage9(String image9) {
+        this.image9 = image9;
+    }
+
+    public String getImage10() {
+        return image10;
+    }
+
+    public void setImage10(String image10) {
+        this.image10 = image10;
+    }
+
+    public String getImage11() {
+        return image11;
+    }
+
+    public void setImage11(String image11) {
+        this.image11 = image11;
+    }
+
+    public String getImage12() {
+        return image12;
+    }
+
+    public void setImage12(String image12) {
+        this.image12 = image12;
+    }
+
+    public String getImage13() {
+        return image13;
+    }
+
+    public void setImage13(String image13) {
+        this.image13 = image13;
+    }
+
+    public String getImage14() {
+        return image14;
+    }
+
+    public void setImage14(String image14) {
+        this.image14 = image14;
+    }
+
+    public String getImage15() {
+        return image15;
+    }
+
+    public Bitmap getPic99() {
+        return pic99;
+    }
+
+    public void setPic99(Bitmap pic99) {
+        this.pic99 = pic99;
+    }
+
+    public Bitmap getPic1010() {
+        return pic1010;
+    }
+
+    public void setPic1010(Bitmap pic1010) {
+        this.pic1010 = pic1010;
+    }
+
+    public Bitmap getPic1111() {
+        return pic1111;
+    }
+
+    public void setPic1111(Bitmap pic1111) {
+        this.pic1111 = pic1111;
+    }
+
+    public Bitmap getPic1212() {
+        return pic1212;
+    }
+
+    public void setPic1212(Bitmap pic1212) {
+        this.pic1212 = pic1212;
+    }
+
+    public Bitmap getPic1313() {
+        return pic1313;
+    }
+
+    public void setPic1313(Bitmap pic1313) {
+        this.pic1313 = pic1313;
+    }
+
+    public Bitmap getPic1414() {
+        return pic1414;
+    }
+
+    public void setPic1414(Bitmap pic1414) {
+        this.pic1414 = pic1414;
+    }
+
+    public Bitmap getPic1515() {
+        return pic1515;
+    }
+
+    public void setPic1515(Bitmap pic1515) {
+        this.pic1515 = pic1515;
+    }
+
+    public void setImage15(String image15) {
+        this.image15 = image15;
+    }
+
     public int getRemove() {
         return remove;
     }
@@ -508,6 +650,13 @@ public class NewRowInfo implements Serializable {
             jsonObject.put("PIC6", "'" +imageSix+ "'");
             jsonObject.put("PIC7", "'" +imageSeven+ "'");
             jsonObject.put("PIC8", "'" +imageEight+ "'");
+            jsonObject.put("PIC9", "'" +image9+ "'");
+            jsonObject.put("PIC10", "'" +image10+ "'");
+            jsonObject.put("PIC11", "'" +image11+ "'");
+            jsonObject.put("PIC12", "'" +image12+ "'");
+            jsonObject.put("PIC13", "'" +image13+ "'");
+            jsonObject.put("PIC14", "'" +image14+ "'");
+            jsonObject.put("PIC15", "'" +image15+ "'");
 
         } catch (JSONException e) {
             e.printStackTrace();

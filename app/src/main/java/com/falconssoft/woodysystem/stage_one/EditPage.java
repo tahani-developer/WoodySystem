@@ -101,7 +101,7 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
     private final String STATE_VISIBILITY = "state-visibility";
     private Settings generalSettings;
     private WoodPresenter presenter;
-    private ImageView image1, image2, image3, image4, image5, image6, image7, image8;
+    private ImageView image1, image2, image3, image4, image5, image6, image7, image8, image9, image10, image11, image12, image13, image14, image15;
     private TextView addNewSupplier, searchSupplier, addButton, acceptRowButton, mainInfoButton, acceptanceDate, addPicture, totalRejected, totalBundles;
     private EditText thickness, width, length, noOfPieces, noOfBundles, noOfRejected, truckNo, acceptor, ttnNo;
     private Spinner gradeSpinner, acceptanceLocation;
@@ -199,6 +199,14 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
         image7 = findViewById(R.id.editPage_image7);
         image8 = findViewById(R.id.editPage_image8);
 
+        image9 = findViewById(R.id.editPage_image9);
+        image10 = findViewById(R.id.editPage_image10);
+        image11 = findViewById(R.id.editPage_image11);
+        image12 = findViewById(R.id.editPage_image12);
+        image13 = findViewById(R.id.editPage_image13);
+        image14 = findViewById(R.id.editPage_image14);
+        image15 = findViewById(R.id.editPage_image15);
+
         thickness.requestFocus();
         headerLayout.setVisibility(View.VISIBLE);
         acceptRowLayout.setVisibility(View.GONE);
@@ -210,6 +218,15 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
         image6.setVisibility(View.INVISIBLE);
         image7.setVisibility(View.INVISIBLE);
         image8.setVisibility(View.INVISIBLE);
+
+
+        image9.setVisibility(View.INVISIBLE);
+        image10.setVisibility(View.INVISIBLE);
+        image11.setVisibility(View.INVISIBLE);
+        image12.setVisibility(View.INVISIBLE);
+        image13.setVisibility(View.INVISIBLE);
+        image14.setVisibility(View.INVISIBLE);
+        image15.setVisibility(View.INVISIBLE);
 
         gradeList.clear();
         gradeList.add("KD");
@@ -256,6 +273,14 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
         image7.setOnClickListener(this);
         image8.setOnClickListener(this);
 
+        image9.setOnClickListener(this);
+        image10.setOnClickListener(this);
+        image11.setOnClickListener(this);
+        image12.setOnClickListener(this);
+        image13.setOnClickListener(this);
+        image14.setOnClickListener(this);
+        image15.setOnClickListener(this);
+
         checkIfEditItem();
 
         progressDialog = new ProgressDialog(this);
@@ -291,6 +316,15 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
             imagesRowInfo.setImageSix(rowInfo.getImageSix());
             imagesRowInfo.setImageSeven(rowInfo.getImageSeven());
             imagesRowInfo.setImageEight(rowInfo.getImageEight());
+
+            imagesRowInfo.setImage9(rowInfo.getImage9());
+            imagesRowInfo.setImage10(rowInfo.getImage10());
+            imagesRowInfo.setImage11(rowInfo.getImage11());
+            imagesRowInfo.setImage12(rowInfo.getImage12());
+            imagesRowInfo.setImage13(rowInfo.getImage13());
+            imagesRowInfo.setImage14(rowInfo.getImage14());
+            imagesRowInfo.setImage15(rowInfo.getImage15());
+
 
             addNewSupplier.setVisibility(View.INVISIBLE);
 //            searchSupplier.setClickable(false);
@@ -763,6 +797,15 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
                             newRowList.get(0).setImageSeven(imagesRowInfo.getImageSeven());
                             newRowList.get(0).setImageEight(imagesRowInfo.getImageEight());
 
+                            newRowList.get(0).setImage9(imagesRowInfo.getImage9());
+                            newRowList.get(0).setImage10(imagesRowInfo.getImage10());
+                            newRowList.get(0).setImage11(imagesRowInfo.getImage11());
+                            newRowList.get(0).setImage12(imagesRowInfo.getImage12());
+                            newRowList.get(0).setImage13(imagesRowInfo.getImage13());
+                            newRowList.get(0).setImage14(imagesRowInfo.getImage14());
+                            newRowList.get(0).setImage15(imagesRowInfo.getImage15());
+
+
                             masterData = newRowList.get(0).getJsonDataMaster();
 //                                Log.e("newRowList", "" + newRowList.get(0).getTruckNo());
 
@@ -871,7 +914,42 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
                         image8.setImageBitmap(bitmap);
                         imagesList.add(7, bitMapToString(bitmap));
                         break;
+                    case 9:
+                        image9.setVisibility(View.VISIBLE);
+                        image9.setImageBitmap(bitmap);
+                        imagesList.add(8, bitMapToString(bitmap));
+                        break;
+                    case 10:
+                        image10.setVisibility(View.VISIBLE);
+                        image10.setImageBitmap(bitmap);
+                        imagesList.add(9, bitMapToString(bitmap));
+                        break;
+                    case 11:
+                        image11.setVisibility(View.VISIBLE);
+                        image11.setImageBitmap(bitmap);
+                        imagesList.add(10, bitMapToString(bitmap));
+                        break;
+                    case 12:
+                        image12.setVisibility(View.VISIBLE);
+                        image12.setImageBitmap(bitmap);
+                        imagesList.add(11, bitMapToString(bitmap));
+                        break;
 
+                    case 13:
+                        image13.setVisibility(View.VISIBLE);
+                        image13.setImageBitmap(bitmap);
+                        imagesList.add(12, bitMapToString(bitmap));
+                        break;
+                    case 14:
+                        image14.setVisibility(View.VISIBLE);
+                        image14.setImageBitmap(bitmap);
+                        imagesList.add(13, bitMapToString(bitmap));
+                        break;
+                    case 15:
+                        image15.setVisibility(View.VISIBLE);
+                        image15.setImageBitmap(bitmap);
+                        imagesList.add(14, bitMapToString(bitmap));
+                        break;
                 }
             }
 
@@ -1244,6 +1322,37 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
                     image8.setVisibility(View.VISIBLE);
                     image8.setImageBitmap(stringToBitMap(imagesList.get(i)));
                     break;
+
+                case 8:
+                    image9.setVisibility(View.VISIBLE);
+                    image9.setImageBitmap(stringToBitMap(imagesList.get(i)));
+                    break;
+                case 9:
+                    image10.setVisibility(View.VISIBLE);
+                    image10.setImageBitmap(stringToBitMap(imagesList.get(i)));
+                    break;
+                case 10:
+                    image11.setVisibility(View.VISIBLE);
+                    image11.setImageBitmap(stringToBitMap(imagesList.get(i)));
+                    break;
+                case 11:
+                    image12.setVisibility(View.VISIBLE);
+                    image12.setImageBitmap(stringToBitMap(imagesList.get(i)));
+                    break;
+                case 12:
+                    image13.setVisibility(View.VISIBLE);
+                    image13.setImageBitmap(stringToBitMap(imagesList.get(i)));
+                    break;
+                case 13:
+                    image14.setVisibility(View.VISIBLE);
+                    image14.setImageBitmap(stringToBitMap(imagesList.get(i)));
+                    break;
+                case 14:
+                    image15.setVisibility(View.VISIBLE);
+                    image15.setImageBitmap(stringToBitMap(imagesList.get(i)));
+                    break;
+
+
             }
 
 

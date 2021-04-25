@@ -106,7 +106,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     private final String STATE_VISIBILITY = "state-visibility";
     private Settings generalSettings;
     private WoodPresenter presenter;
-    private ImageView image1, image2, image3, image4, image5, image6, image7, image8;
+    private ImageView image1, image2, image3, image4, image5, image6, image7, image8, image9, image10, image11, image12, image13, image14, image15;
     private TextView addNewSupplier, searchSupplier, addButton, acceptRowButton, mainInfoButton, acceptanceDate, addPicture, totalRejected, totalBundles, total;
     private EditText thickness, width, length, noOfPieces, noOfBundles, noOfRejected, truckNo, acceptor, ttnNo;
     private Spinner gradeSpinner, acceptanceLocation;
@@ -209,6 +209,14 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         image7 = findViewById(R.id.addNewRaw_image7);
         image8 = findViewById(R.id.addNewRaw_image8);
 
+        image9 = findViewById(R.id.addNewRaw_image9);
+        image10 = findViewById(R.id.addNewRaw_image10);
+        image11 = findViewById(R.id.addNewRaw_image11);
+        image12 = findViewById(R.id.addNewRaw_image12);
+        image13 = findViewById(R.id.addNewRaw_image13);
+        image14 = findViewById(R.id.addNewRaw_image14);
+        image15 = findViewById(R.id.addNewRaw_image15);
+
         thickness.requestFocus();
         headerLayout.setVisibility(View.VISIBLE);
         acceptRowLayout.setVisibility(View.GONE);
@@ -220,6 +228,14 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         image6.setVisibility(View.INVISIBLE);
         image7.setVisibility(View.INVISIBLE);
         image8.setVisibility(View.INVISIBLE);
+
+        image9 .setVisibility(View.INVISIBLE);
+        image10.setVisibility(View.INVISIBLE);
+        image11.setVisibility(View.INVISIBLE);
+        image12.setVisibility(View.INVISIBLE);
+        image13.setVisibility(View.INVISIBLE);
+        image14 .setVisibility(View.INVISIBLE);
+        image15.setVisibility(View.INVISIBLE);
 
         gradeList.clear();
         gradeList.add("KD");
@@ -265,6 +281,15 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         image6.setOnClickListener(this);
         image7.setOnClickListener(this);
         image8.setOnClickListener(this);
+
+        image9 .setOnClickListener(this);
+        image10.setOnClickListener(this);
+        image11.setOnClickListener(this);
+        image12.setOnClickListener(this);
+        image13.setOnClickListener(this);
+        image14 .setOnClickListener(this);
+        image15.setOnClickListener(this);
+
 
         imagesList.add(0, null);
         imagesList.add(1, null);
@@ -908,7 +933,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     }
 
     void fillImage(NewRowInfo image) {
-        for (int i = 0; i < 8; i++)
+        for (int i = 0; i < 15; i++)
             switch (i) {
                 case 0:
                     Bitmap bitmap = null;
@@ -982,6 +1007,73 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     } else
                         image.setImageEight(null);
                     break;
+                case 8:
+                    Bitmap bitmap9 = null;
+                    if (image9.getVisibility() == View.VISIBLE) {
+                        BitmapDrawable drawable = (BitmapDrawable) image9.getDrawable();
+                        bitmap9 = drawable.getBitmap();
+                        image.setImage9(bitMapToString(bitmap9));
+                    } else
+                        image.setImage9(null);
+                    break;
+                case 9:
+                    Bitmap bitmap10 = null;
+                    if (image10.getVisibility() == View.VISIBLE) {
+                        BitmapDrawable drawable = (BitmapDrawable) image10.getDrawable();
+                        bitmap10 = drawable.getBitmap();
+                        image.setImage10(bitMapToString(bitmap10));
+                    } else
+                        image.setImage10(null);
+                    break;
+                case 10:
+                    Bitmap bitmap11 = null;
+                    if (image11.getVisibility() == View.VISIBLE) {
+                        BitmapDrawable drawable = (BitmapDrawable) image11.getDrawable();
+                        bitmap11 = drawable.getBitmap();
+                        image.setImage11(bitMapToString(bitmap11));
+                    } else
+                        image.setImage11(null);
+                    break;
+                case 11:
+                    Bitmap bitmap12 = null;
+                    if (image12.getVisibility() == View.VISIBLE) {
+                        BitmapDrawable drawable = (BitmapDrawable) image12.getDrawable();
+                        bitmap12 = drawable.getBitmap();
+                        image.setImage12(bitMapToString(bitmap12));
+                    } else
+                        image.setImage12(null);
+                    break;
+                case 12:
+                    Bitmap bitmap13 = null;
+                    if (image13.getVisibility() == View.VISIBLE) {
+                        BitmapDrawable drawable = (BitmapDrawable) image13.getDrawable();
+                        bitmap13 = drawable.getBitmap();
+                        image.setImage13(bitMapToString(bitmap13));
+                    } else
+                        image.setImageEight(null);
+                    break;
+                case 13:
+                    Bitmap bitmap14 = null;
+                    if (image14.getVisibility() == View.VISIBLE) {
+                        BitmapDrawable drawable = (BitmapDrawable) image14.getDrawable();
+                        bitmap14 = drawable.getBitmap();
+                        image.setImage14(bitMapToString(bitmap14));
+                    } else
+                        image.setImage14(null);
+                    break;
+                case 14:
+                    Bitmap bitmap15 = null;
+                    if (image15.getVisibility() == View.VISIBLE) {
+                        BitmapDrawable drawable = (BitmapDrawable) image15.getDrawable();
+                        bitmap15 = drawable.getBitmap();
+                        image.setImage15(bitMapToString(bitmap15));
+                    } else
+                        image.setImage15(null);
+                    break;
+
+
+
+
             }
 //        for (int i = 0; i < imagesList.size(); i++)
 //            switch (i) {
@@ -1025,7 +1117,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void openCamera() {
-        if (imageNo < 6) {
+        if (imageNo < 15) {
             if ((ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
                     && (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
@@ -1195,6 +1287,99 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 //                    imagesList.add(7, bitMapToString(bitmap));
                     break;
 
+                case 9:
+                    image9.setVisibility(View.VISIBLE);
+                    try {
+                        thumbnail = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    image9.setImageBitmap(thumbnail);
+//                    imagesList.add(7, bitMapToString(bitmap));
+                    break;
+
+
+
+                case 10:
+                    image10.setVisibility(View.VISIBLE);
+                    try {
+                        thumbnail = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    image10.setImageBitmap(thumbnail);
+//                    imagesList.add(7, bitMapToString(bitmap));
+                    break;
+
+
+                case  11:
+                    image11.setVisibility(View.VISIBLE);
+                    try {
+                        thumbnail = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    image11.setImageBitmap(thumbnail);
+//                    imagesList.add(7, bitMapToString(bitmap));
+                    break;
+
+
+
+                case 12:
+                    image12.setVisibility(View.VISIBLE);
+                    try {
+                        thumbnail = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    image12.setImageBitmap(thumbnail);
+//                    imagesList.add(7, bitMapToString(bitmap));
+                    break;
+
+
+                case 13:
+                    image13.setVisibility(View.VISIBLE);
+                    try {
+                        thumbnail = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    image13.setImageBitmap(thumbnail);
+//                    imagesList.add(7, bitMapToString(bitmap));
+                    break;
+
+
+
+                case 14:
+                    image14.setVisibility(View.VISIBLE);
+                    try {
+                        thumbnail = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    image14.setImageBitmap(thumbnail);
+//                    imagesList.add(7, bitMapToString(bitmap));
+                    break;
+
+
+                case 15:
+                    image15.setVisibility(View.VISIBLE);
+                    try {
+                        thumbnail = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    image15.setImageBitmap(thumbnail);
+//                    imagesList.add(7, bitMapToString(bitmap));
+                    break;
+
 //                }
             }
 
@@ -1289,7 +1474,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     public String bitMapToString(Bitmap bitmap) {
         if (bitmap != null) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 20, baos);
             byte[] arr = baos.toByteArray();
             String result = Base64.encodeToString(arr, Base64.DEFAULT);
             return result;
@@ -1683,6 +1868,88 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     image8.setVisibility(View.VISIBLE);
                     image8.setImageBitmap(stringToBitMap(imagesList.get(i)));
                     break;
+
+
+                case 8:
+                    if (imagesList.get(i) == null) {
+                        image9.setVisibility(View.INVISIBLE);
+                        break;
+                    }
+                    imageNo++;
+                    image9.setVisibility(View.VISIBLE);
+                    image9.setImageBitmap(stringToBitMap(imagesList.get(i)));
+                    break;
+
+
+                case 9:
+                    if (imagesList.get(i) == null) {
+                        image10.setVisibility(View.INVISIBLE);
+                        break;
+                    }
+                    imageNo++;
+                    image10.setVisibility(View.VISIBLE);
+                    image10.setImageBitmap(stringToBitMap(imagesList.get(i)));
+                    break;
+
+
+
+                case 10:
+                    if (imagesList.get(i) == null) {
+                        image11.setVisibility(View.INVISIBLE);
+                        break;
+                    }
+                    imageNo++;
+                    image11.setVisibility(View.VISIBLE);
+                    image11.setImageBitmap(stringToBitMap(imagesList.get(i)));
+                    break;
+
+
+                case 11:
+                    if (imagesList.get(i) == null) {
+                        image12.setVisibility(View.INVISIBLE);
+                        break;
+                    }
+                    imageNo++;
+                    image12.setVisibility(View.VISIBLE);
+                    image12.setImageBitmap(stringToBitMap(imagesList.get(i)));
+                    break;
+
+
+                case 12:
+                    if (imagesList.get(i) == null) {
+                        image13.setVisibility(View.INVISIBLE);
+                        break;
+                    }
+                    imageNo++;
+                    image13.setVisibility(View.VISIBLE);
+                    image13.setImageBitmap(stringToBitMap(imagesList.get(i)));
+                    break;
+
+
+                case 13:
+                    if (imagesList.get(i) == null) {
+                        image14.setVisibility(View.INVISIBLE);
+                        break;
+                    }
+                    imageNo++;
+                    image14.setVisibility(View.VISIBLE);
+                    image14.setImageBitmap(stringToBitMap(imagesList.get(i)));
+                    break;
+
+
+                case 14:
+                    if (imagesList.get(i) == null) {
+                        image15.setVisibility(View.INVISIBLE);
+                        break;
+                    }
+                    imageNo++;
+                    image15.setVisibility(View.VISIBLE);
+                    image15.setImageBitmap(stringToBitMap(imagesList.get(i)));
+                    break;
+
+
+
+
             }
 
 //        super.onRestoreInstanceState(savedInstanceState);
@@ -1876,6 +2143,14 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     image6.setVisibility(View.INVISIBLE);
                     image7.setVisibility(View.INVISIBLE);
                     image8.setVisibility(View.INVISIBLE);
+
+                    image9 .setVisibility(View.INVISIBLE);
+                    image10.setVisibility(View.INVISIBLE);
+                    image11.setVisibility(View.INVISIBLE);
+                    image12.setVisibility(View.INVISIBLE);
+                    image13.setVisibility(View.INVISIBLE);
+                    image14 .setVisibility(View.INVISIBLE);
+                    image15.setVisibility(View.INVISIBLE);
 
                     acceptRowLayout.setVisibility(View.GONE);
                     headerLayout.setVisibility(View.VISIBLE);
