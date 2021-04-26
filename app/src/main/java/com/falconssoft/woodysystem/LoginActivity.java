@@ -1,5 +1,6 @@
 package com.falconssoft.woodysystem;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
@@ -43,9 +44,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
+import java.net.NetworkInterface;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.falconssoft.woodysystem.SettingsFile.usersList;
@@ -54,7 +57,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private LinearLayout linearLayout;
     private EditText username, password, ipAddress, companyName;
-    private TextView aboutDevelopers, saveSettings;
+    private TextView aboutDevelopers, saveSettings,macAddress;
     private Button login;
     private ImageView  settings;//logoImage
     private DatabaseHandler databaseHandler;
@@ -224,10 +227,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 ipAddress = settingDialog.findViewById(R.id.settings_ipAddress);
                 storesSpinner = settingDialog.findViewById(R.id.settings_stores);
                 saveSettings = settingDialog.findViewById(R.id.settings_save);
+                macAddress= settingDialog.findViewById(R.id.macAddress);
                 localCompanyName = generalSettings.getCompanyName();
                 localIpAddress = generalSettings.getIpAddress();
                 localStore = generalSettings.getStore();
 
+                String mac=getMacAddr();
+                macAddress.setText(""+mac);
 //                Window window = settingDialog.getWindow();
 //                window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
@@ -425,5 +431,37 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 //        overridePendingTransition(R.anim.fade_out, R.anim.fade_in);
 //    }
 
+
+
+    @SuppressLint("LongLogTag")
+    public static String getMacAddr() {
+        try {
+            List<NetworkInterface> all = Collections.list(NetworkInterface.getNetworkInterfaces());
+            for (NetworkInterface nif : all) {
+                if (!nif.getName().equalsIgnoreCase("wlan0")) continue;
+
+                byte[] macBytes = nif.getHardwareAddress();
+                if (macBytes == null) {
+                    return "";
+                }
+
+                StringBuilder res1 = new StringBuilder();
+                for (byte b : macBytes) {
+                    res1.append(Integer.toHexString(b & 0xFF) + ":");
+                }
+
+                if (res1.length() > 0) {
+                    res1.deleteCharAt(res1.length() - 1);
+                }
+                Log.e("LogIn","mac "+res1.toString());
+                return res1.toString();
+            }
+        } catch (Exception ex) {
+
+            Log.e("ExceptionMac",""+ex.toString());
+
+        }
+        return "02:00:00:00:00:00";
+    }
 
 }
