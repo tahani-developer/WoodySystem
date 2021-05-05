@@ -112,6 +112,8 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
     private List<SupplierInfo> suppliers = new ArrayList<>();
     public static String supplierName = "All";
     private List<SupplierInfo> arraylist = new ArrayList<>();
+    double acceptedReject=0,acceptedBundle=0;
+    TextView reportTotalReject,reportTotalBundle;
 
     //    public static final String EDIT_FLAG2= "EDIT_FLAG";
     @Override
@@ -148,6 +150,8 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
         exportToExcel = findViewById(R.id.acceptance_report_export_Excel);
         totalCubic = findViewById(R.id.truck_report_cubic);
         supplier = findViewById(R.id.truck_report_supplier);
+        reportTotalReject=findViewById(R.id.Report_total_rejected);
+        reportTotalBundle=findViewById(R.id.Report_total_bundles);
 
         myFormat = "dd/MM/yyyy";
         sdf = new SimpleDateFormat(myFormat, Locale.US);
@@ -214,7 +218,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
 
                 recyclerView = searchDialog.findViewById(R.id.search_supplier_recyclerView);
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
-                suppliersAdapter = new SuppliersAdapter(null, suppliers, null, this);
+                suppliersAdapter = new SuppliersAdapter(null, suppliers, null, this,0);
                 recyclerView.setAdapter(suppliersAdapter);
 
                 searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -303,7 +307,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
             }
         }
         total.setText("" + arraylist.size());
-        suppliersAdapter = new SuppliersAdapter(null, arraylist, null, this);
+        suppliersAdapter = new SuppliersAdapter(null, arraylist, null, this,0);
         recyclerView.setAdapter(suppliersAdapter);
     }
 
@@ -468,6 +472,25 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
         return d;
     }
 
+    void getRejectNetBundle(){
+        Log.e("rejjj1",""+master.size());
+        acceptedReject=0;
+        acceptedReject=0;
+    for (int i=0;i<master.size();i++){
+
+        acceptedReject+=Double.parseDouble(master.get(i).getTotalRejectedNo());
+        acceptedBundle+=Double.parseDouble(master.get(i).getNetBundles());
+        Log.e("rejjj",""+acceptedBundle+"   "+acceptedReject);
+
+        Log.e("rejjj2",""+master.get(i).getNoOfBundles());
+
+    }
+
+        reportTotalReject.setText(""+acceptedReject);
+        reportTotalBundle.setText(""+acceptedBundle);
+
+    }
+
     public void filters() {
 
         if (linearLayout.getVisibility() == View.VISIBLE)
@@ -494,6 +517,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
             adapter2 = new AcceptanceReportAdapter(AcceptanceReport.this, filtered, details);
             list.setAdapter(adapter2);
             totalCubic.setText("" + String.format("%.3f", sum));
+            getRejectNetBundle();
 
 
         } catch (ParseException e) {
@@ -719,7 +743,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
     }
 
     public void openPicDialog2(NewRowInfo picts) {
-        dialog = new Dialog(previewLinearContext);
+        dialog = new Dialog(previewLinearContext,R.style.Theme_Dialog);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 //        dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
@@ -810,6 +834,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
             totalCubic.setText("0.000");
 
         fillSpinnerAdapter();
+        getRejectNetBundle();
         adapter2 = new AcceptanceReportAdapter(AcceptanceReport.this, master, details);
         list.setAdapter(adapter2);
         progressDialog.dismiss();

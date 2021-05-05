@@ -89,6 +89,9 @@
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".MainActivity" />
         <activity android:name=".QrReader" />
+        <activity
+            android:name=".TransferBundle"
+            android:screenOrientation="sensorLandscape" />
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.falconssoft.woodysystem.provider"

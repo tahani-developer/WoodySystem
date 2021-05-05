@@ -42,6 +42,11 @@ public class BundleInfo implements Serializable {
     private int noOfCopies;
     private int index;
 
+    private String newSerial;
+    private  String newLocation;
+    private  String newBundleNo;
+
+
     public BundleInfo() {
     }
 
@@ -278,6 +283,30 @@ public class BundleInfo implements Serializable {
         this.noOfExist = noOfExist;
     }
 
+    public String getNewSerial() {
+        return newSerial;
+    }
+
+    public void setNewSerial(String newSerial) {
+        this.newSerial = newSerial;
+    }
+
+    public String getNewLocation() {
+        return newLocation;
+    }
+
+    public void setNewLocation(String newLocation) {
+        this.newLocation = newLocation;
+    }
+
+    public String getNewBundleNo() {
+        return newBundleNo;
+    }
+
+    public void setNewBundleNo(String newBundleNo) {
+        this.newBundleNo = newBundleNo;
+    }
+
     public JSONObject getJSONObject() {
         JSONObject obj = new JSONObject();
 
@@ -299,6 +328,38 @@ public class BundleInfo implements Serializable {
             obj.put("IS_PRINTED", "'" + isPrinted + "'");
             obj.put("BACKING_LIST", "'" + backingList + "'");
             obj.put("CUSTOMER", "'" + customer + "'");
+
+        } catch (JSONException e) {
+            Log.e("Tag", "JSONException");
+        }
+        return obj;
+    }
+
+    public JSONObject getJSONObjectTransfer() {
+        JSONObject obj = new JSONObject();
+
+        try {
+            obj.put("THICKNESS", "'" + thickness + "'");
+            obj.put("WIDTH", "'" + width + "'");
+            obj.put("LENGTH", "'" + length + "'");
+            obj.put("GRADE", "'" + grade + "'");
+            obj.put("PIECES", "'" + noOfPieces + "'");
+            obj.put("BUNDLE_NO", "'" + bundleNo + "'");
+            obj.put("LOCATION", "'" + location + "'");
+            obj.put("AREA", "'" + area + "'");
+            obj.put("BARCODE", "'" + barcode + "'");
+            obj.put("ORDERED", "'" + ordered + "'");
+            obj.put("BUNDLE_DATE", "'" + addingDate + "'");
+            obj.put("DESCRIPTION", "'" + description + "'");
+            obj.put("B_SERIAL", "'" + serialNo + "'");
+            obj.put("USER_NO", "'" + userNo + "'");
+            obj.put("IS_PRINTED", "'" + isPrinted + "'");
+            obj.put("BACKING_LIST", "'" + backingList + "'");
+            obj.put("CUSTOMER", "'" + customer + "'");
+
+            obj.put("NEW_LOCATION", "'" + newLocation + "'");
+            obj.put("NEW_BUNDLE_NO", "'" + newBundleNo + "'");
+            obj.put("NEW_B_SERIAL", "'" + newSerial + "'");
 
         } catch (JSONException e) {
             Log.e("Tag", "JSONException");

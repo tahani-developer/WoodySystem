@@ -1,5 +1,6 @@
 package com.falconssoft.woodysystem.stage_one;
 
+import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -32,7 +33,7 @@ public class EditPageAdapter extends RecyclerView.Adapter<EditPageAdapter.EditPa
     }
 
     @Override
-    public void onBindViewHolder(@NonNull EditPageViewHolder holder, int i) {
+    public void onBindViewHolder(@NonNull EditPageViewHolder holder, @SuppressLint("RecyclerView") int i) {
 
         holder.supplier.setText(list.get(i).getSupplierName());
         holder.thickness.setText("" + list.get(i).getThickness());
@@ -42,6 +43,14 @@ public class EditPageAdapter extends RecyclerView.Adapter<EditPageAdapter.EditPa
         holder.rejected.setText("" + list.get(i).getNoOfRejected());
         holder.bundles.setText("" + list.get(i).getNoOfBundles());
         holder.grade.setText(list.get(i).getGrade());
+        holder.edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                editPage.EditDialog(list.get(i),i);
+
+            }
+        });
 
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,7 +76,7 @@ public class EditPageAdapter extends RecyclerView.Adapter<EditPageAdapter.EditPa
 
     class EditPageViewHolder extends RecyclerView.ViewHolder {
         TextView supplier, thickness, width, length, pieces, rejected, bundles, grade;
-        ImageView delete;
+        ImageView delete,edit;
 
         public EditPageViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -81,6 +90,7 @@ public class EditPageAdapter extends RecyclerView.Adapter<EditPageAdapter.EditPa
             bundles = itemView.findViewById(R.id.editRow_bundles);
             grade = itemView.findViewById(R.id.editRow_grade);
             delete = itemView.findViewById(R.id.editRow_delete);
+            edit = itemView.findViewById(R.id.editRow_edit);
 
         }
     }

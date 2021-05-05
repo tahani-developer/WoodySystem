@@ -179,5 +179,10 @@
     <string name="accepted_truck_report">Accepted Truck Report</string>
     <string name="enter_barcode">Enter Barcode</string>
     <string name="planned_packing_list">Planned packing list</string>
+    <string name="pdf">PDF</string>
+    <string name="excel">Excel</string>
+    <string name="transferBundle">Transfer Bundle</string>
+    <string name="transfer">transfer</string>
+    <string name="scanBarcode">scan Barcode</string>
 
 </resources>

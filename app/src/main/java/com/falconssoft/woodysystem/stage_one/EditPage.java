@@ -149,6 +149,7 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
 
     private String thicknessLocal, widthLocal, lengthLocal, noOfPiecesLocal, noOfRejectedLocal, noOfBundlesLocal;
 
+    TextView supplierTextTemp=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -209,7 +210,7 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
 
         thickness.requestFocus();
         headerLayout.setVisibility(View.VISIBLE);
-        acceptRowLayout.setVisibility(View.GONE);
+        acceptRowLayout.setVisibility(View.VISIBLE);
         image1.setVisibility(View.INVISIBLE);
         image2.setVisibility(View.INVISIBLE);
         image3.setVisibility(View.INVISIBLE);
@@ -445,18 +446,217 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
         builder.show();
     }
 
+
+    public  void EditDialog(NewRowInfo newRowInfo,int index){
+        final Dialog dialog = new Dialog(EditPage.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.edite_dialog);
+
+        TextView addNewRaw_search_supplier_edit;
+        Spinner addNewRaw_grade_edit;
+        Button editButton;
+
+        EditText addNewRaw_thickness_edit,addNewRaw_width_edit,addNewRaw_length_edit,addNewRaw_no_of_pieces_edit,addNewRaw_no_of_rejected_edit,
+                addNewRaw_no_of_bundles_edit;
+
+        addNewRaw_thickness_edit=dialog.findViewById(R.id.addNewRaw_thickness_edit);
+        addNewRaw_width_edit=dialog.findViewById(R.id.addNewRaw_width_edit);
+        addNewRaw_length_edit=dialog.findViewById(R.id.addNewRaw_length_edit);
+
+        addNewRaw_no_of_pieces_edit=dialog.findViewById(R.id.addNewRaw_no_of_pieces_edit);
+
+        addNewRaw_no_of_rejected_edit=dialog.findViewById(R.id.addNewRaw_no_of_rejected_edit);
+        addNewRaw_no_of_bundles_edit=dialog.findViewById(R.id.addNewRaw_no_of_bundles_edit);
+
+
+        addNewRaw_grade_edit=dialog.findViewById(R.id.addNewRaw_grade_edit);
+        editButton=dialog.findViewById(R.id.editButton);
+
+
+
+        addNewRaw_search_supplier_edit=dialog.findViewById(R.id.addNewRaw_search_supplier_edit);
+
+       supplierTextTemp=addNewRaw_search_supplier_edit;
+        final String[] gradeTextEdit = {"KD"};
+
+        ArrayAdapter gradeAdapter = new ArrayAdapter<String>(this, R.layout.spinner_layout, gradeList);
+        gradeAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
+        addNewRaw_grade_edit.setAdapter(gradeAdapter);
+        addNewRaw_grade_edit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                gradeTextEdit[0] = parent.getItemAtPosition(position).toString();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        addNewRaw_thickness_edit.setText(""+(int)newRowInfo.getThickness());
+        addNewRaw_width_edit.setText(""+(int)newRowInfo.getWidth());
+        addNewRaw_length_edit.setText(""+(int)newRowInfo.getLength());
+        addNewRaw_no_of_pieces_edit.setText(""+(int)newRowInfo.getNoOfPieces());
+        addNewRaw_no_of_rejected_edit.setText(""+(int)newRowInfo.getNoOfRejected());
+        addNewRaw_no_of_bundles_edit.setText(""+(int)newRowInfo.getNoOfBundles());
+        addNewRaw_search_supplier_edit.setText(newRowInfo.getSupplierName());
+
+        addNewRaw_search_supplier_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+              supplierDialog();
+            }
+        });
+
+        try {
+            addNewRaw_grade_edit.setSelection(getGrade(newRowInfo.getGrade()));
+        }catch (Exception e){
+            Log.e("grade","Ex:Grade Error");
+        }
+
+        try {
+
+        }catch (Exception e){
+            Log.e("grade","Ex:Grade Error");
+        }
+
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!addNewRaw_thickness_edit.getText().toString().equals("") && Integer.parseInt(addNewRaw_thickness_edit.getText().toString()) != 0) {
+                    if (!addNewRaw_width_edit.getText().toString().equals("") && Integer.parseInt(addNewRaw_width_edit.getText().toString()) != 0) {
+
+                        if (!addNewRaw_length_edit.getText().toString().equals("") && Integer.parseInt(addNewRaw_length_edit.getText().toString()) != 0) {
+
+                            if (!addNewRaw_no_of_pieces_edit.getText().toString().equals("") && Integer.parseInt(addNewRaw_no_of_pieces_edit.getText().toString()) != 0) {
+
+                                if (!addNewRaw_no_of_rejected_edit.getText().toString().equals("") && Integer.parseInt(addNewRaw_no_of_rejected_edit.getText().toString()) != 0) {
+
+                                    if (!addNewRaw_no_of_bundles_edit.getText().toString().equals("") && Integer.parseInt(addNewRaw_no_of_bundles_edit.getText().toString()) != 0) {
+
+                                        if (!addNewRaw_search_supplier_edit.getText().toString().equals("")) {
+
+                                            editList.get(index).setThickness(Double.parseDouble(addNewRaw_thickness_edit.getText().toString()));
+                                            editList.get(index).setWidth(Double.parseDouble(addNewRaw_width_edit.getText().toString()));
+                                            editList.get(index).setLength(Double.parseDouble(addNewRaw_length_edit.getText().toString()));
+                                            editList.get(index).setNoOfPieces(Double.parseDouble(addNewRaw_no_of_pieces_edit.getText().toString()));
+                                            editList.get(index).setNoOfRejected(Double.parseDouble(addNewRaw_no_of_rejected_edit.getText().toString()));
+                                            editList.get(index).setNoOfBundles(Double.parseDouble(addNewRaw_no_of_bundles_edit.getText().toString()));
+                                            editList.get(index).setSupplierName(addNewRaw_search_supplier_edit.getText().toString());
+                                            editList.get(index).setGrade( gradeTextEdit[0]);
+
+                                            editPageAdapter.notifyDataSetChanged();
+                                            rejectAdd();
+                                            dialog.dismiss();
+
+                                        } else {
+                                            addNewRaw_search_supplier_edit.setError("Required !");
+                                        }
+
+
+                                    } else {
+                                        addNewRaw_no_of_bundles_edit.setError("Required !");
+                                    }
+
+                                } else {
+                                    addNewRaw_no_of_rejected_edit.setError("Required !");
+                                }
+
+                            } else {
+                                addNewRaw_no_of_pieces_edit.setError("Required !");
+                            }
+
+                        } else {
+                            addNewRaw_length_edit.setError("Required !");
+                        }
+
+                    } else {
+                        addNewRaw_width_edit.setError("Required !");
+                    }
+                } else {
+                    addNewRaw_thickness_edit.setError("Required !");
+                }
+
+
+            }
+        });
+
+        dialog.show();
+
+    }
+
+    int getGrade(String grade){
+        int position=-1;
+
+        for(int i=0;i<gradeList.size();i++){
+
+            if(gradeList.get(i).equals(grade)){
+                position=i;
+                break;
+            }
+        }
+
+        return position;
+    }
+
+    void supplierDialog (){
+        suppliers.clear();
+        isCamera = false;
+        new JSONTask().execute();
+
+        searchDialog = new Dialog(this);
+        searchDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        searchDialog.setContentView(R.layout.search_supplier_dialog);
+        searchDialog.setCancelable(false);
+
+        SearchView searchView = searchDialog.findViewById(R.id.search_supplier_searchView);
+        TextView close = searchDialog.findViewById(R.id.search_supplier_close);
+
+        recyclerView = searchDialog.findViewById(R.id.search_supplier_recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new SuppliersAdapter(null, suppliers, this, null,1);
+        recyclerView.setAdapter(adapter);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filter(newText);
+//                        adapter.notifyDataSetChanged();
+                return false;
+            }
+        });
+
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchDialog.dismiss();
+                isCamera = false;
+            }
+        });
+        searchDialog.show();
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.editPage_acceptRow_back:
-                acceptRowLayout.setVisibility(View.GONE);
+               // acceptRowLayout.setVisibility(View.GONE);
                 acceptRowButton.setBackgroundResource(R.drawable.frame_shape_2);
                 mainInfoButton.setBackgroundResource(R.drawable.frame_shape_3);
 
-                Animation animation1 = AnimationUtils.loadAnimation(this, R.anim.fade_out);
-                headerLayout.setVisibility(View.VISIBLE);
-                headerLayout.startAnimation(animation1);
+               // Animation animation1 = AnimationUtils.loadAnimation(this, R.anim.fade_out);
+                //headerLayout.setVisibility(View.VISIBLE);
+               // headerLayout.startAnimation(animation1);
                 thickness.requestFocus();
                 break;
             case R.id.editPage_acceptRow_done:
@@ -468,35 +668,11 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
                 break;
             case R.id.editPage_acceptRaw_button:
-                headerLayout.setVisibility(View.GONE);
-                acceptRowButton.setBackgroundResource(R.drawable.frame_shape_3);
-                mainInfoButton.setBackgroundResource(R.drawable.frame_shape_2);
-
-                Animation animation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
-                acceptRowLayout.setVisibility(View.VISIBLE);
-                acceptRowLayout.startAnimation(animation);
-                truckNo.requestFocus();
-
-                netRejectedString = 0;
-                netBundlesString = 0;
-                Log.e("fromedit11", "" + editList.size());
-                if (edieFlag == 11)
-                    for (int n = 0; n < editList.size(); n++) {
-                        netRejectedString += editList.get(n).getNoOfRejected();
-                        netBundlesString += editList.get(n).getNoOfBundles();
-                    }
-                else if (edieFlag == 10) ;
-                else
-                    for (int n = 0; n < newRowList.size(); n++) {
-                        netRejectedString += newRowList.get(n).getNoOfRejected();
-                        netBundlesString += newRowList.get(n).getNoOfBundles();
-                    }
-
-                totalRejected.setText("" + netRejectedString);
-                totalBundles.setText("" + netBundlesString);
+               rejectAdd();
                 break;
             case R.id.editPage_add_button:
                 addButtonMethod();
+                rejectAdd();
                 break;
             case R.id.editPage_add_photo:
                 openCamera();
@@ -521,7 +697,7 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
 
                 recyclerView = searchDialog.findViewById(R.id.search_supplier_recyclerView);
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
-                adapter = new SuppliersAdapter(null, suppliers, this, null);
+                adapter = new SuppliersAdapter(null, suppliers, this, null,0);
                 recyclerView.setAdapter(adapter);
 
                 searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -591,6 +767,37 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
 
     }
 
+    void rejectAdd(){
+
+        //headerLayout.setVisibility(View.GONE);
+        acceptRowButton.setBackgroundResource(R.drawable.frame_shape_3);
+        mainInfoButton.setBackgroundResource(R.drawable.frame_shape_2);
+
+        //Animation animation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+        //acceptRowLayout.setVisibility(View.VISIBLE);
+        //acceptRowLayout.startAnimation(animation);
+        truckNo.requestFocus();
+
+        netRejectedString = 0;
+        netBundlesString = 0;
+        Log.e("fromedit11", "" + editList.size());
+        if (edieFlag == 11)
+            for (int n = 0; n < editList.size(); n++) {
+                netRejectedString += editList.get(n).getNoOfRejected();
+                netBundlesString += editList.get(n).getNoOfBundles();
+            }
+        else if (edieFlag == 10) ;
+        else
+            for (int n = 0; n < newRowList.size(); n++) {
+                netRejectedString += newRowList.get(n).getNoOfRejected();
+                netBundlesString += newRowList.get(n).getNoOfBundles();
+            }
+
+        totalRejected.setText("" + netRejectedString);
+        totalBundles.setText("" + netBundlesString);
+
+    }
+
     public void filter(String charText) { // by Name
         charText = charText.toLowerCase(Locale.getDefault());
         arraylist.clear();
@@ -603,7 +810,7 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
                 }
             }
         }
-        adapter = new SuppliersAdapter(null, suppliers, this, null);
+        adapter = new SuppliersAdapter(null, suppliers, this, null,0);
         recyclerView.setAdapter(adapter);
     }
 
@@ -1006,6 +1213,8 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
 //        Log.e("checkValidData4", word + ((word.length() == 1) && (word.equals("."))));
         if ((word.length() == 1) && (word.contains(".")))
             return true;
+        else if (((word.length() > 0) && Double.parseDouble(word)==0))
+            return true;
         return false;
     }
 
@@ -1044,11 +1253,15 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
 
     }
 
-    public void getSearchSupplierInfo(String supplierNameLocal, String supplierNoLocal) {
+    public void getSearchSupplierInfo(String supplierNameLocal, String supplierNoLocal,int updateFlag) {
         supplierName = supplierNameLocal;
         searchSupplier.setText(supplierName);
         searchSupplier.setError(null);
         searchDialog.dismiss();
+
+        if(updateFlag==1) {
+            supplierTextTemp.setText(supplierNameLocal);
+        }
 
     }
 
@@ -1634,6 +1847,7 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
             else {
                 editPageAdapter = new EditPageAdapter(EditPage.this, editList);
                 rowsRecyclerView.setAdapter(editPageAdapter);
+                rejectAdd();
             }
 
         }

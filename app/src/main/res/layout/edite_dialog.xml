@@ -1,20 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/wooddecor"
 
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:padding="10dp"
+    android:background="@color/black">
+
     <LinearLayout
         android:id="@+id/addNewRaw_linearLayoutHeader"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/alpha_black_dark"
         android:orientation="vertical"
         android:visibility="visible"
-        android:background="@color/alpha_black_dark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addNewRaw_linear_header">
+
+        <LinearLayout
+            android:id="@+id/inventory_report_linear1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/orange"
+            android:orientation="horizontal"
+            android:layout_marginBottom="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <TextView
+                android:id="@+id/inventory_report_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:fontFamily="serif"
+                android:gravity="start|left"
+                android:paddingVertical="5dp"
+                android:text="Editing "
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -49,7 +77,7 @@
                     android:textSize="15sp" />
 
                 <TextView
-                    android:id="@+id/addNewRaw_search_supplier"
+                    android:id="@+id/addNewRaw_search_supplier_edit"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
@@ -62,18 +90,18 @@
                     android:textColorHint="@color/white"
                     android:textSize="15sp" />
 
-                <TextView
-                    android:id="@+id/addNewRaw_add_supplier"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0"
-                    android:background="@drawable/frame_shape"
-                    android:drawableStart="@drawable/ic_person_add_24dp"
-                    android:drawableLeft="@drawable/ic_person_add_24dp"
-                    android:paddingStart="5dp"
-                    android:paddingLeft="5dp"
-                    android:paddingEnd="5dp"
-                    android:paddingRight="5dp" />
+                <!--                <TextView-->
+                <!--                    android:id="@+id/addNewRaw_add_supplier"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="match_parent"-->
+                <!--                    android:layout_weight="0"-->
+                <!--                    android:background="@drawable/frame_shape"-->
+                <!--                    android:drawableStart="@drawable/ic_person_add_24dp"-->
+                <!--                    android:drawableLeft="@drawable/ic_person_add_24dp"-->
+                <!--                    android:paddingStart="5dp"-->
+                <!--                    android:paddingLeft="5dp"-->
+                <!--                    android:paddingEnd="5dp"-->
+                <!--                    android:paddingRight="5dp" />-->
             </LinearLayout>
 
             <LinearLayout
@@ -98,7 +126,7 @@
                     android:textSize="15sp" />
 
                 <EditText
-                    android:id="@+id/addNewRaw_thickness"
+                    android:id="@+id/addNewRaw_thickness_edit"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="10dp"
@@ -116,7 +144,7 @@
             <LinearLayout
                 android:id="@+id/addNewRaw_linear_three"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/alpha_frame"
                 android:orientation="horizontal"
@@ -133,7 +161,7 @@
                     android:textSize="15sp" />
 
                 <EditText
-                    android:id="@+id/addNewRaw_width"
+                    android:id="@+id/addNewRaw_width_edit"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="10dp"
@@ -148,12 +176,23 @@
 
             </LinearLayout>
 
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
             <LinearLayout
                 android:id="@+id/addNewRaw_linear_five"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
-                android:layout_marginLeft="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/alpha_frame"
                 android:orientation="horizontal"
@@ -170,7 +209,7 @@
                     android:textSize="15sp" />
 
                 <EditText
-                    android:id="@+id/addNewRaw_length"
+                    android:id="@+id/addNewRaw_length_edit"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="10dp"
@@ -184,15 +223,6 @@
                     android:textSize="15sp" />
 
             </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginHorizontal="10dp"
-            android:orientation="horizontal">
 
             <LinearLayout
                 android:id="@+id/addNewRaw_linear_seven"
@@ -216,7 +246,7 @@
                     android:textSize="15sp" />
 
                 <EditText
-                    android:id="@+id/addNewRaw_no_of_pieces"
+                    android:id="@+id/addNewRaw_no_of_pieces_edit"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="10dp"
@@ -250,7 +280,7 @@
                     android:textSize="15sp" />
 
                 <EditText
-                    android:id="@+id/addNewRaw_no_of_rejected"
+                    android:id="@+id/addNewRaw_no_of_rejected_edit"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="10dp"
@@ -264,14 +294,42 @@
                     android:textSize="15sp" />
             </LinearLayout>
 
+
+
+
+        </LinearLayout>
+
+<!--        <View-->
+<!--            android:id="@+id/inventory_report_linear6"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="2dp"-->
+<!--            android:layout_marginTop="5dp"-->
+<!--            android:layout_marginBottom="5dp"-->
+<!--            android:background="@color/white"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintBottom_toTopOf="@+id/inventory_report_linear7"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent" />-->
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp"
+            android:padding="5dp">
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="5dp"
-                android:layout_marginLeft="5dp"
                 android:layout_marginEnd="5dp"
                 android:layout_marginRight="5dp"
+                android:layout_weight="1"
                 android:background="@drawable/alpha_frame"
                 android:orientation="horizontal"
                 android:padding="5dp">
@@ -287,7 +345,7 @@
                     android:textSize="15sp" />
 
                 <EditText
-                    android:id="@+id/addNewRaw_no_of_bundles"
+                    android:id="@+id/addNewRaw_no_of_bundles_edit"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="10dp"
@@ -305,8 +363,11 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
                 android:background="@drawable/alpha_frame"
                 android:orientation="horizontal"
+
                 android:padding="5dp">
 
                 <TextView
@@ -321,16 +382,28 @@
                     android:textSize="15sp" />
 
                 <Spinner
-                    android:id="@+id/addNewRaw_grade"
+                    android:id="@+id/addNewRaw_grade_edit"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_weight="2" />
             </LinearLayout>
-
+            <Button
+                android:id="@+id/editButton"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@drawable/frame_shape"
+                android:fontFamily="serif"
+                android:layout_weight="1"
+                android:text="@string/edit"
+                android:textAllCaps="false"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
 
         </LinearLayout>
-
     </LinearLayout>
 </LinearLayout>
