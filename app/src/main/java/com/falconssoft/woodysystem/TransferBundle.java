@@ -3,6 +3,7 @@ package com.falconssoft.woodysystem;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -123,6 +124,7 @@ public class TransferBundle extends AppCompatActivity {
     private RelativeLayout coordinatorLayout;
     private Snackbar snackbar;
     private Settings generalSettings;
+    ProgressDialog progressDialog ;
 
     BundleInfo bundleInfoG=new BundleInfo();
 
@@ -138,6 +140,11 @@ public class TransferBundle extends AppCompatActivity {
     }
 
     private void initialization() {
+
+        progressDialog = new ProgressDialog(this, R.style.MyAlertDialogStyle);
+        progressDialog.setMessage("Please Waiting...");
+        progressDialog.setCanceledOnTouchOutside(false);
+
 
         transferLocationButton = findViewById(R.id.transferLocationButton);
         thickness = findViewById(R.id.thickness_edit);
@@ -991,7 +998,7 @@ public class TransferBundle extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-           // progressDialog.show();
+          progressDialog.show();
             super.onPreExecute();
         }
 
@@ -1049,12 +1056,14 @@ public class TransferBundle extends AppCompatActivity {
                     // transferAdapter.notifyDataSetChanged();
                     fillTransferAdapter();
                     clearText();
-
+                    progressDialog.dismiss();
                     Log.e("tag", "save Success");
                 } else {
+                    progressDialog.dismiss();
                     Log.e("tag", "****Failed to export data");
                 }
             } else {
+                progressDialog.dismiss();
                 Log.e("tag", "****Failed to export data Please check internet connection");
                 Toast.makeText(TransferBundle.this, "Failed to export data Please check internet connection", Toast.LENGTH_LONG).show();
             }
