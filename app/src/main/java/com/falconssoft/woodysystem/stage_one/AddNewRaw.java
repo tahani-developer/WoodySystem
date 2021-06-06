@@ -55,7 +55,10 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.creativityapps.gmailbackgroundlibrary.BackgroundMail;
 import com.falconssoft.woodysystem.DatabaseHandler;
+import com.falconssoft.woodysystem.ExportToExcel;
+import com.falconssoft.woodysystem.ExportToPDF;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.WoodPresenter;
 import com.falconssoft.woodysystem.models.NewRowInfo;
@@ -79,6 +82,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Serializable;
@@ -119,10 +123,12 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     private String gradeText = "KD", locationText = "Kalinovka";
     public static String supplierName = "";
     private LinearLayout headerLayout, acceptRowLayout;
-    private Button doneAcceptRow;
+    private Button doneAcceptRow,excelAcceptRow,pdfAcceptRow;
     private TableLayout tableLayout, headerTableLayout;
     private TableRow tableRow;
     private Dialog searchDialog;
+    NewRowInfo newRowInfoMaster;
+    List<Bitmap> imageBitmapList;
 
     private DatabaseHandler databaseHandler;
     private List<SupplierInfo> suppliers;
@@ -150,7 +156,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     private NewRowInfo oldNewRowInfo, updatedNewRowInfo;
     private String oldTruck = "", editSerial = "";// for edit
     //    Bitmap serverPicBitmap;
-    private String mCameraFileName, path;
+    private String mCameraFileName, path,pathImage;
     //    ImageView imageView;
     private Uri image;
     private Process process;
@@ -161,11 +167,18 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     int update=0,index=0;
     TableRow tableRowEdit;
     TextView supplierTextTemp=null;
+    String myFormat;
+    private SimpleDateFormat sdf;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_new_raw);
+        try {
+            setContentView(R.layout.activity_add_new_raw);
+        }catch (Exception e){
+            Log.e("exceptaionMaster","112");
+        }
 
         databaseHandler = new DatabaseHandler(AddNewRaw.this);
         suppliers = new ArrayList<>();
@@ -175,7 +188,10 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         presenter = new WoodPresenter(this);
         this.arraylist = new ArrayList<>();
 //        this.arraylist.addAll(this.supplierInfoList);
-
+        myFormat = "dd/MM/yyyy";
+        newRowInfoMaster=new NewRowInfo();
+        imageBitmapList=new ArrayList<>();
+        sdf = new SimpleDateFormat(myFormat, Locale.US);
         coordinatorLayout = findViewById(R.id.addNewRow_coordinator);
         addNewSupplier = findViewById(R.id.addNewRaw_add_supplier);
         searchSupplier = findViewById(R.id.addNewRaw_search_supplier);
@@ -201,6 +217,8 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         totalRejected = findViewById(R.id.addNewRaw_total_rejected);
         totalBundles = findViewById(R.id.addNewRaw_total_bundles);
         doneAcceptRow = findViewById(R.id.addNewRaw_acceptRow_done);
+        excelAcceptRow=findViewById(R.id.addNewRaw_acceptRow_excel);
+        pdfAcceptRow=findViewById(R.id.addNewRaw_acceptRow_pdf);
         addPicture = findViewById(R.id.addNewRaw_add_photo);
         image1 = findViewById(R.id.addNewRaw_image1);
         image2 = findViewById(R.id.addNewRaw_image2);
@@ -270,6 +288,8 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         addPicture.setOnClickListener(this);
         mainInfoButton.setOnClickListener(this);
         doneAcceptRow.setOnClickListener(this);
+        excelAcceptRow.setOnClickListener(this);
+        pdfAcceptRow.setOnClickListener(this);
         acceptRowButton.setOnClickListener(this);
         addNewSupplier.setOnClickListener(this);
         searchSupplier.setOnClickListener(this);
@@ -310,6 +330,25 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         bitmapImagesList.add(5, null);
         bitmapImagesList.add(6, null);
         bitmapImagesList.add(7, null);
+
+
+        imageBitmapList.add(0, null);
+        imageBitmapList.add(1, null);
+        imageBitmapList.add(2, null);
+        imageBitmapList.add(3, null);
+        imageBitmapList.add(4, null);
+        imageBitmapList.add(5, null);
+        imageBitmapList.add(6, null);
+        imageBitmapList.add(7, null);
+
+        imageBitmapList.add(8, null);
+        imageBitmapList.add(9, null);
+        imageBitmapList.add(10, null);
+        imageBitmapList.add(11, null);
+        imageBitmapList.add(12, null);
+        imageBitmapList.add(13, null);
+        imageBitmapList.add(14, null);
+
         checkIfEditItem();
 
         progressDialog = new ProgressDialog(this, R.style.MyAlertDialogStyle);
@@ -654,8 +693,101 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 //                cameraIntent();
                 openCamera();
                 break;
+            case R.id.addNewRaw_acceptRow_pdf:
+                if(!truckNo.getText().toString().equals("")) {
+                    if(!acceptor.getText().toString().equals("")) {
+                        if (!ttnNo.getText().toString().equals("")) {
+                            if (!acceptanceDate.getText().toString().equals("")) {
+                                String truckNoLocal = truckNo.getText().toString();
+                                String acceptorLocal = acceptor.getText().toString();
+                                String ttnNoLocal = ttnNo.getText().toString();
+                                String acceptanceDateLocal = acceptanceDate.getText().toString();
+
+                                newRowInfoMaster.setTruckNo(truckNoLocal);
+                                newRowInfoMaster.setAcceptedPersonName(acceptorLocal);
+                                newRowInfoMaster.setTtnNo(ttnNoLocal);
+                                newRowInfoMaster.setNetBundles("" + netBundlesString);
+                                newRowInfoMaster.setDate(acceptanceDateLocal);
+                                newRowInfoMaster.setLocationOfAcceptance(locationText);
+                                newRowInfoMaster.setTotalRejectedNo("" + netRejectedString);
+                                try {
+                                    createPdf();
+                                }catch (Exception e){
+                                    Log.e("error_711","createPdf");
+                                }
+                            }else {
+                                acceptanceDate.setError("Requierd!");
+                            }
+                        }else {
+                                ttnNo.setError("Requierd!");
+                            }
+                    }else {
+                                acceptor.setError("Requierd!");
+                            }
+                }else {
+                                truckNo.setError("Requierd!");
+                            }
+                break;
+            case R.id.addNewRaw_acceptRow_excel:
+
+                if(!truckNo.getText().toString().equals("")) {
+                    if(!acceptor.getText().toString().equals("")) {
+                        if (!ttnNo.getText().toString().equals("")) {
+                            if (!acceptanceDate.getText().toString().equals("")) {
+                                String truckNoLocal = truckNo.getText().toString();
+                                String acceptorLocal = acceptor.getText().toString();
+                                String ttnNoLocal = ttnNo.getText().toString();
+                                String acceptanceDateLocal = acceptanceDate.getText().toString();
+
+                                newRowInfoMaster.setTruckNo(truckNoLocal);
+                                newRowInfoMaster.setAcceptedPersonName(acceptorLocal);
+                                newRowInfoMaster.setTtnNo(ttnNoLocal);
+                                newRowInfoMaster.setNetBundles("" + netBundlesString);
+                                newRowInfoMaster.setDate(acceptanceDateLocal);
+                                newRowInfoMaster.setLocationOfAcceptance(locationText);
+                                newRowInfoMaster.setTotalRejectedNo("" + netRejectedString);
+                                try {
+                                    createExcel();
+                                }catch (Exception e){
+                                    Log.e("error_711","createExcel");
+                                }
+                            }else {
+                                acceptanceDate.setError("Requierd!");
+                            }
+                        }else {
+                            ttnNo.setError("Requierd!");
+                        }
+                    }else {
+                        acceptor.setError("Requierd!");
+                    }
+                }else {
+                    truckNo.setError("Requierd!");
+                }
+
+                break;
         }
 
+    }
+
+    void createPdf (){
+        if (newRowList.size() != 0) {
+            ExportToPDF obj = new ExportToPDF(AddNewRaw.this);
+            obj.exportTruckAcceptance(newRowList,newRowInfoMaster, sdf.format(myCalendar.getTime()));
+        }else {
+            Toast.makeText(this, "no Data ", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    void createExcel(){
+//        try {
+            if (newRowList.size() != 0) {
+            ExportToExcel.getInstance().createExcelFile(AddNewRaw.this, "Acceptance_Report_2.xls", 8, (List<?>) newRowInfoMaster, null);
+       }else {
+            Toast.makeText(this, "no Data ", Toast.LENGTH_SHORT).show();
+        }
+//        }catch (Exception e){
+//            Log.e("dataError","Acc");
+//        }
     }
 
     void rejectAdd(){
@@ -1127,6 +1259,18 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                             fillImage(newRowList.get(0));
                             masterData = new JSONObject();
                             masterData = newRowList.get(0).getJsonDataMaster();
+                            if (newRowList.size() != 0) {
+                                ExportToPDF obj = new ExportToPDF(AddNewRaw.this);
+                                obj.exportTruckAcceptanceSendEmail(newRowList, sdf.format(myCalendar.getTime()));
+                            }else {
+                                Toast.makeText(this, "no Data ", Toast.LENGTH_SHORT).show();
+                            }
+
+                            fillImageBitmap(newRowList.get(0));
+
+//                            for(int i=0;i<imageBitmapList.size();i++) {
+//                                createDirectoryAndSaveFile(imageBitmapList.get(i),"image_"+i);
+//                            }
 
                             new JSONTask1().execute();// save
 //                            }
@@ -1144,6 +1288,108 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
             }
         } else {
             Toast.makeText(this, "Please add rows first!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void fillImageBitmap(NewRowInfo newRowInfo) {
+
+        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImageOne()),"image_1.png");
+        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImageTwo()),"image_2.png");
+        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImageThree()),"image_3.png");
+        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImageFour()),"image_4.png");
+        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImageFive()),"image_5.png");
+        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImageSix()),"image_6.png");
+        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImageSeven()),"image_7.png");
+        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImageEight()),"image_8.png");
+
+        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImage9()),"image_9.png");
+        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImage10()),"image_10.png");
+        createDirectoryAndSaveFile(stringToBitMap(newRowInfo.getImage11()),"image_11.png");
+        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImage12()),"image_12.png");
+        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImage13()),"image_13.png");
+        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImage14()),"image_14.png");
+        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImage15()),"image_15.png");
+
+    }
+
+    void deleteFiles1 (String path){
+        File fdelete = new File(path);
+        if (fdelete.exists()) {
+            if (fdelete.delete()) {
+                System.out.println("file Deleted :");
+            } else {
+                System.out.println("file not Deleted :" );
+            }
+        }
+    }
+
+    private void createDirectoryAndSaveFile(Bitmap imageToSave, String fileName) {
+        String directory_path = Environment.getExternalStorageDirectory().getPath() + "/SendEmailWood/";
+        File file = new File(directory_path);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        String targetPdf = directory_path + fileName;
+        File path = new File(targetPdf);
+
+        try {
+            FileOutputStream out = new FileOutputStream(path);
+            imageToSave.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    void sendEmail(){
+
+
+
+        File folder = new File(Environment.getExternalStorageDirectory().getPath()+"/SendEmailWood");
+        File[] listOfFiles = folder.listFiles();
+        Log.e("pathh= ",""+folder.getPath().toString()+"  "+listOfFiles.length);
+        ArrayList<String> images = new ArrayList<String>();
+        for (int i = 0; i < listOfFiles.length; i++) {
+            //if (listOfFiles[i].getName().endsWith(".jpg")) {
+            images.add(listOfFiles[i].getPath());
+            // }
+        }
+//
+        BackgroundMail.newBuilder(AddNewRaw.this)
+                .withUsername("rawanwork2021@gmail.com")
+                .withPassword("raw@raw113199o")
+                .withMailto("rawriy2017@gmail.com")
+                .withType(BackgroundMail.TYPE_PLAIN)
+                .withSubject("this is the subject")
+                .withBody("this is the body \n www.google.com  \n  http://5.189.130.98:8085/import.php?FLAG=3 \n")
+                .withProcessVisibility(true)
+                .withAttachments(images)
+                .withOnSuccessCallback(new BackgroundMail.OnSuccessCallback() {
+                    @Override
+                    public void onSuccess() {
+                        //do some magic
+                        deleteTempFolder(folder.getPath());
+                    }
+                })
+                .withOnFailCallback(new BackgroundMail.OnFailCallback() {
+                    @Override
+                    public void onFail() {
+                        //do some magic
+                    }
+                })
+                .send();
+
+
+    }
+
+    private void deleteTempFolder(String dir) {
+        File myDir = new File(dir);
+        if (myDir.isDirectory()) {
+            String[] children = myDir.list();
+            for (int i = 0; i < children.length; i++) {
+                new File(myDir, children[i]).delete();
+            }
         }
     }
 
@@ -1618,7 +1864,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 //            bitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory().getAbsolutePath() + "/in" + imageNo + ".png");
 //            viewImage.setImageBitmap(bitmap);
 //            imagesList.add(i, bitMapToString(bitmap));
-////            deleteFiles(path);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ////            deleteFiles(path);
 //        }
         File file = new File(mCameraFileName);
         if (!file.exists()) {
@@ -2463,6 +2709,8 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     acceptRowButton.setBackgroundResource(R.drawable.frame_shape_2);
                     mainInfoButton.setBackgroundResource(R.drawable.frame_shape_3);
                     doneAcceptRow.setEnabled(true);
+
+                    sendEmail();
                     Log.e("tag", "save Success");
                 } else {
                     Log.e("tag", "****Failed to export data");
