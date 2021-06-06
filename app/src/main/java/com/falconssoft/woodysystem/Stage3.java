@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 public class Stage3 extends AppCompatActivity implements View.OnClickListener {
 
-    private LinearLayout enterInventory, loadingOrder,  ordersReport, inventoryReport,reports;
+    private LinearLayout enterInventory, loadingOrder,  ordersReport, inventoryReport,reports,transferInventory;
     private Animation animation;
     private WoodPresenter presenter;
     private DatabaseHandler databaseHandler;
@@ -44,6 +44,7 @@ public class Stage3 extends AppCompatActivity implements View.OnClickListener {
         reports = findViewById(R.id.stage3_reports);
         ordersReport = findViewById(R.id.reports_orders);
         inventoryReport = findViewById(R.id.reports_inventory);
+        transferInventory=findViewById(R.id.transfer_inventory);
 
         ordersReport.setOnClickListener(this);
         inventoryReport.setOnClickListener(this);
@@ -51,6 +52,7 @@ public class Stage3 extends AppCompatActivity implements View.OnClickListener {
         enterInventory.setOnClickListener(this);
         loadingOrder.setOnClickListener(this);
         reports.setOnClickListener(this);
+        transferInventory.setOnClickListener(this);
 
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
         enterInventory.setAnimation(animation);
@@ -60,6 +62,9 @@ public class Stage3 extends AppCompatActivity implements View.OnClickListener {
         ordersReport.setAnimation(animation);
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
         inventoryReport.setAnimation(animation);
+        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
+        transferInventory.setAnimation(animation);
+
 //        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
 //        reports.setAnimation(animation);
 
@@ -109,6 +114,12 @@ public class Stage3 extends AppCompatActivity implements View.OnClickListener {
             case R.id.reports_inventory:
                 Intent intent33=new Intent(this, InventoryReport.class);
                 startActivity(intent33);
+//                setSlideAnimation();
+                break;
+
+            case R.id.transfer_inventory:
+                Intent intent34=new Intent(this, TransferBundle.class);
+                startActivity(intent34);
 //                setSlideAnimation();
                 break;
         }

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:descendantFocusability="blocksDescendants"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:paddingVertical="5dp"
+        android:background="@color/light_orange"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inventory_report_linear3">
+
+        <CheckBox
+            android:id="@+id/checkBoxPrint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="5dp"
+            />
+
+<!--        <TextView-->
+<!--            android:id="@+id/serial"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_weight="0.5"-->
+<!--            android:layout_marginStart="5dp"-->
+<!--            android:layout_marginLeft="5dp"-->
+<!--            android:fontFamily="serif"-->
+<!--            android:text="@string/serial"-->
+<!--            android:textColor="@color/gray_dark_one"-->
+<!--            android:textSize="13sp" />-->
+
+        <TextView
+            android:id="@+id/oldBundle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2.7"
+            android:fontFamily="serif"
+            android:text="@string/old_bundle_no"
+            android:textColor="@color/gray_dark_one"
+            android:textSize="15sp" />
+
+
+        <TextView
+            android:id="@+id/newBundle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2.7"
+            android:fontFamily="serif"
+            android:text="@string/new_bundle_no"
+            android:textColor="@color/gray_dark_one"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/th"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:fontFamily="serif"
+            android:text="@string/th"
+            android:textColor="@color/gray_dark_one"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/w"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fontFamily="serif"
+            android:text="@string/w"
+            android:textColor="@color/gray_dark_one"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/l"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fontFamily="serif"
+            android:text="@string/l"
+            android:textColor="@color/gray_dark_one"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/pcs"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fontFamily="serif"
+            android:text="@string/no_pieces"
+            android:textColor="@color/gray_dark_one"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/grade"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fontFamily="serif"
+            android:text="@string/grade"
+            android:textColor="@color/gray_dark_one"
+            android:textSize="15sp" />
+        <TextView
+            android:id="@+id/location"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fontFamily="serif"
+            android:text="@string/loc"
+            android:textColor="@color/gray_dark_one"
+            android:textSize="15sp" />
+
+
+
+        <TextView
+            android:id="@+id/pl"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fontFamily="serif"
+            android:text="@string/p_list"
+            android:textColor="@color/gray_dark_one"
+            android:textSize="15sp" />
+
+        <ImageView
+            android:id="@+id/transferRaw_print"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0"
+            android:paddingHorizontal="10dp"
+            android:src="@drawable/ic_print_24dp"
+            android:tint="@color/orange"
+            android:layout_marginEnd="1dp"
+            android:layout_marginRight="1dp"/>
+
+    </TableRow>
+
+</LinearLayout>

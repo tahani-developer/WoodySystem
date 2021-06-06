@@ -1,5 +1,6 @@
 package com.falconssoft.woodysystem.stage_one;
 
+import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -23,12 +24,14 @@ public class SuppliersAdapter extends RecyclerView.Adapter<SuppliersAdapter.Supp
     private List<SupplierInfo> supplierInfoList;
     private EditPage editPage;
     private AcceptanceReport truckReport;
+    int updateFlag=0;
 
-    public SuppliersAdapter(AddNewRaw addNewRaw, List<SupplierInfo> supplierInfoList, EditPage editPage, AcceptanceReport truckReport) {
+    public SuppliersAdapter(AddNewRaw addNewRaw, List<SupplierInfo> supplierInfoList, EditPage editPage, AcceptanceReport truckReport,int updateFlag) {
         this.addNewRaw = addNewRaw;
         this.supplierInfoList = supplierInfoList;
         this.editPage = editPage;
         this.truckReport = truckReport;
+        this.updateFlag=updateFlag;
 
     }
 
@@ -41,7 +44,7 @@ public class SuppliersAdapter extends RecyclerView.Adapter<SuppliersAdapter.Supp
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SuppliersViewHolder holder, int i) {
+    public void onBindViewHolder(@NonNull SuppliersViewHolder holder, @SuppressLint("RecyclerView") int i) {
         Log.e("size2", "" + supplierInfoList.size());
         holder.supplierNo.setText("" + supplierInfoList.get(i).getSupplierNo());
         holder.supplierName.setText("" + supplierInfoList.get(i).getSupplierName());
@@ -50,10 +53,10 @@ public class SuppliersAdapter extends RecyclerView.Adapter<SuppliersAdapter.Supp
             public void onClick(View v) {
                 if (addNewRaw != null)
                     addNewRaw.getSearchSupplierInfo(supplierInfoList.get(i).getSupplierName()
-                            , supplierInfoList.get(i).getSupplierNo());
+                            , supplierInfoList.get(i).getSupplierNo(),updateFlag);
                 else if (editPage != null)
                     editPage.getSearchSupplierInfo(supplierInfoList.get(i).getSupplierName()
-                            , supplierInfoList.get(i).getSupplierNo());
+                            , supplierInfoList.get(i).getSupplierNo(),updateFlag);
                 else
                     truckReport.getSearchSupplierInfo(supplierInfoList.get(i).getSupplierName()
                             , supplierInfoList.get(i).getSupplierNo());

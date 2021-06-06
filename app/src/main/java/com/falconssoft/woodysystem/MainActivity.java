@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (password.getText().toString().equals("301190")) {
+                if (password.getText().toString().equals("3030100")) {
                     passwordDialog.dismiss();
                     Intent intent1 = new Intent(MainActivity.this, StageOne.class);
                     startActivity(intent1);
