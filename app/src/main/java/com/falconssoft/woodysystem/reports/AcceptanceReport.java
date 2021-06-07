@@ -821,10 +821,12 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
         master.clear();
         details.clear();
         locationList.clear();
-
-        for (int i = 0; i < info.getLocationList().size(); i++)
-            locationList.add(info.getLocationList().get(i).getLocationOfAcceptance());
+        locationList.add("Kalinovka");
+        locationList.add("Rudniya Store");
         locationList.add(0, "All");
+//        for (int i = 0; i < info.getLocationList().size(); i++)
+//            locationList.add(info.getLocationList().get(i).getLocationOfAcceptance());
+//        locationList.add(0, "All");
 
         rowsCount = master.size();
         count.setText("" + rowsCount);
@@ -893,8 +895,12 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
                     details.addAll(list.getDetails());
                 }
 //                cubicList.addAll(list.getCubicList());
-                for (int i = 0; i < list.getLocationList().size(); i++)
-                    locationList.add(list.getLocationList().get(i).getLocationOfAcceptance());
+//                for (int i = 0; i < list.getLocationList().size(); i++)
+//                    locationList.add(list.getLocationList().get(i).getLocationOfAcceptance());
+//                locationList.add(0, "All");
+
+                locationList.add("Kalinovka");
+                locationList.add("Rudniya Store");
                 locationList.add(0, "All");
                 rowsCount = master.size();
 
