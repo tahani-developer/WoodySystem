@@ -440,6 +440,16 @@
             app:layout_constraintVertical_bias="0.0"
             />
 
+        <View
+            android:id="@+id/inventory_report_linear6"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/list"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
         <LinearLayout
             android:id="@+id/acceptanceInfo_report_linear7"
             android:layout_width="match_parent"
@@ -455,12 +465,14 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:layout_weight="2"
+                android:layout_weight="1"
                 android:layout_gravity="center"
                 android:background="@drawable/alpha_frame"
                 android:orientation="horizontal"
                 android:paddingEnd="5dp"
-                android:paddingRight="5dp">
+                android:paddingRight="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -477,18 +489,90 @@
 
                 <TextView
                     android:id="@+id/truck_report_cubic"
-                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:singleLine="true"
+                    android:textColor="@color/orange"
+                    android:textSize="15sp"
+                    android:layout_width="match_parent" />
+
+            </LinearLayout>
+
+<!--            <View-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_weight="5"/>-->
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/alpha_frame"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_three">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="serif"
+                    android:gravity="start|center_vertical"
+                    android:paddingHorizontal="10dp"
+                    android:text="@string/reject"
+                    android:textColor="@color/white"
+                    android:textSize="15sp"
+                    android:background="@drawable/frame_shape"/>
+
+                <TextView
+                    android:id="@+id/Report_total_rejected"                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:singleLine="true"
                     android:textColor="@color/orange"
                     android:textSize="15sp" />
 
             </LinearLayout>
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="5"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@drawable/alpha_frame"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_three">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="serif"
+                    android:gravity="start|center_vertical"
+                    android:paddingHorizontal="5dp"
+                    android:text="@string/net"
+                    android:textColor="@color/white"
+                    android:textSize="15sp"
+                    android:background="@drawable/frame_shape"/>
+
+                <TextView
+                    android:id="@+id/Report_total_bundles"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:nextFocusDown="@id/addNewRaw_acceptance_location"
+                    android:singleLine="true"
+                    android:textColor="@color/orange"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
 
             <Button
                 android:id="@+id/acceptance_report_export"
@@ -496,11 +580,12 @@
                 android:layout_height="40dp"
                 android:layout_marginHorizontal="5dp"
                 android:background="@drawable/frame_shape"
-                android:text="@string/export_to_pdf"
+                android:text="@string/pdf"
                 android:fontFamily="serif"
                 android:padding="10dp"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
+                android:layout_weight="0"
                 android:textSize="15sp" />
 
             <Button
@@ -508,11 +593,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:background="@drawable/frame_shape"
-                android:text="@string/export_to_excel"
+                android:text="@string/excel"
                 android:fontFamily="serif"
                 android:padding="10dp"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
+                android:layout_weight="0"
                 android:textSize="15sp" />
 
             <Button

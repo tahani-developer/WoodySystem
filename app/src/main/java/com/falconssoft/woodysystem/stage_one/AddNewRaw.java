@@ -39,6 +39,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -54,7 +55,10 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.creativityapps.gmailbackgroundlibrary.BackgroundMail;
 import com.falconssoft.woodysystem.DatabaseHandler;
+import com.falconssoft.woodysystem.ExportToExcel;
+import com.falconssoft.woodysystem.ExportToPDF;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.WoodPresenter;
 import com.falconssoft.woodysystem.models.NewRowInfo;
@@ -78,6 +82,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Serializable;
@@ -106,7 +111,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     private final String STATE_VISIBILITY = "state-visibility";
     private Settings generalSettings;
     private WoodPresenter presenter;
-    private ImageView image1, image2, image3, image4, image5, image6, image7, image8;
+    private ImageView image1, image2, image3, image4, image5, image6, image7, image8, image9, image10, image11, image12, image13, image14, image15;
     private TextView addNewSupplier, searchSupplier, addButton, acceptRowButton, mainInfoButton, acceptanceDate, addPicture, totalRejected, totalBundles, total;
     private EditText thickness, width, length, noOfPieces, noOfBundles, noOfRejected, truckNo, acceptor, ttnNo;
     private Spinner gradeSpinner, acceptanceLocation;
@@ -118,10 +123,12 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     private String gradeText = "KD", locationText = "Kalinovka";
     public static String supplierName = "";
     private LinearLayout headerLayout, acceptRowLayout;
-    private Button doneAcceptRow;
+    private Button doneAcceptRow,excelAcceptRow,pdfAcceptRow;
     private TableLayout tableLayout, headerTableLayout;
     private TableRow tableRow;
     private Dialog searchDialog;
+    NewRowInfo newRowInfoMaster;
+    List<Bitmap> imageBitmapList;
 
     private DatabaseHandler databaseHandler;
     private List<SupplierInfo> suppliers;
@@ -149,7 +156,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     private NewRowInfo oldNewRowInfo, updatedNewRowInfo;
     private String oldTruck = "", editSerial = "";// for edit
     //    Bitmap serverPicBitmap;
-    private String mCameraFileName, path;
+    private String mCameraFileName, path,pathImage;
     //    ImageView imageView;
     private Uri image;
     private Process process;
@@ -159,11 +166,19 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     int id=0;
     int update=0,index=0;
     TableRow tableRowEdit;
+    TextView supplierTextTemp=null;
+    String myFormat;
+    private SimpleDateFormat sdf;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_new_raw);
+        try {
+            setContentView(R.layout.activity_add_new_raw);
+        }catch (Exception e){
+            Log.e("exceptaionMaster","112");
+        }
 
         databaseHandler = new DatabaseHandler(AddNewRaw.this);
         suppliers = new ArrayList<>();
@@ -173,7 +188,10 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         presenter = new WoodPresenter(this);
         this.arraylist = new ArrayList<>();
 //        this.arraylist.addAll(this.supplierInfoList);
-
+        myFormat = "dd/MM/yyyy";
+        newRowInfoMaster=new NewRowInfo();
+        imageBitmapList=new ArrayList<>();
+        sdf = new SimpleDateFormat(myFormat, Locale.US);
         coordinatorLayout = findViewById(R.id.addNewRow_coordinator);
         addNewSupplier = findViewById(R.id.addNewRaw_add_supplier);
         searchSupplier = findViewById(R.id.addNewRaw_search_supplier);
@@ -199,6 +217,8 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         totalRejected = findViewById(R.id.addNewRaw_total_rejected);
         totalBundles = findViewById(R.id.addNewRaw_total_bundles);
         doneAcceptRow = findViewById(R.id.addNewRaw_acceptRow_done);
+        excelAcceptRow=findViewById(R.id.addNewRaw_acceptRow_excel);
+        pdfAcceptRow=findViewById(R.id.addNewRaw_acceptRow_pdf);
         addPicture = findViewById(R.id.addNewRaw_add_photo);
         image1 = findViewById(R.id.addNewRaw_image1);
         image2 = findViewById(R.id.addNewRaw_image2);
@@ -209,9 +229,17 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         image7 = findViewById(R.id.addNewRaw_image7);
         image8 = findViewById(R.id.addNewRaw_image8);
 
+        image9 = findViewById(R.id.addNewRaw_image9);
+        image10 = findViewById(R.id.addNewRaw_image10);
+        image11 = findViewById(R.id.addNewRaw_image11);
+        image12 = findViewById(R.id.addNewRaw_image12);
+        image13 = findViewById(R.id.addNewRaw_image13);
+        image14 = findViewById(R.id.addNewRaw_image14);
+        image15 = findViewById(R.id.addNewRaw_image15);
+
         thickness.requestFocus();
         headerLayout.setVisibility(View.VISIBLE);
-        acceptRowLayout.setVisibility(View.GONE);
+        acceptRowLayout.setVisibility(View.VISIBLE);
         image1.setVisibility(View.INVISIBLE);
         image2.setVisibility(View.INVISIBLE);
         image3.setVisibility(View.INVISIBLE);
@@ -220,6 +248,14 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         image6.setVisibility(View.INVISIBLE);
         image7.setVisibility(View.INVISIBLE);
         image8.setVisibility(View.INVISIBLE);
+
+        image9 .setVisibility(View.INVISIBLE);
+        image10.setVisibility(View.INVISIBLE);
+        image11.setVisibility(View.INVISIBLE);
+        image12.setVisibility(View.INVISIBLE);
+        image13.setVisibility(View.INVISIBLE);
+        image14 .setVisibility(View.INVISIBLE);
+        image15.setVisibility(View.INVISIBLE);
 
         gradeList.clear();
         gradeList.add("KD");
@@ -252,6 +288,8 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         addPicture.setOnClickListener(this);
         mainInfoButton.setOnClickListener(this);
         doneAcceptRow.setOnClickListener(this);
+        excelAcceptRow.setOnClickListener(this);
+        pdfAcceptRow.setOnClickListener(this);
         acceptRowButton.setOnClickListener(this);
         addNewSupplier.setOnClickListener(this);
         searchSupplier.setOnClickListener(this);
@@ -265,6 +303,15 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         image6.setOnClickListener(this);
         image7.setOnClickListener(this);
         image8.setOnClickListener(this);
+
+        image9 .setOnClickListener(this);
+        image10.setOnClickListener(this);
+        image11.setOnClickListener(this);
+        image12.setOnClickListener(this);
+        image13.setOnClickListener(this);
+        image14 .setOnClickListener(this);
+        image15.setOnClickListener(this);
+
 
         imagesList.add(0, null);
         imagesList.add(1, null);
@@ -283,6 +330,25 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         bitmapImagesList.add(5, null);
         bitmapImagesList.add(6, null);
         bitmapImagesList.add(7, null);
+
+
+        imageBitmapList.add(0, null);
+        imageBitmapList.add(1, null);
+        imageBitmapList.add(2, null);
+        imageBitmapList.add(3, null);
+        imageBitmapList.add(4, null);
+        imageBitmapList.add(5, null);
+        imageBitmapList.add(6, null);
+        imageBitmapList.add(7, null);
+
+        imageBitmapList.add(8, null);
+        imageBitmapList.add(9, null);
+        imageBitmapList.add(10, null);
+        imageBitmapList.add(11, null);
+        imageBitmapList.add(12, null);
+        imageBitmapList.add(13, null);
+        imageBitmapList.add(14, null);
+
         checkIfEditItem();
 
         progressDialog = new ProgressDialog(this, R.style.MyAlertDialogStyle);
@@ -394,7 +460,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
             supplierName = editList.get(i).getSupplierName();
             fillTableRow(tableRow, "" + (int) editList.get(i).getThickness(), "" + (int) editList.get(i).getWidth()
                     , "" + (int) editList.get(i).getLength(), "" + (int) editList.get(i).getNoOfPieces()
-                    , "" + (int) editList.get(i).getNoOfRejected(), "" + (int) editList.get(i).getNoOfBundles());
+                    , "" + (int) editList.get(i).getNoOfRejected(), "" + (int) editList.get(i).getNoOfBundles(),gradeText);
             tableLayout.addView(tableRow);
 
             int finalI = i;
@@ -424,27 +490,27 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 //                }
 //            });
 
-            tableRow.getChildAt(8).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.e("delete", "" + finalI + editList.get(finalI).getThickness()
-                            + "/" + editList.get(finalI).getWidth()
-                            + "/" + editList.get(finalI).getLength()
-                            + "/" + editList.get(finalI).getNoOfPieces()
-                    );
-                    AlertDialog.Builder builder = new AlertDialog.Builder(AddNewRaw.this);
-                    builder.setMessage("Are you want delete this row?");
-                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            tableLayout.removeAllViews();
-                            editList.remove(finalI);
-                            fillDataFromReport1();
-                        }
-                    });
-                    builder.show();
-                }
-            });
+//            tableRow.getChildAt(8).setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Log.e("delete", "" + finalI + editList.get(finalI).getThickness()
+//                            + "/" + editList.get(finalI).getWidth()
+//                            + "/" + editList.get(finalI).getLength()
+//                            + "/" + editList.get(finalI).getNoOfPieces()
+//                    );
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(AddNewRaw.this);
+//                    builder.setMessage("Are you want delete this row?");
+//                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            tableLayout.removeAllViews();
+//                            editList.remove(finalI);
+//                            fillDataFromReport1();
+//                        }
+//                    });
+//                    builder.show();
+//                }
+//            });
         }
     }
 
@@ -453,13 +519,13 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.addNewRaw_acceptRow_back:
-                acceptRowLayout.setVisibility(View.GONE);
+                acceptRowLayout.setVisibility(View.VISIBLE);
                 acceptRowButton.setBackgroundResource(R.drawable.frame_shape_2);
                 mainInfoButton.setBackgroundResource(R.drawable.frame_shape_3);
 
-                Animation animation1 = AnimationUtils.loadAnimation(this, R.anim.fade_out);
-                headerLayout.setVisibility(View.VISIBLE);
-                headerLayout.startAnimation(animation1);
+                //Animation animation1 = AnimationUtils.loadAnimation(this, R.anim.fade_out);
+                //headerLayout.setVisibility(View.VISIBLE);
+                //headerLayout.startAnimation(animation1);
                 thickness.requestFocus();
                 break;
             case R.id.addNewRaw_acceptRow_done:
@@ -471,40 +537,19 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
                 break;
             case R.id.addNewRaw_acceptRaw_button:
-                headerLayout.setVisibility(View.GONE);
-                acceptRowButton.setBackgroundResource(R.drawable.frame_shape_3);
-                mainInfoButton.setBackgroundResource(R.drawable.frame_shape_2);
-
-                Animation animation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
-                acceptRowLayout.setVisibility(View.VISIBLE);
-                acceptRowLayout.startAnimation(animation);
-                truckNo.requestFocus();
-
-                netRejectedString = 0;
-                netBundlesString = 0;
-                Log.e("fromedit11", "" + editList.size());
-                if (edieFlag == 11)
-                    for (int n = 0; n < editList.size(); n++) {
-                        netRejectedString += editList.get(n).getNoOfRejected();
-                        netBundlesString += editList.get(n).getNoOfBundles();
-                    }
-                else if (edieFlag == 10) ;
-                else
-                    for (int n = 0; n < newRowList.size(); n++) {
-                        netRejectedString += newRowList.get(n).getNoOfRejected();
-                        netBundlesString += newRowList.get(n).getNoOfBundles();
-                    }
-
-                totalRejected.setText("" + netRejectedString);
-                totalBundles.setText("" + netBundlesString);
+               // headerLayout.setVisibility(View.VISIBLE);
+                rejectAdd();
                 break;
             case R.id.addNewRaw_add_button:
-                if(update==0){
-                    addButtonMethod();
+//                if(update==0){
 
-                }else if(update==1){
-                    updateFlag();
-                }
+                    addButtonMethod(-1,0);
+                    rejectAdd();
+
+//                }else if(update==1){
+//                    updateFlag();
+//                    rejectAdd();
+//                }
                 break;
             case R.id.addNewRaw_add_photo:
                 openCamera();
@@ -531,7 +576,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
                 recyclerView = searchDialog.findViewById(R.id.search_supplier_recyclerView);
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
-                adapter = new SuppliersAdapter(this, suppliers, null, null);
+                adapter = new SuppliersAdapter(this, suppliers, null, null,0);
                 recyclerView.setAdapter(adapter);
 
                 searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -605,21 +650,210 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 //                cameraIntent();
                 openCamera();
                 break;
+            case R.id.addNewRaw_image9:
+                isEditImage = true;
+                editImageNo = 9;
+//                cameraIntent();
+                openCamera();
+                break;
+            case R.id.addNewRaw_image10:
+                isEditImage = true;
+                editImageNo = 10;
+//                cameraIntent();
+                openCamera();
+                break;
+            case R.id.addNewRaw_image11:
+                isEditImage = true;
+                editImageNo = 11;
+//                cameraIntent();
+                openCamera();
+                break;
+            case R.id.addNewRaw_image12:
+                isEditImage = true;
+                editImageNo = 12;
+//                cameraIntent();
+                openCamera();
+                break;
+            case R.id.addNewRaw_image13:
+                isEditImage = true;
+                editImageNo = 13;
+//                cameraIntent();
+                openCamera();
+                break;
+
+            case R.id.addNewRaw_image14:
+                isEditImage = true;
+                editImageNo = 14;
+//                cameraIntent();
+                openCamera();
+                break;
+            case R.id.addNewRaw_image15:
+                isEditImage = true;
+                editImageNo = 15;
+//                cameraIntent();
+                openCamera();
+                break;
+            case R.id.addNewRaw_acceptRow_pdf:
+                if(!truckNo.getText().toString().equals("")) {
+                    if(!acceptor.getText().toString().equals("")) {
+                        if (!ttnNo.getText().toString().equals("")) {
+                            if (!acceptanceDate.getText().toString().equals("")) {
+                                String truckNoLocal = truckNo.getText().toString();
+                                String acceptorLocal = acceptor.getText().toString();
+                                String ttnNoLocal = ttnNo.getText().toString();
+                                String acceptanceDateLocal = acceptanceDate.getText().toString();
+
+                                newRowInfoMaster.setTruckNo(truckNoLocal);
+                                newRowInfoMaster.setAcceptedPersonName(acceptorLocal);
+                                newRowInfoMaster.setTtnNo(ttnNoLocal);
+                                newRowInfoMaster.setNetBundles("" + netBundlesString);
+                                newRowInfoMaster.setDate(acceptanceDateLocal);
+                                newRowInfoMaster.setLocationOfAcceptance(locationText);
+                                newRowInfoMaster.setTotalRejectedNo("" + netRejectedString);
+                                try {
+                                    createPdf();
+                                }catch (Exception e){
+                                    Log.e("error_711","createPdf");
+                                }
+                            }else {
+                                acceptanceDate.setError("Requierd!");
+                            }
+                        }else {
+                                ttnNo.setError("Requierd!");
+                            }
+                    }else {
+                                acceptor.setError("Requierd!");
+                            }
+                }else {
+                                truckNo.setError("Requierd!");
+                            }
+                break;
+            case R.id.addNewRaw_acceptRow_excel:
+
+                if(!truckNo.getText().toString().equals("")) {
+                    if(!acceptor.getText().toString().equals("")) {
+                        if (!ttnNo.getText().toString().equals("")) {
+                            if (!acceptanceDate.getText().toString().equals("")) {
+                                String truckNoLocal = truckNo.getText().toString();
+                                String acceptorLocal = acceptor.getText().toString();
+                                String ttnNoLocal = ttnNo.getText().toString();
+                                String acceptanceDateLocal = acceptanceDate.getText().toString();
+
+                                newRowInfoMaster.setTruckNo(truckNoLocal);
+                                newRowInfoMaster.setAcceptedPersonName(acceptorLocal);
+                                newRowInfoMaster.setTtnNo(ttnNoLocal);
+                                newRowInfoMaster.setNetBundles("" + netBundlesString);
+                                newRowInfoMaster.setDate(acceptanceDateLocal);
+                                newRowInfoMaster.setLocationOfAcceptance(locationText);
+                                newRowInfoMaster.setTotalRejectedNo("" + netRejectedString);
+                                try {
+                                    createExcel();
+                                }catch (Exception e){
+                                    Log.e("error_711","createExcel");
+                                }
+                            }else {
+                                acceptanceDate.setError("Requierd!");
+                            }
+                        }else {
+                            ttnNo.setError("Requierd!");
+                        }
+                    }else {
+                        acceptor.setError("Requierd!");
+                    }
+                }else {
+                    truckNo.setError("Requierd!");
+                }
+
+                break;
         }
 
     }
 
-    void updateFlag(){
+    void createPdf (){
+        if (newRowList.size() != 0) {
+            ExportToPDF obj = new ExportToPDF(AddNewRaw.this);
+            obj.exportTruckAcceptance(newRowList,newRowInfoMaster, sdf.format(myCalendar.getTime()));
+        }else {
+            Toast.makeText(this, "no Data ", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    void createExcel(){
+//        try {
+            if (newRowList.size() != 0) {
+            ExportToExcel.getInstance().createExcelFile(AddNewRaw.this, "Acceptance_Report_2.xls", 8, (List<?>) newRowInfoMaster, null);
+       }else {
+            Toast.makeText(this, "no Data ", Toast.LENGTH_SHORT).show();
+        }
+//        }catch (Exception e){
+//            Log.e("dataError","Acc");
+//        }
+    }
+
+    void rejectAdd(){
+        acceptRowButton.setBackgroundResource(R.drawable.frame_shape_3);
+        mainInfoButton.setBackgroundResource(R.drawable.frame_shape_2);
+
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+        // acceptRowLayout.setVisibility(View.VISIBLE);
+        // acceptRowLayout.startAnimation(animation);
+        truckNo.requestFocus();
+
+        netRejectedString = 0;
+        netBundlesString = 0;
+        Log.e("fromedit11", "" + editList.size());
+        if (edieFlag == 11)
+            for (int n = 0; n < editList.size(); n++) {
+                netRejectedString += editList.get(n).getNoOfRejected();
+                netBundlesString += editList.get(n).getNoOfBundles();
+            }
+        else if (edieFlag == 10) ;
+        else
+            for (int n = 0; n < newRowList.size(); n++) {
+                netRejectedString += newRowList.get(n).getNoOfRejected();
+                netBundlesString += newRowList.get(n).getNoOfBundles();
+            }
+
+        totalRejected.setText("" + netRejectedString);
+        totalBundles.setText("" + netBundlesString);
+    }
+
+    void updateFlag(NewRowInfo newRowInfo,int index){
+        Log.e("aaaa1", " "+newRowList.size()+"     "+index);
         newRowList.remove(index);
-        //newRowList.get(index).setRemove(1);
         tableLayout.removeViewAt(index);
-        //tableLayout.setFocusable(newRowList.size());
-        addButtonMethod();
-        update=0;
+        newRowList.add(index,newRowInfo);
+        tableRow = new TableRow(this);
+        fillTableRow(tableRow, ""+newRowInfo.getThickness(), ""+newRowInfo.getWidth(), ""+newRowInfo.getLength()
+                , ""+newRowInfo.getNoOfPieces(), ""+newRowInfo.getNoOfRejected(), ""+newRowInfo.getNoOfBundles(),newRowInfo.getGrade());
+            tableLayout.addView(tableRow,index);
+
 
         for(int i=0;i<tableLayout.getChildCount();i++){
 
             TableRow tableRow= (TableRow) tableLayout.getChildAt(i);
+            ImageView imageViewEdit= (ImageView) tableRow.getChildAt(8);
+            ImageView imageViewDelete= (ImageView) tableRow.getChildAt(9);
+            imageViewEdit.setTag(i);
+            imageViewDelete.setTag(i);
+            tableRow.setTag(i);
+        }
+
+        Log.e("aaaa", " "+newRowList.size());
+
+
+    }
+    void deleteFlag(){
+        newRowList.remove(index);
+        tableLayout.removeViewAt(index);
+
+        for(int i=0;i<tableLayout.getChildCount();i++){
+
+            TableRow tableRow= (TableRow) tableLayout.getChildAt(i);
+            ImageView imageViewEdit= (ImageView) tableRow.getChildAt(8);
+            ImageView imageViewDelete= (ImageView) tableRow.getChildAt(9);
+            imageViewEdit.setTag(i);
+            imageViewDelete.setTag(i);
             tableRow.setTag(i);
         }
 
@@ -640,11 +874,11 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                 }
             }
         }
-        adapter = new SuppliersAdapter(this, arraylist, null, null);
+        adapter = new SuppliersAdapter(this, arraylist, null, null,0);
         recyclerView.setAdapter(adapter);
     }
 
-    void addButtonMethod() {
+    void addButtonMethod(int indexs,int flag) {
         thicknessLocal = thickness.getText().toString();
         widthLocal = width.getText().toString();
         lengthLocal = length.getText().toString();
@@ -705,7 +939,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                                         rowInfo.setSerial(editSerial);
                                         Log.e("reportTwo", rowInfo.getSerial());
 
-                                        fillTableRow(tableRow, thicknessLocal, widthLocal, lengthLocal, noOfPiecesLocal, noOfRejectedLocal, noOfBundlesLocal);
+                                        fillTableRow(tableRow, thicknessLocal, widthLocal, lengthLocal, noOfPiecesLocal, noOfRejectedLocal, noOfBundlesLocal,gradeText);
                                         tableLayout.addView(tableRow);
                                         supplierName = "";
                                     } else if (edieFlag == 11 && tableLayout.getChildCount() > 0) { //truck Report
@@ -735,8 +969,12 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 //                                            Toast.makeText(this, "Please choose the raw first!", Toast.LENGTH_SHORT).show();
 //                                        }
                                     } else {
-                                        fillTableRow(tableRow, thicknessLocal, widthLocal, lengthLocal, noOfPiecesLocal, noOfRejectedLocal, noOfBundlesLocal);
-                                        tableLayout.addView(tableRow);
+                                        fillTableRow(tableRow, thicknessLocal, widthLocal, lengthLocal, noOfPiecesLocal, noOfRejectedLocal, noOfBundlesLocal,gradeText);
+                                        if(flag==1) {
+                                            tableLayout.addView(tableRow,indexs);
+                                        }else {
+                                            tableLayout.addView(tableRow);
+                                        }
                                     }
                                     if (!(rowInfo == null))
                                         newRowList.add(rowInfo);
@@ -791,6 +1029,9 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                 return false;
             }
         });
+
+
+
     }
 
     void fillDialog (NewRowInfo newRowInfo){
@@ -817,16 +1058,147 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
     }
 
-//    void EditDialog(){
-//        final Dialog dialog = new Dialog(AddNewRaw.this);
-//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        dialog.setCancelable(true);
-//        dialog.setContentView(R.layout.edite_dialog);
-//
-//        EditText
-//
-//        dialog.show();
-//    }
+    void EditDialog(NewRowInfo newRowInfo,int index){
+        final Dialog dialog = new Dialog(AddNewRaw.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.edite_dialog);
+
+        TextView addNewRaw_search_supplier_edit;
+        Spinner addNewRaw_grade_edit;
+        Button editButton;
+
+        EditText addNewRaw_thickness_edit,addNewRaw_width_edit,addNewRaw_length_edit,addNewRaw_no_of_pieces_edit,addNewRaw_no_of_rejected_edit,
+        addNewRaw_no_of_bundles_edit;
+
+        addNewRaw_thickness_edit=dialog.findViewById(R.id.addNewRaw_thickness_edit);
+        addNewRaw_width_edit=dialog.findViewById(R.id.addNewRaw_width_edit);
+        addNewRaw_length_edit=dialog.findViewById(R.id.addNewRaw_length_edit);
+
+        addNewRaw_no_of_pieces_edit=dialog.findViewById(R.id.addNewRaw_no_of_pieces_edit);
+
+        addNewRaw_no_of_rejected_edit=dialog.findViewById(R.id.addNewRaw_no_of_rejected_edit);
+        addNewRaw_no_of_bundles_edit=dialog.findViewById(R.id.addNewRaw_no_of_bundles_edit);
+
+
+        addNewRaw_grade_edit=dialog.findViewById(R.id.addNewRaw_grade_edit);
+        editButton=dialog.findViewById(R.id.editButton);
+
+
+
+        addNewRaw_search_supplier_edit=dialog.findViewById(R.id.addNewRaw_search_supplier_edit);
+
+        supplierTextTemp=addNewRaw_search_supplier_edit;
+        final String[] gradeTextEdit = {"KD"};
+
+       ArrayAdapter gradeAdapter = new ArrayAdapter<String>(this, R.layout.spinner_layout, gradeList);
+        gradeAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
+        addNewRaw_grade_edit.setAdapter(gradeAdapter);
+        addNewRaw_grade_edit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                gradeTextEdit[0] = parent.getItemAtPosition(position).toString();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        addNewRaw_thickness_edit.setText(""+(int)newRowInfo.getThickness());
+        addNewRaw_width_edit.setText(""+(int)newRowInfo.getWidth());
+        addNewRaw_length_edit.setText(""+(int)newRowInfo.getLength());
+        addNewRaw_no_of_pieces_edit.setText(""+(int)newRowInfo.getNoOfPieces());
+        addNewRaw_no_of_rejected_edit.setText(""+(int)newRowInfo.getNoOfRejected());
+        addNewRaw_no_of_bundles_edit.setText(""+(int)newRowInfo.getNoOfBundles());
+        addNewRaw_search_supplier_edit.setText(newRowInfo.getSupplierName());
+
+        addNewRaw_search_supplier_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                supplierDialog();
+            }
+        });
+
+        try {
+            addNewRaw_grade_edit.setSelection(getGrade(newRowInfo.getGrade()));
+        }catch (Exception e){
+            Log.e("grade","Ex:Grade Error");
+        }
+
+        try {
+
+        }catch (Exception e){
+            Log.e("grade","Ex:Grade Error");
+        }
+
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!addNewRaw_thickness_edit.getText().toString().equals("") && Integer.parseInt(addNewRaw_thickness_edit.getText().toString()) != 0) {
+                    if (!addNewRaw_width_edit.getText().toString().equals("") && Integer.parseInt(addNewRaw_width_edit.getText().toString()) != 0) {
+
+                        if (!addNewRaw_length_edit.getText().toString().equals("") && Integer.parseInt(addNewRaw_length_edit.getText().toString()) != 0) {
+
+                            if (!addNewRaw_no_of_pieces_edit.getText().toString().equals("") && Integer.parseInt(addNewRaw_no_of_pieces_edit.getText().toString()) != 0) {
+
+                                if (!addNewRaw_no_of_rejected_edit.getText().toString().equals("") && Integer.parseInt(addNewRaw_no_of_rejected_edit.getText().toString()) != 0) {
+
+                                    if (!addNewRaw_no_of_bundles_edit.getText().toString().equals("") && Integer.parseInt(addNewRaw_no_of_bundles_edit.getText().toString()) != 0) {
+
+                                        if (!addNewRaw_search_supplier_edit.getText().toString().equals("")) {
+
+                                            NewRowInfo newRowInfo1=new NewRowInfo();
+                                            newRowInfo1.setThickness(Double.parseDouble(addNewRaw_thickness_edit.getText().toString()));
+                                            newRowInfo1.setWidth(Double.parseDouble(addNewRaw_width_edit.getText().toString()));
+                                            newRowInfo1.setLength(Double.parseDouble(addNewRaw_length_edit.getText().toString()));
+                                            newRowInfo1.setNoOfPieces(Double.parseDouble(addNewRaw_no_of_pieces_edit.getText().toString()));
+                                            newRowInfo1.setNoOfRejected(Double.parseDouble(addNewRaw_no_of_rejected_edit.getText().toString()));
+                                            newRowInfo1.setNoOfBundles(Double.parseDouble(addNewRaw_no_of_bundles_edit.getText().toString()));
+                                            newRowInfo1.setSupplierName(addNewRaw_search_supplier_edit.getText().toString());
+                                            newRowInfo1.setGrade( gradeTextEdit[0]);
+                                            updateFlag(newRowInfo1,index);
+                                            rejectAdd();
+                                            dialog.dismiss();
+
+                                        } else {
+                                            addNewRaw_search_supplier_edit.setError("Required !");
+                                        }
+
+
+                                    } else {
+                                        addNewRaw_no_of_bundles_edit.setError("Required !");
+                                    }
+
+                                } else {
+                                    addNewRaw_no_of_rejected_edit.setError("Required !");
+                                }
+
+                            } else {
+                                addNewRaw_no_of_pieces_edit.setError("Required !");
+                            }
+
+                        } else {
+                            addNewRaw_length_edit.setError("Required !");
+                        }
+
+                    } else {
+                        addNewRaw_width_edit.setError("Required !");
+                    }
+                } else {
+                    addNewRaw_thickness_edit.setError("Required !");
+                }
+
+
+            }
+        });
+
+        dialog.show();
+
+    }
 
     int getGrade(String grade){
         int position=-1;
@@ -887,6 +1259,18 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                             fillImage(newRowList.get(0));
                             masterData = new JSONObject();
                             masterData = newRowList.get(0).getJsonDataMaster();
+                            if (newRowList.size() != 0) {
+                                ExportToPDF obj = new ExportToPDF(AddNewRaw.this);
+                                obj.exportTruckAcceptanceSendEmail(newRowList, sdf.format(myCalendar.getTime()));
+                            }else {
+                                Toast.makeText(this, "no Data ", Toast.LENGTH_SHORT).show();
+                            }
+
+                            fillImageBitmap(newRowList.get(0));
+
+//                            for(int i=0;i<imageBitmapList.size();i++) {
+//                                createDirectoryAndSaveFile(imageBitmapList.get(i),"image_"+i);
+//                            }
 
                             new JSONTask1().execute();// save
 //                            }
@@ -907,8 +1291,110 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         }
     }
 
+    private void fillImageBitmap(NewRowInfo newRowInfo) {
+
+        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImageOne()),"image_1.png");
+        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImageTwo()),"image_2.png");
+        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImageThree()),"image_3.png");
+        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImageFour()),"image_4.png");
+        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImageFive()),"image_5.png");
+        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImageSix()),"image_6.png");
+        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImageSeven()),"image_7.png");
+        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImageEight()),"image_8.png");
+
+        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImage9()),"image_9.png");
+        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImage10()),"image_10.png");
+        createDirectoryAndSaveFile(stringToBitMap(newRowInfo.getImage11()),"image_11.png");
+        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImage12()),"image_12.png");
+        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImage13()),"image_13.png");
+        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImage14()),"image_14.png");
+        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImage15()),"image_15.png");
+
+    }
+
+    void deleteFiles1 (String path){
+        File fdelete = new File(path);
+        if (fdelete.exists()) {
+            if (fdelete.delete()) {
+                System.out.println("file Deleted :");
+            } else {
+                System.out.println("file not Deleted :" );
+            }
+        }
+    }
+
+    private void createDirectoryAndSaveFile(Bitmap imageToSave, String fileName) {
+        String directory_path = Environment.getExternalStorageDirectory().getPath() + "/SendEmailWood/";
+        File file = new File(directory_path);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        String targetPdf = directory_path + fileName;
+        File path = new File(targetPdf);
+
+        try {
+            FileOutputStream out = new FileOutputStream(path);
+            imageToSave.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    void sendEmail(){
+
+
+
+        File folder = new File(Environment.getExternalStorageDirectory().getPath()+"/SendEmailWood");
+        File[] listOfFiles = folder.listFiles();
+        Log.e("pathh= ",""+folder.getPath().toString()+"  "+listOfFiles.length);
+        ArrayList<String> images = new ArrayList<String>();
+        for (int i = 0; i < listOfFiles.length; i++) {
+            //if (listOfFiles[i].getName().endsWith(".jpg")) {
+            images.add(listOfFiles[i].getPath());
+            // }
+        }
+//
+        BackgroundMail.newBuilder(AddNewRaw.this)
+                .withUsername("rawanwork2021@gmail.com")
+                .withPassword("raw@raw113199o")
+                .withMailto("rawriy2017@gmail.com")
+                .withType(BackgroundMail.TYPE_PLAIN)
+                .withSubject("this is the subject")
+                .withBody("this is the body \n www.google.com  \n  http://5.189.130.98:8085/import.php?FLAG=3 \n")
+                .withProcessVisibility(true)
+                .withAttachments(images)
+                .withOnSuccessCallback(new BackgroundMail.OnSuccessCallback() {
+                    @Override
+                    public void onSuccess() {
+                        //do some magic
+                        deleteTempFolder(folder.getPath());
+                    }
+                })
+                .withOnFailCallback(new BackgroundMail.OnFailCallback() {
+                    @Override
+                    public void onFail() {
+                        //do some magic
+                    }
+                })
+                .send();
+
+
+    }
+
+    private void deleteTempFolder(String dir) {
+        File myDir = new File(dir);
+        if (myDir.isDirectory()) {
+            String[] children = myDir.list();
+            for (int i = 0; i < children.length; i++) {
+                new File(myDir, children[i]).delete();
+            }
+        }
+    }
+
     void fillImage(NewRowInfo image) {
-        for (int i = 0; i < 8; i++)
+        for (int i = 0; i < 15; i++)
             switch (i) {
                 case 0:
                     Bitmap bitmap = null;
@@ -982,6 +1468,73 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     } else
                         image.setImageEight(null);
                     break;
+                case 8:
+                    Bitmap bitmap9 = null;
+                    if (image9.getVisibility() == View.VISIBLE) {
+                        BitmapDrawable drawable = (BitmapDrawable) image9.getDrawable();
+                        bitmap9 = drawable.getBitmap();
+                        image.setImage9(bitMapToString(bitmap9));
+                    } else
+                        image.setImage9(null);
+                    break;
+                case 9:
+                    Bitmap bitmap10 = null;
+                    if (image10.getVisibility() == View.VISIBLE) {
+                        BitmapDrawable drawable = (BitmapDrawable) image10.getDrawable();
+                        bitmap10 = drawable.getBitmap();
+                        image.setImage10(bitMapToString(bitmap10));
+                    } else
+                        image.setImage10(null);
+                    break;
+                case 10:
+                    Bitmap bitmap11 = null;
+                    if (image11.getVisibility() == View.VISIBLE) {
+                        BitmapDrawable drawable = (BitmapDrawable) image11.getDrawable();
+                        bitmap11 = drawable.getBitmap();
+                        image.setImage11(bitMapToString(bitmap11));
+                    } else
+                        image.setImage11(null);
+                    break;
+                case 11:
+                    Bitmap bitmap12 = null;
+                    if (image12.getVisibility() == View.VISIBLE) {
+                        BitmapDrawable drawable = (BitmapDrawable) image12.getDrawable();
+                        bitmap12 = drawable.getBitmap();
+                        image.setImage12(bitMapToString(bitmap12));
+                    } else
+                        image.setImage12(null);
+                    break;
+                case 12:
+                    Bitmap bitmap13 = null;
+                    if (image13.getVisibility() == View.VISIBLE) {
+                        BitmapDrawable drawable = (BitmapDrawable) image13.getDrawable();
+                        bitmap13 = drawable.getBitmap();
+                        image.setImage13(bitMapToString(bitmap13));
+                    } else
+                        image.setImageEight(null);
+                    break;
+                case 13:
+                    Bitmap bitmap14 = null;
+                    if (image14.getVisibility() == View.VISIBLE) {
+                        BitmapDrawable drawable = (BitmapDrawable) image14.getDrawable();
+                        bitmap14 = drawable.getBitmap();
+                        image.setImage14(bitMapToString(bitmap14));
+                    } else
+                        image.setImage14(null);
+                    break;
+                case 14:
+                    Bitmap bitmap15 = null;
+                    if (image15.getVisibility() == View.VISIBLE) {
+                        BitmapDrawable drawable = (BitmapDrawable) image15.getDrawable();
+                        bitmap15 = drawable.getBitmap();
+                        image.setImage15(bitMapToString(bitmap15));
+                    } else
+                        image.setImage15(null);
+                    break;
+
+
+
+
             }
 //        for (int i = 0; i < imagesList.size(); i++)
 //            switch (i) {
@@ -1025,7 +1578,8 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void openCamera() {
-        if (imageNo < 6) {
+        if (imageNo < 15||isEditImage) {
+
             if ((ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
                     && (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
@@ -1195,6 +1749,99 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 //                    imagesList.add(7, bitMapToString(bitmap));
                     break;
 
+                case 9:
+                    image9.setVisibility(View.VISIBLE);
+                    try {
+                        thumbnail = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    image9.setImageBitmap(thumbnail);
+//                    imagesList.add(7, bitMapToString(bitmap));
+                    break;
+
+
+
+                case 10:
+                    image10.setVisibility(View.VISIBLE);
+                    try {
+                        thumbnail = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    image10.setImageBitmap(thumbnail);
+//                    imagesList.add(7, bitMapToString(bitmap));
+                    break;
+
+
+                case  11:
+                    image11.setVisibility(View.VISIBLE);
+                    try {
+                        thumbnail = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    image11.setImageBitmap(thumbnail);
+//                    imagesList.add(7, bitMapToString(bitmap));
+                    break;
+
+
+
+                case 12:
+                    image12.setVisibility(View.VISIBLE);
+                    try {
+                        thumbnail = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    image12.setImageBitmap(thumbnail);
+//                    imagesList.add(7, bitMapToString(bitmap));
+                    break;
+
+
+                case 13:
+                    image13.setVisibility(View.VISIBLE);
+                    try {
+                        thumbnail = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    image13.setImageBitmap(thumbnail);
+//                    imagesList.add(7, bitMapToString(bitmap));
+                    break;
+
+
+
+                case 14:
+                    image14.setVisibility(View.VISIBLE);
+                    try {
+                        thumbnail = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    image14.setImageBitmap(thumbnail);
+//                    imagesList.add(7, bitMapToString(bitmap));
+                    break;
+
+
+                case 15:
+                    image15.setVisibility(View.VISIBLE);
+                    try {
+                        thumbnail = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    image15.setImageBitmap(thumbnail);
+//                    imagesList.add(7, bitMapToString(bitmap));
+                    break;
+
 //                }
             }
 
@@ -1217,7 +1864,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 //            bitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory().getAbsolutePath() + "/in" + imageNo + ".png");
 //            viewImage.setImageBitmap(bitmap);
 //            imagesList.add(i, bitMapToString(bitmap));
-////            deleteFiles(path);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ////            deleteFiles(path);
 //        }
         File file = new File(mCameraFileName);
         if (!file.exists()) {
@@ -1289,7 +1936,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     public String bitMapToString(Bitmap bitmap) {
         if (bitmap != null) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 20, baos);
             byte[] arr = baos.toByteArray();
             String result = Base64.encodeToString(arr, Base64.DEFAULT);
             return result;
@@ -1313,7 +1960,9 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 //        Log.e("checkValidData4", word + ((word.length() == 1)));
 //        Log.e("checkValidData4", word + ((word.contains("."))));
 //        Log.e("checkValidData4", word + ((word.length() == 1) && (word.equals("."))));
-        if ((word.length() == 1) && (word.contains(".")))
+        if (((word.length() == 1) && (word.contains("."))))
+            return true;
+        else if (((word.length() > 0) && Double.parseDouble(word)==0))
             return true;
         return false;
     }
@@ -1353,17 +2002,22 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
     }
 
-    public void getSearchSupplierInfo(String supplierNameLocal, String supplierNoLocal) {
-        supplierName = supplierNameLocal;
-        searchSupplier.setText(supplierName);
-        searchSupplier.setError(null);
+    public void getSearchSupplierInfo(String supplierNameLocal, String supplierNoLocal,int updateFlag) {
+
+            supplierName = supplierNameLocal;
+            searchSupplier.setText(supplierName);
+            searchSupplier.setError(null);
+        if(updateFlag==1) {
+            supplierTextTemp.setText(supplierNameLocal);
+        }
         searchDialog.dismiss();
+
 
     }
 
     void addTableHeader(TableLayout tableLayout) {
         TableRow tableRow = new TableRow(this);
-        int max = 8;
+        int max = 10;
         if (edieFlag == 11)
             max = 9;
         for (int i = 0; i < max; i++) {
@@ -1412,6 +2066,14 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     tableRow.addView(textView);
                     break;
                 case 8:
+                    TableRow.LayoutParams editParam = new TableRow.LayoutParams(40, 40);
+                    imageView.setPadding(0, 10, 0, 10);
+                    imageView.setLayoutParams(editParam);
+                    imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_edit_24dp));
+                    imageView.setBackgroundResource(R.color.orange);
+                    tableRow.addView(imageView);
+                    break;
+                case 9:
                     TableRow.LayoutParams deleteParam = new TableRow.LayoutParams(40, 40);
                     imageView.setPadding(0, 10, 0, 10);
                     imageView.setLayoutParams(deleteParam);
@@ -1419,14 +2081,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     imageView.setBackgroundResource(R.color.orange);
                     tableRow.addView(imageView);
                     break;
-                case 9:
-                    TableRow.LayoutParams editParam = new TableRow.LayoutParams(40, TableRow.LayoutParams.WRAP_CONTENT);
-                    imageView.setPadding(0, 10, 0, 10);
-                    imageView.setLayoutParams(editParam);
-                    imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_edit_24dp));
-                    imageView.setBackgroundResource(R.color.orange);
-                    tableRow.addView(imageView);
-                    break;
+
             }
 
         }
@@ -1435,8 +2090,8 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     }
 
     void fillTableRow(TableRow tableRow, String thicknessText, String widthText, String lengthText, String noOfPiecesText
-            , String noOfRejectedText, String noBundleText) {
-        int max = 8;
+            , String noOfRejectedText, String noBundleText,String grade) {
+        int max = 10;
         if (edieFlag == 11)
             max = 9;
         for (int i = 0; i < max; i++) {
@@ -1482,10 +2137,33 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     tableRow.addView(textView);
                     break;
                 case 7:
-                    textView.setText(gradeText);
+                    textView.setText(grade);
                     tableRow.addView(textView);
                     break;
+
                 case 8:
+                    ImageView imageView = new ImageView(this);
+                    TableRow.LayoutParams editParam = new TableRow.LayoutParams(40, TableRow.LayoutParams.WRAP_CONTENT);
+                    editParam.setMargins(1, 5, 1, 1);
+                    imageView.setPadding(0, 10, 0, 10);
+                    imageView.setLayoutParams(editParam);
+                    imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_edit_o));
+                    imageView.setBackgroundResource(R.color.light_orange);
+                    imageView.setTag(tableRow.getTag().toString());
+                    tableRow.addView(imageView);
+
+                    tableRow.getChildAt(8).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ImageView imageView=(ImageView) v;
+                            Log.e("tagImageViewid","= "+imageView.getTag().toString());
+                            int i=Integer.parseInt(imageView.getTag().toString());
+                            EditDialog(newRowList.get(i),i);
+
+                        }
+                    });
+                    break;
+                case 9:
                     ImageView imageView2 = new ImageView(this);
                     TableRow.LayoutParams deleteParam = new TableRow.LayoutParams(40, TableRow.LayoutParams.WRAP_CONTENT);
                     deleteParam.setMargins(1, 5, 1, 1);
@@ -1493,24 +2171,82 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     imageView2.setLayoutParams(deleteParam);
                     imageView2.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_delete_forever));
                     imageView2.setBackgroundResource(R.color.light_orange);
+                    imageView2.setTag(tableRow.getTag().toString());
                     tableRow.addView(imageView2);
-                    break;
-                case 9:
-                    ImageView imageView = new ImageView(this);
-                    TableRow.LayoutParams editParam = new TableRow.LayoutParams(40, 40);
-                    editParam.setMargins(1, 5, 1, 1);
-                    imageView.setPadding(0, 10, 0, 10);
-                    imageView.setLayoutParams(editParam);
-                    imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_edit_o));
-                    imageView.setBackgroundResource(R.color.light_orange);
-                    tableRow.addView(imageView);
+
+                    tableRow.getChildAt(9).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ImageView imageView=(ImageView) v;
+                            Log.e("tagImageViewid","= "+imageView.getTag().toString());
+                            AlertDialog.Builder builder = new AlertDialog.Builder(AddNewRaw.this);
+                            builder.setMessage("Are you want delete this row?");
+                            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+//                            tableLayout.removeAllViews();
+
+                                    deleteFlag();
+                                    rejectAdd();
+
+                                }
+                            });
+                            builder.show();
+                        }
+                    });
                     break;
             }
 //            tableRow.addView(textView);
             idInAcceptanceNew();
-            editRowInAcceptanceNew();
+//            editRowInAcceptanceNew();
+
+
         }
 
+    }
+
+
+    void supplierDialog (){
+        suppliers.clear();
+        isCamera = false;
+        new JSONTask().execute();
+
+        searchDialog = new Dialog(this);
+        searchDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        searchDialog.setContentView(R.layout.search_supplier_dialog);
+        searchDialog.setCancelable(false);
+
+        SearchView searchView = searchDialog.findViewById(R.id.search_supplier_searchView);
+        TextView close = searchDialog.findViewById(R.id.search_supplier_close);
+        total = searchDialog.findViewById(R.id.total_suppliers);
+
+        recyclerView = searchDialog.findViewById(R.id.search_supplier_recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new SuppliersAdapter(this, suppliers, null, null,1);
+        recyclerView.setAdapter(adapter);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filter(newText);
+//                        adapter.notifyDataSetChanged();
+                return false;
+            }
+        });
+
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchDialog.dismiss();
+                isCamera = false;
+            }
+        });
+        searchDialog.show();
     }
 
     public DatePickerDialog.OnDateSetListener openDatePickerDialog(final int flag) {
@@ -1683,6 +2419,88 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     image8.setVisibility(View.VISIBLE);
                     image8.setImageBitmap(stringToBitMap(imagesList.get(i)));
                     break;
+
+
+                case 8:
+                    if (imagesList.get(i) == null) {
+                        image9.setVisibility(View.INVISIBLE);
+                        break;
+                    }
+                    imageNo++;
+                    image9.setVisibility(View.VISIBLE);
+                    image9.setImageBitmap(stringToBitMap(imagesList.get(i)));
+                    break;
+
+
+                case 9:
+                    if (imagesList.get(i) == null) {
+                        image10.setVisibility(View.INVISIBLE);
+                        break;
+                    }
+                    imageNo++;
+                    image10.setVisibility(View.VISIBLE);
+                    image10.setImageBitmap(stringToBitMap(imagesList.get(i)));
+                    break;
+
+
+
+                case 10:
+                    if (imagesList.get(i) == null) {
+                        image11.setVisibility(View.INVISIBLE);
+                        break;
+                    }
+                    imageNo++;
+                    image11.setVisibility(View.VISIBLE);
+                    image11.setImageBitmap(stringToBitMap(imagesList.get(i)));
+                    break;
+
+
+                case 11:
+                    if (imagesList.get(i) == null) {
+                        image12.setVisibility(View.INVISIBLE);
+                        break;
+                    }
+                    imageNo++;
+                    image12.setVisibility(View.VISIBLE);
+                    image12.setImageBitmap(stringToBitMap(imagesList.get(i)));
+                    break;
+
+
+                case 12:
+                    if (imagesList.get(i) == null) {
+                        image13.setVisibility(View.INVISIBLE);
+                        break;
+                    }
+                    imageNo++;
+                    image13.setVisibility(View.VISIBLE);
+                    image13.setImageBitmap(stringToBitMap(imagesList.get(i)));
+                    break;
+
+
+                case 13:
+                    if (imagesList.get(i) == null) {
+                        image14.setVisibility(View.INVISIBLE);
+                        break;
+                    }
+                    imageNo++;
+                    image14.setVisibility(View.VISIBLE);
+                    image14.setImageBitmap(stringToBitMap(imagesList.get(i)));
+                    break;
+
+
+                case 14:
+                    if (imagesList.get(i) == null) {
+                        image15.setVisibility(View.INVISIBLE);
+                        break;
+                    }
+                    imageNo++;
+                    image15.setVisibility(View.VISIBLE);
+                    image15.setImageBitmap(stringToBitMap(imagesList.get(i)));
+                    break;
+
+
+
+
             }
 
 //        super.onRestoreInstanceState(savedInstanceState);
@@ -1877,12 +2695,22 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     image7.setVisibility(View.INVISIBLE);
                     image8.setVisibility(View.INVISIBLE);
 
-                    acceptRowLayout.setVisibility(View.GONE);
+                    image9 .setVisibility(View.INVISIBLE);
+                    image10.setVisibility(View.INVISIBLE);
+                    image11.setVisibility(View.INVISIBLE);
+                    image12.setVisibility(View.INVISIBLE);
+                    image13.setVisibility(View.INVISIBLE);
+                    image14 .setVisibility(View.INVISIBLE);
+                    image15.setVisibility(View.INVISIBLE);
+
+                    acceptRowLayout.setVisibility(View.VISIBLE);
                     headerLayout.setVisibility(View.VISIBLE);
 
                     acceptRowButton.setBackgroundResource(R.drawable.frame_shape_2);
                     mainInfoButton.setBackgroundResource(R.drawable.frame_shape_3);
                     doneAcceptRow.setEnabled(true);
+
+                    sendEmail();
                     Log.e("tag", "save Success");
                 } else {
                     Log.e("tag", "****Failed to export data");

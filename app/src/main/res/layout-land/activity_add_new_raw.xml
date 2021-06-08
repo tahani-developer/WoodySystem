@@ -28,6 +28,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone"
             android:orientation="horizontal">
 
             <Button
@@ -60,451 +61,28 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/addNewRaw_linearLayoutHeader"
+            android:id="@+id/inventory_report_linear1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="visible"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:background="@color/orange"
+            android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addNewRaw_linear_header">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+
+            <TextView
+                android:id="@+id/inventory_report_tv"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginTop="5dp"
-                android:orientation="horizontal">
+                android:layout_marginHorizontal="20dp"
+                android:paddingVertical="5dp"
+                android:fontFamily="serif"
+                android:gravity="start|left"
+                android:text="Truck Acceptance"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
 
-                <LinearLayout
-                    android:id="@+id/addNewRaw_linear_two"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/alpha_frame"
-                    android:orientation="horizontal"
-                    android:padding="5dp">
-
-                    <TextView
-                        android:id="@+id/textView7"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="3dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_weight="1"
-                        android:fontFamily="serif"
-                        android:paddingTop="7dp"
-                        android:paddingBottom="7dp"
-                        android:text="@string/supplier_name"
-                        android:textColor="@color/white"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:id="@+id/addNewRaw_search_supplier"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_weight="6"
-                        android:gravity="start|left"
-                        android:hint="@string/search"
-                        android:textColor="@color/white"
-                        android:textColorHint="@color/white"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:id="@+id/addNewRaw_add_supplier"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="0"
-                        android:background="@drawable/frame_shape"
-                        android:drawableStart="@drawable/ic_person_add_24dp"
-                        android:drawableLeft="@drawable/ic_person_add_24dp"
-                        android:paddingStart="5dp"
-                        android:paddingLeft="5dp"
-                        android:paddingEnd="5dp"
-                        android:paddingRight="5dp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/addNewRaw_linear_one"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/alpha_frame"
-                    android:orientation="horizontal"
-                    android:padding="5dp">
-
-                    <TextView
-                        android:id="@+id/textView1"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:fontFamily="serif"
-                        android:text="@string/thickness"
-                        android:textColor="@color/white"
-                        android:textSize="15sp" />
-
-                    <EditText
-                        android:id="@+id/addNewRaw_thickness"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="2"
-                        android:ems="10"
-                        android:gravity="center"
-                        android:inputType="numberDecimal"
-                        android:nextFocusDown="@id/addNewRaw_width"
-                        android:textColor="@color/white"
-                        android:textSize="15sp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/addNewRaw_linear_three"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/alpha_frame"
-                    android:orientation="horizontal"
-                    android:padding="5dp">
-
-                    <TextView
-                        android:id="@+id/textView3"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:fontFamily="serif"
-                        android:text="@string/width"
-                        android:textColor="@color/white"
-                        android:textSize="15sp" />
-
-                    <EditText
-                        android:id="@+id/addNewRaw_width"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="2.5"
-                        android:ems="10"
-                        android:gravity="center"
-                        android:inputType="numberDecimal"
-                        android:nextFocusDown="@id/addNewRaw_length"
-                        android:textColor="@color/white"
-                        android:textSize="15sp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/addNewRaw_linear_five"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/alpha_frame"
-                    android:orientation="horizontal"
-                    android:padding="5dp">
-
-                    <TextView
-                        android:id="@+id/textView2"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:fontFamily="serif"
-                        android:text="@string/length"
-                        android:textColor="@color/white"
-                        android:textSize="15sp" />
-
-                    <EditText
-                        android:id="@+id/addNewRaw_length"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="2"
-                        android:ems="10"
-                        android:gravity="center"
-                        android:inputType="numberDecimal"
-                        android:nextFocusDown="@id/addNewRaw_no_of_pieces"
-                        android:textColor="@color/white"
-                        android:textSize="15sp" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginHorizontal="10dp"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:id="@+id/addNewRaw_linear_seven"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/alpha_frame"
-                    android:orientation="horizontal"
-                    android:padding="5dp">
-
-                    <TextView
-                        android:id="@+id/textView5"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1.5"
-                        android:fontFamily="serif"
-                        android:text="@string/no_of_pieces"
-                        android:textColor="@color/white"
-                        android:textSize="15sp" />
-
-                    <EditText
-                        android:id="@+id/addNewRaw_no_of_pieces"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="2"
-                        android:ems="10"
-                        android:gravity="center"
-                        android:inputType="numberDecimal"
-                        android:nextFocusDown="@id/addNewRaw_no_of_rejected"
-                        android:textColor="@color/white"
-                        android:textSize="15sp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/addNewRaw_linear_eight5"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/alpha_frame"
-                    android:orientation="horizontal"
-                    android:padding="5dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="2"
-                        android:fontFamily="serif"
-                        android:text="@string/rejected_pieces"
-                        android:textColor="@color/white"
-                        android:textSize="15sp" />
-
-                    <EditText
-                        android:id="@+id/addNewRaw_no_of_rejected"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="2"
-                        android:ems="10"
-                        android:gravity="center"
-                        android:inputType="number"
-                        android:nextFocusDown="@id/addNewRaw_no_of_bundles"
-                        android:textColor="@color/white"
-                        android:textSize="15sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginRight="5dp"
-                    android:background="@drawable/alpha_frame"
-                    android:orientation="horizontal"
-                    android:padding="5dp">
-
-                    <TextView
-                        android:id="@+id/textView11"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1.5"
-                        android:fontFamily="serif"
-                        android:text="@string/no_bundle"
-                        android:textColor="@color/white"
-                        android:textSize="15sp" />
-
-                    <EditText
-                        android:id="@+id/addNewRaw_no_of_bundles"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="2"
-                        android:ems="10"
-                        android:gravity="center"
-                        android:inputType="number"
-                        android:textColor="@color/white"
-                        android:textSize="15sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/addNewRaw_linear_eight"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/alpha_frame"
-                    android:orientation="horizontal"
-                    android:padding="5dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_weight="1"
-                        android:fontFamily="serif"
-                        android:text="@string/grade"
-                        android:textColor="@color/white"
-                        android:textSize="15sp" />
-
-                    <Spinner
-                        android:id="@+id/addNewRaw_grade"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="2" />
-                </LinearLayout>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginHorizontal="10dp"
-                >
-
-                <ImageView
-                    android:id="@+id/addNewRaw_image1"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/border_background"
-                    android:padding="7dp"
-                    android:layout_marginHorizontal="5dp"
-                    app:srcCompat="@drawable/pic" />
-
-                <ImageView
-                    android:id="@+id/addNewRaw_image2"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/border_background"
-                    android:padding="7dp"
-                    android:layout_marginHorizontal="5dp"
-                    app:srcCompat="@drawable/pic" />
-
-                <ImageView
-                    android:id="@+id/addNewRaw_image3"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/border_background"
-                    android:padding="7dp"
-                    android:layout_marginHorizontal="5dp"
-                    app:srcCompat="@drawable/pic" />
-
-                <ImageView
-                    android:id="@+id/addNewRaw_image4"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/border_background"
-                    android:padding="7dp"
-                    android:layout_marginHorizontal="5dp"
-                    app:srcCompat="@drawable/pic" />
-
-                <ImageView
-                    android:id="@+id/addNewRaw_image5"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/border_background"
-                    android:padding="7dp"
-                    android:layout_marginHorizontal="5dp"
-                    app:srcCompat="@drawable/pic" />
-
-                <ImageView
-                    android:id="@+id/addNewRaw_image6"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/border_background"
-                    android:padding="7dp"
-                    android:layout_marginHorizontal="5dp"
-                    app:srcCompat="@drawable/pic" />
-
-                <ImageView
-                    android:visibility="gone"
-                    android:id="@+id/addNewRaw_image7"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/border_background"
-                    android:padding="7dp"
-                    android:layout_marginHorizontal="5dp"
-                    app:srcCompat="@drawable/pic" />
-
-                <ImageView
-                    android:visibility="gone"
-                    android:id="@+id/addNewRaw_image8"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/border_background"
-                    android:padding="7dp"
-                    android:layout_marginHorizontal="5dp"
-                    app:srcCompat="@drawable/pic" />
-
-                <TextView
-                    android:id="@+id/addNewRaw_add_photo"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="1.4"
-                    android:background="@drawable/frame_shape"
-                    android:drawableStart="@drawable/ic_add_a_photo"
-                    android:drawableLeft="@drawable/ic_add_a_photo"
-                    android:fontFamily="serif"
-                    android:layout_marginHorizontal="5dp"
-                    android:paddingStart="45dp"
-                    android:paddingLeft="45dp"
-                    android:layout_gravity="end"
-                    android:textColor="@color/white"/>
-
-                <TextView
-                    android:id="@+id/addNewRaw_add_button"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="1.4"
-                    android:background="@drawable/frame_shape"
-                    android:drawableStart="@drawable/ic_add_white_32dp"
-                    android:drawableLeft="@drawable/ic_add_white_32dp"
-                    android:fontFamily="serif"
-                    android:paddingStart="40dp"
-                    android:paddingLeft="40dp"
-                    android:layout_marginHorizontal="5dp"
-                    android:layout_gravity="end"
-                    android:textColor="@color/white"/>
-
-            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -626,50 +204,10 @@
 
                 </LinearLayout>
 
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/alpha_frame"
-                    android:orientation="horizontal"
-                    app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_three">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:fontFamily="serif"
-                        android:gravity="start|center_vertical"
-                        android:paddingHorizontal="5dp"
-                        android:text="@string/net"
-                        android:textColor="@color/white"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:id="@+id/addNewRaw_total_bundles"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@color/gray_dark_two"
-                        android:ems="10"
-                        android:gravity="center"
-                        android:inputType="numberDecimal"
-                        android:nextFocusDown="@id/addNewRaw_acceptance_location"
-                        android:singleLine="true"
-                        android:textSize="15sp" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingTop="5dp">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:layout_weight="1"
@@ -698,41 +236,6 @@
                         android:textSize="15sp" />
 
                 </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/alpha_frame"
-                    android:orientation="horizontal"
-                    app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_three">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:fontFamily="serif"
-                        android:gravity="start|center_vertical"
-                        android:paddingHorizontal="10dp"
-                        android:text="@string/reject"
-                        android:textColor="@color/white"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:id="@+id/addNewRaw_total_rejected"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@color/gray_dark_two"
-                        android:ems="10"
-                        android:gravity="center"
-                        android:inputType="numberDecimal"
-                        android:singleLine="true"
-                        android:textSize="15sp" />
-
-                </LinearLayout>
-
                 <LinearLayout
                     android:id="@+id/addToInventory_linear_three"
                     android:layout_width="0dp"
@@ -768,45 +271,579 @@
                         android:textSize="15sp" />
 
                 </LinearLayout>
+            </LinearLayout>
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:paddingTop="5dp">-->
+
+<!--              -->
+
+
+
+
+
+
+
+<!--            </LinearLayout>-->
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.2dp"
+            android:layout_margin="5dp"
+            android:background="@color/orange"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/inventory_report_linear7"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+        <LinearLayout
+            android:id="@+id/addNewRaw_linearLayoutHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/addNewRaw_linear_header">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
 
                 <LinearLayout
+                    android:id="@+id/addNewRaw_linear_two"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
                     android:layout_weight="1"
-                    android:orientation="horizontal">
+                    android:background="@drawable/alpha_frame"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
 
-                    <Button
-                        android:id="@+id/addNewRaw_acceptRow_done"
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/textView7"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:background="@drawable/frame_shape"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_weight="1"
                         android:fontFamily="serif"
-                        android:text="@string/done"
-                        android:textAllCaps="false"
+                        android:paddingTop="7dp"
+                        android:paddingBottom="7dp"
+                        android:text="@string/supplier_name"
                         android:textColor="@color/white"
-                        android:textSize="18sp" />
+                        android:textSize="14sp" />
 
+                    <TextView
+                        android:id="@+id/addNewRaw_search_supplier"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_weight="6"
+                        android:gravity="start|left"
+                        android:hint="@string/search"
+                        android:textColor="@color/white"
+                        android:textColorHint="@color/white"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/addNewRaw_add_supplier"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0"
+                        android:background="@drawable/frame_shape"
+                        android:drawableStart="@drawable/ic_person_add_24dp"
+                        android:drawableLeft="@drawable/ic_person_add_24dp"
+                        android:paddingStart="5dp"
+                        android:paddingLeft="5dp"
+                        android:paddingEnd="5dp"
+                        android:paddingRight="5dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/addNewRaw_linear_one"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/alpha_frame"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:id="@+id/textView1"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:fontFamily="serif"
+                        android:text="@string/thickness"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+
+                    <EditText
+                        android:id="@+id/addNewRaw_thickness"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="2"
+                        android:ems="10"
+                        android:gravity="center"
+                        android:inputType="numberDecimal"
+                        android:nextFocusDown="@id/addNewRaw_width"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/addNewRaw_linear_three"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/alpha_frame"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:fontFamily="serif"
+                        android:text="@string/width"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+
+                    <EditText
+                        android:id="@+id/addNewRaw_width"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="2.5"
+                        android:ems="10"
+                        android:gravity="center"
+                        android:inputType="numberDecimal"
+                        android:nextFocusDown="@id/addNewRaw_length"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/addNewRaw_linear_five"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/alpha_frame"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:fontFamily="serif"
+                        android:text="@string/length"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+
+                    <EditText
+                        android:id="@+id/addNewRaw_length"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="2"
+                        android:ems="10"
+                        android:gravity="center"
+                        android:inputType="numberDecimal"
+                        android:nextFocusDown="@id/addNewRaw_no_of_pieces"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
 
                 </LinearLayout>
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginHorizontal="10dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/addNewRaw_linear_seven"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/alpha_frame"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:id="@+id/textView5"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1.5"
+                        android:fontFamily="serif"
+                        android:text="@string/no_of_pieces"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+
+                    <EditText
+                        android:id="@+id/addNewRaw_no_of_pieces"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="2"
+                        android:ems="10"
+                        android:gravity="center"
+                        android:inputType="numberDecimal"
+                        android:nextFocusDown="@id/addNewRaw_no_of_rejected"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/addNewRaw_linear_eight5"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/alpha_frame"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:fontFamily="serif"
+                        android:text="@string/rejected_pieces"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+
+                    <EditText
+                        android:id="@+id/addNewRaw_no_of_rejected"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="2"
+                        android:ems="10"
+                        android:gravity="center"
+                        android:inputType="number"
+                        android:nextFocusDown="@id/addNewRaw_no_of_bundles"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/alpha_frame"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:id="@+id/textView11"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1.5"
+                        android:fontFamily="serif"
+                        android:text="@string/no_bundle"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+
+                    <EditText
+                        android:id="@+id/addNewRaw_no_of_bundles"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="2"
+                        android:ems="10"
+                        android:gravity="center"
+                        android:inputType="number"
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/addNewRaw_linear_eight"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/alpha_frame"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_weight="1"
+                        android:fontFamily="serif"
+                        android:text="@string/grade"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+
+                    <Spinner
+                        android:id="@+id/addNewRaw_grade"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="2" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="10dp"
+                >
+
+                <ScrollView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="9">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/addNewRaw_image1"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_marginHorizontal="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/border_background"
+                            android:padding="7dp"
+                            app:srcCompat="@drawable/pic" />
+
+                        <ImageView
+                            android:id="@+id/addNewRaw_image2"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_marginHorizontal="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/border_background"
+                            android:padding="7dp"
+                            app:srcCompat="@drawable/pic" />
+
+                        <ImageView
+                            android:id="@+id/addNewRaw_image3"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_marginHorizontal="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/border_background"
+                            android:padding="7dp"
+                            app:srcCompat="@drawable/pic" />
+
+                        <ImageView
+                            android:id="@+id/addNewRaw_image4"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_marginHorizontal="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/border_background"
+                            android:padding="7dp"
+                            app:srcCompat="@drawable/pic" />
+
+                        <ImageView
+                            android:id="@+id/addNewRaw_image5"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_marginHorizontal="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/border_background"
+                            android:padding="7dp"
+                            app:srcCompat="@drawable/pic" />
+
+                        <ImageView
+                            android:id="@+id/addNewRaw_image6"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_marginHorizontal="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/border_background"
+                            android:padding="7dp"
+                            app:srcCompat="@drawable/pic" />
+
+                        <ImageView
+                            android:id="@+id/addNewRaw_image7"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_marginHorizontal="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/border_background"
+                            android:padding="7dp"
+                            app:srcCompat="@drawable/pic" />
+
+                        <ImageView
+                            android:id="@+id/addNewRaw_image8"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_marginHorizontal="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/border_background"
+                            android:padding="7dp"
+                            app:srcCompat="@drawable/pic" />
+
+                        <ImageView
+                            android:id="@+id/addNewRaw_image9"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_marginHorizontal="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/border_background"
+                            android:padding="7dp"
+                            android:visibility="visible"
+                            app:srcCompat="@drawable/pic" />
+
+                        <ImageView
+                            android:id="@+id/addNewRaw_image10"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_marginHorizontal="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/border_background"
+                            android:padding="7dp"
+                            app:srcCompat="@drawable/pic" />
+
+                        <ImageView
+                            android:id="@+id/addNewRaw_image11"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_marginHorizontal="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/border_background"
+                            android:padding="7dp"
+                            app:srcCompat="@drawable/pic" />
+
+                        <ImageView
+                            android:id="@+id/addNewRaw_image12"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_marginHorizontal="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/border_background"
+                            android:padding="7dp"
+                            app:srcCompat="@drawable/pic" />
+
+                        <ImageView
+                            android:id="@+id/addNewRaw_image13"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_marginHorizontal="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/border_background"
+                            android:padding="7dp"
+                            app:srcCompat="@drawable/pic" />
+
+                        <ImageView
+                            android:id="@+id/addNewRaw_image14"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_marginHorizontal="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/border_background"
+                            android:padding="7dp"
+                            app:srcCompat="@drawable/pic" />
+
+                        <ImageView
+                            android:id="@+id/addNewRaw_image15"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_marginHorizontal="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/border_background"
+                            android:padding="7dp"
+                            app:srcCompat="@drawable/pic" />
+
+                    </LinearLayout>
+                </ScrollView>
+
+                <TextView
+                    android:id="@+id/addNewRaw_add_photo"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1.4"
+                    android:background="@drawable/frame_shape"
+                    android:drawableStart="@drawable/ic_add_a_photo"
+                    android:drawableLeft="@drawable/ic_add_a_photo"
+                    android:fontFamily="serif"
+                    android:layout_marginHorizontal="5dp"
+                    android:paddingStart="45dp"
+                    android:paddingLeft="45dp"
+                    android:layout_gravity="end"
+                    android:textColor="@color/white"/>
+                <TextView
+                    android:id="@+id/addNewRaw_add_button"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1.4"
+                    android:background="@drawable/frame_shape"
+                    android:drawableStart="@drawable/ic_add_white_32dp"
+                    android:drawableLeft="@drawable/ic_add_white_32dp"
+                    android:fontFamily="serif"
+                    android:paddingStart="40dp"
+                    android:paddingLeft="40dp"
+                    android:layout_marginHorizontal="5dp"
+                    android:layout_gravity="end"
+                    android:textColor="@color/white"/>
+
+
+            </LinearLayout>
         </LinearLayout>
+
 
         <LinearLayout
             android:id="@+id/addNewRaw_table_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/alpha_black"
             android:layout_marginStart="1dp"
             android:layout_marginLeft="1dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="1dp"
             android:layout_marginRight="1dp"
             android:layout_marginBottom="10dp"
-            android:orientation="vertical"
-            >
+            android:layout_weight="1"
+            android:background="@color/alpha_black"
+            android:orientation="vertical">
 
             <TableLayout
                 android:id="@+id/addNewRaw_table_header"
@@ -816,12 +853,12 @@
                 android:layout_marginLeft="3dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="3dp"
-                android:layout_marginRight="3dp"/>
+                android:layout_marginRight="3dp" />
 
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
+                android:layout_height="wrap_content">
+
                 <TableLayout
                     android:id="@+id/addNewRaw_table"
                     android:layout_width="match_parent"
@@ -830,11 +867,151 @@
                     android:layout_marginLeft="3dp"
                     android:layout_marginTop="2dp"
                     android:layout_marginEnd="3dp"
-                    android:layout_marginRight="3dp"/>
+                    android:layout_marginRight="3dp" />
 
             </ScrollView>
         </LinearLayout>
 
+        <View
+            android:id="@+id/inventory_report_linear6"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/inventory_report_linear7"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:orientation="horizontal">
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/alpha_frame"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_three">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="serif"
+                    android:gravity="start|center_vertical"
+                    android:paddingHorizontal="10dp"
+                    android:text="@string/reject"
+                    android:textColor="@color/white"
+                    android:textSize="15sp"
+                    android:background="@drawable/frame_shape"/>
+
+                <TextView
+                    android:id="@+id/addNewRaw_total_rejected"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:singleLine="true"
+                    android:textColor="@color/orange"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/alpha_frame"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_three">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="serif"
+                    android:gravity="start|center_vertical"
+                    android:paddingHorizontal="5dp"
+                    android:text="@string/net"
+                    android:textColor="@color/white"
+                    android:textSize="15sp"
+                    android:background="@drawable/frame_shape"/>
+
+                <TextView
+                    android:id="@+id/addNewRaw_total_bundles"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:nextFocusDown="@id/addNewRaw_acceptance_location"
+                    android:singleLine="true"
+                    android:textColor="@color/orange"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+
+
+
+                <Button
+                    android:id="@+id/addNewRaw_acceptRow_pdf"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="2"
+                    android:background="@drawable/frame_shape"
+                    android:fontFamily="serif"
+                    android:text="@string/pdf"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:visibility="gone"
+                    android:layout_marginLeft="5dp" />
+                <Button
+                    android:id="@+id/addNewRaw_acceptRow_excel"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="2"
+                    android:background="@drawable/frame_shape"
+                    android:fontFamily="serif"
+                    android:text="@string/excel"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:visibility="gone"
+                    android:layout_marginLeft="5dp" />
+
+                <Button
+                    android:id="@+id/addNewRaw_acceptRow_done"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="2"
+                    android:background="@drawable/frame_shape"
+                    android:fontFamily="serif"
+                    android:text="@string/save"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:layout_marginLeft="5dp" />
+            </LinearLayout>
+        </LinearLayout>
 
     </LinearLayout>
 </RelativeLayout>

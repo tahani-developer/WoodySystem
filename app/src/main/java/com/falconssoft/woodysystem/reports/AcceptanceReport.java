@@ -112,6 +112,8 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
     private List<SupplierInfo> suppliers = new ArrayList<>();
     public static String supplierName = "All";
     private List<SupplierInfo> arraylist = new ArrayList<>();
+    double acceptedReject=0,acceptedBundle=0;
+    TextView reportTotalReject,reportTotalBundle;
 
     //    public static final String EDIT_FLAG2= "EDIT_FLAG";
     @Override
@@ -148,6 +150,8 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
         exportToExcel = findViewById(R.id.acceptance_report_export_Excel);
         totalCubic = findViewById(R.id.truck_report_cubic);
         supplier = findViewById(R.id.truck_report_supplier);
+        reportTotalReject=findViewById(R.id.Report_total_rejected);
+        reportTotalBundle=findViewById(R.id.Report_total_bundles);
 
         myFormat = "dd/MM/yyyy";
         sdf = new SimpleDateFormat(myFormat, Locale.US);
@@ -214,7 +218,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
 
                 recyclerView = searchDialog.findViewById(R.id.search_supplier_recyclerView);
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
-                suppliersAdapter = new SuppliersAdapter(null, suppliers, null, this);
+                suppliersAdapter = new SuppliersAdapter(null, suppliers, null, this,0);
                 recyclerView.setAdapter(suppliersAdapter);
 
                 searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -303,7 +307,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
             }
         }
         total.setText("" + arraylist.size());
-        suppliersAdapter = new SuppliersAdapter(null, arraylist, null, this);
+        suppliersAdapter = new SuppliersAdapter(null, arraylist, null, this,0);
         recyclerView.setAdapter(suppliersAdapter);
     }
 
@@ -468,6 +472,25 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
         return d;
     }
 
+    void getRejectNetBundle(){
+        Log.e("rejjj1",""+master.size());
+        acceptedReject=0;
+        acceptedReject=0;
+    for (int i=0;i<master.size();i++){
+
+        acceptedReject+=Double.parseDouble(master.get(i).getTotalRejectedNo());
+        acceptedBundle+=Double.parseDouble(master.get(i).getNetBundles());
+        Log.e("rejjj",""+acceptedBundle+"   "+acceptedReject);
+
+        Log.e("rejjj2",""+master.get(i).getNoOfBundles());
+
+    }
+
+        reportTotalReject.setText(""+acceptedReject);
+        reportTotalBundle.setText(""+acceptedBundle);
+
+    }
+
     public void filters() {
 
         if (linearLayout.getVisibility() == View.VISIBLE)
@@ -494,6 +517,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
             adapter2 = new AcceptanceReportAdapter(AcceptanceReport.this, filtered, details);
             list.setAdapter(adapter2);
             totalCubic.setText("" + String.format("%.3f", sum));
+            getRejectNetBundle();
 
 
         } catch (ParseException e) {
@@ -518,7 +542,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
             Bitmap bitmap;
             try {
                 if (!newRowInfoPic.equals("null")) {
-                    for (int i = 0; i < 6; i++) {
+                    for (int i = 0; i < 15; i++) {
 
                         switch (i) {
                             case 0:
@@ -609,6 +633,93 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
                                     }
                                 }
                                 break;
+
+                            case 8:
+                                if (pictures[0].getImage9() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImage9());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic99(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic88(bitmap);
+                                    }
+                                }
+                                break;
+
+
+
+                            case 9:
+                                if (pictures[0].getImage10() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImage10());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic1010(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic88(bitmap);
+                                    }
+                                }
+                                break;
+
+                            case 10:
+                                if (pictures[0].getImage11() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImage11());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic1111(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic88(bitmap);
+                                    }
+                                }
+                                break;
+
+                            case 11:
+                                if (pictures[0].getImage12() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImage12());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic1212(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic88(bitmap);
+                                    }
+                                }
+                                break;
+
+                            case 12:
+                                if (pictures[0].getImage13() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImage13());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic1313(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic88(bitmap);
+                                    }
+                                }
+                                break;
+
+                            case 13:
+                                if (pictures[0].getImage14() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImage14());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic1414(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic88(bitmap);
+                                    }
+                                }
+                                break;
+
+                            case 14:
+
+                                if (pictures[0].getImage15() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImage15());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic1515(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic88(bitmap);
+                                    }
+                                }
+                                break;
                         }
                     }
                 }
@@ -632,7 +743,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
     }
 
     public void openPicDialog2(NewRowInfo picts) {
-        dialog = new Dialog(previewLinearContext);
+        dialog = new Dialog(previewLinearContext,R.style.Theme_Dialog);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 //        dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
@@ -652,6 +763,15 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
                 newRowInfoPic.setPic66(null);
                 newRowInfoPic.setPic77(null);
                 newRowInfoPic.setPic88(null);
+
+                newRowInfoPic.setPic99(null);
+                newRowInfoPic.setPic1010(null);
+                newRowInfoPic.setPic1111(null);
+                newRowInfoPic.setPic1212(null);
+                newRowInfoPic.setPic1313(null);
+                newRowInfoPic.setPic1414(null);
+                newRowInfoPic.setPic1515(null);
+
                 dialog.dismiss();
             }
         });
@@ -663,9 +783,16 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
         pics.add(picts.getPic44());
         pics.add(picts.getPic55());
         pics.add(picts.getPic66());
-//        pics.add(picts.getPic77());
-//        pics.add(picts.getPic88());
+        pics.add(picts.getPic77());
+        pics.add(picts.getPic88());
 
+        pics.add(picts.getPic99());
+        pics.add(picts.getPic1010());
+        pics.add(picts.getPic1111());
+        pics.add(picts.getPic1212());
+        pics.add(picts.getPic1313());
+        pics.add(picts.getPic1414());
+        pics.add(picts.getPic1515());
 
         PicturesAdapter adapter = new PicturesAdapter(pics, null, this);
         listView.setAdapter(adapter);
@@ -694,10 +821,12 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
         master.clear();
         details.clear();
         locationList.clear();
-
-        for (int i = 0; i < info.getLocationList().size(); i++)
-            locationList.add(info.getLocationList().get(i).getLocationOfAcceptance());
+        locationList.add("Kalinovka");
+        locationList.add("Rudniya Store");
         locationList.add(0, "All");
+//        for (int i = 0; i < info.getLocationList().size(); i++)
+//            locationList.add(info.getLocationList().get(i).getLocationOfAcceptance());
+//        locationList.add(0, "All");
 
         rowsCount = master.size();
         count.setText("" + rowsCount);
@@ -707,6 +836,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
             totalCubic.setText("0.000");
 
         fillSpinnerAdapter();
+        getRejectNetBundle();
         adapter2 = new AcceptanceReportAdapter(AcceptanceReport.this, master, details);
         list.setAdapter(adapter2);
         progressDialog.dismiss();
@@ -765,8 +895,12 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
                     details.addAll(list.getDetails());
                 }
 //                cubicList.addAll(list.getCubicList());
-                for (int i = 0; i < list.getLocationList().size(); i++)
-                    locationList.add(list.getLocationList().get(i).getLocationOfAcceptance());
+//                for (int i = 0; i < list.getLocationList().size(); i++)
+//                    locationList.add(list.getLocationList().get(i).getLocationOfAcceptance());
+//                locationList.add(0, "All");
+
+                locationList.add("Kalinovka");
+                locationList.add("Rudniya Store");
                 locationList.add(0, "All");
                 rowsCount = master.size();
 

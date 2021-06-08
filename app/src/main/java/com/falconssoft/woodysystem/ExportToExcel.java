@@ -80,6 +80,9 @@ public class ExportToExcel {
             case 7:
                 workbook = stageThreeReportTow(workbook, (List<BundleInfo>) list );
                 break;
+            case 8:
+                workbook = stageOneReportOneAcc(workbook, (List<NewRowInfo>) list );
+                break;
         }
 
         Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -402,6 +405,63 @@ public class ExportToExcel {
         return workbook;
 
     }
+
+    WritableWorkbook stageOneReportOneAcc(WritableWorkbook workbook, List<NewRowInfo> list ) {
+        try {
+            WritableSheet sheet = workbook.createSheet("Sheet1", 0);//Excel sheet name. 0 represents first sheet
+
+            try {
+                sheet.addCell(new Label(0, 0, "Truck No")); // column and row
+                sheet.addCell(new Label(2, 0, "Supplier"));
+                sheet.addCell(new Label(3, 0, "TTN NO"));
+                sheet.addCell(new Label(5, 0, "Acceptance Date"));
+                sheet.addCell(new Label(6, 0, "Bundles"));
+                sheet.addCell(new Label(8, 0, "Rejected"));
+
+
+
+                sheet.mergeCells(0,0, 1, 0);// col , row, to col , to row
+                sheet.mergeCells(3,0, 4, 0);// col , row, to col , to row
+                sheet.mergeCells(6,0, 7, 0);// col , row, to col , to row
+                sheet.mergeCells(11,0, 12, 0);// col , row, to col , to row
+
+                sheet.mergeCells(0,1, 1, 1);// col , row, to col , to row
+                sheet.mergeCells(3,1, 4, 1);// col , row, to col , to row
+                sheet.mergeCells(6,1, 7, 1);// col , row, to col , to row
+                sheet.mergeCells(11,1, 12, 1);// col , row, to col , to row
+
+                for (int i = 0; i < list.size(); i++) {
+                    sheet.addCell(new Label(0, i + 2, list.get(i).getTruckNo()));
+                    sheet.addCell(new Label(2, i + 2, ""+list.get(i).getSupplierName()));
+                    sheet.addCell(new Label(3, i + 2, ""+list.get(i).getTtnNo()));
+                    sheet.addCell(new Label(5, i + 2, ""+list.get(i).getDate()));
+                    sheet.addCell(new Label(6, i + 2,""+ list.get(i).getNetBundles()));
+                    sheet.addCell(new Label(8, i + 2, ""+list.get(i).getTotalRejectedNo()));
+
+                    sheet.mergeCells(0,i + 2, 1, i + 2);// col , row, to col , to row
+                    sheet.mergeCells(3,i + 2, 4, i + 2);// col , row, to col , to row
+                    sheet.mergeCells(6,i + 2, 7, i + 2);// col , row, to col , to row
+                    sheet.mergeCells(11,i + 2, 12, i + 2);// col , row, to col , to row
+                }
+
+            } catch (RowsExceededException e) {
+                e.printStackTrace();
+            } catch (WriteException e) {
+                e.printStackTrace();
+            }
+            workbook.write();
+            try {
+                workbook.close();
+            } catch (WriteException e) {
+                e.printStackTrace();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return workbook;
+
+    }
+
 
     void stageThreeReportOne() {
 

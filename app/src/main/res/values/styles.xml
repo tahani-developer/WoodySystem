@@ -20,4 +20,12 @@
     <style name="MyAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorAccent">@color/orange</item>
     </style>
+
+    <style name="Theme_Dialog" parent="android:Theme.Holo.Dialog">
+
+        <item name="android:windowMinWidthMajor">50%</item>
+        <item name="android:windowMinWidthMinor">50%</item>
+
+
+    </style>
 </resources>

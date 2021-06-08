@@ -1000,7 +1000,7 @@ public class AddToInventory extends AppCompatActivity implements View.OnClickLis
 
             try {
 //                http://10.0.0.22/woody/import.php?FLAG=2
-                URL url = new URL("http://" + generalSettings.getIpAddress() + "/import.php?FLAG=14&LOCATION=" + generalSettings.getStore());
+                URL url = new URL("http://" + generalSettings.getIpAddress() + "/import.php?FLAG=14&LOCATION=" + generalSettings.getStore().trim().replace(" ","%20"));
 
                 URLConnection conn = url.openConnection();
                 conn.setDoOutput(true);
