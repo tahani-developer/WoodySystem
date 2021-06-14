@@ -245,7 +245,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
                 break;
             case R.id.acceptance_report_export:
                 ExportToPDF obj = new ExportToPDF(AcceptanceReport.this);
-                obj.exportReportOne(details, filtered, truckString, loc, from.getText().toString(), to.getText().toString(), dfReport.format(myCalendar.getTime()));
+                obj.exportReportOne(details, filtered, truckString, loc, from.getText().toString(), to.getText().toString(), dfReport.format(myCalendar.getTime()),totalCubic.getText().toString(),totalCubicReg.getText().toString());
                 break;
             case R.id.acceptance_report_export_Excel:
                 ExportToExcel.getInstance().createExcelFile(AcceptanceReport.this, "Acceptance_Report.xls", 6, filtered, details);
@@ -476,7 +476,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
     void getRejectNetBundle(){
         Log.e("rejjj1",""+master.size());
         acceptedReject=0;
-        acceptedReject=0;
+        acceptedBundle=0;
     for (int i=0;i<master.size();i++){
 
         acceptedReject+=Double.parseDouble(master.get(i).getTotalRejectedNo());

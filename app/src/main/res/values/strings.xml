@@ -192,5 +192,6 @@
     <string name="fromEmail">from Email</string>
     <string name="toEmail">to Email</string>
     <string name="subject">subject</string>
+    <string name="rejectC">Cubic Reg</string>
 
 </resources>

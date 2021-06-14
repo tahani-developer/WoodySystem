@@ -534,7 +534,7 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
 
                             if (!addNewRaw_no_of_pieces_edit.getText().toString().equals("") && Integer.parseInt(addNewRaw_no_of_pieces_edit.getText().toString()) != 0) {
 
-                                if (!addNewRaw_no_of_rejected_edit.getText().toString().equals("") && Integer.parseInt(addNewRaw_no_of_rejected_edit.getText().toString()) != 0) {
+                                if (!addNewRaw_no_of_rejected_edit.getText().toString().equals("") /*&& Integer.parseInt(addNewRaw_no_of_rejected_edit.getText().toString()) != 0*/) {
 
                                     if (!addNewRaw_no_of_bundles_edit.getText().toString().equals("") && Integer.parseInt(addNewRaw_no_of_bundles_edit.getText().toString()) != 0) {
 
@@ -828,7 +828,7 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
                 if (!TextUtils.isEmpty(widthLocal) && (!checkValidData(widthLocal)))
                     if (!TextUtils.isEmpty(lengthLocal) && (!checkValidData(lengthLocal)))
                         if (!TextUtils.isEmpty(noOfPiecesLocal) && (!checkValidData(noOfPiecesLocal)))
-                            if (!TextUtils.isEmpty(noOfRejectedLocal) && (!checkValidData(noOfRejectedLocal)))
+                            if (!TextUtils.isEmpty(noOfRejectedLocal) && (!noOfRejectedLocal.equals(".")))
                                 if (!TextUtils.isEmpty(noOfBundlesLocal) && (!checkValidData(noOfBundlesLocal))) {
 
                                     thickness.setError(null);
