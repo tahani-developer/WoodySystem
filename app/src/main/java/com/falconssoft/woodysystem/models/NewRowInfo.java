@@ -59,8 +59,14 @@ public class NewRowInfo implements Serializable {
     @SerializedName("CUBIC")
     private double cubic;
 
+    @SerializedName("CUBIC_REJ")
+    private double cubicRej;
+
     @SerializedName("TOTAL")
     private double totalCubic;// this used to get cubic summation without using any filter
+
+    @SerializedName("TOTAL_REJ")
+    private double totalCubicRej;// this used to get cubic summation without using any filter
 
     @SerializedName("TRUCK_NO")
     private String truckNo;
@@ -233,8 +239,16 @@ public class NewRowInfo implements Serializable {
         return totalCubic;
     }
 
+    public double getTotalCubicRej() {
+        return totalCubicRej;
+    }
+
     public void setTotalCubic(double totalCubic) {
         this.totalCubic = totalCubic;
+    }
+
+    public void setTotalCubicRej(double totalCubic) {
+        this.totalCubicRej = totalCubic;
     }
 
     public List<NewRowInfo> getDetailsList() {
@@ -273,8 +287,16 @@ public class NewRowInfo implements Serializable {
         return cubic;
     }
 
+    public double getCubicRej() {
+        return cubicRej;
+    }
+
     public void setCubic(double cubic) {
         this.cubic = cubic;
+    }
+
+    public void setCubicRej(double cubicRej) {
+        this.cubicRej = cubicRej;
     }
 
     public String getSerial() {

@@ -75,7 +75,7 @@ import static com.falconssoft.woodysystem.reports.AcceptanceInfoReport.EDIT_FLAG
 public class AcceptanceReport extends AppCompatActivity implements AdapterView.OnItemSelectedListener, Serializable, View.OnClickListener {
     // truck Report
 
-    private TextView textView, count, totalCubic, supplier, total;
+    private TextView textView, count, totalCubic, totalCubicReg, supplier, total;
     private static LinearLayout linearLayout;
     private EditText from, to, truckEditText, acceptorEditText, ttnEditText;
     private Button arrow, export, exportToExcel;
@@ -102,7 +102,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
     public static String truckNoBeforeUpdate2 = "", date_from = "", date_to = "";
     public static final String EDIT_LIST2 = "EDIT_LIST";
     public static final String EDIT_RAW2 = "EDIT_RAW";
-    public double sum = 0;
+    public double sum = 0, sumRej = 0;
     private Context previewContext, previewLinearContext;
     private String previewSerial;
     NewRowInfo newRowInfoPic;
@@ -149,6 +149,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
         export = findViewById(R.id.acceptance_report_export);
         exportToExcel = findViewById(R.id.acceptance_report_export_Excel);
         totalCubic = findViewById(R.id.truck_report_cubic);
+        totalCubicReg = findViewById(R.id.truck_report_cubic_rej);
         supplier = findViewById(R.id.truck_report_supplier);
         reportTotalReject=findViewById(R.id.Report_total_rejected);
         reportTotalBundle=findViewById(R.id.Report_total_bundles);
@@ -501,6 +502,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
 //        Log.e("AcceptanceReport", "filter/" + loc + "/" + truckString + "/" + acceptorString + "/" + ttnString);
         try {
             sum = 0;
+            sumRej = 0;
             filtered = new ArrayList<>();
             for (int k = 0; k < master.size(); k++)
                 if ((formatDate(master.get(k).getDate()).after(formatDate(fromDate)) || formatDate(master.get(k).getDate()).equals(formatDate(fromDate))) &&
@@ -510,6 +512,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
                             if (acceptorString.equals("") || master.get(k).getAcceptedPersonName().toLowerCase().contains(acceptorString.toLowerCase()))
                                 if (ttnString.equals("") || master.get(k).getTtnNo().toLowerCase().contains(ttnString.toLowerCase())) {
                                     sum += master.get(k).getCubic();
+                                    sumRej += master.get(k).getCubicRej();
                                     filtered.add(master.get(k));
                                 }
 
@@ -517,6 +520,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
             adapter2 = new AcceptanceReportAdapter(AcceptanceReport.this, filtered, details);
             list.setAdapter(adapter2);
             totalCubic.setText("" + String.format("%.3f", sum));
+            totalCubicReg.setText("" + String.format("%.3f", sumRej));
             getRejectNetBundle();
 
 
@@ -830,11 +834,13 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
 
         rowsCount = master.size();
         count.setText("" + rowsCount);
-        if (master.size() > 0)
+        if (master.size() > 0) {
             totalCubic.setText("" + master.get(0).getTotalCubic());
-        else
+            totalCubicReg.setText("" + master.get(0).getTotalCubicRej());
+        }else {
             totalCubic.setText("0.000");
-
+            totalCubicReg.setText("0.000");
+        }
         fillSpinnerAdapter();
         getRejectNetBundle();
         adapter2 = new AcceptanceReportAdapter(AcceptanceReport.this, master, details);
@@ -935,10 +941,13 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
 
             if (result != null) {
                 count.setText("" + rowsCount);
-                if (master.size() > 0)
+                if (master.size() > 0) {
                     totalCubic.setText("" + master.get(0).getTotalCubic());
-                else
+                    totalCubicReg.setText("" + master.get(0).getTotalCubicRej());
+                } else {
                     totalCubic.setText("0.000");
+                    totalCubicReg.setText("0.000");
+                }
 
                 fillSpinnerAdapter();
                 adapter2 = new AcceptanceReportAdapter(AcceptanceReport.this, master, details);

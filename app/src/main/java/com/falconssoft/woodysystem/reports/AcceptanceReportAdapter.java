@@ -54,7 +54,7 @@ public class AcceptanceReportAdapter extends BaseAdapter {
     private class ViewHolder {
         ImageView pic, image;
         Button preview;
-        TextView truckNo, acceptor, ttn, netBundle, date, noOfBundles, rejected, cubic, serial;
+        TextView truckNo, acceptor, ttn, netBundle, date, noOfBundles, rejected, cubic, cubicRej, serial;
         ImageView edit;
     }
 
@@ -75,6 +75,7 @@ public class AcceptanceReportAdapter extends BaseAdapter {
         holder.rejected = view.findViewById(R.id.rejected_pieces);
         holder.edit = view.findViewById(R.id.acceptanceReport_edit);
         holder.cubic = view.findViewById(R.id.truck_report_cubic);
+        holder.cubicRej = view.findViewById(R.id.truck_report_cubic_rej);
         holder.serial = view.findViewById(R.id.truck_report_serial);
         holder.image = view.findViewById(R.id.truckReport_image);
 
@@ -87,6 +88,7 @@ public class AcceptanceReportAdapter extends BaseAdapter {
         holder.noOfBundles.setText("" + itemsList.get(i).getNetBundles());
         holder.rejected.setText(itemsList.get(i).getTotalRejectedNo());
         holder.cubic.setText("" + itemsList.get(i).getCubic());
+        holder.cubicRej.setText("" + itemsList.get(i).getCubicRej());
         AcceptanceReport obj = new AcceptanceReport();
 
         holder.edit.setOnClickListener(new View.OnClickListener() {
