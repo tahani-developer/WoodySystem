@@ -1,10 +1,12 @@
 package com.falconssoft.woodysystem.stage_one;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ClipData;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,8 +14,10 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -25,6 +29,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -59,6 +64,7 @@ import com.creativityapps.gmailbackgroundlibrary.BackgroundMail;
 import com.falconssoft.woodysystem.DatabaseHandler;
 import com.falconssoft.woodysystem.ExportToExcel;
 import com.falconssoft.woodysystem.ExportToPDF;
+import com.falconssoft.woodysystem.MainActivity;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.WoodPresenter;
 import com.falconssoft.woodysystem.models.NewRowInfo;
@@ -67,6 +73,7 @@ import com.falconssoft.woodysystem.models.SupplierInfo;
 import com.falconssoft.woodysystem.reports.AcceptanceInfoReport;
 import com.falconssoft.woodysystem.reports.AcceptanceReport;
 import com.falconssoft.woodysystem.reports.BundlesReport;
+import com.google.gson.Gson;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -112,7 +119,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     private Settings generalSettings;
     private WoodPresenter presenter;
     private ImageView image1, image2, image3, image4, image5, image6, image7, image8, image9, image10, image11, image12, image13, image14, image15;
-    private TextView addNewSupplier, searchSupplier, addButton, acceptRowButton, mainInfoButton, acceptanceDate, addPicture, totalRejected, totalBundles, total;
+    private TextView addNewSupplier, searchSupplier, addButton, acceptRowButton, mainInfoButton, acceptanceDate, addPicture, totalRejected, totalBundles, total, addImageGalary;
     private EditText thickness, width, length, noOfPieces, noOfBundles, noOfRejected, truckNo, acceptor, ttnNo;
     private Spinner gradeSpinner, acceptanceLocation;
     private ArrayList<String> gradeList = new ArrayList<>();
@@ -123,12 +130,14 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     private String gradeText = "KD", locationText = "Kalinovka";
     public static String supplierName = "";
     private LinearLayout headerLayout, acceptRowLayout;
-    private Button doneAcceptRow,excelAcceptRow,pdfAcceptRow;
+    private Button doneAcceptRow, excelAcceptRow, pdfAcceptRow, clear, sendEmailB;
     private TableLayout tableLayout, headerTableLayout;
     private TableRow tableRow;
     private Dialog searchDialog;
     NewRowInfo newRowInfoMaster;
     List<Bitmap> imageBitmapList;
+    NewRowInfo newRowInfoPic;
+
 
     private DatabaseHandler databaseHandler;
     private List<SupplierInfo> suppliers;
@@ -149,35 +158,38 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     private static boolean isCamera = false;
     private int edieFlag = 0;
     private int netBundlesString = 0, netRejectedString = 0;
-    private ProgressDialog progressDialog;
+    private ProgressDialog progressDialog, proTTn;
     public static String truckNoBeforeUpdate = "";
     public static String serialBeforeUpdate = "";
 
     private NewRowInfo oldNewRowInfo, updatedNewRowInfo;
     private String oldTruck = "", editSerial = "";// for edit
     //    Bitmap serverPicBitmap;
-    private String mCameraFileName, path,pathImage;
+    private String mCameraFileName, path, pathImage;
     //    ImageView imageView;
     private Uri image;
     private Process process;
     private Bitmap bitmap;
     private String thicknessLocal, widthLocal, lengthLocal, noOfPiecesLocal, noOfRejectedLocal, noOfBundlesLocal;
     private Uri imageUri;
-    int id=0;
-    int update=0,index=0;
+    int id = 0;
+    int update = 0, index = 0;
     TableRow tableRowEdit;
-    TextView supplierTextTemp=null;
+    TextView supplierTextTemp = null, getTtNo;
     String myFormat;
     private SimpleDateFormat sdf;
-
+    Dialog passwordDialog;
+    int PICK_IMAGE_MULTIPLE = 1;
+    List<NewRowInfo> listOfEmail = new ArrayList<>();
+    int flagIsGet = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try {
             setContentView(R.layout.activity_add_new_raw);
-        }catch (Exception e){
-            Log.e("exceptaionMaster","112");
+        } catch (Exception e) {
+            Log.e("exceptaionMaster", "112");
         }
 
         databaseHandler = new DatabaseHandler(AddNewRaw.this);
@@ -189,11 +201,12 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         this.arraylist = new ArrayList<>();
 //        this.arraylist.addAll(this.supplierInfoList);
         myFormat = "dd/MM/yyyy";
-        newRowInfoMaster=new NewRowInfo();
-        imageBitmapList=new ArrayList<>();
+        newRowInfoMaster = new NewRowInfo();
+        imageBitmapList = new ArrayList<>();
         sdf = new SimpleDateFormat(myFormat, Locale.US);
         coordinatorLayout = findViewById(R.id.addNewRow_coordinator);
         addNewSupplier = findViewById(R.id.addNewRaw_add_supplier);
+        addImageGalary = findViewById(R.id.addNewRaw_get_photo);
         searchSupplier = findViewById(R.id.addNewRaw_search_supplier);
         thickness = findViewById(R.id.addNewRaw_thickness);
         width = findViewById(R.id.addNewRaw_width);
@@ -217,8 +230,8 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         totalRejected = findViewById(R.id.addNewRaw_total_rejected);
         totalBundles = findViewById(R.id.addNewRaw_total_bundles);
         doneAcceptRow = findViewById(R.id.addNewRaw_acceptRow_done);
-        excelAcceptRow=findViewById(R.id.addNewRaw_acceptRow_excel);
-        pdfAcceptRow=findViewById(R.id.addNewRaw_acceptRow_pdf);
+        excelAcceptRow = findViewById(R.id.addNewRaw_acceptRow_excel);
+        pdfAcceptRow = findViewById(R.id.addNewRaw_acceptRow_pdf);
         addPicture = findViewById(R.id.addNewRaw_add_photo);
         image1 = findViewById(R.id.addNewRaw_image1);
         image2 = findViewById(R.id.addNewRaw_image2);
@@ -236,6 +249,10 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         image13 = findViewById(R.id.addNewRaw_image13);
         image14 = findViewById(R.id.addNewRaw_image14);
         image15 = findViewById(R.id.addNewRaw_image15);
+        getTtNo = findViewById(R.id.addNewRaw_get_data);
+        clear = findViewById(R.id.addNewRaw_acceptRow_clear);
+        sendEmailB = findViewById(R.id.addNewRaw_acceptRow_Email);
+
 
         thickness.requestFocus();
         headerLayout.setVisibility(View.VISIBLE);
@@ -249,14 +266,14 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         image7.setVisibility(View.INVISIBLE);
         image8.setVisibility(View.INVISIBLE);
 
-        image9 .setVisibility(View.INVISIBLE);
+        image9.setVisibility(View.INVISIBLE);
         image10.setVisibility(View.INVISIBLE);
         image11.setVisibility(View.INVISIBLE);
         image12.setVisibility(View.INVISIBLE);
         image13.setVisibility(View.INVISIBLE);
-        image14 .setVisibility(View.INVISIBLE);
+        image14.setVisibility(View.INVISIBLE);
         image15.setVisibility(View.INVISIBLE);
-
+        acceptanceDate.setText(sdf.format(myCalendar.getTime()));
         gradeList.clear();
         gradeList.add("KD");
         gradeList.add("Fresh");
@@ -285,12 +302,14 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
             }
         });
 
+        clear.setOnClickListener(this);
         addPicture.setOnClickListener(this);
         mainInfoButton.setOnClickListener(this);
         doneAcceptRow.setOnClickListener(this);
         excelAcceptRow.setOnClickListener(this);
         pdfAcceptRow.setOnClickListener(this);
         acceptRowButton.setOnClickListener(this);
+        addImageGalary.setOnClickListener(this);
         addNewSupplier.setOnClickListener(this);
         searchSupplier.setOnClickListener(this);
         addButton.setOnClickListener(this);
@@ -304,14 +323,15 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         image7.setOnClickListener(this);
         image8.setOnClickListener(this);
 
-        image9 .setOnClickListener(this);
+        image9.setOnClickListener(this);
         image10.setOnClickListener(this);
         image11.setOnClickListener(this);
         image12.setOnClickListener(this);
         image13.setOnClickListener(this);
-        image14 .setOnClickListener(this);
+        image14.setOnClickListener(this);
         image15.setOnClickListener(this);
-
+        getTtNo.setOnClickListener(this);
+        sendEmailB.setOnClickListener(this);
 
         imagesList.add(0, null);
         imagesList.add(1, null);
@@ -460,7 +480,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
             supplierName = editList.get(i).getSupplierName();
             fillTableRow(tableRow, "" + (int) editList.get(i).getThickness(), "" + (int) editList.get(i).getWidth()
                     , "" + (int) editList.get(i).getLength(), "" + (int) editList.get(i).getNoOfPieces()
-                    , "" + (int) editList.get(i).getNoOfRejected(), "" + (int) editList.get(i).getNoOfBundles(),gradeText);
+                    , "" + (int) editList.get(i).getNoOfRejected(), "" + (int) editList.get(i).getNoOfBundles(), gradeText);
             tableLayout.addView(tableRow);
 
             int finalI = i;
@@ -529,7 +549,12 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                 thickness.requestFocus();
                 break;
             case R.id.addNewRaw_acceptRow_done:
-                doneButtonMethod();
+                if (flagIsGet == 0) {
+                    doneButtonMethod();
+                } else {
+                    Toast.makeText(this, "This For Email Can Not Edit", Toast.LENGTH_SHORT).show();
+
+                }
                 break;
             case R.id.addNewRaw_acceptance_date:
                 new DatePickerDialog(AddNewRaw.this, openDatePickerDialog(0), myCalendar
@@ -537,14 +562,19 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
                 break;
             case R.id.addNewRaw_acceptRaw_button:
-               // headerLayout.setVisibility(View.VISIBLE);
+                // headerLayout.setVisibility(View.VISIBLE);
                 rejectAdd();
                 break;
             case R.id.addNewRaw_add_button:
 //                if(update==0){
 
-                    addButtonMethod(-1,0);
+                if (flagIsGet == 0) {
+                    addButtonMethod(-1, 0);
                     rejectAdd();
+                } else {
+                    Toast.makeText(this, "This For Email Can Not Edit", Toast.LENGTH_SHORT).show();
+
+                }
 
 //                }else if(update==1){
 //                    updateFlag();
@@ -552,13 +582,17 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 //                }
                 break;
             case R.id.addNewRaw_add_photo:
-                openCamera();
+                if (flagIsGet == 0) {
+                    openCamera();
+                } else {
+                    Toast.makeText(this, "This For Email Can Not Edit", Toast.LENGTH_SHORT).show();
+                }
 //                cameraIntent();
                 break;
             case R.id.addNewRaw_add_supplier:
-                Intent intent = new Intent(AddNewRaw.this, AddNewSupplier.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+
+                showPasswordDialog();
+
                 break;
             case R.id.addNewRaw_search_supplier:
                 suppliers.clear();
@@ -576,7 +610,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
                 recyclerView = searchDialog.findViewById(R.id.search_supplier_recyclerView);
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
-                adapter = new SuppliersAdapter(this, suppliers, null, null,0);
+                adapter = new SuppliersAdapter(this, suppliers, null, null, 0);
                 recyclerView.setAdapter(adapter);
 
                 searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -694,8 +728,8 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                 openCamera();
                 break;
             case R.id.addNewRaw_acceptRow_pdf:
-                if(!truckNo.getText().toString().equals("")) {
-                    if(!acceptor.getText().toString().equals("")) {
+                if (!truckNo.getText().toString().equals("")) {
+                    if (!acceptor.getText().toString().equals("")) {
                         if (!ttnNo.getText().toString().equals("")) {
                             if (!acceptanceDate.getText().toString().equals("")) {
                                 String truckNoLocal = truckNo.getText().toString();
@@ -712,26 +746,26 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                                 newRowInfoMaster.setTotalRejectedNo("" + netRejectedString);
                                 try {
                                     createPdf();
-                                }catch (Exception e){
-                                    Log.e("error_711","createPdf");
+                                } catch (Exception e) {
+                                    Log.e("error_711", "createPdf");
                                 }
-                            }else {
+                            } else {
                                 acceptanceDate.setError("Requierd!");
                             }
-                        }else {
-                                ttnNo.setError("Requierd!");
-                            }
-                    }else {
-                                acceptor.setError("Requierd!");
-                            }
-                }else {
-                                truckNo.setError("Requierd!");
-                            }
+                        } else {
+                            ttnNo.setError("Requierd!");
+                        }
+                    } else {
+                        acceptor.setError("Requierd!");
+                    }
+                } else {
+                    truckNo.setError("Requierd!");
+                }
                 break;
             case R.id.addNewRaw_acceptRow_excel:
 
-                if(!truckNo.getText().toString().equals("")) {
-                    if(!acceptor.getText().toString().equals("")) {
+                if (!truckNo.getText().toString().equals("")) {
+                    if (!acceptor.getText().toString().equals("")) {
                         if (!ttnNo.getText().toString().equals("")) {
                             if (!acceptanceDate.getText().toString().equals("")) {
                                 String truckNoLocal = truckNo.getText().toString();
@@ -748,41 +782,208 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                                 newRowInfoMaster.setTotalRejectedNo("" + netRejectedString);
                                 try {
                                     createExcel();
-                                }catch (Exception e){
-                                    Log.e("error_711","createExcel");
+                                } catch (Exception e) {
+                                    Log.e("error_711", "createExcel");
                                 }
-                            }else {
+                            } else {
                                 acceptanceDate.setError("Requierd!");
                             }
-                        }else {
+                        } else {
                             ttnNo.setError("Requierd!");
                         }
-                    }else {
+                    } else {
                         acceptor.setError("Requierd!");
                     }
-                }else {
+                } else {
                     truckNo.setError("Requierd!");
                 }
+
+                break;
+            case R.id.addNewRaw_get_photo:
+                if (flagIsGet == 0) {
+                    getPicFromGallery();
+                } else {
+                    Toast.makeText(this, "This For Email Can Not Edit", Toast.LENGTH_SHORT).show();
+
+                }
+                break;
+            case R.id.addNewRaw_get_data:
+//                if(!ttnNo.getText().toString().equals("")) {
+
+                AlertDialog.Builder builderGet = new AlertDialog.Builder(AddNewRaw.this);
+                builderGet.setMessage("are you sure ,you want delete every thing?");
+                builderGet.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+//                            tableLayout.removeAllViews();
+
+                        new JSONTaskTTN().execute();
+                    }
+                });
+                builderGet.show();
+
+//                }else {
+//                    ttnNo.setError("Requierd !");
+//                }
+                break;
+            case R.id.addNewRaw_acceptRow_clear:
+
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(AddNewRaw.this);
+                builder.setMessage("Are you want Clear all ?");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+//                            tableLayout.removeAllViews();
+
+                        clear();
+                    }
+                });
+                builder.show();
+
+                break;
+            case R.id.addNewRaw_acceptRow_Email:
+
+                if (listOfEmail.size() != 0) {
+                    ExportToPDF obj = new ExportToPDF(AddNewRaw.this);
+                    obj.exportTruckAcceptanceSendEmail(listOfEmail, sdf.format(myCalendar.getTime()));
+                    if (newRowInfoPic != null) {
+                        fillImageBitmap(newRowInfoPic);
+                    }
+
+                    sendEmailDialog();
+                } else {
+                    Toast.makeText(this, "no Data ", Toast.LENGTH_SHORT).show();
+                }
+
 
                 break;
         }
 
     }
 
-    void createPdf (){
+    public void clear() {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(AddNewRaw.this);
+//        builder.setMessage("Are you want Clear all ?");
+//        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+////                            tableLayout.removeAllViews();
+
+        flagIsGet = 0;
+        listOfEmail.clear();
+        tableLayout.removeAllViews();
+        headerTableLayout.removeAllViews();
+        ttnNo.setText("");
+        try {
+            newRowInfoPic.setPic11(null);
+            newRowInfoPic.setPic22(null);
+            newRowInfoPic.setPic33(null);
+            newRowInfoPic.setPic44(null);
+            newRowInfoPic.setPic55(null);
+            newRowInfoPic.setPic66(null);
+            newRowInfoPic.setPic77(null);
+            newRowInfoPic.setPic88(null);
+            newRowInfoPic.setPic99(null);
+            newRowInfoPic.setPic1010(null);
+            newRowInfoPic.setPic1111(null);
+            newRowInfoPic.setPic1212(null);
+            newRowInfoPic.setPic1313(null);
+            newRowInfoPic.setPic1414(null);
+            newRowInfoPic.setPic1515(null);
+        }catch (Exception e)
+        {}
+
+        image1.setVisibility(View.INVISIBLE);
+        image2.setVisibility(View.INVISIBLE);
+        image3.setVisibility(View.INVISIBLE);
+        image4.setVisibility(View.INVISIBLE);
+        image5.setVisibility(View.INVISIBLE);
+        image6.setVisibility(View.INVISIBLE);
+        image7.setVisibility(View.INVISIBLE);
+        image8.setVisibility(View.INVISIBLE);
+
+        image9.setVisibility(View.INVISIBLE);
+        image10.setVisibility(View.INVISIBLE);
+        image11.setVisibility(View.INVISIBLE);
+        image12.setVisibility(View.INVISIBLE);
+        image13.setVisibility(View.INVISIBLE);
+        image14.setVisibility(View.INVISIBLE);
+        image15.setVisibility(View.INVISIBLE);
+
+
+        try {
+            fillImagesFromEmail();
+        }catch (Exception e){
+
+        }
+        rejectAdd();
+//            }
+//        });
+//        builder.show();
+
+    }
+
+    private void getPicFromGallery() {
+
+        try {
+            Intent intent = new Intent();
+
+            // setting type to select to be image
+            intent.setType("image/*");
+
+            // allowing multiple image to be selected
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_MULTIPLE);
+        } catch (Exception e) {
+            Log.e("ExcIntentG", "Gallery");
+        }
+
+    }
+
+    void showPasswordDialog() {
+        passwordDialog = new Dialog(this);
+        passwordDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        passwordDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        passwordDialog.setContentView(R.layout.password_dialog);
+
+        TextInputEditText password = passwordDialog.findViewById(R.id.password_dialog_password);
+        TextView done = passwordDialog.findViewById(R.id.password_dialog_done);
+
+        done.setText(getResources().getString(R.string.done));
+
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (password.getText().toString().equals("3030111")) {
+                    passwordDialog.dismiss();
+                    Intent intent = new Intent(AddNewRaw.this, AddNewSupplier.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                } else
+                    Toast.makeText(AddNewRaw.this, "Password is not correct!", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        passwordDialog.show();
+    }
+
+    void createPdf() {
         if (newRowList.size() != 0) {
             ExportToPDF obj = new ExportToPDF(AddNewRaw.this);
-            obj.exportTruckAcceptance(newRowList,newRowInfoMaster, sdf.format(myCalendar.getTime()));
-        }else {
+            obj.exportTruckAcceptance(newRowList, newRowInfoMaster, sdf.format(myCalendar.getTime()));
+        } else {
             Toast.makeText(this, "no Data ", Toast.LENGTH_SHORT).show();
         }
     }
 
-    void createExcel(){
+    void createExcel() {
 //        try {
-            if (newRowList.size() != 0) {
+        if (newRowList.size() != 0) {
             ExportToExcel.getInstance().createExcelFile(AddNewRaw.this, "Acceptance_Report_2.xls", 8, (List<?>) newRowInfoMaster, null);
-       }else {
+        } else {
             Toast.makeText(this, "no Data ", Toast.LENGTH_SHORT).show();
         }
 //        }catch (Exception e){
@@ -790,7 +991,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 //        }
     }
 
-    void rejectAdd(){
+    void rejectAdd() {
         acceptRowButton.setBackgroundResource(R.drawable.frame_shape_3);
         mainInfoButton.setBackgroundResource(R.drawable.frame_shape_2);
 
@@ -802,62 +1003,70 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         netRejectedString = 0;
         netBundlesString = 0;
         Log.e("fromedit11", "" + editList.size());
-        if (edieFlag == 11)
-            for (int n = 0; n < editList.size(); n++) {
-                netRejectedString += editList.get(n).getNoOfRejected();
-                netBundlesString += editList.get(n).getNoOfBundles();
+        if (flagIsGet == 0) {
+            if (edieFlag == 11)
+                for (int n = 0; n < editList.size(); n++) {
+                    netRejectedString += editList.get(n).getNoOfRejected();
+                    netBundlesString += editList.get(n).getNoOfBundles();
+                }
+            else if (edieFlag == 10) ;
+            else
+                for (int n = 0; n < newRowList.size(); n++) {
+                    netRejectedString += newRowList.get(n).getNoOfRejected();
+                    netBundlesString += newRowList.get(n).getNoOfBundles();
+                }
+        } else {
+            for (int n = 0; n < listOfEmail.size(); n++) {
+                netRejectedString += listOfEmail.get(n).getNoOfRejected();
+                netBundlesString += listOfEmail.get(n).getNoOfBundles();
             }
-        else if (edieFlag == 10) ;
-        else
-            for (int n = 0; n < newRowList.size(); n++) {
-                netRejectedString += newRowList.get(n).getNoOfRejected();
-                netBundlesString += newRowList.get(n).getNoOfBundles();
-            }
+        }
 
         totalRejected.setText("" + netRejectedString);
         totalBundles.setText("" + netBundlesString);
     }
 
-    void updateFlag(NewRowInfo newRowInfo,int index){
-        Log.e("aaaa1", " "+newRowList.size()+"     "+index);
+    void updateFlag(NewRowInfo newRowInfo, int index) {
+        Log.e("aaaa1", " " + newRowList.size() + "     " + index);
         newRowList.remove(index);
         tableLayout.removeViewAt(index);
-        newRowList.add(index,newRowInfo);
+        newRowList.add(index, newRowInfo);
         tableRow = new TableRow(this);
-        fillTableRow(tableRow, ""+newRowInfo.getThickness(), ""+newRowInfo.getWidth(), ""+newRowInfo.getLength()
-                , ""+newRowInfo.getNoOfPieces(), ""+newRowInfo.getNoOfRejected(), ""+newRowInfo.getNoOfBundles(),newRowInfo.getGrade());
-            tableLayout.addView(tableRow,index);
+        fillTableRow(tableRow, "" + newRowInfo.getThickness(), "" + newRowInfo.getWidth(), "" + newRowInfo.getLength()
+                , "" + newRowInfo.getNoOfPieces(), "" + newRowInfo.getNoOfRejected(), "" + newRowInfo.getNoOfBundles(), newRowInfo.getGrade());
+        tableLayout.addView(tableRow, index);
 
 
-        for(int i=0;i<tableLayout.getChildCount();i++){
+        for (int i = 0; i < tableLayout.getChildCount(); i++) {
 
-            TableRow tableRow= (TableRow) tableLayout.getChildAt(i);
-            ImageView imageViewEdit= (ImageView) tableRow.getChildAt(8);
-            ImageView imageViewDelete= (ImageView) tableRow.getChildAt(9);
+            TableRow tableRow = (TableRow) tableLayout.getChildAt(i);
+            ImageView imageViewEdit = (ImageView) tableRow.getChildAt(8);
+            ImageView imageViewDelete = (ImageView) tableRow.getChildAt(9);
             imageViewEdit.setTag(i);
             imageViewDelete.setTag(i);
             tableRow.setTag(i);
         }
 
-        Log.e("aaaa", " "+newRowList.size());
+        Log.e("aaaa", " " + newRowList.size());
 
 
     }
-    void deleteFlag(){
+
+    void deleteFlag() {
         newRowList.remove(index);
         tableLayout.removeViewAt(index);
 
-        for(int i=0;i<tableLayout.getChildCount();i++){
+        for (int i = 0; i < tableLayout.getChildCount(); i++) {
 
-            TableRow tableRow= (TableRow) tableLayout.getChildAt(i);
-            ImageView imageViewEdit= (ImageView) tableRow.getChildAt(8);
-            ImageView imageViewDelete= (ImageView) tableRow.getChildAt(9);
+            TableRow tableRow = (TableRow) tableLayout.getChildAt(i);
+            ImageView imageViewEdit = (ImageView) tableRow.getChildAt(8);
+            ImageView imageViewDelete = (ImageView) tableRow.getChildAt(9);
             imageViewEdit.setTag(i);
             imageViewDelete.setTag(i);
             tableRow.setTag(i);
         }
 
-        Log.e("aaaa", " "+newRowList.size());
+        Log.e("aaaa", " " + newRowList.size());
 
 
     }
@@ -874,11 +1083,11 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                 }
             }
         }
-        adapter = new SuppliersAdapter(this, arraylist, null, null,0);
+        adapter = new SuppliersAdapter(this, arraylist, null, null, 0);
         recyclerView.setAdapter(adapter);
     }
 
-    void addButtonMethod(int indexs,int flag) {
+    void addButtonMethod(int indexs, int flag) {
         thicknessLocal = thickness.getText().toString();
         widthLocal = width.getText().toString();
         lengthLocal = length.getText().toString();
@@ -892,7 +1101,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                 if (!TextUtils.isEmpty(widthLocal) && (!checkValidData(widthLocal)))
                     if (!TextUtils.isEmpty(lengthLocal) && (!checkValidData(lengthLocal)))
                         if (!TextUtils.isEmpty(noOfPiecesLocal) && (!checkValidData(noOfPiecesLocal)))
-                            if (!TextUtils.isEmpty(noOfRejectedLocal) && (!checkValidData(noOfRejectedLocal)))
+                            if (!TextUtils.isEmpty(noOfRejectedLocal) && (!noOfRejectedLocal.equals(".")))
                                 if (!TextUtils.isEmpty(noOfBundlesLocal) && (!checkValidData(noOfBundlesLocal))) {
 
                                     thickness.setError(null);
@@ -939,7 +1148,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                                         rowInfo.setSerial(editSerial);
                                         Log.e("reportTwo", rowInfo.getSerial());
 
-                                        fillTableRow(tableRow, thicknessLocal, widthLocal, lengthLocal, noOfPiecesLocal, noOfRejectedLocal, noOfBundlesLocal,gradeText);
+                                        fillTableRow(tableRow, thicknessLocal, widthLocal, lengthLocal, noOfPiecesLocal, noOfRejectedLocal, noOfBundlesLocal, gradeText);
                                         tableLayout.addView(tableRow);
                                         supplierName = "";
                                     } else if (edieFlag == 11 && tableLayout.getChildCount() > 0) { //truck Report
@@ -969,10 +1178,10 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 //                                            Toast.makeText(this, "Please choose the raw first!", Toast.LENGTH_SHORT).show();
 //                                        }
                                     } else {
-                                        fillTableRow(tableRow, thicknessLocal, widthLocal, lengthLocal, noOfPiecesLocal, noOfRejectedLocal, noOfBundlesLocal,gradeText);
-                                        if(flag==1) {
-                                            tableLayout.addView(tableRow,indexs);
-                                        }else {
+                                        fillTableRow(tableRow, thicknessLocal, widthLocal, lengthLocal, noOfPiecesLocal, noOfRejectedLocal, noOfBundlesLocal, gradeText);
+                                        if (flag == 1) {
+                                            tableLayout.addView(tableRow, indexs);
+                                        } else {
                                             tableLayout.addView(tableRow);
                                         }
                                     }
@@ -1011,208 +1220,212 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
             searchSupplier.setError("Please Select First!");
         }
     }
+
     void idInAcceptanceNew() {
         id = newRowList.size();
         tableRow.setTag(id);
     }
-    void editRowInAcceptanceNew(){
+
+    void editRowInAcceptanceNew() {
         tableRow.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
 
-                update=1;
-                tableRowEdit= (TableRow) v;
-                index=(Integer) v.getTag();
+                update = 1;
+                tableRowEdit = (TableRow) v;
+                index = (Integer) v.getTag();
                 fillDialog(newRowList.get((Integer) v.getTag()));
-                Log.e("acceptance",""+v.getTag());
+                Log.e("acceptance", "" + v.getTag());
 
                 return false;
             }
         });
 
 
-
     }
 
-    void fillDialog (NewRowInfo newRowInfo){
+    void fillDialog(NewRowInfo newRowInfo) {
 
-        thickness.setText(""+(int)newRowInfo.getThickness());
-        width.setText(""+(int)newRowInfo.getWidth());
-        length.setText(""+(int)newRowInfo.getLength());
-        noOfPieces.setText(""+(int)newRowInfo.getNoOfPieces());
-        noOfRejected.setText(""+(int)newRowInfo.getNoOfRejected());
-        noOfBundles.setText(""+(int)newRowInfo.getNoOfBundles());
+        thickness.setText("" + (int) newRowInfo.getThickness());
+        width.setText("" + (int) newRowInfo.getWidth());
+        length.setText("" + (int) newRowInfo.getLength());
+        noOfPieces.setText("" + (int) newRowInfo.getNoOfPieces());
+        noOfRejected.setText("" + (int) newRowInfo.getNoOfRejected());
+        noOfBundles.setText("" + (int) newRowInfo.getNoOfBundles());
         searchSupplier.setText(newRowInfo.getSupplierName());
-        supplierName=newRowInfo.getSupplierName();
+        supplierName = newRowInfo.getSupplierName();
         try {
             gradeSpinner.setSelection(getGrade(newRowInfo.getGrade()));
-        }catch (Exception e){
-            Log.e("grade","Ex:Grade Error");
+        } catch (Exception e) {
+            Log.e("grade", "Ex:Grade Error");
         }
 
         try {
 
-        }catch (Exception e){
-            Log.e("grade","Ex:Grade Error");
+        } catch (Exception e) {
+            Log.e("grade", "Ex:Grade Error");
         }
 
     }
 
-    void EditDialog(NewRowInfo newRowInfo,int index){
-        final Dialog dialog = new Dialog(AddNewRaw.this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(true);
-        dialog.setContentView(R.layout.edite_dialog);
+    void EditDialog(NewRowInfo newRowInfo, int index) {
+        if (flagIsGet == 0) {
+            final Dialog dialog = new Dialog(AddNewRaw.this);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setCancelable(true);
+            dialog.setContentView(R.layout.edite_dialog);
 
-        TextView addNewRaw_search_supplier_edit;
-        Spinner addNewRaw_grade_edit;
-        Button editButton;
+            TextView addNewRaw_search_supplier_edit;
+            Spinner addNewRaw_grade_edit;
+            Button editButton;
 
-        EditText addNewRaw_thickness_edit,addNewRaw_width_edit,addNewRaw_length_edit,addNewRaw_no_of_pieces_edit,addNewRaw_no_of_rejected_edit,
-        addNewRaw_no_of_bundles_edit;
+            EditText addNewRaw_thickness_edit, addNewRaw_width_edit, addNewRaw_length_edit, addNewRaw_no_of_pieces_edit, addNewRaw_no_of_rejected_edit,
+                    addNewRaw_no_of_bundles_edit;
 
-        addNewRaw_thickness_edit=dialog.findViewById(R.id.addNewRaw_thickness_edit);
-        addNewRaw_width_edit=dialog.findViewById(R.id.addNewRaw_width_edit);
-        addNewRaw_length_edit=dialog.findViewById(R.id.addNewRaw_length_edit);
+            addNewRaw_thickness_edit = dialog.findViewById(R.id.addNewRaw_thickness_edit);
+            addNewRaw_width_edit = dialog.findViewById(R.id.addNewRaw_width_edit);
+            addNewRaw_length_edit = dialog.findViewById(R.id.addNewRaw_length_edit);
 
-        addNewRaw_no_of_pieces_edit=dialog.findViewById(R.id.addNewRaw_no_of_pieces_edit);
+            addNewRaw_no_of_pieces_edit = dialog.findViewById(R.id.addNewRaw_no_of_pieces_edit);
 
-        addNewRaw_no_of_rejected_edit=dialog.findViewById(R.id.addNewRaw_no_of_rejected_edit);
-        addNewRaw_no_of_bundles_edit=dialog.findViewById(R.id.addNewRaw_no_of_bundles_edit);
-
-
-        addNewRaw_grade_edit=dialog.findViewById(R.id.addNewRaw_grade_edit);
-        editButton=dialog.findViewById(R.id.editButton);
+            addNewRaw_no_of_rejected_edit = dialog.findViewById(R.id.addNewRaw_no_of_rejected_edit);
+            addNewRaw_no_of_bundles_edit = dialog.findViewById(R.id.addNewRaw_no_of_bundles_edit);
 
 
+            addNewRaw_grade_edit = dialog.findViewById(R.id.addNewRaw_grade_edit);
+            editButton = dialog.findViewById(R.id.editButton);
 
-        addNewRaw_search_supplier_edit=dialog.findViewById(R.id.addNewRaw_search_supplier_edit);
 
-        supplierTextTemp=addNewRaw_search_supplier_edit;
-        final String[] gradeTextEdit = {"KD"};
+            addNewRaw_search_supplier_edit = dialog.findViewById(R.id.addNewRaw_search_supplier_edit);
 
-       ArrayAdapter gradeAdapter = new ArrayAdapter<String>(this, R.layout.spinner_layout, gradeList);
-        gradeAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
-        addNewRaw_grade_edit.setAdapter(gradeAdapter);
-        addNewRaw_grade_edit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            supplierTextTemp = addNewRaw_search_supplier_edit;
+            final String[] gradeTextEdit = {"KD"};
 
-                gradeTextEdit[0] = parent.getItemAtPosition(position).toString();
+            ArrayAdapter gradeAdapter = new ArrayAdapter<String>(this, R.layout.spinner_layout, gradeList);
+            gradeAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
+            addNewRaw_grade_edit.setAdapter(gradeAdapter);
+            addNewRaw_grade_edit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
+                    gradeTextEdit[0] = parent.getItemAtPosition(position).toString();
+
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+
+            addNewRaw_thickness_edit.setText("" + (int) newRowInfo.getThickness());
+            addNewRaw_width_edit.setText("" + (int) newRowInfo.getWidth());
+            addNewRaw_length_edit.setText("" + (int) newRowInfo.getLength());
+            addNewRaw_no_of_pieces_edit.setText("" + (int) newRowInfo.getNoOfPieces());
+            addNewRaw_no_of_rejected_edit.setText("" + (int) newRowInfo.getNoOfRejected());
+            addNewRaw_no_of_bundles_edit.setText("" + (int) newRowInfo.getNoOfBundles());
+            addNewRaw_search_supplier_edit.setText(newRowInfo.getSupplierName());
+
+            addNewRaw_search_supplier_edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    supplierDialog();
+                }
+            });
+
+            try {
+                addNewRaw_grade_edit.setSelection(getGrade(newRowInfo.getGrade()));
+            } catch (Exception e) {
+                Log.e("grade", "Ex:Grade Error");
             }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+            try {
 
+            } catch (Exception e) {
+                Log.e("grade", "Ex:Grade Error");
             }
-        });
 
-        addNewRaw_thickness_edit.setText(""+(int)newRowInfo.getThickness());
-        addNewRaw_width_edit.setText(""+(int)newRowInfo.getWidth());
-        addNewRaw_length_edit.setText(""+(int)newRowInfo.getLength());
-        addNewRaw_no_of_pieces_edit.setText(""+(int)newRowInfo.getNoOfPieces());
-        addNewRaw_no_of_rejected_edit.setText(""+(int)newRowInfo.getNoOfRejected());
-        addNewRaw_no_of_bundles_edit.setText(""+(int)newRowInfo.getNoOfBundles());
-        addNewRaw_search_supplier_edit.setText(newRowInfo.getSupplierName());
+            editButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!addNewRaw_thickness_edit.getText().toString().equals("") && Integer.parseInt(addNewRaw_thickness_edit.getText().toString()) != 0) {
+                        if (!addNewRaw_width_edit.getText().toString().equals("") && Integer.parseInt(addNewRaw_width_edit.getText().toString()) != 0) {
 
-        addNewRaw_search_supplier_edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                supplierDialog();
-            }
-        });
+                            if (!addNewRaw_length_edit.getText().toString().equals("") && Integer.parseInt(addNewRaw_length_edit.getText().toString()) != 0) {
 
-        try {
-            addNewRaw_grade_edit.setSelection(getGrade(newRowInfo.getGrade()));
-        }catch (Exception e){
-            Log.e("grade","Ex:Grade Error");
-        }
+                                if (!addNewRaw_no_of_pieces_edit.getText().toString().equals("") && Integer.parseInt(addNewRaw_no_of_pieces_edit.getText().toString()) != 0) {
 
-        try {
+                                    if (!addNewRaw_no_of_rejected_edit.getText().toString().equals("") /*&& Integer.parseInt(addNewRaw_no_of_rejected_edit.getText().toString()) != 0*/) {
 
-        }catch (Exception e){
-            Log.e("grade","Ex:Grade Error");
-        }
+                                        if (!addNewRaw_no_of_bundles_edit.getText().toString().equals("") && Integer.parseInt(addNewRaw_no_of_bundles_edit.getText().toString()) != 0) {
 
-        editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!addNewRaw_thickness_edit.getText().toString().equals("") && Integer.parseInt(addNewRaw_thickness_edit.getText().toString()) != 0) {
-                    if (!addNewRaw_width_edit.getText().toString().equals("") && Integer.parseInt(addNewRaw_width_edit.getText().toString()) != 0) {
+                                            if (!addNewRaw_search_supplier_edit.getText().toString().equals("")) {
 
-                        if (!addNewRaw_length_edit.getText().toString().equals("") && Integer.parseInt(addNewRaw_length_edit.getText().toString()) != 0) {
+                                                NewRowInfo newRowInfo1 = new NewRowInfo();
+                                                newRowInfo1.setThickness(Double.parseDouble(addNewRaw_thickness_edit.getText().toString()));
+                                                newRowInfo1.setWidth(Double.parseDouble(addNewRaw_width_edit.getText().toString()));
+                                                newRowInfo1.setLength(Double.parseDouble(addNewRaw_length_edit.getText().toString()));
+                                                newRowInfo1.setNoOfPieces(Double.parseDouble(addNewRaw_no_of_pieces_edit.getText().toString()));
+                                                newRowInfo1.setNoOfRejected(Double.parseDouble(addNewRaw_no_of_rejected_edit.getText().toString()));
+                                                newRowInfo1.setNoOfBundles(Double.parseDouble(addNewRaw_no_of_bundles_edit.getText().toString()));
+                                                newRowInfo1.setSupplierName(addNewRaw_search_supplier_edit.getText().toString());
+                                                newRowInfo1.setGrade(gradeTextEdit[0]);
+                                                updateFlag(newRowInfo1, index);
+                                                rejectAdd();
+                                                dialog.dismiss();
 
-                            if (!addNewRaw_no_of_pieces_edit.getText().toString().equals("") && Integer.parseInt(addNewRaw_no_of_pieces_edit.getText().toString()) != 0) {
+                                            } else {
+                                                addNewRaw_search_supplier_edit.setError("Required !");
+                                            }
 
-                                if (!addNewRaw_no_of_rejected_edit.getText().toString().equals("") && Integer.parseInt(addNewRaw_no_of_rejected_edit.getText().toString()) != 0) {
-
-                                    if (!addNewRaw_no_of_bundles_edit.getText().toString().equals("") && Integer.parseInt(addNewRaw_no_of_bundles_edit.getText().toString()) != 0) {
-
-                                        if (!addNewRaw_search_supplier_edit.getText().toString().equals("")) {
-
-                                            NewRowInfo newRowInfo1=new NewRowInfo();
-                                            newRowInfo1.setThickness(Double.parseDouble(addNewRaw_thickness_edit.getText().toString()));
-                                            newRowInfo1.setWidth(Double.parseDouble(addNewRaw_width_edit.getText().toString()));
-                                            newRowInfo1.setLength(Double.parseDouble(addNewRaw_length_edit.getText().toString()));
-                                            newRowInfo1.setNoOfPieces(Double.parseDouble(addNewRaw_no_of_pieces_edit.getText().toString()));
-                                            newRowInfo1.setNoOfRejected(Double.parseDouble(addNewRaw_no_of_rejected_edit.getText().toString()));
-                                            newRowInfo1.setNoOfBundles(Double.parseDouble(addNewRaw_no_of_bundles_edit.getText().toString()));
-                                            newRowInfo1.setSupplierName(addNewRaw_search_supplier_edit.getText().toString());
-                                            newRowInfo1.setGrade( gradeTextEdit[0]);
-                                            updateFlag(newRowInfo1,index);
-                                            rejectAdd();
-                                            dialog.dismiss();
 
                                         } else {
-                                            addNewRaw_search_supplier_edit.setError("Required !");
+                                            addNewRaw_no_of_bundles_edit.setError("Required !");
                                         }
 
-
                                     } else {
-                                        addNewRaw_no_of_bundles_edit.setError("Required !");
+                                        addNewRaw_no_of_rejected_edit.setError("Required !");
                                     }
 
                                 } else {
-                                    addNewRaw_no_of_rejected_edit.setError("Required !");
+                                    addNewRaw_no_of_pieces_edit.setError("Required !");
                                 }
 
                             } else {
-                                addNewRaw_no_of_pieces_edit.setError("Required !");
+                                addNewRaw_length_edit.setError("Required !");
                             }
 
                         } else {
-                            addNewRaw_length_edit.setError("Required !");
+                            addNewRaw_width_edit.setError("Required !");
                         }
-
                     } else {
-                        addNewRaw_width_edit.setError("Required !");
+                        addNewRaw_thickness_edit.setError("Required !");
                     }
-                } else {
-                    addNewRaw_thickness_edit.setError("Required !");
+
+
                 }
+            });
 
-
-            }
-        });
-
-        dialog.show();
-
+            dialog.show();
+        } else {
+            Toast.makeText(this, "Can Not Edit ", Toast.LENGTH_SHORT).show();
+        }
     }
 
-    int getGrade(String grade){
-        int position=-1;
+    int getGrade(String grade) {
+        int position = -1;
 
-        for(int i=0;i<gradeList.size();i++){
+        for (int i = 0; i < gradeList.size(); i++) {
 
-            if(gradeList.get(i).equals(grade)){
-                position=i;
+            if (gradeList.get(i).equals(grade)) {
+                position = i;
                 break;
             }
         }
 
         return position;
     }
+
     void doneButtonMethod() {
         String truckNoLocal = truckNo.getText().toString();
         String acceptorLocal = acceptor.getText().toString();
@@ -1262,7 +1475,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                             if (newRowList.size() != 0) {
                                 ExportToPDF obj = new ExportToPDF(AddNewRaw.this);
                                 obj.exportTruckAcceptanceSendEmail(newRowList, sdf.format(myCalendar.getTime()));
-                            }else {
+                            } else {
                                 Toast.makeText(this, "no Data ", Toast.LENGTH_SHORT).show();
                             }
 
@@ -1293,32 +1506,32 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
     private void fillImageBitmap(NewRowInfo newRowInfo) {
 
-        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImageOne()),"image_1.png");
-        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImageTwo()),"image_2.png");
-        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImageThree()),"image_3.png");
-        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImageFour()),"image_4.png");
-        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImageFive()),"image_5.png");
-        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImageSix()),"image_6.png");
-        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImageSeven()),"image_7.png");
-        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImageEight()),"image_8.png");
+        createDirectoryAndSaveFile(stringToBitMap(newRowInfo.getImageOne()), "image_1.png");
+        createDirectoryAndSaveFile(stringToBitMap(newRowInfo.getImageTwo()), "image_2.png");
+        createDirectoryAndSaveFile(stringToBitMap(newRowInfo.getImageThree()), "image_3.png");
+        createDirectoryAndSaveFile(stringToBitMap(newRowInfo.getImageFour()), "image_4.png");
+        createDirectoryAndSaveFile(stringToBitMap(newRowInfo.getImageFive()), "image_5.png");
+        createDirectoryAndSaveFile(stringToBitMap(newRowInfo.getImageSix()), "image_6.png");
+        createDirectoryAndSaveFile(stringToBitMap(newRowInfo.getImageSeven()), "image_7.png");
+        createDirectoryAndSaveFile(stringToBitMap(newRowInfo.getImageEight()), "image_8.png");
 
-        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImage9()),"image_9.png");
-        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImage10()),"image_10.png");
-        createDirectoryAndSaveFile(stringToBitMap(newRowInfo.getImage11()),"image_11.png");
-        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImage12()),"image_12.png");
-        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImage13()),"image_13.png");
-        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImage14()),"image_14.png");
-        createDirectoryAndSaveFile( stringToBitMap(newRowInfo.getImage15()),"image_15.png");
+        createDirectoryAndSaveFile(stringToBitMap(newRowInfo.getImage9()), "image_9.png");
+        createDirectoryAndSaveFile(stringToBitMap(newRowInfo.getImage10()), "image_10.png");
+        createDirectoryAndSaveFile(stringToBitMap(newRowInfo.getImage11()), "image_11.png");
+        createDirectoryAndSaveFile(stringToBitMap(newRowInfo.getImage12()), "image_12.png");
+        createDirectoryAndSaveFile(stringToBitMap(newRowInfo.getImage13()), "image_13.png");
+        createDirectoryAndSaveFile(stringToBitMap(newRowInfo.getImage14()), "image_14.png");
+        createDirectoryAndSaveFile(stringToBitMap(newRowInfo.getImage15()), "image_15.png");
 
     }
 
-    void deleteFiles1 (String path){
+    void deleteFiles1(String path) {
         File fdelete = new File(path);
         if (fdelete.exists()) {
             if (fdelete.delete()) {
                 System.out.println("file Deleted :");
             } else {
-                System.out.println("file not Deleted :" );
+                System.out.println("file not Deleted :");
             }
         }
     }
@@ -1342,33 +1555,64 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         }
     }
 
-    void sendEmail(){
+    void sendEmailDialog() {
+        final Dialog dialog = new Dialog(AddNewRaw.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.send_email_dialog);
+        Button sendButton = dialog.findViewById(R.id.sendButton);
+        EditText toEmail = dialog.findViewById(R.id.addNewRaw_toEmail);
+        EditText subject = dialog.findViewById(R.id.addNewRaw_subject);
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!toEmail.getText().toString().equals("")) {
+                    sendEmail(toEmail.getText().toString(), subject.getText().toString());
+                    dialog.dismiss();
+                } else {
+                    toEmail.setError("Required!");
+                }
+            }
+        });
 
 
+        dialog.show();
+    }
 
-        File folder = new File(Environment.getExternalStorageDirectory().getPath()+"/SendEmailWood");
+    void sendEmail(String toEmil, String subject) {
+
+
+        File folder = new File(Environment.getExternalStorageDirectory().getPath() + "/SendEmailWood");
         File[] listOfFiles = folder.listFiles();
-        Log.e("pathh= ",""+folder.getPath().toString()+"  "+listOfFiles.length);
+        Log.e("pathh= ", "" + folder.getPath().toString() + "  " + listOfFiles.length);
         ArrayList<String> images = new ArrayList<String>();
         for (int i = 0; i < listOfFiles.length; i++) {
             //if (listOfFiles[i].getName().endsWith(".jpg")) {
             images.add(listOfFiles[i].getPath());
             // }
         }
+        String  subject2="";
+        if(!TextUtils.isEmpty(subject)){
+              subject2=subject;
+        }else {
+              subject2="quality";
+        }
+
 //
-        BackgroundMail.newBuilder(AddNewRaw.this)
-                .withUsername("rawanwork2021@gmail.com")
-                .withPassword("raw@raw113199o")
-                .withMailto("rawriy2017@gmail.com")
+        BackgroundMail.newBuilder(AddNewRaw.this)//rawanwork2021@gmail.com
+                .withUsername("quality@blackseawood.com")//quality@blackseawood.com
+                .withPassword("12345678Q")
+                .withMailto(toEmil)
                 .withType(BackgroundMail.TYPE_PLAIN)
-                .withSubject("this is the subject")
-                .withBody("this is the body \n www.google.com  \n  http://5.189.130.98:8085/import.php?FLAG=3 \n")
+                .withSubject("quality BLACK SEA WOOD")
+                .withBody(subject2 /*"this is the body \n www.google.com  \n  http://5.189.130.98:8085/import.php?FLAG=3 \n "  */)
                 .withProcessVisibility(true)
                 .withAttachments(images)
                 .withOnSuccessCallback(new BackgroundMail.OnSuccessCallback() {
                     @Override
                     public void onSuccess() {
                         //do some magic
+                        clear();
                         deleteTempFolder(folder.getPath());
                     }
                 })
@@ -1401,6 +1645,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     if (image1.getVisibility() == View.VISIBLE) {
                         BitmapDrawable drawable = (BitmapDrawable) image1.getDrawable();
                         bitmap = drawable.getBitmap();
+                        image.setPic11(bitmap);
                         image.setImageOne(bitMapToString(bitmap));
                     } else
                         image.setImageOne(null);
@@ -1410,6 +1655,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     if (image2.getVisibility() == View.VISIBLE) {
                         BitmapDrawable drawable = (BitmapDrawable) image2.getDrawable();
                         bitmap2 = drawable.getBitmap();
+                        image.setPic22(bitmap2);
                         image.setImageTwo(bitMapToString(bitmap2));
                     } else
                         image.setImageTwo(null);
@@ -1419,6 +1665,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     if (image3.getVisibility() == View.VISIBLE) {
                         BitmapDrawable drawable = (BitmapDrawable) image3.getDrawable();
                         bitmap3 = drawable.getBitmap();
+                        image.setPic33(bitmap3);
                         image.setImageThree(bitMapToString(bitmap3));
                     } else
                         image.setImageThree(null);
@@ -1428,6 +1675,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     if (image4.getVisibility() == View.VISIBLE) {
                         BitmapDrawable drawable = (BitmapDrawable) image4.getDrawable();
                         bitmap4 = drawable.getBitmap();
+                        image.setPic44(bitmap4);
                         image.setImageFour(bitMapToString(bitmap4));
                     } else
                         image.setImageFour(null);
@@ -1437,6 +1685,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     if (image5.getVisibility() == View.VISIBLE) {
                         BitmapDrawable drawable = (BitmapDrawable) image5.getDrawable();
                         bitmap5 = drawable.getBitmap();
+                        image.setPic55(bitmap5);
                         image.setImageFive(bitMapToString(bitmap5));
                     } else
                         image.setImageFive(null);
@@ -1446,6 +1695,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     if (image6.getVisibility() == View.VISIBLE) {
                         BitmapDrawable drawable = (BitmapDrawable) image6.getDrawable();
                         bitmap6 = drawable.getBitmap();
+                        image.setPic66(bitmap6);
                         image.setImageSix(bitMapToString(bitmap6));
                     } else
                         image.setImageSix(null);
@@ -1455,6 +1705,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     if (image7.getVisibility() == View.VISIBLE) {
                         BitmapDrawable drawable = (BitmapDrawable) image7.getDrawable();
                         bitmap7 = drawable.getBitmap();
+                        image.setPic77(bitmap7);
                         image.setImageSeven(bitMapToString(bitmap7));
                     } else
                         image.setImageSeven(null);
@@ -1464,6 +1715,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     if (image8.getVisibility() == View.VISIBLE) {
                         BitmapDrawable drawable = (BitmapDrawable) image8.getDrawable();
                         bitmap8 = drawable.getBitmap();
+                        image.setPic88(bitmap8);
                         image.setImageEight(bitMapToString(bitmap8));
                     } else
                         image.setImageEight(null);
@@ -1473,6 +1725,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     if (image9.getVisibility() == View.VISIBLE) {
                         BitmapDrawable drawable = (BitmapDrawable) image9.getDrawable();
                         bitmap9 = drawable.getBitmap();
+                        image.setPic99(bitmap9);
                         image.setImage9(bitMapToString(bitmap9));
                     } else
                         image.setImage9(null);
@@ -1482,6 +1735,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     if (image10.getVisibility() == View.VISIBLE) {
                         BitmapDrawable drawable = (BitmapDrawable) image10.getDrawable();
                         bitmap10 = drawable.getBitmap();
+                        image.setPic1010(bitmap10);
                         image.setImage10(bitMapToString(bitmap10));
                     } else
                         image.setImage10(null);
@@ -1491,6 +1745,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     if (image11.getVisibility() == View.VISIBLE) {
                         BitmapDrawable drawable = (BitmapDrawable) image11.getDrawable();
                         bitmap11 = drawable.getBitmap();
+                        image.setPic1111(bitmap11);
                         image.setImage11(bitMapToString(bitmap11));
                     } else
                         image.setImage11(null);
@@ -1500,6 +1755,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     if (image12.getVisibility() == View.VISIBLE) {
                         BitmapDrawable drawable = (BitmapDrawable) image12.getDrawable();
                         bitmap12 = drawable.getBitmap();
+                        image.setPic1212(bitmap12);
                         image.setImage12(bitMapToString(bitmap12));
                     } else
                         image.setImage12(null);
@@ -1509,6 +1765,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     if (image13.getVisibility() == View.VISIBLE) {
                         BitmapDrawable drawable = (BitmapDrawable) image13.getDrawable();
                         bitmap13 = drawable.getBitmap();
+                        image.setPic1313(bitmap13);
                         image.setImage13(bitMapToString(bitmap13));
                     } else
                         image.setImageEight(null);
@@ -1518,6 +1775,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     if (image14.getVisibility() == View.VISIBLE) {
                         BitmapDrawable drawable = (BitmapDrawable) image14.getDrawable();
                         bitmap14 = drawable.getBitmap();
+                        image.setPic1414(bitmap14);
                         image.setImage14(bitMapToString(bitmap14));
                     } else
                         image.setImage14(null);
@@ -1527,12 +1785,11 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     if (image15.getVisibility() == View.VISIBLE) {
                         BitmapDrawable drawable = (BitmapDrawable) image15.getDrawable();
                         bitmap15 = drawable.getBitmap();
+                        image.setPic1515(bitmap15);
                         image.setImage15(bitMapToString(bitmap15));
                     } else
                         image.setImage15(null);
                     break;
-
-
 
 
             }
@@ -1578,27 +1835,32 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void openCamera() {
-        if (imageNo < 15||isEditImage) {
+        if (flagIsGet == 0) {
+            if (imageNo < 15 || isEditImage) {
 
-            if ((ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
-                    && (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
-            } else {
-                ContentValues values = new ContentValues();
-                values.put(MediaStore.Images.Media.TITLE, "NewPicture");
-                values.put(MediaStore.Images.Media.DESCRIPTION, "FromyourCamera");
-                imageUri = getContentResolver().insert(
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-                startActivityForResult(intent, 18);
+                if ((ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+                        && (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
+                } else {
+                    ContentValues values = new ContentValues();
+                    values.put(MediaStore.Images.Media.TITLE, "NewPicture");
+                    values.put(MediaStore.Images.Media.DESCRIPTION, "FromyourCamera");
+                    imageUri = getContentResolver().insert(
+                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                    startActivityForResult(intent, 18);
 //                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 //                startActivityForResult(cameraIntent, 18);
 //            imageNo = i;
+                }
+                isCamera = false;
+            } else {
+                showSnackbar("Reached maximum size of images!", false);
             }
-            isCamera = false;
         } else {
-            showSnackbar("Reached maximum size of images!", false);
+            Toast.makeText(this, "This For Email Can Not Edit", Toast.LENGTH_SHORT).show();
+
         }
     }
 
@@ -1615,6 +1877,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -1762,7 +2025,6 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     break;
 
 
-
                 case 10:
                     image10.setVisibility(View.VISIBLE);
                     try {
@@ -1776,7 +2038,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     break;
 
 
-                case  11:
+                case 11:
                     image11.setVisibility(View.VISIBLE);
                     try {
                         thumbnail = MediaStore.Images.Media.getBitmap(
@@ -1787,7 +2049,6 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     image11.setImageBitmap(thumbnail);
 //                    imagesList.add(7, bitMapToString(bitmap));
                     break;
-
 
 
                 case 12:
@@ -1814,7 +2075,6 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     image13.setImageBitmap(thumbnail);
 //                    imagesList.add(7, bitMapToString(bitmap));
                     break;
-
 
 
                 case 14:
@@ -1848,8 +2108,661 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
             isEditImage = false;
         }
 
+        if (requestCode == PICK_IMAGE_MULTIPLE && resultCode == RESULT_OK && null != data) {
+            // Get the Image from data
+            if (data.getClipData() != null) {
+                ClipData mClipData = data.getClipData();
+                int cout = data.getClipData().getItemCount();
+                imageBitmapList.clear();
+                for (int i = 0; i < cout; i++) {
+                    // adding imageuri in array
+
+                    try {
+                        Uri imageurl = data.getClipData().getItemAt(i).getUri();
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageurl);
+
+                        imageBitmapList.add(i, bitmap);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+                Log.e("imageListSize", "test = " + imageBitmapList.size());
+                // setting 1st selected image into image switcher
+                //imageView.setImageURI(mArrayUri.get(0));
+                //  position = 0;
+//                  for (int i = 0; i < imageBitmapList.size(); i++)
+//            switch (i) {
+//                case 0:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image1.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image1.setVisibility(View.VISIBLE);
+//                    image1.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//                case 1:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image2.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image2.setVisibility(View.VISIBLE);
+//                    image2.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//                case 2:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image3.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image3.setVisibility(View.VISIBLE);
+//                    image3.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//                case 3:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image4.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image4.setVisibility(View.VISIBLE);
+//                    image4.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//                case 4:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image5.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image5.setVisibility(View.VISIBLE);
+//                    image5.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//                case 5:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image6.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image6.setVisibility(View.VISIBLE);
+//                    image6.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//                case 6:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image7.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image7.setVisibility(View.VISIBLE);
+//                    image7.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//                case 7:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image8.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image8.setVisibility(View.VISIBLE);
+//                    image8.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//
+//
+//                case 8:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image9.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image9.setVisibility(View.VISIBLE);
+//                    image9.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//
+//
+//                case 9:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image10.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image10.setVisibility(View.VISIBLE);
+//                    image10.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//
+//
+//                case 10:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image11.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image11.setVisibility(View.VISIBLE);
+//                    image11.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//
+//
+//                case 11:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image12.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image12.setVisibility(View.VISIBLE);
+//                    image12.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//
+//
+//                case 12:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image13.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image13.setVisibility(View.VISIBLE);
+//                    image13.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//
+//
+//                case 13:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image14.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image14.setVisibility(View.VISIBLE);
+//                    image14.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//
+//
+//                case 14:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image15.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image15.setVisibility(View.VISIBLE);
+//                    image15.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//
+//
+                fillImagesInLayout();
+
+
+//        super.onRestoreInstanceState(savedInstanceState);
+
+
+            } else {
+                Uri imageurl = data.getData();
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(
+                            getContentResolver(), imageurl);
+                    imageBitmapList.clear();
+                    imageBitmapList.add(0, bitmap);
+                    fillImagesInLayout();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                //imageView.setImageURI(mArrayUri.get(0));
+                //position = 0;
+            }
+
+        } else {
+            // show this if no image is selected
+            Toast.makeText(this, "You haven't picked Image", Toast.LENGTH_LONG).show();
+        }
+
 
         isCamera = true;
+    }
+
+
+    void fillImagesInLayout() {
+        for (int i = 0; i < imageBitmapList.size(); i++) {
+
+            if (imageNo < 15) {
+                if (image1.getVisibility() == View.INVISIBLE && imageBitmapList.get(i) != null) {
+                    Log.e("checkvalue1", "" + i);
+                    image1.setVisibility(View.VISIBLE);
+//                    convertToURI(data, image1, check);
+//                    image1.setImageBitmap(bitmap);
+//                    try {
+//                        thumbnail = MediaStore.Images.Media.getBitmap(
+//                                getContentResolver(), imageUri);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+                    imageNo++;
+                    image1.setImageBitmap(imageBitmapList.get(i));
+//                    imagesList.add(0, bitMapToString(thumbnail));
+//                    break;
+                } else if (image2.getVisibility() == View.INVISIBLE && imageBitmapList.get(i) != null) {
+                    image2.setVisibility(View.VISIBLE);
+//                    try {
+//                        thumbnail = MediaStore.Images.Media.getBitmap(
+//                                getContentResolver(), imageUri);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+                    imageNo++;
+                    image2.setImageBitmap(imageBitmapList.get(i));
+//                    imagesList.add(1, bitMapToString(thumbnail));
+//                    break;
+                } else if (image3.getVisibility() == View.INVISIBLE && imageBitmapList.get(i) != null) {
+                    image3.setVisibility(View.VISIBLE);
+//                    try {
+//                        thumbnail = MediaStore.Images.Media.getBitmap(
+//                                getContentResolver(), imageUri);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+                    imageNo++;
+                    image3.setImageBitmap(imageBitmapList.get(i));
+//                    imagesList.add(2, bitMapToString(thumbnail));
+//                    break;
+                } else if (image4.getVisibility() == View.INVISIBLE && imageBitmapList.get(i) != null) {
+                    image4.setVisibility(View.VISIBLE);
+//                    try {
+//                        thumbnail = MediaStore.Images.Media.getBitmap(
+//                                getContentResolver(), imageUri);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+                    imageNo++;
+                    image4.setImageBitmap(imageBitmapList.get(i));
+//                    imagesList.add(3, bitMapToString(bitmap));
+//                    break;
+                } else if (image5.getVisibility() == View.INVISIBLE && imageBitmapList.get(i) != null) {
+                    image5.setVisibility(View.VISIBLE);
+//                    try {
+//                        thumbnail = MediaStore.Images.Media.getBitmap(
+//                                getContentResolver(), imageUri);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+                    imageNo++;
+                    image5.setImageBitmap(imageBitmapList.get(i));
+//                    imagesList.add(4, bitMapToString(bitmap));
+//                    break;
+                } else if (image6.getVisibility() == View.INVISIBLE && imageBitmapList.get(i) != null) {
+                    image6.setVisibility(View.VISIBLE);
+//                    try {
+//                        thumbnail = MediaStore.Images.Media.getBitmap(
+//                                getContentResolver(), imageUri);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+                    imageNo++;
+                    image6.setImageBitmap(imageBitmapList.get(i));
+//                    imagesList.add(5, bitMapToString(bitmap));
+//                    break;
+                } else if (image7.getVisibility() == View.INVISIBLE && imageBitmapList.get(i) != null) {
+                    image7.setVisibility(View.VISIBLE);
+//                    try {
+//                        thumbnail = MediaStore.Images.Media.getBitmap(
+//                                getContentResolver(), imageUri);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+                    imageNo++;
+                    image7.setImageBitmap(imageBitmapList.get(i));
+//                    imagesList.add(6, bitMapToString(bitmap));
+//                    break;
+                } else if (image8.getVisibility() == View.INVISIBLE && imageBitmapList.get(i) != null) {
+                    image8.setVisibility(View.VISIBLE);
+//                    try {
+//                        thumbnail = MediaStore.Images.Media.getBitmap(
+//                                getContentResolver(), imageUri);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+                    imageNo++;
+                    image8.setImageBitmap(imageBitmapList.get(i));
+//                    imagesList.add(7, bitMapToString(bitmap));
+//                    break;
+
+                } else if (image9.getVisibility() == View.INVISIBLE && imageBitmapList.get(i) != null) {
+                    image9.setVisibility(View.VISIBLE);
+//                    try {
+//                        thumbnail = MediaStore.Images.Media.getBitmap(
+//                                getContentResolver(), imageUri);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+                    imageNo++;
+                    image9.setImageBitmap(imageBitmapList.get(i));
+//                    imagesList.add(7, bitMapToString(bitmap));
+//                    break;
+
+
+                } else if (image10.getVisibility() == View.INVISIBLE && imageBitmapList.get(i) != null) {
+                    image10.setVisibility(View.VISIBLE);
+//                    try {
+//                        thumbnail = MediaStore.Images.Media.getBitmap(
+//                                getContentResolver(), imageUri);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+                    imageNo++;
+                    image10.setImageBitmap(imageBitmapList.get(i));
+//                    imagesList.add(7, bitMapToString(bitmap));
+//                    break;
+
+
+                } else if (image11.getVisibility() == View.INVISIBLE && imageBitmapList.get(i) != null) {
+                    image11.setVisibility(View.VISIBLE);
+//                    try {
+//                        thumbnail = MediaStore.Images.Media.getBitmap(
+//                                getContentResolver(), imageUri);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+                    imageNo++;
+                    image11.setImageBitmap(imageBitmapList.get(i));
+//                    imagesList.add(7, bitMapToString(bitmap));
+//                    break;
+
+
+                } else if (image12.getVisibility() == View.INVISIBLE && imageBitmapList.get(i) != null) {
+                    image12.setVisibility(View.VISIBLE);
+//                    try {
+//                        thumbnail = MediaStore.Images.Media.getBitmap(
+//                                getContentResolver(), imageUri);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+                    imageNo++;
+                    image12.setImageBitmap(imageBitmapList.get(i));
+//                    imagesList.add(7, bitMapToString(bitmap));
+//                    break;
+
+
+                } else if (image13.getVisibility() == View.INVISIBLE && imageBitmapList.get(i) != null) {
+                    image13.setVisibility(View.VISIBLE);
+//                    try {
+//                        thumbnail = MediaStore.Images.Media.getBitmap(
+//                                getContentResolver(), imageUri);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+                    imageNo++;
+                    image13.setImageBitmap(imageBitmapList.get(i));
+//                    imagesList.add(7, bitMapToString(bitmap));
+//                    break;
+
+
+                } else if (image14.getVisibility() == View.INVISIBLE && imageBitmapList.get(i) != null) {
+                    image14.setVisibility(View.VISIBLE);
+//                    try {
+//                        thumbnail = MediaStore.Images.Media.getBitmap(
+//                                getContentResolver(), imageUri);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+                    imageNo++;
+                    image14.setImageBitmap(imageBitmapList.get(i));
+//                    imagesList.add(7, bitMapToString(bitmap));
+//                    break;
+                } else if (image15.getVisibility() == View.INVISIBLE && imageBitmapList.get(i) != null) {
+                    image15.setVisibility(View.VISIBLE);
+//                    try {
+//                        thumbnail = MediaStore.Images.Media.getBitmap(
+//                                getContentResolver(), imageUri);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+                    imageNo++;
+                    image15.setImageBitmap(imageBitmapList.get(i));
+//                    imagesList.add(7, bitMapToString(bitmap));
+//                    break;
+                }
+
+
+//                }
+
+//            switch (i) {
+//                case 0:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image1.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image1.setVisibility(View.VISIBLE);
+//                    image1.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//                case 1:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image2.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image2.setVisibility(View.VISIBLE);
+//                    image2.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//                case 2:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image3.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image3.setVisibility(View.VISIBLE);
+//                    image3.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//                case 3:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image4.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image4.setVisibility(View.VISIBLE);
+//                    image4.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//                case 4:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image5.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image5.setVisibility(View.VISIBLE);
+//                    image5.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//                case 5:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image6.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image6.setVisibility(View.VISIBLE);
+//                    image6.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//                case 6:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image7.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image7.setVisibility(View.VISIBLE);
+//                    image7.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//                case 7:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image8.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image8.setVisibility(View.VISIBLE);
+//                    image8.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//
+//
+//                case 8:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image9.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image9.setVisibility(View.VISIBLE);
+//                    image9.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//
+//
+//                case 9:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image10.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image10.setVisibility(View.VISIBLE);
+//                    image10.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//
+//
+//                case 10:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image11.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image11.setVisibility(View.VISIBLE);
+//                    image11.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//
+//
+//                case 11:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image12.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image12.setVisibility(View.VISIBLE);
+//                    image12.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//
+//
+//                case 12:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image13.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image13.setVisibility(View.VISIBLE);
+//                    image13.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//
+//
+//                case 13:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image14.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image14.setVisibility(View.VISIBLE);
+//                    image14.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//
+//
+//                case 14:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image15.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image15.setVisibility(View.VISIBLE);
+//                    image15.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//
+//
+//            }
+
+            } else {
+                showSnackbar("Reached maximum size of images!", false);
+
+            }
+        }
+    }
+
+    void fillImagesFromEmail() {
+        for (int i = 0; i < 15; i++) {
+
+
+            if (image1.getVisibility() == View.INVISIBLE && newRowInfoPic.getPic11() != null) {
+                image1.setVisibility(View.VISIBLE);
+                image1.setImageBitmap(newRowInfoPic.getPic11());
+
+            } else if (image2.getVisibility() == View.INVISIBLE && newRowInfoPic.getPic22() != null) {
+                image2.setVisibility(View.VISIBLE);
+                image2.setImageBitmap(newRowInfoPic.getPic22());
+
+            } else if (image3.getVisibility() == View.INVISIBLE && newRowInfoPic.getPic33() != null) {
+                image3.setVisibility(View.VISIBLE);
+                image3.setImageBitmap(newRowInfoPic.getPic33());
+
+            } else if (image4.getVisibility() == View.INVISIBLE && newRowInfoPic.getPic44() != null) {
+                image4.setVisibility(View.VISIBLE);
+                image4.setImageBitmap(newRowInfoPic.getPic44());
+
+            } else if (image5.getVisibility() == View.INVISIBLE && newRowInfoPic.getPic55() != null) {
+                image5.setVisibility(View.VISIBLE);
+//
+                image5.setImageBitmap(newRowInfoPic.getPic55());
+
+            } else if (image6.getVisibility() == View.INVISIBLE && newRowInfoPic.getPic66() != null) {
+                image6.setVisibility(View.VISIBLE);
+//
+                image6.setImageBitmap(newRowInfoPic.getPic66());
+//                    imagesList.add(5, bitMapToString(bitmap));
+//                    break;
+            } else if (image7.getVisibility() == View.INVISIBLE && newRowInfoPic.getPic77() != null) {
+                image7.setVisibility(View.VISIBLE);
+
+                image7.setImageBitmap(newRowInfoPic.getPic88());
+//                    imagesList.add(6, bitMapToString(bitmap));
+//                    break;
+            } else if (image8.getVisibility() == View.INVISIBLE && newRowInfoPic.getPic88() != null) {
+                image8.setVisibility(View.VISIBLE);
+                image8.setImageBitmap(newRowInfoPic.getPic88());
+//                    imagesList.add(7, bitMapToString(bitmap));
+//                    break;
+
+            } else if (image9.getVisibility() == View.INVISIBLE && newRowInfoPic.getPic99() != null) {
+                image9.setVisibility(View.VISIBLE);
+                imageNo++;
+                image9.setImageBitmap(newRowInfoPic.getPic99());
+
+
+            } else if (image10.getVisibility() == View.INVISIBLE && newRowInfoPic.getPic1010() != null) {
+                image10.setVisibility(View.VISIBLE);
+                image10.setImageBitmap(newRowInfoPic.getPic1010());
+
+
+            } else if (image11.getVisibility() == View.INVISIBLE && newRowInfoPic.getPic1111() != null) {
+                image11.setVisibility(View.VISIBLE);
+                image11.setImageBitmap(newRowInfoPic.getPic1111());
+
+            } else if (image12.getVisibility() == View.INVISIBLE && newRowInfoPic.getPic1212() != null) {
+                image12.setVisibility(View.VISIBLE);
+
+                image12.setImageBitmap(newRowInfoPic.getPic1212());
+
+
+            } else if (image13.getVisibility() == View.INVISIBLE && newRowInfoPic.getPic1313() != null) {
+                image13.setVisibility(View.VISIBLE);
+
+                image13.setImageBitmap(newRowInfoPic.getPic1313());
+
+            } else if (image14.getVisibility() == View.INVISIBLE && newRowInfoPic.getPic1414() != null) {
+                image14.setVisibility(View.VISIBLE);
+                image14.setImageBitmap(newRowInfoPic.getPic1414());
+
+            } else if (image15.getVisibility() == View.INVISIBLE && newRowInfoPic.getPic1515() != null) {
+                image15.setVisibility(View.VISIBLE);
+
+                image15.setImageBitmap(newRowInfoPic.getPic1515());
+
+            }
+
+
+        }
     }
 
     void convertToURI(Intent data, ImageView viewImage, int i) {
@@ -1864,7 +2777,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 //            bitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory().getAbsolutePath() + "/in" + imageNo + ".png");
 //            viewImage.setImageBitmap(bitmap);
 //            imagesList.add(i, bitMapToString(bitmap));
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ////            deleteFiles(path);
+        ////            deleteFiles(path);
 //        }
         File file = new File(mCameraFileName);
         if (!file.exists()) {
@@ -1962,7 +2875,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 //        Log.e("checkValidData4", word + ((word.length() == 1) && (word.equals("."))));
         if (((word.length() == 1) && (word.contains("."))))
             return true;
-        else if (((word.length() > 0) && Double.parseDouble(word)==0))
+        else if (((word.length() > 0) && Double.parseDouble(word) == 0))
             return true;
         return false;
     }
@@ -2002,12 +2915,12 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
     }
 
-    public void getSearchSupplierInfo(String supplierNameLocal, String supplierNoLocal,int updateFlag) {
+    public void getSearchSupplierInfo(String supplierNameLocal, String supplierNoLocal, int updateFlag) {
 
-            supplierName = supplierNameLocal;
-            searchSupplier.setText(supplierName);
-            searchSupplier.setError(null);
-        if(updateFlag==1) {
+        supplierName = supplierNameLocal;
+        searchSupplier.setText(supplierName);
+        searchSupplier.setError(null);
+        if (updateFlag == 1) {
             supplierTextTemp.setText(supplierNameLocal);
         }
         searchDialog.dismiss();
@@ -2090,123 +3003,137 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     }
 
     void fillTableRow(TableRow tableRow, String thicknessText, String widthText, String lengthText, String noOfPiecesText
-            , String noOfRejectedText, String noBundleText,String grade) {
-        int max = 10;
-        if (edieFlag == 11)
-            max = 9;
-        for (int i = 0; i < max; i++) {
-            TextView textView = new TextView(this);
-            textView.setBackgroundResource(R.color.light_orange);
-            TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f);
-            textViewParam.setMargins(1, 5, 1, 1);
-            textView.setPadding(0, 10, 0, 10);
-            textView.setTextSize(15);
-            textView.setTextColor(ContextCompat.getColor(this, R.color.gray_dark_one));
-            textView.setLayoutParams(textViewParam);
-            switch (i) {
-                case 0:
+            , String noOfRejectedText, String noBundleText, String grade) {
+        try {
+            int max = 10;
+            if (edieFlag == 11)
+                max = 9;
+            for (int i = 0; i < max; i++) {
+                TextView textView = new TextView(this);
+                textView.setBackgroundResource(R.color.light_orange);
+                TableRow.LayoutParams textViewParam = new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f);
+                textViewParam.setMargins(1, 5, 1, 1);
+                textView.setPadding(0, 10, 0, 10);
+                textView.setTextSize(15);
+                textView.setTextColor(ContextCompat.getColor(this, R.color.gray_dark_one));
+                textView.setLayoutParams(textViewParam);
+                switch (i) {
+                    case 0:
 //                    TableRow.LayoutParams param = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
 //                    param.setMargins(1, 5, 1, 1);
 //                    textView.setPadding(0, 10, 0, 10);
 //                    textView.setLayoutParams(param);
-                    textView.setText(supplierName);
-                    tableRow.addView(textView);
-                    break;
-                case 1:
-                    textView.setText(thicknessText);
-                    tableRow.addView(textView);
-                    break;
-                case 2:
-                    textView.setText(widthText);
-                    tableRow.addView(textView);
-                    break;
-                case 3:
-                    textView.setText(lengthText);
-                    tableRow.addView(textView);
-                    break;
-                case 4:
-                    textView.setText(noOfPiecesText);
-                    tableRow.addView(textView);
-                    break;
-                case 5:
-                    textView.setText(noOfRejectedText);
-                    tableRow.addView(textView);
-                    break;
-                case 6:
-                    textView.setText(noBundleText);
-                    tableRow.addView(textView);
-                    break;
-                case 7:
-                    textView.setText(grade);
-                    tableRow.addView(textView);
-                    break;
+                        textView.setText(supplierName);
+                        tableRow.addView(textView);
+                        break;
+                    case 1:
+                        textView.setText(thicknessText);
+                        tableRow.addView(textView);
+                        break;
+                    case 2:
+                        textView.setText(widthText);
+                        tableRow.addView(textView);
+                        break;
+                    case 3:
+                        textView.setText(lengthText);
+                        tableRow.addView(textView);
+                        break;
+                    case 4:
+                        textView.setText(noOfPiecesText);
+                        tableRow.addView(textView);
+                        break;
+                    case 5:
+                        textView.setText(noOfRejectedText);
+                        tableRow.addView(textView);
+                        break;
+                    case 6:
+                        textView.setText(noBundleText);
+                        tableRow.addView(textView);
+                        break;
+                    case 7:
+                        textView.setText(grade);
+                        tableRow.addView(textView);
+                        break;
 
-                case 8:
-                    ImageView imageView = new ImageView(this);
-                    TableRow.LayoutParams editParam = new TableRow.LayoutParams(40, TableRow.LayoutParams.WRAP_CONTENT);
-                    editParam.setMargins(1, 5, 1, 1);
-                    imageView.setPadding(0, 10, 0, 10);
-                    imageView.setLayoutParams(editParam);
-                    imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_edit_o));
-                    imageView.setBackgroundResource(R.color.light_orange);
-                    imageView.setTag(tableRow.getTag().toString());
-                    tableRow.addView(imageView);
+                    case 8:
+                        ImageView imageView = new ImageView(this);
+                        TableRow.LayoutParams editParam = new TableRow.LayoutParams(40, TableRow.LayoutParams.WRAP_CONTENT);
+                        editParam.setMargins(1, 5, 1, 1);
+                        imageView.setPadding(0, 10, 0, 10);
+                        imageView.setLayoutParams(editParam);
+                        imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_edit_o));
+                        imageView.setBackgroundResource(R.color.light_orange);
+                        imageView.setTag(tableRow.getTag().toString());
+                        tableRow.addView(imageView);
 
-                    tableRow.getChildAt(8).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            ImageView imageView=(ImageView) v;
-                            Log.e("tagImageViewid","= "+imageView.getTag().toString());
-                            int i=Integer.parseInt(imageView.getTag().toString());
-                            EditDialog(newRowList.get(i),i);
+                        tableRow.getChildAt(8).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (flagIsGet == 0) {
 
-                        }
-                    });
-                    break;
-                case 9:
-                    ImageView imageView2 = new ImageView(this);
-                    TableRow.LayoutParams deleteParam = new TableRow.LayoutParams(40, TableRow.LayoutParams.WRAP_CONTENT);
-                    deleteParam.setMargins(1, 5, 1, 1);
-                    imageView2.setPadding(0, 10, 0, 10);
-                    imageView2.setLayoutParams(deleteParam);
-                    imageView2.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_delete_forever));
-                    imageView2.setBackgroundResource(R.color.light_orange);
-                    imageView2.setTag(tableRow.getTag().toString());
-                    tableRow.addView(imageView2);
+                                    ImageView imageView = (ImageView) v;
+                                    Log.e("tagImageViewid", "= " + imageView.getTag().toString());
+                                    int i = Integer.parseInt(imageView.getTag().toString());
+                                    EditDialog(newRowList.get(i), i);
+                                } else {
+                                    Toast.makeText(AddNewRaw.this, "Can Not Edit", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                        break;
+                    case 9:
+                        ImageView imageView2 = new ImageView(this);
+                        TableRow.LayoutParams deleteParam = new TableRow.LayoutParams(40, TableRow.LayoutParams.WRAP_CONTENT);
+                        deleteParam.setMargins(1, 5, 1, 1);
+                        imageView2.setPadding(0, 10, 0, 10);
+                        imageView2.setLayoutParams(deleteParam);
+                        imageView2.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_delete_forever));
+                        imageView2.setBackgroundResource(R.color.light_orange);
+                        imageView2.setTag(tableRow.getTag().toString());
+                        tableRow.addView(imageView2);
 
-                    tableRow.getChildAt(9).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            ImageView imageView=(ImageView) v;
-                            Log.e("tagImageViewid","= "+imageView.getTag().toString());
-                            AlertDialog.Builder builder = new AlertDialog.Builder(AddNewRaw.this);
-                            builder.setMessage("Are you want delete this row?");
-                            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
+                        tableRow.getChildAt(9).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (flagIsGet == 0) {
+                                    ImageView imageView = (ImageView) v;
+                                    Log.e("tagImageViewid", "= " + imageView.getTag().toString());
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(AddNewRaw.this);
+                                    builder.setMessage("Are you want delete this row?");
+                                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
 //                            tableLayout.removeAllViews();
 
-                                    deleteFlag();
-                                    rejectAdd();
+                                            deleteFlag();
+                                            rejectAdd();
 
+                                        }
+                                    });
+                                    builder.show();
+                                } else {
+                                    Toast.makeText(AddNewRaw.this, "Can Not Delete", Toast.LENGTH_SHORT).show();
                                 }
-                            });
-                            builder.show();
-                        }
-                    });
-                    break;
-            }
+                            }
+
+                        });
+
+                        break;
+                }
 //            tableRow.addView(textView);
-            idInAcceptanceNew();
+                idInAcceptanceNew();
 //            editRowInAcceptanceNew();
 
 
+            }
+        } catch (Exception e) {
+            Log.e("ExceptaionEE", "rr");
         }
 
     }
 
 
-    void supplierDialog (){
+    void supplierDialog() {
         suppliers.clear();
         isCamera = false;
         new JSONTask().execute();
@@ -2222,7 +3149,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
         recyclerView = searchDialog.findViewById(R.id.search_supplier_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new SuppliersAdapter(this, suppliers, null, null,1);
+        adapter = new SuppliersAdapter(this, suppliers, null, null, 1);
         recyclerView.setAdapter(adapter);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -2443,7 +3370,6 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     break;
 
 
-
                 case 10:
                     if (imagesList.get(i) == null) {
                         image11.setVisibility(View.INVISIBLE);
@@ -2497,8 +3423,6 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     image15.setVisibility(View.VISIBLE);
                     image15.setImageBitmap(stringToBitMap(imagesList.get(i)));
                     break;
-
-
 
 
             }
@@ -2676,7 +3600,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     acceptor.setText("");
                     ttnNo.setText("");
                     totalBundles.setText("");
-                    acceptanceDate.setText("");
+                    acceptanceDate.setText(sdf.format(myCalendar.getTime()));
                     acceptanceLocation.setSelection(0);
                     totalRejected.setText("");
                     supplierName = "";
@@ -2695,12 +3619,12 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     image7.setVisibility(View.INVISIBLE);
                     image8.setVisibility(View.INVISIBLE);
 
-                    image9 .setVisibility(View.INVISIBLE);
+                    image9.setVisibility(View.INVISIBLE);
                     image10.setVisibility(View.INVISIBLE);
                     image11.setVisibility(View.INVISIBLE);
                     image12.setVisibility(View.INVISIBLE);
                     image13.setVisibility(View.INVISIBLE);
-                    image14 .setVisibility(View.INVISIBLE);
+                    image14.setVisibility(View.INVISIBLE);
                     image15.setVisibility(View.INVISIBLE);
 
                     acceptRowLayout.setVisibility(View.VISIBLE);
@@ -2710,7 +3634,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     mainInfoButton.setBackgroundResource(R.drawable.frame_shape_3);
                     doneAcceptRow.setEnabled(true);
 
-                    sendEmail();
+                    sendEmailDialog();
                     Log.e("tag", "save Success");
                 } else {
                     Log.e("tag", "****Failed to export data");
@@ -2826,6 +3750,346 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
             }
         }
     }
+
+    // *************************************** GET TTN ***************************************
+    private class JSONTaskTTN extends AsyncTask<String, String, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            proTTn = new ProgressDialog(AddNewRaw.this, R.style.MyAlertDialogStyle);
+            proTTn.setMessage("Please Waiting...");
+            proTTn.show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            URLConnection connection = null;
+            BufferedReader reader = null;
+            String finalJson = null;
+            try {
+                URL url = new URL("http://" + generalSettings.getIpAddress() + "/import.php?FLAG=19&TTN_NO=" + ttnNo.getText().toString().trim());
+
+                URLConnection conn = url.openConnection();
+                conn.setDoOutput(true);
+
+                reader = new BufferedReader(new
+                        InputStreamReader(conn.getInputStream()));
+
+                StringBuilder sb = new StringBuilder();
+                String line = null;
+
+                // Read Server Response
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                finalJson = sb.toString();
+                Log.e("finalJson*********", finalJson);
+
+
+            } catch (IOException e) {
+                Log.e("Import Data2", e.getMessage().toString());
+            }
+
+
+            return finalJson;
+        }
+
+
+        @Override
+        protected void onPostExecute(final String result) {
+            super.onPostExecute(result);
+
+            tableLayout.removeAllViews();
+            headerTableLayout.removeAllViews();
+            rejectAdd();
+            if (result != null) {
+                if (!result.contains("noBundleFound")) {
+                    // Log.e("result", "*****************" + result.size());
+                    flagIsGet = 1;
+                    Gson gson = new Gson();
+                    NewRowInfo list = gson.fromJson(result, NewRowInfo.class);
+                    listOfEmail.clear();
+                    listOfEmail.addAll(list.getDetailsList());
+
+                    tableLayout.removeAllViews();
+                    addTableHeader(headerTableLayout);
+                    for (int i = 0; i < listOfEmail.size(); i++) {
+                        supplierName = listOfEmail.get(i).getSupplierName();
+                        tableRow = new TableRow(AddNewRaw.this);
+                        gradeText = listOfEmail.get(i).getGrade();
+                        fillTableRow(tableRow, "" + (int) listOfEmail.get(i).getThickness(), "" + (int) listOfEmail.get(i).getWidth()
+                                , "" + (int) listOfEmail.get(i).getLength(), "" + (int) listOfEmail.get(i).getNoOfPieces()
+                                , "" + (int) listOfEmail.get(i).getNoOfRejected(), "" + (int) listOfEmail.get(i).getNoOfBundles(), gradeText);
+                        tableLayout.addView(tableRow);
+
+
+                    }
+                    new BitmapImage2().execute(listOfEmail.get(0));
+                    rejectAdd();
+                } else {
+                    flagIsGet = 0;
+                    Toast.makeText(AddNewRaw.this, "The TTN.NO Not Found", Toast.LENGTH_SHORT).show();
+                    proTTn.dismiss();
+                }
+
+
+            } else {
+                proTTn.dismiss();
+                flagIsGet = 0;
+                Toast.makeText(AddNewRaw.this, "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private class BitmapImage2 extends AsyncTask<NewRowInfo, String, NewRowInfo> {
+        //  Settings generalSettings = new DatabaseHandler(previewLinearContext).getSettings();
+
+        @Override
+        protected NewRowInfo doInBackground(NewRowInfo... pictures) {
+
+            newRowInfoPic = pictures[0];
+            URL url;
+            Bitmap bitmap;
+            try {
+                if (!newRowInfoPic.equals("null")) {
+                    for (int i = 0; i < 15; i++) {
+
+                        switch (i) {
+                            case 0:
+                                if (pictures[0].getImageOne() != null) {//http://192.168.2.17:8088/woody/images/2342_img_1.png
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImageOne());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic11(bitmap);
+                                        newRowInfoPic.setImageOne(bitMapToString(bitmap));
+                                        listOfEmail.get(0).setPic11(bitmap);
+
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic11(bitmap);
+                                    }
+                                }
+                                break;
+                            case 1:
+                                if (pictures[0].getImageTwo() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImageTwo());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic22(bitmap);
+                                        newRowInfoPic.setImageTwo(bitMapToString(bitmap));
+                                        listOfEmail.get(0).setPic22(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic22(bitmap);
+                                    }
+                                }
+                                break;
+                            case 2:
+                                if (pictures[0].getImageThree() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImageThree());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic33(bitmap);
+                                        newRowInfoPic.setImageThree(bitMapToString(bitmap));
+                                        listOfEmail.get(0).setPic33(bitmap);
+
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic33(bitmap);
+                                    }
+                                }
+                                break;
+                            case 3:
+                                if (pictures[0].getImageFour() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImageFour());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic44(bitmap);
+                                        newRowInfoPic.setImageFour(bitMapToString(bitmap));
+                                        listOfEmail.get(0).setPic44(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic44(bitmap);
+                                    }
+                                }
+                                break;
+                            case 4:
+                                if (pictures[0].getImageFive() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImageFive());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic55(bitmap);
+                                        newRowInfoPic.setImageFive(bitMapToString(bitmap));
+                                        listOfEmail.get(0).setPic55(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic55(bitmap);
+                                    }
+                                }
+                                break;
+                            case 5:
+                                if (pictures[0].getImageSix() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImageSix());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic66(bitmap);
+                                        newRowInfoPic.setImageSix(bitMapToString(bitmap));
+                                        listOfEmail.get(0).setPic66(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic66(bitmap);
+                                    }
+                                }
+                                break;
+                            case 6:
+                                if (pictures[0].getImageSeven() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImageSeven());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic77(bitmap);
+                                        newRowInfoPic.setImageSeven(bitMapToString(bitmap));
+                                        listOfEmail.get(0).setPic77(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic77(bitmap);
+                                    }
+                                }
+                                break;
+                            case 7:
+                                if (pictures[0].getImageEight() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImageEight());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic88(bitmap);
+                                        newRowInfoPic.setImageEight(bitMapToString(bitmap));
+                                        listOfEmail.get(0).setPic88(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic88(bitmap);
+                                    }
+                                }
+                                break;
+
+                            case 8:
+                                if (pictures[0].getImage9() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImage9());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic99(bitmap);
+                                        newRowInfoPic.setImage9(bitMapToString(bitmap));
+                                        listOfEmail.get(0).setPic99(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic88(bitmap);
+                                    }
+                                }
+                                break;
+
+
+                            case 9:
+                                if (pictures[0].getImage10() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImage10());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic1010(bitmap);
+                                        newRowInfoPic.setImage10(bitMapToString(bitmap));
+                                        listOfEmail.get(0).setPic1010(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic88(bitmap);
+                                    }
+                                }
+                                break;
+
+                            case 10:
+                                if (pictures[0].getImage11() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImage11());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic1111(bitmap);
+                                        newRowInfoPic.setImage11(bitMapToString(bitmap));
+                                        listOfEmail.get(0).setPic1111(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic88(bitmap);
+                                    }
+                                }
+                                break;
+
+                            case 11:
+                                if (pictures[0].getImage12() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImage12());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic1212(bitmap);
+                                        newRowInfoPic.setImage12(bitMapToString(bitmap));
+                                        listOfEmail.get(0).setPic1212(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic88(bitmap);
+                                    }
+                                }
+                                break;
+
+                            case 12:
+                                if (pictures[0].getImage13() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImage13());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic1313(bitmap);
+                                        newRowInfoPic.setImage13(bitMapToString(bitmap));
+                                        listOfEmail.get(0).setPic1313(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic88(bitmap);
+                                    }
+                                }
+                                break;
+
+                            case 13:
+                                if (pictures[0].getImage14() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImage14());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic1414(bitmap);
+                                        newRowInfoPic.setImage14(bitMapToString(bitmap));
+                                        listOfEmail.get(0).setPic1414(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic88(bitmap);
+                                    }
+                                }
+                                break;
+
+                            case 14:
+
+                                if (pictures[0].getImage15() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImage15());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic1515(bitmap);
+                                        newRowInfoPic.setImage15(bitMapToString(bitmap));
+                                        listOfEmail.get(0).setPic1515(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic88(bitmap);
+                                    }
+                                }
+                                break;
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                Log.e("fromclass2", "exception:doInBackground " + e.getMessage());
+                return null;
+            }
+            return newRowInfoPic;// BitmapFactory.decodeStream(in);
+        }
+
+        @Override
+        protected void onPostExecute(NewRowInfo pictures) {
+
+
+            if (pictures != null) {
+                //fillImageBitmap(newRowInfoPic);
+                fillImagesFromEmail();
+                proTTn.dismiss();
+            } else {
+                proTTn.dismiss();
+                Toast.makeText(AddNewRaw.this, "Fail get Pic", Toast.LENGTH_SHORT).show();
+            }
+
+
+        }
+    }
+
 
 }
 
