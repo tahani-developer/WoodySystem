@@ -86,7 +86,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         localIpAddress = generalSettings.getIpAddress();
         localStore = generalSettings.getStore();
 
-//        new JSONTask().execute();
+        //new JSONTask().execute();
         woodPresenter = new WoodPresenter(LoginActivity.this);
         woodPresenter.getUsersData(LoginActivity.this);
 
