@@ -1472,14 +1472,14 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                             fillImage(newRowList.get(0));
                             masterData = new JSONObject();
                             masterData = newRowList.get(0).getJsonDataMaster();
-                            if (newRowList.size() != 0) {
-                                ExportToPDF obj = new ExportToPDF(AddNewRaw.this);
-                                obj.exportTruckAcceptanceSendEmail(newRowList, sdf.format(myCalendar.getTime()));
-                            } else {
-                                Toast.makeText(this, "no Data ", Toast.LENGTH_SHORT).show();
-                            }
-
-                            fillImageBitmap(newRowList.get(0));
+//                            if (newRowList.size() != 0) {
+//                                ExportToPDF obj = new ExportToPDF(AddNewRaw.this);
+//                                obj.exportTruckAcceptanceSendEmail(newRowList, sdf.format(myCalendar.getTime()));
+//                            } else {
+//                                Toast.makeText(this, "no Data ", Toast.LENGTH_SHORT).show();
+//                            }
+//
+//                            fillImageBitmap(newRowList.get(0));
 
 //                            for(int i=0;i<imageBitmapList.size();i++) {
 //                                createDirectoryAndSaveFile(imageBitmapList.get(i),"image_"+i);
@@ -3590,11 +3590,26 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             Log.e("tag of row info", "" + s);
-            progressDialog.dismiss();
+
             if (s != null) {
                 if (s.contains("RAW_INFO SUCCESS")) {
 
                     showSnackbar("Added Successfully", true);
+
+                    if (newRowList.size() != 0) {
+                        try {
+                            ExportToPDF obj = new ExportToPDF(AddNewRaw.this);
+                            obj.exportTruckAcceptanceSendEmail(newRowList, sdf.format(myCalendar.getTime()));
+
+                            fillImageBitmap(newRowList.get(0));
+                        }catch (Exception e){
+
+                        }
+                    } else {
+                        Toast.makeText(AddNewRaw.this, "no Data ", Toast.LENGTH_SHORT).show();
+                    }
+
+
 
                     truckNo.setText("");
                     acceptor.setText("");
@@ -3635,11 +3650,14 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     doneAcceptRow.setEnabled(true);
 
                     sendEmailDialog();
+                    progressDialog.dismiss();
                     Log.e("tag", "save Success");
                 } else {
                     Log.e("tag", "****Failed to export data");
+                    progressDialog.dismiss();
                 }
             } else {
+                progressDialog.dismiss();
                 Log.e("tag", "****Failed to export data Please check internet connection");
                 Toast.makeText(AddNewRaw.this, "Failed to export data Please check internet connection", Toast.LENGTH_LONG).show();
             }
