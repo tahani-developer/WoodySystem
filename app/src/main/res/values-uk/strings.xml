@@ -184,5 +184,10 @@
     <string name="transferBundle">Transfer Bundle</string>
     <string name="transfer">transfer</string>
     <string name="scanBarcode">scan Barcode</string>
+    <string name="clear">Clear</string>
+    <string name="email">Email</string>
+    <string name="fromEmail">from Email</string>
+    <string name="toEmail">to Email</string>
+    <string name="subject">subject</string>
 
 </resources>

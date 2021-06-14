@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -17,11 +18,13 @@ import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.NewRowInfo;
 import com.falconssoft.woodysystem.models.Orders;
 import com.falconssoft.woodysystem.models.PlannedPL;
+import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
@@ -30,6 +33,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -56,6 +60,8 @@ public class ExportToPDF {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        }catch (Exception e){
+
         }
     }
 
@@ -580,10 +586,98 @@ public class ExportToPDF {
         insertCell(pdfPTableHeader, "", directionOfHeader, 1, arabicFontHeader, BaseColor.WHITE);
 
 
+
+//            signature.setRotation(0f);
+//            signature.setPaddingTop(10);
+
+
         try {
 
             doc.add(pdfPTableHeader);
             doc.add(pdfPTable);
+
+            Image signature = null;
+            try {
+                for(int im=0;im<15;im++) {
+                    if(bundles.get(0)!=null) {
+                        Bitmap bitmap=null;
+
+                        switch (im){
+                            case 0:
+                                bitmap=bundles.get(0).getPic11();
+                                break;
+                            case 1:
+                                bitmap=bundles.get(0).getPic22();
+
+                                break;
+                            case 2:
+                                bitmap=bundles.get(0).getPic33();
+
+                                break;
+                            case 3:
+                                bitmap=bundles.get(0).getPic44();
+                                break;
+                            case 4:
+                                bitmap=bundles.get(0).getPic55();
+                                break;
+                            case 5:
+                                bitmap=bundles.get(0).getPic66();
+                                break;
+                            case 6:
+                                bitmap=bundles.get(0).getPic77();
+                                break;
+                            case 7:
+                                bitmap=bundles.get(0).getPic88();
+                                break;
+                            case 8:
+                                bitmap=bundles.get(0).getPic99();
+                                break;
+                            case 9:
+                                bitmap=bundles.get(0).getPic1010();
+                                break;
+                            case 10:
+                                bitmap=bundles.get(0).getPic1111();
+                                break;
+                            case 11:
+                                bitmap=bundles.get(0).getPic1212();
+                                break;
+                            case 12:
+                                bitmap=bundles.get(0).getPic1313();
+                                break;
+                            case 13:
+                                bitmap=bundles.get(0).getPic1414();
+                                break;
+                            case 14:
+                                bitmap=bundles.get(0).getPic1515();
+                                break;
+
+
+
+                        }
+
+                        if(bitmap!=null) {
+                            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+
+                            signature = Image.getInstance(stream.toByteArray());
+                            signature.setAbsolutePosition(0f, 20f);
+                            signature.scalePercent(50f);
+                            signature.setRotationDegrees(0f);
+
+
+
+                          doc.newPage();
+                        }
+                        doc.add(signature);
+                    }
+                }
+            } catch (BadElementException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
             Toast.makeText(context, context.getString(R.string.export_to_pdf), Toast.LENGTH_LONG).show();
 
         } catch (DocumentException e) {

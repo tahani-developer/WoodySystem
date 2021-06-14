@@ -187,5 +187,10 @@
     <string name="scanBarcode">scan Barcode</string>
     <string name="old_bundle_no">old Bundle no</string>
     <string name="new_bundle_no">new Bundle no</string>
+    <string name="clear">Clear</string>
+    <string name="email">Email</string>
+    <string name="fromEmail">from Email</string>
+    <string name="toEmail">to Email</string>
+    <string name="subject">subject</string>
 
 </resources>

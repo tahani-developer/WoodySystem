@@ -5,8 +5,11 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -37,6 +40,7 @@ import com.falconssoft.woodysystem.models.CustomerInfo;
 import com.falconssoft.woodysystem.models.PlannedPL;
 import com.falconssoft.woodysystem.models.Settings;
 import com.falconssoft.woodysystem.models.SupplierInfo;
+import com.falconssoft.woodysystem.stage_one.AddNewRaw;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -236,9 +240,7 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                 customersDialog();
                 break;
             case R.id.add_supplier:
-                Intent intent2 = new Intent(PlannedPackingList.this, AddNewSupplier.class);
-                intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent2);
+                showPasswordDialog();
                 break;
             case R.id.supplier:
                 flag2 = 1;
@@ -248,6 +250,34 @@ public class PlannedPackingList extends AppCompatActivity implements View.OnClic
                 suppliersDialog();
                 break;
         }
+    }
+
+    void showPasswordDialog() {
+       Dialog passwordDialog = new Dialog(this);
+        passwordDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        passwordDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        passwordDialog.setContentView(R.layout.password_dialog);
+
+        TextInputEditText password = passwordDialog.findViewById(R.id.password_dialog_password);
+        TextView done = passwordDialog.findViewById(R.id.password_dialog_done);
+
+        done.setText(getResources().getString(R.string.done));
+
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (password.getText().toString().equals("3030111")) {
+                    passwordDialog.dismiss();
+                    Intent intent2 = new Intent(PlannedPackingList.this, AddNewSupplier.class);
+                    intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent2);
+                } else
+                    Toast.makeText(PlannedPackingList.this, "Password is not correct!", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        passwordDialog.show();
     }
 
     void checkBundlesExistence() {
