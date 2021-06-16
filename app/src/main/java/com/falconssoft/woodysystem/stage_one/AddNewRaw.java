@@ -102,6 +102,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -728,74 +729,87 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                 openCamera();
                 break;
             case R.id.addNewRaw_acceptRow_pdf:
-                if (!truckNo.getText().toString().equals("")) {
-                    if (!acceptor.getText().toString().equals("")) {
-                        if (!ttnNo.getText().toString().equals("")) {
-                            if (!acceptanceDate.getText().toString().equals("")) {
-                                String truckNoLocal = truckNo.getText().toString();
-                                String acceptorLocal = acceptor.getText().toString();
-                                String ttnNoLocal = ttnNo.getText().toString();
-                                String acceptanceDateLocal = acceptanceDate.getText().toString();
+//                if (!truckNo.getText().toString().equals("")) {
+//                    if (!acceptor.getText().toString().equals("")) {
+//                        if (!ttnNo.getText().toString().equals("")) {
+//                            if (!acceptanceDate.getText().toString().equals("")) {
+//                                String truckNoLocal = truckNo.getText().toString();
+//                                String acceptorLocal = acceptor.getText().toString();
+//                                String ttnNoLocal = ttnNo.getText().toString();
+//                                String acceptanceDateLocal = acceptanceDate.getText().toString();
+//
+//                                newRowInfoMaster.setTruckNo(truckNoLocal);
+//                                newRowInfoMaster.setAcceptedPersonName(acceptorLocal);
+//                                newRowInfoMaster.setTtnNo(ttnNoLocal);
+//                                newRowInfoMaster.setNetBundles("" + netBundlesString);
+//                                newRowInfoMaster.setDate(acceptanceDateLocal);
+//                                newRowInfoMaster.setLocationOfAcceptance(locationText);
+//                                newRowInfoMaster.setTotalRejectedNo("" + netRejectedString);
+//                                try {
+//                                    createPdf();
+//                                } catch (Exception e) {
+//                                    Log.e("error_711", "createPdf");
+//                                }
+//                            } else {
+//                                acceptanceDate.setError("Requierd!");
+//                            }
+//                        } else {
+//                            ttnNo.setError("Requierd!");
+//                        }
+//                    } else {
+//                        acceptor.setError("Requierd!");
+//                    }
+//                } else {
+//                    truckNo.setError("Requierd!");
+//                }
 
-                                newRowInfoMaster.setTruckNo(truckNoLocal);
-                                newRowInfoMaster.setAcceptedPersonName(acceptorLocal);
-                                newRowInfoMaster.setTtnNo(ttnNoLocal);
-                                newRowInfoMaster.setNetBundles("" + netBundlesString);
-                                newRowInfoMaster.setDate(acceptanceDateLocal);
-                                newRowInfoMaster.setLocationOfAcceptance(locationText);
-                                newRowInfoMaster.setTotalRejectedNo("" + netRejectedString);
-                                try {
-                                    createPdf();
-                                } catch (Exception e) {
-                                    Log.e("error_711", "createPdf");
-                                }
-                            } else {
-                                acceptanceDate.setError("Requierd!");
-                            }
-                        } else {
-                            ttnNo.setError("Requierd!");
-                        }
-                    } else {
-                        acceptor.setError("Requierd!");
-                    }
-                } else {
-                    truckNo.setError("Requierd!");
+                if(flagIsGet==0){
+                    createPdf();
+                }else {
+                    createPdfEmail();
                 }
+
                 break;
             case R.id.addNewRaw_acceptRow_excel:
 
-                if (!truckNo.getText().toString().equals("")) {
-                    if (!acceptor.getText().toString().equals("")) {
-                        if (!ttnNo.getText().toString().equals("")) {
-                            if (!acceptanceDate.getText().toString().equals("")) {
-                                String truckNoLocal = truckNo.getText().toString();
-                                String acceptorLocal = acceptor.getText().toString();
-                                String ttnNoLocal = ttnNo.getText().toString();
-                                String acceptanceDateLocal = acceptanceDate.getText().toString();
+//                if (!truckNo.getText().toString().equals("")) {
+//                    if (!acceptor.getText().toString().equals("")) {
+//                        if (!ttnNo.getText().toString().equals("")) {
+//                            if (!acceptanceDate.getText().toString().equals("")) {
+//                                String truckNoLocal = truckNo.getText().toString();
+//                                String acceptorLocal = acceptor.getText().toString();
+//                                String ttnNoLocal = ttnNo.getText().toString();
+//                                String acceptanceDateLocal = acceptanceDate.getText().toString();
+//
+//                                newRowInfoMaster.setTruckNo(truckNoLocal);
+//                                newRowInfoMaster.setAcceptedPersonName(acceptorLocal);
+//                                newRowInfoMaster.setTtnNo(ttnNoLocal);
+//                                newRowInfoMaster.setNetBundles("" + netBundlesString);
+//                                newRowInfoMaster.setDate(acceptanceDateLocal);
+//                                newRowInfoMaster.setLocationOfAcceptance(locationText);
+//                                newRowInfoMaster.setTotalRejectedNo("" + netRejectedString);
+//                                try {
+//                                    createExcel();
+//                                } catch (Exception e) {
+//                                    Log.e("error_711", "createExcel");
+//                                }
+//                            } else {
+//                                acceptanceDate.setError("Requierd!");
+//                            }
+//                        } else {
+//                            ttnNo.setError("Requierd!");
+//                        }
+//                    } else {
+//                        acceptor.setError("Requierd!");
+//                    }
+//                } else {
+//                    truckNo.setError("Requierd!");
+//                }
 
-                                newRowInfoMaster.setTruckNo(truckNoLocal);
-                                newRowInfoMaster.setAcceptedPersonName(acceptorLocal);
-                                newRowInfoMaster.setTtnNo(ttnNoLocal);
-                                newRowInfoMaster.setNetBundles("" + netBundlesString);
-                                newRowInfoMaster.setDate(acceptanceDateLocal);
-                                newRowInfoMaster.setLocationOfAcceptance(locationText);
-                                newRowInfoMaster.setTotalRejectedNo("" + netRejectedString);
-                                try {
-                                    createExcel();
-                                } catch (Exception e) {
-                                    Log.e("error_711", "createExcel");
-                                }
-                            } else {
-                                acceptanceDate.setError("Requierd!");
-                            }
-                        } else {
-                            ttnNo.setError("Requierd!");
-                        }
-                    } else {
-                        acceptor.setError("Requierd!");
-                    }
-                } else {
-                    truckNo.setError("Requierd!");
+                if(flagIsGet==0){
+                    createExcel();
+                }else {
+                    createExcelEmail();
                 }
 
                 break;
@@ -810,17 +824,17 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
             case R.id.addNewRaw_get_data:
 //                if(!ttnNo.getText().toString().equals("")) {
 
-                AlertDialog.Builder builderGet = new AlertDialog.Builder(AddNewRaw.this);
-                builderGet.setMessage("are you sure ,you want delete every thing?");
-                builderGet.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+//                AlertDialog.Builder builderGet = new AlertDialog.Builder(AddNewRaw.this);
+//                builderGet.setMessage("are you sure ,you want delete every thing?");
+//                builderGet.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
 //                            tableLayout.removeAllViews();
 
                         new JSONTaskTTN().execute();
-                    }
-                });
-                builderGet.show();
+//                    }
+//                });
+//                builderGet.show();
 
 //                }else {
 //                    ttnNo.setError("Requierd !");
@@ -861,6 +875,8 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         }
 
     }
+
+
 
     public void clear() {
 //        AlertDialog.Builder builder = new AlertDialog.Builder(AddNewRaw.this);
@@ -971,24 +987,133 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     }
 
     void createPdf() {
-        if (newRowList.size() != 0) {
-            ExportToPDF obj = new ExportToPDF(AddNewRaw.this);
-            obj.exportTruckAcceptance(newRowList, newRowInfoMaster, sdf.format(myCalendar.getTime()));
+
+        if (!truckNo.getText().toString().equals("")) {
+            if (!acceptor.getText().toString().equals("")) {
+                if (!ttnNo.getText().toString().equals("")) {
+                    if (!acceptanceDate.getText().toString().equals("")) {
+                        String truckNoLocal = truckNo.getText().toString();
+                        String acceptorLocal = acceptor.getText().toString();
+                        String ttnNoLocal = ttnNo.getText().toString();
+                        String acceptanceDateLocal = acceptanceDate.getText().toString();
+
+                        newRowInfoMaster.setTruckNo(truckNoLocal);
+                        newRowInfoMaster.setAcceptedPersonName(acceptorLocal);
+                        newRowInfoMaster.setTtnNo(ttnNoLocal);
+                        newRowInfoMaster.setNetBundles("" + netBundlesString);
+                        newRowInfoMaster.setDate(acceptanceDateLocal);
+                        newRowInfoMaster.setLocationOfAcceptance(locationText);
+                        newRowInfoMaster.setTotalRejectedNo("" + netRejectedString);
+                        try {
+                            if (newRowList.size() != 0) {
+                                ExportToPDF obj = new ExportToPDF(AddNewRaw.this);
+                                obj.exportTruckAcceptance(newRowList, newRowInfoMaster, sdf.format(myCalendar.getTime()),totalBundles.getText().toString(),totalRejected.getText().toString());
+                            } else {
+                                Toast.makeText(this, "no Data ", Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (Exception e) {
+                            Log.e("error_711", "createPdf");
+                        }
+                    } else {
+                        acceptanceDate.setError("Requierd!");
+                    }
+                } else {
+                    ttnNo.setError("Requierd!");
+                }
+            } else {
+                acceptor.setError("Requierd!");
+            }
         } else {
-            Toast.makeText(this, "no Data ", Toast.LENGTH_SHORT).show();
+            truckNo.setError("Requierd!");
         }
+
+
+
+    }
+
+    void createPdfEmail(){
+        try {
+            if (listOfEmail.size() != 0) {
+                ExportToPDF obj = new ExportToPDF(AddNewRaw.this);
+                obj.exportTruckAcceptanceEmail(listOfEmail, sdf.format(myCalendar.getTime()),totalBundles.getText().toString(),totalRejected.getText().toString());
+            } else {
+                Toast.makeText(this, "no Data ", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Log.e("error_1034", "createPdfE");
+        }
+
     }
 
     void createExcel() {
-//        try {
-        if (newRowList.size() != 0) {
-            ExportToExcel.getInstance().createExcelFile(AddNewRaw.this, "Acceptance_Report_2.xls", 8, (List<?>) newRowInfoMaster, null);
+
+        if (!truckNo.getText().toString().equals("")) {
+            if (!acceptor.getText().toString().equals("")) {
+                if (!ttnNo.getText().toString().equals("")) {
+                    if (!acceptanceDate.getText().toString().equals("")) {
+                        String truckNoLocal = truckNo.getText().toString();
+                        String acceptorLocal = acceptor.getText().toString();
+                        String ttnNoLocal = ttnNo.getText().toString();
+                        String acceptanceDateLocal = acceptanceDate.getText().toString();
+
+                        newRowInfoMaster.setTruckNo(truckNoLocal);
+                        newRowInfoMaster.setAcceptedPersonName(acceptorLocal);
+                        newRowInfoMaster.setTtnNo(ttnNoLocal);
+                        newRowInfoMaster.setNetBundles("" + netBundlesString);
+                        newRowInfoMaster.setDate(acceptanceDateLocal);
+                        newRowInfoMaster.setLocationOfAcceptance(locationText);
+                        newRowInfoMaster.setTotalRejectedNo("" + netRejectedString);
+
+//                        try {
+
+                            if (newRowList.size() != 0) {
+                                if (!truckNo.getText().toString().equals("")) {
+                                    newRowList.get(0).setTruckNo(truckNo.getText().toString());
+                                    ExportToExcel.getInstance().createExcelFile(AddNewRaw.this, "Acceptance_Report_2.xls", 8, newRowList, null);
+
+                                }else {
+                                    truckNo.setError("Required");
+                                }
+                            } else {
+                                Toast.makeText(this, "no Data ", Toast.LENGTH_SHORT).show();
+                            }
+
+//                        } catch (Exception e) {
+//                            Log.e("error_711", "createExcel");
+//                        }
+                    } else {
+                        acceptanceDate.setError("Requierd!");
+                    }
+                } else {
+                    ttnNo.setError("Requierd!");
+                }
+            } else {
+                acceptor.setError("Requierd!");
+            }
         } else {
-            Toast.makeText(this, "no Data ", Toast.LENGTH_SHORT).show();
+            truckNo.setError("Requierd!");
         }
+        
+        
+//        try {
+
 //        }catch (Exception e){
 //            Log.e("dataError","Acc");
 //        }
+    }
+
+    void   createExcelEmail() {
+        try {
+
+            if (listOfEmail.size() != 0) {
+                ExportToExcel.getInstance().createExcelFile(AddNewRaw.this, "Acceptance_Report_2.xls", 8, (List<?>) listOfEmail, null);
+            } else {
+                Toast.makeText(this, "no Data ", Toast.LENGTH_SHORT).show();
+            }
+
+        } catch (Exception e) {
+            Log.e("error_711", "createExcel");
+        }
     }
 
     void rejectAdd() {
@@ -2963,11 +3088,11 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     tableRow.addView(textView);
                     break;
                 case 4:
-                    textView.setText("Pieces");
+                    textView.setText("Pieces"+"/"+"Accept");
                     tableRow.addView(textView);
                     break;
                 case 5:
-                    textView.setText("Rejected");
+                    textView.setText("Pieces"+"/"+"Rejected");
                     tableRow.addView(textView);
                     break;
                 case 6:

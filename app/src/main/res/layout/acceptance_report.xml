@@ -572,7 +572,7 @@
                     android:fontFamily="serif"
                     android:gravity="start|center_vertical"
                     android:paddingHorizontal="10dp"
-                    android:text="@string/reject"
+                    android:text="@string/no_of_p_reject"
                     android:textColor="@color/white"
                     android:textSize="15sp"
                     android:background="@drawable/frame_shape"/>

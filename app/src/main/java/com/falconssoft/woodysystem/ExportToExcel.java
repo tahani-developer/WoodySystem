@@ -413,10 +413,13 @@ public class ExportToExcel {
             try {
                 sheet.addCell(new Label(0, 0, "Truck No")); // column and row
                 sheet.addCell(new Label(2, 0, "Supplier"));
-                sheet.addCell(new Label(3, 0, "TTN NO"));
-                sheet.addCell(new Label(5, 0, "Acceptance Date"));
-                sheet.addCell(new Label(6, 0, "Bundles"));
-                sheet.addCell(new Label(8, 0, "Rejected"));
+                sheet.addCell(new Label(3, 0, "Thick"));
+                sheet.addCell(new Label(5, 0, "Width"));
+                sheet.addCell(new Label(6, 0, "length"));
+                sheet.addCell(new Label(8, 0, "# pieces/Accept"));
+                sheet.addCell(new Label(9, 0, "#Pieces/Rejected"));
+                sheet.addCell(new Label(10, 0, "#Bundle"));
+                sheet.addCell(new Label(11, 0, "Grade"));
 
 
 
@@ -433,10 +436,14 @@ public class ExportToExcel {
                 for (int i = 0; i < list.size(); i++) {
                     sheet.addCell(new Label(0, i + 2, list.get(i).getTruckNo()));
                     sheet.addCell(new Label(2, i + 2, ""+list.get(i).getSupplierName()));
-                    sheet.addCell(new Label(3, i + 2, ""+list.get(i).getTtnNo()));
-                    sheet.addCell(new Label(5, i + 2, ""+list.get(i).getDate()));
-                    sheet.addCell(new Label(6, i + 2,""+ list.get(i).getNetBundles()));
-                    sheet.addCell(new Label(8, i + 2, ""+list.get(i).getTotalRejectedNo()));
+                    sheet.addCell(new Label(3, i + 2, ""+list.get(i).getThickness()));
+                    sheet.addCell(new Label(5, i + 2, ""+list.get(i).getWidth()));
+                    sheet.addCell(new Label(6, i + 2,""+ list.get(i).getLength()));
+                    sheet.addCell(new Label(8, i + 2, ""+list.get(i).getNoOfPieces()));
+                    sheet.addCell(new Label(9, i + 2, ""+list.get(i).getNoOfRejected()));
+                    sheet.addCell(new Label(10, i + 2, ""+list.get(i).getNoOfBundles()));
+                    sheet.addCell(new Label(11, i + 2, ""+list.get(i).getGrade()));
+
 
                     sheet.mergeCells(0,i + 2, 1, i + 2);// col , row, to col , to row
                     sheet.mergeCells(3,i + 2, 4, i + 2);// col , row, to col , to row

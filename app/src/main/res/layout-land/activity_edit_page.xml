@@ -973,7 +973,7 @@
                 android:layout_weight="1"
                 android:background="@color/orange"
                 android:fontFamily="serif"
-                android:text="@string/no_pieces"
+                android:text="@string/no_pieces_accept"
                 android:textColor="@color/white"
                 android:textSize="14sp" />
 
@@ -986,7 +986,7 @@
                 android:layout_weight="1"
                 android:background="@color/orange"
                 android:fontFamily="serif"
-                android:text="@string/reject"
+                android:text="@string/no_pieces_rej"
                 android:textColor="@color/white"
                 android:textSize="14sp" />
 
@@ -1079,7 +1079,7 @@
                     android:fontFamily="serif"
                     android:gravity="start|center_vertical"
                     android:paddingHorizontal="10dp"
-                    android:text="@string/reject"
+                    android:text="@string/no_of_p_reject"
                     android:textColor="@color/white"
                     android:textSize="15sp"
                     android:background="@drawable/frame_shape"/>
