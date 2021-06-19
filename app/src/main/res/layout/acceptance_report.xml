@@ -381,7 +381,7 @@
                 android:layout_weight="1"
                 android:fontFamily="serif"
                 android:gravity="center"
-                android:text="@string/rejected_pieces"
+                android:text="@string/no_of_p_reject"
                 android:textColor="@color/white"
                 android:textSize="15sp" />
 

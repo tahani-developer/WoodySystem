@@ -122,9 +122,27 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp"
+            android:padding="5dp">
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_marginTop="5dp"
             android:orientation="horizontal">
+
 
             <LinearLayout
                 android:id="@+id/addNewRaw_linear_five"
@@ -167,6 +185,20 @@
 
         </LinearLayout>
 
+        <Button
+            android:id="@+id/sendButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/frame_shape"
+            android:fontFamily="serif"
+            android:text="@string/msg_sending_email"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
 <!--        <View-->
 <!--            android:id="@+id/inventory_report_linear6"-->
 <!--            android:layout_width="match_parent"-->
@@ -180,34 +212,6 @@
 <!--            app:layout_constraintStart_toStartOf="parent" />-->
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:gravity="end"
-            android:orientation="horizontal"
-            android:layout_marginBottom="10dp"
-            android:padding="5dp">
 
-            <Button
-                android:id="@+id/sendButton"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_marginEnd="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/frame_shape"
-                android:fontFamily="serif"
-                android:text="@string/msg_sending_email"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="18sp" />
-
-        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

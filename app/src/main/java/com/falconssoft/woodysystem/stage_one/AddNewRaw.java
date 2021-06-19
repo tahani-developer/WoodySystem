@@ -860,7 +860,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
                 if (listOfEmail.size() != 0) {
                     ExportToPDF obj = new ExportToPDF(AddNewRaw.this);
-                    obj.exportTruckAcceptanceSendEmail(listOfEmail, sdf.format(myCalendar.getTime()));
+                    obj.exportTruckAcceptanceSendEmail(listOfEmail, sdf.format(myCalendar.getTime()),totalBundles.getText().toString(),totalRejected.getText().toString());
                     if (newRowInfoPic != null) {
                         fillImageBitmap(newRowInfoPic);
                     }
@@ -927,6 +927,9 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         image14.setVisibility(View.INVISIBLE);
         image15.setVisibility(View.INVISIBLE);
 
+
+        totalBundles.setText("0.0");
+        totalRejected.setText("0.0");
 
         try {
             fillImagesFromEmail();
@@ -1681,7 +1684,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     }
 
     void sendEmailDialog() {
-        final Dialog dialog = new Dialog(AddNewRaw.this);
+        final Dialog dialog = new Dialog(AddNewRaw.this,R.style.Theme_Dialog);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.send_email_dialog);
@@ -3724,7 +3727,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     if (newRowList.size() != 0) {
                         try {
                             ExportToPDF obj = new ExportToPDF(AddNewRaw.this);
-                            obj.exportTruckAcceptanceSendEmail(newRowList, sdf.format(myCalendar.getTime()));
+                            obj.exportTruckAcceptanceSendEmail(newRowList, sdf.format(myCalendar.getTime()),totalBundles.getText().toString(),totalRejected.getText().toString());
 
                             fillImageBitmap(newRowList.get(0));
                         }catch (Exception e){
