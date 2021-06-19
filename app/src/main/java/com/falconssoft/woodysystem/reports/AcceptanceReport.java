@@ -245,7 +245,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
                 break;
             case R.id.acceptance_report_export:
                 ExportToPDF obj = new ExportToPDF(AcceptanceReport.this);
-                obj.exportReportOne(details, filtered, truckString, loc, from.getText().toString(), to.getText().toString(), dfReport.format(myCalendar.getTime()),totalCubic.getText().toString(),totalCubicReg.getText().toString());
+                obj.exportReportOne(details, filtered, truckString, loc, from.getText().toString(), to.getText().toString(), dfReport.format(myCalendar.getTime()),totalCubic.getText().toString(),totalCubicReg.getText().toString(),reportTotalBundle.getText().toString(),reportTotalReject.getText().toString());
                 break;
             case R.id.acceptance_report_export_Excel:
                 ExportToExcel.getInstance().createExcelFile(AcceptanceReport.this, "Acceptance_Report.xls", 6, filtered, details);
