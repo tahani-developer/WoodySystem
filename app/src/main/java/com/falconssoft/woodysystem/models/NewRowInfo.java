@@ -135,6 +135,10 @@ public class NewRowInfo implements Serializable {
     @SerializedName("PIC15")
     private String image15;
 
+    private  String CbmRej;
+    private String CbmAccept;
+    private String truckCMB;
+
     private Bitmap pic11;
     private Bitmap pic22;
     private Bitmap pic33;
@@ -621,6 +625,30 @@ public class NewRowInfo implements Serializable {
 
     public void setRemove(int remove) {
         this.remove = remove;
+    }
+
+    public String getCbmRej() {
+        return CbmRej;
+    }
+
+    public void setCbmRej(String cbmRej) {
+        CbmRej = cbmRej;
+    }
+
+    public String getCbmAccept() {
+        return CbmAccept;
+    }
+
+    public void setCbmAccept(String cbmAccept) {
+        CbmAccept = cbmAccept;
+    }
+
+    public String getTruckCMB() {
+        return truckCMB;
+    }
+
+    public void setTruckCMB(String truckCMB) {
+        this.truckCMB = truckCMB;
     }
 
     public JSONObject getJsonData() {

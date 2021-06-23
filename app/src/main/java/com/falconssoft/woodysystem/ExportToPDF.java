@@ -505,7 +505,7 @@ public class ExportToPDF {
         insertCell(pdfPTableHeader, "Accepted Truck for "+bundles.get(0).getSupplierName(), Element.ALIGN_CENTER, 16, arabicFontHeader, BaseColor.WHITE);
         insertCell(pdfPTableHeader, context.getString(R.string.supplier_name) + ": " + bundles.get(0).getSupplierName(), Element.ALIGN_RIGHT, 8, arabicFontHeader, BaseColor.WHITE);
         insertCell(pdfPTableHeader, context.getString(R.string.truck_no) + ": " + newRowInfoMaster.getTruckNo(), Element.ALIGN_LEFT, 8, arabicFontHeader, BaseColor.WHITE);
-        insertCell(pdfPTableHeader, context.getString(R.string.acceptor) + ": " + newRowInfoMaster.getAcceptedPersonName(), Element.ALIGN_RIGHT, 8, arabicFont, BaseColor.WHITE);
+        insertCell(pdfPTableHeader, context.getString(R.string.ttn_no) + ": " + newRowInfoMaster.getTtnNo(), Element.ALIGN_RIGHT, 8, arabicFont, BaseColor.WHITE);
         insertCell(pdfPTableHeader, context.getString(R.string.acceptance_loc) + ": " + newRowInfoMaster.getLocationOfAcceptance(), Element.ALIGN_LEFT, 8, arabicFont, BaseColor.WHITE);
         insertCell(pdfPTableHeader, context.getString(R.string.date) + ": " + newRowInfoMaster.getDate(), Element.ALIGN_LEFT, 16, arabicFont, BaseColor.WHITE);
 
@@ -681,7 +681,7 @@ public class ExportToPDF {
         insertCell(pdfPTableHeader, "Accepted Truck for "+bundles.get(0).getSupplierName(), Element.ALIGN_CENTER, 16, arabicFontHeader, BaseColor.WHITE);
         insertCell(pdfPTableHeader, context.getString(R.string.supplier_name) + ": " + bundles.get(0).getSupplierName(), Element.ALIGN_RIGHT, 8, arabicFontHeader, BaseColor.WHITE);
         insertCell(pdfPTableHeader, context.getString(R.string.truck_no) + ": " + bundles.get(0).getTruckNo(), Element.ALIGN_LEFT, 8, arabicFontHeader, BaseColor.WHITE);
-        insertCell(pdfPTableHeader, context.getString(R.string.acceptor) + ": " + bundles.get(0).getAcceptedPersonName(), Element.ALIGN_RIGHT, 8, arabicFont, BaseColor.WHITE);
+        insertCell(pdfPTableHeader, context.getString(R.string.ttn_no) + ": " + bundles.get(0).getTtnNo(), Element.ALIGN_RIGHT, 8, arabicFont, BaseColor.WHITE);
         insertCell(pdfPTableHeader, context.getString(R.string.acceptance_loc) + ": " + bundles.get(0).getLocationOfAcceptance(), Element.ALIGN_LEFT, 8, arabicFont, BaseColor.WHITE);
         insertCell(pdfPTableHeader, context.getString(R.string.date) + ": " + bundles.get(0).getDate(), Element.ALIGN_LEFT, 16, arabicFont, BaseColor.WHITE);
 

@@ -114,7 +114,7 @@ import static com.falconssoft.woodysystem.reports.AcceptanceReport.EDIT_LIST2;
 import static com.falconssoft.woodysystem.reports.AcceptanceReport.EDIT_RAW2;
 
 public class AddNewRaw extends AppCompatActivity implements View.OnClickListener {
-
+    double calRej=0,cal=0;
     private boolean mState = false, isEditImage = false;
     private final String STATE_VISIBILITY = "state-visibility";
     private Settings generalSettings;
@@ -1168,8 +1168,8 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         for (int i = 0; i < tableLayout.getChildCount(); i++) {
 
             TableRow tableRow = (TableRow) tableLayout.getChildAt(i);
-            ImageView imageViewEdit = (ImageView) tableRow.getChildAt(8);
-            ImageView imageViewDelete = (ImageView) tableRow.getChildAt(9);
+            ImageView imageViewEdit = (ImageView) tableRow.getChildAt(11);
+            ImageView imageViewDelete = (ImageView) tableRow.getChildAt(12);
             imageViewEdit.setTag(i);
             imageViewDelete.setTag(i);
             tableRow.setTag(i);
@@ -1187,8 +1187,8 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         for (int i = 0; i < tableLayout.getChildCount(); i++) {
 
             TableRow tableRow = (TableRow) tableLayout.getChildAt(i);
-            ImageView imageViewEdit = (ImageView) tableRow.getChildAt(8);
-            ImageView imageViewDelete = (ImageView) tableRow.getChildAt(9);
+            ImageView imageViewEdit = (ImageView) tableRow.getChildAt(11);
+            ImageView imageViewDelete = (ImageView) tableRow.getChildAt(12);
             imageViewEdit.setTag(i);
             imageViewDelete.setTag(i);
             tableRow.setTag(i);
@@ -1325,6 +1325,8 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                                     gradeSpinner.setSelection(gradeList.indexOf("KD"));
                                     gradeText = "KD";
                                     thickness.requestFocus();
+                                     calRej=0;
+                                     cal=0;
 
                                 } else {
                                     noOfBundles.setError("Required!");
@@ -3058,7 +3060,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
     void addTableHeader(TableLayout tableLayout) {
         TableRow tableRow = new TableRow(this);
-        int max = 10;
+        int max = 13;
         if (edieFlag == 11)
             max = 9;
         for (int i = 0; i < max; i++) {
@@ -3095,18 +3097,30 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     tableRow.addView(textView);
                     break;
                 case 5:
-                    textView.setText("Pieces"+"/"+"Rejected");
-                    tableRow.addView(textView);
-                    break;
-                case 6:
                     textView.setText("Bundles");
                     tableRow.addView(textView);
                     break;
+                case 6:
+                    textView.setText("Truck CBM");
+                    tableRow.addView(textView);
+                    break;
                 case 7:
-                    textView.setText("Grade");
+                    textView.setText("Pieces"+"/"+"Rejected");
                     tableRow.addView(textView);
                     break;
                 case 8:
+                    textView.setText("CBM Rej");
+                    tableRow.addView(textView);
+                    break;
+                case 9:
+                    textView.setText("Accept CBM");
+                    tableRow.addView(textView);
+                    break;
+                case 10:
+                    textView.setText("Grade");
+                    tableRow.addView(textView);
+                    break;
+                case 11:
                     TableRow.LayoutParams editParam = new TableRow.LayoutParams(40, 40);
                     imageView.setPadding(0, 10, 0, 10);
                     imageView.setLayoutParams(editParam);
@@ -3114,7 +3128,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     imageView.setBackgroundResource(R.color.orange);
                     tableRow.addView(imageView);
                     break;
-                case 9:
+                case 12:
                     TableRow.LayoutParams deleteParam = new TableRow.LayoutParams(40, 40);
                     imageView.setPadding(0, 10, 0, 10);
                     imageView.setLayoutParams(deleteParam);
@@ -3133,9 +3147,10 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     void fillTableRow(TableRow tableRow, String thicknessText, String widthText, String lengthText, String noOfPiecesText
             , String noOfRejectedText, String noBundleText, String grade) {
         try {
-            int max = 10;
+            int max = 13;
             if (edieFlag == 11)
                 max = 9;
+
             for (int i = 0; i < max; i++) {
                 TextView textView = new TextView(this);
                 textView.setBackgroundResource(R.color.light_orange);
@@ -3145,6 +3160,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                 textView.setTextSize(15);
                 textView.setTextColor(ContextCompat.getColor(this, R.color.gray_dark_one));
                 textView.setLayoutParams(textViewParam);
+
                 switch (i) {
                     case 0:
 //                    TableRow.LayoutParams param = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
@@ -3170,20 +3186,43 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                         textView.setText(noOfPiecesText);
                         tableRow.addView(textView);
                         break;
+
                     case 5:
-                        textView.setText(noOfRejectedText);
-                        tableRow.addView(textView);
-                        break;
-                    case 6:
                         textView.setText(noBundleText);
                         tableRow.addView(textView);
                         break;
+                    case 6:
+                         cal=(Double.parseDouble(thicknessText)*Double.parseDouble(widthText)*Double.parseDouble(lengthText)*
+                                Double.parseDouble(noOfPiecesText)*Double.parseDouble(noBundleText))/1000000000;
+                        cal=Double.parseDouble(String.format("%.3f", cal));
+                        textView.setText(""+cal);
+                        tableRow.addView(textView);
+                        break;
+
                     case 7:
-                        textView.setText(grade);
+                        textView.setText(noOfRejectedText);
                         tableRow.addView(textView);
                         break;
 
                     case 8:
+                         calRej=(Double.parseDouble(thicknessText)*Double.parseDouble(widthText)*Double.parseDouble(lengthText)*
+                                Double.parseDouble(noOfRejectedText))/1000000000;
+                         calRej=Double.parseDouble(String.format("%.3f", calRej));
+                        textView.setText(""+calRej);
+                        tableRow.addView(textView);
+                        break;
+                    case 9:
+                        double acceptCbm=(cal-calRej);
+                        acceptCbm=Double.parseDouble(String.format("%.3f", acceptCbm));
+                        textView.setText(""+acceptCbm);
+                        tableRow.addView(textView);
+                        break;
+                    case 10:
+                        textView.setText(grade);
+                        tableRow.addView(textView);
+                        break;
+
+                    case 11:
                         ImageView imageView = new ImageView(this);
                         TableRow.LayoutParams editParam = new TableRow.LayoutParams(40, TableRow.LayoutParams.WRAP_CONTENT);
                         editParam.setMargins(1, 5, 1, 1);
@@ -3194,7 +3233,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                         imageView.setTag(tableRow.getTag().toString());
                         tableRow.addView(imageView);
 
-                        tableRow.getChildAt(8).setOnClickListener(new View.OnClickListener() {
+                        tableRow.getChildAt(11).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 if (flagIsGet == 0) {
@@ -3209,7 +3248,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                             }
                         });
                         break;
-                    case 9:
+                    case 12:
                         ImageView imageView2 = new ImageView(this);
                         TableRow.LayoutParams deleteParam = new TableRow.LayoutParams(40, TableRow.LayoutParams.WRAP_CONTENT);
                         deleteParam.setMargins(1, 5, 1, 1);
@@ -3220,7 +3259,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                         imageView2.setTag(tableRow.getTag().toString());
                         tableRow.addView(imageView2);
 
-                        tableRow.getChildAt(9).setOnClickListener(new View.OnClickListener() {
+                        tableRow.getChildAt(12).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 if (flagIsGet == 0) {
