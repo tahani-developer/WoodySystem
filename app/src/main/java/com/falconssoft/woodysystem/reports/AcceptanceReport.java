@@ -75,7 +75,7 @@ import static com.falconssoft.woodysystem.reports.AcceptanceInfoReport.EDIT_FLAG
 public class AcceptanceReport extends AppCompatActivity implements AdapterView.OnItemSelectedListener, Serializable, View.OnClickListener {
     // truck Report
 
-    private TextView textView, count, totalCubic, totalCubicReg, supplier, total;
+    private TextView textView, count, totalCubic, totalCubicReg, supplier, total,totalAcceptCbm;
     private static LinearLayout linearLayout;
     private EditText from, to, truckEditText, acceptorEditText, ttnEditText;
     private Button arrow, export, exportToExcel;
@@ -150,6 +150,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
         exportToExcel = findViewById(R.id.acceptance_report_export_Excel);
         totalCubic = findViewById(R.id.truck_report_cubic);
         totalCubicReg = findViewById(R.id.truck_report_cubic_rej);
+        totalAcceptCbm = findViewById(R.id.Report_total_accept_cbm);
         supplier = findViewById(R.id.truck_report_supplier);
         reportTotalReject=findViewById(R.id.Report_total_rejected);
         reportTotalBundle=findViewById(R.id.Report_total_bundles);
@@ -245,7 +246,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
                 break;
             case R.id.acceptance_report_export:
                 ExportToPDF obj = new ExportToPDF(AcceptanceReport.this);
-                obj.exportReportOne(details, filtered, truckString, loc, from.getText().toString(), to.getText().toString(), dfReport.format(myCalendar.getTime()),totalCubic.getText().toString(),totalCubicReg.getText().toString(),reportTotalBundle.getText().toString(),reportTotalReject.getText().toString());
+                obj.exportReportOne(details, filtered, truckString, loc, from.getText().toString(), to.getText().toString(), dfReport.format(myCalendar.getTime()),totalCubic.getText().toString(),totalCubicReg.getText().toString(),reportTotalBundle.getText().toString(),reportTotalReject.getText().toString(),totalAcceptCbm.getText().toString());
                 break;
             case R.id.acceptance_report_export_Excel:
                 ExportToExcel.getInstance().createExcelFile(AcceptanceReport.this, "Acceptance_Report.xls", 6, filtered, details);
@@ -521,6 +522,9 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
             list.setAdapter(adapter2);
             totalCubic.setText("" + String.format("%.3f", sum));
             totalCubicReg.setText("" + String.format("%.3f", sumRej));
+            double acc=0;
+            acc=sum-sumRej;
+            totalAcceptCbm.setText("" + String.format("%.3f", acc));
             getRejectNetBundle();
 
 
@@ -944,9 +948,17 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
                 if (master.size() > 0) {
                     totalCubic.setText("" + master.get(0).getTotalCubic());
                     totalCubicReg.setText("" + master.get(0).getTotalCubicRej());
+                    double acc=0;
+
+                    acc=(master.get(0).getTotalCubic()-master.get(0).getTotalCubicRej());
+                    acc=Double.parseDouble(String.format("%.3f", acc));
+                    Log.e("totalCubic", master.get(0).getTotalCubic() +"  - " + master.get(0).getTotalCubicRej()+"  "+acc);
+
+                    totalAcceptCbm.setText(""+acc);
                 } else {
                     totalCubic.setText("0.000");
                     totalCubicReg.setText("0.000");
+                    totalAcceptCbm.setText("0.000");
                 }
 
                 fillSpinnerAdapter();

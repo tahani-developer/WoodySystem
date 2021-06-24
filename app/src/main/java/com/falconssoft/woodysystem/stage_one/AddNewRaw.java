@@ -3889,9 +3889,11 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     totalBundles.setText("");
                     acceptanceDate.setText(sdf.format(myCalendar.getTime()));
                     acceptanceLocation.setSelection(0);
-                    totalRejected.setText("");
+                    totalRejected.setText("0.000");
                     supplierName = "";
                     searchSupplier.setText("");
+                    totalAcceptCbm.setText("0.000");
+                    totalTruckCbm.setText("0.000");
                     //tableLayout.removeAllViews();
                     newRowList.clear();
                     imagesList.clear();

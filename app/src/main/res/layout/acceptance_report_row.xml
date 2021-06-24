@@ -144,6 +144,20 @@
             android:textSize="15sp"
             />
 
+        <TextView
+            android:id="@+id/truck_report_cubic_accept"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="1"
+            android:background="@color/light_orange"
+            android:fontFamily="serif"
+            android:text="@string/cbmAccept"
+            android:textColor="@color/gray_dark_one"
+            android:textSize="15sp" />
+
         <Button
             android:id="@+id/preview"
             android:layout_width="0dp"
