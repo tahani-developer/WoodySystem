@@ -872,31 +872,211 @@
             android:background="@color/alpha_black"
             android:orientation="vertical">
 
-            <TableLayout
-                android:id="@+id/addNewRaw_table_header"
+<!--            <TableLayout-->
+<!--                android:id="@+id/addNewRaw_table_header"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="3dp"-->
+<!--                android:layout_marginLeft="3dp"-->
+<!--                android:layout_marginTop="5dp"-->
+<!--                android:layout_marginEnd="3dp"-->
+<!--                android:layout_marginRight="3dp" />-->
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="3dp"
-                android:layout_marginLeft="3dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="3dp"
-                android:layout_marginRight="3dp" />
+                android:background="@color/orange"
+                android:orientation="horizontal">
 
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TableLayout
-                    android:id="@+id/addNewRaw_table"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/editRow_supplier"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="3dp"
-                    android:layout_marginLeft="3dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginLeft="2dp"
                     android:layout_marginTop="2dp"
-                    android:layout_marginEnd="3dp"
-                    android:layout_marginRight="3dp" />
+                    android:layout_weight="1"
+                    android:fontFamily="serif"
+                    android:textColor="@color/white"
+                    android:text="@string/supplier_name"
+                    android:textSize="15sp" />
 
-            </ScrollView>
+                <TextView
+                    android:id="@+id/editRow_thickness"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_weight="1"
+                    android:fontFamily="serif"
+                    android:textColor="@color/white"
+                    android:text="@string/thickness"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/editRow_width"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_weight="1"
+                    android:fontFamily="serif"
+                    android:textColor="@color/white"
+                    android:text="@string/width"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/editRow_length"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_weight="1"
+                    android:fontFamily="serif"
+                    android:text="@string/length"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/editRow_pieces"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_weight="1"
+                    android:fontFamily="serif"
+                    android:text="@string/no_pieces_accept"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+
+
+                <TextView
+                    android:id="@+id/editRow_bundles"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_weight="1"
+                    android:fontFamily="serif"
+                    android:text="@string/no_bundle"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/editRow_truckCbm"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_weight="1"
+                    android:fontFamily="serif"
+                    android:text="@string/truck_cbm"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/editRow_rejected"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_weight="1"
+                    android:fontFamily="serif"
+                    android:text="@string/no_of_p_reject"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/editRow_cbmRej"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_weight="1"
+                    android:fontFamily="serif"
+                    android:text="@string/rejcmb"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/editRow_cbmAccept"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_weight="1"
+                    android:fontFamily="serif"
+                    android:text="@string/cbmAccept"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/editRow_grade"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_weight="1"
+                    android:fontFamily="serif"
+                    android:text="@string/grade"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+                <ImageView
+                    android:id="@+id/editRow_edit"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginTop="2dp"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_edit_24dp" />
+
+                <ImageView
+                    android:id="@+id/editRow_delete"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginTop="2dp"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_delete_black_24dp" />
+
+
+            </LinearLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerViewAdd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+<!--            <ScrollView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content">-->
+
+<!--                <TableLayout-->
+<!--                    android:id="@+id/addNewRaw_table"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_marginStart="3dp"-->
+<!--                    android:layout_marginLeft="3dp"-->
+<!--                    android:layout_marginTop="2dp"-->
+<!--                    android:layout_marginEnd="3dp"-->
+<!--                    android:layout_marginRight="3dp" />-->
+
+<!--            </ScrollView>-->
         </LinearLayout>
 
         <View
@@ -917,6 +1097,39 @@
             android:layout_weight="0"
             android:orientation="horizontal">
 
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/alpha_frame"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_three">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="serif"
+                    android:gravity="start|center_vertical"
+                    android:paddingHorizontal="5dp"
+                    android:text="@string/totalTCbm"
+                    android:textColor="@color/white"
+                    android:textSize="15sp"
+                    android:background="@drawable/frame_shape"/>
+
+                <TextView
+                    android:id="@+id/addNewRaw_total_truck_cbm"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:nextFocusDown="@id/addNewRaw_acceptance_location"
+                    android:singleLine="true"
+                    android:textColor="@color/orange"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -959,6 +1172,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/alpha_frame"
                 android:orientation="horizontal"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_three">
 
                 <TextView
@@ -974,6 +1188,73 @@
 
                 <TextView
                     android:id="@+id/addNewRaw_total_bundles"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:nextFocusDown="@id/addNewRaw_acceptance_location"
+                    android:singleLine="true"
+                    android:textColor="@color/orange"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/alpha_frame"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_three">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="serif"
+                    android:gravity="start|center_vertical"
+                    android:paddingHorizontal="5dp"
+                    android:text="@string/totalRejCbm"
+                    android:textColor="@color/white"
+                    android:textSize="15sp"
+                    android:background="@drawable/frame_shape"/>
+
+                <TextView
+                    android:id="@+id/addNewRaw_total_rej_cbm"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:nextFocusDown="@id/addNewRaw_acceptance_location"
+                    android:singleLine="true"
+                    android:textColor="@color/orange"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/alpha_frame"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_three">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="serif"
+                    android:gravity="start|center_vertical"
+                    android:paddingHorizontal="5dp"
+                    android:text="@string/totalAccCbm"
+                    android:textColor="@color/white"
+                    android:textSize="15sp"
+                    android:background="@drawable/frame_shape"/>
+
+                <TextView
+                    android:id="@+id/addNewRaw_total_accept_cbm"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"

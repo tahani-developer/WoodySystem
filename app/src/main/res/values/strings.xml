@@ -196,5 +196,11 @@
     <string name="no_of_p_reject"># Pieces/Rej</string>
     <string name="no_pieces_accept"># Pieces/Accept</string>
     <string name="no_pieces_rej"># Pieces Rej</string>
+    <string name="truck_cbm">Truck CBM</string>
+    <string name="rejcmb">Rej CBM</string>
+    <string name="cbmAccept">Accept CBM</string>
+    <string name="totalTCbm">total Truck CBM</string>
+    <string name="totalRejCbm">total Rej CBM</string>
+    <string name="totalAccCbm">total Accept CBM</string>
 
 </resources>

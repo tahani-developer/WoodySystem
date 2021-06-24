@@ -66,23 +66,8 @@
         android:layout_marginTop="2dp"
         android:layout_marginStart="2dp"
         android:layout_marginLeft="2dp"
-        android:text="@string/no_pieces"
+        android:text="@string/no_pieces_accept"
         android:textSize="15sp" />
-
-    <TextView
-        android:id="@+id/editRow_rejected"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:fontFamily="serif"
-        android:background="@color/light_orange"
-        android:layout_marginTop="2dp"
-        android:layout_marginStart="2dp"
-        android:layout_marginLeft="2dp"
-        android:text="@string/reject"
-        android:textSize="15sp"
-        />
-
     <TextView
         android:id="@+id/editRow_bundles"
         android:layout_width="0dp"
@@ -94,6 +79,61 @@
         android:layout_marginStart="2dp"
         android:layout_marginLeft="2dp"
         android:text="@string/no_bundle"
+        android:textSize="15sp"
+        />
+
+    <TextView
+        android:id="@+id/editRow_truckCbm"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:fontFamily="serif"
+        android:background="@color/light_orange"
+        android:layout_marginTop="2dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginLeft="2dp"
+        android:text="@string/truck_cbm"
+        android:textSize="15sp"
+        />
+
+    <TextView
+        android:id="@+id/editRow_rejected"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:fontFamily="serif"
+        android:background="@color/light_orange"
+        android:layout_marginTop="2dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginLeft="2dp"
+        android:text="@string/no_pieces_rej"
+        android:textSize="15sp"
+        />
+
+    <TextView
+        android:id="@+id/editRow_cbmRej"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:fontFamily="serif"
+        android:background="@color/light_orange"
+        android:layout_marginTop="2dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginLeft="2dp"
+        android:text="@string/grade"
+        android:textSize="15sp"
+        />
+    <TextView
+        android:id="@+id/editRow_cbmAccept"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:fontFamily="serif"
+        android:background="@color/light_orange"
+        android:layout_marginTop="2dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginLeft="2dp"
+        android:text="@string/grade"
         android:textSize="15sp"
         />
 

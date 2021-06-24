@@ -241,7 +241,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1.5"
                     android:fontFamily="serif"
-                    android:text="@string/no_of_pieces"
+                    android:text="@string/no_pieces_accept"
                     android:textColor="@color/white"
                     android:textSize="15sp" />
 
@@ -275,7 +275,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="2"
                     android:fontFamily="serif"
-                    android:text="@string/rejected_pieces"
+                    android:text="@string/no_of_p_reject"
                     android:textColor="@color/white"
                     android:textSize="15sp" />
 

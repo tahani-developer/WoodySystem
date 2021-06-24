@@ -120,7 +120,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     private Settings generalSettings;
     private WoodPresenter presenter;
     private ImageView image1, image2, image3, image4, image5, image6, image7, image8, image9, image10, image11, image12, image13, image14, image15;
-    private TextView addNewSupplier, searchSupplier, addButton, acceptRowButton, mainInfoButton, acceptanceDate, addPicture, totalRejected, totalBundles, total, addImageGalary;
+    private TextView addNewSupplier, searchSupplier, addButton, acceptRowButton, mainInfoButton, acceptanceDate, addPicture, totalRejected, totalBundles, total, addImageGalary,totalTruckCbm,totalRejCbm,totalAcceptCbm;
     private EditText thickness, width, length, noOfPieces, noOfBundles, noOfRejected, truckNo, acceptor, ttnNo;
     private Spinner gradeSpinner, acceptanceLocation;
     private ArrayList<String> gradeList = new ArrayList<>();
@@ -132,7 +132,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     public static String supplierName = "";
     private LinearLayout headerLayout, acceptRowLayout;
     private Button doneAcceptRow, excelAcceptRow, pdfAcceptRow, clear, sendEmailB;
-    private TableLayout tableLayout, headerTableLayout;
+   // private TableLayout tableLayout, headerTableLayout;
     private TableRow tableRow;
     private Dialog searchDialog;
     NewRowInfo newRowInfoMaster;
@@ -158,7 +158,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     private List<SupplierInfo> arraylist;
     private static boolean isCamera = false;
     private int edieFlag = 0;
-    private int netBundlesString = 0, netRejectedString = 0;
+    private double netBundlesString = 0, netRejectedString = 0 ,netTruckCmb=0,netRejCMB =0,acceptCbm=0;
     private ProgressDialog progressDialog, proTTn;
     public static String truckNoBeforeUpdate = "";
     public static String serialBeforeUpdate = "";
@@ -183,6 +183,8 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
     int PICK_IMAGE_MULTIPLE = 1;
     List<NewRowInfo> listOfEmail = new ArrayList<>();
     int flagIsGet = 0;
+    RecyclerView recyclerViewAdd;
+    AddNewAdapter addNewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -205,6 +207,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         newRowInfoMaster = new NewRowInfo();
         imageBitmapList = new ArrayList<>();
         sdf = new SimpleDateFormat(myFormat, Locale.US);
+        recyclerViewAdd=findViewById(R.id.recyclerViewAdd);
         coordinatorLayout = findViewById(R.id.addNewRow_coordinator);
         addNewSupplier = findViewById(R.id.addNewRaw_add_supplier);
         addImageGalary = findViewById(R.id.addNewRaw_get_photo);
@@ -221,14 +224,17 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         headerLayout = findViewById(R.id.addNewRaw_linearLayoutHeader);
         acceptRowLayout = findViewById(R.id.addNewRaw_acceptRow_linear);
         mainInfoButton = findViewById(R.id.addNewRaw_acceptRow_back);
-        tableLayout = findViewById(R.id.addNewRaw_table);
-        headerTableLayout = findViewById(R.id.addNewRaw_table_header);
+//        tableLayout = findViewById(R.id.addNewRaw_table);
+//        headerTableLayout = findViewById(R.id.addNewRaw_table_header);
         truckNo = findViewById(R.id.addNewRaw_truckNo);
         acceptanceDate = findViewById(R.id.addNewRaw_acceptance_date);
         acceptor = findViewById(R.id.addNewRaw_acceptor);
         acceptanceLocation = findViewById(R.id.addNewRaw_acceptance_location);
         ttnNo = findViewById(R.id.addNewRaw_ttn_no);
         totalRejected = findViewById(R.id.addNewRaw_total_rejected);
+        totalTruckCbm = findViewById(R.id.addNewRaw_total_truck_cbm);
+        totalRejCbm = findViewById(R.id.addNewRaw_total_rej_cbm);
+        totalAcceptCbm = findViewById(R.id.addNewRaw_total_accept_cbm);
         totalBundles = findViewById(R.id.addNewRaw_total_bundles);
         doneAcceptRow = findViewById(R.id.addNewRaw_acceptRow_done);
         excelAcceptRow = findViewById(R.id.addNewRaw_acceptRow_excel);
@@ -451,7 +457,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                 }
             });
 
-            addTableHeader(headerTableLayout);
+           // addTableHeader(headerTableLayout);
             fillDataFromReport1();
         } else {
             locationList.clear();
@@ -482,7 +488,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
             fillTableRow(tableRow, "" + (int) editList.get(i).getThickness(), "" + (int) editList.get(i).getWidth()
                     , "" + (int) editList.get(i).getLength(), "" + (int) editList.get(i).getNoOfPieces()
                     , "" + (int) editList.get(i).getNoOfRejected(), "" + (int) editList.get(i).getNoOfBundles(), gradeText);
-            tableLayout.addView(tableRow);
+          //  tableLayout.addView(tableRow);
 
             int finalI = i;
 //            tableRow.getChildAt(8).setOnClickListener(new View.OnClickListener() {
@@ -571,7 +577,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
                 if (flagIsGet == 0) {
                     addButtonMethod(-1, 0);
-                    rejectAdd();
+//                    rejectAdd();
                 } else {
                     Toast.makeText(this, "This For Email Can Not Edit", Toast.LENGTH_SHORT).show();
 
@@ -860,7 +866,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
                 if (listOfEmail.size() != 0) {
                     ExportToPDF obj = new ExportToPDF(AddNewRaw.this);
-                    obj.exportTruckAcceptanceSendEmail(listOfEmail, sdf.format(myCalendar.getTime()),totalBundles.getText().toString(),totalRejected.getText().toString());
+                    obj.exportTruckAcceptanceSendEmail(listOfEmail, sdf.format(myCalendar.getTime()),totalTruckCbm.getText().toString(),totalRejected.getText().toString(),totalRejCbm.getText().toString(),totalAcceptCbm.getText().toString());
                     if (newRowInfoPic != null) {
                         fillImageBitmap(newRowInfoPic);
                     }
@@ -888,8 +894,13 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
         flagIsGet = 0;
         listOfEmail.clear();
-        tableLayout.removeAllViews();
-        headerTableLayout.removeAllViews();
+//        tableLayout.removeAllViews();
+//        headerTableLayout.removeAllViews();
+
+
+        recyclerViewAdd.setLayoutManager(new LinearLayoutManager(this));
+        addNewAdapter = new AddNewAdapter(this, listOfEmail);
+        recyclerViewAdd.setAdapter(addNewAdapter);
         ttnNo.setText("");
         try {
             newRowInfoPic.setPic11(null);
@@ -936,7 +947,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         }catch (Exception e){
 
         }
-        rejectAdd();
+       // rejectAdd();
 //            }
 //        });
 //        builder.show();
@@ -1010,7 +1021,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                         try {
                             if (newRowList.size() != 0) {
                                 ExportToPDF obj = new ExportToPDF(AddNewRaw.this);
-                                obj.exportTruckAcceptance(newRowList, newRowInfoMaster, sdf.format(myCalendar.getTime()),totalBundles.getText().toString(),totalRejected.getText().toString());
+                                obj.exportTruckAcceptance(newRowList, newRowInfoMaster, sdf.format(myCalendar.getTime()),totalTruckCbm.getText().toString(),totalRejected.getText().toString(),totalRejCbm.getText().toString(),totalAcceptCbm.getText().toString());
                             } else {
                                 Toast.makeText(this, "no Data ", Toast.LENGTH_SHORT).show();
                             }
@@ -1038,7 +1049,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         try {
             if (listOfEmail.size() != 0) {
                 ExportToPDF obj = new ExportToPDF(AddNewRaw.this);
-                obj.exportTruckAcceptanceEmail(listOfEmail, sdf.format(myCalendar.getTime()),totalBundles.getText().toString(),totalRejected.getText().toString());
+                obj.exportTruckAcceptanceEmail(listOfEmail, sdf.format(myCalendar.getTime()),totalTruckCbm.getText().toString(),totalRejected.getText().toString(),totalRejCbm.getText().toString(),totalAcceptCbm.getText().toString());
             } else {
                 Toast.makeText(this, "no Data ", Toast.LENGTH_SHORT).show();
             }
@@ -1119,7 +1130,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         }
     }
 
-    void rejectAdd() {
+   public  void rejectAdd() {
         acceptRowButton.setBackgroundResource(R.drawable.frame_shape_3);
         mainInfoButton.setBackgroundResource(R.drawable.frame_shape_2);
 
@@ -1130,69 +1141,120 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
         netRejectedString = 0;
         netBundlesString = 0;
+        netRejCMB=0;
+        netTruckCmb=0;
+        acceptCbm=0;
         Log.e("fromedit11", "" + editList.size());
         if (flagIsGet == 0) {
             if (edieFlag == 11)
                 for (int n = 0; n < editList.size(); n++) {
                     netRejectedString += editList.get(n).getNoOfRejected();
                     netBundlesString += editList.get(n).getNoOfBundles();
+                    netRejCMB += Double.parseDouble(editList.get(n).getCbmRej());
+                    netTruckCmb += Double.parseDouble(editList.get(n).getTruckCMB());
+                    acceptCbm += Double.parseDouble(editList.get(n).getCbmAccept());
                 }
             else if (edieFlag == 10) ;
             else
                 for (int n = 0; n < newRowList.size(); n++) {
                     netRejectedString += newRowList.get(n).getNoOfRejected();
                     netBundlesString += newRowList.get(n).getNoOfBundles();
+                    Log.e("newRawListIII"," vv = "+n+newRowList.get(n).getCbmRej());
+
+                    netRejCMB += Double.parseDouble(newRowList.get(n).getCbmRej());
+                    netTruckCmb += Double.parseDouble(newRowList.get(n).getTruckCMB());
+                    acceptCbm += Double.parseDouble(newRowList.get(n).getCbmAccept());
                 }
         } else {
             for (int n = 0; n < listOfEmail.size(); n++) {
                 netRejectedString += listOfEmail.get(n).getNoOfRejected();
                 netBundlesString += listOfEmail.get(n).getNoOfBundles();
+                netRejCMB += Double.parseDouble(listOfEmail.get(n).getCbmRej());
+                netTruckCmb += Double.parseDouble(listOfEmail.get(n).getTruckCMB());
+                acceptCbm += Double.parseDouble(listOfEmail.get(n).getCbmAccept());
             }
         }
 
-        totalRejected.setText("" + netRejectedString);
+       Log.e("newRawListIII"," gg = "+netRejectedString+"  "+netBundlesString +"  "+netTruckCmb+"   "+netRejCMB+"   "+acceptCbm);
+
+       netRejectedString=Double.parseDouble(String.format("%.3f", netRejectedString));
+
+       netTruckCmb=Double.parseDouble(String.format("%.3f", netTruckCmb));
+
+       netRejCMB=Double.parseDouble(String.format("%.3f", netRejCMB));
+
+       acceptCbm=Double.parseDouble(String.format("%.3f", acceptCbm));
+
+
+       totalRejected.setText("" + netRejectedString);
         totalBundles.setText("" + netBundlesString);
+        totalTruckCbm.setText(""+netTruckCmb);
+        totalRejCbm.setText(""+netRejCMB);
+        totalAcceptCbm.setText(""+acceptCbm);
+
     }
 
     void updateFlag(NewRowInfo newRowInfo, int index) {
         Log.e("aaaa1", " " + newRowList.size() + "     " + index);
         newRowList.remove(index);
-        tableLayout.removeViewAt(index);
+       // tableLayout.removeViewAt(index);
         newRowList.add(index, newRowInfo);
-        tableRow = new TableRow(this);
-        fillTableRow(tableRow, "" + newRowInfo.getThickness(), "" + newRowInfo.getWidth(), "" + newRowInfo.getLength()
-                , "" + newRowInfo.getNoOfPieces(), "" + newRowInfo.getNoOfRejected(), "" + newRowInfo.getNoOfBundles(), newRowInfo.getGrade());
-        tableLayout.addView(tableRow, index);
+
+        addNewAdapter.notifyDataSetChanged();
+        //rejectAdd();
+        //tableRow = new TableRow(this);
+//        fillTableRow(tableRow, "" + newRowInfo.getThickness(), "" + newRowInfo.getWidth(), "" + newRowInfo.getLength()
+//                , "" + newRowInfo.getNoOfPieces(), "" + newRowInfo.getNoOfRejected(), "" + newRowInfo.getNoOfBundles(), newRowInfo.getGrade());
+      //  tableLayout.addView(tableRow, index);
 
 
-        for (int i = 0; i < tableLayout.getChildCount(); i++) {
-
-            TableRow tableRow = (TableRow) tableLayout.getChildAt(i);
-            ImageView imageViewEdit = (ImageView) tableRow.getChildAt(11);
-            ImageView imageViewDelete = (ImageView) tableRow.getChildAt(12);
-            imageViewEdit.setTag(i);
-            imageViewDelete.setTag(i);
-            tableRow.setTag(i);
-        }
+//        for (int i = 0; i < tableLayout.getChildCount(); i++) {
+//
+//            TableRow tableRow = (TableRow) tableLayout.getChildAt(i);
+//            ImageView imageViewEdit = (ImageView) tableRow.getChildAt(11);
+//            ImageView imageViewDelete = (ImageView) tableRow.getChildAt(12);
+//            imageViewEdit.setTag(i);
+//            imageViewDelete.setTag(i);
+//            tableRow.setTag(i);
+//        }
 
         Log.e("aaaa", " " + newRowList.size());
 
 
     }
 
-    void deleteFlag() {
-        newRowList.remove(index);
-        tableLayout.removeViewAt(index);
+    void deleteFlag(int index) {
 
-        for (int i = 0; i < tableLayout.getChildCount(); i++) {
 
-            TableRow tableRow = (TableRow) tableLayout.getChildAt(i);
-            ImageView imageViewEdit = (ImageView) tableRow.getChildAt(11);
-            ImageView imageViewDelete = (ImageView) tableRow.getChildAt(12);
-            imageViewEdit.setTag(i);
-            imageViewDelete.setTag(i);
-            tableRow.setTag(i);
+        if (flagIsGet == 0) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(AddNewRaw.this);
+            builder.setMessage("Are you want delete this row?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    newRowList.remove(index);
+
+                    addNewAdapter.notifyDataSetChanged();
+                  //  rejectAdd();
+
+                }
+            });
+            builder.show();
+        } else {
+            Toast.makeText(AddNewRaw.this, "Can Not Delete", Toast.LENGTH_SHORT).show();
         }
+
+        //tableLayout.removeViewAt(index);
+
+//        for (int i = 0; i < tableLayout.getChildCount(); i++) {
+//
+//            TableRow tableRow = (TableRow) tableLayout.getChildAt(i);
+//            ImageView imageViewEdit = (ImageView) tableRow.getChildAt(11);
+//            ImageView imageViewDelete = (ImageView) tableRow.getChildAt(12);
+//            imageViewEdit.setTag(i);
+//            imageViewDelete.setTag(i);
+//            tableRow.setTag(i);
+//        }
 
         Log.e("aaaa", " " + newRowList.size());
 
@@ -1266,20 +1328,25 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                                     rowInfo.setNoOfBundles(Double.parseDouble(noOfBundlesLocal));
                                     rowInfo.setGrade(gradeText);
 
-                                    if (headerTableLayout.getChildCount() == 0)
-                                        addTableHeader(headerTableLayout);
+//                                    if (headerTableLayout.getChildCount() == 0)
+//                                        addTableHeader(headerTableLayout);
 
                                     tableRow = new TableRow(this);
-                                    if (edieFlag == 10 && tableLayout.getChildCount() < 2) { //Report 2
-                                        tableLayout.removeAllViews();
+                                    if (edieFlag == 10 /*&& tableLayout.getChildCount() < 2*/) { //Report 2
+                                       // tableLayout.removeAllViews();
                                         newRowList.clear();
                                         rowInfo.setSerial(editSerial);
                                         Log.e("reportTwo", rowInfo.getSerial());
 
-                                        fillTableRow(tableRow, thicknessLocal, widthLocal, lengthLocal, noOfPiecesLocal, noOfRejectedLocal, noOfBundlesLocal, gradeText);
-                                        tableLayout.addView(tableRow);
+//                                        fillTableRow(tableRow, thicknessLocal, widthLocal, lengthLocal, noOfPiecesLocal, noOfRejectedLocal, noOfBundlesLocal, gradeText);
+//                                        tableLayout.addView(tableRow);
+
+                                        recyclerViewAdd.setLayoutManager(new LinearLayoutManager(this));
+                                        addNewAdapter = new AddNewAdapter(this, newRowList);
+                                        recyclerViewAdd.setAdapter(addNewAdapter);
+
                                         supplierName = "";
-                                    } else if (edieFlag == 11 && tableLayout.getChildCount() > 0) { //truck Report
+                                    } else if (edieFlag == 11 /*&& tableLayout.getChildCount() > 0*/) { //truck Report
 
 //                                        boolean isOverflowRaw = false;
 //                                        for (int m = 0; m < editList.size(); m++)
@@ -1298,7 +1365,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                                         rowInfo.setSerial(editSerial);//oldNewRowInfo.getSerial());
                                         oldNewRowInfo = new NewRowInfo();
                                         editList.add(rowInfo);
-                                        tableLayout.removeAllViews();
+                                      //  tableLayout.removeAllViews();
                                         fillDataFromReport1();
                                         Log.e("fromedit11", "2:" + editList.size());
 //                                        } else {
@@ -1306,15 +1373,22 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 //                                            Toast.makeText(this, "Please choose the raw first!", Toast.LENGTH_SHORT).show();
 //                                        }
                                     } else {
-                                        fillTableRow(tableRow, thicknessLocal, widthLocal, lengthLocal, noOfPiecesLocal, noOfRejectedLocal, noOfBundlesLocal, gradeText);
-                                        if (flag == 1) {
-                                            tableLayout.addView(tableRow, indexs);
-                                        } else {
-                                            tableLayout.addView(tableRow);
-                                        }
+                                    //    fillTableRow(tableRow, thicknessLocal, widthLocal, lengthLocal, noOfPiecesLocal, noOfRejectedLocal, noOfBundlesLocal, gradeText);
+                                        if (!(rowInfo == null))
+                                            newRowList.add(rowInfo);
+
+                                        recyclerViewAdd.setLayoutManager(new LinearLayoutManager(this));
+                                        addNewAdapter = new AddNewAdapter(this, newRowList);
+                                        recyclerViewAdd.setAdapter(addNewAdapter);
+
+//                                        if (flag == 1) {
+//                                            tableLayout.addView(tableRow, indexs);
+//                                        } else {
+//                                            tableLayout.addView(tableRow);
+//                                        }
                                     }
-                                    if (!(rowInfo == null))
-                                        newRowList.add(rowInfo);
+//                                    if (!(rowInfo == null))
+//                                        newRowList.add(rowInfo);
 
                                     thickness.setText("");
                                     width.setText("");
@@ -1501,7 +1575,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                                                 newRowInfo1.setSupplierName(addNewRaw_search_supplier_edit.getText().toString());
                                                 newRowInfo1.setGrade(gradeTextEdit[0]);
                                                 updateFlag(newRowInfo1, index);
-                                                rejectAdd();
+                                            //    rejectAdd();
                                                 dialog.dismiss();
 
                                             } else {
@@ -3272,8 +3346,8 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                                         public void onClick(DialogInterface dialog, int which) {
 //                            tableLayout.removeAllViews();
 
-                                            deleteFlag();
-                                            rejectAdd();
+                                            //deleteFlag();
+                                            //rejectAdd();
 
                                         }
                                     });
@@ -3299,6 +3373,37 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        newRowList.clear();
+        listOfEmail.clear();
+    }
+
+    void fillCbmVal(int i,double truckCbm,double rejCbm,double acceptCbms){
+
+        if(flagIsGet==0) {
+            newRowList.get(i).setTruckCMB("" + truckCbm);
+            newRowList.get(i).setCbmRej("" + rejCbm);
+            newRowList.get(i).setCbmAccept("" + acceptCbms);
+
+            Log.e("newRawListIII", i + " size  = " + newRowList.size());
+            if (i == (newRowList.size() - 1)) {
+                rejectAdd();
+            }
+        }else{
+
+            listOfEmail.get(i).setTruckCMB("" + truckCbm);
+            listOfEmail.get(i).setCbmRej("" + rejCbm);
+            listOfEmail.get(i).setCbmAccept("" + acceptCbms);
+
+            Log.e("newRawListIII", i + " size  = " + listOfEmail.size());
+            if (i == (listOfEmail.size() - 1)) {
+                rejectAdd();
+            }
+
+        }
+    }
 
     void supplierDialog() {
         suppliers.clear();
@@ -3389,11 +3494,11 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
         if (isCamera) {
             List<TableRow> tableRows = new ArrayList<>();
-            int rowcount = tableLayout.getChildCount();
-            for (int i = 0; i < rowcount; i++) {
-                TableRow row = (TableRow) tableLayout.getChildAt(i);
-                tableRows.add(row);
-            }
+          //  int rowcount = tableLayout.getChildCount();
+//            for (int i = 0; i < rowcount; i++) {
+//                TableRow row = (TableRow) tableLayout.getChildAt(i);
+//                tableRows.add(row);
+//            }
             outState.putSerializable("table", (Serializable) tableRows);
         }
         outState.putSerializable("list", (Serializable) imagesList);
@@ -3427,14 +3532,14 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
             isCamera = false;
             List<TableRow> tableRows = (List<TableRow>) savedInstanceState.getSerializable("table");
 
-            if (tableRows.size() > 0)
-                addTableHeader(headerTableLayout);
+//            if (tableRows.size() > 0)
+//                addTableHeader(headerTableLayout);
 
             for (int i = 0; i < tableRows.size(); i++) {
                 if (tableRows.get(i).getParent() != null) {
                     ((ViewGroup) tableRows.get(i).getParent()).removeView(tableRows.get(i)); // <- fix
                 }
-                tableLayout.addView(tableRows.get(i));
+             //   tableLayout.addView(tableRows.get(i));
             }
         }
         isEditImage = false;
@@ -3766,7 +3871,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     if (newRowList.size() != 0) {
                         try {
                             ExportToPDF obj = new ExportToPDF(AddNewRaw.this);
-                            obj.exportTruckAcceptanceSendEmail(newRowList, sdf.format(myCalendar.getTime()),totalBundles.getText().toString(),totalRejected.getText().toString());
+                            obj.exportTruckAcceptanceSendEmail(newRowList, sdf.format(myCalendar.getTime()),totalTruckCbm.getText().toString(),totalRejected.getText().toString(),totalRejCbm.getText().toString(),totalAcceptCbm.getText().toString());
 
                             fillImageBitmap(newRowList.get(0));
                         }catch (Exception e){
@@ -3787,7 +3892,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     totalRejected.setText("");
                     supplierName = "";
                     searchSupplier.setText("");
-                    tableLayout.removeAllViews();
+                    //tableLayout.removeAllViews();
                     newRowList.clear();
                     imagesList.clear();
 //                    bitmapImagesList.clear();
@@ -3909,7 +4014,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     totalRejected.setText("");
                     supplierName = "";
                     searchSupplier.setText("");
-                    tableLayout.removeAllViews();
+                  //  tableLayout.removeAllViews();
                     newRowList.clear();
 
                     Intent it;
@@ -3986,9 +4091,9 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         protected void onPostExecute(final String result) {
             super.onPostExecute(result);
 
-            tableLayout.removeAllViews();
-            headerTableLayout.removeAllViews();
-            rejectAdd();
+//            tableLayout.removeAllViews();
+//            headerTableLayout.removeAllViews();
+           // rejectAdd();
             if (result != null) {
                 if (!result.contains("noBundleFound")) {
                     // Log.e("result", "*****************" + result.size());
@@ -3998,21 +4103,23 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     listOfEmail.clear();
                     listOfEmail.addAll(list.getDetailsList());
 
-                    tableLayout.removeAllViews();
-                    addTableHeader(headerTableLayout);
+                   // tableLayout.removeAllViews();
+                  //  addTableHeader(headerTableLayout);
                     for (int i = 0; i < listOfEmail.size(); i++) {
                         supplierName = listOfEmail.get(i).getSupplierName();
                         tableRow = new TableRow(AddNewRaw.this);
                         gradeText = listOfEmail.get(i).getGrade();
-                        fillTableRow(tableRow, "" + (int) listOfEmail.get(i).getThickness(), "" + (int) listOfEmail.get(i).getWidth()
-                                , "" + (int) listOfEmail.get(i).getLength(), "" + (int) listOfEmail.get(i).getNoOfPieces()
-                                , "" + (int) listOfEmail.get(i).getNoOfRejected(), "" + (int) listOfEmail.get(i).getNoOfBundles(), gradeText);
-                        tableLayout.addView(tableRow);
+//                        fillTableRow(tableRow, "" + (int) listOfEmail.get(i).getThickness(), "" + (int) listOfEmail.get(i).getWidth()
+//                                , "" + (int) listOfEmail.get(i).getLength(), "" + (int) listOfEmail.get(i).getNoOfPieces()
+//                                , "" + (int) listOfEmail.get(i).getNoOfRejected(), "" + (int) listOfEmail.get(i).getNoOfBundles(), gradeText);
+                    //    tableLayout.addView(tableRow);
 
-
+                        recyclerViewAdd.setLayoutManager(new LinearLayoutManager(AddNewRaw.this));
+                        addNewAdapter = new AddNewAdapter(AddNewRaw.this, listOfEmail);
+                        recyclerViewAdd.setAdapter(addNewAdapter);
                     }
                     new BitmapImage2().execute(listOfEmail.get(0));
-                    rejectAdd();
+                  // rejectAdd();
                 } else {
                     flagIsGet = 0;
                     Toast.makeText(AddNewRaw.this, "The TTN.NO Not Found", Toast.LENGTH_SHORT).show();

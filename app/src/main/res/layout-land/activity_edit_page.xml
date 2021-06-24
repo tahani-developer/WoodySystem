@@ -1063,6 +1063,77 @@
             android:orientation="horizontal">
 
 
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:visibility="gone"
+                android:background="@drawable/alpha_frame"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_three">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="serif"
+                    android:gravity="start|center_vertical"
+                    android:paddingHorizontal="5dp"
+                    android:text="@string/net"
+                    android:textColor="@color/white"
+                    android:textSize="15sp"
+                    android:background="@drawable/frame_shape"/>
+
+                <TextView
+                    android:id="@+id/editPage_total_bundles"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:nextFocusDown="@id/addNewRaw_acceptance_location"
+                    android:singleLine="true"
+                    android:textColor="@color/orange"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/alpha_frame"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_three">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="serif"
+                    android:gravity="start|center_vertical"
+                    android:paddingHorizontal="5dp"
+                    android:text="@string/totalTCbm"
+                    android:textColor="@color/white"
+                    android:textSize="15sp"
+                    android:background="@drawable/frame_shape"/>
+
+                <TextView
+                    android:id="@+id/addNewRaw_total_truck_cbm"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:nextFocusDown="@id/addNewRaw_acceptance_location"
+                    android:singleLine="true"
+                    android:textColor="@color/orange"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -1103,6 +1174,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/alpha_frame"
                 android:orientation="horizontal"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_three">
 
                 <TextView
@@ -1117,7 +1189,7 @@
                     android:background="@drawable/frame_shape"/>
 
                 <TextView
-                    android:id="@+id/editPage_total_bundles"
+                    android:id="@+id/addNewRaw_total_bundles"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -1130,6 +1202,75 @@
                     android:textSize="15sp" />
 
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/alpha_frame"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_three">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="serif"
+                    android:gravity="start|center_vertical"
+                    android:paddingHorizontal="5dp"
+                    android:text="@string/totalRejCbm"
+                    android:textColor="@color/white"
+                    android:textSize="15sp"
+                    android:background="@drawable/frame_shape"/>
+
+                <TextView
+                    android:id="@+id/addNewRaw_total_rej_cbm"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:nextFocusDown="@id/addNewRaw_acceptance_location"
+                    android:singleLine="true"
+                    android:textColor="@color/orange"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/alpha_frame"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_three">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="serif"
+                    android:gravity="start|center_vertical"
+                    android:paddingHorizontal="5dp"
+                    android:text="@string/totalAccCbm"
+                    android:textColor="@color/white"
+                    android:textSize="15sp"
+                    android:background="@drawable/frame_shape"/>
+
+                <TextView
+                    android:id="@+id/addNewRaw_total_accept_cbm"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:nextFocusDown="@id/addNewRaw_acceptance_location"
+                    android:singleLine="true"
+                    android:textColor="@color/orange"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

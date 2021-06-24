@@ -102,7 +102,7 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
     private Settings generalSettings;
     private WoodPresenter presenter;
     private ImageView image1, image2, image3, image4, image5, image6, image7, image8, image9, image10, image11, image12, image13, image14, image15;
-    private TextView addNewSupplier, searchSupplier, addButton, acceptRowButton, mainInfoButton, acceptanceDate, addPicture, totalRejected, totalBundles;
+    private TextView addNewSupplier, searchSupplier, addButton, acceptRowButton, mainInfoButton, acceptanceDate, addPicture, totalRejected, totalBundles, total, addImageGalary,totalTruckCbm,totalRejCbm,totalAcceptCbm;
     private EditText thickness, width, length, noOfPieces, noOfBundles, noOfRejected, truckNo, acceptor, ttnNo;
     private Spinner gradeSpinner, acceptanceLocation;
     private ArrayList<String> gradeList = new ArrayList<>();
@@ -135,7 +135,7 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
     private List<SupplierInfo> arraylist;
     private static boolean isCamera = false;
     private int edieFlag = 0;
-    private int netBundlesString = 0, netRejectedString = 0;
+    private double netBundlesString = 0, netRejectedString = 0 ,netTruckCmb=0,netRejCMB =0,acceptCbm=0;
     private ProgressDialog progressDialog;
     public static String truckNoBeforeUpdate = "";
     public static String serialBeforeUpdate = "";
@@ -188,6 +188,9 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
         acceptanceLocation = findViewById(R.id.editPage_acceptance_location);
         ttnNo = findViewById(R.id.editPage_ttn_no);
         totalRejected = findViewById(R.id.editPage_total_rejected);
+        totalTruckCbm = findViewById(R.id.addNewRaw_total_truck_cbm);
+        totalRejCbm = findViewById(R.id.addNewRaw_total_rej_cbm);
+        totalAcceptCbm = findViewById(R.id.addNewRaw_total_accept_cbm);
         totalBundles = findViewById(R.id.editPage_total_bundles);
         doneAcceptRow = findViewById(R.id.editPage_acceptRow_done);
         addPicture = findViewById(R.id.editPage_add_photo);
@@ -550,7 +553,7 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
                                             editList.get(index).setGrade( gradeTextEdit[0]);
 
                                             editPageAdapter.notifyDataSetChanged();
-                                            rejectAdd();
+                                            //rejectAdd();
                                             dialog.dismiss();
 
                                         } else {
@@ -668,11 +671,11 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
                 break;
             case R.id.editPage_acceptRaw_button:
-               rejectAdd();
+               //rejectAdd();
                 break;
             case R.id.editPage_add_button:
                 addButtonMethod();
-                rejectAdd();
+               // rejectAdd();
                 break;
             case R.id.editPage_add_photo:
                 openCamera();
@@ -767,34 +770,58 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
 
     }
 
-    void rejectAdd(){
-
-        //headerLayout.setVisibility(View.GONE);
+    public  void rejectAdd() {
         acceptRowButton.setBackgroundResource(R.drawable.frame_shape_3);
         mainInfoButton.setBackgroundResource(R.drawable.frame_shape_2);
 
-        //Animation animation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
-        //acceptRowLayout.setVisibility(View.VISIBLE);
-        //acceptRowLayout.startAnimation(animation);
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+        // acceptRowLayout.setVisibility(View.VISIBLE);
+        // acceptRowLayout.startAnimation(animation);
         truckNo.requestFocus();
 
         netRejectedString = 0;
         netBundlesString = 0;
+        netRejCMB=0;
+        netTruckCmb=0;
+        acceptCbm=0;
         Log.e("fromedit11", "" + editList.size());
-        if (edieFlag == 11)
-            for (int n = 0; n < editList.size(); n++) {
-                netRejectedString += editList.get(n).getNoOfRejected();
-                netBundlesString += editList.get(n).getNoOfBundles();
-            }
-        else if (edieFlag == 10) ;
-        else
-            for (int n = 0; n < newRowList.size(); n++) {
-                netRejectedString += newRowList.get(n).getNoOfRejected();
-                netBundlesString += newRowList.get(n).getNoOfBundles();
-            }
+            if (edieFlag == 11)
+                for (int n = 0; n < editList.size(); n++) {
+                    netRejectedString += editList.get(n).getNoOfRejected();
+                    netBundlesString += editList.get(n).getNoOfBundles();
+                    netRejCMB += Double.parseDouble(editList.get(n).getCbmRej());
+                    netTruckCmb += Double.parseDouble(editList.get(n).getTruckCMB());
+                    acceptCbm += Double.parseDouble(editList.get(n).getCbmAccept());
+                }
+            else if (edieFlag == 10) ;
+            else
+                for (int n = 0; n < newRowList.size(); n++) {
+                    netRejectedString += newRowList.get(n).getNoOfRejected();
+                    netBundlesString += newRowList.get(n).getNoOfBundles();
+                    Log.e("newRawListIII"," vv = "+n+newRowList.get(n).getCbmRej());
+
+                    netRejCMB += Double.parseDouble(newRowList.get(n).getCbmRej());
+                    netTruckCmb += Double.parseDouble(newRowList.get(n).getTruckCMB());
+                    acceptCbm += Double.parseDouble(newRowList.get(n).getCbmAccept());
+                }
+
+
+        Log.e("newRawListIII"," gg = "+netRejectedString+"  "+netBundlesString +"  "+netTruckCmb+"   "+netRejCMB+"   "+acceptCbm);
+
+        netRejectedString=Double.parseDouble(String.format("%.3f", netRejectedString));
+
+        netTruckCmb=Double.parseDouble(String.format("%.3f", netTruckCmb));
+
+        netRejCMB=Double.parseDouble(String.format("%.3f", netRejCMB));
+
+        acceptCbm=Double.parseDouble(String.format("%.3f", acceptCbm));
+
 
         totalRejected.setText("" + netRejectedString);
         totalBundles.setText("" + netBundlesString);
+        totalTruckCbm.setText(""+netTruckCmb);
+        totalRejCbm.setText(""+netRejCMB);
+        totalAcceptCbm.setText(""+acceptCbm);
 
     }
 
@@ -1231,6 +1258,20 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
         }
 //        Log.e("value", value);
         return value;
+    }
+
+    void fillCbmVal(int i,double truckCbm,double rejCbm,double acceptCbms){
+
+
+        editList.get(i).setTruckCMB("" + truckCbm);
+        editList.get(i).setCbmRej("" + rejCbm);
+        editList.get(i).setCbmAccept("" + acceptCbms);
+
+            Log.e("newRawListIII", i + " size  = " + editList.size());
+            if (i == (editList.size() - 1)) {
+                rejectAdd();
+            }
+
     }
 
     String isContainValueAfterDot(String string) {
@@ -1847,7 +1888,7 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
             else {
                 editPageAdapter = new EditPageAdapter(EditPage.this, editList);
                 rowsRecyclerView.setAdapter(editPageAdapter);
-                rejectAdd();
+                //rejectAdd();
             }
 
         }
