@@ -894,6 +894,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
         flagIsGet = 0;
         listOfEmail.clear();
+        newRowList.clear();
 //        tableLayout.removeAllViews();
 //        headerTableLayout.removeAllViews();
 
@@ -941,6 +942,9 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
         totalBundles.setText("0.0");
         totalRejected.setText("0.0");
+        totalTruckCbm.setText("0.0");
+        totalRejCbm.setText("0.0");
+        totalAcceptCbm.setText("0.0");
 
         try {
             fillImagesFromEmail();
@@ -3894,6 +3898,8 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     searchSupplier.setText("");
                     totalAcceptCbm.setText("0.000");
                     totalTruckCbm.setText("0.000");
+                    totalRejCbm.setText("0.0");
+
                     //tableLayout.removeAllViews();
                     newRowList.clear();
                     imagesList.clear();
