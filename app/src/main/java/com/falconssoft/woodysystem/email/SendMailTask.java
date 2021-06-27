@@ -16,9 +16,11 @@ public class SendMailTask extends AsyncTask {
 
       private ProgressDialog statusDialog;
     private AddNewRaw sendMailActivity;
+    String path;
 
-    public SendMailTask(AddNewRaw activity) {
+    public SendMailTask(AddNewRaw activity,String path) {
         sendMailActivity = activity;
+        this.path=path;
 
     }
 
@@ -63,6 +65,7 @@ public class SendMailTask extends AsyncTask {
     @Override
     public void onPostExecute(Object result) {
         sendMailActivity.clear();
+        sendMailActivity.deleteTempFolder(path);
        statusDialog.dismiss();
     }
 
