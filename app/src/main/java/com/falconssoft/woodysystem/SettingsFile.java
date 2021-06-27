@@ -1,10 +1,8 @@
 package com.falconssoft.woodysystem;
 
-import android.net.Uri;
 
 import com.falconssoft.woodysystem.models.Users;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,11 +19,11 @@ public class SettingsFile {
 
     public static String hostName = "smtp.gmail.com";
 
-    public static String senderName = "1234developersteam@gmail.com";
+    public static String senderName = "quality@blackseawood.com";//1234developersteam@gmail.com
 
-    public static String senderPassword = "androiddevelopers4";
+    public static String senderPassword = "12345678Q";//androiddevelopers4
 
-    public static String recipientName = "rawanfalcons2017@gmail.com";
+    public static String recipientName = "rawriy2017@gmail.com";
 
     public static String emailTitle = "Wood App";
 

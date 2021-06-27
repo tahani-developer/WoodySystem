@@ -2,28 +2,32 @@ package com.falconssoft.woodysystem.email;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+
+import com.falconssoft.woodysystem.SettingsFile;
+import com.falconssoft.woodysystem.stage_one.AddNewRaw;
+
 import java.util.Collections;
+import java.util.List;
 
 public class SendMailTask extends AsyncTask {
 
-//    private ProgressDialog statusDialog;
-    private Activity sendMailActivity;
+      private ProgressDialog statusDialog;
+    private AddNewRaw sendMailActivity;
 
-    public SendMailTask(Activity activity) {
+    public SendMailTask(AddNewRaw activity) {
         sendMailActivity = activity;
 
     }
 
     protected void onPreExecute() {
-//        statusDialog = new ProgressDialog(sendMailActivity);
-//        statusDialog.setMessage("Getting ready...");
-//        statusDialog.setIndeterminate(false);
-//        statusDialog.setCancelable(false);
-//        statusDialog.show();
+        statusDialog = new ProgressDialog(sendMailActivity);
+        statusDialog.setMessage("Getting ready...");
+        statusDialog.setIndeterminate(false);
+        statusDialog.setCancelable(false);
+        statusDialog.show();
     }
 
     @Override
@@ -35,8 +39,8 @@ public class SendMailTask extends AsyncTask {
                     , args[1].toString()
                     , Collections.singletonList(args[2].toString())
                     , args[3].toString()
-                    , args[4].toString());
-                 //   , args[5].toString());
+                    ,args[4].toString()
+                 , (List<String>) args[5]);
             publishProgress("Preparing mail message....");
             androidEmail.createEmailMessage();
             publishProgress("Sending email....");
@@ -52,13 +56,14 @@ public class SendMailTask extends AsyncTask {
 
     @Override
     public void onProgressUpdate(Object... values) {
-//        statusDialog.setMessage(values[0].toString());
+        statusDialog.setMessage(values[0].toString());
 
     }
 
     @Override
     public void onPostExecute(Object result) {
-//        statusDialog.dismiss();
+        sendMailActivity.clear();
+       statusDialog.dismiss();
     }
 
 }

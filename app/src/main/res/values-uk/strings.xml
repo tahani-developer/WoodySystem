@@ -199,5 +199,6 @@
     <string name="totalTCbm">total Truck CBM</string>
     <string name="totalRejCbm">total Rej CBM</string>
     <string name="totalAccCbm">total Accept CBM</string>
+    <string name="msg_sending_email">Sending</string>
 
 </resources>

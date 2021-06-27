@@ -51,7 +51,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.falconssoft.woodysystem.SettingsFile.usersList;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 

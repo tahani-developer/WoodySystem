@@ -60,13 +60,14 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.creativityapps.gmailbackgroundlibrary.BackgroundMail;
+//import com.creativityapps.gmailbackgroundlibrary.BackgroundMail;
 import com.falconssoft.woodysystem.DatabaseHandler;
 import com.falconssoft.woodysystem.ExportToExcel;
 import com.falconssoft.woodysystem.ExportToPDF;
 import com.falconssoft.woodysystem.MainActivity;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.WoodPresenter;
+import com.falconssoft.woodysystem.email.SendMailTask;
 import com.falconssoft.woodysystem.models.NewRowInfo;
 import com.falconssoft.woodysystem.models.Settings;
 import com.falconssoft.woodysystem.models.SupplierInfo;
@@ -1806,31 +1807,39 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
               subject2="quality";
         }
 
+
+        new SendMailTask(AddNewRaw.this).execute("quality@blackseawood.com","12345678Q",
+                toEmil,
+                "quality BLACK SEA WOOD",
+                subject2,
+                images
+                );
+
 //
-        BackgroundMail.newBuilder(AddNewRaw.this)//rawanwork2021@gmail.com
-                .withUsername("quality@blackseawood.com")//quality@blackseawood.com
-                .withPassword("12345678Q")
-                .withMailto(toEmil)
-                .withType(BackgroundMail.TYPE_PLAIN)
-                .withSubject("quality BLACK SEA WOOD")
-                .withBody(subject2 /*"this is the body \n www.google.com  \n  http://5.189.130.98:8085/import.php?FLAG=3 \n "  */)
-                .withProcessVisibility(true)
-                .withAttachments(images)
-                .withOnSuccessCallback(new BackgroundMail.OnSuccessCallback() {
-                    @Override
-                    public void onSuccess() {
-                        //do some magic
-                        clear();
-                        deleteTempFolder(folder.getPath());
-                    }
-                })
-                .withOnFailCallback(new BackgroundMail.OnFailCallback() {
-                    @Override
-                    public void onFail() {
-                        //do some magic
-                    }
-                })
-                .send();
+//        BackgroundMail.newBuilder(AddNewRaw.this)//rawanwork2021@gmail.com
+//                .withUsername("quality@blackseawood.com")//quality@blackseawood.com
+//                .withPassword("12345678Q")
+//                .withMailto(toEmil)
+//                .withType(BackgroundMail.TYPE_PLAIN)
+//                .withSubject("quality BLACK SEA WOOD")
+//                .withBody(subject2 /*"this is the body \n www.google.com  \n  http://5.189.130.98:8085/import.php?FLAG=3 \n "  */)
+//                .withProcessVisibility(true)
+//                .withAttachments(images)
+//                .withOnSuccessCallback(new BackgroundMail.OnSuccessCallback() {
+//                    @Override
+//                    public void onSuccess() {
+//                        //do some magic
+//                        clear();
+//                        deleteTempFolder(folder.getPath());
+//                    }
+//                })
+//                .withOnFailCallback(new BackgroundMail.OnFailCallback() {
+//                    @Override
+//                    public void onFail() {
+//                        //do some magic
+//                    }
+//                })
+//                .send();
 
 
     }
