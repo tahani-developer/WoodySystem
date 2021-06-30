@@ -867,7 +867,10 @@ public class ExportToPDF {
             insertCell(pdfPTable, String.valueOf(bundles.get(i).getTruckCMB()), Element.ALIGN_CENTER, 2, arabicFont, BaseColor.BLACK);
             insertCell(pdfPTable, String.valueOf(bundles.get(i).getNoOfRejected()), Element.ALIGN_CENTER, 2, arabicFont, BaseColor.BLACK);
             insertCell(pdfPTable, String.valueOf(bundles.get(i).getCbmRej()), Element.ALIGN_CENTER, 2, arabicFont, BaseColor.BLACK);
-            insertCell(pdfPTable, String.valueOf(bundles.get(i).getCbmAccept()), Element.ALIGN_CENTER, 2, arabicFont, BaseColor.BLACK);
+            double accCubic= 0;
+            accCubic= bundles.get(i).getCubic()- bundles.get(i).getCubicRej();
+            accCubic=Double.parseDouble(String.format("%.3f", accCubic));
+            insertCell(pdfPTable, String.valueOf(accCubic), Element.ALIGN_CENTER, 2, arabicFont, BaseColor.BLACK);
             insertCell(pdfPTable, String.valueOf(bundles.get(i).getGrade()), Element.ALIGN_CENTER, 2, arabicFont, BaseColor.BLACK);
 
 //            double cubic = (list.get(i).getLength() * list.get(i).getWidth() * list.get(i).getThickness() * list.get(i).getNoOfPieces());

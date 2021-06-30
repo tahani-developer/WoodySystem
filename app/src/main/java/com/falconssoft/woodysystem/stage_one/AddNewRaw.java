@@ -1829,13 +1829,14 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         }
         String subject2 = "";
         if (!TextUtils.isEmpty(subject)) {
-            subject2 = subject;
+            subject2 = subject+"  ";
         } else {
-            subject2 = "quality";
+            subject2 = "Quality";
         }
 
 
-        new SendMailTask(AddNewRaw.this,folder.getPath()).execute("quality@blackseawood.com", "12345678Q",
+        new SendMailTask(AddNewRaw.this,folder.getPath(),1).execute("quality@blackseawood.com",
+                "12345678Q",
                 toEmil,
                 "quality BLACK SEA WOOD",
                 subject2,

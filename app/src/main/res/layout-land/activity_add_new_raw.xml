@@ -207,6 +207,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_weight="0"
+                        android:visibility="gone"
                         android:text="Get"
                         android:background="@drawable/frame_shape"
                         android:paddingStart="5dp"
@@ -1314,15 +1315,18 @@
                     android:background="@drawable/frame_shape"
                     android:fontFamily="serif"
                     android:text="@string/clear"
+                    android:visibility="gone"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="18sp"
                     android:layout_marginLeft="5dp" />
+
                 <Button
                     android:id="@+id/addNewRaw_acceptRow_Email"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
+                    android:layout_marginLeft="5dp"
                     android:layout_weight="2"
                     android:background="@drawable/frame_shape"
                     android:fontFamily="serif"
@@ -1330,7 +1334,7 @@
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="18sp"
-                    android:layout_marginLeft="5dp" />
+                    android:visibility="gone" />
 
                 <Button
                     android:id="@+id/addNewRaw_acceptRow_done"

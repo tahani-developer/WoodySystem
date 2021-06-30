@@ -30,6 +30,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Spinner;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +46,7 @@ import com.falconssoft.woodysystem.models.NewRowInfo;
 import com.falconssoft.woodysystem.models.Pictures;
 import com.falconssoft.woodysystem.models.Settings;
 import com.falconssoft.woodysystem.models.SupplierInfo;
+import com.falconssoft.woodysystem.stage_one.AddNewAdapter;
 import com.falconssoft.woodysystem.stage_one.AddNewRaw;
 import com.falconssoft.woodysystem.stage_one.EditPage;
 import com.falconssoft.woodysystem.stage_one.SuppliersAdapter;
@@ -56,6 +58,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Serializable;
@@ -114,6 +117,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
     private List<SupplierInfo> arraylist = new ArrayList<>();
     double acceptedReject=0,acceptedBundle=0;
     TextView reportTotalReject,reportTotalBundle;
+    int openLinkFlag=0;
 
     //    public static final String EDIT_FLAG2= "EDIT_FLAG";
     @Override
@@ -255,18 +259,22 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
                 slideDown(linearLayout);
                 break;
             case R.id.Loding_Order_from:
-                new DatePickerDialog(AcceptanceReport.this, openDatePickerDialog(0), myCalendar
-                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                openLinkFlag=0;
+               date(0);
                 break;
             case R.id.Loding_Order_to:
-                new DatePickerDialog(AcceptanceReport.this, openDatePickerDialog(1), myCalendar
-                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                openLinkFlag=0;
+                date(1);
                 break;
         }
     }
 
+
+    public void date (int flag){
+        new DatePickerDialog(AcceptanceReport.this, openDatePickerDialog(flag), myCalendar
+                .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+    }
     public void goToEditPage(NewRowInfo newRowInfo) {
         Intent intent = new Intent(AcceptanceReport.this, EditPage.class);
         Bundle bundle = new Bundle();
@@ -430,7 +438,13 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
 //                    filters();
                 date_from = from.getText().toString();
                 date_to = to.getText().toString();
-                new JSONTask().execute();
+
+                Log.e("url555222","in "+(view.getId()==R.id.Loding_Order_from)+"   "+(view.getId()==R.id.Loding_Order_to));
+
+                if(openLinkFlag==0) {
+                    openLinkFlag=1;
+                    new JSONTask().execute();
+                }
 
             }
 
@@ -876,7 +890,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
 
                 URLConnection conn = url.openConnection();
                 conn.setDoOutput(true);
-
+                Log.e("url555", ""+url );
                 reader = new BufferedReader(new
                         InputStreamReader(conn.getInputStream()));
 
@@ -965,7 +979,10 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
                 adapter2 = new AcceptanceReportAdapter(AcceptanceReport.this, master, details);
                 list.setAdapter(adapter2);
 
+                openLinkFlag=0;
+
             } else {
+                openLinkFlag=0;
                 Toast.makeText(AcceptanceReport.this, "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();
             }
             progressDialog.dismiss();
@@ -1153,6 +1170,17 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
             }
         }
     }
+
+    public void deleteTempFolder(String dir) {
+        File myDir = new File(dir);
+        if (myDir.isDirectory()) {
+            String[] children = myDir.list();
+            for (int i = 0; i < children.length; i++) {
+                new File(myDir, children[i]).delete();
+            }
+        }
+    }
+
 
 }
 

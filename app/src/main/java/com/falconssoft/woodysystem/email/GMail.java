@@ -78,8 +78,8 @@ public class GMail {
 //        }
 
         MimeBodyPart messageBodyPart = new MimeBodyPart();
-        messageBodyPart.setContent(emailSubject, "text/html");
-
+        messageBodyPart.setContent(emailBody, "text/html");
+     //   messageBodyPart.setContent(emailBody, "text/html");
         // creates multi-part
         Multipart multipart = new MimeMultipart();
         multipart.addBodyPart(messageBodyPart);
@@ -102,7 +102,7 @@ public class GMail {
         // sets the multi-part as e-mail's content
         emailMessage.setContent(multipart);
 
-        //emailMessage.setSubject(emailSubject);
+        emailMessage.setSubject(emailSubject);
         //emailMessage.setContent(emailBody, "text/html");// for a html email
 
         //emailMessage.set
@@ -120,7 +120,7 @@ public class GMail {
         Log.i("GMail", "allrecipients: " + emailMessage.getAllRecipients());
         transport.sendMessage(emailMessage, emailMessage.getAllRecipients());
         transport.close();
-        Log.i("GMail", "Email sent successfully.");
+        Log.e("GMail", "Email sent successfully.");
     }
 
     class GMailAuthenticator extends Authenticator {

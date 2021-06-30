@@ -2,11 +2,13 @@ package com.falconssoft.woodysystem.email;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
 
 import com.falconssoft.woodysystem.SettingsFile;
+import com.falconssoft.woodysystem.reports.AcceptanceReport;
 import com.falconssoft.woodysystem.stage_one.AddNewRaw;
 
 import java.util.Collections;
@@ -15,13 +17,14 @@ import java.util.List;
 public class SendMailTask extends AsyncTask {
 
       private ProgressDialog statusDialog;
-    private AddNewRaw sendMailActivity;
+    private Context sendMailActivity;
     String path;
+    int flag;
 
-    public SendMailTask(AddNewRaw activity,String path) {
+    public SendMailTask(Context activity, String path,int flag) {
         sendMailActivity = activity;
         this.path=path;
-
+        this.flag=flag;
     }
 
     protected void onPreExecute() {
@@ -64,9 +67,20 @@ public class SendMailTask extends AsyncTask {
 
     @Override
     public void onPostExecute(Object result) {
-        sendMailActivity.clear();
-        sendMailActivity.deleteTempFolder(path);
-       statusDialog.dismiss();
+      //  sendMailActivity.clear();
+
+        if(flag==0){//save
+            AcceptanceReport acceptanceReport=(AcceptanceReport) sendMailActivity;
+            acceptanceReport.deleteTempFolder(path);
+            statusDialog.dismiss();
+        }else if(flag==1){
+            AddNewRaw addNewRaw=(AddNewRaw) sendMailActivity;
+            addNewRaw.clear();
+            addNewRaw.deleteTempFolder(path);
+            statusDialog.dismiss();
+
+        }
+
     }
 
 }

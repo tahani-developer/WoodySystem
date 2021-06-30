@@ -135,8 +135,13 @@ public class NewRowInfo implements Serializable {
     @SerializedName("PIC15")
     private String image15;
 
+    @SerializedName("CBMREJ")
     private  String CbmRej;
+
+   // @SerializedName("CbmAccept")
     private String CbmAccept;
+
+   @SerializedName("TRUCKCMB")
     private String truckCMB;
 
     private Bitmap pic11;
