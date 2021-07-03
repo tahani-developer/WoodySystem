@@ -77,6 +77,46 @@
                 android:layout_weight=".2"/>
 
             <LinearLayout
+                android:id="@+id/stage1_accept_supplier_info"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@drawable/alpha_frame"
+                android:gravity="center"
+                android:visibility="visible"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1.7"
+                    android:layout_marginVertical="20dp"
+                    android:src="@drawable/truck_report"
+                    android:scaleType="fitCenter" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_horizontal"
+                    android:fontFamily="serif"
+                    android:gravity="center"
+                    android:background="@drawable/border_frame"
+                    android:text="@string/accept_report_truck"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+<!--            <View-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:layout_weight="1"/>-->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight=".2"/>
+
+            <LinearLayout
                 android:id="@+id/stage1_accept_info"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -102,15 +142,10 @@
                     android:fontFamily="serif"
                     android:gravity="center"
                     android:background="@drawable/border_frame"
-                    android:text="@string/accepted_truck_report"
+                    android:text="@string/accept_report_supplier"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
             </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
 
             <LinearLayout
                 android:visibility="gone"
