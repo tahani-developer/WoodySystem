@@ -14,7 +14,7 @@ import com.falconssoft.woodysystem.reports.AcceptanceReport;
 
 public class StageOne extends AppCompatActivity implements View.OnClickListener {
 
-    private LinearLayout addRaw,  generateBarcode, report2, report1;//acceptInfo
+    private LinearLayout addRaw,  generateBarcode, report2, report1,reportSupplier;//acceptInfo
     private Animation animation;
 
     @Override
@@ -27,12 +27,13 @@ public class StageOne extends AppCompatActivity implements View.OnClickListener 
         report1 = findViewById(R.id.stage1_accept_info);
 //        generateBarcode = findViewById(R.id.stage1_generate_barcode);
         report2 = findViewById(R.id.stage1_reports);
+        reportSupplier= findViewById(R.id.stage1_accept_supplier_info);
 
         addRaw.setOnClickListener(this);
         report1.setOnClickListener(this);
 //        generateBarcode.setOnClickListener(this);
         report2.setOnClickListener(this);
-
+        reportSupplier.setOnClickListener(this);
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
         addRaw.setAnimation(animation);
 
@@ -45,7 +46,8 @@ public class StageOne extends AppCompatActivity implements View.OnClickListener 
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
         report2.setAnimation(animation);
 
-
+        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
+        reportSupplier.setAnimation(animation);
     }
 
 
@@ -59,7 +61,13 @@ public class StageOne extends AppCompatActivity implements View.OnClickListener 
                 break;
             case R.id.stage1_accept_info: // report1
                 Intent intent2 = new Intent(this, AcceptanceReport.class);//AcceptRow
+                intent2.putExtra("supplier","0");
                 startActivity(intent2);
+                break;
+            case  R.id.stage1_accept_supplier_info:
+                Intent intent5 = new Intent(this, AcceptanceReport.class);//AcceptRow
+                intent5.putExtra("supplier","1");
+                startActivity(intent5);
                 break;
             case R.id.stage1_generate_barcode:
                 Intent intent3 = new Intent(this, GenerateBarCode.class);

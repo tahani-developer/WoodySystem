@@ -118,6 +118,8 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
     double acceptedReject=0,acceptedBundle=0;
     TextView reportTotalReject,reportTotalBundle;
     int openLinkFlag=0;
+    LinearLayout locationLinear,ttnLinear,acceptorLinear,truckLinear;
+    String suppliersFlag;
 
     //    public static final String EDIT_FLAG2= "EDIT_FLAG";
     @Override
@@ -137,6 +139,11 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
         pictures = new ArrayList<>();
         locationList = new ArrayList<>();
         filtered = new ArrayList<>();
+
+        locationLinear=findViewById(R.id.addToInventory_linear_two);
+        ttnLinear=findViewById(R.id.ttnLinear);
+        acceptorLinear=findViewById(R.id.acceptorLinear);
+        truckLinear=findViewById(R.id.acceptanceInfo_report_truck);
 
         count = findViewById(R.id.acceptanceReport_count);
         list = findViewById(R.id.list);
@@ -200,6 +207,23 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
         arrow.setOnClickListener(this);
         from.setOnClickListener(this);
         to.setOnClickListener(this);
+
+
+        suppliersFlag = getIntent().getStringExtra("supplier");
+
+        if(suppliersFlag.equals("1")){
+            textView.setText(AcceptanceReport.this.getResources().getString(R.string.accept_report_supplier));
+            locationLinear.setVisibility(View.GONE);
+            ttnLinear.setVisibility(View.GONE);
+            acceptorLinear.setVisibility(View.GONE);
+            truckLinear.setVisibility(View.GONE);
+        }else if(suppliersFlag.equals("0")){
+            textView.setText(AcceptanceReport.this.getResources().getString(R.string.accept_report_truck));
+            locationLinear.setVisibility(View.VISIBLE);
+            ttnLinear.setVisibility(View.VISIBLE);
+            acceptorLinear.setVisibility(View.VISIBLE);
+            truckLinear.setVisibility(View.VISIBLE);
+        }
 
         new JSONTask().execute();
         new JSONTask1().execute();
@@ -968,7 +992,8 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
                     acc=Double.parseDouble(String.format("%.3f", acc));
                     Log.e("totalCubic", master.get(0).getTotalCubic() +"  - " + master.get(0).getTotalCubicRej()+"  "+acc);
 
-                    totalAcceptCbm.setText(""+acc);
+
+                totalAcceptCbm.setText(""+acc);
                 } else {
                     totalCubic.setText("0.000");
                     totalCubicReg.setText("0.000");
@@ -978,7 +1003,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
                 fillSpinnerAdapter();
                 adapter2 = new AcceptanceReportAdapter(AcceptanceReport.this, master, details);
                 list.setAdapter(adapter2);
-
+                filters();
                 openLinkFlag=0;
 
             } else {

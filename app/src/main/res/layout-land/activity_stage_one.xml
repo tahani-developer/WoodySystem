@@ -92,12 +92,46 @@
                 android:background="@drawable/border_frame"
                 android:fontFamily="serif"
                 android:gravity="center"
-                android:text="@string/accepted_truck_report"
+                android:text="@string/accept_report_truck"
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 android:textSize="18sp" />
         </LinearLayout>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".7"/>
 
+        <LinearLayout
+            android:id="@+id/stage1_accept_supplier_info"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:visibility="visible"
+            android:background="@drawable/alpha_frame"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1.7"
+                android:layout_marginVertical="20dp"
+                android:src="@drawable/truck_report"
+                android:scaleType="fitCenter" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@drawable/border_frame"
+                android:fontFamily="serif"
+                android:gravity="center"
+                android:text="@string/accept_report_supplier"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="18sp" />
+        </LinearLayout>
         <LinearLayout
             android:visibility="gone"
             android:id="@+id/stage1_reports"

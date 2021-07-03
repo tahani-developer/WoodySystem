@@ -185,6 +185,7 @@
 
 
             <LinearLayout
+                android:id="@+id/acceptanceInfo_report_truck"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -215,6 +216,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/acceptorLinear"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -247,6 +249,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ttnLinear"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -455,6 +458,24 @@
                 android:background="@drawable/ic_email_white_24dp"
              android:backgroundTint="@color/white"
                 />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:gravity="center"
+                android:text="pdf"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:gravity="center"
+                android:text="excel"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
         </TableRow>
 
         <ListView

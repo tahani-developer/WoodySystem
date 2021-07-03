@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.falconssoft.woodysystem.DatabaseHandler;
+import com.falconssoft.woodysystem.ExportToExcel;
 import com.falconssoft.woodysystem.ExportToPDF;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.email.SendMailTask;
@@ -88,7 +89,7 @@ public class AcceptanceReportAdapter extends BaseAdapter {
     private class ViewHolder {
         ImageView pic, image;
         Button preview;
-        TextView truckNo, acceptor, ttn, netBundle, date, noOfBundles, rejected, cubic, cubicRej, serial,acceptCubic;
+        TextView truckNo, acceptor, ttn, netBundle, date, noOfBundles, rejected, cubic, cubicRej, serial,acceptCubic,pdf,excel;
         ImageView edit,sendEmail;
     }
 
@@ -114,7 +115,8 @@ public class AcceptanceReportAdapter extends BaseAdapter {
         holder.serial = view.findViewById(R.id.truck_report_serial);
         holder.image = view.findViewById(R.id.truckReport_image);
         holder.acceptCubic=view.findViewById(R.id.truck_report_cubic_accept);
-
+        holder.pdf=view.findViewById(R.id.truck_report_pdf);
+        holder.excel=view.findViewById(R.id.truck_report_excel);
         holder.serial.setText(itemsList.get(i).getSerial());
         holder.truckNo.setText(itemsList.get(i).getTruckNo());
         holder.acceptor.setText(findSupplier(itemsList.get(i)));//itemsList.get(i).getAcceptedPersonName());
@@ -140,6 +142,23 @@ public class AcceptanceReportAdapter extends BaseAdapter {
             }
         });
 
+        holder.pdf.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new JSONTaskTTN(itemsList.get(i),0).execute();
+
+            }
+        });
+
+
+        holder.excel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               new JSONTaskTTN(itemsList.get(i),2).execute();
+
+            }
+        });
+
         holder.preview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -154,7 +173,7 @@ public class AcceptanceReportAdapter extends BaseAdapter {
             public void onClick(View v) {
 
 //                obj.previewLinear(itemsList.get(i).getSerial(), context);
-                new JSONTaskTTN(itemsList.get(i)).execute();
+                new JSONTaskTTN(itemsList.get(i),1).execute();
 
             }
         });
@@ -183,9 +202,11 @@ public class AcceptanceReportAdapter extends BaseAdapter {
     private class JSONTaskTTN extends AsyncTask<String, String, String> {
         Settings generalSettings = new DatabaseHandler(context).getSettings();
         NewRowInfo newRowInfos=null;
+        int flag;
 
-        public JSONTaskTTN(NewRowInfo newRowInfos) {
+        public JSONTaskTTN(NewRowInfo newRowInfos,int flag) {
         this.newRowInfos=newRowInfos;
+        this.flag=flag;
         }
 
         @Override
@@ -257,7 +278,7 @@ public class AcceptanceReportAdapter extends BaseAdapter {
 ////                        addNewAdapter = new AddNewAdapter(context, listOfEmail);
 ////                        recyclerViewAdd.setAdapter(addNewAdapter);
 //                    }
-                    new BitmapImage3(newRowInfos).execute(listOfEmail.get(0));
+                    new BitmapImage3(newRowInfos,flag).execute(listOfEmail.get(0));
                     // rejectAdd();
                 } else {
                     Toast.makeText(context, "The TTN.NO Not Found", Toast.LENGTH_SHORT).show();
@@ -275,9 +296,11 @@ public class AcceptanceReportAdapter extends BaseAdapter {
     private class BitmapImage3 extends AsyncTask<NewRowInfo, String, NewRowInfo> {
           Settings generalSettings = new DatabaseHandler(context).getSettings();
         NewRowInfo newRowInfos=null;
+        int flag;
 
-        public BitmapImage3(NewRowInfo newRowInfos) {
+        public BitmapImage3(NewRowInfo newRowInfos,int flag) {
             this.newRowInfos =newRowInfos;
+        this.flag=flag;
         }
 
         @Override
@@ -527,13 +550,21 @@ public class AcceptanceReportAdapter extends BaseAdapter {
                 accCubic=newRowInfos.getCubic()- newRowInfos.getCubicRej();
                 accCubic=Double.parseDouble(String.format("%.3f", accCubic));
                 ExportToPDF obj = new ExportToPDF(context);
-                obj.exportTruckAcceptanceSendEmail(listOfEmail,"",""+newRowInfos.getCubic()
-                        , ""+newRowInfos.getNoOfRejected(), ""+newRowInfos.getCubicRej(),""+accCubic);
-                if (newRowInfoPic != null) {
-                    fillImageBitmap(newRowInfoPic);
-                }
 
-                sendEmailDialog();
+                if(flag==0) {
+                    obj.exportTruckAcceptance(listOfEmail, newRowInfos, "", "" + newRowInfos.getCubic(), "" + newRowInfos.getNoOfRejected(),"" + newRowInfos.getCubicRej(), "" + accCubic);
+                }else   if(flag==1) {
+                    obj.exportTruckAcceptanceSendEmail(listOfEmail, "", "" + newRowInfos.getCubic()
+                            , "" + newRowInfos.getNoOfRejected(), "" + newRowInfos.getCubicRej(), "" + accCubic);
+                    if (newRowInfoPic != null) {
+                        fillImageBitmap(newRowInfoPic);
+                    }
+
+                    sendEmailDialog();
+                }else   if(flag==2) {
+                    ExportToExcel.getInstance().createExcelFile(context, "Acceptance_Report_2.xls", 8, listOfEmail, null);
+
+                }
             } else {
                 Toast.makeText(context, "no Data ", Toast.LENGTH_SHORT).show();
             }
