@@ -68,8 +68,14 @@
             android:windowSoftInputMode="adjustNothing|stateAlwaysHidden" />
         <activity
             android:name=".reports.AcceptanceReport"
-            android:screenOrientation="sensorLandscape"
-            android:windowSoftInputMode="adjustNothing|stateAlwaysHidden" />
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:screenOrientation="landscape"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity
+            android:name=".reports.AcceptanceSupplierReport"
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:screenOrientation="landscape"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity
             android:name=".reports.BundlesReport"
             android:screenOrientation="sensorLandscape" />

@@ -104,7 +104,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     break;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                showPasswordDialog();
+              //  showPasswordDialog();
+                Intent intent1 = new Intent(MainActivity.this, StageOne.class);
+                startActivity(intent1);
                 break;
             case R.id.s2:
                 if (SystemClock.elapsedRealtime() - mLastClickTime3 < 1000) {

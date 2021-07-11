@@ -618,7 +618,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
                 recyclerView = searchDialog.findViewById(R.id.search_supplier_recyclerView);
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
-                adapter = new SuppliersAdapter(this, suppliers, null, null, 0);
+                adapter = new SuppliersAdapter(AddNewRaw.this, suppliers, null, null, 0,null);
                 recyclerView.setAdapter(adapter);
 
                 searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -1276,7 +1276,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                 }
             }
         }
-        adapter = new SuppliersAdapter(this, arraylist, null, null, 0);
+        adapter = new SuppliersAdapter(AddNewRaw.this, arraylist, null, null, 0,null);
         recyclerView.setAdapter(adapter);
     }
 
@@ -3462,7 +3462,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
         recyclerView = searchDialog.findViewById(R.id.search_supplier_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new SuppliersAdapter(this, suppliers, null, null, 1);
+        adapter = new SuppliersAdapter(AddNewRaw.this, suppliers, null, null, 1,null);
         recyclerView.setAdapter(adapter);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

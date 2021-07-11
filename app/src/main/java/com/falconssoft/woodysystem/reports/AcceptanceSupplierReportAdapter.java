@@ -11,7 +11,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
@@ -22,7 +21,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,11 +28,8 @@ import com.falconssoft.woodysystem.DatabaseHandler;
 import com.falconssoft.woodysystem.ExportToExcel;
 import com.falconssoft.woodysystem.ExportToPDF;
 import com.falconssoft.woodysystem.R;
-import com.falconssoft.woodysystem.email.SendMailTask;
 import com.falconssoft.woodysystem.models.NewRowInfo;
 import com.falconssoft.woodysystem.models.Settings;
-import com.falconssoft.woodysystem.stage_one.AddNewAdapter;
-import com.falconssoft.woodysystem.stage_one.AddNewRaw;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
@@ -51,25 +46,21 @@ import java.util.List;
 import static android.provider.CalendarContract.CalendarCache.URI;
 import static com.falconssoft.woodysystem.reports.AcceptanceReport.truckNoBeforeUpdate2;
 
-public class AcceptanceReportAdapter extends BaseAdapter {
+public class AcceptanceSupplierReportAdapter extends BaseAdapter {
 
-    private AcceptanceReport context;
-    //    private List<BundleInfo> mOriginalValues;
+    private AcceptanceSupplierReport context;
     private static List<NewRowInfo> itemsList;
-    private static List<NewRowInfo> bundles;
-//    private static List<BundleInfo> selectedBundles ;
 
     List<NewRowInfo> listOfEmail=new ArrayList<>();
     ProgressDialog proTTn;
     NewRowInfo newRowInfoPic=null;
 
-    public AcceptanceReportAdapter(AcceptanceReport context, List<NewRowInfo> itemsList, List<NewRowInfo> bundles) {
+    public AcceptanceSupplierReportAdapter(AcceptanceSupplierReport context, List<NewRowInfo> itemsList) {
         this.context = context;
         this.itemsList = itemsList;
-        this.bundles = bundles;
     }
 
-    public AcceptanceReportAdapter() {
+    public AcceptanceSupplierReportAdapter() {
 
     }
 
@@ -95,7 +86,7 @@ public class AcceptanceReportAdapter extends BaseAdapter {
     private class ViewHolder {
         ImageView pic, image;
         Button preview;
-        TextView truckNo, acceptor, ttn, netBundle, date, noOfBundles, rejected, cubic, cubicRej, serial,acceptCubic,pdf,excel;
+        TextView truckNo, acceptor, ttn, Thic,width,length,date_of_acceptance,piecesA,TruckCBM,piecesR,rejCbm,AcceptCbm,grade,noOfBundle,pdf,excel;
         ImageView edit,sendEmail;
     }
 
@@ -103,50 +94,48 @@ public class AcceptanceReportAdapter extends BaseAdapter {
     public View getView(final int i, View view, ViewGroup viewGroup) {
 
         final ViewHolder holder = new ViewHolder();
-        view = View.inflate(context, R.layout.acceptance_report_row, null);
+        view = View.inflate(context, R.layout.acceptance_supplier_report_row, null);
 
 //        holder.pic = (ImageView) view.findViewById(R.id.pic);
 //        holder.netBundle = (TextView) view.findViewById(R.id.net);
         holder.sendEmail=view.findViewById(R.id.acceptanceReport_email);
         holder.preview = view.findViewById(R.id.preview);
         holder.truckNo = view.findViewById(R.id.truck_no);
-        holder.acceptor = view.findViewById(R.id.name_of_person_to_accept); //supplier after edit not acceptor
-        holder.date = view.findViewById(R.id.date_of_acceptance);
-        holder.ttn = view.findViewById(R.id.ttn_no);
-        holder.noOfBundles = view.findViewById(R.id.noOfBundles_acceptance);
-        holder.rejected = view.findViewById(R.id.rejected_pieces);
-        holder.edit = view.findViewById(R.id.acceptanceReport_edit);
-        holder.cubic = view.findViewById(R.id.truck_report_cubic);
-        holder.cubicRej = view.findViewById(R.id.truck_report_cubic_rej);
-        holder.serial = view.findViewById(R.id.truck_report_serial);
-        holder.image = view.findViewById(R.id.truckReport_image);
-        holder.acceptCubic=view.findViewById(R.id.truck_report_cubic_accept);
+        holder.Thic = view.findViewById(R.id.Thic); //supplier after edit not acceptor
+        holder.width = view.findViewById(R.id.width);
+        holder.ttn = view.findViewById(R.id.ttnNo);
+        holder.length = view.findViewById(R.id.length);
+        holder.noOfBundle = view.findViewById(R.id.noOfBundle);
+        holder.date_of_acceptance = view.findViewById(R.id.date_of_acceptance);
+        holder.piecesA = view.findViewById(R.id.piecesA);
+        holder.TruckCBM = view.findViewById(R.id.TruckCBM);
+        holder.piecesR = view.findViewById(R.id.piecesR);
+        holder.rejCbm = view.findViewById(R.id.rejCbm);
+        holder.AcceptCbm=view.findViewById(R.id.AcceptCbm);
         holder.pdf=view.findViewById(R.id.truck_report_pdf);
         holder.excel=view.findViewById(R.id.truck_report_excel);
-        holder.serial.setText(itemsList.get(i).getSerial());
+        holder.grade=view.findViewById(R.id.grade);
+
         holder.truckNo.setText(itemsList.get(i).getTruckNo());
-        holder.acceptor.setText(findSupplier(itemsList.get(i)));//itemsList.get(i).getAcceptedPersonName());
-        holder.date.setText(itemsList.get(i).getDate());
         holder.ttn.setText(itemsList.get(i).getTtnNo());
-//        holder.netBundle.setText( itemsList.get(i).getNetBundles());
-        holder.noOfBundles.setText("" + itemsList.get(i).getNetBundles());
-        holder.rejected.setText(itemsList.get(i).getTotalRejectedNo());
-        holder.cubic.setText("" + itemsList.get(i).getCubic());
-        holder.cubicRej.setText("" + itemsList.get(i).getCubicRej());
+        holder.noOfBundle.setText("" + itemsList.get(i).getNetBundles());
+        holder.piecesR.setText(itemsList.get(i).getTotalRejectedNo());
+        holder.TruckCBM.setText("" + itemsList.get(i).getTruckCMB());
+        holder.rejCbm.setText("" + itemsList.get(i).getCbmRej());
+
+        holder.grade.setText(itemsList.get(i).getGrade());
+        holder.Thic.setText(""+itemsList.get(i).getThickness());
+        holder.width.setText(""+itemsList.get(i).getWidth());
+        holder.length.setText(""+itemsList.get(i).getLength());
+        holder.date_of_acceptance.setText(""+itemsList.get(i).getDate());
+        holder.piecesA.setText(""+itemsList.get(i).getNoOfPieces());
         double accCubic= 0;
-        accCubic= itemsList.get(i).getCubic()- itemsList.get(i).getCubicRej();
+        accCubic=Double.parseDouble( itemsList.get(i).getTruckCMB())- Double.parseDouble(itemsList.get(i).getCbmRej());
         accCubic=Double.parseDouble(String.format("%.3f", accCubic));
-        holder.acceptCubic.setText(""+ accCubic);
+        holder.AcceptCbm.setText(""+ accCubic);
 
-        AcceptanceReport obj = new AcceptanceReport();
 
-        holder.edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                truckNoBeforeUpdate2 = itemsList.get(i).getTruckNo();
-                context.goToEditPage(itemsList.get(i));
-            }
-        });
+        context.fillCbmVal(i,Double.parseDouble(itemsList.get(i).getTruckCMB()),Double.parseDouble(itemsList.get(i).getCbmRej()),accCubic);
 
         holder.pdf.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,14 +154,7 @@ public class AcceptanceReportAdapter extends BaseAdapter {
             }
         });
 
-        holder.preview.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                obj.previewLinear(itemsList.get(i).getSerial(), context);
-
-            }
-        });
 
         holder.sendEmail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -184,24 +166,9 @@ public class AcceptanceReportAdapter extends BaseAdapter {
             }
         });
 
-        holder.image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                context.previewPics2(itemsList.get(i), context);
-            }
-        });
 
         return view;
-    }
-
-    String findSupplier(NewRowInfo newRowInfo) {
-        for (int i = 0; i < bundles.size(); i++) {
-            if (newRowInfo.getSerial().equals(bundles.get(i).getSerial()))
-                return bundles.get(i).getSupplierName();
-        }
-
-        return "----";
     }
 
 
@@ -803,14 +770,14 @@ public class AcceptanceReportAdapter extends BaseAdapter {
 //            email = etEmail.getText().toString();
 //            subject = etSubject.getText().toString();
 //            message = etMessage.getText().toString();
-            final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+            final Intent emailIntent = new Intent(Intent.ACTION_SEND);
             emailIntent.setType("plain/text");
-            emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{email});
-            emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, subject);
+            emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{email});
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
             if (URI != null) {
                 emailIntent.putExtra(Intent.EXTRA_STREAM, URI);
             }
-            emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, message);
+            emailIntent.putExtra(Intent.EXTRA_TEXT, message);
             context.startActivity(Intent.createChooser(emailIntent, "Sending email..."));
         } catch (Throwable t) {
             Toast.makeText(context, "Request failed try again: "+ t.toString(), Toast.LENGTH_LONG).show();
@@ -823,7 +790,7 @@ public class AcceptanceReportAdapter extends BaseAdapter {
         //need to "send multiple" to get more than one attachment
         final Intent emailIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
         emailIntent.setType("text/plain");
-        emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL,
+        emailIntent.putExtra(Intent.EXTRA_EMAIL,
                 new String[]{emailTo});
 //        emailIntent.putExtra(android.content.Intent.EXTRA_CC,
 //                new String[]{emailCC});

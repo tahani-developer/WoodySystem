@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.models.SupplierInfo;
 import com.falconssoft.woodysystem.reports.AcceptanceReport;
+import com.falconssoft.woodysystem.reports.AcceptanceSupplierReport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,14 +26,15 @@ public class SuppliersAdapter extends RecyclerView.Adapter<SuppliersAdapter.Supp
     private EditPage editPage;
     private AcceptanceReport truckReport;
     int updateFlag=0;
+    private AcceptanceSupplierReport acceptanceSupplierReport;
 
-    public SuppliersAdapter(AddNewRaw addNewRaw, List<SupplierInfo> supplierInfoList, EditPage editPage, AcceptanceReport truckReport,int updateFlag) {
+    public SuppliersAdapter(AddNewRaw addNewRaw, List<SupplierInfo> supplierInfoList, EditPage editPage, AcceptanceReport truckReport, int updateFlag , AcceptanceSupplierReport acceptanceSupplierReport) {
         this.addNewRaw = addNewRaw;
         this.supplierInfoList = supplierInfoList;
         this.editPage = editPage;
         this.truckReport = truckReport;
         this.updateFlag=updateFlag;
-
+        this.acceptanceSupplierReport=acceptanceSupplierReport;
     }
 
     @NonNull
@@ -57,8 +59,11 @@ public class SuppliersAdapter extends RecyclerView.Adapter<SuppliersAdapter.Supp
                 else if (editPage != null)
                     editPage.getSearchSupplierInfo(supplierInfoList.get(i).getSupplierName()
                             , supplierInfoList.get(i).getSupplierNo(),updateFlag);
-                else
+                else   if (truckReport != null)
                     truckReport.getSearchSupplierInfo(supplierInfoList.get(i).getSupplierName()
+                            , supplierInfoList.get(i).getSupplierNo());
+                else  if (acceptanceSupplierReport != null)
+                    acceptanceSupplierReport.getSearchSupplierInfo(supplierInfoList.get(i).getSupplierName()
                             , supplierInfoList.get(i).getSupplierNo());
             }
         });
