@@ -1838,8 +1838,8 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         new SendMailTask(AddNewRaw.this,folder.getPath(),1).execute("quality@blackseawood.com",
                 "12345678Q",
                 toEmil,
-                "quality BLACK SEA WOOD",
                 subject2,
+                "quality BLACK SEA WOOD",
                 images
         );
 
