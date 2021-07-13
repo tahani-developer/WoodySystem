@@ -202,5 +202,6 @@
     <string name="msg_sending_email">Sending</string>
     <string name="accept_report_supplier">Accept Report / Supplier</string>
     <string name="accept_report_truck">Accept Report / Truck</string>
+    <string name="preview">preview</string>
 
 </resources>

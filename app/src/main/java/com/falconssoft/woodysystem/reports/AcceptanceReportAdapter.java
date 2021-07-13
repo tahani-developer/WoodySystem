@@ -8,9 +8,13 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.os.StrictMode;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.util.Base64;
@@ -35,6 +39,7 @@ import com.falconssoft.woodysystem.models.NewRowInfo;
 import com.falconssoft.woodysystem.models.Settings;
 import com.falconssoft.woodysystem.stage_one.AddNewAdapter;
 import com.falconssoft.woodysystem.stage_one.AddNewRaw;
+import com.falconssoft.woodysystem.stage_one.StageOne;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
@@ -143,8 +148,8 @@ public class AcceptanceReportAdapter extends BaseAdapter {
         holder.edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                truckNoBeforeUpdate2 = itemsList.get(i).getTruckNo();
-                context.goToEditPage(itemsList.get(i));
+                showPasswordDialog(i);
+
             }
         });
 
@@ -552,6 +557,13 @@ public class AcceptanceReportAdapter extends BaseAdapter {
 
             if (listOfEmail.size() != 0) {
 
+                try {
+                    File folder = new File(Environment.getExternalStorageDirectory().getPath() + "/SendEmailWood");
+                    deleteTempFolder(folder.getPath());
+                }catch (Exception e){
+                    Log.e("Delete Folder ","folder");
+                }
+
                 double accCubic= 0;
                 accCubic=newRowInfos.getCubic()- newRowInfos.getCubicRej();
                 accCubic=Double.parseDouble(String.format("%.3f", accCubic));
@@ -565,8 +577,8 @@ public class AcceptanceReportAdapter extends BaseAdapter {
                     if (newRowInfoPic != null) {
                         fillImageBitmap(newRowInfoPic);
                     }
-
-                    sendEmailDialog();
+                    sendEmail("", "");
+                    //sendEmailDialog();
                 }else   if(flag==2) {
                     ExportToExcel.getInstance().createExcelFile(context, "Acceptance_Report_2.xls", 8, listOfEmail, null);
 
@@ -606,7 +618,7 @@ public class AcceptanceReportAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 if (!toEmail.getText().toString().equals("")) {
-                    sendEmail(toEmail.getText().toString(), subject.getText().toString());
+
                     dialog.dismiss();
                 } else {
                     toEmail.setError("Required!");
@@ -761,6 +773,9 @@ public class AcceptanceReportAdapter extends BaseAdapter {
 
     public void shareWhatsAppA(File pdfFile,int pdfExcel,List<String> filePaths){
         try {
+
+            StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+            StrictMode.setVmPolicy(builder.build());
             Uri uri = Uri.fromFile(pdfFile);
             Intent sendIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
             if (pdfFile.exists()) {
@@ -795,9 +810,45 @@ public class AcceptanceReportAdapter extends BaseAdapter {
             Toast.makeText(context, "Storage Permission"+e.toString(), Toast.LENGTH_SHORT).show();
         }
 
+      //  deleteTempFolder(pdfFile.getPath());
     }
 
+    void showPasswordDialog(int i) {
+      Dialog  passwordDialog = new Dialog(context);
+        passwordDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        passwordDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        passwordDialog.setContentView(R.layout.password_dialog);
 
+        TextInputEditText password = passwordDialog.findViewById(R.id.password_dialog_password);
+        TextView done = passwordDialog.findViewById(R.id.password_dialog_done);
+
+        done.setText(context.getResources().getString(R.string.done));
+
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (password.getText().toString().equals("3030100")) {
+                    passwordDialog.dismiss();
+                    truckNoBeforeUpdate2 = itemsList.get(i).getTruckNo();
+                    context.goToEditPage(itemsList.get(i));
+                } else
+                    Toast.makeText(context, "Password is not correct!", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        passwordDialog.show();
+    }
+
+    public void deleteTempFolder(String dir) {
+        File myDir = new File(dir);
+        if (myDir.isDirectory()) {
+            String[] children = myDir.list();
+            for (int i = 0; i < children.length; i++) {
+                new File(myDir, children[i]).delete();
+            }
+        }
+    }
     public void sendEmail(String subject,String email ,String message) {
         try {
 //            email = etEmail.getText().toString();

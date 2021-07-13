@@ -3,12 +3,17 @@ package com.falconssoft.woodysystem.reports;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -16,6 +21,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -25,6 +31,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.falconssoft.woodysystem.DatabaseHandler;
+import com.falconssoft.woodysystem.ExportToExcel;
+import com.falconssoft.woodysystem.ExportToPDF;
 import com.falconssoft.woodysystem.ItemsListAdapter4;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.models.NewRowInfo;
@@ -39,6 +47,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
@@ -48,6 +57,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -81,6 +91,7 @@ public class AcceptanceSupplierReport extends AppCompatActivity implements   Vie
     private Spinner gradeSpinner;
     double  netRejectedString=0,netRejCMB=0,netTruckCmb=0,acceptCbm=0,netBundlesString=0;
     String  gradeText = "KD";
+    Button preview,pdf,excel,email;
     TextView totalRejected,totalBundles,totalTruckCbm,totalRejCbm,totalAcceptCbm;
 
     @Override
@@ -107,7 +118,12 @@ public class AcceptanceSupplierReport extends AppCompatActivity implements   Vie
         totalTruckCbm = findViewById(R.id.total_truck_cbm);
         totalRejCbm = findViewById(R.id.total_rej_cbm);
         totalAcceptCbm = findViewById(R.id.total_accept_cbm);
+        preview=findViewById(R.id.preview);
+        pdf=findViewById(R.id.pdf);
+        excel=findViewById(R.id.excel);
+        email=findViewById(R.id.email);
         gradeList.clear();
+        gradeList.add("ALL");
         gradeList.add("KD");
         gradeList.add("Fresh");
         gradeList.add("Blue Stain");
@@ -159,6 +175,10 @@ public class AcceptanceSupplierReport extends AppCompatActivity implements   Vie
         from.setOnClickListener(this);
         to.setOnClickListener(this);
         supplier.setOnClickListener(this);
+        preview.setOnClickListener(this);
+        pdf.setOnClickListener(this);
+        excel.setOnClickListener(this);
+        email.setOnClickListener(this);
         location.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -202,8 +222,155 @@ public class AcceptanceSupplierReport extends AppCompatActivity implements   Vie
             case R.id.supplier_report_supplier:
                 supplierDialog();
                 break;
+            case R.id.preview:
+                new JSONTask().execute();
+                break;
+            case R.id.pdf:
+
+                String truckNos="All";
+                if(!truckNo.getText().toString().equals("")){
+                    truckNos=truckNo.getText().toString();
+                }
+                ExportToPDF obj = new ExportToPDF(AcceptanceSupplierReport.this);
+                obj.exportSupplierAcceptance(dataList, truckNos, gradeText, from.getText().toString(), to.getText().toString(),supplierName,totalTruckCbm.getText().toString(),totalRejCbm.getText().toString(),totalBundles.getText().toString(),totalRejected.getText().toString(),totalAcceptCbm.getText().toString());
+
+                break;
+            case R.id.excel:
+                ExportToExcel.getInstance().createExcelFile(AcceptanceSupplierReport.this, "Acceptance_Supplier_Report.xls", 9,null, dataList);
+                break;
+            case R.id.email:
+                try {
+                    File folder = new File(Environment.getExternalStorageDirectory().getPath() + "/SendEmailWood");
+                    deleteTempFolder(folder.getPath());
+                }catch (Exception e){
+                    Log.e("Delete Folder ","folder");
+                }
+                ExportToPDF obj2 = new ExportToPDF(AcceptanceSupplierReport.this);
+                obj2.exportSupplierAcceptanceForEmail(dataList,  truckNo.getText().toString(), gradeText, from.getText().toString(), to.getText().toString(),supplierName,totalTruckCbm.getText().toString(),totalRejCbm.getText().toString(),totalBundles.getText().toString(),totalRejected.getText().toString(),totalAcceptCbm.getText().toString());
+
+                sendEmail("","");
+                break;
 
         }
+    }
+    public void sendEmail(String toEmil, String subject) {
+
+
+        File folder = new File(Environment.getExternalStorageDirectory().getPath() + "/SendEmailWood");
+        File[] listOfFiles = folder.listFiles();
+        Log.e("pathh= ", "" + folder.getPath().toString() + "  " + listOfFiles.length);
+        List<String> images = new ArrayList<String>();
+        for (int i = 0; i < listOfFiles.length; i++) {
+            //if (listOfFiles[i].getName().endsWith(".jpg")) {
+            images.add(listOfFiles[i].getPath());
+            // }
+        }
+        String subject2 = "";
+        if (!TextUtils.isEmpty(subject)) {
+            subject2 = subject+" ";
+        } else {
+            subject2 = "Quality";
+        }
+
+        //EmailPDF(folder);
+        shareWhatsAppA(folder,2,images);
+
+
+//        new SendMailTask(context,folder.getPath(),0).execute("quality@blackseawood.com",
+//                "12345678Q",
+//                toEmil,
+//                "quality BLACK SEA WOOD",
+//                subject2,
+//                images
+//        );
+
+//
+//        BackgroundMail.newBuilder(AddNewRaw.this)//rawanwork2021@gmail.com
+//                .withUsername("quality@blackseawood.com")//quality@blackseawood.com
+//                .withPassword("12345678Q")
+//                .withMailto(toEmil)
+//                .withType(BackgroundMail.TYPE_PLAIN)
+//                .withSubject("quality BLACK SEA WOOD")
+//                .withBody(subject2 /*"this is the body \n www.google.com  \n  http://5.189.130.98:8085/import.php?FLAG=3 \n "  */)
+//                .withProcessVisibility(true)
+//                .withAttachments(images)
+//                .withOnSuccessCallback(new BackgroundMail.OnSuccessCallback() {
+//                    @Override
+//                    public void onSuccess() {
+//                        //do some magic
+//                        clear();
+//                        deleteTempFolder(folder.getPath());
+//                    }
+//                })
+//                .withOnFailCallback(new BackgroundMail.OnFailCallback() {
+//                    @Override
+//                    public void onFail() {
+//                        //do some magic
+//                    }
+//                })
+//                .send();
+
+
+    }
+
+    public void EmailPDF(File folder)
+    {
+        File PayslipDir = new File(Environment.getExternalStorageDirectory(), "/SendEmailWood/");
+        // Write your file to that directory and capture the Uri
+        String strFilename = "PDFFile.pdf";
+        File htmlFile = new File(PayslipDir, strFilename);
+        // Save file encoded as html
+        Uri htmlUri = Uri.fromFile(folder);
+        final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+        emailIntent.setType("application/pdf");
+        emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL,new String[] {"rawriy2017@gmail.com"});
+        emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,"Pdf attachment");
+        emailIntent.putExtra(android.content.Intent.EXTRA_TEXT,"Hi PDF is attached in this mail. ");
+        emailIntent.putExtra(Intent.EXTRA_STREAM, htmlUri);
+        AcceptanceSupplierReport.this.startActivity(Intent.createChooser(emailIntent,"Send mail..."));
+        //finish();
+    }
+
+    public void shareWhatsAppA(File pdfFile, int pdfExcel, List<String> filePaths){
+        try {
+
+            StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+            StrictMode.setVmPolicy(builder.build());
+            Uri uri = Uri.fromFile(pdfFile);
+            Intent sendIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+            if (pdfFile.exists()) {
+                if (pdfExcel == 1) {
+                    sendIntent.setType("application/excel");
+                } else if (pdfExcel == 2) {
+                    sendIntent.setType("plain/text");//46.185.208.4
+                }
+                //  sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(String.valueOf(uri)));
+
+                sendIntent.putExtra(Intent.EXTRA_SUBJECT,
+                        pdfFile.getName() + " Sharing File...");
+
+                sendIntent.putExtra(Intent.EXTRA_TEXT, pdfFile.getName() + " Sharing File");
+
+                ArrayList<Uri> uris = new ArrayList<Uri>();
+                //convert from paths to Android friendly Parcelable Uri's
+                for (String file : filePaths)
+                {
+                    File fileIn = new File(file);
+                    Uri u = Uri.fromFile(fileIn);
+                    uris.add(u);
+                }
+                sendIntent.putExtra(Intent.EXTRA_STREAM, uris);
+
+                Intent shareIntent = Intent.createChooser(sendIntent, null);
+                startActivity(shareIntent);
+
+            }
+        }catch (Exception e){
+            Log.e("drk;d","dfrtr"+e.toString());
+            Toast.makeText(AcceptanceSupplierReport.this, "Storage Permission"+e.toString(), Toast.LENGTH_SHORT).show();
+        }
+
+        //deleteTempFolder(pdfFile.getPath());
     }
 
         public Date formatDate(String date) {
@@ -382,6 +549,40 @@ public class AcceptanceSupplierReport extends AppCompatActivity implements   Vie
 
     }
 
+    public void exportToPdf(NewRowInfo newRowInfo) {
+
+        ExportToPDF obj = new ExportToPDF(AcceptanceSupplierReport.this);
+        obj.exportSupplierAcceptance(Collections.singletonList(newRowInfo), newRowInfo.getTruckNo(), newRowInfo.getGrade(), from.getText().toString(), to.getText().toString(),supplierName,newRowInfo.getTruckCMB(),newRowInfo.getCbmRej(),newRowInfo.getNetBundles(),newRowInfo.getTotalRejectedNo(),newRowInfo.getCbmAccept());
+
+    }
+
+    public void exportToExcel(NewRowInfo newRowInfo) {
+        ExportToExcel.getInstance().createExcelFile(AcceptanceSupplierReport.this, "Acceptance_Supplier_Report.xls", 9,null, Collections.singletonList(newRowInfo));
+    }
+
+    public void deleteTempFolder(String dir) {
+        File myDir = new File(dir);
+        if (myDir.isDirectory()) {
+            String[] children = myDir.list();
+            for (int i = 0; i < children.length; i++) {
+                new File(myDir, children[i]).delete();
+            }
+        }
+    }
+
+    public void sendEmailFromReport(NewRowInfo newRowInfo) {
+        try {
+            File folder = new File(Environment.getExternalStorageDirectory().getPath() + "/SendEmailWood");
+            deleteTempFolder(folder.getPath());
+        }catch (Exception e){
+            Log.e("Delete Folder ","folder");
+        }
+        ExportToPDF obj2 = new ExportToPDF(AcceptanceSupplierReport.this);
+        obj2.exportSupplierAcceptanceForEmail(Collections.singletonList(newRowInfo), newRowInfo.getTruckNo(), newRowInfo.getGrade(), from.getText().toString(), to.getText().toString(), supplierName, newRowInfo.getTruckCMB(), newRowInfo.getCbmRej(), newRowInfo.getNetBundles(), newRowInfo.getTotalRejectedNo(), newRowInfo.getCbmAccept());
+
+       sendEmail("","");
+    }
+
     // ******************************************** GET DATA For Report*****************************************
     private class JSONTask extends AsyncTask<String, String, String> {
 
@@ -469,7 +670,7 @@ public class AcceptanceSupplierReport extends AppCompatActivity implements   Vie
                         +"&PIECES="+piecesA
                        // +"&ttnNo="+ttnNo
                         +"&TRUCK_NO="+truckNos
-                        +"&GRADE="+grade
+                        +"&GRADE="+grade.replace(" ","%20")
                         //+"&location="+location
                 );
                 URLConnection conn = url.openConnection();
@@ -539,11 +740,13 @@ public class AcceptanceSupplierReport extends AppCompatActivity implements   Vie
 
                 }else {
                     dataList.clear();
+                    rawCount.setText("" + dataList.size());
                     adapter2 = new AcceptanceSupplierReportAdapter(AcceptanceSupplierReport.this, dataList);
                     list.setAdapter(adapter2);
                 }
             } else {
                 dataList.clear();
+                rawCount.setText("" + dataList.size());
                 adapter2 = new AcceptanceSupplierReportAdapter(AcceptanceSupplierReport.this, dataList);
                 list.setAdapter(adapter2);
                 Toast.makeText(AcceptanceSupplierReport.this, "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();

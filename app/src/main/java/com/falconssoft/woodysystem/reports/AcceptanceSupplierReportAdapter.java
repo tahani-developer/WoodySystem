@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
@@ -41,6 +42,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static android.provider.CalendarContract.CalendarCache.URI;
@@ -118,7 +120,7 @@ public class AcceptanceSupplierReportAdapter extends BaseAdapter {
 
         holder.truckNo.setText(itemsList.get(i).getTruckNo());
         holder.ttn.setText(itemsList.get(i).getTtnNo());
-        holder.noOfBundle.setText("" + itemsList.get(i).getNetBundles());
+        holder.noOfBundle.setText("" + itemsList.get(i).getNoOfBundles());
         holder.piecesR.setText(itemsList.get(i).getTotalRejectedNo());
         holder.TruckCBM.setText("" + itemsList.get(i).getTruckCMB());
         holder.rejCbm.setText("" + itemsList.get(i).getCbmRej());
@@ -140,7 +142,7 @@ public class AcceptanceSupplierReportAdapter extends BaseAdapter {
         holder.pdf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new JSONTaskTTN(itemsList.get(i),0).execute();
+              context.exportToPdf(itemsList.get(i));
 
             }
         });
@@ -149,7 +151,7 @@ public class AcceptanceSupplierReportAdapter extends BaseAdapter {
         holder.excel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               new JSONTaskTTN(itemsList.get(i),2).execute();
+               context.exportToExcel(itemsList.get(i));
 
             }
         });
@@ -161,8 +163,8 @@ public class AcceptanceSupplierReportAdapter extends BaseAdapter {
             public void onClick(View v) {
 
 //                obj.previewLinear(itemsList.get(i).getSerial(), context);
-                new JSONTaskTTN(itemsList.get(i),1).execute();
-
+            //    new JSONTaskTTN(itemsList.get(i),1).execute();
+            context.sendEmailFromReport(itemsList.get(i));
             }
         });
 
@@ -585,6 +587,8 @@ public class AcceptanceSupplierReportAdapter extends BaseAdapter {
         dialog.show();
     }
 
+
+
     void sendEmail(String toEmil, String subject) {
 
 
@@ -728,6 +732,8 @@ public class AcceptanceSupplierReportAdapter extends BaseAdapter {
 
     public void shareWhatsAppA(File pdfFile,int pdfExcel,List<String> filePaths){
         try {
+            StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+            StrictMode.setVmPolicy(builder.build());
             Uri uri = Uri.fromFile(pdfFile);
             Intent sendIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
             if (pdfFile.exists()) {

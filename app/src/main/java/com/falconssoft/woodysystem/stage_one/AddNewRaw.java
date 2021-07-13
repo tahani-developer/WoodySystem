@@ -73,6 +73,7 @@ import com.falconssoft.woodysystem.models.Settings;
 import com.falconssoft.woodysystem.models.SupplierInfo;
 import com.falconssoft.woodysystem.reports.AcceptanceInfoReport;
 import com.falconssoft.woodysystem.reports.AcceptanceReport;
+import com.falconssoft.woodysystem.reports.AcceptanceSupplierReport;
 import com.falconssoft.woodysystem.reports.BundlesReport;
 import com.google.gson.Gson;
 
@@ -865,14 +866,21 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                 break;
             case R.id.addNewRaw_acceptRow_Email:
 
+                try {
+                    File folder = new File(Environment.getExternalStorageDirectory().getPath() + "/SendEmailWood");
+                    deleteTempFolder(folder.getPath());
+                }catch (Exception e){
+                    Log.e("Delete Folder ","folder");
+                }
                 if (listOfEmail.size() != 0) {
                     ExportToPDF obj = new ExportToPDF(AddNewRaw.this);
                     obj.exportTruckAcceptanceSendEmail(listOfEmail, sdf.format(myCalendar.getTime()), totalTruckCbm.getText().toString(), totalRejected.getText().toString(), totalRejCbm.getText().toString(), totalAcceptCbm.getText().toString());
                     if (newRowInfoPic != null) {
                         fillImageBitmap(newRowInfoPic);
                     }
+                    sendEmail("", "");
 
-                    sendEmailDialog();
+                    //sendEmailDialog();
                 } else {
                     Toast.makeText(this, "no Data ", Toast.LENGTH_SHORT).show();
                 }
@@ -1692,6 +1700,13 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 //                                createDirectoryAndSaveFile(imageBitmapList.get(i),"image_"+i);
 //                            }
 
+                            try {
+                                File folder = new File(Environment.getExternalStorageDirectory().getPath() + "/SendEmailWood");
+                                deleteTempFolder(folder.getPath());
+                            }catch (Exception e){
+                                Log.e("Delete Folder ","folder");
+                            }
+
                             new JSONTask1().execute();// save
 //                            }
                         } else {
@@ -1834,14 +1849,14 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
             subject2 = "Quality";
         }
 
-
-        new SendMailTask(AddNewRaw.this,folder.getPath(),1).execute("quality@blackseawood.com",
-                "12345678Q",
-                toEmil,
-                "quality BLACK SEA WOOD",
-                subject2,
-                images
-        );
+        shareWhatsAppA(folder,2,images);
+//        new SendMailTask(AddNewRaw.this,folder.getPath(),1).execute("quality@blackseawood.com",
+//                "12345678Q",
+//                toEmil,
+//                "quality BLACK SEA WOOD",
+//                subject2,
+//                images
+//        );
 
 //
 //        BackgroundMail.newBuilder(AddNewRaw.this)//rawanwork2021@gmail.com
@@ -1870,6 +1885,47 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 //                .send();
 
 
+    }
+
+    public void shareWhatsAppA(File pdfFile, int pdfExcel, List<String> filePaths){
+        try {
+            StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+            StrictMode.setVmPolicy(builder.build());
+            Uri uri = Uri.fromFile(pdfFile);
+            Intent sendIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+            if (pdfFile.exists()) {
+                if (pdfExcel == 1) {
+                    sendIntent.setType("application/excel");
+                } else if (pdfExcel == 2) {
+                    sendIntent.setType("plain/text");//46.185.208.4
+                }
+                //  sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(String.valueOf(uri)));
+
+                sendIntent.putExtra(Intent.EXTRA_SUBJECT,
+                        pdfFile.getName() + " Sharing File...");
+
+                sendIntent.putExtra(Intent.EXTRA_TEXT, pdfFile.getName() + " Sharing File");
+
+                ArrayList<Uri> uris = new ArrayList<Uri>();
+                //convert from paths to Android friendly Parcelable Uri's
+                for (String file : filePaths)
+                {
+                    File fileIn = new File(file);
+                    Uri u = Uri.fromFile(fileIn);
+                    uris.add(u);
+                }
+                sendIntent.putExtra(Intent.EXTRA_STREAM, uris);
+
+                Intent shareIntent = Intent.createChooser(sendIntent, null);
+                startActivity(shareIntent);
+
+            }
+        }catch (Exception e){
+            Log.e("drk;d","dfrtr"+e.toString());
+            Toast.makeText(AddNewRaw.this, "Storage Permission"+e.toString(), Toast.LENGTH_SHORT).show();
+        }
+
+        //deleteTempFolder(pdfFile.getPath());
     }
 
     public void deleteTempFolder(String dir) {
@@ -3909,6 +3965,8 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
 
                     showSnackbar("Added Successfully", true);
 
+
+
                     if (newRowList.size() != 0) {
                         try {
                             ExportToPDF obj = new ExportToPDF(AddNewRaw.this);
@@ -3964,8 +4022,9 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     acceptRowButton.setBackgroundResource(R.drawable.frame_shape_2);
                     mainInfoButton.setBackgroundResource(R.drawable.frame_shape_3);
                     doneAcceptRow.setEnabled(true);
+                    sendEmail("","");
 
-                    sendEmailDialog();
+                    //sendEmailDialog();
                     progressDialog.dismiss();
                     Log.e("tag", "save Success");
                 } else {
