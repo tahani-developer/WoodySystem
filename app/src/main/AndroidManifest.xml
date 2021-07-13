@@ -37,7 +37,10 @@
         android:largeHeap="true"
         android:grantUriPermissions="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".stage_one.EditPage"/>
+        <activity android:name=".stage_one.EditPage"
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:screenOrientation="landscape"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
 
         <activity android:name=".stage_two.StageTwoReports" />
 

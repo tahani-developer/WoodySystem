@@ -10,8 +10,8 @@ android {
         applicationId "com.falconssoft.woodysystem"
         minSdkVersion 15
         targetSdkVersion 29
-        versionCode 85
-        versionName "1.8.2"
+        versionCode 86
+        versionName "1.8.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
