@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ClipData;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,8 +15,12 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
@@ -102,7 +108,7 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
     private Settings generalSettings;
     private WoodPresenter presenter;
     private ImageView image1, image2, image3, image4, image5, image6, image7, image8, image9, image10, image11, image12, image13, image14, image15;
-    private TextView addNewSupplier, searchSupplier, addButton, acceptRowButton, mainInfoButton, acceptanceDate, addPicture, totalRejected, totalBundles, total, addImageGalary,totalTruckCbm,totalRejCbm,totalAcceptCbm;
+    private TextView addNewSupplier, searchSupplier, addButton, acceptRowButton, mainInfoButton, acceptanceDate, addPicture, totalRejected, totalBundles, total, addImageGalary,totalTruckCbm,totalRejCbm,totalAcceptCbm,deleteTruck;
     private EditText thickness, width, length, noOfPieces, noOfBundles, noOfRejected, truckNo, acceptor, ttnNo;
     private Spinner gradeSpinner, acceptanceLocation;
     private ArrayList<String> gradeList = new ArrayList<>();
@@ -117,7 +123,7 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
     //    private TableLayout tableLayout, headerTableLayout;
     private TableRow tableRow;
     private Dialog searchDialog;
-
+    private Uri imageUri;
     private DatabaseHandler databaseHandler;
     private List<SupplierInfo> suppliers;
     private JSONObject masterData;
@@ -136,7 +142,7 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
     private static boolean isCamera = false;
     private int edieFlag = 0;
     private double netBundlesString = 0, netRejectedString = 0 ,netTruckCmb=0,netRejCMB =0,acceptCbm=0;
-    private ProgressDialog progressDialog;
+    private ProgressDialog progressDialog,progressDialogTack;
     public static String truckNoBeforeUpdate = "";
     public static String serialBeforeUpdate = "";
     private RecyclerView rowsRecyclerView;
@@ -146,10 +152,15 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
     private String oldTruck = "", editSerial = "";// for edit
     private Dialog dialog;
 
+    NewRowInfo editingRaw;
+    int PICK_IMAGE_MULTIPLE = 1;
+
 
     private String thicknessLocal, widthLocal, lengthLocal, noOfPiecesLocal, noOfRejectedLocal, noOfBundlesLocal;
+    List<Bitmap> imageBitmapList;
 
     TextView supplierTextTemp=null;
+    NewRowInfo newRowInfoPic;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -180,6 +191,7 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
         headerLayout = findViewById(R.id.editPage_linearLayoutHeader);
         acceptRowLayout = findViewById(R.id.editPage_acceptRow_linear);
         mainInfoButton = findViewById(R.id.editPage_acceptRow_back);
+        imageBitmapList = new ArrayList<>();
 //        tableLayout = findViewById(R.id.editPage_table);
 //        headerTableLayout = findViewById(R.id.editPage_table_header);
         truckNo = findViewById(R.id.editPage_truckNo);
@@ -189,6 +201,7 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
         ttnNo = findViewById(R.id.editPage_ttn_no);
         totalRejected = findViewById(R.id.editPage_total_rejected);
         totalTruckCbm = findViewById(R.id.addNewRaw_total_truck_cbm);
+        deleteTruck=findViewById(R.id.editPage_delete_button);
         totalRejCbm = findViewById(R.id.addNewRaw_total_rej_cbm);
         totalAcceptCbm = findViewById(R.id.addNewRaw_total_accept_cbm);
         totalBundles = findViewById(R.id.editPage_total_bundles);
@@ -210,7 +223,7 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
         image13 = findViewById(R.id.editPage_image13);
         image14 = findViewById(R.id.editPage_image14);
         image15 = findViewById(R.id.editPage_image15);
-
+        addImageGalary = findViewById(R.id.editPage_take_photo);
         thickness.requestFocus();
         headerLayout.setVisibility(View.VISIBLE);
         acceptRowLayout.setVisibility(View.VISIBLE);
@@ -268,6 +281,7 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
         searchSupplier.setOnClickListener(this);
         addButton.setOnClickListener(this);
         acceptanceDate.setOnClickListener(this);
+        addImageGalary.setOnClickListener(this);
         image1.setOnClickListener(this);
         image2.setOnClickListener(this);
         image3.setOnClickListener(this);
@@ -284,6 +298,8 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
         image13.setOnClickListener(this);
         image14.setOnClickListener(this);
         image15.setOnClickListener(this);
+
+        deleteTruck.setOnClickListener(this);
 
         checkIfEditItem();
 
@@ -307,10 +323,14 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
 
             Bundle bundle = getIntent().getExtras();
             NewRowInfo rowInfo = (NewRowInfo) bundle.getSerializable(EDIT_RAW2);
+            editingRaw=new NewRowInfo();
+//            newRowInfoPic=new NewRowInfo();
+            editingRaw=rowInfo;
+//            newRowInfoPic=rowInfo;
             Log.e("checkedit", "" + editList.size());
             editSerial = rowInfo.getSerial();
             oldTruck = rowInfo.getTruckNo();
-
+            Log.e("editingRaw", editingRaw.getImageOne()+"  " + editingRaw.getSerial()+"   "+editingRaw.getTtnNo()+"     "+editingRaw.getTruckNo()+"    "+editingRaw.getLocationOfAcceptance());
             imagesRowInfo = new NewRowInfo();
             imagesRowInfo.setImageOne(rowInfo.getImageOne());
             imagesRowInfo.setImageTwo(rowInfo.getImageTwo());
@@ -328,6 +348,7 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
             imagesRowInfo.setImage13(rowInfo.getImage13());
             imagesRowInfo.setImage14(rowInfo.getImage14());
             imagesRowInfo.setImage15(rowInfo.getImage15());
+
 
 
             addNewSupplier.setVisibility(View.INVISIBLE);
@@ -361,6 +382,8 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
 
                 }
             });
+
+
 
         }
     }
@@ -621,7 +644,7 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
 
         recyclerView = searchDialog.findViewById(R.id.search_supplier_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new SuppliersAdapter(null, suppliers, this, null,1);
+        adapter = new SuppliersAdapter(null, suppliers, this, null,1,null);
         recyclerView.setAdapter(adapter);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -700,7 +723,7 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
 
                 recyclerView = searchDialog.findViewById(R.id.search_supplier_recyclerView);
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
-                adapter = new SuppliersAdapter(null, suppliers, this, null,0);
+                adapter = new SuppliersAdapter(null, suppliers, this, null,0,null);
                 recyclerView.setAdapter(adapter);
 
                 searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -765,6 +788,23 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
                 isEditImage = true;
                 editImageNo = 8;
                 openCamera();
+                break;
+            case R.id.editPage_delete_button:
+                AlertDialog.Builder builder = new AlertDialog.Builder(EditPage.this);
+                builder.setMessage("Are you want delete this Truck ?");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        new JSONTaskDelete(editingRaw.getTruckNo(),editingRaw.getSerial(),editingRaw.getLocationOfAcceptance(),editingRaw.getTtnNo()).execute();
+
+                    }
+                });
+                builder.show();
+                
+                break;
+            case R.id.editPage_take_photo:
+                getPicFromGallery();
                 break;
         }
 
@@ -837,7 +877,7 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
                 }
             }
         }
-        adapter = new SuppliersAdapter(null, suppliers, this, null,0);
+        adapter = new SuppliersAdapter(null, suppliers, this, null,0,null);
         recyclerView.setAdapter(adapter);
     }
 
@@ -1022,27 +1062,30 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
                             Log.e("newRowList//", "" + newRowList.get(0).getSerial());
 
                             masterData = new JSONObject();
-                            newRowList.get(0).setImageOne(imagesRowInfo.getImageOne());
-                            newRowList.get(0).setImageTwo(imagesRowInfo.getImageTwo());
-                            newRowList.get(0).setImageThree(imagesRowInfo.getImageThree());
-                            newRowList.get(0).setImageFour(imagesRowInfo.getImageFour());
-                            newRowList.get(0).setImageFive(imagesRowInfo.getImageFive());
-                            newRowList.get(0).setImageSix(imagesRowInfo.getImageSix());
-                            newRowList.get(0).setImageSeven(imagesRowInfo.getImageSeven());
-                            newRowList.get(0).setImageEight(imagesRowInfo.getImageEight());
+//                            newRowList.get(0).setImageOne(newRowInfoPic.getImageOne());
+//                            newRowList.get(0).setImageTwo(newRowInfoPic.getImageTwo());
+//                            newRowList.get(0).setImageThree(newRowInfoPic.getImageThree());
+//                            newRowList.get(0).setImageFour(newRowInfoPic.getImageFour());
+//                            newRowList.get(0).setImageFive(newRowInfoPic.getImageFive());
+//                            newRowList.get(0).setImageSix(newRowInfoPic.getImageSix());
+//                            newRowList.get(0).setImageSeven(newRowInfoPic.getImageSeven());
+//                            newRowList.get(0).setImageEight(newRowInfoPic.getImageEight());
+//
+//                            newRowList.get(0).setImage9(newRowInfoPic.getImage9());
+//                            newRowList.get(0).setImage10(newRowInfoPic.getImage10());
+//                            newRowList.get(0).setImage11(newRowInfoPic.getImage11());
+//                            newRowList.get(0).setImage12(newRowInfoPic.getImage12());
+//                            newRowList.get(0).setImage13(newRowInfoPic.getImage13());
+//                            newRowList.get(0).setImage14(newRowInfoPic.getImage14());
+//                            newRowList.get(0).setImage15(newRowInfoPic.getImage15());
 
-                            newRowList.get(0).setImage9(imagesRowInfo.getImage9());
-                            newRowList.get(0).setImage10(imagesRowInfo.getImage10());
-                            newRowList.get(0).setImage11(imagesRowInfo.getImage11());
-                            newRowList.get(0).setImage12(imagesRowInfo.getImage12());
-                            newRowList.get(0).setImage13(imagesRowInfo.getImage13());
-                            newRowList.get(0).setImage14(imagesRowInfo.getImage14());
-                            newRowList.get(0).setImage15(imagesRowInfo.getImage15());
 
 
-                            masterData = newRowList.get(0).getJsonDataMaster();
 //                                Log.e("newRowList", "" + newRowList.get(0).getTruckNo());
 
+
+                            fillImage();
+                            masterData = newRowList.get(0).getJsonDataMaster();
                             new JSONTask2().execute();// update
 
                         } else {
@@ -1064,20 +1107,44 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void openCamera() {
-        if (imageNo < 8) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
-            } else {
-                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cameraIntent, 1888);
+            if (imageNo < 15 || isEditImage) {
+
+                if ((ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+                        && (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
+                } else {
+                    ContentValues values = new ContentValues();
+                    values.put(MediaStore.Images.Media.TITLE, "NewPicture");
+                    values.put(MediaStore.Images.Media.DESCRIPTION, "FromyourCamera");
+                    imageUri = getContentResolver().insert(
+                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                    startActivityForResult(intent, 18);
+//                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+//                startActivityForResult(cameraIntent, 18);
 //            imageNo = i;
+                }
+                isCamera = false;
+            } else {
+                showSnackbar("Reached maximum size of images!", false);
             }
-            isCamera = false;
-        } else {
-            showSnackbar("Reached maximum size of images!", false);
-        }
+
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == 100)
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                    != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+                return;
+
+        openCamera();
+
+    }
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -1091,11 +1158,23 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
             );
         }
 
-        if (requestCode == 1888 && resultCode == RESULT_OK) {
-            Bundle intent = data.getExtras();
-            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-            bitmap = getResizedBitmap(bitmap, 100, 100);
-            File pictureFile;
+        if (requestCode == 18 && resultCode == RESULT_OK) {
+            Bitmap thumbnail = null;
+//            try {
+//                thumbnail = MediaStore.Images.Media.getBitmap(
+//                        getContentResolver(), imageUri);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            image1.setImageBitmap(thumbnail);
+//            imagesList.add(0, bitMapToString(thumbnail));
+//            imageurl = getRealPathFromURI(imageUri);
+
+//            Bundle intent = data.getExtras();
+//            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+//            bitmap = getResizedBitmap(bitmap, 100, 100);
+//            File pictureFile;
+
 
             int check;
             if (!isEditImage) {
@@ -1104,91 +1183,433 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
             } else {
                 check = editImageNo;
             }
-
+            Log.e("checkvalue22", "" + check);
 //            Log.e("checkvalue", "" + check);
-            if (intent != null) {
-                switch (check) {
-                    case 1:
-                        image1.setVisibility(View.VISIBLE);
-                        image1.setImageBitmap(bitmap);
-                        imagesList.add(0, bitMapToString(bitmap));
-                        break;
-                    case 2:
-                        image2.setVisibility(View.VISIBLE);
-                        image2.setImageBitmap(bitmap);
-                        imagesList.add(1, bitMapToString(bitmap));
-                        break;
-                    case 3:
-                        image3.setVisibility(View.VISIBLE);
-                        image3.setImageBitmap(bitmap);
-                        imagesList.add(2, bitMapToString(bitmap));
-                        break;
-                    case 4:
-                        image4.setVisibility(View.VISIBLE);
-                        image4.setImageBitmap(bitmap);
-                        imagesList.add(3, bitMapToString(bitmap));
-                        break;
-                    case 5:
-                        image5.setVisibility(View.VISIBLE);
-                        image5.setImageBitmap(bitmap);
-                        imagesList.add(4, bitMapToString(bitmap));
-                        break;
-                    case 6:
-                        image6.setVisibility(View.VISIBLE);
-                        image6.setImageBitmap(bitmap);
-                        imagesList.add(5, bitMapToString(bitmap));
-                        break;
-                    case 7:
-                        image7.setVisibility(View.VISIBLE);
-                        image7.setImageBitmap(bitmap);
-                        imagesList.add(6, bitMapToString(bitmap));
-                        break;
-                    case 8:
-                        image8.setVisibility(View.VISIBLE);
-                        image8.setImageBitmap(bitmap);
-                        imagesList.add(7, bitMapToString(bitmap));
-                        break;
-                    case 9:
-                        image9.setVisibility(View.VISIBLE);
-                        image9.setImageBitmap(bitmap);
-                        imagesList.add(8, bitMapToString(bitmap));
-                        break;
-                    case 10:
-                        image10.setVisibility(View.VISIBLE);
-                        image10.setImageBitmap(bitmap);
-                        imagesList.add(9, bitMapToString(bitmap));
-                        break;
-                    case 11:
-                        image11.setVisibility(View.VISIBLE);
-                        image11.setImageBitmap(bitmap);
-                        imagesList.add(10, bitMapToString(bitmap));
-                        break;
-                    case 12:
-                        image12.setVisibility(View.VISIBLE);
-                        image12.setImageBitmap(bitmap);
-                        imagesList.add(11, bitMapToString(bitmap));
-                        break;
+//            if (data != null) {
+            switch (check) {
+                case 1:
+                    Log.e("checkvalue1", "" + check);
+                    image1.setVisibility(View.VISIBLE);
+//                    convertToURI(data, image1, check);
+//                    image1.setImageBitmap(bitmap);
+                    try {
+                        thumbnail = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-                    case 13:
-                        image13.setVisibility(View.VISIBLE);
-                        image13.setImageBitmap(bitmap);
-                        imagesList.add(12, bitMapToString(bitmap));
-                        break;
-                    case 14:
-                        image14.setVisibility(View.VISIBLE);
-                        image14.setImageBitmap(bitmap);
-                        imagesList.add(13, bitMapToString(bitmap));
-                        break;
-                    case 15:
-                        image15.setVisibility(View.VISIBLE);
-                        image15.setImageBitmap(bitmap);
-                        imagesList.add(14, bitMapToString(bitmap));
-                        break;
-                }
+                    image1.setImageBitmap(thumbnail);
+                    //newRowInfoPic.setImageOne(bitMapToString(thumbnail));
+//                    imagesList.add(0, bitMapToString(thumbnail));
+                    break;
+                case 2:
+                    image2.setVisibility(View.VISIBLE);
+                    try {
+                        thumbnail = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    image2.setImageBitmap(thumbnail);
+                    //newRowInfoPic.setImageTwo(bitMapToString(thumbnail));
+
+//                    imagesList.add(1, bitMapToString(thumbnail));
+                    break;
+                case 3:
+                    image3.setVisibility(View.VISIBLE);
+                    try {
+                        thumbnail = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    image3.setImageBitmap(thumbnail);
+                    //newRowInfoPic.setImageThree(bitMapToString(thumbnail));
+
+//                    imagesList.add(2, bitMapToString(thumbnail));
+                    break;
+                case 4:
+                    image4.setVisibility(View.VISIBLE);
+                    try {
+                        thumbnail = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    image4.setImageBitmap(thumbnail);
+                    //newRowInfoPic.setImageFour(bitMapToString(thumbnail));
+
+//                    imagesList.add(3, bitMapToString(bitmap));
+                    break;
+                case 5:
+                    image5.setVisibility(View.VISIBLE);
+                    try {
+                        thumbnail = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    image5.setImageBitmap(thumbnail);
+                    //newRowInfoPic.setImageFive(bitMapToString(thumbnail));
+
+//                    imagesList.add(4, bitMapToString(bitmap));
+                    break;
+                case 6:
+                    image6.setVisibility(View.VISIBLE);
+                    try {
+                        thumbnail = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    image6.setImageBitmap(thumbnail);
+                    //newRowInfoPic.setImageSix(bitMapToString(thumbnail));
+
+//                    imagesList.add(5, bitMapToString(bitmap));
+                    break;
+                case 7:
+                    image7.setVisibility(View.VISIBLE);
+                    try {
+                        thumbnail = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    image7.setImageBitmap(thumbnail);
+                    //newRowInfoPic.setImageSeven(bitMapToString(thumbnail));
+
+//                    imagesList.add(6, bitMapToString(bitmap));
+                    break;
+                case 8:
+                    image8.setVisibility(View.VISIBLE);
+                    try {
+                        thumbnail = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    image8.setImageBitmap(thumbnail);
+                    //newRowInfoPic.setImageEight(bitMapToString(thumbnail));
+
+//                    imagesList.add(7, bitMapToString(bitmap));
+                    break;
+
+                case 9:
+                    image9.setVisibility(View.VISIBLE);
+                    try {
+                        thumbnail = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    image9.setImageBitmap(thumbnail);
+//                    imagesList.add(7, bitMapToString(bitmap));
+                    //newRowInfoPic.setImage9(bitMapToString(thumbnail));
+                    break;
+
+
+                case 10:
+                    image10.setVisibility(View.VISIBLE);
+                    try {
+                        thumbnail = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    image10.setImageBitmap(thumbnail);
+//                    imagesList.add(7, bitMapToString(bitmap));
+                    //newRowInfoPic.setImage10(bitMapToString(thumbnail));
+
+                    break;
+
+
+                case 11:
+                    image11.setVisibility(View.VISIBLE);
+                    try {
+                        thumbnail = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    image11.setImageBitmap(thumbnail);
+//                    imagesList.add(7, bitMapToString(bitmap));
+                    //newRowInfoPic.setImage11(bitMapToString(thumbnail));
+
+                    break;
+
+
+                case 12:
+                    image12.setVisibility(View.VISIBLE);
+                    try {
+                        thumbnail = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    image12.setImageBitmap(thumbnail);
+//                    imagesList.add(7, bitMapToString(bitmap));
+                    //newRowInfoPic.setImage12(bitMapToString(thumbnail));
+
+                    break;
+
+
+
+                case 13:
+                    image13.setVisibility(View.VISIBLE);
+                    try {
+                        thumbnail = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    image13.setImageBitmap(thumbnail);
+//                    imagesList.add(7, bitMapToString(bitmap));
+                    //newRowInfoPic.setImage13(bitMapToString(thumbnail));
+
+                    break;
+
+
+                case 14:
+                    image14.setVisibility(View.VISIBLE);
+                    try {
+                        thumbnail = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    image14.setImageBitmap(thumbnail);
+//                    imagesList.add(7, bitMapToString(bitmap));
+                    //newRowInfoPic.setImage14(bitMapToString(thumbnail));
+
+                    break;
+
+
+                case 15:
+                    image15.setVisibility(View.VISIBLE);
+                    try {
+                        thumbnail = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    image15.setImageBitmap(thumbnail);
+                    //newRowInfoPic.setImage15(bitMapToString(thumbnail));
+
+//                    imagesList.add(7, bitMapToString(bitmap));
+                    break;
+
+//                }
             }
 
             isEditImage = false;
         }
+
+        if (requestCode == PICK_IMAGE_MULTIPLE && resultCode == RESULT_OK && null != data) {
+            // Get the Image from data
+            if (data.getClipData() != null) {
+                ClipData mClipData = data.getClipData();
+                int cout = data.getClipData().getItemCount();
+                imageBitmapList.clear();
+                for (int i = 0; i < cout; i++) {
+                    // adding imageuri in array
+
+                    try {
+                        Uri imageurl = data.getClipData().getItemAt(i).getUri();
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageurl);
+
+                        imageBitmapList.add(i, bitmap);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+                Log.e("imageListSize", "test = " + imageBitmapList.size());
+                // setting 1st selected image into image switcher
+                //imageView.setImageURI(mArrayUri.get(0));
+                //  position = 0;
+//                  for (int i = 0; i < imageBitmapList.size(); i++)
+//            switch (i) {
+//                case 0:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image1.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image1.setVisibility(View.VISIBLE);
+//                    image1.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//                case 1:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image2.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image2.setVisibility(View.VISIBLE);
+//                    image2.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//                case 2:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image3.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image3.setVisibility(View.VISIBLE);
+//                    image3.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//                case 3:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image4.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image4.setVisibility(View.VISIBLE);
+//                    image4.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//                case 4:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image5.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image5.setVisibility(View.VISIBLE);
+//                    image5.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//                case 5:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image6.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image6.setVisibility(View.VISIBLE);
+//                    image6.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//                case 6:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image7.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image7.setVisibility(View.VISIBLE);
+//                    image7.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//                case 7:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image8.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image8.setVisibility(View.VISIBLE);
+//                    image8.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//
+//
+//                case 8:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image9.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image9.setVisibility(View.VISIBLE);
+//                    image9.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//
+//
+//                case 9:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image10.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image10.setVisibility(View.VISIBLE);
+//                    image10.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//
+//
+//                case 10:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image11.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image11.setVisibility(View.VISIBLE);
+//                    image11.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//
+//
+//                case 11:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image12.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image12.setVisibility(View.VISIBLE);
+//                    image12.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//
+//
+//                case 12:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image13.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image13.setVisibility(View.VISIBLE);
+//                    image13.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//
+//
+//                case 13:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image14.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image14.setVisibility(View.VISIBLE);
+//                    image14.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//
+//
+//                case 14:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image15.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image15.setVisibility(View.VISIBLE);
+//                    image15.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//
+//
+                fillImagesInLayout();
+
+
+//        super.onRestoreInstanceState(savedInstanceState);
+
+
+            } else {
+                Uri imageurl = data.getData();
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(
+                            getContentResolver(), imageurl);
+                    imageBitmapList.clear();
+                    imageBitmapList.add(0, bitmap);
+                    fillImagesInLayout();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                //imageView.setImageURI(mArrayUri.get(0));
+                //position = 0;
+            }
+
+        } else {
+            // show this if no image is selected
+            Toast.makeText(this, "You haven't picked Image", Toast.LENGTH_LONG).show();
+        }
+
+
         isCamera = true;
     }
 
@@ -1214,7 +1635,7 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
     public String bitMapToString(Bitmap bitmap) {
         if (bitmap != null) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 20, baos);
             byte[] arr = baos.toByteArray();
             String result = Base64.encodeToString(arr, Base64.DEFAULT);
             return result;
@@ -1492,6 +1913,24 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
         if (showImage)
             textViewSnackbar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check_24dp, 0, 0, 0);
         snackbar.show();
+    }
+
+    private void getPicFromGallery() {
+
+        try {
+            Intent intent = new Intent();
+
+            // setting type to select to be image
+            intent.setType("image/*");
+
+            // allowing multiple image to be selected
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_MULTIPLE);
+        } catch (Exception e) {
+            Log.e("ExcIntentG", "Gallery");
+        }
+
     }
 
     @Override
@@ -1795,6 +2234,7 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
                     else
                         it = new Intent(EditPage.this, AcceptanceReport.class);
                     it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    it.putExtra("supplier","0");
                     startActivity(it);
                     finish();
                     Log.e("tag", "update Success");
@@ -1818,6 +2258,10 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
 
         @Override
         protected void onPreExecute() {
+            progressDialogTack = new ProgressDialog(EditPage.this, R.style.MyAlertDialogStyle);
+            progressDialogTack.setMessage("Please Waiting...");
+            progressDialogTack.setCanceledOnTouchOutside(false);
+
             super.onPreExecute();
 
         }
@@ -1889,8 +2333,1022 @@ public class EditPage extends AppCompatActivity implements View.OnClickListener 
                 editPageAdapter = new EditPageAdapter(EditPage.this, editList);
                 rowsRecyclerView.setAdapter(editPageAdapter);
                 //rejectAdd();
+                new BitmapImage2().execute(editingRaw);
             }
 
+        }
+    }
+
+
+    // *************************************** DELETE ***************************************
+    private class JSONTaskDelete extends AsyncTask<String, String, String> {
+
+        String truckNos,serials,locations,ttnNos;
+        @Override
+        protected void onPreExecute() {
+            progressDialog.show();
+            super.onPreExecute();
+        }
+
+        public JSONTaskDelete(String truckNo, String serial, String location, String ttnNo) {
+            this.truckNos = truckNo;
+            this.serials = serial;
+            this.locations = location;
+            this.ttnNos = ttnNo;
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+//https://5.189.130.98/WOODY/export.php
+
+                String JsonResponse = null;
+                HttpClient client = new DefaultHttpClient();
+                HttpPost request = new HttpPost();
+                request.setURI(new URI("http://" + generalSettings.getIpAddress() + "/export.php"));//import 10.0.0.214
+
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+//                Log.e("addToInventory/", "" + jsonArrayBundles.toString());
+                nameValuePairs.add(new BasicNameValuePair("DELETE_TRUCK", "1"));// list
+//                for (int i=0 ;i< newRowList.size();i++) {
+//                    nameValuePairs.add(new BasicNameValuePair("ROW_INFO_DETAILS", newRowList.get(i).toString()));
+//                }
+                nameValuePairs.add(new BasicNameValuePair("TRUCK_NO", truckNos));//oldTruck
+                nameValuePairs.add(new BasicNameValuePair("SERIAL", serials));// list
+                nameValuePairs.add(new BasicNameValuePair("LOCATION", locations)); // json object
+                nameValuePairs.add(new BasicNameValuePair("TTN_NO", ttnNos)); // TTnNo
+//                Log.e("addNewRow/", "update" + masterData.toString().trim() + " ///oldTruck" + oldTruck);
+
+                request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                HttpResponse response = client.execute(request);
+
+                BufferedReader in = new BufferedReader(new
+                        InputStreamReader(response.getEntity().getContent()));
+
+                StringBuffer sb = new StringBuffer("");
+                String line = "";
+
+                while ((line = in.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                in.close();
+
+                JsonResponse = sb.toString();
+                Log.e("tag/", "delete" + JsonResponse);
+
+                return JsonResponse;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            Log.e("tag of delete row info", s);
+            progressDialog.dismiss();
+            if (s != null) {
+                if (s.contains("DELETE_BUNDLE_SUCCESS")) {
+
+                    showSnackbar("Delete Successfully", true);
+                    editList.clear();
+
+
+                    truckNo.setText("");
+                    acceptor.setText("");
+                    ttnNo.setText("");
+                    totalBundles.setText("");
+                    acceptanceDate.setText("");
+                    acceptanceLocation.setSelection(0);
+                    totalRejected.setText("");
+                    supplierName = "";
+                    searchSupplier.setText("");
+//                    tableLayout.removeAllViews();
+                    newRowList.clear();
+
+                    Intent it;
+                    if (edieFlag == 10)
+                        it = new Intent(EditPage.this, AcceptanceInfoReport.class);
+                    else
+                        it = new Intent(EditPage.this, AcceptanceReport.class);
+                    it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    it.putExtra("supplier","0");
+                    startActivity(it);
+                    finish();
+                    Log.e("tag", "delete Success");
+                } else {
+//                    presenter.setSerialNo("");
+//                    SettingsFile.serialNumber = "";
+                    Log.e("tag", "****Failed to export data");
+//                    Toast.makeText(AddToInventory.this, "Failed to export data Please check internet connection", Toast.LENGTH_LONG).show();
+                }
+            } else {
+//                presenter.setSerialNo("");
+//                SettingsFile.serialNumber = "";
+                Log.e("tag", "****Failed to export data Please check internet connection");
+                Toast.makeText(EditPage.this, "Failed to export data Please check internet connection", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+    // *************************************** image for truck ***************************************
+    private class BitmapImage2 extends AsyncTask<NewRowInfo, String, NewRowInfo> {
+        //  Settings generalSettings = new DatabaseHandler(previewLinearContext).getSettings();
+
+        @Override
+        protected NewRowInfo doInBackground(NewRowInfo... pictures) {
+
+            newRowInfoPic = pictures[0];
+
+            Log.e("checkedit", "" + newRowInfoPic.getLength()+"  "+newRowInfoPic.getTruckNo());
+            URL url;
+            Bitmap bitmap;
+            try {
+                if (!newRowInfoPic.equals("null")) {
+                    for (int i = 0; i < 15; i++) {
+
+                        switch (i) {
+                            case 0:
+                                if (pictures[0].getImageOne() != null) {//http://192.168.2.17:8088/woody/images/2342_img_1.png
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImageOne());
+                                    Log.e("checkedit", "" + newRowInfoPic.getImageOne());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic11(bitmap);
+                                        //newRowInfoPic.setImageOne(bitMapToString(bitmap));
+                                        //listOfEmail.get(0).setPic11(bitmap);
+
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic11(bitmap);
+                                    }
+                                }
+                                break;
+                            case 1:
+                                if (pictures[0].getImageTwo() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImageTwo());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic22(bitmap);
+                                        //newRowInfoPic.setImageTwo(bitMapToString(bitmap));
+//                                        listOfEmail.get(0).setPic22(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic22(bitmap);
+                                    }
+                                }
+                                break;
+                            case 2:
+                                if (pictures[0].getImageThree() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImageThree());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic33(bitmap);
+                                        //newRowInfoPic.setImageThree(bitMapToString(bitmap));
+                                        //listOfEmail.get(0).setPic33(bitmap);
+
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic33(bitmap);
+                                    }
+                                }
+                                break;
+                            case 3:
+                                if (pictures[0].getImageFour() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImageFour());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic44(bitmap);
+                                       // newRowInfoPic.setImageFour(bitMapToString(bitmap));
+                                        //listOfEmail.get(0).setPic44(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic44(bitmap);
+                                    }
+                                }
+                                break;
+                            case 4:
+                                if (pictures[0].getImageFive() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImageFive());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic55(bitmap);
+                                        //newRowInfoPic.setImageFive(bitMapToString(bitmap));
+                                        //listOfEmail.get(0).setPic55(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic55(bitmap);
+                                    }
+                                }
+                                break;
+                            case 5:
+                                if (pictures[0].getImageSix() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImageSix());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic66(bitmap);
+                                        //newRowInfoPic.setImageSix(bitMapToString(bitmap));
+                                        //listOfEmail.get(0).setPic66(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic66(bitmap);
+                                    }
+                                }
+                                break;
+                            case 6:
+                                if (pictures[0].getImageSeven() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImageSeven());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic77(bitmap);
+                                      //  newRowInfoPic.setImageSeven(bitMapToString(bitmap));
+                                        ////listOfEmail.get(0).setPic77(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic77(bitmap);
+                                    }
+                                }
+                                break;
+                            case 7:
+                                if (pictures[0].getImageEight() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImageEight());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic88(bitmap);
+                                    //    newRowInfoPic.setImageEight(bitMapToString(bitmap));
+                                        //listOfEmail.get(0).setPic88(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic88(bitmap);
+                                    }
+                                }
+                                break;
+
+                            case 8:
+                                if (pictures[0].getImage9() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImage9());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic99(bitmap);
+                                    //    newRowInfoPic.setImage9(bitMapToString(bitmap));
+                                      //  imagesList.add(bitMapToString(bitmap));
+                                        //listOfEmail.get(0).setPic99(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic88(bitmap);
+                                    }
+                                }
+                                break;
+
+
+                            case 9:
+                                if (pictures[0].getImage10() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImage10());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic1010(bitmap);
+                                        newRowInfoPic.setImage10(bitMapToString(bitmap));
+                                        //listOfEmail.get(0).setPic1010(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic88(bitmap);
+                                    }
+                                }
+                                break;
+
+                            case 10:
+                                if (pictures[0].getImage11() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImage11());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic1111(bitmap);
+                                      //  newRowInfoPic.setImage11(bitMapToString(bitmap));
+                                        //listOfEmail.get(0).setPic1111(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic88(bitmap);
+                                    }
+                                }
+                                break;
+
+                            case 11:
+                                if (pictures[0].getImage12() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImage12());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic1212(bitmap);
+                                       // newRowInfoPic.setImage12(bitMapToString(bitmap));
+                                        //listOfEmail.get(0).setPic1212(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic88(bitmap);
+                                    }
+                                }
+                                break;
+
+                            case 12:
+                                if (pictures[0].getImage13() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImage13());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic1313(bitmap);
+                                       //newRowInfoPic.setImage13(bitMapToString(bitmap));
+                                        //listOfEmail.get(0).setPic1313(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic88(bitmap);
+                                    }
+                                }
+                                break;
+
+                            case 13:
+                                if (pictures[0].getImage14() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImage14());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic1414(bitmap);
+                                       // newRowInfoPic.setImage14(bitMapToString(bitmap));
+                                        //listOfEmail.get(0).setPic1414(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic88(bitmap);
+                                    }
+                                }
+                                break;
+
+                            case 14:
+
+                                if (pictures[0].getImage15() != null) {
+                                    url = new URL("http://" + generalSettings.getIpAddress() + "/" + pictures[0].getImage15());
+                                    try {
+                                        bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                        newRowInfoPic.setPic1515(bitmap);
+                                     //   newRowInfoPic.setImage15(bitMapToString(bitmap));
+                                        //listOfEmail.get(0).setPic1515(bitmap);
+                                    } catch (Exception e) {
+//                                        pictures[0].setPic88(bitmap);
+                                    }
+                                }
+                                break;
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                Log.e("fromclass2", "exception:doInBackground " + e.getMessage());
+                return null;
+            }
+            return newRowInfoPic;// BitmapFactory.decodeStream(in);
+        }
+
+        @Override
+        protected void onPostExecute(NewRowInfo pictures) {
+
+
+            if (pictures != null) {
+                //fillImageBitmap(newRowInfoPic);
+                fillImagesFromEmail();
+               // proTTn.dismiss();
+                progressDialogTack.dismiss();
+            } else {
+                progressDialogTack.dismiss();
+                Toast.makeText(EditPage.this, "Fail get Pic", Toast.LENGTH_SHORT).show();
+            }
+
+
+        }
+    }
+
+    void fillImagesFromEmail() {
+        for (int i = 0; i < 15; i++) {
+
+
+            if (image1.getVisibility() == View.INVISIBLE && newRowInfoPic.getPic11() != null) {
+                image1.setVisibility(View.VISIBLE);
+                image1.setImageBitmap(newRowInfoPic.getPic11());
+                imageNo++;
+            } else if (image2.getVisibility() == View.INVISIBLE && newRowInfoPic.getPic22() != null) {
+                image2.setVisibility(View.VISIBLE);
+                image2.setImageBitmap(newRowInfoPic.getPic22());
+                imageNo++;
+            } else if (image3.getVisibility() == View.INVISIBLE && newRowInfoPic.getPic33() != null) {
+                image3.setVisibility(View.VISIBLE);
+                image3.setImageBitmap(newRowInfoPic.getPic33());
+                imageNo++;
+            } else if (image4.getVisibility() == View.INVISIBLE && newRowInfoPic.getPic44() != null) {
+                image4.setVisibility(View.VISIBLE);
+                image4.setImageBitmap(newRowInfoPic.getPic44());
+                imageNo++;
+            } else if (image5.getVisibility() == View.INVISIBLE && newRowInfoPic.getPic55() != null) {
+                image5.setVisibility(View.VISIBLE);
+                imageNo++;
+
+                image5.setImageBitmap(newRowInfoPic.getPic55());
+
+            } else if (image6.getVisibility() == View.INVISIBLE && newRowInfoPic.getPic66() != null) {
+                image6.setVisibility(View.VISIBLE);
+ imageNo++;
+                image6.setImageBitmap(newRowInfoPic.getPic66());
+//                    imagesList.add(5, bitMapToString(bitmap));
+//                    break;
+            } else if (image7.getVisibility() == View.INVISIBLE && newRowInfoPic.getPic77() != null) {
+                image7.setVisibility(View.VISIBLE);
+                imageNo++;
+                image7.setImageBitmap(newRowInfoPic.getPic88());
+//                    imagesList.add(6, bitMapToString(bitmap));
+//                    break;
+            } else if (image8.getVisibility() == View.INVISIBLE && newRowInfoPic.getPic88() != null) {
+                image8.setVisibility(View.VISIBLE);
+                image8.setImageBitmap(newRowInfoPic.getPic88());
+//                    imagesList.add(7, bitMapToString(bitmap));
+//                    break;
+                imageNo++;
+            } else if (image9.getVisibility() == View.INVISIBLE && newRowInfoPic.getPic99() != null) {
+                image9.setVisibility(View.VISIBLE);
+                imageNo++;
+                image9.setImageBitmap(newRowInfoPic.getPic99());
+
+
+            } else if (image10.getVisibility() == View.INVISIBLE && newRowInfoPic.getPic1010() != null) {
+                image10.setVisibility(View.VISIBLE);
+                image10.setImageBitmap(newRowInfoPic.getPic1010());
+                imageNo++;
+
+            } else if (image11.getVisibility() == View.INVISIBLE && newRowInfoPic.getPic1111() != null) {
+                image11.setVisibility(View.VISIBLE);
+                image11.setImageBitmap(newRowInfoPic.getPic1111());
+                imageNo++;
+            } else if (image12.getVisibility() == View.INVISIBLE && newRowInfoPic.getPic1212() != null) {
+                image12.setVisibility(View.VISIBLE);
+
+                image12.setImageBitmap(newRowInfoPic.getPic1212());
+                imageNo++;
+
+            } else if (image13.getVisibility() == View.INVISIBLE && newRowInfoPic.getPic1313() != null) {
+                image13.setVisibility(View.VISIBLE);
+
+                image13.setImageBitmap(newRowInfoPic.getPic1313());
+                imageNo++;
+            } else if (image14.getVisibility() == View.INVISIBLE && newRowInfoPic.getPic1414() != null) {
+                image14.setVisibility(View.VISIBLE);
+                image14.setImageBitmap(newRowInfoPic.getPic1414());
+                imageNo++;
+            } else if (image15.getVisibility() == View.INVISIBLE && newRowInfoPic.getPic1515() != null) {
+                image15.setVisibility(View.VISIBLE);
+
+                image15.setImageBitmap(newRowInfoPic.getPic1515());
+                imageNo++;
+            }
+
+
+        }
+    }
+
+    void fillImage() {
+        for (int i = 0; i < 15; i++)
+            switch (i) {
+                case 0:
+                    Bitmap bitmap = null;
+                    if (image1.getVisibility() == View.VISIBLE) {
+                        BitmapDrawable drawable = (BitmapDrawable) image1.getDrawable();
+                        bitmap = drawable.getBitmap();
+                   //     newRowList.get(0).setPic11(bitmap);
+                        newRowList.get(0).setImageOne(bitMapToString(bitmap));
+                    } else
+                        newRowList.get(0).setImageOne(null);
+                    break;
+                case 1:
+                    Bitmap bitmap2 = null;
+                    if (image2.getVisibility() == View.VISIBLE) {
+                        BitmapDrawable drawable = (BitmapDrawable) image2.getDrawable();
+                        bitmap2 = drawable.getBitmap();
+                      //  newRowList.get(0).setPic22(bitmap2);
+                        newRowList.get(0).setImageTwo(bitMapToString(bitmap2));
+                    } else
+                        newRowList.get(0).setImageTwo(null);
+                    break;
+                case 2:
+                    Bitmap bitmap3 = null;
+                    if (image3.getVisibility() == View.VISIBLE) {
+                        BitmapDrawable drawable = (BitmapDrawable) image3.getDrawable();
+                        bitmap3 = drawable.getBitmap();
+                     //   newRowList.get(0).setPic33(bitmap3);
+                        newRowList.get(0).setImageThree(bitMapToString(bitmap3));
+                    } else
+                        newRowList.get(0).setImageThree(null);
+                    break;
+                case 3:
+                    Bitmap bitmap4 = null;
+                    if (image4.getVisibility() == View.VISIBLE) {
+                        BitmapDrawable drawable = (BitmapDrawable) image4.getDrawable();
+                        bitmap4 = drawable.getBitmap();
+                     //   newRowList.get(0).setPic44(bitmap4);
+                        newRowList.get(0).setImageFour(bitMapToString(bitmap4));
+                    } else
+                        newRowList.get(0).setImageFour(null);
+                    break;
+                case 4:
+                    Bitmap bitmap5 = null;
+                    if (image5.getVisibility() == View.VISIBLE) {
+                        BitmapDrawable drawable = (BitmapDrawable) image5.getDrawable();
+                        bitmap5 = drawable.getBitmap();
+                    //    newRowList.get(0).setPic55(bitmap5);
+                        newRowList.get(0).setImageFive(bitMapToString(bitmap5));
+                    } else
+                        newRowList.get(0).setImageFive(null);
+                    break;
+                case 5:
+                    Bitmap bitmap6 = null;
+                    if (image6.getVisibility() == View.VISIBLE) {
+                        BitmapDrawable drawable = (BitmapDrawable) image6.getDrawable();
+                        bitmap6 = drawable.getBitmap();
+                     //   newRowList.get(0).setPic66(bitmap6);
+                        newRowList.get(0).setImageSix(bitMapToString(bitmap6));
+                    } else
+                        newRowList.get(0).setImageSix(null);
+                    break;
+                case 6:
+                    Bitmap bitmap7 = null;
+                    if (image7.getVisibility() == View.VISIBLE) {
+                        BitmapDrawable drawable = (BitmapDrawable) image7.getDrawable();
+                        bitmap7 = drawable.getBitmap();
+                  //      newRowList.get(0).setPic77(bitmap7);
+                        newRowList.get(0).setImageSeven(bitMapToString(bitmap7));
+                    } else
+                        newRowList.get(0).setImageSeven(null);
+                    break;
+                case 7:
+                    Bitmap bitmap8 = null;
+                    if (image8.getVisibility() == View.VISIBLE) {
+                        BitmapDrawable drawable = (BitmapDrawable) image8.getDrawable();
+                        bitmap8 = drawable.getBitmap();
+                  //      newRowList.get(0).setPic88(bitmap8);
+                        newRowList.get(0).setImageEight(bitMapToString(bitmap8));
+                    } else
+                        newRowList.get(0).setImageEight(null);
+                    break;
+                case 8:
+                    Bitmap bitmap9 = null;
+                    if (image9.getVisibility() == View.VISIBLE) {
+                        BitmapDrawable drawable = (BitmapDrawable) image9.getDrawable();
+                        bitmap9 = drawable.getBitmap();
+                     //   newRowList.get(0).setPic99(bitmap9);
+                        newRowList.get(0).setImage9(bitMapToString(bitmap9));
+                    } else
+                        newRowList.get(0).setImage9(null);
+                    break;
+                case 9:
+                    Bitmap bitmap10 = null;
+                    if (image10.getVisibility() == View.VISIBLE) {
+                        BitmapDrawable drawable = (BitmapDrawable) image10.getDrawable();
+                        bitmap10 = drawable.getBitmap();
+                   //     newRowList.get(0).setPic1010(bitmap10);
+                        newRowList.get(0).setImage10(bitMapToString(bitmap10));
+                    } else
+                        newRowList.get(0).setImage10(null);
+                    break;
+                case 10:
+                    Bitmap bitmap11 = null;
+                    if (image11.getVisibility() == View.VISIBLE) {
+                        BitmapDrawable drawable = (BitmapDrawable) image11.getDrawable();
+                        bitmap11 = drawable.getBitmap();
+                  //      newRowList.get(0).setPic1111(bitmap11);
+                        newRowList.get(0).setImage11(bitMapToString(bitmap11));
+                    } else
+                        newRowList.get(0).setImage11(null);
+                    break;
+                case 11:
+                    Bitmap bitmap12 = null;
+                    if (image12.getVisibility() == View.VISIBLE) {
+                        BitmapDrawable drawable = (BitmapDrawable) image12.getDrawable();
+                        bitmap12 = drawable.getBitmap();
+                   //     newRowList.get(0).setPic1212(bitmap12);
+                        newRowList.get(0).setImage12(bitMapToString(bitmap12));
+                    } else
+                        newRowList.get(0).setImage12(null);
+                    break;
+                case 12:
+                    Bitmap bitmap13 = null;
+                    if (image13.getVisibility() == View.VISIBLE) {
+                        BitmapDrawable drawable = (BitmapDrawable) image13.getDrawable();
+                        bitmap13 = drawable.getBitmap();
+                      //  newRowList.get(0).setPic1313(bitmap13);
+                        newRowList.get(0).setImage13(bitMapToString(bitmap13));
+                    } else
+                        newRowList.get(0).setImageEight(null);
+                    break;
+                case 13:
+                    Bitmap bitmap14 = null;
+                    if (image14.getVisibility() == View.VISIBLE) {
+                        BitmapDrawable drawable = (BitmapDrawable) image14.getDrawable();
+                        bitmap14 = drawable.getBitmap();
+                       // newRowList.get(0).setPic1414(bitmap14);
+                        newRowList.get(0).setImage14(bitMapToString(bitmap14));
+                    } else
+                        newRowList.get(0).setImage14(null);
+                    break;
+                case 14:
+                    Bitmap bitmap15 = null;
+                    if (image15.getVisibility() == View.VISIBLE) {
+                        BitmapDrawable drawable = (BitmapDrawable) image15.getDrawable();
+                        bitmap15 = drawable.getBitmap();
+                     //   newRowList.get(0).setPic1515(bitmap15);
+                        newRowList.get(0).setImage15(bitMapToString(bitmap15));
+                    } else
+                        newRowList.get(0).setImage15(null);
+                    break;
+
+
+            }
+//        for (int i = 0; i < imagesList.size(); i++)
+//            switch (i) {
+//                case 0:
+//                    image.setImageOne(imagesList.get(i));
+//                    break;
+//                case 1:
+//                    image.setImageTwo(imagesList.get(i));
+//                    break;
+//                case 2:
+//                    image.setImageThree(imagesList.get(i));
+//                    break;
+//                case 3:
+//                    image.setImageFour(imagesList.get(i));
+//                    break;
+//                case 4:
+//                    image.setImageFive(imagesList.get(i));
+//                    break;
+//                case 5:
+//                    image.setImageSix(imagesList.get(i));
+//                    break;
+//                case 6:
+//                    image.setImageSeven(imagesList.get(i));
+//                    break;
+//                case 7:
+//                    image.setImageEight(imagesList.get(i));
+//                    break;
+//            }
+        Log.e("showimages", " 1: " +
+                newRowList.get(0).getImageOne() + " 2: " +
+                newRowList.get(0).getImageTwo() + " 3: " +
+                newRowList.get(0).getImageThree() + " 4: " +
+                newRowList.get(0).getImageFour() + " 5: " +
+                newRowList.get(0).getImageFive() + " 6: " +
+                newRowList.get(0).getImageSix() + " 7: " +
+                newRowList.get(0).getImageSeven() + " 8: " +
+                newRowList.get(0).getImageEight()
+        );
+
+    }
+
+    void fillImagesInLayout() {
+        for (int i = 0; i < imageBitmapList.size(); i++) {
+
+            if (imageNo < 15) {
+                if (image1.getVisibility() == View.INVISIBLE && imageBitmapList.get(i) != null) {
+                    Log.e("checkvalue1", "" + i);
+                    image1.setVisibility(View.VISIBLE);
+//                    convertToURI(data, image1, check);
+//                    image1.setImageBitmap(bitmap);
+//                    try {
+//                        thumbnail = MediaStore.Images.Media.getBitmap(
+//                                getContentResolver(), imageUri);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+                    imageNo++;
+                    image1.setImageBitmap(imageBitmapList.get(i));
+//                    imagesList.add(0, bitMapToString(thumbnail));
+//                    break;
+                } else if (image2.getVisibility() == View.INVISIBLE && imageBitmapList.get(i) != null) {
+                    image2.setVisibility(View.VISIBLE);
+//                    try {
+//                        thumbnail = MediaStore.Images.Media.getBitmap(
+//                                getContentResolver(), imageUri);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+                    imageNo++;
+                    image2.setImageBitmap(imageBitmapList.get(i));
+//                    imagesList.add(1, bitMapToString(thumbnail));
+//                    break;
+                } else if (image3.getVisibility() == View.INVISIBLE && imageBitmapList.get(i) != null) {
+                    image3.setVisibility(View.VISIBLE);
+//                    try {
+//                        thumbnail = MediaStore.Images.Media.getBitmap(
+//                                getContentResolver(), imageUri);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+                    imageNo++;
+                    image3.setImageBitmap(imageBitmapList.get(i));
+//                    imagesList.add(2, bitMapToString(thumbnail));
+//                    break;
+                } else if (image4.getVisibility() == View.INVISIBLE && imageBitmapList.get(i) != null) {
+                    image4.setVisibility(View.VISIBLE);
+//                    try {
+//                        thumbnail = MediaStore.Images.Media.getBitmap(
+//                                getContentResolver(), imageUri);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+                    imageNo++;
+                    image4.setImageBitmap(imageBitmapList.get(i));
+//                    imagesList.add(3, bitMapToString(bitmap));
+//                    break;
+                } else if (image5.getVisibility() == View.INVISIBLE && imageBitmapList.get(i) != null) {
+                    image5.setVisibility(View.VISIBLE);
+//                    try {
+//                        thumbnail = MediaStore.Images.Media.getBitmap(
+//                                getContentResolver(), imageUri);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+                    imageNo++;
+                    image5.setImageBitmap(imageBitmapList.get(i));
+//                    imagesList.add(4, bitMapToString(bitmap));
+//                    break;
+                } else if (image6.getVisibility() == View.INVISIBLE && imageBitmapList.get(i) != null) {
+                    image6.setVisibility(View.VISIBLE);
+//                    try {
+//                        thumbnail = MediaStore.Images.Media.getBitmap(
+//                                getContentResolver(), imageUri);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+                    imageNo++;
+                    image6.setImageBitmap(imageBitmapList.get(i));
+//                    imagesList.add(5, bitMapToString(bitmap));
+//                    break;
+                } else if (image7.getVisibility() == View.INVISIBLE && imageBitmapList.get(i) != null) {
+                    image7.setVisibility(View.VISIBLE);
+//                    try {
+//                        thumbnail = MediaStore.Images.Media.getBitmap(
+//                                getContentResolver(), imageUri);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+                    imageNo++;
+                    image7.setImageBitmap(imageBitmapList.get(i));
+//                    imagesList.add(6, bitMapToString(bitmap));
+//                    break;
+                } else if (image8.getVisibility() == View.INVISIBLE && imageBitmapList.get(i) != null) {
+                    image8.setVisibility(View.VISIBLE);
+//                    try {
+//                        thumbnail = MediaStore.Images.Media.getBitmap(
+//                                getContentResolver(), imageUri);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+                    imageNo++;
+                    image8.setImageBitmap(imageBitmapList.get(i));
+//                    imagesList.add(7, bitMapToString(bitmap));
+//                    break;
+
+                } else if (image9.getVisibility() == View.INVISIBLE && imageBitmapList.get(i) != null) {
+                    image9.setVisibility(View.VISIBLE);
+//                    try {
+//                        thumbnail = MediaStore.Images.Media.getBitmap(
+//                                getContentResolver(), imageUri);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+                    imageNo++;
+                    image9.setImageBitmap(imageBitmapList.get(i));
+//                    imagesList.add(7, bitMapToString(bitmap));
+//                    break;
+
+
+                } else if (image10.getVisibility() == View.INVISIBLE && imageBitmapList.get(i) != null) {
+                    image10.setVisibility(View.VISIBLE);
+//                    try {
+//                        thumbnail = MediaStore.Images.Media.getBitmap(
+//                                getContentResolver(), imageUri);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+                    imageNo++;
+                    image10.setImageBitmap(imageBitmapList.get(i));
+//                    imagesList.add(7, bitMapToString(bitmap));
+//                    break;
+
+
+                } else if (image11.getVisibility() == View.INVISIBLE && imageBitmapList.get(i) != null) {
+                    image11.setVisibility(View.VISIBLE);
+//                    try {
+//                        thumbnail = MediaStore.Images.Media.getBitmap(
+//                                getContentResolver(), imageUri);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+                    imageNo++;
+                    image11.setImageBitmap(imageBitmapList.get(i));
+//                    imagesList.add(7, bitMapToString(bitmap));
+//                    break;
+
+
+                } else if (image12.getVisibility() == View.INVISIBLE && imageBitmapList.get(i) != null) {
+                    image12.setVisibility(View.VISIBLE);
+//                    try {
+//                        thumbnail = MediaStore.Images.Media.getBitmap(
+//                                getContentResolver(), imageUri);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+                    imageNo++;
+                    image12.setImageBitmap(imageBitmapList.get(i));
+//                    imagesList.add(7, bitMapToString(bitmap));
+//                    break;
+
+
+                } else if (image13.getVisibility() == View.INVISIBLE && imageBitmapList.get(i) != null) {
+                    image13.setVisibility(View.VISIBLE);
+//                    try {
+//                        thumbnail = MediaStore.Images.Media.getBitmap(
+//                                getContentResolver(), imageUri);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+                    imageNo++;
+                    image13.setImageBitmap(imageBitmapList.get(i));
+//                    imagesList.add(7, bitMapToString(bitmap));
+//                    break;
+
+
+                } else if (image14.getVisibility() == View.INVISIBLE && imageBitmapList.get(i) != null) {
+                    image14.setVisibility(View.VISIBLE);
+//                    try {
+//                        thumbnail = MediaStore.Images.Media.getBitmap(
+//                                getContentResolver(), imageUri);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+                    imageNo++;
+                    image14.setImageBitmap(imageBitmapList.get(i));
+//                    imagesList.add(7, bitMapToString(bitmap));
+//                    break;
+                } else if (image15.getVisibility() == View.INVISIBLE && imageBitmapList.get(i) != null) {
+                    image15.setVisibility(View.VISIBLE);
+//                    try {
+//                        thumbnail = MediaStore.Images.Media.getBitmap(
+//                                getContentResolver(), imageUri);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+                    imageNo++;
+                    image15.setImageBitmap(imageBitmapList.get(i));
+//                    imagesList.add(7, bitMapToString(bitmap));
+//                    break;
+                }
+
+
+//                }
+
+//            switch (i) {
+//                case 0:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image1.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image1.setVisibility(View.VISIBLE);
+//                    image1.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//                case 1:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image2.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image2.setVisibility(View.VISIBLE);
+//                    image2.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//                case 2:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image3.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image3.setVisibility(View.VISIBLE);
+//                    image3.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//                case 3:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image4.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image4.setVisibility(View.VISIBLE);
+//                    image4.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//                case 4:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image5.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image5.setVisibility(View.VISIBLE);
+//                    image5.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//                case 5:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image6.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image6.setVisibility(View.VISIBLE);
+//                    image6.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//                case 6:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image7.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image7.setVisibility(View.VISIBLE);
+//                    image7.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//                case 7:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image8.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image8.setVisibility(View.VISIBLE);
+//                    image8.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//
+//
+//                case 8:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image9.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image9.setVisibility(View.VISIBLE);
+//                    image9.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//
+//
+//                case 9:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image10.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image10.setVisibility(View.VISIBLE);
+//                    image10.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//
+//
+//                case 10:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image11.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image11.setVisibility(View.VISIBLE);
+//                    image11.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//
+//
+//                case 11:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image12.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image12.setVisibility(View.VISIBLE);
+//                    image12.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//
+//
+//                case 12:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image13.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image13.setVisibility(View.VISIBLE);
+//                    image13.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//
+//
+//                case 13:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image14.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image14.setVisibility(View.VISIBLE);
+//                    image14.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//
+//
+//                case 14:
+//                    if (imageBitmapList.get(i) == null) {
+//                        image15.setVisibility(View.INVISIBLE);
+//                        break;
+//                    }
+//                    imageNo++;
+//                    image15.setVisibility(View.VISIBLE);
+//                    image15.setImageBitmap((imageBitmapList.get(i)));
+//                    break;
+//
+//
+//            }
+
+            } else {
+                showSnackbar("Reached maximum size of images!", false);
+
+            }
         }
     }
 

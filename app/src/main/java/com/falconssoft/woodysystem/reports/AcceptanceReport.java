@@ -248,7 +248,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
 
                 recyclerView = searchDialog.findViewById(R.id.search_supplier_recyclerView);
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
-                suppliersAdapter = new SuppliersAdapter(null, suppliers, null, this,0);
+                suppliersAdapter = new SuppliersAdapter(null, suppliers, null, AcceptanceReport.this,0,null);
                 recyclerView.setAdapter(suppliersAdapter);
 
                 searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -341,7 +341,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
             }
         }
         total.setText("" + arraylist.size());
-        suppliersAdapter = new SuppliersAdapter(null, arraylist, null, this,0);
+        suppliersAdapter = new SuppliersAdapter(null, arraylist, null, AcceptanceReport.this,0,null);
         recyclerView.setAdapter(suppliersAdapter);
     }
 

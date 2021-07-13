@@ -169,13 +169,13 @@
                 <EditText
                     android:id="@+id/addNewRaw_subject"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/alpha_background"
                     android:ems="10"
                     android:gravity="center"
+                    android:lines="2"
                     android:inputType="textMultiLine"
-                    android:lines="9"
                     android:nextFocusDown="@id/addNewRaw_no_of_pieces"
                     android:textColor="@color/white"
                     android:textSize="15sp" />
