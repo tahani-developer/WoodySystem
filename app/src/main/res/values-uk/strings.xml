@@ -203,5 +203,21 @@
     <string name="accept_report_supplier">Accept Report / Supplier</string>
     <string name="accept_report_truck">Accept Report / Truck</string>
     <string name="preview">preview</string>
+    <string name="SupplierAccount">Supplier Account</string>
+    <string name="Debt_">Debt $</string>
+    <string name="cash_">Cash $</string>
+    <string name="price">Price</string>
+    <string name="payment">Payment</string>
+    <string name="cash">Cash</string>
+    <string name="Value">Value</string>
+    <string name="invoice_number">Invoice Number</string>
+    <string name="payer">Payer</string>
+    <string name="paymenttype">Payment Type</string>
+    <string name="totalCash">Total Cash</string>
+    <string name="totalBank">Total Bank</string>
+    <string name="Balance">Balance</string>
+    <string name="SupplierAccountReport">Supplier Account Report</string>
+    <string name="paymentDate">Payment Date</string>
+    <string name="PaymentSupplierReport">Payment Supplier Report</string>
 
 </resources>

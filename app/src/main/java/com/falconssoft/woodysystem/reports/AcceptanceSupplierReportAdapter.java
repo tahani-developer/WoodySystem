@@ -88,7 +88,7 @@ public class AcceptanceSupplierReportAdapter extends BaseAdapter {
     private class ViewHolder {
         ImageView pic, image;
         Button preview;
-        TextView truckNo, acceptor, ttn, Thic,width,length,date_of_acceptance,piecesA,TruckCBM,piecesR,rejCbm,AcceptCbm,grade,noOfBundle,pdf,excel;
+        TextView truckNo, acceptor, ttn, Thic,width,length,date_of_acceptance,piecesA,TruckCBM,piecesR,rejCbm,AcceptCbm,grade,noOfBundle,pdf,excel,supplier;
         ImageView edit,sendEmail;
     }
 
@@ -100,6 +100,7 @@ public class AcceptanceSupplierReportAdapter extends BaseAdapter {
 
 //        holder.pic = (ImageView) view.findViewById(R.id.pic);
 //        holder.netBundle = (TextView) view.findViewById(R.id.net);
+        holder.supplier=view.findViewById(R.id.supplier);
         holder.sendEmail=view.findViewById(R.id.acceptanceReport_email);
         holder.preview = view.findViewById(R.id.preview);
         holder.truckNo = view.findViewById(R.id.truck_no);
@@ -131,6 +132,7 @@ public class AcceptanceSupplierReportAdapter extends BaseAdapter {
         holder.length.setText(""+itemsList.get(i).getLength());
         holder.date_of_acceptance.setText(""+itemsList.get(i).getDate());
         holder.piecesA.setText(""+itemsList.get(i).getNoOfPieces());
+        holder.supplier.setText(""+itemsList.get(i).getSupplierName());
         double accCubic= 0;
         accCubic=Double.parseDouble( itemsList.get(i).getTruckCMB())- Double.parseDouble(itemsList.get(i).getCbmRej());
         accCubic=Double.parseDouble(String.format("%.3f", accCubic));

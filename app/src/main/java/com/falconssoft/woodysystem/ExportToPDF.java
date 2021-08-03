@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.NewRowInfo;
 import com.falconssoft.woodysystem.models.Orders;
+import com.falconssoft.woodysystem.models.PaymentAccountSupplier;
 import com.falconssoft.woodysystem.models.PlannedPL;
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.BaseColor;
@@ -1504,6 +1505,420 @@ public class ExportToPDF {
         showPdf(pdfFileName);
 
     }
+    public void exportSupplierAccountPayment(List<PaymentAccountSupplier> list) {
+        PdfPTable pdfPTable = new PdfPTable(11);
+        PdfPTable pdfPTableHeader = new PdfPTable(11);
+
+        createPDF("PaymentAccountSupplierReport"  + "_.pdf");
+        pdfPTable.setWidthPercentage(100f);
+        pdfPTableHeader.setWidthPercentage(100f);
+        pdfPTableHeader.setSpacingAfter(20);
+
+//        int directionOfHeader = Element.ALIGN_RIGHT;
+
+        pdfPTable.setRunDirection(PdfWriter.RUN_DIRECTION_LTR);
+        pdfPTableHeader.setRunDirection(PdfWriter.RUN_DIRECTION_LTR);
+//        directionOfHeader = Element.ALIGN_RIGHT;
+
+        insertCell(pdfPTable, context.getString(R.string.paymentDate), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.supplier_name), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.date_of_acceptance), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.Value), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.payer), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.invoice_number), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.Balance), ALIGN_CENTER, 2, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.totalBank), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.totalCash), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.paymenttype), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+
+
+        pdfPTable.setHeaderRows(1);
+        for (int i = 0; i < list.size(); i++) {
+
+            insertCell(pdfPTable, String.valueOf(list.get(i).getDATE_OF_PAYMENT()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getSUPLIER()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getACCEPTANCE_DATE()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getVALUE_OF_PAYMENT()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getPAYER()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getINVOICE_NO()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getSTART_BALANCE()), Element.ALIGN_CENTER, 2, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getTOTAL_BANK()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getTOTAL_CASH()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            if(list.get(i).getPAYMENT_TYPE().equals("1")){
+                insertCell(pdfPTable, "Bank", Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+
+            }else {
+
+                insertCell(pdfPTable, "Cash", Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            }
+
+
+//
+//            double acc=list.get(i).getCubic()-list.get(i).getCubicRej();
+//            insertCell(pdfPTable, String.format("%.3f", acc), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+//            double cubic = (list.get(i).getLength() * list.get(i).getWidth() * list.get(i).getThickness() * list.get(i).getNoOfPieces());
+//            insertCell(pdfPTable, String.valueOf(String.format("%.3f", cubic / 1000000000)), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+
+        }
+//        insertCell(pdfPTable,"Total", Element.ALIGN_LEFT, 9, arabicFont, BaseColor.BLACK);
+//        insertCell(pdfPTable, String.valueOf(TotalCubic), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+//        insertCell(pdfPTable, String.valueOf(totalReject), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+//        insertCell(pdfPTable, String.valueOf(TotalCubicRej), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+//        insertCell(pdfPTable, String.valueOf(totalACbm), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+//        insertCell(pdfPTable, "", Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+
+        insertCell(pdfPTableHeader, "Payment Account Supplier Report", Element.ALIGN_CENTER, 11, arabicFontHeader, BaseColor.WHITE);
+        //insertCell(pdfPTableHeader, context.getString(R.string.supplier_name) + ": " + supplier, Element.ALIGN_RIGHT, 16, arabicFontHeader, BaseColor.WHITE);
+//        insertCell(pdfPTableHeader, context.getString(R.string.from) + ": " + fromDate, Element.ALIGN_LEFT, 8, arabicFontHeader, BaseColor.WHITE);
+//        insertCell(pdfPTableHeader, " "+context.getString(R.string.truck_no) + ": " + truck, Element.ALIGN_RIGHT, 8, arabicFont, BaseColor.WHITE);
+//        insertCell(pdfPTableHeader, context.getString(R.string.to) + ": " + toDate, Element.ALIGN_LEFT, 8, arabicFont, BaseColor.WHITE);
+//        insertCell(pdfPTableHeader, "", directionOfHeader, 1, arabicFontHeader, BaseColor.WHITE);
+
+
+        try {
+
+            doc.add(pdfPTableHeader);
+            doc.add(pdfPTable);
+            Toast.makeText(context, context.getString(R.string.export_to_pdf), Toast.LENGTH_LONG).show();
+
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+        endDocPdf();
+
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (context.checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+                    && (context.checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)) {
+                showPdf(pdfFileName);
+                Log.v("", "Permission is granted");
+            } else {
+
+                Log.v("", "Permission is revoked");
+                ActivityCompat.requestPermissions(
+                        (Activity) context,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
+                        1);
+            }
+        } else { // permission is automatically granted on sdk<23 upon
+            // installation
+            showPdf(pdfFileName);
+            Log.v("", "Permission is granted");
+        }
+//        showPdf(pdfFileName);
+
+    }
+    public void exportSupplierAccountPaymentEmail(List<PaymentAccountSupplier> list) {
+        PdfPTable pdfPTable = new PdfPTable(11);
+        PdfPTable pdfPTableHeader = new PdfPTable(11);
+
+        createPDFForSendEmail("PaymentAccountSupplierReport"  + "_.pdf");
+        pdfPTable.setWidthPercentage(100f);
+        pdfPTableHeader.setWidthPercentage(100f);
+        pdfPTableHeader.setSpacingAfter(20);
+
+//        int directionOfHeader = Element.ALIGN_RIGHT;
+
+        pdfPTable.setRunDirection(PdfWriter.RUN_DIRECTION_LTR);
+        pdfPTableHeader.setRunDirection(PdfWriter.RUN_DIRECTION_LTR);
+//        directionOfHeader = Element.ALIGN_RIGHT;
+
+        insertCell(pdfPTable, context.getString(R.string.paymentDate), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.supplier_name), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.date_of_acceptance), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.Value), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.payer), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.invoice_number), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.Balance), ALIGN_CENTER, 2, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.totalBank), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.totalCash), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.paymenttype), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+
+
+        pdfPTable.setHeaderRows(1);
+        for (int i = 0; i < list.size(); i++) {
+
+            insertCell(pdfPTable, String.valueOf(list.get(i).getDATE_OF_PAYMENT()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getSUPLIER()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getACCEPTANCE_DATE()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getVALUE_OF_PAYMENT()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getPAYER()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getINVOICE_NO()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getSTART_BALANCE()), Element.ALIGN_CENTER, 2, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getTOTAL_BANK()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getTOTAL_CASH()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            if(list.get(i).getPAYMENT_TYPE().equals("1")){
+                insertCell(pdfPTable, "Bank", Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+
+            }else {
+
+                insertCell(pdfPTable, "Cash", Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            }
+
+
+//
+//            double acc=list.get(i).getCubic()-list.get(i).getCubicRej();
+//            insertCell(pdfPTable, String.format("%.3f", acc), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+//            double cubic = (list.get(i).getLength() * list.get(i).getWidth() * list.get(i).getThickness() * list.get(i).getNoOfPieces());
+//            insertCell(pdfPTable, String.valueOf(String.format("%.3f", cubic / 1000000000)), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+
+        }
+//        insertCell(pdfPTable,"Total", Element.ALIGN_LEFT, 9, arabicFont, BaseColor.BLACK);
+//        insertCell(pdfPTable, String.valueOf(TotalCubic), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+//        insertCell(pdfPTable, String.valueOf(totalReject), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+//        insertCell(pdfPTable, String.valueOf(TotalCubicRej), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+//        insertCell(pdfPTable, String.valueOf(totalACbm), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+//        insertCell(pdfPTable, "", Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+
+        insertCell(pdfPTableHeader, "Payment Account Supplier Report", Element.ALIGN_CENTER, 11, arabicFontHeader, BaseColor.WHITE);
+        //insertCell(pdfPTableHeader, context.getString(R.string.supplier_name) + ": " + supplier, Element.ALIGN_RIGHT, 16, arabicFontHeader, BaseColor.WHITE);
+//        insertCell(pdfPTableHeader, context.getString(R.string.from) + ": " + fromDate, Element.ALIGN_LEFT, 8, arabicFontHeader, BaseColor.WHITE);
+//        insertCell(pdfPTableHeader, " "+context.getString(R.string.truck_no) + ": " + truck, Element.ALIGN_RIGHT, 8, arabicFont, BaseColor.WHITE);
+//        insertCell(pdfPTableHeader, context.getString(R.string.to) + ": " + toDate, Element.ALIGN_LEFT, 8, arabicFont, BaseColor.WHITE);
+//        insertCell(pdfPTableHeader, "", directionOfHeader, 1, arabicFontHeader, BaseColor.WHITE);
+
+
+        try {
+
+            doc.add(pdfPTableHeader);
+            doc.add(pdfPTable);
+            Toast.makeText(context, context.getString(R.string.export_to_pdf), Toast.LENGTH_LONG).show();
+
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+        endDocPdf();
+
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (context.checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+                    && (context.checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)) {
+              //  showPdf(pdfFileName);
+                Log.v("", "Permission is granted");
+            } else {
+
+                Log.v("", "Permission is revoked");
+                ActivityCompat.requestPermissions(
+                        (Activity) context,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
+                        1);
+            }
+        } else { // permission is automatically granted on sdk<23 upon
+            // installation
+        //    showPdf(pdfFileName);
+            Log.v("", "Permission is granted");
+        }
+//        showPdf(pdfFileName);
+
+    }
+    public void exportSupplierAccountSupplier(List<NewRowInfo> list,String supplier) {
+        PdfPTable pdfPTable = new PdfPTable(16);
+        PdfPTable pdfPTableHeader = new PdfPTable(16);
+
+        createPDF("AccountSupplierReport"  + "_.pdf");
+        pdfPTable.setWidthPercentage(100f);
+        pdfPTableHeader.setWidthPercentage(100f);
+        pdfPTableHeader.setSpacingAfter(20);
+
+//        int directionOfHeader = Element.ALIGN_RIGHT;
+
+        pdfPTable.setRunDirection(PdfWriter.RUN_DIRECTION_LTR);
+        pdfPTableHeader.setRunDirection(PdfWriter.RUN_DIRECTION_LTR);
+//        directionOfHeader = Element.ALIGN_RIGHT;
+
+        insertCell(pdfPTable, context.getString(R.string.date_of_acceptance), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.supplier_name), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.truck_no), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.ttn_no), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.thickness), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.width), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.length), ALIGN_CENTER, 2, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.no_pieces), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.bundle_no), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.reject), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.cbmAccept), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.price), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.cash), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.Debt_), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.cash_), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+
+        pdfPTable.setHeaderRows(1);
+        for (int i = 0; i < list.size(); i++) {
+
+            insertCell(pdfPTable, String.valueOf(list.get(i).getDate()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getSupplierName()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getTruckNo()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getTtnNo()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getThickness()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getWidth()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getLength()), Element.ALIGN_CENTER, 2, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getNoOfPieces()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getNoOfBundles()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getNoOfRejected()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getCbmAccept()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getPrice()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getCash()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getDebt$()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getCash$()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+
+//
+//            double acc=list.get(i).getCubic()-list.get(i).getCubicRej();
+//            insertCell(pdfPTable, String.format("%.3f", acc), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+//            double cubic = (list.get(i).getLength() * list.get(i).getWidth() * list.get(i).getThickness() * list.get(i).getNoOfPieces());
+//            insertCell(pdfPTable, String.valueOf(String.format("%.3f", cubic / 1000000000)), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+
+        }
+//        insertCell(pdfPTable,"Total", Element.ALIGN_LEFT, 9, arabicFont, BaseColor.BLACK);
+//        insertCell(pdfPTable, String.valueOf(TotalCubic), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+//        insertCell(pdfPTable, String.valueOf(totalReject), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+//        insertCell(pdfPTable, String.valueOf(TotalCubicRej), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+//        insertCell(pdfPTable, String.valueOf(totalACbm), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+//        insertCell(pdfPTable, "", Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+
+        insertCell(pdfPTableHeader, "Account Supplier Report", Element.ALIGN_CENTER, 16, arabicFontHeader, BaseColor.WHITE);
+        insertCell(pdfPTableHeader, context.getString(R.string.supplier_name) + ": " + supplier, Element.ALIGN_RIGHT, 16, arabicFontHeader, BaseColor.WHITE);
+//        insertCell(pdfPTableHeader, context.getString(R.string.from) + ": " + fromDate, Element.ALIGN_LEFT, 8, arabicFontHeader, BaseColor.WHITE);
+//        insertCell(pdfPTableHeader, " "+context.getString(R.string.truck_no) + ": " + truck, Element.ALIGN_RIGHT, 8, arabicFont, BaseColor.WHITE);
+//        insertCell(pdfPTableHeader, context.getString(R.string.to) + ": " + toDate, Element.ALIGN_LEFT, 8, arabicFont, BaseColor.WHITE);
+//        insertCell(pdfPTableHeader, "", directionOfHeader, 1, arabicFontHeader, BaseColor.WHITE);
+
+
+        try {
+
+            doc.add(pdfPTableHeader);
+            doc.add(pdfPTable);
+            Toast.makeText(context, context.getString(R.string.export_to_pdf), Toast.LENGTH_LONG).show();
+
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+        endDocPdf();
+
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (context.checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+                    && (context.checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)) {
+                showPdf(pdfFileName);
+                Log.v("", "Permission is granted");
+            } else {
+
+                Log.v("", "Permission is revoked");
+                ActivityCompat.requestPermissions(
+                        (Activity) context,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
+                        1);
+            }
+        } else { // permission is automatically granted on sdk<23 upon
+            // installation
+            showPdf(pdfFileName);
+            Log.v("", "Permission is granted");
+        }
+//        showPdf(pdfFileName);
+
+    }
+
+    public void exportSupplierAccountSupplierEmail(List<NewRowInfo> list,String supplier) {
+        PdfPTable pdfPTable = new PdfPTable(16);
+        PdfPTable pdfPTableHeader = new PdfPTable(16);
+
+        createPDFForSendEmail("AccountSupplierReport"  + "_.pdf");
+        pdfPTable.setWidthPercentage(100f);
+        pdfPTableHeader.setWidthPercentage(100f);
+        pdfPTableHeader.setSpacingAfter(20);
+
+//        int directionOfHeader = Element.ALIGN_RIGHT;
+
+        pdfPTable.setRunDirection(PdfWriter.RUN_DIRECTION_LTR);
+        pdfPTableHeader.setRunDirection(PdfWriter.RUN_DIRECTION_LTR);
+//        directionOfHeader = Element.ALIGN_RIGHT;
+
+        insertCell(pdfPTable, context.getString(R.string.date_of_acceptance), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.supplier_name), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.truck_no), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.ttn_no), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.thickness), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.width), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.length), ALIGN_CENTER, 2, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.no_pieces), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.bundle_no), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.reject), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.cbmAccept), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.price), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.cash), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.Debt_), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+        insertCell(pdfPTable, context.getString(R.string.cash_), ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+
+        pdfPTable.setHeaderRows(1);
+        for (int i = 0; i < list.size(); i++) {
+
+            insertCell(pdfPTable, String.valueOf(list.get(i).getDate()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getSupplierName()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getTruckNo()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getTtnNo()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getThickness()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getWidth()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getLength()), Element.ALIGN_CENTER, 2, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getNoOfPieces()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getNoOfBundles()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getNoOfRejected()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getCbmAccept()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getPrice()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getCash()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getDebt$()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+            insertCell(pdfPTable, String.valueOf(list.get(i).getCash$()), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+
+//
+//            double acc=list.get(i).getCubic()-list.get(i).getCubicRej();
+//            insertCell(pdfPTable, String.format("%.3f", acc), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+//            double cubic = (list.get(i).getLength() * list.get(i).getWidth() * list.get(i).getThickness() * list.get(i).getNoOfPieces());
+//            insertCell(pdfPTable, String.valueOf(String.format("%.3f", cubic / 1000000000)), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+
+        }
+//        insertCell(pdfPTable,"Total", Element.ALIGN_LEFT, 9, arabicFont, BaseColor.BLACK);
+//        insertCell(pdfPTable, String.valueOf(TotalCubic), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+//        insertCell(pdfPTable, String.valueOf(totalReject), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+//        insertCell(pdfPTable, String.valueOf(TotalCubicRej), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+//        insertCell(pdfPTable, String.valueOf(totalACbm), Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+//        insertCell(pdfPTable, "", Element.ALIGN_CENTER, 1, arabicFont, BaseColor.BLACK);
+
+        insertCell(pdfPTableHeader, "Account Supplier Report", Element.ALIGN_CENTER, 16, arabicFontHeader, BaseColor.WHITE);
+        insertCell(pdfPTableHeader, context.getString(R.string.supplier_name) + ": " + supplier, Element.ALIGN_RIGHT, 16, arabicFontHeader, BaseColor.WHITE);
+//        insertCell(pdfPTableHeader, context.getString(R.string.from) + ": " + fromDate, Element.ALIGN_LEFT, 8, arabicFontHeader, BaseColor.WHITE);
+//        insertCell(pdfPTableHeader, " "+context.getString(R.string.truck_no) + ": " + truck, Element.ALIGN_RIGHT, 8, arabicFont, BaseColor.WHITE);
+//        insertCell(pdfPTableHeader, context.getString(R.string.to) + ": " + toDate, Element.ALIGN_LEFT, 8, arabicFont, BaseColor.WHITE);
+//        insertCell(pdfPTableHeader, "", directionOfHeader, 1, arabicFontHeader, BaseColor.WHITE);
+
+
+        try {
+
+            doc.add(pdfPTableHeader);
+            doc.add(pdfPTable);
+            Toast.makeText(context, context.getString(R.string.export_to_pdf), Toast.LENGTH_LONG).show();
+
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+        endDocPdf();
+
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (context.checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+                    && (context.checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)) {
+              //  showPdf(pdfFileName);
+                Log.v("", "Permission is granted");
+            } else {
+
+                Log.v("", "Permission is revoked");
+                ActivityCompat.requestPermissions(
+                        (Activity) context,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
+                        1);
+            }
+        } else { // permission is automatically granted on sdk<23 upon
+            // installation
+         //   showPdf(pdfFileName);
+            Log.v("", "Permission is granted");
+        }
+//        showPdf(pdfFileName);
+
+    }
+
 
     String findSupplier(List<NewRowInfo> bundles, NewRowInfo newRowInfo) {
         for (int i = 0; i < bundles.size(); i++) {

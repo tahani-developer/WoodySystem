@@ -11,7 +11,9 @@ import java.io.Serializable;
 import java.util.List;
 
 public class NewRowInfo implements Serializable {
-
+//{"DETAILS_LIST":[{"TTN_NO":"335","DATE_OF_ACCEPTANCE":"17\/06\/2020","THICKNESS":"19.0","WIDTH":"75.0","LENGTH":"3650.0",
+// "PIECES":"132.0",
+// "NO_BUNDLES":"1","REJECTED":"0","SUPLIER":"Paleta Ukraina","TRUCK_NO":"CB 6722 AK","GRADE":"Fresh","TRUCKCMB":".687","CBMREJ":"0"
     @SerializedName("RAW_INFO_MASTER")
     private List<NewRowInfo> master;
 
@@ -144,6 +146,15 @@ public class NewRowInfo implements Serializable {
    @SerializedName("TRUCKCMB")
     private String truckCMB;
 
+    @SerializedName("PRICE")
+   private double price;
+
+    @SerializedName("PRICE_CASH")
+    private double cash;
+
+
+    private  double debt$;
+    private  double cash$;
     private Bitmap pic11;
     private Bitmap pic22;
     private Bitmap pic33;
@@ -654,6 +665,38 @@ public class NewRowInfo implements Serializable {
 
     public void setTruckCMB(String truckCMB) {
         this.truckCMB = truckCMB;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public double getCash() {
+        return cash;
+    }
+
+    public void setCash(double cash) {
+        this.cash = cash;
+    }
+
+    public double getDebt$() {
+        return debt$;
+    }
+
+    public void setDebt$(double debt$) {
+        this.debt$ = debt$;
+    }
+
+    public double getCash$() {
+        return cash$;
+    }
+
+    public void setCash$(double cash$) {
+        this.cash$ = cash$;
     }
 
     public JSONObject getJsonData() {

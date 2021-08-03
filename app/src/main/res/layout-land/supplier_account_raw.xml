@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:descendantFocusability="blocksDescendants"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:ignore="MissingDefaultResource">
@@ -32,6 +31,33 @@
             android:visibility="gone" />
 
         <TextView
+            android:id="@+id/date"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="1"
+            android:background="@color/light_orange"
+            android:fontFamily="serif"
+            android:text="@string/date"
+            android:textColor="@color/gray_dark_one"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/supplier"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="1"
+            android:background="@color/light_orange"
+            android:fontFamily="serif"
+            android:text="@string/supplier_name"
+            android:textColor="@color/gray_dark_one"
+            android:textSize="15sp" />
+        <TextView
             android:id="@+id/truck_no"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -44,21 +70,9 @@
             android:text="@string/truck_no"
             android:textColor="@color/gray_dark_one"
             android:textSize="15sp" />
+
         <TextView
-            android:id="@+id/supplier"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="2dp"
-            android:layout_marginLeft="2dp"
-            android:layout_marginTop="2dp"
-            android:layout_weight="1"
-            android:background="@color/light_orange"
-            android:fontFamily="serif"
-            android:text="@string/ttn_no"
-            android:textColor="@color/gray_dark_one"
-            android:textSize="15sp" />
-        <TextView
-            android:id="@+id/ttnNo"
+            android:id="@+id/ttn_no"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="2dp"
@@ -72,7 +86,7 @@
             android:textSize="15sp" />
 
         <TextView
-            android:id="@+id/Thic"
+            android:id="@+id/thic"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="2dp"
@@ -81,7 +95,7 @@
             android:layout_weight="1"
             android:background="@color/light_orange"
             android:fontFamily="serif"
-            android:text="@string/thickness"
+            android:text="@string/th"
             android:textColor="@color/gray_dark_one"
             android:textSize="15sp" />
 
@@ -114,7 +128,7 @@
             android:textSize="15sp" />
 
         <TextView
-            android:id="@+id/noOfBundle"
+            android:id="@+id/pieces"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="2dp"
@@ -123,26 +137,26 @@
             android:layout_weight="1"
             android:background="@color/light_orange"
             android:fontFamily="serif"
-            android:text="@string/bundle_no"
+            android:text="@string/no_pieces"
             android:textColor="@color/gray_dark_one"
             android:textSize="15sp" />
 
         <TextView
-            android:id="@+id/date_of_acceptance"
+            android:id="@+id/bundel_no"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="2dp"
             android:layout_marginLeft="2dp"
             android:layout_marginTop="2dp"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:background="@color/light_orange"
             android:fontFamily="serif"
-            android:text="@string/cubic"
+            android:text="bundel_no"
             android:textColor="@color/gray_dark_one"
             android:textSize="15sp" />
 
         <TextView
-            android:id="@+id/piecesA"
+            android:id="@+id/rej_no"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="2dp"
@@ -151,66 +165,26 @@
             android:layout_weight="1"
             android:background="@color/light_orange"
             android:fontFamily="serif"
-            android:text="Cubic-rej"
-            android:textColor="@color/gray_dark_one"
-            android:textSize="15sp" />
-
-
-        <TextView
-            android:id="@+id/TruckCBM"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="2dp"
-            android:layout_marginLeft="2dp"
-            android:layout_marginTop="2dp"
-            android:layout_weight="1"
-            android:background="@color/light_orange"
-            android:fontFamily="serif"
-            android:text="Cubic-rej"
-            android:textColor="@color/gray_dark_one"
-            android:textSize="15sp" />
-        <TextView
-            android:id="@+id/piecesR"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="2dp"
-            android:layout_marginLeft="2dp"
-            android:layout_marginTop="2dp"
-            android:layout_weight="1"
-            android:background="@color/light_orange"
-            android:fontFamily="serif"
-            android:text="@string/cbmAccept"
-            android:textColor="@color/gray_dark_one"
-            android:textSize="15sp" />
-        <TextView
-            android:id="@+id/rejCbm"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="2dp"
-            android:layout_marginLeft="2dp"
-            android:layout_marginTop="2dp"
-            android:layout_weight="1"
-            android:background="@color/light_orange"
-            android:fontFamily="serif"
-            android:text="@string/cbmAccept"
-            android:textColor="@color/gray_dark_one"
-            android:textSize="15sp" />
-        <TextView
-            android:id="@+id/AcceptCbm"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="2dp"
-            android:layout_marginLeft="2dp"
-            android:layout_marginTop="2dp"
-            android:layout_weight="1"
-            android:background="@color/light_orange"
-            android:fontFamily="serif"
-            android:text="@string/cbmAccept"
+            android:text="@string/reject"
             android:textColor="@color/gray_dark_one"
             android:textSize="15sp" />
 
         <TextView
-            android:id="@+id/grade"
+            android:id="@+id/truck_accept"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="1"
+            android:background="@color/alpha_yellow"
+            android:fontFamily="serif"
+            android:text="@string/truck_cbm"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/prices"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="2dp"
@@ -219,15 +193,67 @@
             android:layout_weight="1"
             android:background="@color/light_orange"
             android:fontFamily="serif"
-            android:text="@string/cbmAccept"
-            android:textColor="@color/gray_dark_one"
+            android:text="0.0"
+            android:textColor="@color/orange"
             android:textSize="15sp" />
 
+        <TextView
+            android:id="@+id/cash"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="1"
+            android:background="@color/light_orange"
+            android:fontFamily="serif"
+            android:text="0.0"
+            android:textColor="@color/orange"
+            android:textSize="15sp" />
+        <TextView
+            android:id="@+id/debt"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="1"
+            android:background="@color/orangeHover"
+            android:fontFamily="serif"
+            android:text="0.0"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+        <TextView
+            android:id="@+id/cash_"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="1"
+            android:background="@color/green"
+            android:fontFamily="serif"
+            android:text="0.0"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+<!--        <TextView-->
+<!--            android:id="@+id/payment"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_marginStart="2dp"-->
+<!--            android:layout_marginLeft="2dp"-->
+<!--            android:layout_marginTop="2dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:background="@color/orange"-->
+<!--            android:fontFamily="serif"-->
+<!--            android:text="@string/payment"-->
+<!--            android:textColor="@color/white"-->
+<!--            android:textSize="15sp" />-->
 
         <ImageView
             android:id="@+id/acceptanceReport_email"
             android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
             android:layout_marginLeft="2dp"
             android:layout_marginTop="2dp"

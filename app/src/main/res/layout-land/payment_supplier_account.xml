@@ -1,0 +1,802 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/wooddecor"
+    android:minWidth="1000dp"
+    android:minHeight="500dp"
+    android:orientation="vertical"
+    tools:ignore="MissingDefaultResource">
+
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/alpha_black_dark"
+        >
+
+        <LinearLayout
+            android:id="@+id/linearLayout4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/orange"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/loading_order_report"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginVertical="10dp"
+                android:layout_weight="9"
+                android:fontFamily="serif"
+                android:gravity="start|center_vertical"
+                android:text="@string/PaymentSupplierReport"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/acceptanceReport_count"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/acceptanceInfo_report_linear22"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/linearLayout4">
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/alpha_frame"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:fontFamily="serif"
+                    android:paddingStart="10dp"
+                    android:paddingLeft="10dp"
+                    android:text="@string/from"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+                <EditText
+                    android:id="@+id/fromDateText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:focusable="false"
+                    android:fontFamily="serif"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@drawable/alpha_frame"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:fontFamily="serif"
+                    android:paddingStart="10dp"
+                    android:paddingLeft="10dp"
+                    android:text="@string/to"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+                <EditText
+                    android:id="@+id/toDateText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="5dp"
+                    android:focusable="false"
+                    android:fontFamily="serif"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/acceptanceInfo_report_linear2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/acceptanceInfo_report_linear22"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="98dp"
+            android:layout_marginHorizontal="10dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/acceptanceInfo_report_linear22">
+
+
+
+            <LinearLayout
+                android:id="@+id/acceptorLinear"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/alpha_frame"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="serif"
+                    android:paddingLeft="5dp"
+                    android:text="@string/paymenttype"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+<!--                <EditText-->
+<!--                    android:id="@+id/acceptanceInfoReport_acceptor"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:gravity="center"-->
+<!--                    android:fontFamily="serif"-->
+<!--                    android:textSize="15sp"-->
+<!--                    android:textColor="@color/white" />-->
+
+                <Spinner
+                    android:id="@+id/payType"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ttnLinear"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:layout_marginEnd="5dp"
+                android:visibility="gone"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/alpha_frame"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="serif"
+                    android:paddingLeft="5dp"
+                    android:text="@string/payer"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+                <EditText
+                    android:id="@+id/acceptanceInfoReport_ttn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:fontFamily="serif"
+                    android:textSize="15sp"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@drawable/alpha_frame"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="serif"
+                    android:paddingLeft="5dp"
+                    android:text="@string/supplier_name"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/supplier"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:fontFamily="serif"
+                    android:textSize="15sp"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <TableRow
+            android:id="@+id/acceptanceInfo_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/orange"
+            android:layout_marginVertical="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/acceptanceInfo_report_linear2">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:gravity="center"
+                android:text="@string/serial"
+                android:visibility="gone"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:gravity="center"
+                android:text="@string/paymentDate"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:text="@string/supplier_name"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:gravity="center"
+                android:text="@string/date_of_acceptance"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:text="@string/Value"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:text="@string/payer"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:gravity="center"
+                android:text="@string/invoice_number"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:gravity="center"
+                android:text="@string/Balance"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:gravity="center"
+                android:text="@string/totalBank"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:gravity="center"
+                android:text="@string/totalCash"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:gravity="center"
+                android:text="@string/paymenttype"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="10dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/ic_email_white_24dp"
+             android:backgroundTint="@color/white"
+                />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:gravity="center"
+                android:text="pdf"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:gravity="center"
+                android:text="excel"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+        </TableRow>
+
+        <ListView
+            android:id="@+id/list"
+            app:layout_constraintTop_toBottomOf="@+id/acceptanceInfo_header"
+            app:layout_constraintBottom_toTopOf="@+id/acceptanceInfo_report_linear7"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            />
+
+        <View
+            android:id="@+id/inventory_report_linear6"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/list"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+        <LinearLayout
+            android:id="@+id/acceptanceInfo_report_linear7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end|right"
+            android:layout_margin="5dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            >
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="40dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:background="@drawable/alpha_frame"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:paddingEnd="5dp"-->
+<!--                android:paddingRight="5dp"-->
+<!--                android:layout_marginEnd="5dp"-->
+<!--                android:layout_marginRight="5dp">-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:background="@drawable/frame_shape"-->
+<!--                    android:paddingStart="5dp"-->
+<!--                    android:paddingLeft="5dp"-->
+<!--                    android:paddingEnd="5dp"-->
+<!--                    android:paddingRight="5dp"-->
+<!--                    android:text="@string/totalTCbm"-->
+<!--                    android:fontFamily="serif"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    android:textSize="15sp" />-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/truck_report_cubic"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:ems="10"-->
+<!--                    android:gravity="center"-->
+<!--                    android:inputType="numberDecimal"-->
+<!--                    android:singleLine="true"-->
+<!--                    android:textColor="@color/orange"-->
+<!--                    android:textSize="15sp"-->
+<!--                    android:layout_width="match_parent" />-->
+
+<!--            </LinearLayout>-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="40dp"-->
+<!--                android:layout_marginEnd="5dp"-->
+<!--                android:layout_marginRight="5dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:background="@drawable/alpha_frame"-->
+<!--                android:orientation="horizontal"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_three">-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:fontFamily="serif"-->
+<!--                    android:gravity="start|center_vertical"-->
+<!--                    android:paddingHorizontal="10dp"-->
+<!--                    android:text="@string/no_of_p_reject"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    android:textSize="15sp"-->
+<!--                    android:background="@drawable/frame_shape"/>-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/Report_total_rejected"                    android:layout_width="0dp"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:ems="10"-->
+<!--                    android:gravity="center"-->
+<!--                    android:inputType="numberDecimal"-->
+<!--                    android:singleLine="true"-->
+<!--                    android:textColor="@color/orange"-->
+<!--                    android:textSize="15sp" />-->
+
+<!--            </LinearLayout>-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="40dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:background="@drawable/alpha_frame"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:paddingEnd="5dp"-->
+<!--                android:paddingRight="5dp"-->
+<!--                android:layout_marginEnd="5dp"-->
+<!--                android:layout_marginRight="5dp">-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:background="@drawable/frame_shape"-->
+<!--                    android:paddingStart="5dp"-->
+<!--                    android:paddingLeft="5dp"-->
+<!--                    android:paddingEnd="5dp"-->
+<!--                    android:paddingRight="5dp"-->
+<!--                    android:text="@string/totalRejCbm"-->
+<!--                    android:fontFamily="serif"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    android:textSize="15sp" />-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/truck_report_cubic_rej"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:ems="10"-->
+<!--                    android:gravity="center"-->
+<!--                    android:inputType="numberDecimal"-->
+<!--                    android:singleLine="true"-->
+<!--                    android:textColor="@color/orange"-->
+<!--                    android:textSize="15sp"-->
+<!--                    android:layout_width="match_parent" />-->
+
+<!--            </LinearLayout>-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="40dp"-->
+<!--                android:layout_marginEnd="5dp"-->
+<!--                android:layout_marginRight="5dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:background="@drawable/alpha_frame"-->
+<!--                android:orientation="horizontal"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_three">-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:background="@drawable/frame_shape"-->
+<!--                    android:paddingStart="5dp"-->
+<!--                    android:paddingLeft="5dp"-->
+<!--                    android:paddingEnd="5dp"-->
+<!--                    android:paddingRight="5dp"-->
+<!--                    android:text="@string/totalAccCbm"-->
+<!--                    android:fontFamily="serif"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    android:textSize="15sp" />-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/Report_total_accept_cbm"                    android:layout_width="0dp"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:ems="10"-->
+<!--                    android:gravity="center"-->
+<!--                    android:inputType="numberDecimal"-->
+<!--                    android:singleLine="true"-->
+<!--                    android:textColor="@color/orange"-->
+<!--                    android:textSize="15sp" />-->
+
+<!--            </LinearLayout>-->
+
+
+            <!--            <View-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_weight="5"/>-->
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@drawable/alpha_frame"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_three">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/frame_shape"
+                    android:fontFamily="serif"
+                    android:gravity="start|center_vertical"
+                    android:paddingHorizontal="5dp"
+                    android:text="@string/net"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/Report_total_bundles"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:nextFocusDown="@id/addNewRaw_acceptance_location"
+                    android:singleLine="true"
+                    android:textColor="@color/orange"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/pdf"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginHorizontal="5dp"
+                android:background="@drawable/frame_shape"
+                android:text="@string/pdf"
+                android:fontFamily="serif"
+                android:padding="10dp"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:layout_weight="0"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/excel"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:background="@drawable/frame_shape"
+                android:text="@string/excel"
+                android:fontFamily="serif"
+                android:layout_marginHorizontal="5dp"
+                android:padding="10dp"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:layout_weight="0"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/email"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:background="@drawable/frame_shape"
+                android:text="@string/email"
+                android:fontFamily="serif"
+                android:padding="10dp"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:layout_weight="0"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="290dp"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <Button
+                android:id="@+id/arrow"
+                android:layout_width="180dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/arrow" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/jjj"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="5dp">
+
+                    <TextView
+                        android:text="@string/supplier_name"
+                        android:textSize="15sp"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="serif"
+                        android:textColor="@color/orange"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5"/>
+
+                    <TextView
+                        android:text="@string/thickness"
+                        android:textSize="15sp"
+                        android:fontFamily="serif"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/orange"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:text="@string/width"
+                        android:textSize="15sp"
+                        android:fontFamily="serif"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/orange"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:text="@string/length"
+                        android:textSize="15sp"
+                        android:fontFamily="serif"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/orange"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:text="@string/no_of_pieces"
+                        android:textSize="15sp"
+                        android:fontFamily="serif"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/orange"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:text="@string/cubic"
+                        android:textSize="15sp"
+                        android:fontFamily="serif"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/orange"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:text="@string/grade"
+                        android:textSize="15sp"
+                        android:fontFamily="serif"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/orange"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:text="@string/rejected_pieces"
+                        android:textSize="15sp"
+                        android:fontFamily="serif"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/orange"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:text="@string/no_bundle"
+                        android:textSize="15sp"
+                        android:fontFamily="serif"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/orange"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+                </LinearLayout>
+
+                <ListView
+                    android:id="@+id/listview"
+                    android:layout_width="fill_parent"
+                    android:layout_height="280dp"
+                    android:background="@drawable/jjj" />
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
+
+</LinearLayout>
