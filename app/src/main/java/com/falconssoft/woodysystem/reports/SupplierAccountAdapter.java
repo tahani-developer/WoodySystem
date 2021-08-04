@@ -8,10 +8,13 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.StrictMode;
+import android.support.design.widget.TextInputEditText;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
@@ -58,6 +61,7 @@ public class SupplierAccountAdapter extends BaseAdapter {
     ProgressDialog proTTn;
     NewRowInfo newRowInfoPic=null;
 
+    Dialog passwordDialog;
     public SupplierAccountAdapter(AccountSupplier context, List<NewRowInfo> itemsList) {
         this.context = context;
         this.itemsList = itemsList;
@@ -135,7 +139,7 @@ public class SupplierAccountAdapter extends BaseAdapter {
         double accCubic= 0;
         accCubic=Double.parseDouble( itemsList.get(i).getTruckCMB())- Double.parseDouble(itemsList.get(i).getCbmRej());
         accCubic=Double.parseDouble(String.format("%.3f", accCubic));
-         holder.TruckCBM.setText(""+ accCubic);
+         holder.TruckCBM.setText(""+ itemsList.get(i).getCbmAccept());
 
 
         holder.Thic.setText(""+itemsList.get(i).getThickness());
@@ -165,7 +169,7 @@ public class SupplierAccountAdapter extends BaseAdapter {
             holder.cash.setText("0.0");
         }
 
-        context.Acc(i);
+     //   context.Acc(i);
 
 //
 //        holder.payment.setOnClickListener(new View.OnClickListener() {
@@ -183,8 +187,8 @@ public class SupplierAccountAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 // context.exportToPdf(itemsList.get(i));
+                showPasswordDialog(i,1);
 
-                priceDialog(i,1);
 
             }
         });
@@ -194,8 +198,7 @@ public class SupplierAccountAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 // context.exportToPdf(itemsList.get(i));
-
-                priceDialog(i,2);
+showPasswordDialog(i,2);
 
             }
         });
@@ -212,7 +215,10 @@ public class SupplierAccountAdapter extends BaseAdapter {
         holder.excel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              context.showExcelExport(itemsList.get(i));
+
+              //  priceDialog(i,2);
+
+                context.showExcelExport(itemsList.get(i));
 
             }
         });
@@ -276,7 +282,39 @@ public class SupplierAccountAdapter extends BaseAdapter {
         return "";
     }
 
+    void showPasswordDialog(int index ,int flag) {
+        passwordDialog = new Dialog(context);
+        passwordDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        passwordDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        passwordDialog.setContentView(R.layout.password_dialog);
 
+        TextInputEditText password = passwordDialog.findViewById(R.id.password_dialog_password);
+        TextView done = passwordDialog.findViewById(R.id.password_dialog_done);
+
+        done.setText(context.getResources().getString(R.string.done));
+
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (password.getText().toString().equals("3030300")) {
+                    passwordDialog.dismiss();
+                    switch (flag){
+                        case 1:
+                            priceDialog(index,1);
+                            break;
+                        case 2:
+                            priceDialog(index,2);
+
+                            break;
+                    }
+                } else
+                    Toast.makeText(context, "Password is not correct!", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        passwordDialog.show();
+    }
     void priceDialog(int index,int flag){
         final Dialog dialog = new Dialog(context, R.style.Theme_Dialog);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);

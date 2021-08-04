@@ -140,7 +140,7 @@ public class NewRowInfo implements Serializable {
     @SerializedName("CBMREJ")
     private  String CbmRej;
 
-   // @SerializedName("CbmAccept")
+    @SerializedName("CBMACCEPT")
     private String CbmAccept;
 
    @SerializedName("TRUCKCMB")

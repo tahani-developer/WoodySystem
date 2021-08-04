@@ -4,6 +4,8 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -12,6 +14,7 @@ import android.os.Environment;
 import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -31,6 +34,7 @@ import android.widget.Toast;
 import com.falconssoft.woodysystem.DatabaseHandler;
 import com.falconssoft.woodysystem.ExportToExcel;
 import com.falconssoft.woodysystem.ExportToPDF;
+import com.falconssoft.woodysystem.MainActivity;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.models.NewRowInfo;
 import com.falconssoft.woodysystem.models.Settings;
@@ -74,7 +78,7 @@ public class AccountSupplier extends AppCompatActivity implements View.OnClickLi
     SupplierAccountAdapter adapter;
     private Settings generalSettings;
     TextView count, supplier, total;
-    public static String supplierName = "All";
+    public static String supplierName = "Fortune";
     private RecyclerView recyclerView;
     private List<SupplierInfo> suppliers = new ArrayList<>();
     private List<SupplierInfo> arraylist = new ArrayList<>();
@@ -86,6 +90,7 @@ public class AccountSupplier extends AppCompatActivity implements View.OnClickLi
     private SimpleDateFormat sdf;
     TextView totalAcce,balances,totalBanks,totalCashs;
 
+    Dialog passwordDialog;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,6 +122,7 @@ public class AccountSupplier extends AppCompatActivity implements View.OnClickLi
         email.setOnClickListener(this);
         myFormat = "dd/MM/yyyy";
         sdf = new SimpleDateFormat(myFormat, Locale.US);
+        supplier.setText("Fortune");
         new JSONTask1().execute();
         new JSONTask3().execute();
 //        adapter = new SupplierAccountAdapter(AccountSupplier.this, newRowInfoList);
@@ -157,11 +163,8 @@ public class AccountSupplier extends AppCompatActivity implements View.OnClickLi
                 SupplierDialog();
                 break;
             case R.id.payment:
-                if (newRowInfoList.size() != 0) {
-                    paymentDialog();
-                } else {
-                    Toast.makeText(this, "No Data For Payment", Toast.LENGTH_SHORT).show();
-                }
+                showPasswordDialog(2,null);
+
                 break;
             case R.id.pdf_report:
                 if(newRowInfoList.size()!=0) {
@@ -171,11 +174,9 @@ public class AccountSupplier extends AppCompatActivity implements View.OnClickLi
                 }
                 break;
             case R.id.export_Excel:
-                if(newRowInfoList.size()!=0) {
-                showExcel();
-                }else {
-                    Toast.makeText(this, "no data For create excel", Toast.LENGTH_SHORT).show();
-                }
+                showPasswordDialog(1,null);
+
+
                 break;
             case R.id.email:
                 if(newRowInfoList.size()!=0) {
@@ -215,7 +216,7 @@ public class AccountSupplier extends AppCompatActivity implements View.OnClickLi
     }
    public void showExcelExport(NewRowInfo newRowInfo){
 
-        ExportToExcel.getInstance().createExcelFile(AccountSupplier.this, "Acceptance_supplier_Report_2.xls", 10, null, Collections.singletonList(newRowInfo));
+        showPasswordDialog(3,null);
 
     }
     void showExcel(){
@@ -309,10 +310,11 @@ public class AccountSupplier extends AppCompatActivity implements View.OnClickLi
                                         value.getText().toString(),
                                         payer.getText().toString(),
                                         payType,
-                                        "0.0",
-                                        "0.0",
-                                        "0.0",
-                                        "0.0"
+                                        "25",
+                                        "45",
+                                        "74",
+                                        "85"
+                                        ,dialog
                                 ).execute();
 
                             } else {
@@ -528,6 +530,50 @@ public class AccountSupplier extends AppCompatActivity implements View.OnClickLi
         //  deleteTempFolder(pdfFile.getPath());
     }
 
+
+    void showPasswordDialog(int flag,NewRowInfo newRowInfo) {
+        passwordDialog = new Dialog(this);
+        passwordDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        passwordDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        passwordDialog.setContentView(R.layout.password_dialog);
+
+        TextInputEditText password = passwordDialog.findViewById(R.id.password_dialog_password);
+        TextView done = passwordDialog.findViewById(R.id.password_dialog_done);
+
+        done.setText(getResources().getString(R.string.done));
+
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (password.getText().toString().equals("3030300")) {
+                    passwordDialog.dismiss();
+                 switch (flag){
+                     case 1:
+                         if(newRowInfoList.size()!=0) {
+                             showExcel();
+                         }else {
+                             Toast.makeText(AccountSupplier.this, "no data For create excel", Toast.LENGTH_SHORT).show();
+                         }
+                         break;
+                     case 2:
+                         if (newRowInfoList.size() != 0) {
+                             paymentDialog();
+                         } else {
+                             Toast.makeText(AccountSupplier.this, "No Data For Payment", Toast.LENGTH_SHORT).show();
+                         }
+                         break;
+                     case 3:
+                         ExportToExcel.getInstance().createExcelFile(AccountSupplier.this, "Acceptance_supplier_Report_2.xls", 10, null, Collections.singletonList(newRowInfo));
+                         break;
+                 }
+                } else
+                    Toast.makeText(AccountSupplier.this, "Password is not correct!", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        passwordDialog.show();
+    }
 
 
     // *************************************** GET SUPPLIERS ***************************************
@@ -837,6 +883,7 @@ public class AccountSupplier extends AppCompatActivity implements View.OnClickLi
         NewRowInfo newRowInfo;
         String invoiceNo,dateOfPayment, value, payer, paymentType, accDate, totalCash, totalPay,
          startBalance;
+        Dialog dialog;
         @Override
         protected void onPreExecute() {
             // progressDialog.show();
@@ -844,7 +891,7 @@ public class AccountSupplier extends AppCompatActivity implements View.OnClickLi
         }
 
         public JSONTaskAddPayment(String invoiceNo,String dateOfPayment,String value,String payer,String paymentType,String accDate,String totalCash,String totalPay,
-                                  String startBalance) {
+                                  String startBalance,Dialog dialog) {
           //  this.newRowInfo = newRowInfo;
             this.invoiceNo = invoiceNo;
             this.dateOfPayment = dateOfPayment;
@@ -855,6 +902,7 @@ public class AccountSupplier extends AppCompatActivity implements View.OnClickLi
             this.totalCash = totalCash;
             this.totalPay = totalPay;
             this.startBalance = startBalance;
+            this.dialog=dialog;
 
         }
 
@@ -878,10 +926,10 @@ public class AccountSupplier extends AppCompatActivity implements View.OnClickLi
                 nameValuePairs.add(new BasicNameValuePair("PAYER", "" + payer)); // TTnNo
                 nameValuePairs.add(new BasicNameValuePair("PAYMENT_TYPE", "" + paymentType)); // TTnNo
 
-                nameValuePairs.add(new BasicNameValuePair("ACCEPTANCE_DATE", "" +accDate)); // TTnNo
-                nameValuePairs.add(new BasicNameValuePair("TOTAL_CASH", "" + totalCash)); // TTnNo
-                nameValuePairs.add(new BasicNameValuePair("TOTAL_BANK", totalPay)); // TTnNo
-                nameValuePairs.add(new BasicNameValuePair("START_BALANCE", startBalance)); // TTnNo
+                nameValuePairs.add(new BasicNameValuePair("ACCEPTANCE_DATE", "" +dateOfPayment)); // TTnNo
+                nameValuePairs.add(new BasicNameValuePair("TOTAL_CASH", "" + totalCashs.getText().toString())); // TTnNo
+                nameValuePairs.add(new BasicNameValuePair("TOTAL_BANK", totalBanks.getText().toString())); // TTnNo
+                nameValuePairs.add(new BasicNameValuePair("START_BALANCE", balances.getText().toString())); // TTnNo
 
 
                 request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
@@ -922,6 +970,7 @@ public class AccountSupplier extends AppCompatActivity implements View.OnClickLi
                     //showSnackbar("Delete Successfully", true);
                     adapter.notifyDataSetChanged();
                     Log.e("tag", "PAYMENT_SUPPLIER_ACCOUNT_SUCCESS Success");
+                    dialog.dismiss();
                 } else {
 
                     Log.e("tag", "****Failed to export data");

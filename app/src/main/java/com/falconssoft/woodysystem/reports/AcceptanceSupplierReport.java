@@ -89,7 +89,7 @@ public class AcceptanceSupplierReport extends AppCompatActivity implements   Vie
     private List<SupplierInfo> arraylist = new ArrayList<>();
     private SuppliersAdapter suppliersAdapter;
     private RecyclerView recyclerView;
-    int openLinkFlag=0;
+    int openLinkFlag=1;
     private SimpleDateFormat sdf;
     private Spinner gradeSpinner;
     double  netRejectedString=0,netRejCMB=0,netTruckCmb=0,acceptCbm=0,netBundlesString=0;
@@ -99,8 +99,8 @@ public class AcceptanceSupplierReport extends AppCompatActivity implements   Vie
     int sortFlag;
     private boolean isThicknessAsc = true, isWidthAsc = true, isLengthAsc = true, isPiecesAsc = true, isCubicAsc = true,
             isNoBundelAsc = true,isTruckNo=true ,isRejectOrder=true,isRejectCbmOrder=true,isaccebtCbmOrder=true
-            ;
-
+            ,isSupplier=true,isTtnNo=true;
+    int timeFlagOrder=0;
     TextView thicknessOrder,truckNoOrder,supplierOrder,ttn_noOrder,wOrder,lenOrder,bundelNo,piecesNo,truckOrder
     ,rejectOrder,rejectCbmOrder,accebtCbmOrder ;
     @Override
@@ -247,15 +247,49 @@ public class AcceptanceSupplierReport extends AppCompatActivity implements   Vie
         truckNoOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sortFlag = 1;
+                timeFlagOrder = 1;
                 if (isTruckNo) {
                     isTruckNo = false;
                     truckNoOrder.setBackgroundResource(R.drawable.des);
-                    Collections.sort(dataList, new SorterClass());
+                    Collections.sort(dataList, new StringDateComparatorString());
                 } else { // des
                     isTruckNo = true;
                     truckNoOrder.setBackgroundResource(R.drawable.asc);
-                    Collections.sort(dataList, Collections.reverseOrder(new SorterClass()));
+                    Collections.sort(dataList,Collections.reverseOrder(new StringDateComparatorString()));
+                }
+                adapter2.notifyDataSetChanged();
+            }
+        });
+
+        ttn_noOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timeFlagOrder = 3;
+                if (isTtnNo) {
+                    isTtnNo = false;
+                    ttn_noOrder.setBackgroundResource(R.drawable.des);
+                    Collections.sort(dataList, new StringDateComparatorString());
+                } else { // des
+                    isTtnNo = true;
+                    ttn_noOrder.setBackgroundResource(R.drawable.asc);
+                    Collections.sort(dataList,Collections.reverseOrder(new StringDateComparatorString()));
+                }
+                adapter2.notifyDataSetChanged();
+            }
+        });
+
+        supplierOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timeFlagOrder = 2;
+                if (isSupplier) {
+                    isSupplier = false;
+                    supplierOrder.setBackgroundResource(R.drawable.des);
+                    Collections.sort(dataList, new StringDateComparatorString());
+                } else { // des
+                    isSupplier = true;
+                    supplierOrder.setBackgroundResource(R.drawable.asc);
+                    Collections.sort(dataList,Collections.reverseOrder(new StringDateComparatorString()));
                 }
                 adapter2.notifyDataSetChanged();
             }
@@ -447,6 +481,9 @@ public class AcceptanceSupplierReport extends AppCompatActivity implements   Vie
 
         }
     }
+
+
+
     public void sendEmail(String toEmil, String subject) {
 
 
@@ -863,19 +900,54 @@ public class AcceptanceSupplierReport extends AppCompatActivity implements   Vie
                         returnVal = 0;
                     }
                     break;
-//                case 8: // reject cbm
-//                    if (Double.parseDouble(one.getCbmAccept()) < Double.parseDouble(another.getCbmAccept())) {
-//                        returnVal = -1;
-//                    } else if (Double.parseDouble(one.getCbmAccept()) > Double.parseDouble(another.getCbmAccept())) {
-//                        returnVal = 1;
-//                    } else if (Double.parseDouble(one.getCbmAccept()) == Double.parseDouble(another.getCbmAccept())) {
-//                        returnVal = 0;
-//                    }
-//                    break;
+                case 8: // reject cbm
+                    if (Double.parseDouble(one.getCbmAccept()) < Double.parseDouble(another.getCbmAccept())) {
+                        returnVal = -1;
+                    } else if (Double.parseDouble(one.getCbmAccept()) > Double.parseDouble(another.getCbmAccept())) {
+                        returnVal = 1;
+                    } else if (Double.parseDouble(one.getCbmAccept()) == Double.parseDouble(another.getCbmAccept())) {
+                        returnVal = 0;
+                    }
+                    break;
             }
             return returnVal;
         }
 
+    }
+
+    class StringDateComparatorString implements Comparator<NewRowInfo>
+    {
+        public int compare(NewRowInfo lhs, NewRowInfo rhs)
+        {
+            //
+            switch (timeFlagOrder) {
+                case 1:
+                    if (lhs.getTruckNo() == null || rhs.getTruckNo() == null)
+                        return 0;
+                    return lhs.getTruckNo().compareTo(rhs.getTruckNo());
+
+
+                case 2:
+                    if (lhs.getSupplierName() == null || rhs.getSupplierName() == null)
+                        return 0;
+                    return lhs.getSupplierName().compareTo(rhs.getSupplierName());
+
+//
+                case 3:
+                    if (lhs.getTtnNo() == null || rhs.getTtnNo() == null)
+                        return 0;
+                    return lhs.getTtnNo().compareTo(rhs.getTtnNo());
+
+
+//                case 7:
+//                    if (lhs.getCustomerName() == null || rhs.getCustomerName() == null)
+//                        return 0;
+//                    return lhs.getCustomerName().compareTo(rhs.getCustomerName());
+
+
+            }
+            return 0;
+        }
     }
 
     // ******************************************** GET DATA For Report*****************************************
@@ -1031,7 +1103,7 @@ public class AcceptanceSupplierReport extends AppCompatActivity implements   Vie
                     adapter2 = new AcceptanceSupplierReportAdapter(AcceptanceSupplierReport.this, dataList);
                     list.setAdapter(adapter2);
 
-                    //rejectAdd();
+                    rejectAdd();
 
                 }else {
                     dataList.clear();

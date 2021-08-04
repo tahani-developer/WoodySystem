@@ -136,10 +136,10 @@ public class AcceptanceSupplierReportAdapter extends BaseAdapter {
         double accCubic= 0;
         accCubic=Double.parseDouble( itemsList.get(i).getTruckCMB())- Double.parseDouble(itemsList.get(i).getCbmRej());
         accCubic=Double.parseDouble(String.format("%.3f", accCubic));
-        holder.AcceptCbm.setText(""+ accCubic);
+        holder.AcceptCbm.setText(""+ itemsList.get(i).getCbmAccept());
 
 
-        context.fillCbmVal(i,Double.parseDouble(itemsList.get(i).getTruckCMB()),Double.parseDouble(itemsList.get(i).getCbmRej()),accCubic);
+       // context.fillCbmVal(i,Double.parseDouble(itemsList.get(i).getTruckCMB()),Double.parseDouble(itemsList.get(i).getCbmRej()),accCubic);
 
         holder.pdf.setOnClickListener(new View.OnClickListener() {
             @Override
