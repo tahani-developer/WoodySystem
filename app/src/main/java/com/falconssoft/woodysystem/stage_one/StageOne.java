@@ -20,10 +20,11 @@ import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.reports.AcceptanceInfoReport;
 import com.falconssoft.woodysystem.reports.AcceptanceReport;
 import com.falconssoft.woodysystem.reports.AcceptanceSupplierReport;
+import com.falconssoft.woodysystem.reports.SupplierAccountReportPayment;
 
 public class StageOne extends AppCompatActivity implements View.OnClickListener {
 
-    private LinearLayout addRaw,  generateBarcode, report2, report1,reportSupplier;//acceptInfo
+    private LinearLayout addRaw,  generateBarcode, report2, report1,reportSupplier,supplierAccount,supplierAccountPayment;//acceptInfo
     private Animation animation;
     private Dialog passwordDialog;
 
@@ -39,12 +40,17 @@ public class StageOne extends AppCompatActivity implements View.OnClickListener 
 //        generateBarcode = findViewById(R.id.stage1_generate_barcode);
         report2 = findViewById(R.id.stage1_reports);
         reportSupplier= findViewById(R.id.stage1_accept_supplier_info);
+        supplierAccount = findViewById(R.id.stage1_account_raw);
+        supplierAccountPayment=findViewById(R.id.stage1_report_supplier);
+
 
         addRaw.setOnClickListener(this);
         report1.setOnClickListener(this);
 //        generateBarcode.setOnClickListener(this);
         report2.setOnClickListener(this);
         reportSupplier.setOnClickListener(this);
+        supplierAccount.setOnClickListener(this);
+        supplierAccountPayment.setOnClickListener(this);
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
         addRaw.setAnimation(animation);
 
@@ -59,6 +65,11 @@ public class StageOne extends AppCompatActivity implements View.OnClickListener 
 
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
         reportSupplier.setAnimation(animation);
+        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
+        supplierAccount.setAnimation(animation);
+
+        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
+        supplierAccountPayment.setAnimation(animation);
     }
 
 
@@ -89,6 +100,15 @@ public class StageOne extends AppCompatActivity implements View.OnClickListener 
             case R.id.stage1_reports: //report 2
                 Intent intent4 = new Intent(this, AcceptanceInfoReport.class);//ReportsStageOne
                 startActivity(intent4);
+                break;
+            case R.id.stage1_account_raw: //report 2
+                Intent intent6 = new Intent(this, AccountSupplier.class);//ReportsStageOne
+                startActivity(intent6);
+                break;
+
+            case R.id.stage1_report_supplier: //report payment
+                Intent intent7 = new Intent(this, SupplierAccountReportPayment.class);//ReportsStageOne
+                startActivity(intent7);
                 break;
         }
     }

@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.falconssoft.woodysystem.models.BundleInfo;
 import com.falconssoft.woodysystem.models.NewRowInfo;
+import com.falconssoft.woodysystem.models.PaymentAccountSupplier;
 import com.falconssoft.woodysystem.models.PlannedPL;
 
 import java.io.File;
@@ -85,6 +86,12 @@ public class ExportToExcel {
                 break;
             case 9:
                 workbook = stageOneReportTwoAccSupplier(workbook, (List<NewRowInfo>) listDetail );
+                break;
+            case 10:
+                workbook = stageOneReportAccSupplier(workbook, (List<NewRowInfo>) listDetail );
+                break;
+            case 11:
+                workbook = stageOneReportPaymentAccountSupplier(workbook, (List<PaymentAccountSupplier>) listDetail );
                 break;
         }
 
@@ -540,6 +547,138 @@ public class ExportToExcel {
 
     }
 
+    WritableWorkbook stageOneReportPaymentAccountSupplier(WritableWorkbook workbook, List<PaymentAccountSupplier> list ) {
+        try {
+            WritableSheet sheet = workbook.createSheet("Sheet1", 0);//Excel sheet name. 0 represents first sheet
+
+            try {
+                sheet.addCell(new Label(0, 0, "payment Date")); // column and row
+                sheet.addCell(new Label(1, 0, "Supplier"));
+                sheet.addCell(new Label(2, 0, "Acceptance Date"));
+                sheet.addCell(new Label(3, 0, "Value"));
+                sheet.addCell(new Label(4, 0, "Payer"));
+                sheet.addCell(new Label(5, 0, "Invoice No"));
+                sheet.addCell(new Label(6, 0, "Balance "));
+                sheet.addCell(new Label(7, 0, "Total Bank"));
+                sheet.addCell(new Label(8, 0, "Total Cash"));
+                sheet.addCell(new Label(9, 0, "Payment Type"));
+
+
+//                sheet.mergeCells(0,0, 1, 0);// col , row, to col , to row
+//                sheet.mergeCells(3,0, 4, 0);// col , row, to col , to row
+//                sheet.mergeCells(6,0, 7, 0);// col , row, to col , to row
+//                sheet.mergeCells(11,0, 12, 0);// col , row, to col , to row
+//
+//                sheet.mergeCells(0,1, 1, 1);// col , row, to col , to row
+//                sheet.mergeCells(3,1, 4, 1);// col , row, to col , to row
+//                sheet.mergeCells(6,1, 7, 1);// col , row, to col , to row
+//                sheet.mergeCells(11,1, 12, 1);// col , row, to col , to row
+
+                for (int i = 0; i < list.size(); i++) {
+                    sheet.addCell(new Label(0, i + 2, list.get(i).getDATE_OF_PAYMENT()));
+                    sheet.addCell(new Label(1, i + 2, ""+list.get(i).getSUPLIER()));
+                    sheet.addCell(new Label(2, i + 2, ""+list.get(i).getACCEPTANCE_DATE()));
+                    sheet.addCell(new Label(3, i + 2, ""+list.get(i).getVALUE_OF_PAYMENT()));
+                    sheet.addCell(new Label(4, i + 2,""+ list.get(i).getPAYER()));
+                    sheet.addCell(new Label(5, i + 2, ""+list.get(i).getINVOICE_NO()));
+                    sheet.addCell(new Label(6, i + 2, ""+list.get(i).getSTART_BALANCE()));
+                    sheet.addCell(new Label(7, i + 2, ""+list.get(i).getTOTAL_BANK()));
+                    sheet.addCell(new Label(8, i + 2, ""+list.get(i).getTOTAL_CASH()));
+
+                    if(list.get(i).getPAYMENT_TYPE().equals("1")){
+                        sheet.addCell(new Label(9, i + 2, "Bank"));
+                    }else {
+                        sheet.addCell(new Label(9, i + 2, "Cash"));
+                    }
+                }
+
+            } catch (RowsExceededException e) {
+                e.printStackTrace();
+            } catch (WriteException e) {
+                e.printStackTrace();
+            }
+            workbook.write();
+            try {
+                workbook.close();
+            } catch (WriteException e) {
+                e.printStackTrace();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return workbook;
+
+    }
+    WritableWorkbook stageOneReportAccSupplier(WritableWorkbook workbook, List<NewRowInfo> list ) {
+        try {
+            WritableSheet sheet = workbook.createSheet("Sheet1", 0);//Excel sheet name. 0 represents first sheet
+
+            try {
+                sheet.addCell(new Label(0, 0, "Acceptance Date")); // column and row
+                sheet.addCell(new Label(1, 0, "Supplier"));
+                sheet.addCell(new Label(2, 0, "Truck No"));
+                sheet.addCell(new Label(3, 0, "TTN NO"));
+                sheet.addCell(new Label(4, 0, "Thic"));
+                sheet.addCell(new Label(5, 0, "Width"));
+                sheet.addCell(new Label(6, 0, "Length"));
+                sheet.addCell(new Label(7, 0, "# pieces/Accept"));
+                sheet.addCell(new Label(8, 0, "Bundle # "));
+                sheet.addCell(new Label(9, 0, "#Pieces/Rejected"));
+                sheet.addCell(new Label(10, 0, "Accept CBM"));
+                sheet.addCell(new Label(11, 0, "Price"));
+                sheet.addCell(new Label( 12, 0, "cash"));
+                sheet.addCell(new Label( 13, 0, "debt $"));
+                sheet.addCell(new Label( 14, 0, "cash $"));
+
+//                sheet.mergeCells(0,0, 1, 0);// col , row, to col , to row
+//                sheet.mergeCells(3,0, 4, 0);// col , row, to col , to row
+//                sheet.mergeCells(6,0, 7, 0);// col , row, to col , to row
+//                sheet.mergeCells(11,0, 12, 0);// col , row, to col , to row
+//
+//                sheet.mergeCells(0,1, 1, 1);// col , row, to col , to row
+//                sheet.mergeCells(3,1, 4, 1);// col , row, to col , to row
+//                sheet.mergeCells(6,1, 7, 1);// col , row, to col , to row
+//                sheet.mergeCells(11,1, 12, 1);// col , row, to col , to row
+
+                for (int i = 0; i < list.size(); i++) {
+                    sheet.addCell(new Label(0, i + 2, list.get(i).getDate()));
+                    sheet.addCell(new Label(1, i + 2, ""+list.get(i).getSupplierName()));
+                    sheet.addCell(new Label(2, i + 2, ""+list.get(i).getTruckNo()));
+                    sheet.addCell(new Label(3, i + 2, ""+list.get(i).getTtnNo()));
+                    sheet.addCell(new Label(4, i + 2,""+ list.get(i).getThickness()));
+                    sheet.addCell(new Label(5, i + 2, ""+list.get(i).getWidth()));
+                    sheet.addCell(new Label(6, i + 2, ""+list.get(i).getLength()));
+                    sheet.addCell(new Label(7, i + 2, ""+list.get(i).getNoOfPieces()));
+                    sheet.addCell(new Label(8, i + 2, ""+list.get(i).getNoOfBundles()));
+                    sheet.addCell(new Label(9, i + 2, ""+list.get(i).getNoOfRejected()));
+                    sheet.addCell(new Label(10, i + 2, ""+list.get(i).getCbmAccept()));
+                    sheet.addCell(new Label(11, i + 2, ""+list.get(i).getPrice()));
+                    sheet.addCell(new Label(12, i + 2, ""+list.get(i).getCash()));
+                    sheet.addCell(new Label(13, i + 2, ""+list.get(i).getDebt$()));
+                    sheet.addCell(new Label(14, i + 2, ""+list.get(i).getCash$()));
+//                    sheet.mergeCells(0,i + 2, 1, i + 2);// col , row, to col , to row
+//                    sheet.mergeCells(3,i + 2, 4, i + 2);// col , row, to col , to row
+//                    sheet.mergeCells(6,i + 2, 7, i + 2);// col , row, to col , to row
+//                    sheet.mergeCells(11,i + 2, 12, i + 2);// col , row, to col , to row
+                }
+
+            } catch (RowsExceededException e) {
+                e.printStackTrace();
+            } catch (WriteException e) {
+                e.printStackTrace();
+            }
+            workbook.write();
+            try {
+                workbook.close();
+            } catch (WriteException e) {
+                e.printStackTrace();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return workbook;
+
+    }
     void stageThreeReportOne() {
 
     }

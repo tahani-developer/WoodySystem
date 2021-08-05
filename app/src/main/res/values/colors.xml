@@ -30,6 +30,6 @@
     <color name="oranges">#90FF7500</color>
     <color name="alpha_black_dark2">#920C0C0C</color>
     <color name="alpha_white4">#1DFAFAFA</color>
-
-
+    <color name="alpha_yellow">#6B750B</color>
+    <color name="green">#286A04</color>
 </resources>

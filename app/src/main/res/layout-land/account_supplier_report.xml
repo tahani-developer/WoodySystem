@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:descendantFocusability="blocksDescendants"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:ignore="MissingDefaultResource">
@@ -32,7 +31,7 @@
             android:visibility="gone" />
 
         <TextView
-            android:id="@+id/truck_no"
+            android:id="@+id/text1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="2dp"
@@ -44,8 +43,23 @@
             android:text="@string/truck_no"
             android:textColor="@color/gray_dark_one"
             android:textSize="15sp" />
+
         <TextView
-            android:id="@+id/supplier"
+            android:id="@+id/text2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="1"
+            android:background="@color/light_orange"
+            android:fontFamily="serif"
+            android:text="@string/supplier_name"
+            android:textColor="@color/gray_dark_one"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/text3"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="2dp"
@@ -57,8 +71,9 @@
             android:text="@string/ttn_no"
             android:textColor="@color/gray_dark_one"
             android:textSize="15sp" />
+
         <TextView
-            android:id="@+id/ttnNo"
+            android:id="@+id/text4"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="2dp"
@@ -67,12 +82,12 @@
             android:layout_weight="1"
             android:background="@color/light_orange"
             android:fontFamily="serif"
-            android:text="@string/ttn_no"
+            android:text="@string/date_of_acceptance"
             android:textColor="@color/gray_dark_one"
             android:textSize="15sp" />
 
         <TextView
-            android:id="@+id/Thic"
+            android:id="@+id/text5"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="2dp"
@@ -81,12 +96,12 @@
             android:layout_weight="1"
             android:background="@color/light_orange"
             android:fontFamily="serif"
-            android:text="@string/thickness"
+            android:text="@string/no_bundle"
             android:textColor="@color/gray_dark_one"
             android:textSize="15sp" />
 
         <TextView
-            android:id="@+id/width"
+            android:id="@+id/text6"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="2dp"
@@ -95,46 +110,18 @@
             android:layout_weight="1"
             android:background="@color/light_orange"
             android:fontFamily="serif"
-            android:text="@string/width"
+            android:text="@string/rejected_pieces"
             android:textColor="@color/gray_dark_one"
             android:textSize="15sp" />
 
         <TextView
-            android:id="@+id/length"
+            android:id="@+id/text7"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="2dp"
             android:layout_marginLeft="2dp"
             android:layout_marginTop="2dp"
             android:layout_weight="1"
-            android:background="@color/light_orange"
-            android:fontFamily="serif"
-            android:text="@string/length"
-            android:textColor="@color/gray_dark_one"
-            android:textSize="15sp" />
-
-        <TextView
-            android:id="@+id/noOfBundle"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="2dp"
-            android:layout_marginLeft="2dp"
-            android:layout_marginTop="2dp"
-            android:layout_weight="1"
-            android:background="@color/light_orange"
-            android:fontFamily="serif"
-            android:text="@string/bundle_no"
-            android:textColor="@color/gray_dark_one"
-            android:textSize="15sp" />
-
-        <TextView
-            android:id="@+id/date_of_acceptance"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="2dp"
-            android:layout_marginLeft="2dp"
-            android:layout_marginTop="2dp"
-            android:layout_weight="2"
             android:background="@color/light_orange"
             android:fontFamily="serif"
             android:text="@string/cubic"
@@ -142,7 +129,7 @@
             android:textSize="15sp" />
 
         <TextView
-            android:id="@+id/piecesA"
+            android:id="@+id/text8"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="2dp"
@@ -155,48 +142,8 @@
             android:textColor="@color/gray_dark_one"
             android:textSize="15sp" />
 
-
         <TextView
-            android:id="@+id/TruckCBM"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="2dp"
-            android:layout_marginLeft="2dp"
-            android:layout_marginTop="2dp"
-            android:layout_weight="1"
-            android:background="@color/light_orange"
-            android:fontFamily="serif"
-            android:text="Cubic-rej"
-            android:textColor="@color/gray_dark_one"
-            android:textSize="15sp" />
-        <TextView
-            android:id="@+id/piecesR"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="2dp"
-            android:layout_marginLeft="2dp"
-            android:layout_marginTop="2dp"
-            android:layout_weight="1"
-            android:background="@color/light_orange"
-            android:fontFamily="serif"
-            android:text="@string/cbmAccept"
-            android:textColor="@color/gray_dark_one"
-            android:textSize="15sp" />
-        <TextView
-            android:id="@+id/rejCbm"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="2dp"
-            android:layout_marginLeft="2dp"
-            android:layout_marginTop="2dp"
-            android:layout_weight="1"
-            android:background="@color/light_orange"
-            android:fontFamily="serif"
-            android:text="@string/cbmAccept"
-            android:textColor="@color/gray_dark_one"
-            android:textSize="15sp" />
-        <TextView
-            android:id="@+id/AcceptCbm"
+            android:id="@+id/text9"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="2dp"
@@ -210,7 +157,7 @@
             android:textSize="15sp" />
 
         <TextView
-            android:id="@+id/grade"
+            android:id="@+id/text10"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="2dp"
@@ -225,7 +172,7 @@
 
 
         <ImageView
-            android:id="@+id/acceptanceReport_email"
+            android:id="@+id/sendEmail"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginStart="2dp"
@@ -238,7 +185,7 @@
             android:tint="@color/orange" />
 
         <TextView
-            android:id="@+id/truck_report_pdf"
+            android:id="@+id/pdf"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="2dp"
@@ -253,7 +200,7 @@
 
 
         <TextView
-            android:id="@+id/truck_report_excel"
+            android:id="@+id/excel"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="2dp"

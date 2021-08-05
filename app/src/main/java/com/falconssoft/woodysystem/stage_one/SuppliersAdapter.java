@@ -14,6 +14,7 @@ import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.models.SupplierInfo;
 import com.falconssoft.woodysystem.reports.AcceptanceReport;
 import com.falconssoft.woodysystem.reports.AcceptanceSupplierReport;
+import com.falconssoft.woodysystem.reports.SupplierAccountReportPayment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,14 +28,18 @@ public class SuppliersAdapter extends RecyclerView.Adapter<SuppliersAdapter.Supp
     private AcceptanceReport truckReport;
     int updateFlag=0;
     private AcceptanceSupplierReport acceptanceSupplierReport;
+    private SupplierAccountReportPayment supplierAccountReportPayment;
+    AccountSupplier accountSupplier;
 
-    public SuppliersAdapter(AddNewRaw addNewRaw, List<SupplierInfo> supplierInfoList, EditPage editPage, AcceptanceReport truckReport, int updateFlag , AcceptanceSupplierReport acceptanceSupplierReport) {
+    public SuppliersAdapter(AddNewRaw addNewRaw, List<SupplierInfo> supplierInfoList, EditPage editPage, AcceptanceReport truckReport, int updateFlag , AcceptanceSupplierReport acceptanceSupplierReport, AccountSupplier accountSupplier, SupplierAccountReportPayment supplierAccountReportPayment) {
         this.addNewRaw = addNewRaw;
         this.supplierInfoList = supplierInfoList;
         this.editPage = editPage;
         this.truckReport = truckReport;
         this.updateFlag=updateFlag;
         this.acceptanceSupplierReport=acceptanceSupplierReport;
+        this.accountSupplier=accountSupplier;
+        this.supplierAccountReportPayment=supplierAccountReportPayment;
     }
 
     @NonNull
@@ -64,6 +69,12 @@ public class SuppliersAdapter extends RecyclerView.Adapter<SuppliersAdapter.Supp
                             , supplierInfoList.get(i).getSupplierNo());
                 else  if (acceptanceSupplierReport != null)
                     acceptanceSupplierReport.getSearchSupplierInfo(supplierInfoList.get(i).getSupplierName()
+                            , supplierInfoList.get(i).getSupplierNo());
+                else if(accountSupplier !=null)
+                    accountSupplier.getSearchSupplierInfo(supplierInfoList.get(i).getSupplierName()
+                            , supplierInfoList.get(i).getSupplierNo());
+                else if(supplierAccountReportPayment !=null)
+                    supplierAccountReportPayment.getSearchSupplierInfo(supplierInfoList.get(i).getSupplierName()
                             , supplierInfoList.get(i).getSupplierNo());
             }
         });

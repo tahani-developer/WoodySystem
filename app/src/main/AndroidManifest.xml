@@ -76,6 +76,11 @@
             android:screenOrientation="landscape"
             android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity
+            android:name=".reports.SupplierAccountReportPayment"
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:screenOrientation="landscape"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity
             android:name=".reports.AcceptanceSupplierReport"
             android:windowSoftInputMode="stateAlwaysHidden"
             android:screenOrientation="landscape"
@@ -118,6 +123,10 @@
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
         <activity
             android:name=".reports.LoadingOrderReport"
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".stage_one.AccountSupplier"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".MainActivity" />

@@ -69,6 +69,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -121,6 +123,10 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
     LinearLayout locationLinear,ttnLinear,acceptorLinear,truckLinear;
     String suppliersFlag;
 
+    int sortFlag=0,timeFlagOrder=0;
+
+    boolean isTruckNo=true,isSupplier=true,isTtnNo=true,isBundle=true,isRej=true,isTruckCbm=true,rejCbm=true,acceptCbm=true;
+TextView truckOrder,supplierOrder,ttnNoOrder,bundleNoOrder,piecesRejOrder,truckCOrder,rejCOrder,AccOrder;
     //    public static final String EDIT_FLAG2= "EDIT_FLAG";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,6 +171,158 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
         supplier = findViewById(R.id.truck_report_supplier);
         reportTotalReject=findViewById(R.id.Report_total_rejected);
         reportTotalBundle=findViewById(R.id.Report_total_bundles);
+
+        truckOrder=findViewById(R.id.truckOrder);
+        supplierOrder=findViewById(R.id.supplierOrder);
+        ttnNoOrder=findViewById(R.id.ttnNoOrder);
+        bundleNoOrder=findViewById(R.id.bundleNoOrder);
+        piecesRejOrder=findViewById(R.id.piecesRejOrder);
+        truckCOrder=findViewById(R.id.truckCOrder);
+        rejCOrder=findViewById(R.id.rejCOrder);
+        AccOrder=findViewById(R.id.AccOrder);
+
+
+        truckOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timeFlagOrder = 0;
+                if (isTruckNo) {
+                    isTruckNo = false;
+                    truckOrder.setBackgroundResource(R.drawable.des);
+                    Collections.sort(master, new StringDateComparatorString());
+                } else { // des
+                    isTruckNo = true;
+                    truckOrder.setBackgroundResource(R.drawable.asc);
+                    Collections.sort(master,Collections.reverseOrder(new StringDateComparatorString()));
+                }
+                adapter2 = new AcceptanceReportAdapter(AcceptanceReport.this, master, details);
+                list.setAdapter(adapter2);
+            }
+        });
+        supplierOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timeFlagOrder = 1;
+                if (isSupplier) {
+                    isSupplier = false;
+                    supplierOrder.setBackgroundResource(R.drawable.des);
+                    Collections.sort(master, new StringDateComparatorString());
+                } else { // des
+                    isSupplier = true;
+                    supplierOrder.setBackgroundResource(R.drawable.asc);
+                    Collections.sort(master,Collections.reverseOrder(new StringDateComparatorString()));
+                }
+                adapter2 = new AcceptanceReportAdapter(AcceptanceReport.this, master, details);
+                list.setAdapter(adapter2);
+            }
+        });
+
+        ttnNoOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timeFlagOrder = 2;
+                if (isTtnNo) {
+                    isTtnNo = false;
+                    ttnNoOrder.setBackgroundResource(R.drawable.des);
+                    Collections.sort(master, new StringDateComparatorString());
+                } else { // des
+                    isTtnNo = true;
+                    ttnNoOrder.setBackgroundResource(R.drawable.asc);
+                    Collections.sort(master,Collections.reverseOrder(new StringDateComparatorString()));
+                }
+                adapter2 = new AcceptanceReportAdapter(AcceptanceReport.this, master, details);
+                list.setAdapter(adapter2);
+            }
+        });
+
+        bundleNoOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sortFlag = 0;
+                if (isBundle) {
+                    isBundle = false;
+                    bundleNoOrder.setBackgroundResource(R.drawable.des);
+                    Collections.sort(master, new SorterClass());
+                } else { // des
+                    isBundle = true;
+                    bundleNoOrder.setBackgroundResource(R.drawable.asc);
+                    Collections.sort(master, Collections.reverseOrder(new SorterClass()));
+                }
+                adapter2 = new AcceptanceReportAdapter(AcceptanceReport.this, master, details);
+                list.setAdapter(adapter2);
+            }
+        });
+        piecesRejOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sortFlag =1;
+                if (isBundle) {
+                    isBundle = false;
+                    piecesRejOrder.setBackgroundResource(R.drawable.des);
+                    Collections.sort(master, new SorterClass());
+                } else { // des
+                    isBundle = true;
+                    piecesRejOrder.setBackgroundResource(R.drawable.asc);
+                    Collections.sort(master, Collections.reverseOrder(new SorterClass()));
+                }
+                adapter2 = new AcceptanceReportAdapter(AcceptanceReport.this, master, details);
+                list.setAdapter(adapter2);
+            }
+        });
+
+        truckCOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sortFlag = 2;
+                if (isTruckCbm) {
+                    isTruckCbm = false;
+                    truckCOrder.setBackgroundResource(R.drawable.des);
+                    Collections.sort(master, new SorterClass());
+                } else { // des
+                    isTruckCbm = true;
+                    truckCOrder.setBackgroundResource(R.drawable.asc);
+                    Collections.sort(master, Collections.reverseOrder(new SorterClass()));
+                }
+                adapter2 = new AcceptanceReportAdapter(AcceptanceReport.this, master, details);
+                list.setAdapter(adapter2);
+            }
+        });
+
+        rejCOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sortFlag = 3;
+                if (rejCbm) {
+                    rejCbm = false;
+                    rejCOrder.setBackgroundResource(R.drawable.des);
+                    Collections.sort(master, new SorterClass());
+                } else { // des
+                    rejCbm = true;
+                    rejCOrder.setBackgroundResource(R.drawable.asc);
+                    Collections.sort(master, Collections.reverseOrder(new SorterClass()));
+                }
+                adapter2 = new AcceptanceReportAdapter(AcceptanceReport.this, master, details);
+                list.setAdapter(adapter2);
+            }
+        });
+
+        AccOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sortFlag = 4;
+                if (acceptCbm) {
+                    acceptCbm = false;
+                    AccOrder.setBackgroundResource(R.drawable.des);
+                    Collections.sort(master, new SorterClass());
+                } else { // des
+                    acceptCbm = true;
+                    AccOrder.setBackgroundResource(R.drawable.asc);
+                    Collections.sort(master, Collections.reverseOrder(new SorterClass()));
+                }
+                adapter2 = new AcceptanceReportAdapter(AcceptanceReport.this, master, details);
+                list.setAdapter(adapter2);
+            }
+        });
 
         myFormat = "dd/MM/yyyy";
         sdf = new SimpleDateFormat(myFormat, Locale.US);
@@ -248,7 +406,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
 
                 recyclerView = searchDialog.findViewById(R.id.search_supplier_recyclerView);
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
-                suppliersAdapter = new SuppliersAdapter(null, suppliers, null, AcceptanceReport.this,0,null);
+                suppliersAdapter = new SuppliersAdapter(null, suppliers, null, AcceptanceReport.this,0,null,null,null);
                 recyclerView.setAdapter(suppliersAdapter);
 
                 searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -341,7 +499,7 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
             }
         }
         total.setText("" + arraylist.size());
-        suppliersAdapter = new SuppliersAdapter(null, arraylist, null, AcceptanceReport.this,0,null);
+        suppliersAdapter = new SuppliersAdapter(null, arraylist, null, AcceptanceReport.this,0,null,null,null);
         recyclerView.setAdapter(suppliersAdapter);
     }
 
@@ -1205,7 +1363,98 @@ public class AcceptanceReport extends AppCompatActivity implements AdapterView.O
             }
         }
     }
+// ******************************************** Sort Data *****************************************
 
+    class SorterClass implements Comparator<NewRowInfo> {
+        @Override
+        public int compare(NewRowInfo one, NewRowInfo another) {
+            int returnVal = 0;
+            switch (sortFlag) {
+                case 0: // thickness
+                    if (Double.parseDouble(one.getNetBundles()) < Double.parseDouble(another.getNetBundles())) {
+                        returnVal = -1;
+                    } else if (Double.parseDouble(one.getNetBundles()) > Double.parseDouble(another.getNetBundles())) {
+                        returnVal = 1;
+                    } else if (Double.parseDouble(one.getNetBundles()) == Double.parseDouble(another.getNetBundles())) {
+                        returnVal = 0;
+                    }
+                    break;
+
+                case 1: // width
+                    if (Double.parseDouble(one.getTotalRejectedNo()) < Double.parseDouble(another.getTotalRejectedNo())) {
+                        returnVal = -1;
+                    } else if (Double.parseDouble(one.getTotalRejectedNo()) > Double.parseDouble(another.getTotalRejectedNo())) {
+                        returnVal = 1;
+                    } else if (Double.parseDouble(one.getTotalRejectedNo()) == Double.parseDouble(another.getTotalRejectedNo())) {
+                        returnVal = 0;
+                    }
+                    break;
+
+                case 2: // length
+                    if (one.getCubic() < another.getCubic()) {
+                        returnVal = -1;
+                    } else if (one.getCubic() > another.getCubic()) {
+                        returnVal = 1;
+                    } else if (one.getCubic() == another.getCubic()) {
+                        returnVal = 0;
+                    }
+                    break;
+
+                case 3: // pieces
+                    if (one.getCubicRej() < another.getCubicRej()) {
+                        returnVal = -1;
+                    } else if (one.getCubicRej() > another.getCubicRej()) {
+                        returnVal = 1;
+                    } else if (one.getCubicRej() == another.getCubicRej()) {
+                        returnVal = 0;
+                    }
+                    break;
+
+                case 4: // cubic
+//                    if (Double.parseDouble(one.getCbmAccept()) < Double.parseDouble(another.getCbmAccept())) {
+//                        returnVal = -1;
+//                    } else if (Double.parseDouble(one.getCbmAccept()) > Double.parseDouble(another.getCbmAccept())) {
+//                        returnVal = 1;
+//                    } else if (Double.parseDouble(one.getCbmAccept()) == Double.parseDouble(another.getCbmAccept())) {
+//                        returnVal = 0;
+//                    }
+                    break;
+
+            }
+            return returnVal;
+        }
+
+    }
+
+    class StringDateComparatorString implements Comparator<NewRowInfo>
+    {
+        public int compare(NewRowInfo lhs, NewRowInfo rhs)
+        {
+            //
+            switch (timeFlagOrder) {
+                case 0:
+                    if (lhs.getTruckNo() == null || rhs.getTruckNo() == null)
+                        return 0;
+                    return lhs.getTruckNo().compareTo(rhs.getTruckNo());
+
+
+//                case 1:
+//                    if (lhs.getSupplierName() == null || rhs.getSupplierName() == null)
+//                        return 0;
+//                    return lhs.getSupplierName().compareTo(rhs.getSupplierName());
+
+//
+                case 2:
+                    if (lhs.getTtnNo() == null || rhs.getTtnNo() == null)
+                        return 0;
+                    return lhs.getTtnNo().compareTo(rhs.getTtnNo());
+
+
+
+            }
+            return 0;
+        }
+    }
 
 }
 

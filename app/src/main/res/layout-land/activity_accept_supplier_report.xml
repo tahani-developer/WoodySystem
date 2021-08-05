@@ -596,83 +596,217 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginTop="2dp"
                     android:layout_weight="1"
-                    android:fontFamily="serif"
-                    android:text="@string/truck_no"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
+                    android:background="@color/orange"
+                    android:orientation="horizontal"
+                    android:layout_marginEnd="1dp"
+                    android:layout_marginRight="1dp">
 
-                <TextView
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:fontFamily="serif"
+                        android:text="@string/truck_no"
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/truckNoOrder"
+                        android:layout_width="0dp"
+                        android:layout_height="20dp"
+                        android:layout_weight="1"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="2dp"
+                        android:background="@drawable/asc"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginTop="2dp"
                     android:layout_weight="1"
-                    android:fontFamily="serif"
-                    android:text="@string/ttn_no"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
+                    android:background="@color/orange"
+                    android:orientation="horizontal"
+                    android:layout_marginEnd="1dp"
+                    android:layout_marginRight="1dp">
 
-                <TextView
-                    android:id="@+id/editRow_thickness"
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:fontFamily="serif"
+                        android:text="@string/supplier_name"
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/supplierOrder"
+                        android:layout_width="0dp"
+                        android:layout_height="20dp"
+                        android:layout_weight="1"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="2dp"
+                        android:background="@drawable/asc"
+                        />
+
+                </LinearLayout>
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginTop="2dp"
                     android:layout_weight="1"
-                    android:fontFamily="serif"
-                    android:text="@string/thickness"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
+                    android:background="@color/orange"
+                    android:orientation="horizontal"
+                    android:layout_marginEnd="1dp"
+                    android:layout_marginRight="1dp">
 
-                <TextView
-                    android:id="@+id/editRow_width"
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:fontFamily="serif"
+                        android:text="@string/ttn_no"
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/ttn_noOrder"
+                        android:layout_width="0dp"
+                        android:layout_height="20dp"
+                        android:layout_weight="1"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="2dp"
+                        android:background="@drawable/asc"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginTop="2dp"
                     android:layout_weight="1"
-                    android:fontFamily="serif"
-                    android:text="@string/width"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
+                    android:background="@color/orange"
+                    android:orientation="horizontal"
+                    android:layout_marginEnd="1dp"
+                    android:layout_marginRight="1dp">
 
-                <TextView
-                    android:id="@+id/editRow_length"
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:fontFamily="serif"
+                        android:text="T"
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/thicknessOrder"
+                        android:layout_width="0dp"
+                        android:layout_height="20dp"
+                        android:layout_weight="1"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="2dp"
+                        android:background="@drawable/asc"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginTop="2dp"
                     android:layout_weight="1"
-                    android:fontFamily="serif"
-                    android:text="@string/length"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
+                    android:background="@color/orange"
+                    android:orientation="horizontal"
+                    android:layout_marginEnd="1dp"
+                    android:layout_marginRight="1dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:fontFamily="serif"
+                        android:text="W"
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/wOrder"
+                        android:layout_width="0dp"
+                        android:layout_height="20dp"
+                        android:layout_weight="1"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="2dp"
+                        android:background="@drawable/asc"
+                        />
 
 
-                <TextView
-                    android:id="@+id/editRow_bundles"
+                </LinearLayout>
+
+
+
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginTop="2dp"
                     android:layout_weight="1"
-                    android:fontFamily="serif"
-                    android:text="@string/no_bundle"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
+                    android:background="@color/orange"
+                    android:orientation="horizontal"
+                    android:layout_marginEnd="1dp"
+                    android:layout_marginRight="1dp">
 
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:fontFamily="serif"
+                        android:text="L"
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/lenOrder"
+                        android:layout_width="39dp"
+                        android:layout_height="19dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="2dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/asc" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/orange"
+                    android:orientation="horizontal"
+                    android:layout_marginEnd="1dp"
+                    android:layout_marginRight="1dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:fontFamily="serif"
+                        android:text="@string/bundle_no"
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/bundelNo"
+                        android:layout_width="0dp"
+                        android:layout_height="20dp"
+                        android:layout_weight="1"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="2dp"
+                        android:background="@drawable/asc"
+                        />
+
+                </LinearLayout>
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -685,70 +819,156 @@
                     android:textColor="@color/white"
                     android:textSize="15sp" />
 
-                <TextView
-                    android:id="@+id/editRow_pieces"
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginTop="2dp"
                     android:layout_weight="1"
-                    android:fontFamily="serif"
-                    android:text="@string/no_pieces_accept"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
+                    android:background="@color/orange"
+                    android:orientation="horizontal"
+                    android:layout_marginEnd="1dp"
+                    android:layout_marginRight="1dp">
 
-                <TextView
-                    android:id="@+id/editRow_truckCbm"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_weight="1"
-                    android:fontFamily="serif"
-                    android:text="@string/truck_cbm"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:fontFamily="serif"
+                        android:text="@string/no_pieces_accept"
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
 
-                <TextView
-                    android:id="@+id/editRow_rejected"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_weight="1"
-                    android:fontFamily="serif"
-                    android:text="@string/no_of_p_reject"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
+                    <TextView
+                        android:id="@+id/piecesNo"
+                        android:layout_width="0dp"
+                        android:layout_height="20dp"
+                        android:layout_weight="1"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="2dp"
+                        android:background="@drawable/asc"
+                        />
 
-                <TextView
-                    android:id="@+id/editRow_cbmRej"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_weight="1"
-                    android:fontFamily="serif"
-                    android:text="@string/rejcmb"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
+                </LinearLayout>
 
-                <TextView
-                    android:id="@+id/editRow_cbmAccept"
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginTop="2dp"
                     android:layout_weight="1"
-                    android:fontFamily="serif"
-                    android:text="@string/cbmAccept"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
+                    android:background="@color/orange"
+                    android:orientation="horizontal"
+                    android:layout_marginEnd="1dp"
+                    android:layout_marginRight="1dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:fontFamily="serif"
+                        android:text="@string/truck_cbm"
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/truckOrder"
+                        android:layout_width="0dp"
+                        android:layout_height="20dp"
+                        android:layout_weight="1"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="2dp"
+                        android:background="@drawable/asc"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/orange"
+                    android:orientation="horizontal"
+                    android:layout_marginEnd="1dp"
+                    android:layout_marginRight="1dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:fontFamily="serif"
+                        android:text="@string/no_of_p_reject"
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/rejectOrder"
+                        android:layout_width="0dp"
+                        android:layout_height="20dp"
+                        android:layout_weight="1"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="2dp"
+                        android:background="@drawable/asc"
+                        />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/orange"
+                    android:orientation="horizontal"
+                    android:layout_marginEnd="1dp"
+                    android:layout_marginRight="1dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:fontFamily="serif"
+                        android:text="@string/rejcmb"
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/rejectCbmOrder"
+                        android:layout_width="0dp"
+                        android:layout_height="20dp"
+                        android:layout_weight="1"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="2dp"
+                        android:background="@drawable/asc"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/orange"
+                    android:orientation="horizontal"
+                    android:layout_marginEnd="1dp"
+                    android:layout_marginRight="1dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:fontFamily="serif"
+                        android:text="@string/cbmAccept"
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/accebtCbmOrder"
+                        android:layout_width="0dp"
+                        android:layout_height="20dp"
+                        android:layout_weight="1"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="2dp"
+                        android:background="@drawable/asc"
+                        />
+
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/editRow_grade"

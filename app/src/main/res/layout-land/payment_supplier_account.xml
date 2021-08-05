@@ -37,7 +37,7 @@
                 android:layout_weight="9"
                 android:fontFamily="serif"
                 android:gravity="start|center_vertical"
-                android:text="@string/accepted_truck_report"
+                android:text="@string/PaymentSupplierReport"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
 
@@ -49,7 +49,7 @@
                 android:layout_weight="1"
                 android:fontFamily="serif"
                 android:gravity="center"
-                android:text="1"
+                android:text="0"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
         </LinearLayout>
@@ -64,36 +64,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/linearLayout4">
 
-            <LinearLayout
-                android:id="@+id/addToInventory_linear_two"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_marginEnd="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/alpha_frame"
-                android:orientation="horizontal"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:fontFamily="serif"
-                    android:paddingLeft="5dp"
-                    android:text="@string/location"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
-
-                <Spinner
-                    android:id="@+id/Loding_Order_Location"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-
-
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -118,7 +88,7 @@
                     android:textSize="15sp" />
 
                 <EditText
-                    android:id="@+id/Loding_Order_from"
+                    android:id="@+id/fromDateText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="5dp"
@@ -153,7 +123,7 @@
                     android:textSize="15sp" />
 
                 <EditText
-                    android:id="@+id/Loding_Order_to"
+                    android:id="@+id/toDateText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="5dp"
@@ -184,36 +154,6 @@
             app:layout_constraintTop_toBottomOf="@+id/acceptanceInfo_report_linear22">
 
 
-            <LinearLayout
-                android:id="@+id/acceptanceInfo_report_truck"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:layout_marginEnd="5dp"
-                android:background="@drawable/alpha_frame"
-                android:orientation="horizontal"
-                android:layout_marginRight="5dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:fontFamily="serif"
-                    android:paddingLeft="5dp"
-                    android:text="@string/truck"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
-
-                <EditText
-                    android:id="@+id/acceptanceInfoReport_truckNo"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:fontFamily="serif"
-                    android:textSize="15sp"
-                    android:textColor="@color/white" />
-
-            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/acceptorLinear"
@@ -232,20 +172,23 @@
                     android:layout_height="match_parent"
                     android:fontFamily="serif"
                     android:paddingLeft="5dp"
-                    android:text="@string/acceptor"
+                    android:text="@string/paymenttype"
                     android:textColor="@color/white"
                     android:textSize="15sp" />
 
-                <EditText
-                    android:id="@+id/acceptanceInfoReport_acceptor"
+<!--                <EditText-->
+<!--                    android:id="@+id/acceptanceInfoReport_acceptor"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:gravity="center"-->
+<!--                    android:fontFamily="serif"-->
+<!--                    android:textSize="15sp"-->
+<!--                    android:textColor="@color/white" />-->
+
+                <Spinner
+                    android:id="@+id/payType"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:fontFamily="serif"
-                    android:textSize="15sp"
-                    android:textColor="@color/white" />
-
-
+                    android:layout_height="match_parent" />
             </LinearLayout>
 
             <LinearLayout
@@ -255,6 +198,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:layout_marginEnd="5dp"
+                android:visibility="gone"
                 android:layout_marginRight="5dp"
                 android:background="@drawable/alpha_frame"
                 android:orientation="horizontal"
@@ -265,7 +209,7 @@
                     android:layout_height="match_parent"
                     android:fontFamily="serif"
                     android:paddingLeft="5dp"
-                    android:text="@string/ttn"
+                    android:text="@string/payer"
                     android:textColor="@color/white"
                     android:textSize="15sp" />
 
@@ -299,7 +243,7 @@
                     android:textSize="15sp" />
 
                 <TextView
-                    android:id="@+id/truck_report_supplier"
+                    android:id="@+id/supplier"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
@@ -331,262 +275,24 @@
                 android:textColor="@color/white"
                 android:textSize="15sp" />
 
-
-            <LinearLayout
+            <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/orange"
-                android:orientation="horizontal"
-                android:layout_marginEnd="1dp"
-                android:layout_marginRight="1dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:fontFamily="serif"
-                    android:text="@string/placing_no_"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/truckOrder"
-                    android:layout_width="0dp"
-                    android:layout_height="20dp"
-                    android:layout_weight="1"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="2dp"
-                    android:background="@drawable/asc"
-                    />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@color/orange"
-                android:orientation="horizontal"
-                android:layout_marginEnd="1dp"
-                android:layout_marginRight="1dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:fontFamily="serif"
-                    android:text="@string/supplier_name"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/supplierOrder"
-                    android:layout_width="0dp"
-                    android:layout_height="20dp"
-                    android:layout_weight="1"
-                    android:visibility="gone"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="2dp"
-                    android:background="@drawable/asc"
-                    />
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@color/orange"
-                android:orientation="horizontal"
-                android:layout_marginEnd="1dp"
-                android:layout_marginRight="1dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:fontFamily="serif"
-                    android:text="@string/ttn_no"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/ttnNoOrder"
-                    android:layout_width="0dp"
-                    android:layout_height="20dp"
-                    android:layout_weight="1"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="2dp"
-                    android:background="@drawable/asc"
-                    />
-
-            </LinearLayout>
-
+                android:fontFamily="serif"
+                android:gravity="center"
+                android:text="@string/paymentDate"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:fontFamily="serif"
-                android:text="@string/date"
+                android:text="@string/supplier_name"
                 android:textColor="@color/white"
                 android:textSize="15sp" />
-
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@color/orange"
-                android:orientation="horizontal"
-                android:layout_marginEnd="1dp"
-                android:layout_marginRight="1dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:fontFamily="serif"
-                    android:text="@string/no_bundle"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/bundleNoOrder"
-                    android:layout_width="0dp"
-                    android:layout_height="20dp"
-                    android:layout_weight="1"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="2dp"
-                    android:background="@drawable/asc"
-                    />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@color/orange"
-                android:orientation="horizontal"
-                android:layout_marginEnd="1dp"
-                android:layout_marginRight="1dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:fontFamily="serif"
-                    android:text="@string/no_of_p_reject"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/piecesRejOrder"
-                    android:layout_width="0dp"
-                    android:layout_height="20dp"
-                    android:layout_weight="1"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="2dp"
-                    android:background="@drawable/asc"
-                    />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@color/orange"
-                android:orientation="horizontal"
-                android:layout_marginEnd="1dp"
-                android:layout_marginRight="1dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:fontFamily="serif"
-                    android:text="@string/truck_cbm"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/truckCOrder"
-                    android:layout_width="0dp"
-                    android:layout_height="20dp"
-                    android:layout_weight="1"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="2dp"
-                    android:background="@drawable/asc"
-                    />
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@color/orange"
-                android:orientation="horizontal"
-                android:layout_marginEnd="1dp"
-                android:layout_marginRight="1dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:fontFamily="serif"
-                    android:text="@string/rejcmb"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/rejCOrder"
-                    android:layout_width="0dp"
-                    android:layout_height="20dp"
-                    android:layout_weight="1"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="2dp"
-                    android:background="@drawable/asc"
-                    />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@color/orange"
-                android:orientation="horizontal"
-                android:layout_marginEnd="1dp"
-                android:layout_marginRight="1dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:fontFamily="serif"
-                    android:text="@string/cbmAccept"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/AccOrder"
-                    android:layout_width="0dp"
-                    android:layout_height="20dp"
-                    android:layout_weight="1"
-                    android:layout_marginTop="5dp"
-                    android:visibility="gone"
-                    android:layout_marginBottom="2dp"
-                    android:background="@drawable/asc"
-                    />
-
-            </LinearLayout>
-
 
             <TextView
                 android:layout_width="0dp"
@@ -594,30 +300,76 @@
                 android:layout_weight="1"
                 android:fontFamily="serif"
                 android:gravity="center"
-                android:text="Preview"
+                android:text="@string/date_of_acceptance"
                 android:textColor="@color/white"
                 android:textSize="15sp" />
 
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:gravity="center"
-                android:padding="10dp"
-                android:layout_marginTop="2dp"
-                android:layout_marginStart="2dp"
-                android:layout_marginLeft="2dp"
-                android:background="@color/orange"
-                android:src="@drawable/pic"
-                />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:text="@string/Value"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:text="@string/payer"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="serif"
                 android:gravity="center"
-                android:padding="10dp"
-                android:layout_margin="5dp"
-                android:background="@drawable/ic_edit_24dp"
-                />
+                android:text="@string/invoice_number"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:gravity="center"
+                android:text="@string/Balance"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:gravity="center"
+                android:text="@string/totalBank"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:gravity="center"
+                android:text="@string/totalCash"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="serif"
+                android:gravity="center"
+                android:text="@string/paymenttype"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -683,153 +435,153 @@
             app:layout_constraintBottom_toBottomOf="parent"
             >
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_weight="1"
-                android:layout_gravity="center"
-                android:background="@drawable/alpha_frame"
-                android:orientation="horizontal"
-                android:paddingEnd="5dp"
-                android:paddingRight="5dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginRight="5dp">
+<!--            <LinearLayout-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="40dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:background="@drawable/alpha_frame"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:paddingEnd="5dp"-->
+<!--                android:paddingRight="5dp"-->
+<!--                android:layout_marginEnd="5dp"-->
+<!--                android:layout_marginRight="5dp">-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/frame_shape"
-                    android:paddingStart="5dp"
-                    android:paddingLeft="5dp"
-                    android:paddingEnd="5dp"
-                    android:paddingRight="5dp"
-                    android:text="@string/totalTCbm"
-                    android:fontFamily="serif"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:background="@drawable/frame_shape"-->
+<!--                    android:paddingStart="5dp"-->
+<!--                    android:paddingLeft="5dp"-->
+<!--                    android:paddingEnd="5dp"-->
+<!--                    android:paddingRight="5dp"-->
+<!--                    android:text="@string/totalTCbm"-->
+<!--                    android:fontFamily="serif"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    android:textSize="15sp" />-->
 
-                <TextView
-                    android:id="@+id/truck_report_cubic"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:gravity="center"
-                    android:inputType="numberDecimal"
-                    android:singleLine="true"
-                    android:textColor="@color/orange"
-                    android:textSize="15sp"
-                    android:layout_width="match_parent" />
+<!--                <TextView-->
+<!--                    android:id="@+id/truck_report_cubic"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:ems="10"-->
+<!--                    android:gravity="center"-->
+<!--                    android:inputType="numberDecimal"-->
+<!--                    android:singleLine="true"-->
+<!--                    android:textColor="@color/orange"-->
+<!--                    android:textSize="15sp"-->
+<!--                    android:layout_width="match_parent" />-->
 
-            </LinearLayout>
+<!--            </LinearLayout>-->
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/alpha_frame"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_three">
+<!--            <LinearLayout-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="40dp"-->
+<!--                android:layout_marginEnd="5dp"-->
+<!--                android:layout_marginRight="5dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:background="@drawable/alpha_frame"-->
+<!--                android:orientation="horizontal"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_three">-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:fontFamily="serif"
-                    android:gravity="start|center_vertical"
-                    android:paddingHorizontal="10dp"
-                    android:text="@string/no_of_p_reject"
-                    android:textColor="@color/white"
-                    android:textSize="15sp"
-                    android:background="@drawable/frame_shape"/>
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:fontFamily="serif"-->
+<!--                    android:gravity="start|center_vertical"-->
+<!--                    android:paddingHorizontal="10dp"-->
+<!--                    android:text="@string/no_of_p_reject"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    android:textSize="15sp"-->
+<!--                    android:background="@drawable/frame_shape"/>-->
 
-                <TextView
-                    android:id="@+id/Report_total_rejected"                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:gravity="center"
-                    android:inputType="numberDecimal"
-                    android:singleLine="true"
-                    android:textColor="@color/orange"
-                    android:textSize="15sp" />
+<!--                <TextView-->
+<!--                    android:id="@+id/Report_total_rejected"                    android:layout_width="0dp"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:ems="10"-->
+<!--                    android:gravity="center"-->
+<!--                    android:inputType="numberDecimal"-->
+<!--                    android:singleLine="true"-->
+<!--                    android:textColor="@color/orange"-->
+<!--                    android:textSize="15sp" />-->
 
-            </LinearLayout>
+<!--            </LinearLayout>-->
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_weight="1"
-                android:layout_gravity="center"
-                android:background="@drawable/alpha_frame"
-                android:orientation="horizontal"
-                android:paddingEnd="5dp"
-                android:paddingRight="5dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginRight="5dp">
+<!--            <LinearLayout-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="40dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:background="@drawable/alpha_frame"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:paddingEnd="5dp"-->
+<!--                android:paddingRight="5dp"-->
+<!--                android:layout_marginEnd="5dp"-->
+<!--                android:layout_marginRight="5dp">-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/frame_shape"
-                    android:paddingStart="5dp"
-                    android:paddingLeft="5dp"
-                    android:paddingEnd="5dp"
-                    android:paddingRight="5dp"
-                    android:text="@string/totalRejCbm"
-                    android:fontFamily="serif"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:background="@drawable/frame_shape"-->
+<!--                    android:paddingStart="5dp"-->
+<!--                    android:paddingLeft="5dp"-->
+<!--                    android:paddingEnd="5dp"-->
+<!--                    android:paddingRight="5dp"-->
+<!--                    android:text="@string/totalRejCbm"-->
+<!--                    android:fontFamily="serif"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    android:textSize="15sp" />-->
 
-                <TextView
-                    android:id="@+id/truck_report_cubic_rej"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:gravity="center"
-                    android:inputType="numberDecimal"
-                    android:singleLine="true"
-                    android:textColor="@color/orange"
-                    android:textSize="15sp"
-                    android:layout_width="match_parent" />
+<!--                <TextView-->
+<!--                    android:id="@+id/truck_report_cubic_rej"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:ems="10"-->
+<!--                    android:gravity="center"-->
+<!--                    android:inputType="numberDecimal"-->
+<!--                    android:singleLine="true"-->
+<!--                    android:textColor="@color/orange"-->
+<!--                    android:textSize="15sp"-->
+<!--                    android:layout_width="match_parent" />-->
 
-            </LinearLayout>
+<!--            </LinearLayout>-->
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/alpha_frame"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_three">
+<!--            <LinearLayout-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="40dp"-->
+<!--                android:layout_marginEnd="5dp"-->
+<!--                android:layout_marginRight="5dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:background="@drawable/alpha_frame"-->
+<!--                android:orientation="horizontal"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/addToInventory_linear_three">-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/frame_shape"
-                    android:paddingStart="5dp"
-                    android:paddingLeft="5dp"
-                    android:paddingEnd="5dp"
-                    android:paddingRight="5dp"
-                    android:text="@string/totalAccCbm"
-                    android:fontFamily="serif"
-                    android:textColor="@color/white"
-                    android:textSize="15sp" />
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:background="@drawable/frame_shape"-->
+<!--                    android:paddingStart="5dp"-->
+<!--                    android:paddingLeft="5dp"-->
+<!--                    android:paddingEnd="5dp"-->
+<!--                    android:paddingRight="5dp"-->
+<!--                    android:text="@string/totalAccCbm"-->
+<!--                    android:fontFamily="serif"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    android:textSize="15sp" />-->
 
-                <TextView
-                    android:id="@+id/Report_total_accept_cbm"                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:gravity="center"
-                    android:inputType="numberDecimal"
-                    android:singleLine="true"
-                    android:textColor="@color/orange"
-                    android:textSize="15sp" />
+<!--                <TextView-->
+<!--                    android:id="@+id/Report_total_accept_cbm"                    android:layout_width="0dp"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:ems="10"-->
+<!--                    android:gravity="center"-->
+<!--                    android:inputType="numberDecimal"-->
+<!--                    android:singleLine="true"-->
+<!--                    android:textColor="@color/orange"-->
+<!--                    android:textSize="15sp" />-->
 
-            </LinearLayout>
+<!--            </LinearLayout>-->
 
 
             <!--            <View-->
@@ -874,7 +626,7 @@
             </LinearLayout>
 
             <Button
-                android:id="@+id/acceptance_report_export"
+                android:id="@+id/pdf"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:layout_marginHorizontal="5dp"
@@ -888,12 +640,13 @@
                 android:textSize="15sp" />
 
             <Button
-                android:id="@+id/acceptance_report_export_Excel"
+                android:id="@+id/excel"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:background="@drawable/frame_shape"
                 android:text="@string/excel"
                 android:fontFamily="serif"
+                android:layout_marginHorizontal="5dp"
                 android:padding="10dp"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
@@ -901,17 +654,17 @@
                 android:textSize="15sp" />
 
             <Button
-                android:id="@+id/p_list_all"
+                android:id="@+id/email"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:layout_marginTop="1dp"
                 android:background="@drawable/frame_shape"
+                android:text="@string/email"
                 android:fontFamily="serif"
-                android:visibility="gone"
-                android:text="@string/p_list"
+                android:padding="10dp"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:layout_weight="0"
+                android:textSize="15sp" />
 
         </LinearLayout>
 
