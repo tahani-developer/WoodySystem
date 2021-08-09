@@ -57,21 +57,21 @@ public class AddNewAdapter extends RecyclerView.Adapter<AddNewAdapter.EditPageVi
                 list.get(i).getLength()*
                 list.get(i).getNoOfRejected())/1000000000;
 
-        rejCbm=Double.parseDouble(String.format("%.3f", rejCbm));
-        truckCbm=Double.parseDouble(String.format("%.3f", truckCbm));
+        rejCbm=Double.parseDouble(convertToEnglish(""+rejCbm));
+        truckCbm=Double.parseDouble(convertToEnglish(""+ truckCbm));
 
          acceptCbm=truckCbm-rejCbm;
-        acceptCbm=Double.parseDouble(String.format("%.3f", acceptCbm));
+        acceptCbm=Double.parseDouble(convertToEnglish(""+ acceptCbm));
 
-        list.get(i).setTruckCMB(""+truckCbm);
-        list.get(i).setCbmRej(""+rejCbm);
-        list.get(i).setCbmAccept(""+acceptCbm);
+        list.get(i).setTruckCMB(""+String.format("%.3f", truckCbm));
+        list.get(i).setCbmRej(""+String.format("%.3f", rejCbm));
+        list.get(i).setCbmAccept(""+String.format("%.3f", acceptCbm));
 
    editPage.fillCbmVal(i,truckCbm,rejCbm,acceptCbm);
 
-        holder.truckCbm.setText(""+truckCbm);
-        holder.rejCbm.setText(""+rejCbm);
-        holder.acceptCbm.setText(""+acceptCbm);
+        holder.truckCbm.setText(""+String.format("%.3f", truckCbm));
+        holder.rejCbm.setText(""+String.format("%.3f", rejCbm));
+        holder.acceptCbm.setText(""+String.format("%.3f", acceptCbm));
 
 
 
@@ -129,5 +129,10 @@ public class AddNewAdapter extends RecyclerView.Adapter<AddNewAdapter.EditPageVi
             rejCbm = itemView.findViewById(R.id.editRow_cbmRej);
             acceptCbm = itemView.findViewById(R.id.editRow_cbmAccept);
         }
+    }
+
+    public String convertToEnglish(String value) {
+        String newValue = (((((((((((value + "").replaceAll("١", "1")).replaceAll("٢", "2")).replaceAll("٣", "3")).replaceAll("٤", "4")).replaceAll("٥", "5")).replaceAll("٦", "6")).replaceAll("٧", "7")).replaceAll("٨", "8")).replaceAll("٩", "9")).replaceAll("٠", "0").replaceAll("٫", "."));
+        return newValue;
     }
 }

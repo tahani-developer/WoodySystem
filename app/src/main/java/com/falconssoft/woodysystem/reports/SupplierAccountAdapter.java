@@ -137,8 +137,11 @@ public class SupplierAccountAdapter extends BaseAdapter {
 
        // holder.grade.setText(itemsList.get(i).getGrade());
         double accCubic= 0;
-        accCubic=Double.parseDouble( itemsList.get(i).getTruckCMB())- Double.parseDouble(itemsList.get(i).getCbmRej());
-        accCubic=Double.parseDouble(String.format("%.3f", accCubic));
+        accCubic=Double.parseDouble( convertToEnglish(itemsList.get(i).getTruckCMB()))- Double.parseDouble(convertToEnglish(itemsList.get(i).getCbmRej()));
+
+        double acc=Double.parseDouble(convertToEnglish(""+accCubic));
+        Log.e("Doubleee",""+convertToEnglish(""+acc)+"    "+acc +"   "+ accCubic);
+
          holder.TruckCBM.setText(""+ itemsList.get(i).getCbmAccept());
 
 
@@ -148,22 +151,22 @@ public class SupplierAccountAdapter extends BaseAdapter {
         holder.date_of_acceptance.setText(""+itemsList.get(i).getDate());
         holder.piecesA.setText(""+itemsList.get(i).getNoOfPieces());
         try {
-            holder.prices.setText("" + itemsList.get(i).getPrice());
+            holder.prices.setText("" + String.format("%.3f", itemsList.get(i).getPrice()));
             double debt=0.0;
          //   debt=itemsList.get(i).getPrice()*Double.parseDouble(itemsList.get(i).getTruckCMB());
-            debt=itemsList.get(i).getPrice()*accCubic;
+            debt=itemsList.get(i).getPrice()*acc;
 
-            holder.debt.setText(""+Double.parseDouble(String.format("%.3f", debt)));
+            holder.debt.setText(""+String.format("%.3f", debt));
         }catch (Exception e){
             holder.prices.setText("0.0" );
             holder.debt.setText("0.0");
         }
         try {
-            holder.cash.setText("" + itemsList.get(i).getCash());
+            holder.cash.setText("" + String.format("%.3f", itemsList.get(i).getCash()));
             double cashes=0.0;
            // cashes=itemsList.get(i).getCash()*Double.parseDouble(itemsList.get(i).getTruckCMB());
-             cashes=itemsList.get(i).getCash()*accCubic;
-            holder.cash_.setText(""+Double.parseDouble(String.format("%.3f", cashes)));
+             cashes=itemsList.get(i).getCash()*acc;
+            holder.cash_.setText(""+String.format("%.3f", cashes));
         }catch (Exception e){
             holder.cash_.setText("0.0" );
             holder.cash.setText("0.0");
@@ -637,5 +640,8 @@ showPasswordDialog(i,2);
             throw ex;
         }
     }
-
+    public String convertToEnglish(String value) {
+        String newValue = (((((((((((value + "").replaceAll("١", "1")).replaceAll("٢", "2")).replaceAll("٣", "3")).replaceAll("٤", "4")).replaceAll("٥", "5")).replaceAll("٦", "6")).replaceAll("٧", "7")).replaceAll("٨", "8")).replaceAll("٩", "9")).replaceAll("٠", "0").replaceAll("٫", "."));
+        return newValue;
+    }
 }

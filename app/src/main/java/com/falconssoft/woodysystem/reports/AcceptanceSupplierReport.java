@@ -755,30 +755,30 @@ public class AcceptanceSupplierReport extends AppCompatActivity implements   Vie
         Log.e("fromedit11", "" + dataList.size());
 
                 for (int n = 0; n < dataList.size(); n++) {
-                    netRejectedString += Double.parseDouble(dataList.get(n).getTotalRejectedNo());
+                    netRejectedString += Double.parseDouble(convertToEnglish(dataList.get(n).getTotalRejectedNo()));
                     netBundlesString += dataList.get(n).getNoOfBundles();
                     Log.e("newRawListIII", " vv = " + n + dataList.get(n).getCbmRej());
 
-                    netRejCMB += Double.parseDouble(dataList.get(n).getCbmRej());
-                    netTruckCmb += Double.parseDouble(dataList.get(n).getTruckCMB());
-                    acceptCbm += Double.parseDouble(dataList.get(n).getCbmAccept());
+                    netRejCMB += Double.parseDouble(convertToEnglish(dataList.get(n).getCbmRej()));
+                    netTruckCmb += Double.parseDouble(convertToEnglish(dataList.get(n).getTruckCMB()));
+                    acceptCbm += Double.parseDouble(convertToEnglish(dataList.get(n).getCbmAccept()));
                 }
 
         Log.e("newRawListIII", " gg = " + netRejectedString + "  " + netBundlesString + "  " + netTruckCmb + "   " + netRejCMB + "   " + acceptCbm);
 
-        netRejectedString = Double.parseDouble(String.format("%.3f", netRejectedString));
+        netRejectedString = Double.parseDouble(convertToEnglish(""+netRejectedString));
 
-        netTruckCmb = Double.parseDouble(String.format("%.3f", netTruckCmb));
+        netTruckCmb = Double.parseDouble(convertToEnglish(""+ netTruckCmb));
 
-        netRejCMB = Double.parseDouble(String.format("%.3f", netRejCMB));
+        netRejCMB = Double.parseDouble(convertToEnglish(""+netRejCMB));
 
-        acceptCbm = Double.parseDouble(String.format("%.3f", acceptCbm));
+        acceptCbm = Double.parseDouble(convertToEnglish(""+ acceptCbm));
 
-        totalRejected.setText("" + netRejectedString);
-        totalBundles.setText("" + netBundlesString);
-        totalTruckCbm.setText("" + netTruckCmb);
-        totalRejCbm.setText("" + netRejCMB);
-        totalAcceptCbm.setText("" + acceptCbm);
+        totalRejected.setText("" + convertToEnglish(String.format("%.3f",netRejectedString)));
+        totalBundles.setText("" +convertToEnglish(String.format("%.3f", netBundlesString)));
+        totalTruckCbm.setText("" +convertToEnglish(String.format("%.3f", netTruckCmb)));
+        totalRejCbm.setText("" + convertToEnglish(String.format("%.3f",netRejCMB)));
+        totalAcceptCbm.setText("" + convertToEnglish(String.format("%.3f",acceptCbm)));
 
     }
 
@@ -864,11 +864,11 @@ public class AcceptanceSupplierReport extends AppCompatActivity implements   Vie
                     break;
 
                 case 4: // cubic
-                    if (Double.parseDouble(one.getTruckCMB()) < Double.parseDouble(another.getTruckCMB())) {
+                    if (Double.parseDouble(convertToEnglish(one.getTruckCMB())) < Double.parseDouble(convertToEnglish(another.getTruckCMB()))) {
                         returnVal = -1;
-                    } else if (Double.parseDouble(one.getTruckCMB()) > Double.parseDouble(another.getTruckCMB())) {
+                    } else if (Double.parseDouble(convertToEnglish(one.getTruckCMB())) > Double.parseDouble(convertToEnglish(another.getTruckCMB()))) {
                         returnVal = 1;
-                    } else if (Double.parseDouble(one.getTruckCMB()) == Double.parseDouble(another.getTruckCMB())) {
+                    } else if (Double.parseDouble(convertToEnglish(one.getTruckCMB())) == Double.parseDouble(convertToEnglish(another.getTruckCMB()))) {
                         returnVal = 0;
                     }
                     break;
@@ -885,14 +885,14 @@ public class AcceptanceSupplierReport extends AppCompatActivity implements   Vie
                 case 6: // reject
                     if (Double.parseDouble(one.getTotalRejectedNo()) < Double.parseDouble(another.getTotalRejectedNo())) {
                         returnVal = -1;
-                    } else if (Double.parseDouble(one.getTotalRejectedNo()) > Double.parseDouble(another.getTotalRejectedNo())) {
+                    } else if (Double.parseDouble(convertToEnglish(one.getTotalRejectedNo())) > Double.parseDouble(convertToEnglish(another.getTotalRejectedNo()))) {
                         returnVal = 1;
-                    } else if (Double.parseDouble(one.getTotalRejectedNo()) == Double.parseDouble(another.getTotalRejectedNo())) {
+                    } else if (Double.parseDouble(convertToEnglish(one.getTotalRejectedNo())) == Double.parseDouble(convertToEnglish(another.getTotalRejectedNo()))) {
                         returnVal = 0;
                     }
                     break;
                 case 7: // reject cbm
-                    if (Double.parseDouble(one.getCbmRej()) < Double.parseDouble(another.getCbmRej())) {
+                    if (Double.parseDouble(convertToEnglish(one.getCbmRej())) < Double.parseDouble(convertToEnglish(another.getCbmRej()))) {
                         returnVal = -1;
                     } else if (Double.parseDouble(one.getCbmRej()) > Double.parseDouble(another.getCbmRej())) {
                         returnVal = 1;
@@ -1220,7 +1220,10 @@ public class AcceptanceSupplierReport extends AppCompatActivity implements   Vie
             }
         }
     }
-
+    public String convertToEnglish(String value) {
+        String newValue = (((((((((((value + "").replaceAll("١", "1")).replaceAll("٢", "2")).replaceAll("٣", "3")).replaceAll("٤", "4")).replaceAll("٥", "5")).replaceAll("٦", "6")).replaceAll("٧", "7")).replaceAll("٨", "8")).replaceAll("٩", "9")).replaceAll("٠", "0").replaceAll("٫", "."));
+        return newValue;
+    }
 
 }
 

@@ -1161,9 +1161,9 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                 for (int n = 0; n < editList.size(); n++) {
                     netRejectedString += editList.get(n).getNoOfRejected();
                     netBundlesString += editList.get(n).getNoOfBundles();
-                    netRejCMB += Double.parseDouble(editList.get(n).getCbmRej());
-                    netTruckCmb += Double.parseDouble(editList.get(n).getTruckCMB());
-                    acceptCbm += Double.parseDouble(editList.get(n).getCbmAccept());
+                    netRejCMB += Double.parseDouble(convertToEnglish(editList.get(n).getCbmRej()));
+                    netTruckCmb += Double.parseDouble(convertToEnglish(editList.get(n).getTruckCMB()));
+                    acceptCbm += Double.parseDouble(convertToEnglish(editList.get(n).getCbmAccept()));
                 }
             else if (edieFlag == 10) ;
             else
@@ -1172,36 +1172,36 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     netBundlesString += newRowList.get(n).getNoOfBundles();
                     Log.e("newRawListIII", " vv = " + n + newRowList.get(n).getCbmRej());
 
-                    netRejCMB += Double.parseDouble(newRowList.get(n).getCbmRej());
-                    netTruckCmb += Double.parseDouble(newRowList.get(n).getTruckCMB());
-                    acceptCbm += Double.parseDouble(newRowList.get(n).getCbmAccept());
+                    netRejCMB += Double.parseDouble(convertToEnglish(newRowList.get(n).getCbmRej()));
+                    netTruckCmb += Double.parseDouble(convertToEnglish(newRowList.get(n).getTruckCMB()));
+                    acceptCbm += Double.parseDouble(convertToEnglish(newRowList.get(n).getCbmAccept()));
                 }
         } else {
             for (int n = 0; n < listOfEmail.size(); n++) {
                 netRejectedString += listOfEmail.get(n).getNoOfRejected();
                 netBundlesString += listOfEmail.get(n).getNoOfBundles();
-                netRejCMB += Double.parseDouble(listOfEmail.get(n).getCbmRej());
-                netTruckCmb += Double.parseDouble(listOfEmail.get(n).getTruckCMB());
-                acceptCbm += Double.parseDouble(listOfEmail.get(n).getCbmAccept());
+                netRejCMB += Double.parseDouble(convertToEnglish(listOfEmail.get(n).getCbmRej()));
+                netTruckCmb += Double.parseDouble(convertToEnglish(listOfEmail.get(n).getTruckCMB()));
+                acceptCbm += Double.parseDouble(convertToEnglish(listOfEmail.get(n).getCbmAccept()));
             }
         }
 
         Log.e("newRawListIII", " gg = " + netRejectedString + "  " + netBundlesString + "  " + netTruckCmb + "   " + netRejCMB + "   " + acceptCbm);
 
-        netRejectedString = Double.parseDouble(String.format("%.3f", netRejectedString));
+        netRejectedString = Double.parseDouble(convertToEnglish(""+ netRejectedString));
 
-        netTruckCmb = Double.parseDouble(String.format("%.3f", netTruckCmb));
+        netTruckCmb = Double.parseDouble(convertToEnglish(""+ netTruckCmb));
 
-        netRejCMB = Double.parseDouble(String.format("%.3f", netRejCMB));
+        netRejCMB = Double.parseDouble(convertToEnglish(""+ netRejCMB));
 
-        acceptCbm = Double.parseDouble(String.format("%.3f", acceptCbm));
+        acceptCbm = Double.parseDouble(convertToEnglish(""+ acceptCbm));
 
 
-        totalRejected.setText("" + netRejectedString);
+        totalRejected.setText("" + String.format("%.3f", netRejectedString));
         totalBundles.setText("" + netBundlesString);
-        totalTruckCbm.setText("" + netTruckCmb);
-        totalRejCbm.setText("" + netRejCMB);
-        totalAcceptCbm.setText("" + acceptCbm);
+        totalTruckCbm.setText("" + String.format("%.3f", netTruckCmb));
+        totalRejCbm.setText("" + String.format("%.3f", netRejCMB));
+        totalAcceptCbm.setText("" + String.format("%.3f", acceptCbm));
 
     }
 
@@ -3365,7 +3365,7 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     case 6:
                         cal = (Double.parseDouble(thicknessText) * Double.parseDouble(widthText) * Double.parseDouble(lengthText) *
                                 Double.parseDouble(noOfPiecesText) * Double.parseDouble(noBundleText)) / 1000000000;
-                        cal = Double.parseDouble(String.format("%.3f", cal));
+                        cal = Double.parseDouble(convertToEnglish(String.format("%.3f", cal)));
                         textView.setText("" + cal);
                         tableRow.addView(textView);
                         break;
@@ -3378,13 +3378,13 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
                     case 8:
                         calRej = (Double.parseDouble(thicknessText) * Double.parseDouble(widthText) * Double.parseDouble(lengthText) *
                                 Double.parseDouble(noOfRejectedText)) / 1000000000;
-                        calRej = Double.parseDouble(String.format("%.3f", calRej));
+                        calRej = Double.parseDouble(convertToEnglish(String.format("%.3f", calRej)));
                         textView.setText("" + calRej);
                         tableRow.addView(textView);
                         break;
                     case 9:
                         double acceptCbm = (cal - calRej);
-                        acceptCbm = Double.parseDouble(String.format("%.3f", acceptCbm));
+                        acceptCbm = Double.parseDouble(convertToEnglish(String.format("%.3f", acceptCbm)));
                         textView.setText("" + acceptCbm);
                         tableRow.addView(textView);
                         break;
@@ -4485,6 +4485,11 @@ public class AddNewRaw extends AppCompatActivity implements View.OnClickListener
         }
     }
 
+
+    public String convertToEnglish(String value) {
+        String newValue = (((((((((((value + "").replaceAll("١", "1")).replaceAll("٢", "2")).replaceAll("٣", "3")).replaceAll("٤", "4")).replaceAll("٥", "5")).replaceAll("٦", "6")).replaceAll("٧", "7")).replaceAll("٨", "8")).replaceAll("٩", "9")).replaceAll("٠", "0").replaceAll("٫", "."));
+        return newValue;
+    }
 
 }
 

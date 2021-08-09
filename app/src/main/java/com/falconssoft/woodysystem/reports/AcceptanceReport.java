@@ -1147,11 +1147,11 @@ TextView truckOrder,supplierOrder,ttnNoOrder,bundleNoOrder,piecesRejOrder,truckC
                     double acc=0;
 
                     acc=(master.get(0).getTotalCubic()-master.get(0).getTotalCubicRej());
-                    acc=Double.parseDouble(String.format("%.3f", acc));
+                    acc=Double.parseDouble(convertToEnglish(""+ acc));
                     Log.e("totalCubic", master.get(0).getTotalCubic() +"  - " + master.get(0).getTotalCubicRej()+"  "+acc);
 
 
-                totalAcceptCbm.setText(""+acc);
+                totalAcceptCbm.setText(""+convertToEnglish(String.format("%.3f", acc)));
                 } else {
                     totalCubic.setText("0.000");
                     totalCubicReg.setText("0.000");
@@ -1455,6 +1455,9 @@ TextView truckOrder,supplierOrder,ttnNoOrder,bundleNoOrder,piecesRejOrder,truckC
             return 0;
         }
     }
-
+    public String convertToEnglish(String value) {
+        String newValue = (((((((((((value + "").replaceAll("١", "1")).replaceAll("٢", "2")).replaceAll("٣", "3")).replaceAll("٤", "4")).replaceAll("٥", "5")).replaceAll("٦", "6")).replaceAll("٧", "7")).replaceAll("٨", "8")).replaceAll("٩", "9")).replaceAll("٠", "0").replaceAll("٫", "."));
+        return newValue;
+    }
 }
 
