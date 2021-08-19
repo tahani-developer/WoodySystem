@@ -9,6 +9,8 @@ public class SupplierInfo {
 
     private String supplierNo;
     private String supplierName;
+    private String startCash;
+    private String startBank;
 
     public SupplierInfo() {
     }
@@ -32,6 +34,22 @@ public class SupplierInfo {
 
     public void setSupplierName(String supplierName) {
         this.supplierName = supplierName;
+    }
+
+    public String getStartCash() {
+        return startCash;
+    }
+
+    public void setStartCash(String startCash) {
+        this.startCash = startCash;
+    }
+
+    public String getStartBank() {
+        return startBank;
+    }
+
+    public void setStartBank(String startBank) {
+        this.startBank = startBank;
     }
 
     public JSONObject getJSONObject() {
