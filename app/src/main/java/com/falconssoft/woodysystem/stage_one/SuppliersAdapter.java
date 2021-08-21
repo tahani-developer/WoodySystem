@@ -72,7 +72,7 @@ public class SuppliersAdapter extends RecyclerView.Adapter<SuppliersAdapter.Supp
                             , supplierInfoList.get(i).getSupplierNo());
                 else if(accountSupplier !=null)
                     accountSupplier.getSearchSupplierInfo(supplierInfoList.get(i).getSupplierName()
-                            , supplierInfoList.get(i).getSupplierNo());
+                            , supplierInfoList.get(i).getSupplierNo(),supplierInfoList.get(i));
                 else if(supplierAccountReportPayment !=null)
                     supplierAccountReportPayment.getSearchSupplierInfo(supplierInfoList.get(i).getSupplierName()
                             , supplierInfoList.get(i).getSupplierNo());

@@ -78,7 +78,8 @@ public class AccountSupplier extends AppCompatActivity implements View.OnClickLi
     SupplierAccountAdapter adapter;
     private Settings generalSettings;
     TextView count, supplier, total;
-    public static String supplierName = "Fortune";
+    public static String supplierName = "";
+    public static String supplierNo = "";
     private RecyclerView recyclerView;
     private List<SupplierInfo> suppliers = new ArrayList<>();
     private List<SupplierInfo> arraylist = new ArrayList<>();
@@ -89,7 +90,8 @@ public class AccountSupplier extends AppCompatActivity implements View.OnClickLi
     String myFormat;
     private SimpleDateFormat sdf;
     TextView totalAcce,balances,totalBanks,totalCashs;
-
+    ProgressDialog progressDialogTack;
+    TextView startBank,startCash,remainBank,remainCash,PaymentCash,PaymentBank;
     Dialog passwordDialog;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -115,14 +117,22 @@ public class AccountSupplier extends AppCompatActivity implements View.OnClickLi
         pdfReport=findViewById(R.id.pdf_report);
         totalCashs= findViewById(R.id.totalCash);
         exportExcel=findViewById(R.id.export_Excel);
+        startCash=findViewById(R.id.startCash);
+        startBank=findViewById(R.id.startBank);
+        remainCash=findViewById(R.id.remainCash);
+        remainBank=findViewById(R.id.remainBank);
+        PaymentCash=findViewById(R.id.PaymentCash);
+        PaymentBank=findViewById(R.id.PaymentBank);
         email=findViewById(R.id.email);
         myCalendar = Calendar.getInstance();
         pdfReport.setOnClickListener(this);
         exportExcel.setOnClickListener(this);
         email.setOnClickListener(this);
+        startBank.setOnClickListener(this);
+        startCash.setOnClickListener(this);
         myFormat = "dd/MM/yyyy";
         sdf = new SimpleDateFormat(myFormat, Locale.US);
-        supplier.setText("Fortune");
+        supplier.setText("");
         new JSONTask1().execute();
         new JSONTask3().execute();
 //        adapter = new SupplierAccountAdapter(AccountSupplier.this, newRowInfoList);
@@ -163,39 +173,46 @@ public class AccountSupplier extends AppCompatActivity implements View.OnClickLi
                 SupplierDialog();
                 break;
             case R.id.payment:
-                showPasswordDialog(2,null);
+                showPasswordDialog(2, null);
 
                 break;
             case R.id.pdf_report:
-                if(newRowInfoList.size()!=0) {
+                if (newRowInfoList.size() != 0) {
                     showPdf();
-                }else {
+                } else {
                     Toast.makeText(this, "no data For create Pdf", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.export_Excel:
-                showPasswordDialog(1,null);
+                showPasswordDialog(1, null);
 
 
                 break;
             case R.id.email:
-                if(newRowInfoList.size()!=0) {
+                if (newRowInfoList.size() != 0) {
 
                     try {
                         File folder = new File(Environment.getExternalStorageDirectory().getPath() + "/SendEmailWood");
                         deleteTempFolder(folder.getPath());
-                    }catch (Exception e){
-                        Log.e("Delete Folder ","folder");
+                    } catch (Exception e) {
+                        Log.e("Delete Folder ", "folder");
                     }
 
 
                     ExportToPDF obj = new ExportToPDF(AccountSupplier.this);
-                    obj.exportSupplierAccountSupplierEmail(newRowInfoList,supplierName);
+                    obj.exportSupplierAccountSupplierEmail(newRowInfoList, supplierName);
 
-                    sendEmail("","");
-                }else {
+                    sendEmail("", "");
+                } else {
                     Toast.makeText(this, "no data For create email", Toast.LENGTH_SHORT).show();
                 }
+                break;
+
+            case R.id.startBank:
+                showPasswordDialog(4, null);
+                break;
+            case R.id.startCash:
+                showPasswordDialog(5, null);
                 break;
         }
     }
@@ -455,16 +472,92 @@ public class AccountSupplier extends AppCompatActivity implements View.OnClickLi
         recyclerView.setAdapter(suppliersAdapter);
     }
 
-    public void getSearchSupplierInfo(String supplierNameLocal, String supplierNoLocal) {
+    public void getSearchSupplierInfo(String supplierNameLocal, String supplierNoLocal,SupplierInfo supplierInfo) {
         supplierName = supplierNameLocal;
+        supplierNo=supplierNoLocal;
         supplier.setText(supplierName);
         supplier.setError(null);
         searchDialog.dismiss();
+        startBank.setText(""+supplierInfo.getStartBank());
+        startCash.setText(""+supplierInfo.getStartCash());
+        Log.e("Bank121","    "+supplierInfo.getStartBank()+"      "+supplierInfo.getStartCash());
+        new JSONTaskGetRemainingBank().execute();
         new JSONTask3().execute();
 
+
+    }
+    void BankDialog(){
+        final Dialog dialog = new Dialog(AccountSupplier.this, R.style.Theme_Dialog);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.bank_editing_dialog);
+
+        Button doneButton=dialog.findViewById(R.id.doneButton);
+        EditText priceText=dialog.findViewById(R.id.new_price);
+
+            priceText.setText("" + startBank.getText().toString());
+
+        doneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(!priceText.getText().toString().equals("")&&!priceText.getText().toString().equals(".")) {
+                    startBank.setText(priceText.getText().toString());
+
+                    new JSONTaskStartCashBank().execute();
+                    dialog.dismiss();
+                }else{
+                    priceText.setError("Required !");
+                }
+
+
+            }
+        });
+
+        dialog.show();
+    }
+    void CashDialog(){
+        final Dialog dialog = new Dialog(AccountSupplier.this, R.style.Theme_Dialog);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.cash_editing_dialog);
+
+        Button doneButton=dialog.findViewById(R.id.doneButton);
+        EditText priceText=dialog.findViewById(R.id.new_price);
+
+
+
+            priceText.setText("" + startCash.getText().toString());
+
+        doneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(!priceText.getText().toString().equals("")&&!priceText.getText().toString().equals(".")) {
+                    startCash.setText(priceText.getText().toString());
+                    new JSONTaskStartCashBank().execute();
+                    dialog.dismiss();
+                }else{
+                    priceText.setError("Required !");
+                }
+
+
+            }
+        });
+
+        dialog.show();
     }
 
+    public  void   totalPayment(){
 
+        double bank= Double.parseDouble(convertToEnglish(PaymentBank.getText().toString()));
+        double sumation= (Double.parseDouble(convertToEnglish(startBank.getText().toString()))-bank);
+        remainBank.setText(""+convertToEnglish(""+sumation));
+        double cash= Double.parseDouble(convertToEnglish(PaymentCash.getText().toString()));
+        double sumationC= (Double.parseDouble(convertToEnglish(startCash.getText().toString()))-cash);
+        remainCash.setText(""+convertToEnglish(""+sumationC));
+
+    }
     public void sendEmail(String toEmil, String subject) {
 
 
@@ -565,6 +658,12 @@ public class AccountSupplier extends AppCompatActivity implements View.OnClickLi
                      case 3:
                          ExportToExcel.getInstance().createExcelFile(AccountSupplier.this, "Acceptance_supplier_Report_2.xls", 10, null, Collections.singletonList(newRowInfo));
                          break;
+                     case 4:
+                         BankDialog();
+                         break;
+                     case 5:
+                         CashDialog();
+                         break;
                  }
                 } else
                     Toast.makeText(AccountSupplier.this, "Password is not correct!", Toast.LENGTH_SHORT).show();
@@ -610,7 +709,8 @@ public class AccountSupplier extends AppCompatActivity implements View.OnClickLi
                 Log.e("finalJson*********", finalJson);
 
                 JSONObject parentObject = new JSONObject(finalJson);
-
+                suppliers.clear();
+                arraylist.clear();
                 try {
                     JSONArray parentArrayOrders = parentObject.getJSONArray("SUPPLIERS");
 
@@ -620,7 +720,10 @@ public class AccountSupplier extends AppCompatActivity implements View.OnClickLi
                         SupplierInfo supplier = new SupplierInfo();
                         supplier.setSupplierNo(innerObject.getString("SUPPLIER_NO"));
                         supplier.setSupplierName(innerObject.getString("SUPPLIER_NAME"));
+                        supplier.setStartCash(innerObject.getString("START_CASH"));
+                        supplier.setStartBank(innerObject.getString("START_BANK"));
 
+                        Log.e("Bank122","   "+supplier.getStartCash()+"    "+supplier.getStartBank());
                         suppliers.add(supplier);
                         arraylist.add(supplier);
 
@@ -679,11 +782,12 @@ public class AccountSupplier extends AppCompatActivity implements View.OnClickLi
 
         @Override
         protected void onPreExecute() {
-//            progressDialogTack = new ProgressDialog(EditPage.this, R.style.MyAlertDialogStyle);
-//            progressDialogTack.setMessage("Please Waiting...");
-//            progressDialogTack.setCanceledOnTouchOutside(false);
-
             super.onPreExecute();
+            progressDialogTack = new ProgressDialog(AccountSupplier.this, R.style.MyAlertDialogStyle);
+            progressDialogTack.setMessage("Please Waiting...");
+            progressDialogTack.setCanceledOnTouchOutside(false);
+            progressDialogTack.show();
+
 
         }
 
@@ -748,6 +852,7 @@ public class AccountSupplier extends AppCompatActivity implements View.OnClickLi
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+            progressDialogTack.dismiss();
             if (s == null)
                 Log.e("tag", "JSONTask3/Failed to export data Please check internet connection");
             else if (!s.contains("noBundleFound")) {
@@ -773,6 +878,122 @@ public class AccountSupplier extends AppCompatActivity implements View.OnClickLi
                 adapter = new SupplierAccountAdapter(AccountSupplier.this, newRowInfoList);
                 list.setAdapter(adapter);
                 totalCalculate();
+
+            }
+
+        }
+    }
+    // **************************** GET DATA Payment  ****************************
+    private class JSONTaskGetRemainingBank extends AsyncTask<String, String, String> {
+
+        @Override
+        protected void onPreExecute() {
+//            progressDialogTack = new ProgressDialog(EditPage.this, R.style.MyAlertDialogStyle);
+//            progressDialogTack.setMessage("Please Waiting...");
+//            progressDialogTack.setCanceledOnTouchOutside(false);
+
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            URLConnection connection = null;
+            BufferedReader reader = null;
+            String finalJson = null;
+            try {
+//                http://10.0.0.22/woody/import.php?FLAG=2
+                URL url = new URL("http://" + generalSettings.getIpAddress() + "/import.php?FLAG=24&SUPLIER=" + supplierName.trim().replace(" ", "%20"));
+
+                URLConnection conn = url.openConnection();
+                conn.setDoOutput(true);
+
+                reader = new BufferedReader(new
+                        InputStreamReader(conn.getInputStream()));
+
+                StringBuilder sb = new StringBuilder();
+                String line = null;
+
+                // Read Server Response
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                finalJson = sb.toString();
+                Log.e("JSONTask3", url + " : " + finalJson);
+
+//                newRowInfoList.clear();
+//                Gson gson = new Gson();
+//                NewRowInfo list = gson.fromJson(finalJson, NewRowInfo.class);
+//                if (list != null)
+//                    newRowInfoList.addAll(list.getDetailsList());
+//                else
+//                    newRowInfoList = null;
+
+            } catch (MalformedURLException e) {
+                Log.e("Customer", "********ex1");
+                e.printStackTrace();
+            } catch (IOException e) {
+                Log.e("Customer", e.getMessage().toString());
+                e.printStackTrace();
+
+            } finally {
+                Log.e("Customer", "********finally");
+                if (connection != null) {
+                    Log.e("Customer", "********ex4");
+                    // connection.disconnect();
+                }
+                try {
+                    if (reader != null) {
+                        reader.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return finalJson;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (s == null)
+                Log.e("tag", "JSONTask3/Failed to export data Please check internet connection");
+            else if (!s.contains("noPaymentFound")) {
+                JSONObject parentObject = null;
+                try {
+                    parentObject = new JSONObject(s);
+
+                    JSONArray parentArrayOrders = parentObject.getJSONArray("Payment_LIST");
+
+                    for (int i = 0; i < parentArrayOrders.length(); i++) {
+                        JSONObject innerObject = parentArrayOrders.getJSONObject(i);
+
+                        if(innerObject.getString("PAYMENT_TYPE").equals("1")){//bank
+                            double bank= innerObject.getDouble("SUM");
+                            PaymentBank.setText(""+bank);
+                            double sumation= (Double.parseDouble(convertToEnglish(startBank.getText().toString()))-bank);
+                            remainBank.setText(""+sumation);
+
+                        }else  if(innerObject.getString("PAYMENT_TYPE").equals("0")){//cash
+                            double cash= innerObject.getDouble("SUM");
+                            double sumation= (Double.parseDouble(convertToEnglish(startCash.getText().toString()))-cash);
+                            PaymentCash.setText(""+cash);
+
+                            remainCash.setText(""+sumation);
+                        }
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                remainCash.setText("0.0");
+                remainBank.setText("0.0");
+                PaymentCash.setText("0.0");
+                PaymentBank.setText("0.0");
+                Toast.makeText(AccountSupplier.this, "no payment", Toast.LENGTH_SHORT).show();
+
             }
 
         }
@@ -876,6 +1097,88 @@ public class AccountSupplier extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+    // *************************************** editing ***************************************
+    private class JSONTaskStartCashBank extends AsyncTask<String, String, String> {
+
+
+
+        @Override
+        protected void onPreExecute() {
+            // progressDialog.show();
+            super.onPreExecute();
+        }
+
+        public JSONTaskStartCashBank() {
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+//https://5.189.130.98/WOODY/export.php
+
+                String JsonResponse = null;
+                HttpClient client = new DefaultHttpClient();
+                HttpPost request = new HttpPost();
+                request.setURI(new URI("http://" + generalSettings.getIpAddress() + "/export.php"));//import 10.0.0.214
+
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+                nameValuePairs.add(new BasicNameValuePair("UPDATE_SUPPLIER_CASH_BANK", "1"));// list
+
+                nameValuePairs.add(new BasicNameValuePair("START_CASH", "" + startCash.getText().toString()));//oldTruck
+                nameValuePairs.add(new BasicNameValuePair("START_BANK", startBank.getText().toString()));//oldTruck
+                nameValuePairs.add(new BasicNameValuePair("SUPPLIER_NO",supplierNo ));// list
+                nameValuePairs.add(new BasicNameValuePair("SUPPLIER_NAME", supplierName)); // json object
+
+
+                request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                HttpResponse response = client.execute(request);
+
+                BufferedReader in = new BufferedReader(new
+                        InputStreamReader(response.getEntity().getContent()));
+
+                StringBuffer sb = new StringBuffer("");
+                String line = "";
+
+                while ((line = in.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                in.close();
+
+                JsonResponse = sb.toString();
+                Log.e("tag/", "updatePrice" + JsonResponse);
+
+                return JsonResponse;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            Log.e("tag_update_start", s);
+            //progressDialog.dismiss();
+            if (s != null) {
+                if (s.contains("UPDATE_SUCCESS")) {
+                    totalPayment();
+                    new JSONTask1().execute();
+
+
+                    Log.e("tag", "UPDATE_PRICE_SUCCESS Success");
+                } else {
+                    Log.e("tag", "****Failed to export data");
+                }
+            } else {
+                Log.e("tag", "****Failed to export data Please check internet connection");
+                Toast.makeText(AccountSupplier.this, "Failed to export data Please check internet connection", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
 
     // *************************************** Add payment ***************************************
     private class JSONTaskAddPayment extends AsyncTask<String, String, String> {
@@ -970,6 +1273,7 @@ public class AccountSupplier extends AppCompatActivity implements View.OnClickLi
                     //showSnackbar("Delete Successfully", true);
                     adapter.notifyDataSetChanged();
                     Log.e("tag", "PAYMENT_SUPPLIER_ACCOUNT_SUCCESS Success");
+                    new JSONTaskGetRemainingBank().execute();
                     dialog.dismiss();
                 } else {
 
