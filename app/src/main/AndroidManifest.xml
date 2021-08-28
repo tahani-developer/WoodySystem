@@ -126,6 +126,10 @@
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
+            android:name=".reports.SupplierAccountReport"
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
             android:name=".stage_one.AccountSupplier"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="stateAlwaysHidden" />

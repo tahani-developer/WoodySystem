@@ -2,58 +2,36 @@ package com.falconssoft.woodysystem.reports;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.support.design.widget.TextInputEditText;
 import android.text.TextUtils;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.falconssoft.woodysystem.DatabaseHandler;
-import com.falconssoft.woodysystem.ExportToExcel;
-import com.falconssoft.woodysystem.ExportToPDF;
 import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.models.NewRowInfo;
 import com.falconssoft.woodysystem.models.PaymentAccountSupplier;
-import com.falconssoft.woodysystem.models.Settings;
-import com.google.gson.Gson;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.provider.CalendarContract.CalendarCache.URI;
-import static com.falconssoft.woodysystem.reports.AcceptanceReport.truckNoBeforeUpdate2;
+public class AccountSupplierReportAdapterDetail extends BaseAdapter {
 
-public class AccountSupplierReportAdapter extends BaseAdapter {
-
-    private SupplierAccountReportPayment context;
+    private SupplierAccountReport context;
     //    private List<BundleInfo> mOriginalValues;
     private static List<PaymentAccountSupplier> itemsList;
 //    private static List<BundleInfo> selectedBundles ;
@@ -62,12 +40,12 @@ public class AccountSupplierReportAdapter extends BaseAdapter {
     ProgressDialog proTTn;
     NewRowInfo newRowInfoPic=null;
 
-    public AccountSupplierReportAdapter(SupplierAccountReportPayment context, List<PaymentAccountSupplier> itemsList) {
+    public AccountSupplierReportAdapterDetail(SupplierAccountReport context, List<PaymentAccountSupplier> itemsList) {
         this.context = context;
         this.itemsList = itemsList;
     }
 
-    public AccountSupplierReportAdapter() {
+    public AccountSupplierReportAdapterDetail() {
 
     }
 
@@ -100,7 +78,7 @@ public class AccountSupplierReportAdapter extends BaseAdapter {
     public View getView(final int i, View view, ViewGroup viewGroup) {
 
         final ViewHolder holder = new ViewHolder();
-        view = View.inflate(context, R.layout.account_supplier_report, null);
+        view = View.inflate(context, R.layout.supplier_report_detail_raw, null);
 
 //        holder.pic = (ImageView) view.findViewById(R.id.pic);
 //        holder.netBundle = (TextView) view.findViewById(R.id.net);
@@ -113,23 +91,17 @@ public class AccountSupplierReportAdapter extends BaseAdapter {
         holder.text7 = view.findViewById(R.id.text7);
         holder.text8 = view.findViewById(R.id.text8);
         holder.text9 = view.findViewById(R.id.text9);
-        holder.text10 = view.findViewById(R.id.text10);
+        //holder.text10 = view.findViewById(R.id.text10);
 
-        holder.text1.setText(itemsList.get(i).getDATE_OF_PAYMENT());
-        holder.text2 .setText(itemsList.get(i).getSUPLIER());
-        holder.text3.setText(itemsList.get(i).getACCEPTANCE_DATE());
-        holder.text4 .setText(itemsList.get(i).getVALUE_OF_PAYMENT());
-        holder.text5 .setText(itemsList.get(i).getPAYER());
-        holder.text6 .setText(itemsList.get(i).getINVOICE_NO());
-        holder.text7.setText(itemsList.get(i).getSTART_BALANCE());
-        holder.text8 .setText(itemsList.get(i).getTOTAL_BANK());
-        holder.text9 .setText(itemsList.get(i).getTOTAL_CASH());
-
-        if(itemsList.get(i).getPAYMENT_TYPE().equals("1")){
-            holder.text10 .setText("Bank");
-        }else {
-            holder.text10 .setText("Cash");
-        }
+        holder.text1.setText(itemsList.get(i).getSUPLIER());
+        holder.text2 .setText(itemsList.get(i).getSTART_BANK());
+        holder.text3.setText(itemsList.get(i).getSTART_CASH());
+        holder.text4 .setText(itemsList.get(i).getDEBT());
+        holder.text5 .setText(itemsList.get(i).getCASHES());
+        holder.text6 .setText(itemsList.get(i).getBANKPAYMENT());
+        holder.text7.setText(itemsList.get(i).getCASHPAYMENT());
+        holder.text8 .setText(itemsList.get(i).getREMININGBANK());
+        holder.text9 .setText(itemsList.get(i).getREMININGCASH());
 
 
         holder.pdf = view.findViewById(R.id.pdf);

@@ -406,7 +406,7 @@ TextView truckOrder,supplierOrder,ttnNoOrder,bundleNoOrder,piecesRejOrder,truckC
 
                 recyclerView = searchDialog.findViewById(R.id.search_supplier_recyclerView);
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
-                suppliersAdapter = new SuppliersAdapter(null, suppliers, null, AcceptanceReport.this,0,null,null,null);
+                suppliersAdapter = new SuppliersAdapter(null, suppliers, null, AcceptanceReport.this,0,null,null,null,null);
                 recyclerView.setAdapter(suppliersAdapter);
 
                 searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -499,7 +499,7 @@ TextView truckOrder,supplierOrder,ttnNoOrder,bundleNoOrder,piecesRejOrder,truckC
             }
         }
         total.setText("" + arraylist.size());
-        suppliersAdapter = new SuppliersAdapter(null, arraylist, null, AcceptanceReport.this,0,null,null,null);
+        suppliersAdapter = new SuppliersAdapter(null, arraylist, null, AcceptanceReport.this,0,null,null,null,null);
         recyclerView.setAdapter(suppliersAdapter);
     }
 

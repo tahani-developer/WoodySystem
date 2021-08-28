@@ -2,6 +2,7 @@ package com.falconssoft.woodysystem.reports;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -30,7 +31,6 @@ import com.falconssoft.woodysystem.DatabaseHandler;
 import com.falconssoft.woodysystem.ExportToExcel;
 import com.falconssoft.woodysystem.ExportToPDF;
 import com.falconssoft.woodysystem.R;
-import com.falconssoft.woodysystem.models.NewRowInfo;
 import com.falconssoft.woodysystem.models.PaymentAccountSupplier;
 import com.falconssoft.woodysystem.models.Settings;
 import com.falconssoft.woodysystem.models.SupplierInfo;
@@ -56,10 +56,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-public class SupplierAccountReportPayment extends AppCompatActivity implements View.OnClickListener {
+public class SupplierAccountReport extends AppCompatActivity implements View.OnClickListener {
     private Settings generalSettings;
     List<PaymentAccountSupplier> paymentAccountSuppliersList;
-    AccountSupplierReportAdapter adapter;
+    AccountSupplierReportAdapterDetail adapter;
     TextView count,fromDate,toDate,total,supplier;
     ListView list;
     Button pdf,excel,email;
@@ -69,7 +69,7 @@ public class SupplierAccountReportPayment extends AppCompatActivity implements V
     int openLinkFlag=0;
     private SuppliersAdapter suppliersAdapter;
     private List<SupplierInfo> suppliers = new ArrayList<>();
-    public static String supplierName = "All";
+    public  String supplierName = "All";
     private List<SupplierInfo> arraylist = new ArrayList<>();
     private Dialog searchDialog;
     private RecyclerView recyclerView;
@@ -77,10 +77,11 @@ public class SupplierAccountReportPayment extends AppCompatActivity implements V
     String payTypes="All";
     private ArrayAdapter<String> locationAdapter;
     private List<String> locationList;
+    ProgressDialog progressDialogTack;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.payment_supplier_account);
+        setContentView(R.layout.report_supplier_account_details);
         initializatin();
 
     }
@@ -102,18 +103,18 @@ public class SupplierAccountReportPayment extends AppCompatActivity implements V
         locationList.add("Bank");
         locationList.add("Cash");
         locationList.add(0, "All");
-        payType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                payTypes = parent.getSelectedItem().toString();
-                new JSONTask3().execute();
-//                filters();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
+//        payType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                payTypes = parent.getSelectedItem().toString();
+//                new JSONTask3().execute();
+////                filters();
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//            }
+//        });
 
         locationAdapter = new ArrayAdapter<String>(this, R.layout.spinner_layout, locationList);
         locationAdapter.setDropDownViewResource(R.layout.spinner_drop_down_layout);
@@ -148,7 +149,7 @@ public class SupplierAccountReportPayment extends AppCompatActivity implements V
 
         recyclerView = searchDialog.findViewById(R.id.search_supplier_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        suppliersAdapter = new SuppliersAdapter(null, suppliers, null, null,0,null,null,SupplierAccountReportPayment.this,null);
+       suppliersAdapter = new SuppliersAdapter(null, suppliers, null, null,0,null,null, null,SupplierAccountReport.this);
         recyclerView.setAdapter(suppliersAdapter);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -175,26 +176,26 @@ public class SupplierAccountReportPayment extends AppCompatActivity implements V
 
 
     void showPdf(){
-        ExportToPDF obj = new ExportToPDF(SupplierAccountReportPayment.this);
-        obj.exportSupplierAccountPayment(paymentAccountSuppliersList);
+        ExportToPDF obj = new ExportToPDF(SupplierAccountReport.this);
+        obj.exportSupplierAccountDetails(paymentAccountSuppliersList);
 
 
     }
 
     public void showPdfExport(PaymentAccountSupplier newRowInfo){
-        ExportToPDF obj = new ExportToPDF(SupplierAccountReportPayment.this);
-        obj.exportSupplierAccountPayment(Collections.singletonList(newRowInfo));
+        ExportToPDF obj = new ExportToPDF(SupplierAccountReport.this);
+        obj.exportSupplierAccountDetails(Collections.singletonList(newRowInfo));
 
 
     }
     public void showExcelExport(PaymentAccountSupplier newRowInfo){
 
-        ExportToExcel.getInstance().createExcelFile(SupplierAccountReportPayment.this, "Payment_Account_supplier_Report_2.xls", 11, null, Collections.singletonList(newRowInfo));
+        ExportToExcel.getInstance().createExcelFile(SupplierAccountReport.this, "supplier_Account_detail_Report_2.xls", 12, null, Collections.singletonList(newRowInfo));
 
     }
     void showExcel(){
 
-        ExportToExcel.getInstance().createExcelFile(SupplierAccountReportPayment.this, "Payment_Account_supplier_Report_2.xls", 11, null, paymentAccountSuppliersList);
+        ExportToExcel.getInstance().createExcelFile(SupplierAccountReport.this, "supplier_Account_detail_Report_2.xls", 12, null, paymentAccountSuppliersList);
 
     }
     public void deleteTempFolder(String dir) {
@@ -236,8 +237,8 @@ public class SupplierAccountReportPayment extends AppCompatActivity implements V
                     }
 
 
-                    ExportToPDF obj = new ExportToPDF(SupplierAccountReportPayment.this);
-                    obj.exportSupplierAccountPaymentEmail(paymentAccountSuppliersList);
+                    ExportToPDF obj = new ExportToPDF(SupplierAccountReport.this);
+                    obj.exportSupplierAccountDetailsEmail(paymentAccountSuppliersList);
 
                     sendEmail("","");
                 }else {
@@ -260,23 +261,27 @@ public class SupplierAccountReportPayment extends AppCompatActivity implements V
     }
 
     public void sendEmail(PaymentAccountSupplier paymentAccountSupplier){
+//        if(paymentAccountSuppliersList.size()!=0) {
 
-        try {
-            File folder = new File(Environment.getExternalStorageDirectory().getPath() + "/SendEmailWood");
-            deleteTempFolder(folder.getPath());
-        }catch (Exception e){
-            Log.e("Delete Folder ","folder");
-        }
+            try {
+                File folder = new File(Environment.getExternalStorageDirectory().getPath() + "/SendEmailWood");
+                deleteTempFolder(folder.getPath());
+            }catch (Exception e){
+                Log.e("Delete Folder ","folder");
+            }
 
 
-        ExportToPDF obj = new ExportToPDF(SupplierAccountReportPayment.this);
-        obj.exportSupplierAccountPaymentEmail(Collections.singletonList(paymentAccountSupplier));
+            ExportToPDF obj = new ExportToPDF(SupplierAccountReport.this);
+            obj.exportSupplierAccountDetailsEmail(Collections.singletonList(paymentAccountSupplier));
 
-        sendEmail("","");
+            sendEmail("","");
+//        }else {
+//            Toast.makeText(this, "no data For create email", Toast.LENGTH_SHORT).show();
+//        }
     }
 
     public void date (int flag){
-        new DatePickerDialog(SupplierAccountReportPayment.this, openDatePickerDialog(flag), myCalendar
+        new DatePickerDialog(SupplierAccountReport.this, openDatePickerDialog(flag), myCalendar
                 .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                 myCalendar.get(Calendar.DAY_OF_MONTH)).show();
     }
@@ -326,7 +331,7 @@ public class SupplierAccountReportPayment extends AppCompatActivity implements V
             }
         }
         total.setText("" + arraylist.size());
-        suppliersAdapter = new SuppliersAdapter(null, arraylist, null, null,0,null,null,SupplierAccountReportPayment.this,null);
+     //   suppliersAdapter = new SuppliersAdapter(null, arraylist, null, null,0,null,null, SupplierAccountReport.this);
         recyclerView.setAdapter(suppliersAdapter);
     }
     public void sendEmail(String toEmil, String subject) {
@@ -388,7 +393,7 @@ public class SupplierAccountReportPayment extends AppCompatActivity implements V
             }
         }catch (Exception e){
             Log.e("drk;d","dfrtr"+e.toString());
-            Toast.makeText(SupplierAccountReportPayment.this, "Storage Permission"+e.toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(SupplierAccountReport.this, "Storage Permission"+e.toString(), Toast.LENGTH_SHORT).show();
         }
 
         //  deleteTempFolder(pdfFile.getPath());
@@ -495,7 +500,7 @@ public class SupplierAccountReportPayment extends AppCompatActivity implements V
              //   adapter.notifyDataSetChanged();
 
             } else {
-                Toast.makeText(SupplierAccountReportPayment.this, "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SupplierAccountReport.this, "Not able to fetch data from server, please check url.", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -505,9 +510,10 @@ public class SupplierAccountReportPayment extends AppCompatActivity implements V
 
         @Override
         protected void onPreExecute() {
-//            progressDialogTack = new ProgressDialog(EditPage.this, R.style.MyAlertDialogStyle);
-//            progressDialogTack.setMessage("Please Waiting...");
-//            progressDialogTack.setCanceledOnTouchOutside(false);
+            progressDialogTack = new ProgressDialog(SupplierAccountReport.this, R.style.MyAlertDialogStyle);
+            progressDialogTack.setMessage("Please Waiting...");
+            progressDialogTack.setCanceledOnTouchOutside(false);
+            progressDialogTack.show();
 
             super.onPreExecute();
 
@@ -520,18 +526,8 @@ public class SupplierAccountReportPayment extends AppCompatActivity implements V
             String finalJson = null;
             try {// + supplierName.trim().replace(" ", "%20")
 //                http://10.0.0.22/woody/import.php?FLAG=2on
-                String pan="1";
-                if(payTypes.equals("Bank")){
-                    pan="1";
-                }else if(payTypes.equals("Cash")){
-                    pan="0";
-                }else {
-                    pan="All";
-                }
 
-                URL url = new URL("http://" + generalSettings.getIpAddress() + "/import.php?FLAG=23&SUPLIER="+supplierName.trim().replace(" ","%20")
-                        +"&FROM_DATE="+fromDate.getText().toString()+"&TO_DATE="+toDate.getText().toString()+
-                        "&PAYMENT_TYPE="+pan);
+                URL url = new URL("http://" + generalSettings.getIpAddress() + "/import.php?FLAG=25&SUPLIER="+supplierName.trim().replace(" ","%20"));
 
                 URLConnection conn = url.openConnection();
                 conn.setDoOutput(true);
@@ -585,6 +581,7 @@ public class SupplierAccountReportPayment extends AppCompatActivity implements V
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+            progressDialogTack.dismiss();
             if (s == null)
                 Log.e("tag", "JSONTask3/Failed to export data Please check internet connection");
             else if (!s.contains("noPaymentFound")) {
@@ -593,12 +590,14 @@ public class SupplierAccountReportPayment extends AppCompatActivity implements V
                 Gson gson = new Gson();
                 PaymentAccountSupplier lists = gson.fromJson(s, PaymentAccountSupplier.class);
                 if (lists != null)
-                    paymentAccountSuppliersList.addAll(lists.getDETAILS_LIST());
+                    paymentAccountSuppliersList.addAll(lists.getPAYMENT_ACCOUNT());
                 else
                     paymentAccountSuppliersList = null;
 
                 count.setText("" + paymentAccountSuppliersList.size());
-                adapter = new AccountSupplierReportAdapter(SupplierAccountReportPayment.this, paymentAccountSuppliersList);
+//                Log.e("paymentAccount", " "+ paymentAccountSuppliersList.get(28).getSTART_BANK());
+
+                adapter = new AccountSupplierReportAdapterDetail(SupplierAccountReport.this, paymentAccountSuppliersList);
                 list.setAdapter(adapter);
 
                 //notiList(0,0,12);
@@ -607,7 +606,7 @@ public class SupplierAccountReportPayment extends AppCompatActivity implements V
             } else {
                 paymentAccountSuppliersList.clear();
                 count.setText("" + paymentAccountSuppliersList.size());
-                adapter = new AccountSupplierReportAdapter(SupplierAccountReportPayment.this, paymentAccountSuppliersList);
+             adapter = new AccountSupplierReportAdapterDetail(SupplierAccountReport.this, paymentAccountSuppliersList);
                 list.setAdapter(adapter);
                 //totalCalculate();
             }
