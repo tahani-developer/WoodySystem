@@ -78,8 +78,8 @@ public class AccountSupplier extends AppCompatActivity implements View.OnClickLi
     SupplierAccountAdapter adapter;
     private Settings generalSettings;
     TextView count, supplier, total;
-    public static String supplierName = "";
-    public static String supplierNo = "";
+    public  String supplierName = "";
+    public  String supplierNo = "";
     private RecyclerView recyclerView;
     private List<SupplierInfo> suppliers = new ArrayList<>();
     private List<SupplierInfo> arraylist = new ArrayList<>();
@@ -376,7 +376,7 @@ public class AccountSupplier extends AppCompatActivity implements View.OnClickLi
 
         recyclerView = searchDialog.findViewById(R.id.search_supplier_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        suppliersAdapter = new SuppliersAdapter(null, suppliers, null, null, 0, null, AccountSupplier.this,null);
+        suppliersAdapter = new SuppliersAdapter(null, suppliers, null, null, 0, null, AccountSupplier.this,null,null);
         recyclerView.setAdapter(suppliersAdapter);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -453,6 +453,8 @@ public class AccountSupplier extends AppCompatActivity implements View.OnClickLi
         totalBanks.setText(String.format("%.3f", totalBank));
         totalCashs.setText(String.format("%.3f", totalCash) );
 
+        totalPayment();
+
     }
 
     public void filter(String charText) { // by Name
@@ -468,7 +470,7 @@ public class AccountSupplier extends AppCompatActivity implements View.OnClickLi
             }
         }
         total.setText("" + arraylist.size());
-        suppliersAdapter = new SuppliersAdapter(null, arraylist, null, null, 0, null, AccountSupplier.this,null);
+        suppliersAdapter = new SuppliersAdapter(null, arraylist, null, null, 0, null, AccountSupplier.this,null,null);
         recyclerView.setAdapter(suppliersAdapter);
     }
 
@@ -551,11 +553,13 @@ public class AccountSupplier extends AppCompatActivity implements View.OnClickLi
     public  void   totalPayment(){
 
         double bank= Double.parseDouble(convertToEnglish(PaymentBank.getText().toString()));
-        double sumation= (Double.parseDouble(convertToEnglish(startBank.getText().toString()))-bank);
-        remainBank.setText(""+convertToEnglish(""+sumation));
+        double totalPBank= Double.parseDouble(convertToEnglish(totalBanks.getText().toString()));
+        double sumation= (Double.parseDouble(convertToEnglish(startBank.getText().toString()))+bank-totalPBank);
+        remainBank.setText(""+convertToEnglish(""+String.format("%.3f",sumation)));
         double cash= Double.parseDouble(convertToEnglish(PaymentCash.getText().toString()));
-        double sumationC= (Double.parseDouble(convertToEnglish(startCash.getText().toString()))-cash);
-        remainCash.setText(""+convertToEnglish(""+sumationC));
+        double totalPCash= Double.parseDouble(convertToEnglish(totalCashs.getText().toString()));
+        double sumationC= (Double.parseDouble(convertToEnglish(startCash.getText().toString()))+cash-totalPCash);
+        remainCash.setText(""+convertToEnglish(""+String.format("%.3f",sumationC)));
 
     }
     public void sendEmail(String toEmil, String subject) {
@@ -656,7 +660,7 @@ public class AccountSupplier extends AppCompatActivity implements View.OnClickLi
                          }
                          break;
                      case 3:
-                         ExportToExcel.getInstance().createExcelFile(AccountSupplier.this, "Acceptance_supplier_Report_2.xls", 10, null, Collections.singletonList(newRowInfo));
+                         ExportToExcel.getInstance().createExcelFile(AccountSupplier.this, "Account_supplier_Report_2.xls", 10, null, Collections.singletonList(newRowInfo));
                          break;
                      case 4:
                          BankDialog();
@@ -972,16 +976,18 @@ public class AccountSupplier extends AppCompatActivity implements View.OnClickLi
                         if(innerObject.getString("PAYMENT_TYPE").equals("1")){//bank
                             double bank= innerObject.getDouble("SUM");
                             PaymentBank.setText(""+bank);
-                            double sumation= (Double.parseDouble(convertToEnglish(startBank.getText().toString()))-bank);
+                            double sumation= (Double.parseDouble(convertToEnglish(startBank.getText().toString()))+bank);
                             remainBank.setText(""+sumation);
 
                         }else  if(innerObject.getString("PAYMENT_TYPE").equals("0")){//cash
                             double cash= innerObject.getDouble("SUM");
-                            double sumation= (Double.parseDouble(convertToEnglish(startCash.getText().toString()))-cash);
+                            double sumation= (Double.parseDouble(convertToEnglish(startCash.getText().toString()))+cash);
                             PaymentCash.setText(""+cash);
 
                             remainCash.setText(""+sumation);
                         }
+
+                        totalPayment();
 
                     }
                 } catch (JSONException e) {

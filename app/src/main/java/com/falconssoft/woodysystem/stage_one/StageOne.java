@@ -20,11 +20,12 @@ import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.reports.AcceptanceInfoReport;
 import com.falconssoft.woodysystem.reports.AcceptanceReport;
 import com.falconssoft.woodysystem.reports.AcceptanceSupplierReport;
+import com.falconssoft.woodysystem.reports.SupplierAccountReport;
 import com.falconssoft.woodysystem.reports.SupplierAccountReportPayment;
 
 public class StageOne extends AppCompatActivity implements View.OnClickListener {
 
-    private LinearLayout addRaw,  generateBarcode, report2, report1,reportSupplier,supplierAccount,supplierAccountPayment;//acceptInfo
+    private LinearLayout addRaw,  generateBarcode, report2, report1,reportSupplier,supplierAccount,supplierAccountPayment,supplierAccountLinear;//acceptInfo
     private Animation animation;
     private Dialog passwordDialog;
 
@@ -42,10 +43,11 @@ public class StageOne extends AppCompatActivity implements View.OnClickListener 
         reportSupplier= findViewById(R.id.stage1_accept_supplier_info);
         supplierAccount = findViewById(R.id.stage1_account_raw);
         supplierAccountPayment=findViewById(R.id.stage1_report_supplier);
-
+        supplierAccountLinear=findViewById(R.id.stage1_report_supplier_detail);
 
         addRaw.setOnClickListener(this);
         report1.setOnClickListener(this);
+        supplierAccountLinear.setOnClickListener(this);
 //        generateBarcode.setOnClickListener(this);
         report2.setOnClickListener(this);
         reportSupplier.setOnClickListener(this);
@@ -70,6 +72,9 @@ public class StageOne extends AppCompatActivity implements View.OnClickListener 
 
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
         supplierAccountPayment.setAnimation(animation);
+
+        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
+        supplierAccountLinear.setAnimation(animation);
     }
 
 
@@ -78,7 +83,7 @@ public class StageOne extends AppCompatActivity implements View.OnClickListener 
         switch (v.getId()) {
             case R.id.stage1_new_raw:
 
-                showPasswordDialog();
+                showPasswordDialog(0);
 //                Intent intent = new Intent(this, AddNewRaw.class);
 //                startActivity(intent);
 //                setSlideAnimation();
@@ -102,18 +107,24 @@ public class StageOne extends AppCompatActivity implements View.OnClickListener 
                 startActivity(intent4);
                 break;
             case R.id.stage1_account_raw: //report 2
-                Intent intent6 = new Intent(this, AccountSupplier.class);//ReportsStageOne
-                startActivity(intent6);
+                showPasswordDialog(1);
+
+//                Intent intent6 = new Intent(this, AccountSupplier.class);//ReportsStageOne
+//                startActivity(intent6);
                 break;
 
             case R.id.stage1_report_supplier: //report payment
                 Intent intent7 = new Intent(this, SupplierAccountReportPayment.class);//ReportsStageOne
                 startActivity(intent7);
                 break;
+            case R.id.stage1_report_supplier_detail: //report account
+                Intent intent8 = new Intent(this, SupplierAccountReport.class);//ReportsStageOne
+                startActivity(intent8);
+                break;
         }
     }
 
-    void showPasswordDialog() {
+    void showPasswordDialog(int flag) {
         passwordDialog = new Dialog(this);
         passwordDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         passwordDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -127,13 +138,26 @@ public class StageOne extends AppCompatActivity implements View.OnClickListener 
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (password.getText().toString().equals("3030100")) {
-                    passwordDialog.dismiss();
-                    Intent intent = new Intent(StageOne.this, AddNewRaw.class);
-                    startActivity(intent);
-                } else
-                    Toast.makeText(StageOne.this, "Password is not correct!", Toast.LENGTH_SHORT).show();
+                switch (flag) {
+                    case 0:
+                    if (password.getText().toString().equals("3030100")) {
+                        passwordDialog.dismiss();
+                        Intent intent = new Intent(StageOne.this, AddNewRaw.class);
+                        startActivity(intent);
+                    } else
+                        Toast.makeText(StageOne.this, "Password is not correct!", Toast.LENGTH_SHORT).show();
+                    break;
+                    case 1:
+                        if (password.getText().toString().equals("3030300")) {
+                            passwordDialog.dismiss();
+                            Intent intent = new Intent(StageOne.this, AccountSupplier.class);
+                            startActivity(intent);
+                        } else
+                            Toast.makeText(StageOne.this, "Password is not correct!", Toast.LENGTH_SHORT).show();
 
+                        break;
+
+                }
             }
         });
 

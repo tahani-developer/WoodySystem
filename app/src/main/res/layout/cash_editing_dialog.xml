@@ -79,7 +79,7 @@
                     android:layout_weight="1"
                     android:ems="10"
                     android:gravity="center"
-                    android:inputType="numberDecimal"
+                    android:inputType="numberSigned|numberDecimal"
                     android:nextFocusDown="@id/addNewRaw_length"
                     android:textColor="@color/white"
                     android:textSize="15sp" />

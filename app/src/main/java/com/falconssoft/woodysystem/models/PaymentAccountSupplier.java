@@ -42,8 +42,36 @@ public class PaymentAccountSupplier {
     @SerializedName("START_BALANCE")
     private  String START_BALANCE;
 
+    @SerializedName("DEBT")
+    private String DEBT="0";
+
+    @SerializedName("CASHES")
+    private String CASHES="0";
+
+    @SerializedName("CASHPAYMENT")
+    private String CASHPAYMENT="0";
+
+    @SerializedName("BANKPAYMENT")
+    private String BANKPAYMENT="0";
+
+    @SerializedName("START_CASH")
+    private String START_CASH="0";
+
+    @SerializedName("START_BANK")
+    private String START_BANK="0";
+
+    @SerializedName("REMININGBANK")
+    private String REMININGBANK="0";
+
+    @SerializedName("REMININGCASH")
+    private String REMININGCASH="0";
+
     @SerializedName("DETAILS_LIST")
     private List<PaymentAccountSupplier> DETAILS_LIST;
+
+    @SerializedName("PAYMENT_ACCOUNT")
+    private  List<PaymentAccountSupplier>PAYMENT_ACCOUNT;
+
 
 
     public PaymentAccountSupplier(String SUPLIER, String DATE_OF_PAYMENT, String VALUE_OF_PAYMENT, String INVOICE_NO, String PAYER, String PAYMENT_TYPE, String ACCEPTANCE_DATE,
@@ -156,5 +184,77 @@ public class PaymentAccountSupplier {
 
     public void setDETAILS_LIST(List<PaymentAccountSupplier> DETAILS_LIST) {
         this.DETAILS_LIST = DETAILS_LIST;
+    }
+
+    public List<PaymentAccountSupplier> getPAYMENT_ACCOUNT() {
+        return PAYMENT_ACCOUNT;
+    }
+
+    public void setPAYMENT_ACCOUNT(List<PaymentAccountSupplier> PAYMENT_ACCOUNT) {
+        this.PAYMENT_ACCOUNT = PAYMENT_ACCOUNT;
+    }
+
+    public String getDEBT() {
+        return DEBT;
+    }
+
+    public void setDEBT(String DEBT) {
+        this.DEBT = DEBT;
+    }
+
+    public String getCASHES() {
+        return CASHES;
+    }
+
+    public void setCASHES(String CASHES) {
+        this.CASHES = CASHES;
+    }
+
+    public String getCASHPAYMENT() {
+        return CASHPAYMENT;
+    }
+
+    public void setCASHPAYMENT(String CASHPAYMENT) {
+        this.CASHPAYMENT = CASHPAYMENT;
+    }
+
+    public String getBANKPAYMENT() {
+        return BANKPAYMENT;
+    }
+
+    public void setBANKPAYMENT(String BANKPAYMENT) {
+        this.BANKPAYMENT = BANKPAYMENT;
+    }
+
+    public String getSTART_CASH() {
+        return START_CASH;
+    }
+
+    public void setSTART_CASH(String START_CASH) {
+        this.START_CASH = START_CASH;
+    }
+
+    public String getSTART_BANK() {
+        return START_BANK;
+    }
+
+    public void setSTART_BANK(String START_BANK) {
+        this.START_BANK = START_BANK;
+    }
+
+    public String getREMININGBANK() {
+        return REMININGBANK;
+    }
+
+    public void setREMININGBANK(String REMININGBANK) {
+        this.REMININGBANK = REMININGBANK;
+    }
+
+    public String getREMININGCASH() {
+        return REMININGCASH;
+    }
+
+    public void setREMININGCASH(String REMININGCASH) {
+        this.REMININGCASH = REMININGCASH;
     }
 }

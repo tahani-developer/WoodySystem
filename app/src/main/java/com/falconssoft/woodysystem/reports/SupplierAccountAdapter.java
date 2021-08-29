@@ -190,7 +190,9 @@ public class SupplierAccountAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 // context.exportToPdf(itemsList.get(i));
-                showPasswordDialog(i,1);
+                //showPasswordDialog(i,1);
+
+                priceDialog(i,1);
 
 
             }
@@ -201,8 +203,8 @@ public class SupplierAccountAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 // context.exportToPdf(itemsList.get(i));
-showPasswordDialog(i,2);
-
+//showPasswordDialog(i,2);
+                priceDialog(i,2);
             }
         });
 

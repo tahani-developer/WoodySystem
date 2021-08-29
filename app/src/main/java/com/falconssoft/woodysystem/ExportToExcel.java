@@ -93,6 +93,9 @@ public class ExportToExcel {
             case 11:
                 workbook = stageOneReportPaymentAccountSupplier(workbook, (List<PaymentAccountSupplier>) listDetail );
                 break;
+            case 12:
+                workbook = stageOneReportAccountSupplierDetails(workbook, (List<PaymentAccountSupplier>) listDetail );
+                break;
         }
 
         Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -590,6 +593,52 @@ public class ExportToExcel {
                     }else {
                         sheet.addCell(new Label(9, i + 2, "Cash"));
                     }
+                }
+
+            } catch (RowsExceededException e) {
+                e.printStackTrace();
+            } catch (WriteException e) {
+                e.printStackTrace();
+            }
+            workbook.write();
+            try {
+                workbook.close();
+            } catch (WriteException e) {
+                e.printStackTrace();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return workbook;
+
+    }
+
+    WritableWorkbook stageOneReportAccountSupplierDetails(WritableWorkbook workbook, List<PaymentAccountSupplier> list ) {
+        try {
+            WritableSheet sheet = workbook.createSheet("Sheet1", 0);//Excel sheet name. 0 represents first sheet
+
+            try {
+                sheet.addCell(new Label(0, 0, "Supplier")); // column and row
+                sheet.addCell(new Label(1, 0, "Start Bank Balance"));
+                sheet.addCell(new Label(2, 0, "Start Cash Balance"));
+                sheet.addCell(new Label(3, 0, "Total Bank"));
+                sheet.addCell(new Label(4, 0, "Total Cash"));
+                sheet.addCell(new Label(5, 0, "Total Bank Payment"));
+                sheet.addCell(new Label(6, 0, "Total Cash Payment "));
+                sheet.addCell(new Label(7, 0, "Remaining Bank"));
+                sheet.addCell(new Label(8, 0, "Remaining Cash"));
+
+                for (int i = 0; i < list.size(); i++) {
+                    sheet.addCell(new Label(0, i + 2, list.get(i).getSUPLIER()));
+                    sheet.addCell(new Label(1, i + 2, ""+list.get(i).getSTART_BANK()));
+                    sheet.addCell(new Label(2, i + 2, ""+list.get(i).getSTART_CASH()));
+                    sheet.addCell(new Label(3, i + 2, ""+list.get(i).getDEBT()));
+                    sheet.addCell(new Label(4, i + 2,""+ list.get(i).getCASHES()));
+                    sheet.addCell(new Label(5, i + 2, ""+list.get(i).getBANKPAYMENT()));
+                    sheet.addCell(new Label(6, i + 2, ""+list.get(i).getCASHPAYMENT()));
+                    sheet.addCell(new Label(7, i + 2, ""+list.get(i).getREMININGBANK()));
+                    sheet.addCell(new Label(8, i + 2, ""+list.get(i).getREMININGCASH()));
+
                 }
 
             } catch (RowsExceededException e) {

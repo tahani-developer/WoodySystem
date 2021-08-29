@@ -219,5 +219,11 @@
     <string name="SupplierAccountReport">Supplier Account Report</string>
     <string name="paymentDate">Payment Date</string>
     <string name="PaymentSupplierReport">Payment Supplier Report</string>
+    <string name="total_cash_payment">total cash Payment</string>
+    <string name="start_bank_balance">start Bank Balance</string>
+    <string name="start_cash_balance">start cash Balance</string>
+    <string name="remaining_bank">remaining bank</string>
+    <string name="remaining_cash">remaining Cash</string>
+    <string name="SupplierPaymentReport">"Supplier Payment Report "</string>
 
 </resources>

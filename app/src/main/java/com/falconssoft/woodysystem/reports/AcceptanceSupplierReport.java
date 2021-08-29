@@ -681,7 +681,7 @@ public class AcceptanceSupplierReport extends AppCompatActivity implements   Vie
 
         recyclerView = searchDialog.findViewById(R.id.search_supplier_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        suppliersAdapter = new SuppliersAdapter(null, suppliers, null, null,0,AcceptanceSupplierReport.this,null,null);
+        suppliersAdapter = new SuppliersAdapter(null, suppliers, null, null,0,AcceptanceSupplierReport.this,null,null,null);
         recyclerView.setAdapter(suppliersAdapter);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -730,7 +730,7 @@ public class AcceptanceSupplierReport extends AppCompatActivity implements   Vie
             }
         }
         total.setText("" + arraylist.size());
-        suppliersAdapter = new SuppliersAdapter(null, arraylist, null, null,0,AcceptanceSupplierReport.this,null,null);
+        suppliersAdapter = new SuppliersAdapter(null, arraylist, null, null,0,AcceptanceSupplierReport.this,null,null,null);
         recyclerView.setAdapter(suppliersAdapter);
     }
     void fillCbmVal(int i, double truckCbm, double rejCbm, double acceptCbms) {
