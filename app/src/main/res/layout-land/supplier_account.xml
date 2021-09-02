@@ -681,6 +681,7 @@
                     android:gravity="center"
                     android:inputType="numberDecimal"
                     android:singleLine="true"
+                    android:text="0.0"
                     android:textColor="@color/orange"
                     android:textSize="15sp" />
 
@@ -716,6 +717,7 @@
                     android:gravity="center"
                     android:inputType="numberDecimal"
                     android:singleLine="true"
+                    android:text="0.0"
                     android:textColor="@color/orange"
                     android:textSize="15sp" />
 
@@ -755,6 +757,7 @@
                     android:gravity="center"
                     android:inputType="numberDecimal"
                     android:singleLine="true"
+                    android:text="0.0"
                     android:textColor="@color/orange"
                     android:textSize="15sp" />
 
@@ -792,6 +795,7 @@
                     android:gravity="center"
                     android:inputType="numberDecimal"
                     android:singleLine="true"
+                    android:text="0.0"
                     android:textColor="@color/orange"
                     android:textSize="15sp" />
 
