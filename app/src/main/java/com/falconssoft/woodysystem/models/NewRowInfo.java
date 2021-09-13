@@ -174,6 +174,8 @@ public class NewRowInfo implements Serializable {
 
     private int remove;
 
+    private boolean isCh;
+
     public NewRowInfo() {
     }
 
@@ -697,6 +699,14 @@ public class NewRowInfo implements Serializable {
 
     public void setCash$(double cash$) {
         this.cash$ = cash$;
+    }
+
+    public boolean isCh() {
+        return isCh;
+    }
+
+    public void setCh(boolean ch) {
+        isCh = ch;
     }
 
     public JSONObject getJsonData() {

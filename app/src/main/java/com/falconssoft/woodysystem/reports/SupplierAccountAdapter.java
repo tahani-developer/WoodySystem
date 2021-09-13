@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -95,6 +96,7 @@ public class SupplierAccountAdapter extends BaseAdapter {
         Button preview;
         TextView cash_,debt,cash,prices,supplier,truckNo, ttn, Thic,width,length,date_of_acceptance,piecesA,TruckCBM,piecesR,rejCbm,AcceptCbm,grade,noOfBundle,pdf,excel;
         ImageView edit,sendEmail;
+        CheckBox PriceCashCheckBox;
     }
 
     @Override
@@ -125,6 +127,7 @@ public class SupplierAccountAdapter extends BaseAdapter {
         holder.cash=view.findViewById(R.id.cash);
         holder.debt=view.findViewById(R.id.debt);
         holder.cash_=view.findViewById(R.id.cash_);
+        holder.PriceCashCheckBox=view.findViewById(R.id.PCCheckBox);
       //  holder.payment=view.findViewById(R.id.payment);
 
         holder.truckNo.setText(itemsList.get(i).getTruckNo());
@@ -172,6 +175,18 @@ public class SupplierAccountAdapter extends BaseAdapter {
             holder.cash.setText("0.0");
         }
 
+        holder.PriceCashCheckBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(holder.PriceCashCheckBox.isChecked()) {
+                    context.checkedValueInMainList(i,true);
+                }else {
+                    context.checkedValueInMainList(i,false);
+
+                }
+            }
+        });
+
      //   context.Acc(i);
 
 //
@@ -184,6 +199,12 @@ public class SupplierAccountAdapter extends BaseAdapter {
 //
 //            }
 //        });
+
+        if(itemsList.get(i).isCh()){
+            holder.PriceCashCheckBox.setChecked(true);
+        }else {
+            holder.PriceCashCheckBox.setChecked(false);
+        }
 
 
         holder.prices.setOnClickListener(new View.OnClickListener() {

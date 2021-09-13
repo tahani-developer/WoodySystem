@@ -29,6 +29,11 @@
             android:textColor="@color/gray_dark_one"
             android:textSize="15sp"
             android:visibility="gone" />
+        <CheckBox
+            android:id="@+id/PCCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
 
         <TextView
             android:id="@+id/date"
