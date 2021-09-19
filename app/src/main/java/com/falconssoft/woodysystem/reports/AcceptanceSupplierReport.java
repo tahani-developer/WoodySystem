@@ -1029,7 +1029,7 @@ public class AcceptanceSupplierReport extends AppCompatActivity implements   Vie
 //                    location=thic.getText().toString().trim();
 //                }
 
-                URL url = new URL("http://" + generalSettings.getIpAddress() + "/import.php?FLAG=20&SUPPLIER="+supplierName+"&FROM_DATE=" +
+                URL url = new URL("http://" + generalSettings.getIpAddress() + "/import.php?FLAG=20&SUPPLIER="+supplierName .trim().replace(" ","%20")+"&FROM_DATE=" +
                          from.getText().toString().trim() + "&TO_DATE=" + to.getText().toString().trim()
                         +"&THICKNESS="+thicString
                         +"&WIDTH="+widths

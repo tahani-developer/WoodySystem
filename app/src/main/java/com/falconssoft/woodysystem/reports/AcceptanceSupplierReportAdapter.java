@@ -41,6 +41,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -56,6 +58,7 @@ public class AcceptanceSupplierReportAdapter extends BaseAdapter {
     List<NewRowInfo> listOfEmail=new ArrayList<>();
     ProgressDialog proTTn;
     NewRowInfo newRowInfoPic=null;
+     NumberFormat nf = new DecimalFormat("##.##");
 
     public AcceptanceSupplierReportAdapter(AcceptanceSupplierReport context, List<NewRowInfo> itemsList) {
         this.context = context;
