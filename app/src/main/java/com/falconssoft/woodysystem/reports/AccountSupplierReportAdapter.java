@@ -1,8 +1,10 @@
 package com.falconssoft.woodysystem.reports;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -35,6 +37,7 @@ import com.falconssoft.woodysystem.R;
 import com.falconssoft.woodysystem.models.NewRowInfo;
 import com.falconssoft.woodysystem.models.PaymentAccountSupplier;
 import com.falconssoft.woodysystem.models.Settings;
+import com.falconssoft.woodysystem.stage_one.AddNewRaw;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
@@ -93,7 +96,7 @@ public class AccountSupplierReportAdapter extends BaseAdapter {
     private class ViewHolder {
 
         TextView text1,text2,text3,text4,text5,text6,text7,text8,text9,text10,pdf,excel;
-        ImageView sendEmail;
+        ImageView sendEmail,delete;
     }
 
     @Override
@@ -115,6 +118,7 @@ public class AccountSupplierReportAdapter extends BaseAdapter {
         holder.text9 = view.findViewById(R.id.text9);
         holder.text10 = view.findViewById(R.id.text10);
 
+
         holder.text1.setText(itemsList.get(i).getDATE_OF_PAYMENT());
         holder.text2 .setText(itemsList.get(i).getSUPLIER());
         holder.text3.setText(itemsList.get(i).getACCEPTANCE_DATE());
@@ -135,6 +139,8 @@ public class AccountSupplierReportAdapter extends BaseAdapter {
         holder.pdf = view.findViewById(R.id.pdf);
         holder.excel = view.findViewById(R.id.excel);
         holder.sendEmail = view.findViewById(R.id.sendEmail);
+
+        holder.delete=view.findViewById(R.id.delete);
 
         holder.pdf.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,6 +170,31 @@ public class AccountSupplierReportAdapter extends BaseAdapter {
             }
         });
 
+
+
+        holder.delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage("Are you want delete this row?");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+//
+                        context.deleteRaw(itemsList.get(i));
+
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                builder.show();
+
+            }
+        });
 
         return view;
     }

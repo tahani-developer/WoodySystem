@@ -2,6 +2,7 @@ package com.falconssoft.woodysystem.reports;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -9,9 +10,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -26,6 +29,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.falconssoft.woodysystem.AddToInventory;
 import com.falconssoft.woodysystem.DatabaseHandler;
 import com.falconssoft.woodysystem.ExportToExcel;
 import com.falconssoft.woodysystem.ExportToPDF;
@@ -38,6 +42,13 @@ import com.falconssoft.woodysystem.stage_one.AccountSupplier;
 import com.falconssoft.woodysystem.stage_one.SuppliersAdapter;
 import com.google.gson.Gson;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,6 +58,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
@@ -77,6 +89,7 @@ public class SupplierAccountReportPayment extends AppCompatActivity implements V
     String payTypes="All";
     private ArrayAdapter<String> locationAdapter;
     private List<String> locationList;
+    ProgressDialog progressDialogTack;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -275,6 +288,12 @@ public class SupplierAccountReportPayment extends AppCompatActivity implements V
         sendEmail("","");
     }
 
+    public void deleteRaw (PaymentAccountSupplier paymentAccountSupplier){
+
+        new DELETE(paymentAccountSupplier).execute();
+
+
+    }
     public void date (int flag){
         new DatePickerDialog(SupplierAccountReportPayment.this, openDatePickerDialog(flag), myCalendar
                 .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
@@ -505,9 +524,6 @@ public class SupplierAccountReportPayment extends AppCompatActivity implements V
 
         @Override
         protected void onPreExecute() {
-//            progressDialogTack = new ProgressDialog(EditPage.this, R.style.MyAlertDialogStyle);
-//            progressDialogTack.setMessage("Please Waiting...");
-//            progressDialogTack.setCanceledOnTouchOutside(false);
 
             super.onPreExecute();
 
@@ -585,7 +601,14 @@ public class SupplierAccountReportPayment extends AppCompatActivity implements V
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            if (s == null)
+            try {
+                if(progressDialogTack!=null) {
+                    progressDialogTack.dismiss();
+                }
+            }catch (Exception e){
+
+
+            }            if (s == null)
                 Log.e("tag", "JSONTask3/Failed to export data Please check internet connection");
             else if (!s.contains("noPaymentFound")) {
 
@@ -614,5 +637,87 @@ public class SupplierAccountReportPayment extends AppCompatActivity implements V
 
         }
     }
+
+
+    private class DELETE extends AsyncTask<String, String, String> {
+
+        PaymentAccountSupplier paymentAccountSupplier;
+
+        public DELETE(PaymentAccountSupplier paymentAccountSupplier) {
+            this.paymentAccountSupplier = paymentAccountSupplier;
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            progressDialogTack = new ProgressDialog(SupplierAccountReportPayment.this, R.style.MyAlertDialogStyle);
+            progressDialogTack.setMessage("Please Waiting...");
+            progressDialogTack.setCanceledOnTouchOutside(false);
+
+            progressDialogTack.show();
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                String JsonResponse = null;
+                HttpClient client = new DefaultHttpClient();
+                HttpPost request = new HttpPost();
+                request.setURI(new URI("http://" + generalSettings.getIpAddress() + "/export.php"));//import 10.0.0.214
+
+//                JSONArray jsonArray = new JSONArray();
+//                jsonArray.put(editPlannedAndBundleInfo.getJSONObject());
+
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+//                nameValuePairs.add(new BasicNameValuePair("UPDATE_BUNDLE", "1"));
+//                nameValuePairs.add(new BasicNameValuePair("BUNDLE_NO", oldBundleNoString)); // the old bundle number
+                nameValuePairs.add(new BasicNameValuePair("DELETE_PAYMENT_SUPPLIER", "1"));
+                nameValuePairs.add(new BasicNameValuePair("INVOICE_NO", paymentAccountSupplier.getINVOICE_NO())); // the old bundle number
+                nameValuePairs.add(new BasicNameValuePair("SERIAL", paymentAccountSupplier.getSERIAL())); // the updated bundle info
+
+                request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                HttpResponse response = client.execute(request);
+
+                BufferedReader in = new BufferedReader(new
+                        InputStreamReader(response.getEntity().getContent()));
+
+                StringBuffer sb = new StringBuffer("");
+                String line = "";
+
+                while ((line = in.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                in.close();
+
+                JsonResponse = sb.toString();
+                Log.e("tag", "" + JsonResponse);
+
+                return JsonResponse;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (s != null) {
+                if (s.contains("UPDATE_PAYMENT_SUCCESS")) {
+                    new JSONTask3().execute();
+                } else {
+                    Log.e("tag", "updated bundle raw/Failed to export data");
+                }
+            } else {
+                Log.e("tag", "updated bundle raw/Failed to export data Please check internet connection");
+            }
+        }
+    }
+
 
 }
